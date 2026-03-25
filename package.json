@@ -1,0 +1,52 @@
+{
+  "name": "@nutmeg/docs",
+  "version": "0.1.0",
+  "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
+  "type": "module",
+  "bin": {
+    "football-docs": "./bin/serve.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "ingest": "tsx src/ingest.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "football",
+    "soccer",
+    "opta",
+    "statsbomb",
+    "wyscout",
+    "sportmonks",
+    "mcp",
+    "model-context-protocol",
+    "analytics",
+    "data"
+  ],
+  "author": {
+    "name": "withqwerty",
+    "url": "https://github.com/withqwerty"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withqwerty/football-docs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "better-sqlite3": "^11.9.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.15.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "data/docs.db",
+    "docs/"
+  ]
+}
