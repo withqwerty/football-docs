@@ -1,6 +1,6 @@
 {
   "name": "football-docs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
   "type": "module",
   "bin": {
