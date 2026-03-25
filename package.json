@@ -1,10 +1,10 @@
 {
-  "name": "@nutmeg/docs",
-  "version": "0.1.0",
+  "name": "football-docs",
+  "version": "0.1.1",
   "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
   "type": "module",
   "bin": {
-    "football-docs": "./bin/serve.js"
+    "football-docs": "bin/serve.js"
   },
   "scripts": {
     "build": "tsc",
@@ -31,7 +31,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/withqwerty/football-docs"
+    "url": "git+https://github.com/withqwerty/football-docs.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
