@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/withqwerty/football-docs/blob/main/CONTRIBUTING.md
+    about: Step-by-step instructions for adding or improving docs
