@@ -1,4 +1,4 @@
-# @nutmeg/docs
+# football-docs
 
 Searchable football data provider documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
 
@@ -15,7 +15,7 @@ Add to your MCP config:
   "mcpServers": {
     "football-docs": {
       "command": "npx",
-      "args": ["-y", "@nutmeg/docs"]
+      "args": ["-y", "football-docs"]
     }
   }
 }
@@ -24,7 +24,7 @@ Add to your MCP config:
 ### With any MCP client
 
 ```bash
-npx @nutmeg/docs
+npx football-docs
 ```
 
 ## Tools
