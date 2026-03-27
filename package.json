@@ -1,6 +1,6 @@
 {
   "name": "football-docs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
   "type": "module",
   "mcpName": "io.github.withqwerty/football-docs",
