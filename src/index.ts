@@ -10,7 +10,7 @@
  * user-writable location (XDG_DATA_HOME or ~/.local/share).
  */
 
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,6 +21,9 @@ import { z } from "zod";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "data", "docs.db");
+const PKG_VERSION = (
+  JSON.parse(readFileSync(resolve(__dirname, "..", "package.json"), "utf-8")) as { version: string }
+).version;
 
 // Request queue DB goes in a user-writable location, not inside the npm package
 const QUEUE_DB_DIR = resolve(
@@ -71,7 +74,7 @@ function openQueueDb(): Database.Database {
 }
 
 /** Sanitise a query string for FTS5 MATCH by wrapping in double quotes (phrase search). */
-function sanitiseFtsQuery(query: string): string {
+export function sanitiseFtsQuery(query: string): string {
   // FTS5 special syntax (AND, OR, NOT, NEAR, column:, *, ^) can cause errors.
   // Wrap the user query in double quotes to treat it as a phrase search,
   // escaping any embedded double quotes first.
@@ -82,7 +85,7 @@ function sanitiseFtsQuery(query: string): string {
 
 const server = new McpServer({
   name: "nutmeg-football-docs",
-  version: "0.2.0",
+  version: PKG_VERSION,
 });
 
 // Tool: search_docs
