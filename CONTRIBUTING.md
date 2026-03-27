@@ -50,7 +50,8 @@ All docs live in `docs/{provider-name}/`. Look at what's there:
 
 ```bash
 ls docs/
-# opta/  statsbomb/  wyscout/  sportmonks/  kloppy/  socceraction/  free-sources/
+# databallpy/  free-sources/  kloppy/  mplsoccer/  opta/  socceraction/
+# soccerdata/  sportmonks/  statsbomb/  wyscout/
 ```
 
 ### Step 2: Ask your AI to make the fix
@@ -174,8 +175,12 @@ Not every provider needs every file type. Here's the guide:
 | `coordinate-system.md` | Provider uses pitch coordinates | StatsBomb, Opta, Wyscout |
 | `qualifiers.md` | Provider uses qualifier/attribute IDs on events | Opta |
 | `xg-model.md` | Provider has their own xG model | StatsBomb, Understat |
+| `usage.md` | Provider is a Python/JS library with code patterns | kloppy, soccerdata, databallpy |
+| `pitch-types.md` | Provider supports multiple coordinate systems | mplsoccer |
+| `visualizations.md` | Provider is a plotting/visualization library | mplsoccer |
+| `overview.md` | Library overview, installation, limitations | soccerdata, databallpy, mplsoccer |
 
-For a typical API provider (like FPL or Football-data.org), you'd create `api-access.md` and `data-model.md` at minimum.
+For a typical API provider (like FPL or Football-data.org), you'd create `api-access.md` and `data-model.md` at minimum. For a Python library, `overview.md` and `usage.md` are the essentials.
 
 ### Step 3: Gather your source material
 
@@ -351,6 +356,7 @@ npm run ingest
 | TheSportsDB | Medium | https://www.thesportsdb.com/api.php |
 | WhoScored | Medium | Based on Opta F24, but has its own wrapper format |
 | Sofascore | Medium | Unofficial API, community-documented |
+| floodlight | Medium | https://floodlight.readthedocs.io/ |
 | Transfermarkt | Low | Web scraping only, fragile |
 
 ### Improvements to existing docs
@@ -359,12 +365,22 @@ npm run ingest
 - Cross-provider comparison tables (e.g., "how do each handle penalty kicks?")
 - Common gotchas from real-world usage
 - Missing fields or type IDs that we haven't documented yet
+- Flagging when upstream libraries have released new versions with API changes
 
 ### Conceptual docs (in `docs/concepts/`)
 
 - Football analytics glossary with standardised definitions
 - "Which provider should I use for X?" decision guide
 - Common data quality issues and how to handle them
+
+## Accuracy policy
+
+We do not make up information or overly interpret upstream documentation. Every chunk in the search index should be directly traceable to a source.
+
+- **Crawled docs** are fetched verbatim from upstream (llms.txt, ReadTheDocs, GitHub). They carry provenance metadata (source URL, upstream version, crawl date) in frontmatter.
+- **Curated docs** are written by contributors for cross-provider comparisons, coordinate conversion formulas, and content that doesn't exist upstream. These are labelled as `source_type: curated`.
+
+If you're unsure whether something is accurate, mark it as unverified in your PR rather than guessing.
 
 ---
 

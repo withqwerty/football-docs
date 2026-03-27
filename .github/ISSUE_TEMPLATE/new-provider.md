@@ -35,7 +35,20 @@ labels: new-provider, help wanted
 - [ ] Yes, I'll create a PR (see [CONTRIBUTING.md](../CONTRIBUTING.md) for how)
 - [ ] No, just requesting that someone else adds this
 
-## Source material
+## Documentation sources (for crawling)
 
-Link to official docs, repo, or other reference material that could be used:
+Help us find the best docs to crawl. Check all that apply:
+
+- [ ] Has `llms.txt` / `llms-full.txt` at site root (check `{site}/llms.txt`)
+- [ ] ReadTheDocs site: `URL`
+- [ ] GitHub repo with docs/ folder: `URL`
+- [ ] API documentation site: `URL`
+- [ ] Other reference material:
+
+## Package info (for version tracking)
+
+- [ ] PyPI: package name
+- [ ] npm: package name
+- [ ] GitHub release: owner/repo
+- [ ] N/A (no versioned package)
 
