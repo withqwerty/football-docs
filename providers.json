@@ -1,0 +1,170 @@
+{
+  "$comment": [
+    "Football Docs Provider Registry",
+    "",
+    "Source types:",
+    "  llms_txt     - llms.txt or llms-full.txt (purpose-built for LLMs, highest priority)",
+    "  readthedocs  - ReadTheDocs site (structured, version-pinned)",
+    "  github_docs  - GitHub repo docs/ folder or README",
+    "  api_docs     - Standalone API documentation site",
+    "  curated      - Hand-written by football-docs contributors",
+    "",
+    "To add a new provider: add an entry here, then run: npm run crawl -- --provider <name>"
+  ],
+  "providers": {
+    "statsbomb": {
+      "description": "Event data provider with free open-data repository",
+      "version": null,
+      "package": { "type": "github", "repo": "statsbomb/open-data" },
+      "sources": [
+        { "url": "https://github.com/statsbomb/open-data", "type": "github_docs" },
+        { "type": "curated", "note": "Cross-provider comparisons, coordinate conversion formulas" }
+      ],
+      "last_crawled": null
+    },
+    "opta": {
+      "description": "Stats Perform event data (F24/F7 XML format)",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "No public docs available; compiled from community knowledge" }
+      ],
+      "last_crawled": null
+    },
+    "wyscout": {
+      "description": "Hudl/Wyscout event and match data",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Compiled from API documentation and community knowledge" }
+      ],
+      "last_crawled": null
+    },
+    "sportmonks": {
+      "description": "REST API for football fixtures, standings, and events",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "url": "https://docs.sportmonks.com/football", "type": "api_docs" },
+        { "type": "curated", "note": "Event type mappings and field descriptions" }
+      ],
+      "last_crawled": null
+    },
+    "kloppy": {
+      "description": "Python library for standardising football data across providers",
+      "version": "3.16.0",
+      "package": { "type": "pypi", "name": "kloppy" },
+      "sources": [
+        { "url": "https://kloppy.pysport.org/", "type": "readthedocs" },
+        { "url": "https://github.com/PySport/kloppy", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "socceraction": {
+      "description": "Python library for SPADL representation and VAEP/xT action valuation",
+      "version": "1.5.3",
+      "package": { "type": "pypi", "name": "socceraction" },
+      "sources": [
+        { "url": "https://socceraction.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/ML-KULeuven/socceraction", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "soccerdata": {
+      "description": "Python library for scraping football data from popular websites",
+      "version": "1.8.8",
+      "package": { "type": "pypi", "name": "soccerdata" },
+      "sources": [
+        { "url": "https://soccerdata.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/probberechts/soccerdata", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "mplsoccer": {
+      "description": "Python library for drawing soccer pitches and visualisations with matplotlib",
+      "version": "1.6.1",
+      "package": { "type": "pypi", "name": "mplsoccer" },
+      "sources": [
+        { "url": "https://mplsoccer.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/andrewRowlinson/mplsoccer", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "databallpy": {
+      "description": "Python library for loading, synchronising, and analysing tracking and event data",
+      "version": "0.7.2",
+      "package": { "type": "pypi", "name": "databallpy" },
+      "sources": [
+        { "url": "https://databallpy.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/Alek050/databallpy", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "api-football": {
+      "description": "REST API for football data via RapidAPI (fixtures, standings, players, live scores)",
+      "version": "3",
+      "package": null,
+      "sources": [
+        { "url": "https://www.api-football.com/documentation-v3", "type": "api_docs" }
+      ],
+      "last_crawled": null
+    },
+    "football-data-org": {
+      "description": "REST API for football competition data (v4) — fixtures, standings, teams, players",
+      "version": "4",
+      "package": null,
+      "sources": [
+        { "url": "https://docs.football-data.org/general/v4/index.html", "type": "api_docs" }
+      ],
+      "last_crawled": null
+    },
+    "fpl": {
+      "description": "Fantasy Premier League unofficial API — player stats, fixtures, gameweeks, transfers",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Unofficial undocumented API; compiled from community sources" }
+      ],
+      "last_crawled": null
+    },
+    "floodlight": {
+      "description": "Python library for spatial football data analysis (tracking, pitch control, metrics)",
+      "version": null,
+      "package": { "type": "pypi", "name": "floodlight" },
+      "sources": [
+        { "url": "https://floodlight.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/floodlight-sports/floodlight", "type": "github_docs" }
+      ],
+      "last_crawled": null
+    },
+    "thesportsdb-v1": {
+      "description": "TheSportsDB v1 API — free tier, search-based endpoints for teams, players, events, livescores",
+      "version": "1",
+      "package": null,
+      "sources": [
+        { "url": "https://www.thesportsdb.com/api/spec/v1/openapi.yaml", "type": "openapi" },
+        { "url": "https://www.thesportsdb.com/documentation", "type": "api_docs" }
+      ],
+      "last_crawled": null
+    },
+    "thesportsdb-v2": {
+      "description": "TheSportsDB v2 API — paid tier, expanded endpoints with schedules, statistics, lookups",
+      "version": "2",
+      "package": null,
+      "sources": [
+        { "url": "https://www.thesportsdb.com/api/spec/v2/openapi.yaml", "type": "openapi" },
+        { "url": "https://www.thesportsdb.com/documentation", "type": "api_docs" }
+      ],
+      "last_crawled": null
+    },
+    "free-sources": {
+      "description": "Free football data sources (FBref, Understat, ClubElo, football-data.co.uk)",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Overview and access patterns for free data sources" }
+      ],
+      "last_crawled": null
+    }
+  }
+}
