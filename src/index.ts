@@ -2,11 +2,12 @@
  * Nutmeg Football Docs MCP Server
  *
  * A Context7-style searchable index of football data provider documentation.
- * Exposes two tools:
- *   - search_docs: Full-text search across all provider docs
- *   - list_providers: List all indexed providers and their coverage
+ * Exposes tools for searching docs, listing providers, comparing providers,
+ * and requesting documentation updates.
  *
  * Data is stored in a SQLite FTS5 index for fast offline search.
+ * Update requests are stored in a separate writable SQLite DB in a
+ * user-writable location (XDG_DATA_HOME or ~/.local/share).
  */
 
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -15,10 +16,18 @@ import { z } from "zod";
 import Database from "better-sqlite3";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
+import { homedir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "data", "docs.db");
+
+// Request queue DB goes in a user-writable location, not inside the npm package
+const QUEUE_DB_DIR = resolve(
+  process.env.XDG_DATA_HOME ?? resolve(homedir(), ".local", "share"),
+  "football-docs"
+);
+const QUEUE_DB_PATH = resolve(QUEUE_DB_DIR, "requests.db");
 
 // ── Database ────────────────────────────────────────────────────────────
 
@@ -28,14 +37,52 @@ function openDb(): Database.Database {
       `Docs database not found at ${DB_PATH}. Run 'npm run ingest' first to build the index.`
     );
   }
-  return new Database(DB_PATH, { readonly: true });
+  const db = new Database(DB_PATH, { readonly: true });
+
+  // Check schema version — source_type column was added in v0.2.0
+  const columns = db.pragma("table_info(docs)") as Array<{ name: string }>;
+  const hasProvenance = columns.some((c) => c.name === "source_type");
+  if (!hasProvenance) {
+    db.close();
+    throw new Error(
+      `Docs database is outdated (missing provenance columns). Run 'npm run ingest' to rebuild.`
+    );
+  }
+
+  return db;
+}
+
+function openQueueDb(): Database.Database {
+  mkdirSync(QUEUE_DB_DIR, { recursive: true });
+  const db = new Database(QUEUE_DB_PATH);
+  db.pragma("journal_mode = WAL");
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS requests (
+      id TEXT PRIMARY KEY,
+      type TEXT NOT NULL,
+      provider TEXT NOT NULL,
+      reason TEXT NOT NULL,
+      suggested_urls TEXT,
+      requested_at TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending'
+    )
+  `);
+  return db;
+}
+
+/** Sanitise a query string for FTS5 MATCH by wrapping in double quotes (phrase search). */
+function sanitiseFtsQuery(query: string): string {
+  // FTS5 special syntax (AND, OR, NOT, NEAR, column:, *, ^) can cause errors.
+  // Wrap the user query in double quotes to treat it as a phrase search,
+  // escaping any embedded double quotes first.
+  return `"${query.replace(/"/g, '""')}"`;
 }
 
 // ── Server ──────────────────────────────────────────────────────────────
 
 const server = new McpServer({
   name: "nutmeg-football-docs",
-  version: "0.1.0",
+  version: "0.2.0",
 });
 
 // Tool: search_docs
@@ -61,16 +108,19 @@ server.tool(
   async ({ query, provider, max_results }) => {
     const db = openDb();
     try {
+      const safeQuery = sanitiseFtsQuery(query);
       let sql = `
-        SELECT provider, category, title, content,
+        SELECT d.provider, d.category, d.title, d.content,
+               d.source_type, d.source_url, d.upstream_version,
                rank * -1 as relevance
         FROM docs_fts
+        JOIN docs d ON d.id = docs_fts.rowid
         WHERE docs_fts MATCH ?
       `;
-      const params: (string | number)[] = [query];
+      const params: (string | number)[] = [safeQuery];
 
       if (provider) {
-        sql += ` AND provider = ?`;
+        sql += ` AND d.provider = ?`;
         params.push(provider.toLowerCase());
       }
 
@@ -82,6 +132,9 @@ server.tool(
         category: string;
         title: string;
         content: string;
+        source_type: string;
+        source_url: string | null;
+        upstream_version: string | null;
         relevance: number;
       }>;
 
@@ -97,10 +150,12 @@ server.tool(
       }
 
       const results = rows
-        .map(
-          (r, i) =>
-            `## [${i + 1}] ${r.title}\n**Provider:** ${r.provider} | **Category:** ${r.category}\n\n${r.content}`
-        )
+        .map((r, i) => {
+          const source = r.source_type === "curated"
+            ? "**Source:** curated by football-docs contributors"
+            : `**Source:** ${r.source_type}${r.source_url ? ` (${r.source_url})` : ""}${r.upstream_version ? ` | v${r.upstream_version}` : ""}`;
+          return `## [${i + 1}] ${r.title}\n**Provider:** ${r.provider} | **Category:** ${r.category} | ${source}\n\n${r.content}`;
+        })
         .join("\n\n---\n\n");
 
       return {
@@ -174,21 +229,23 @@ server.tool(
   async ({ topic, providers }) => {
     const db = openDb();
     try {
+      const safeTopic = sanitiseFtsQuery(topic);
       let sql = `
-        SELECT provider, category, title, content,
+        SELECT d.provider, d.category, d.title, d.content,
                rank * -1 as relevance
         FROM docs_fts
+        JOIN docs d ON d.id = docs_fts.rowid
         WHERE docs_fts MATCH ?
       `;
-      const params: (string | number)[] = [topic];
+      const params: (string | number)[] = [safeTopic];
 
       if (providers && providers.length > 0) {
         const placeholders = providers.map(() => "?").join(", ");
-        sql += ` AND provider IN (${placeholders})`;
+        sql += ` AND d.provider IN (${placeholders})`;
         params.push(...providers.map((p) => p.toLowerCase()));
       }
 
-      sql += ` ORDER BY provider, rank LIMIT 30`;
+      sql += ` ORDER BY d.provider, rank LIMIT 30`;
 
       const rows = db.prepare(sql).all(...params) as Array<{
         provider: string;
@@ -230,6 +287,90 @@ server.tool(
       };
     } finally {
       db.close();
+    }
+  }
+);
+
+// Tool: request_update
+server.tool(
+  "request_update",
+  "Request that a provider's documentation be added, updated, or recrawled. Use when you notice docs are outdated, a provider is missing, or you know of a better documentation source. Requests are queued for review.",
+  {
+    type: z.enum(["new_provider", "recrawl", "flag_outdated", "suggest_source"]).describe(
+      "Type of request: new_provider (add a new tool/library), recrawl (refresh existing docs), flag_outdated (mark docs as stale), suggest_source (recommend a better doc source like llms.txt)"
+    ),
+    provider: z.string().max(100).describe("Provider name (existing or proposed). Examples: 'statsbomb', 'mplsoccer', 'floodlight'"),
+    reason: z.string().max(2000).describe("Why this update is needed. Be specific: version bump, missing event types, new API endpoints, etc."),
+    suggested_urls: z.array(z.string().url().max(500)).max(10).optional().describe("URLs for documentation sources (readthedocs, GitHub, llms.txt, etc.)"),
+  },
+  async ({ type, provider, reason, suggested_urls }) => {
+    const qdb = openQueueDb();
+    try {
+      // Hard cap on queue size
+      const countRow = qdb.prepare("SELECT COUNT(*) as cnt FROM requests").get() as { cnt: number };
+      if (countRow.cnt >= 500) {
+        return {
+          isError: true,
+          content: [
+            {
+              type: "text" as const,
+              text: `Request queue is full (${countRow.cnt} entries). Please file an issue at https://github.com/withqwerty/football-docs/issues instead.`,
+            },
+          ],
+        };
+      }
+
+      // Cooldown: reject if same provider was requested in last 7 days
+      const recentRequest = qdb.prepare(
+        `SELECT id, requested_at FROM requests
+         WHERE lower(provider) = lower(?) AND status = 'pending'
+           AND datetime(requested_at) > datetime('now', '-7 days')
+         LIMIT 1`
+      ).get(provider) as { id: string; requested_at: string } | undefined;
+
+      if (recentRequest) {
+        return {
+          isError: true,
+          content: [
+            {
+              type: "text" as const,
+              text: `A pending request for "${provider}" already exists (from ${recentRequest.requested_at}). Requests have a 7-day cooldown to prevent duplicate work. Request ID: ${recentRequest.id}`,
+            },
+          ],
+        };
+      }
+
+      const id = `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+
+      qdb.prepare(
+        `INSERT INTO requests (id, type, provider, reason, suggested_urls, requested_at, status)
+         VALUES (?, ?, ?, ?, ?, ?, 'pending')`
+      ).run(
+        id,
+        type,
+        provider.toLowerCase(),
+        reason,
+        suggested_urls ? JSON.stringify(suggested_urls) : null,
+        new Date().toISOString(),
+      );
+
+      const typeLabel = {
+        new_provider: "New provider request",
+        recrawl: "Recrawl request",
+        flag_outdated: "Outdated docs flag",
+        suggest_source: "Source suggestion",
+      }[type];
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `${typeLabel} queued for "${provider}" (ID: ${id}).\n\nReason: ${reason}${suggested_urls?.length ? `\nSuggested URLs:\n${suggested_urls.map((u) => `  - ${u}`).join("\n")}` : ""}\n\nThis request will be reviewed by maintainers. You can also file an issue at https://github.com/withqwerty/football-docs/issues for community visibility.`,
+          },
+        ],
+      };
+    } finally {
+      qdb.close();
     }
   }
 );
