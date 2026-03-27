@@ -4,11 +4,19 @@ Searchable football data provider documentation for AI coding agents. Like [Cont
 
 An MCP server that gives your AI agent instant access to documentation for Opta, StatsBomb, Wyscout, SportMonks, socceraction, kloppy, soccerdata, mplsoccer, databallpy, and free sources (FBref, Understat, ClubElo). Search event types, qualifier IDs, coordinate systems, API endpoints, and cross-provider mappings.
 
+MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard for connecting AI coding tools to external data sources.
+
 ## Quick start
 
-### With Claude Code
+### Claude Code
 
-Add to your MCP config:
+```bash
+claude mcp add football-docs -- npx -y football-docs
+```
+
+### Cursor
+
+Settings → MCP → Add server. Use this config:
 
 ```json
 {
@@ -21,10 +29,49 @@ Add to your MCP config:
 }
 ```
 
-### With any MCP client
+### VS Code / Copilot
 
-```bash
-npx football-docs
+Add to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "football-docs": {
+      "command": "npx",
+      "args": ["-y", "football-docs"]
+    }
+  }
+}
+```
+
+### Windsurf
+
+Add to `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "football-docs": {
+      "command": "npx",
+      "args": ["-y", "football-docs"]
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "football-docs": {
+      "command": "npx",
+      "args": ["-y", "football-docs"]
+    }
+  }
+}
 ```
 
 ## Tools

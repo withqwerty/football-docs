@@ -55,12 +55,10 @@ async function probeLlmsTxt(
 
 /**
  * Check if a URL looks like a ReadTheDocs or Sphinx site.
+ * Uses a single GET request (no redundant HEAD).
  */
 async function probeReadTheDocs(url: string): Promise<boolean> {
-  const check = await urlExists(url);
-  if (!check.ok) return false;
-
-  const html = await fetchText(url);
+  const html = await fetchText(url, 10000);
   if (!html) return false;
 
   return (
