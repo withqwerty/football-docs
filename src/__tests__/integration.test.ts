@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { chunkMarkdown } from "../ingest.js";
+import { chunkMarkdown, SCHEMA_SQL } from "../ingest.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TEST_DB_PATH = resolve(__dirname, "..", "..", "data", "test.db");
@@ -14,33 +14,8 @@ describe("ingest → search integration", () => {
   beforeAll(() => {
     db = new Database(TEST_DB_PATH);
     db.pragma("journal_mode = WAL");
-    db.exec(`
-      DROP TABLE IF EXISTS docs_fts;
-      DROP TABLE IF EXISTS docs;
-
-      CREATE TABLE docs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        provider TEXT NOT NULL,
-        category TEXT NOT NULL,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        source_url TEXT,
-        source_type TEXT NOT NULL DEFAULT 'curated',
-        upstream_version TEXT,
-        crawled_at TEXT
-      );
-
-      CREATE VIRTUAL TABLE docs_fts USING fts5(
-        provider, category, title, content,
-        content='docs', content_rowid='id',
-        tokenize='porter unicode61'
-      );
-
-      CREATE TRIGGER docs_ai AFTER INSERT ON docs BEGIN
-        INSERT INTO docs_fts(rowid, provider, category, title, content)
-        VALUES (new.id, new.provider, new.category, new.title, new.content);
-      END;
-    `);
+    db.exec("DROP TABLE IF EXISTS docs_fts; DROP TABLE IF EXISTS docs;");
+    db.exec(SCHEMA_SQL);
   });
 
   afterAll(() => {
@@ -88,7 +63,7 @@ technique, and freeze frame data.`;
       SELECT d.provider, d.title, d.source_type, d.source_url, d.upstream_version
       FROM docs_fts
       JOIN docs d ON d.id = docs_fts.rowid
-      WHERE docs_fts MATCH 'pass'
+      WHERE docs_fts MATCH '"pass"'
       ORDER BY rank
     `).all() as Array<{
       provider: string;
@@ -98,7 +73,7 @@ technique, and freeze frame data.`;
       upstream_version: string;
     }>;
 
-    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.length).toBeGreaterThanOrEqual(1);
     expect(rows[0].provider).toBe("statsbomb");
     expect(rows[0].source_type).toBe("crawled");
     expect(rows[0].source_url).toBe("https://example.com/docs");
@@ -126,7 +101,7 @@ The x-axis runs left to right, y-axis bottom to top.`;
     );
 
     const row = db.prepare(
-      `SELECT d.source_type FROM docs_fts JOIN docs d ON d.id = docs_fts.rowid WHERE docs_fts MATCH 'coordinate' LIMIT 1`
+      `SELECT d.source_type FROM docs_fts JOIN docs d ON d.id = docs_fts.rowid WHERE docs_fts MATCH '"coordinate"' LIMIT 1`
     ).get() as { source_type: string };
 
     expect(row.source_type).toBe("curated");

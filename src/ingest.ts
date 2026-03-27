@@ -157,7 +157,7 @@ function ingestProvider(db: Database.Database, provider: string): number {
   return totalChunks;
 }
 
-const SCHEMA_SQL = `
+export const SCHEMA_SQL = `
   CREATE TABLE IF NOT EXISTS docs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     provider TEXT NOT NULL,
@@ -262,4 +262,8 @@ function main() {
   db.close();
 }
 
-main();
+// Only run when executed directly, not when imported for tests
+const isDirectRun = process.argv[1]?.endsWith("ingest.ts") || process.argv[1]?.endsWith("ingest.js");
+if (isDirectRun) {
+  main();
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { htmlToMarkdown, slugify } from "../crawl.js";
+import { crawlLlmsTxt, htmlToMarkdown, slugify } from "../crawl.js";
 
 describe("slugify", () => {
   it("lowercases and replaces spaces with hyphens", () => {
@@ -120,5 +120,70 @@ console.log(x);</code></pre>
     expect(result).not.toBeNull();
     expect(result).toContain("Pass");
     expect(result).toContain("Shot");
+  });
+});
+
+describe("crawlLlmsTxt", () => {
+  it("splits multi-section content by headings", () => {
+    const content = `# API Reference
+
+This is the overview section with enough content to pass the threshold.
+
+## Endpoints
+
+GET /matches returns a list of matches with detailed information.
+
+## Authentication
+
+Use Bearer token authentication for all API requests to the service.`;
+
+    const docs = crawlLlmsTxt(content, "https://example.com/llms.txt");
+    expect(docs.length).toBe(3);
+    // First chunk uses the default "overview" title (content before first heading switch)
+    expect(docs[0].category).toBe("overview");
+    expect(docs[1].category).toBe("endpoints");
+    expect(docs[2].category).toBe("authentication");
+    for (const doc of docs) {
+      expect(doc.source_type).toBe("llms_txt");
+      expect(doc.source_url).toBe("https://example.com/llms.txt");
+    }
+  });
+
+  it("returns single 'reference' doc when no headings present", () => {
+    const content = "This is a flat llms.txt with no headings but enough content to pass the fifty character threshold for indexing.";
+    const docs = crawlLlmsTxt(content, "https://example.com/llms.txt");
+    expect(docs.length).toBe(1);
+    expect(docs[0].category).toBe("reference");
+    expect(docs[0].content).toBe(content);
+  });
+
+  it("returns single 'reference' doc when only one section", () => {
+    const content = `# Only Section
+
+This is the only section with enough content to pass the threshold for indexing.`;
+
+    const docs = crawlLlmsTxt(content, "https://example.com/llms.txt");
+    expect(docs.length).toBe(1);
+    expect(docs[0].category).toBe("reference");
+  });
+
+  it("drops sections shorter than 50 characters", () => {
+    const content = `# Overview
+
+This overview has enough content to be included in the final output for sure.
+
+## Tiny
+
+Short.
+
+## Detailed Section
+
+This section has plenty of content to pass the fifty character minimum threshold.`;
+
+    const docs = crawlLlmsTxt(content, "https://example.com/llms.txt");
+    const categories = docs.map((d) => d.category);
+    expect(categories).toContain("overview");
+    expect(categories).toContain("detailed-section");
+    expect(categories).not.toContain("tiny");
   });
 });

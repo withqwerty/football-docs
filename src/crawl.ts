@@ -20,7 +20,7 @@ import {
   readFileSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import SwaggerParser from "@apidevtools/swagger-parser";
 import { Readability } from "@mozilla/readability";
@@ -71,10 +71,14 @@ interface CrawledDoc {
  * Uses Mozilla's Readability (same algorithm as Firefox Reader View)
  * to isolate the main content, then Turndown to convert to markdown.
  */
-export function htmlToMarkdown(html: string, _url: string): string | null {
-  const { document } = parseHTML(html);
+export function htmlToMarkdown(html: string, url: string): string | null {
+  // linkedom's parseHTML doesn't support a url option, so we inject a <base> tag
+  // for Readability to resolve relative links against the source URL
+  const htmlWithBase = html.includes("<base ")
+    ? html
+    : html.replace(/(<head[^>]*>)/i, `$1<base href="${url}">`);
+  const { document } = parseHTML(htmlWithBase);
 
-  // Readability mutates the DOM, so we work on the parsed copy directly
   const reader = new Readability(document, { charThreshold: 100 });
   const article = reader.parse();
 
@@ -89,7 +93,7 @@ export function htmlToMarkdown(html: string, _url: string): string | null {
  * Crawl an llms.txt or llms-full.txt file.
  * Already structured for LLM consumption — chunk by top-level heading.
  */
-function crawlLlmsTxt(content: string, sourceUrl: string): CrawledDoc[] {
+export function crawlLlmsTxt(content: string, sourceUrl: string): CrawledDoc[] {
   const sections: CrawledDoc[] = [];
   const lines = content.split("\n");
 
@@ -403,7 +407,8 @@ function writeCrawledDoc(
   ].join("\n");
 
   const filePath = resolve(dir, `${doc.category}.md`);
-  if (!filePath.startsWith(`${dir}/`)) {
+  const rel = relative(dir, filePath);
+  if (rel.startsWith("..") || isAbsolute(rel)) {
     throw new Error(`Path traversal detected: ${doc.category}`);
   }
   writeFileSync(filePath, frontmatter + doc.content, "utf-8");
