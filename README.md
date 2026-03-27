@@ -2,7 +2,7 @@
 
 Searchable football data provider documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
 
-An MCP server that gives your AI agent instant access to documentation for Opta, StatsBomb, Wyscout, SportMonks, socceraction, kloppy, and free sources (FBref, Understat, ClubElo). Search event types, qualifier IDs, coordinate systems, API endpoints, and cross-provider mappings.
+An MCP server that gives your AI agent instant access to documentation for Opta, StatsBomb, Wyscout, SportMonks, socceraction, kloppy, soccerdata, mplsoccer, databallpy, and free sources (FBref, Understat, ClubElo). Search event types, qualifier IDs, coordinate systems, API endpoints, and cross-provider mappings.
 
 ## Quick start
 
@@ -31,9 +31,10 @@ npx football-docs
 
 | Tool | Description |
 |------|-------------|
-| `search_docs` | Full-text search across all provider docs. Filter by provider. |
+| `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version). |
 | `list_providers` | List all indexed providers and their doc coverage. |
 | `compare_providers` | Compare how different providers handle the same concept. |
+| `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queued for maintainer review. |
 
 ## Example queries
 
@@ -48,38 +49,28 @@ npx football-docs
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| Opta | 29 | event-types, qualifiers, coordinate-system, api-access |
 | StatsBomb | 143 | event-types, data-model, coordinate-system, api-access, xg-model |
-| Wyscout | 61 | event-types, data-model, coordinate-system, api-access |
-| SportMonks | 71 | event-types, data-model, api-access |
-| socceraction | 43 | SPADL format, VAEP, Expected Threat |
 | kloppy | 100 | data-model, usage, provider-mapping |
-| Free sources | 28 | overview, fbref, understat |
+| SportMonks | 71 | event-types, data-model, api-access |
+| databallpy | 63 | data-model, overview, usage |
+| mplsoccer | 62 | overview, pitch-types, visualizations |
+| Wyscout | 61 | event-types, data-model, coordinate-system, api-access |
+| Free sources | 45 | overview, fbref, understat |
+| soccerdata | 40 | overview, data-sources, usage |
+| Opta | 29 | event-types, qualifiers, coordinate-system, api-access |
+| socceraction | 26 | SPADL format, VAEP, Expected Threat |
 
-**475 searchable chunks** across 7 providers.
+**640 searchable chunks** across 10 providers.
 
 ## Contributing
 
-We want this to be the most comprehensive football data reference available. Contributions are welcome from everyone, regardless of experience level.
+Contributions are welcome from everyone. There are three ways to help:
 
-### When to open an issue
+1. **Open an issue** — [request a new provider](https://github.com/withqwerty/football-docs/issues/new/choose), [flag outdated docs](https://github.com/withqwerty/football-docs/issues/new/choose), or [suggest a better doc source](https://github.com/withqwerty/football-docs/issues/new/choose)
+2. **Use the `request_update` tool** — AI agents can flag outdated or missing docs directly via the MCP server, which queues requests for maintainer review
+3. **Open a PR** — fix errors, add new providers, or improve existing docs
 
-- You've found an error (wrong type ID, incorrect field name, broken code example)
-- You want docs for a provider we don't cover yet but aren't able to write them yourself
-- You're unsure whether something is correct and want to flag it for review
-- You have a suggestion for how to improve existing docs
-
-Use our [issue templates](https://github.com/withqwerty/football-docs/issues/new/choose) to get started.
-
-### When to open a PR
-
-- You want to fix an error or add missing information to existing docs
-- You want to add a new file for a provider we already cover (e.g. a missing `coordinate-system.md`)
-- You want to add docs for a provider we don't cover yet
-
-**You don't need to be an expert.** The contributing guide walks you through using your AI coding tool (Claude Code, Cursor, Copilot, etc.) to write the docs from source material you provide (official docs, API responses, blog posts, etc.). You review what the AI writes, verify the key facts, and submit.
-
-Read the full guide: **[CONTRIBUTING.md](CONTRIBUTING.md)**
+**You don't need to be an expert.** See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.
 
 ### What we especially need
 
@@ -92,7 +83,21 @@ Read the full guide: **[CONTRIBUTING.md](CONTRIBUTING.md)**
 | WhoScored | Medium | Based on Opta F24, community-documented |
 | Sofascore | Medium | Unofficial API, community-documented |
 
-We also welcome improvements to existing docs: more code examples (especially R and JavaScript), cross-provider comparisons, and gotchas from real-world usage.
+## For maintainers
+
+### Crawl pipeline
+
+Provider doc sources are tracked in `providers.json`. The crawl pipeline discovers the best doc source (llms.txt > ReadTheDocs > GitHub README) and writes markdown with provenance frontmatter.
+
+```bash
+npm run discover                        # probe sources without crawling
+npm run crawl                           # crawl all providers with sources
+npm run crawl -- --provider kloppy      # crawl one provider
+npm run ingest                          # rebuild search index from docs/
+npm run ingest -- --provider kloppy     # re-ingest one provider (incremental)
+```
+
+Each crawled doc carries provenance metadata (source URL, source type, upstream version, crawl timestamp) that is surfaced in search results, so agents can distinguish between curated content and upstream documentation.
 
 ## License
 
