@@ -28,7 +28,7 @@ jobs:
       - name: Create nutmeg issue for version sync
         if: steps.version.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.NUTMEG_REPO_TOKEN || secrets.GITHUB_TOKEN }}
           OLD_VER: ${{ steps.version.outputs.old }}
           NEW_VER: ${{ steps.version.outputs.new }}
         run: |
