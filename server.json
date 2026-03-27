@@ -1,0 +1,13 @@
+{
+  "name": "io.github.withqwerty/football-docs",
+  "title": "football-docs",
+  "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data. 16 providers, 640 chunks, 4 MCP tools.",
+  "version": "0.2.0",
+  "packages": [
+    {
+      "registry_name": "npm",
+      "name": "football-docs",
+      "version": "0.2.0"
+    }
+  ]
+}
