@@ -108,6 +108,7 @@ server.tool(
       .default(10)
       .describe("Maximum number of results to return (default 10)"),
   },
+  { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
   async ({ query, provider, max_results }) => {
     const db = openDb();
     try {
@@ -178,8 +179,9 @@ server.tool(
 // Tool: list_providers
 server.tool(
   "list_providers",
-  "List all indexed football data providers, their document count, and coverage categories. Use to understand what documentation is available.",
+  "List all indexed football data providers, their document count, and coverage categories. Use to understand what documentation is available. Call this first to see what providers are indexed before searching.",
   {},
+  { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
   async () => {
     const db = openDb();
     try {
@@ -229,6 +231,7 @@ server.tool(
     topic: z.string().describe("The concept to compare across providers. Examples: 'shot events', 'coordinate systems', 'xG', 'pass types'"),
     providers: z.array(z.string()).optional().describe("Providers to compare. If omitted, compares all indexed providers."),
   },
+  { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
   async ({ topic, providers }) => {
     const db = openDb();
     try {
@@ -306,6 +309,7 @@ server.tool(
     reason: z.string().max(2000).describe("Why this update is needed. Be specific: version bump, missing event types, new API endpoints, etc."),
     suggested_urls: z.array(z.string().url().max(500)).max(10).optional().describe("URLs for documentation sources (readthedocs, GitHub, llms.txt, etc.)"),
   },
+  { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   async ({ type, provider, reason, suggested_urls }) => {
     const qdb = openQueueDb();
     try {
