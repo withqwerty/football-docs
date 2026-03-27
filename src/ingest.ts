@@ -1,22 +1,22 @@
 /**
  * Ingest provider documentation into the SQLite FTS5 index.
  *
- * Reads markdown files from docs/providers/{provider}/*.md and chunks them
- * by heading (## or ###), storing each chunk with metadata.
+ * Reads markdown files from docs/{provider}/*.md and chunks them
+ * by heading (## or ###), storing each chunk with provenance metadata.
+ *
+ * Each markdown file can include a YAML frontmatter block with provenance:
+ *   ---
+ *   source_url: https://example.com/docs
+ *   source_type: readthedocs
+ *   upstream_version: 1.8.8
+ *   crawled_at: 2026-03-26T00:00:00Z
+ *   ---
+ *
+ * Files without frontmatter default to source_type: "curated".
  *
  * Usage:
  *   npm run ingest                    # ingest all providers
  *   npm run ingest -- --provider opta # ingest one provider
- *
- * Doc file naming convention:
- *   docs/providers/{provider}/{category}.md
- *
- * Example:
- *   docs/providers/opta/event-types.md
- *   docs/providers/opta/qualifiers.md
- *   docs/providers/opta/coordinate-system.md
- *   docs/providers/statsbomb/events.md
- *   docs/providers/kloppy/data-model.md
  */
 
 import Database from "better-sqlite3";
@@ -29,17 +29,66 @@ const DOCS_DIR = resolve(__dirname, "..", "docs");
 const DB_DIR = resolve(__dirname, "..", "data");
 const DB_PATH = resolve(DB_DIR, "docs.db");
 
+interface Frontmatter {
+  source_url: string | null;
+  source_type: string; // "crawled" | "curated" | "llms_txt"
+  upstream_version: string | null;
+  crawled_at: string | null;
+}
+
 interface DocChunk {
   provider: string;
   category: string;
   title: string;
   content: string;
+  source_url: string | null;
+  source_type: string;
+  upstream_version: string | null;
+  crawled_at: string | null;
+}
+
+/** Parse optional YAML frontmatter from a markdown file. */
+function parseFrontmatter(text: string): { frontmatter: Frontmatter; body: string } {
+  const defaults: Frontmatter = {
+    source_url: null,
+    source_type: "curated",
+    upstream_version: null,
+    crawled_at: null,
+  };
+
+  if (!text.startsWith("---")) {
+    return { frontmatter: defaults, body: text };
+  }
+
+  const endIndex = text.indexOf("\n---", 3);
+  if (endIndex === -1) {
+    return { frontmatter: defaults, body: text };
+  }
+
+  const yamlBlock = text.slice(4, endIndex);
+  const body = text.slice(endIndex + 4).trimStart();
+
+  // Simple YAML key: value parser (no dependency needed for flat frontmatter)
+  const fm = { ...defaults };
+  for (const line of yamlBlock.split("\n")) {
+    const match = line.match(/^(\w+):\s*(.+)$/);
+    if (match) {
+      const [, key, value] = match;
+      const cleaned = value.replace(/^["']|["']$/g, "").trim();
+      if (key in fm) {
+        (fm as Record<string, string | null>)[key] = cleaned || null;
+      }
+    }
+  }
+
+  return { frontmatter: fm, body };
 }
 
 /** Split a markdown file into chunks by ## or ### headings. */
 function chunkMarkdown(text: string, provider: string, category: string): DocChunk[] {
+  const { frontmatter, body } = parseFrontmatter(text);
   const chunks: DocChunk[] = [];
-  const lines = text.split("\n");
+  const lines = body.split("\n");
 
   let currentTitle = `${provider} - ${category}`;
   let currentLines: string[] = [];
@@ -49,7 +98,7 @@ function chunkMarkdown(text: string, provider: string, category: string): DocChu
     if (headingMatch && currentLines.length > 0) {
       const content = currentLines.join("\n").trim();
       if (content.length > 20) {
-        chunks.push({ provider, category, title: currentTitle, content });
+        chunks.push({ provider, category, title: currentTitle, content, ...frontmatter });
       }
       currentTitle = headingMatch[2].trim();
       currentLines = [line];
@@ -60,7 +109,7 @@ function chunkMarkdown(text: string, provider: string, category: string): DocChu
 
   const content = currentLines.join("\n").trim();
   if (content.length > 20) {
-    chunks.push({ provider, category, title: currentTitle, content });
+    chunks.push({ provider, category, title: currentTitle, content, ...frontmatter });
   }
 
   return chunks;
@@ -78,7 +127,8 @@ function ingestProvider(db: Database.Database, provider: string): number {
   let totalChunks = 0;
 
   const insert = db.prepare(
-    "INSERT INTO docs (provider, category, title, content) VALUES (?, ?, ?, ?)"
+    `INSERT INTO docs (provider, category, title, content, source_url, source_type, upstream_version, crawled_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   for (const file of files) {
@@ -87,14 +137,67 @@ function ingestProvider(db: Database.Database, provider: string): number {
     const chunks = chunkMarkdown(text, provider, category);
 
     for (const chunk of chunks) {
-      insert.run(chunk.provider, chunk.category, chunk.title, chunk.content);
+      insert.run(
+        chunk.provider,
+        chunk.category,
+        chunk.title,
+        chunk.content,
+        chunk.source_url,
+        chunk.source_type,
+        chunk.upstream_version,
+        chunk.crawled_at,
+      );
     }
 
     totalChunks += chunks.length;
-    console.log(`  ${provider}/${file}: ${chunks.length} chunks`);
+    const sourceTag = chunks[0]?.source_type ?? "curated";
+    console.log(`  ${provider}/${file}: ${chunks.length} chunks [${sourceTag}]`);
   }
 
   return totalChunks;
+}
+
+const SCHEMA_SQL = `
+  CREATE TABLE IF NOT EXISTS docs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    provider TEXT NOT NULL,
+    category TEXT NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    source_url TEXT,
+    source_type TEXT NOT NULL DEFAULT 'curated',
+    upstream_version TEXT,
+    crawled_at TEXT
+  );
+
+  CREATE VIRTUAL TABLE IF NOT EXISTS docs_fts USING fts5(
+    provider,
+    category,
+    title,
+    content,
+    content='docs',
+    content_rowid='id',
+    tokenize='porter unicode61'
+  );
+
+  CREATE TRIGGER IF NOT EXISTS docs_ai AFTER INSERT ON docs BEGIN
+    INSERT INTO docs_fts(rowid, provider, category, title, content)
+    VALUES (new.id, new.provider, new.category, new.title, new.content);
+  END;
+`;
+
+/** Ensure tables exist without dropping existing data. */
+function ensureSchema(db: Database.Database): void {
+  db.exec(SCHEMA_SQL);
+}
+
+/** Drop everything and recreate from scratch. */
+function rebuildSchema(db: Database.Database): void {
+  db.exec(`
+    DROP TABLE IF EXISTS docs_fts;
+    DROP TABLE IF EXISTS docs;
+  `);
+  db.exec(SCHEMA_SQL);
 }
 
 function main() {
@@ -104,44 +207,41 @@ function main() {
   mkdirSync(DB_DIR, { recursive: true });
 
   const db = new Database(DB_PATH);
-
-  db.exec(`
-    DROP TABLE IF EXISTS docs_fts;
-    DROP TABLE IF EXISTS docs;
-
-    CREATE TABLE docs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      provider TEXT NOT NULL,
-      category TEXT NOT NULL,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL
-    );
-
-    CREATE VIRTUAL TABLE docs_fts USING fts5(
-      provider,
-      category,
-      title,
-      content,
-      content='docs',
-      content_rowid='id',
-      tokenize='porter unicode61'
-    );
-
-    CREATE TRIGGER docs_ai AFTER INSERT ON docs BEGIN
-      INSERT INTO docs_fts(rowid, provider, category, title, content)
-      VALUES (new.id, new.provider, new.category, new.title, new.content);
-    END;
-  `);
-
-  console.log("Ingesting provider docs...\n");
+  db.pragma("journal_mode = WAL");
 
   if (singleProvider) {
+    // Single-provider mode: only rebuild that provider's data
+    // Ensure tables exist (in case DB is fresh)
+    ensureSchema(db);
+
+    // Atomically delete existing data and re-ingest for this provider
+    const deleteAndReinsert = db.transaction(() => {
+      const rows = db.prepare(
+        "SELECT id, provider, category, title, content FROM docs WHERE provider = ?"
+      ).all(singleProvider) as Array<{ id: number; provider: string; category: string; title: string; content: string }>;
+
+      const ftsDelete = db.prepare(
+        "INSERT INTO docs_fts(docs_fts, rowid, provider, category, title, content) VALUES('delete', ?, ?, ?, ?, ?)"
+      );
+      for (const row of rows) {
+        ftsDelete.run(row.id, row.provider, row.category, row.title, row.content);
+      }
+
+      db.prepare("DELETE FROM docs WHERE provider = ?").run(singleProvider);
+    });
+    deleteAndReinsert();
+
+    console.log(`Ingesting ${singleProvider}...\n`);
     const count = ingestProvider(db, singleProvider);
     console.log(`\nDone: ${count} chunks from ${singleProvider}`);
   } else {
+    // Full rebuild: drop and recreate everything
+    rebuildSchema(db);
+
+    console.log("Ingesting provider docs...\n");
     if (!existsSync(DOCS_DIR)) {
       console.log(`No docs directory at ${DOCS_DIR}`);
-      console.log("Create docs/providers/{provider}/*.md files first.");
+      console.log("Create docs/{provider}/*.md files first.");
       db.close();
       return;
     }

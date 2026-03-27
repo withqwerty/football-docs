@@ -1,6 +1,6 @@
 {
   "name": "football-docs",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
   "type": "module",
   "bin": {
@@ -10,6 +10,8 @@
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "ingest": "tsx src/ingest.ts",
+    "crawl": "tsx src/crawl.ts",
+    "discover": "tsx src/crawl.ts --discover",
     "start": "node dist/index.js"
   },
   "keywords": [
@@ -34,12 +36,17 @@
     "url": "git+https://github.com/withqwerty/football-docs.git"
   },
   "dependencies": {
+    "@apidevtools/swagger-parser": "^12.1.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
-    "better-sqlite3": "^11.9.1"
+    "@mozilla/readability": "^0.6.0",
+    "better-sqlite3": "^11.9.1",
+    "linkedom": "^0.18.12",
+    "turndown": "^7.2.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.15.2",
+    "@types/turndown": "^5.0.6",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
