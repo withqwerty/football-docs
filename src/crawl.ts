@@ -258,12 +258,27 @@ async function crawlGitHubReadme(repoUrl: string): Promise<CrawledDoc[]> {
 async function crawlOpenApiSpec(specUrl: string): Promise<CrawledDoc[]> {
   const docs: CrawledDoc[] = [];
 
+  // Fetch the spec ourselves first, then dereference the parsed object
+  // with external $ref resolution disabled to prevent SSRF via malicious specs
+  const specContent = await fetchText(specUrl);
+  if (!specContent) return docs;
+
   let api: Awaited<ReturnType<typeof SwaggerParser.dereference>>;
   try {
-    api = await SwaggerParser.dereference(specUrl);
-  } catch (err) {
-    console.error(`  Failed to parse OpenAPI spec: ${err}`);
-    return docs;
+    const parsed = JSON.parse(specContent);
+    api = await SwaggerParser.dereference(parsed, {
+      resolve: { external: false },
+    });
+  } catch {
+    // If JSON parse fails, try as YAML via URL (for YAML specs)
+    try {
+      api = await SwaggerParser.dereference(specUrl, {
+        resolve: { external: false },
+      });
+    } catch (err) {
+      console.error(`  Failed to parse OpenAPI spec: ${err}`);
+      return docs;
+    }
   }
 
   const info = api.info;

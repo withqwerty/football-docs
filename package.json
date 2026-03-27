@@ -19,6 +19,7 @@
     "discover": "tsx src/crawl.ts --discover",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
+    "prepublishOnly": "npm run build && npm run ingest",
     "start": "node dist/index.js",
     "test": "vitest run"
   },

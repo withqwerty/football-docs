@@ -16,7 +16,7 @@ Pick the one that matches what you want to do and follow the steps below.
 ### What you'll need
 
 - A GitHub account (free)
-- Node.js 18+ installed
+- Node.js 20+ installed
 - An AI coding tool (Claude Code, Cursor, GitHub Copilot, or similar)
 - A source to work from: official API docs, a website, a GitHub repo, or your own experience with the provider
 
