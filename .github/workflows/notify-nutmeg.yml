@@ -1,0 +1,40 @@
+name: Notify nutmeg on version change
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if version changed
+        id: version
+        run: |
+          OLD_VER=$(git show HEAD~1:package.json 2>/dev/null | grep '"version"' | grep -o '[0-9.]*' || echo "")
+          NEW_VER=$(grep '"version"' package.json | grep -o '[0-9.]*')
+          echo "old=$OLD_VER" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW_VER" >> "$GITHUB_OUTPUT"
+          if [ "$OLD_VER" != "$NEW_VER" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create nutmeg issue for version sync
+        if: steps.version.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLD_VER: ${{ steps.version.outputs.old }}
+          NEW_VER: ${{ steps.version.outputs.new }}
+        run: |
+          gh issue create \
+            --repo withqwerty/nutmeg \
+            --title "Sync: football-docs bumped to v${NEW_VER}" \
+            --body "football-docs was bumped from v${OLD_VER} to v${NEW_VER}. The nutmeg plugin CI will verify compatibility on the next run. If the schema changed, nutmeg may need updates." \
+            --label "sync" \
+            2>/dev/null || echo "Could not create issue (may need cross-repo permissions)"
