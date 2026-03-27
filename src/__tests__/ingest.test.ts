@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { parseFrontmatter, chunkMarkdown } from "../ingest.js";
+import { describe, expect, it } from "vitest";
+import { chunkMarkdown, parseFrontmatter } from "../ingest.js";
 
 describe("parseFrontmatter", () => {
   it("returns defaults when no frontmatter present", () => {

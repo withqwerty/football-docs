@@ -19,10 +19,10 @@
  *   npm run ingest -- --provider opta # ingest one provider
  */
 
-import Database from "better-sqlite3";
-import { resolve, dirname, basename } from "node:path";
+import { existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { existsSync, mkdirSync, readFileSync, readdirSync } from "node:fs";
+import Database from "better-sqlite3";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = resolve(__dirname, "..", "docs");

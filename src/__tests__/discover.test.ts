@@ -1,13 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { chooseBestSource, type ProviderSource } from "../discover.js";
-
-interface ProbeResult {
-  url: string;
-  sourceType: ProviderSource["type"];
-  llmsTxt: { url: string; content: string } | null;
-  isReadTheDocs: boolean;
-  isReachable: boolean;
-}
+import { describe, expect, it } from "vitest";
+import { chooseBestSource, type ProbeResult } from "../discover.js";
 
 function makeProbe(overrides: Partial<ProbeResult> = {}): ProbeResult {
   return {
@@ -22,7 +14,7 @@ function makeProbe(overrides: Partial<ProbeResult> = {}): ProbeResult {
 
 describe("chooseBestSource", () => {
   it("returns null when no probe results", () => {
-    expect(chooseBestSource([], [])).toBeNull();
+    expect(chooseBestSource([])).toBeNull();
   });
 
   it("returns null when all URLs are unreachable", () => {
@@ -30,7 +22,7 @@ describe("chooseBestSource", () => {
       makeProbe({ isReachable: false }),
       makeProbe({ url: "https://other.com", isReachable: false }),
     ];
-    expect(chooseBestSource([], probes)).toBeNull();
+    expect(chooseBestSource(probes)).toBeNull();
   });
 
   it("prefers llms-full.txt over everything", () => {
@@ -50,7 +42,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result).not.toBeNull();
     expect(result!.type).toBe("llms_txt");
     expect(result!.url).toContain("llms-full.txt");
@@ -73,7 +65,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result!.type).toBe("llms_txt");
   });
 
@@ -94,7 +86,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result!.type).toBe("readthedocs");
     expect(result!.url).toBe("https://rtd.example.com");
   });
@@ -114,7 +106,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result!.type).toBe("readthedocs");
   });
 
@@ -127,7 +119,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result!.type).toBe("github_docs");
     expect(result!.url).toBe("https://github.com/org/repo");
   });
@@ -142,7 +134,7 @@ describe("chooseBestSource", () => {
       }),
     ];
 
-    const result = chooseBestSource([], probes);
+    const result = chooseBestSource(probes);
     expect(result!.url).toBe("https://alive.com");
   });
 });

@@ -10,14 +10,14 @@
  * user-writable location (XDG_DATA_HOME or ~/.local/share).
  */
 
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import Database from "better-sqlite3";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import { existsSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import Database from "better-sqlite3";
+import { z } from "zod";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "data", "docs.db");
@@ -125,7 +125,7 @@ server.tool(
       }
 
       sql += ` ORDER BY rank LIMIT ?`;
-      params.push(max_results ?? 10);
+      params.push(max_results);
 
       const rows = db.prepare(sql).all(...params) as Array<{
         provider: string;
