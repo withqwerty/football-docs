@@ -71,7 +71,7 @@ interface CrawledDoc {
  * Uses Mozilla's Readability (same algorithm as Firefox Reader View)
  * to isolate the main content, then Turndown to convert to markdown.
  */
-function htmlToMarkdown(html: string, url: string): string | null {
+export function htmlToMarkdown(html: string, url: string): string | null {
   const { document } = parseHTML(html);
 
   // Readability mutates the DOM, so we work on the parsed copy directly
@@ -344,7 +344,7 @@ async function crawlOpenApiSpec(specUrl: string): Promise<CrawledDoc[]> {
 
 // ── Utilities ────────────────────────────────────────────────────────
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
