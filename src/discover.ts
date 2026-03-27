@@ -9,7 +9,7 @@
  *   const result = await discoverBestSource(provider);
  */
 
-import { urlExists, fetchText } from "./http.js";
+import { fetchText, urlExists } from "./http.js";
 
 export interface ProviderSource {
   url: string;
@@ -25,6 +25,14 @@ export interface DiscoveryResult {
   checked: Array<{ url: string; found: string | null; error?: string }>;
 }
 
+export interface ProbeResult {
+  url: string;
+  sourceType: ProviderSource["type"];
+  llmsTxt: { url: string; content: string } | null;
+  isReadTheDocs: boolean;
+  isReachable: boolean;
+}
+
 /**
  * Probe a base URL for llms.txt variants.
  * Returns the URL and content of the best llms.txt found, or null.
@@ -32,10 +40,8 @@ export interface DiscoveryResult {
 async function probeLlmsTxt(
   baseUrl: string
 ): Promise<{ url: string; content: string } | null> {
-  // Normalise: ensure trailing slash for root-level probing
   const root = baseUrl.replace(/\/$/, "");
 
-  // Check llms-full.txt first (more complete), then llms.txt
   for (const filename of ["llms-full.txt", "llms.txt"]) {
     const url = `${root}/${filename}`;
     const content = await fetchText(url);
@@ -48,14 +54,12 @@ async function probeLlmsTxt(
 }
 
 /**
- * Check if a URL looks like a ReadTheDocs site.
- * RTD sites typically have /en/latest/ paths and a specific page structure.
+ * Check if a URL looks like a ReadTheDocs or Sphinx site.
  */
 async function probeReadTheDocs(url: string): Promise<boolean> {
   const check = await urlExists(url);
   if (!check.ok) return false;
 
-  // RTD sites serve HTML with a recognisable structure
   const html = await fetchText(url);
   if (!html) return false;
 
@@ -67,41 +71,16 @@ async function probeReadTheDocs(url: string): Promise<boolean> {
   );
 }
 
-// ── Core priority logic ──────────────────────────────────────────────
-//
-// TODO: Implement chooseBestSource() below.
-//
-// This function receives a provider's configured sources (from providers.json)
-// and the results of probing each URL. It should return the single best source
-// to crawl, or null if only curated content is available.
-//
-// Design considerations:
-//   - llms.txt is purpose-built for LLMs — if it exists and is substantial,
-//     it's almost certainly the best source
-//   - But a tiny llms.txt (just links, no content) may be worse than full RTD docs
-//   - Some providers have no public docs at all (Opta, Wyscout) — only curated
-//   - A source that was reachable last month may be down today
-//
-// The probeResults array tells you what was actually found at each URL.
-// The sources array tells you what the provider maintainer configured.
-
-interface ProbeResult {
-  url: string;
-  sourceType: ProviderSource["type"];
-  llmsTxt: { url: string; content: string } | null;
-  isReadTheDocs: boolean;
-  isReachable: boolean;
-}
-
 /**
  * Choose the best source to crawl from probe results.
  *
- * @param sources - The provider's configured sources from providers.json
+ * Scoring: llms-full.txt (>1000 chars) = 100, llms.txt (>1000 chars) = 90,
+ * ReadTheDocs/Sphinx = 70, short llms.txt = 50, reachable = 40, unreachable = 0.
+ *
  * @param probeResults - What was actually found at each URL
  * @returns The best source to crawl, or null if only curated content is available
  */
 export function chooseBestSource(
-  sources: ProviderSource[],
   probeResults: ProbeResult[]
 ): ProviderSource | null {
   let bestScore = 0;
@@ -115,17 +94,15 @@ export function chooseBestSource(
       const isSubstantial = probe.llmsTxt.content.length > 1000;
       score = isFullTxt && isSubstantial ? 100
             : isSubstantial             ? 90
-            :                             50; // short llms.txt — just a link list
+            :                             50;
     } else if (probe.isReadTheDocs) {
       score = 70;
     } else if (probe.isReachable) {
       score = 40;
     }
-    // unreachable → score stays 0, skipped
 
     if (score > bestScore) {
       bestScore = score;
-      // Map back to a ProviderSource — prefer llms.txt URL if found, otherwise original
       bestSource = probe.llmsTxt
         ? { url: probe.llmsTxt.url, type: "llms_txt" }
         : { url: probe.url, type: probe.sourceType };
@@ -185,7 +162,7 @@ export async function discoverBestSource(
     }
   }
 
-  const bestSource = chooseBestSource(sources, probeResults);
+  const bestSource = chooseBestSource(probeResults);
 
   return { provider, source: bestSource, checked };
 }

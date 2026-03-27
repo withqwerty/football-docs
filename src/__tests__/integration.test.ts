@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import Database from "better-sqlite3";
-import { resolve, dirname } from "node:path";
+import { existsSync, rmSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { rmSync, existsSync } from "node:fs";
+import Database from "better-sqlite3";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { chunkMarkdown } from "../ingest.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

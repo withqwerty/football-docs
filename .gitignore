@@ -5,3 +5,13 @@ dist/
 .env
 .env.*
 .npmrc
+
+# SQLite WAL/SHM files (created at runtime)
+*.db-wal
+*.db-shm
+
+# Test artifacts
+data/test.db
+
+# Review artifacts
+.context/

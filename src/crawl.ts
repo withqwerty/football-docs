@@ -14,18 +14,18 @@
  *   npm run crawl -- --discover           # probe sources without crawling
  */
 
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import {
   existsSync,
   mkdirSync,
-  writeFileSync,
   readFileSync,
+  writeFileSync,
 } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import SwaggerParser from "@apidevtools/swagger-parser";
 import { Readability } from "@mozilla/readability";
 import { parseHTML } from "linkedom";
 import TurndownService from "turndown";
-import SwaggerParser from "@apidevtools/swagger-parser";
 import { discoverBestSource, type ProviderSource } from "./discover.js";
 import { fetchText } from "./http.js";
 
@@ -71,7 +71,7 @@ interface CrawledDoc {
  * Uses Mozilla's Readability (same algorithm as Firefox Reader View)
  * to isolate the main content, then Turndown to convert to markdown.
  */
-export function htmlToMarkdown(html: string, url: string): string | null {
+export function htmlToMarkdown(html: string, _url: string): string | null {
   const { document } = parseHTML(html);
 
   // Readability mutates the DOM, so we work on the parsed copy directly
@@ -147,15 +147,27 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
   const docs: CrawledDoc[] = [];
   const root = baseUrl.replace(/\/$/, "");
   const rootHost = new URL(root).hostname;
+  const usedCategories = new Set<string>();
 
   const indexHtml = await fetchText(root);
   if (!indexHtml) return docs;
 
+  // Extract the root/index page itself
+  const indexContent = htmlToMarkdown(indexHtml, root);
+  if (indexContent && indexContent.length >= 100) {
+    usedCategories.add("index");
+    docs.push({
+      category: "index",
+      content: indexContent,
+      source_url: root,
+      source_type: "crawled",
+    });
+  }
+
   // Extract links from the index page
   const linkPattern = /href="([^"]*\.html?)"/g;
   const links = new Set<string>();
-  let match;
-  while ((match = linkPattern.exec(indexHtml)) !== null) {
+  for (const match of indexHtml.matchAll(linkPattern)) {
     const href = match[1];
     if (
       href.startsWith("#") ||
@@ -167,7 +179,7 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
 
     let fullUrl: string;
     try {
-      fullUrl = new URL(href, root + "/").href;
+      fullUrl = new URL(href, `${root}/`).href;
     } catch {
       continue;
     }
@@ -186,14 +198,20 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
     const content = htmlToMarkdown(html, pageUrl);
     if (!content || content.length < 100) continue;
 
-    const path = new URL(pageUrl).pathname;
-    const category = slugify(
-      path
-        .replace(/\.(html?|htm)$/, "")
-        .split("/")
-        .filter(Boolean)
-        .pop() ?? "page"
-    );
+    // Use last 2 path segments to avoid duplicate category names
+    const pathSegments = new URL(pageUrl).pathname
+      .replace(/\.(html?|htm)$/, "")
+      .split("/")
+      .filter(Boolean);
+    let category = slugify(pathSegments.slice(-2).join("-") || "page");
+
+    // Deduplicate: append a suffix if the category is already used
+    if (usedCategories.has(category)) {
+      let suffix = 2;
+      while (usedCategories.has(`${category}-${suffix}`)) suffix++;
+      category = `${category}-${suffix}`;
+    }
+    usedCategories.add(category);
 
     docs.push({
       category,
@@ -240,7 +258,7 @@ async function crawlGitHubReadme(repoUrl: string): Promise<CrawledDoc[]> {
 async function crawlOpenApiSpec(specUrl: string): Promise<CrawledDoc[]> {
   const docs: CrawledDoc[] = [];
 
-  let api;
+  let api: Awaited<ReturnType<typeof SwaggerParser.dereference>>;
   try {
     api = await SwaggerParser.dereference(specUrl);
   } catch (err) {
@@ -252,14 +270,12 @@ async function crawlOpenApiSpec(specUrl: string): Promise<CrawledDoc[]> {
   const paths = (api as Record<string, unknown>).paths as Record<string, Record<string, unknown>> | undefined;
 
   // Overview doc
-  const overviewLines = [
+  const overviewLines: string[] = [
     `# ${info?.title ?? "API"}`,
     "",
-    info?.description ?? "",
-    "",
-    info?.version ? `**Version:** ${info.version}` : "",
-    "",
   ];
+  if (info?.description) overviewLines.push(info.description, "");
+  if (info?.version) overviewLines.push(`**Version:** ${info.version}`, "");
 
   // Collect servers/base URLs if present
   const servers = (api as Record<string, unknown>).servers as Array<{ url: string; description?: string }> | undefined;
@@ -273,7 +289,7 @@ async function crawlOpenApiSpec(specUrl: string): Promise<CrawledDoc[]> {
 
   docs.push({
     category: "api-overview",
-    content: overviewLines.filter(Boolean).join("\n").trim(),
+    content: overviewLines.join("\n").trim(),
     source_url: specUrl,
     source_type: "openapi",
   });
@@ -372,7 +388,7 @@ function writeCrawledDoc(
   ].join("\n");
 
   const filePath = resolve(dir, `${doc.category}.md`);
-  if (!filePath.startsWith(dir)) {
+  if (!filePath.startsWith(`${dir}/`)) {
     throw new Error(`Path traversal detected: ${doc.category}`);
   }
   writeFileSync(filePath, frontmatter + doc.content, "utf-8");
