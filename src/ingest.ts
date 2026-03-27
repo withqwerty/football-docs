@@ -48,7 +48,7 @@ interface DocChunk {
 }
 
 /** Parse optional YAML frontmatter from a markdown file. */
-function parseFrontmatter(text: string): { frontmatter: Frontmatter; body: string } {
+export function parseFrontmatter(text: string): { frontmatter: Frontmatter; body: string } {
   const defaults: Frontmatter = {
     source_url: null,
     source_type: "curated",
@@ -85,7 +85,7 @@ function parseFrontmatter(text: string): { frontmatter: Frontmatter; body: strin
 }
 
 /** Split a markdown file into chunks by ## or ### headings. */
-function chunkMarkdown(text: string, provider: string, category: string): DocChunk[] {
+export function chunkMarkdown(text: string, provider: string, category: string): DocChunk[] {
   const { frontmatter, body } = parseFrontmatter(text);
   const chunks: DocChunk[] = [];
   const lines = body.split("\n");
