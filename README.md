@@ -2,7 +2,11 @@
 
 Searchable football data provider documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
 
-An MCP server that gives your AI agent instant access to documentation for Opta, StatsBomb, Wyscout, SportMonks, socceraction, kloppy, soccerdata, mplsoccer, databallpy, and free sources (FBref, Understat, ClubElo). Search event types, qualifier IDs, coordinate systems, API endpoints, and cross-provider mappings.
+**Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot, Windsurf) to work with football data. Works with any tool that supports MCP.
+
+**What it does:** Gives your AI agent a searchable index of documentation for 16 football data providers — event types, qualifier IDs, coordinate systems, API endpoints, data models, and cross-provider comparisons. Your agent looks up the real docs instead of guessing from training data.
+
+**Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
 MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard for connecting AI coding tools to external data sources.
 
