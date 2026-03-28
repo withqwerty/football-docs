@@ -15,3 +15,7 @@ data/test.db
 
 # Review artifacts
 .context/
+
+# MCP registry tokens
+.mcpregistry_*
+docs/wikidata-sparql-football-ids.md
