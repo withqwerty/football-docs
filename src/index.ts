@@ -382,6 +382,90 @@ server.tool(
   }
 );
 
+// Tool: resolve_entity
+const REEP_API = "https://reep-api.rahulkeerthi2-95d.workers.dev";
+
+server.tool(
+  "resolve_entity",
+  "Resolve a football entity (player, team, or coach) to get cross-provider IDs. Use when you need to map between Transfermarkt, FBref, Sofascore, Opta, and other provider IDs, or when you need to look up a player/team/coach by name.",
+  {
+    name: z.string().optional().describe("Entity name to search for (e.g. 'Cole Palmer', 'Arsenal'). Fuzzy match on name and aliases."),
+    provider: z.string().optional().describe("Source provider for ID resolution (e.g. 'transfermarkt', 'fbref', 'sofascore', 'opta', 'soccerway')"),
+    id: z.string().optional().describe("ID from the source provider to resolve to all other IDs"),
+    qid: z.string().optional().describe("Wikidata QID for direct lookup (e.g. 'Q99760796')"),
+    type: z.enum(["player", "team", "coach"]).optional().describe("Filter results by entity type"),
+  },
+  { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+  async ({ name, provider, id, qid, type }) => {
+    let url: string;
+
+    if (qid) {
+      url = `${REEP_API}/lookup?qid=${encodeURIComponent(qid)}`;
+    } else if (provider && id) {
+      url = `${REEP_API}/resolve?provider=${encodeURIComponent(provider)}&id=${encodeURIComponent(id)}`;
+    } else if (name) {
+      url = `${REEP_API}/search?name=${encodeURIComponent(name)}&limit=10`;
+      if (type) url += `&type=${encodeURIComponent(type)}`;
+    } else {
+      return {
+        isError: true,
+        content: [{
+          type: "text" as const,
+          text: "Provide at least one of: name, qid, or provider+id. Examples:\n- name: 'Cole Palmer'\n- provider: 'transfermarkt', id: '568177'\n- qid: 'Q99760796'",
+        }],
+      };
+    }
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        return {
+          isError: true,
+          content: [{ type: "text" as const, text: `Reep API error: ${resp.status} ${resp.statusText}` }],
+        };
+      }
+
+      const data = await resp.json() as { results: Array<Record<string, unknown>>; count?: number };
+
+      if (!data.results?.length) {
+        return {
+          content: [{ type: "text" as const, text: "No entities found matching the query." }],
+        };
+      }
+
+      const formatted = data.results.map((e: Record<string, unknown>) => {
+        const ids = e.external_ids as Record<string, string> | undefined;
+        const idLines = ids
+          ? Object.entries(ids).map(([k, v]) => `  ${k}: ${v}`).join("\n")
+          : "  (none)";
+
+        const bio = [
+          e.date_of_birth && `DOB: ${e.date_of_birth}`,
+          e.nationality && `Nationality: ${e.nationality}`,
+          e.position && `Position: ${e.position}`,
+          e.height_cm && `Height: ${e.height_cm}cm`,
+          e.country && `Country: ${e.country}`,
+          e.stadium && `Stadium: ${e.stadium}`,
+        ].filter(Boolean).join(" | ");
+
+        return `### ${e.name_en} (${e.type})\nWikidata: ${e.qid}${e.aliases_en ? `\nAliases: ${e.aliases_en}` : ""}${bio ? `\n${bio}` : ""}\nProvider IDs:\n${idLines}`;
+      }).join("\n\n");
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: `Found ${data.results.length} result(s):\n\n${formatted}`,
+        }],
+      };
+    } catch (err) {
+      return {
+        isError: true,
+        content: [{ type: "text" as const, text: `Failed to reach Reep API: ${err instanceof Error ? err.message : String(err)}` }],
+      };
+    }
+  }
+);
+
 // ── Start ───────────────────────────────────────────────────────────────
 
 async function main() {
