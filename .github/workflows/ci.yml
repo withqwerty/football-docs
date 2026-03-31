@@ -14,12 +14,15 @@ jobs:
         node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npm test
-      - run: npm run build
-      - run: npm run ingest
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm test
+      - run: pnpm run build
+      - run: pnpm run ingest
