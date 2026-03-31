@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "prebuild": "npm run check",
+    "prebuild": "pnpm check",
     "check": "tsc --noEmit",
     "dev": "tsx src/index.ts",
     "ingest": "tsx src/ingest.ts",
@@ -20,7 +20,7 @@
     "discover": "tsx src/crawl.ts --discover",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
-    "prepublishOnly": "npm run build && npm run ingest",
+    "prepublishOnly": "pnpm build && pnpm ingest",
     "start": "node dist/index.js",
     "test": "vitest run"
   },
@@ -61,6 +61,9 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "vitest": "^4.1.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3", "esbuild"]
   },
   "files": [
     "dist/",
