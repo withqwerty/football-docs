@@ -12,6 +12,13 @@ football projects that have licensed access to the SDAPI feeds. Treat Opta as a
 canonical schedule and structure source only when the local entitlement and
 coverage audit prove that the relevant competition family is complete.
 
+## Access Surface
+
+Primary access is through licensed Stats Perform / Opta feeds or customer
+exports. Public-facing Opta Analyst surfaces can be useful for examples, but
+they are not a substitute for an entitlement-safe feed contract. Record the feed
+family, extraction date, and competition coverage when using Opta identity facts.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -24,6 +31,14 @@ coverage audit prove that the relevant competition family is complete.
 | Player | person UUID | Strong person key inside Opta. Still corroborate against names, DOB, nationality, and relationship evidence before cross-provider bridging. |
 | Coach or staff | person UUID plus role surface | Person UUIDs can span player and coach roles. Keep role edges separate from person identity. |
 
+## ID Scheme Notes
+
+Opta identifiers are opaque provider keys. Do not parse semantic meaning from
+their string shape, and do not assume that display labels, stage labels, or
+contestant names are stable identifiers. Match, contestant, person, competition,
+and tournament-calendar IDs should be stored with provider, feed family, and
+snapshot metadata.
+
 ## Useful Matching Fields
 
 - Match: date/time, home and away contestant UUIDs, score, competition, season,
@@ -35,7 +50,7 @@ coverage audit prove that the relevant competition family is complete.
 - Relationships: schedule team participation, squads, lineups, coaching staff,
   substitutions, and career memberships.
 
-## Quirks
+## Known Quirks
 
 - Opta labels are provider display labels, not ontology. Do not mint a separate
   competition or team solely because the feed label differs from another
@@ -48,9 +63,9 @@ coverage audit prove that the relevant competition family is complete.
 - Some person facts are current-point-in-time surfaces, especially active squad
   or career listings. Record the snapshot date when using them.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-Curated Reep notes about Opta should say which local feed or mirror was audited
-and whether the fact is a general provider behaviour or only observed in a
-specific competition slice. Do not publish private feed tokens, local file
-paths, or entitlement-specific URLs.
+Use this page as the public provider-fact reference for Opta identity surfaces:
+access shape, ID families, matching fields, and known quirks. Reep Next
+acceptance policy, canonical-feed assignments, minting, review cases, action
+ledgers, and private feed observations belong outside football-docs.

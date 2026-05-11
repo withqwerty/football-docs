@@ -1,6 +1,6 @@
 ---
 source_type: curated
-source_url: https://docs.sportmonks.com/football
+source_url: https://docs.sportmonks.com/v3
 upstream_version: null
 crawled_at: null
 ---
@@ -11,6 +11,13 @@ SportMonks exposes a broad REST API with stable numeric IDs for leagues,
 seasons, stages, fixtures, participants, players, coaches, venues, and related
 entities. It is a useful bridge and corroborator, especially where public API
 access is available.
+
+## Access Surface
+
+Primary access is the documented SportMonks football API. Include expansions can
+make identity, relationship, and event evidence available from the same request,
+but callers should still record the endpoint, include set, plan scope, and
+request date because coverage depends on subscription tier.
 
 ## Stable Identity Surfaces
 
@@ -24,6 +31,13 @@ access is available.
 | Player | player ID | Strong provider key only if not reused or contaminated by previous bridge errors. Corroborate with attributes. |
 | Coach or staff | coach ID | Treat as person identity with role-specific evidence. |
 
+## ID Scheme Notes
+
+SportMonks IDs are numeric provider IDs. Keep them provider-scoped and do not
+merge by bare number across providers. League, season, stage, round, fixture,
+participant, player, coach, and venue IDs should be stored with the source
+endpoint and include path that supplied them.
+
 ## Useful Matching Fields
 
 - Fixture: `fixture.id`, league, season, stage, round, participants, start time,
@@ -33,7 +47,7 @@ access is available.
 - Player: ID, display name, common name, date of birth, nationality, position,
   height, weight, image URL, and team/lineup relationships.
 
-## Quirks
+## Known Quirks
 
 - Broad APIs can carry legacy or contaminated bridges if a downstream register
   previously joined the wrong person. Validate same-provider ID uniqueness.
@@ -43,8 +57,9 @@ access is available.
 - Stages and rounds are provider shape. Keep the canonical ontology decision
   separate from the SportMonks response nesting.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-When Reep notes mention SportMonks bridge issues, record the provider ID,
-affected entity type, and the validation rule that caught it. Avoid publishing
-private API keys or paid-tier payloads.
+Use this page as the public provider-fact reference for SportMonks ID families,
+API identity surfaces, include paths, and matching cautions. Reep Next can cite
+those facts, but contaminated-bridge review, private validation output, API
+keys, paid-tier payloads, and register decisions belong outside football-docs.
