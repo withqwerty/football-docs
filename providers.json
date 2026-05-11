@@ -50,6 +50,51 @@
       ],
       "last_crawled": null
     },
+    "transfermarkt": {
+      "description": "Public football entity pages for players, teams, competitions, matches, transfers, and market values",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Public website identity surfaces and Reep-derived provider-quirk notes" }
+      ],
+      "last_crawled": null
+    },
+    "soccerdonna": {
+      "description": "Public women's football entity pages, match reports, competition pages, player profiles, and staff profiles",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Public website identity surfaces and Reep-derived women's football matching notes" }
+      ],
+      "last_crawled": null
+    },
+    "fotmob": {
+      "description": "Consumer-facing football fixtures, teams, competitions, player profiles, lineups, and match statistics",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "Public website and undocumented endpoint identity-surface notes" }
+      ],
+      "last_crawled": null
+    },
+    "impect": {
+      "description": "Commercial football match and event data provider with team and player identity surfaces in delivered feeds",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "High-level commercial-provider identity guidance; no proprietary payloads" }
+      ],
+      "last_crawled": null
+    },
+    "skillcorner": {
+      "description": "Commercial tracking and physical-data provider with match, team, and player identity surfaces in delivered feeds",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "type": "curated", "note": "High-level commercial-provider identity guidance; no proprietary tracking payloads" }
+      ],
+      "last_crawled": null
+    },
     "kloppy": {
       "description": "Python library for standardising football data across providers",
       "version": "3.16.0",
