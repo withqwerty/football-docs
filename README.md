@@ -4,7 +4,7 @@ Searchable football data provider documentation for AI coding agents. Like [Cont
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot, Windsurf) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 16 football data providers — event types, qualifier IDs, coordinate systems, API endpoints, data models, and cross-provider comparisons. Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 15 football data providers — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons. Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -92,6 +92,7 @@ Add to `claude_desktop_config.json`:
 - "What is Opta qualifier 76?" (big chance)
 - "How does StatsBomb represent shot events?"
 - "Compare Opta and Wyscout coordinate systems"
+- "Which provider IDs are safe identity bridges for Transfermarkt players?"
 - "Does SportMonks have xG data?"
 - "What event types does kloppy map to GenericEvent?"
 - "How does SPADL represent a tackle?"
@@ -100,18 +101,23 @@ Add to `claude_desktop_config.json`:
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| StatsBomb | 143 | event-types, data-model, coordinate-system, api-access, xg-model |
+| StatsBomb | 148 | event-types, data-model, coordinate-system, api-access, xg-model, identity-surfaces |
 | kloppy | 100 | data-model, usage, provider-mapping |
-| SportMonks | 71 | event-types, data-model, api-access |
+| SportMonks | 76 | event-types, data-model, api-access, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 62 | overview, pitch-types, visualizations |
-| Wyscout | 61 | event-types, data-model, coordinate-system, api-access |
+| Wyscout | 66 | event-types, data-model, coordinate-system, api-access, identity-surfaces |
 | Free sources | 45 | overview, fbref, understat |
 | soccerdata | 40 | overview, data-sources, usage |
-| Opta | 29 | event-types, qualifiers, coordinate-system, api-access |
+| Opta | 34 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
 | socceraction | 26 | SPADL format, VAEP, Expected Threat |
+| FotMob | 5 | identity-surfaces |
+| Impect | 5 | identity-surfaces |
+| SkillCorner | 5 | identity-surfaces |
+| Soccerdonna | 5 | identity-surfaces |
+| Transfermarkt | 5 | identity-surfaces |
 
-**640 searchable chunks** across 10 providers.
+**685 searchable chunks** across 15 providers.
 
 ## Contributing
 
