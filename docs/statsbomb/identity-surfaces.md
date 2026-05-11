@@ -12,6 +12,13 @@ competitions. Open Data is excellent for public examples and corroboration, but
 its coverage is selective and should not be treated as a full canonical register
 source unless the exact scope has been audited.
 
+## Access Surface
+
+StatsBomb identity examples can come from the public Open Data repository, the
+`statsbombpy` wrapper, or licensed commercial APIs. Public docs should prefer
+Open Data IDs and explicitly say when guidance is inferred from Open Data rather
+than a commercial entitlement.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -23,6 +30,13 @@ source unless the exact scope has been audited.
 | Player | `player_id` | Strong player bridge inside lineups/events. Corroborate with names, DOB from another authority, and relationship evidence. |
 | Coach or manager | lineup or match metadata surfaces where present | Treat as role evidence. Coverage is less central than player/event data. |
 
+## ID Scheme Notes
+
+StatsBomb Open Data exposes numeric `competition_id`, `season_id`, `match_id`,
+`team_id`, and `player_id` fields, plus event UUIDs. The numeric IDs are stable
+inside the provider dataset but should stay provider-scoped. Do not infer global
+identity from a bare number without provider and dataset context.
+
 ## Useful Matching Fields
 
 - Competitions and seasons: IDs, names, country, gender, and season label.
@@ -32,7 +46,7 @@ source unless the exact scope has been audited.
 - Players: player IDs, names, team membership in lineups/events, shirt number,
   position, and event participation.
 
-## Quirks
+## Known Quirks
 
 - Open Data coverage is selective. Absence from open data is not evidence that
   an entity or match does not exist.
@@ -43,8 +57,9 @@ source unless the exact scope has been audited.
 - Names can be display names. Use another attribute authority for DOB where a
   person bridge requires it.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-When using Reep-derived notes about StatsBomb, distinguish Open Data facts from
-commercial API expectations. Public examples should prefer Open Data IDs and
-avoid implying entitlement to private feeds.
+Use this page as the public provider-fact reference for StatsBomb identity
+surfaces. Reep Next can cite Open Data ID families and matching cautions, while
+commercial entitlement assumptions, register acceptance policy, private review
+evidence, and derived bridge decisions belong outside football-docs.

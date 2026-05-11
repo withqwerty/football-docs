@@ -11,6 +11,13 @@ SkillCorner is mainly a tracking and physical-data provider. Its identity
 surfaces are most useful for linking delivered match, team, and player rows back
 to an existing register rather than minting a full football ontology.
 
+## Access Surface
+
+Access is through licensed SkillCorner APIs or delivered tracking/physical-data
+files. Public guidance should use synthetic examples or high-level field names,
+not proprietary tracking payloads. Record delivery date, match scope, and data
+product when using SkillCorner identity evidence.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -21,6 +28,13 @@ to an existing register rather than minting a full football ontology.
 | Team | provider team key | Corroborate with match participation and team names. |
 | Player | provider player key | Corroborate with tracking roster, shirt number, position, and external person attributes. |
 
+## ID Scheme Notes
+
+SkillCorner IDs should be treated as opaque and provider-scoped. Match delivery
+IDs, team IDs, and player IDs are strongest when paired with the delivery
+snapshot and fixture context. A tracking roster key is not automatically a
+season membership or person identity without corroborating attributes.
+
 ## Useful Matching Fields
 
 - Match: provider match key, date, competition, season, home and away teams,
@@ -29,7 +43,7 @@ to an existing register rather than minting a full football ontology.
 - Player: provider player key, name, team in match, shirt number, position,
   starter/substitute status where supplied, and tracking samples.
 
-## Quirks
+## Known Quirks
 
 - Tracking feeds can expose matchday rosters without enough biographical detail
   for safe person minting. Use them as relationship evidence unless another
@@ -38,8 +52,9 @@ to an existing register rather than minting a full football ontology.
   matching.
 - A match-level tracking file is not proof of a season-long membership edge.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-Public notes should avoid proprietary tracking payload examples. Use synthetic
-examples or high-level field names unless the provider has published equivalent
-documentation.
+Use this page as the public provider-fact reference for SkillCorner identity
+surfaces in tracking and physical-data deliveries. Reep Next can cite the field
+families and matching cautions, but raw tracking payloads, private delivery
+examples, and register review outputs belong outside football-docs.

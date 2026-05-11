@@ -11,6 +11,13 @@ Transfermarkt is valuable for cross-provider corroboration and public entity
 pages, especially player biographical attributes and competition/team history.
 Its public website shape should not be copied blindly into a register ontology.
 
+## Access Surface
+
+Transfermarkt is primarily a public website surface, not an official public API.
+Use public entity pages, match reports, or licence-safe community exports as
+evidence, and record the public URL plus snapshot date. Do not publish scraper
+state, bypass details, or private mirror paths.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -21,6 +28,14 @@ Its public website shape should not be copied blindly into a register ontology.
 | Team | `verein` ID | Same real team can sometimes appear under multiple provider IDs. Distinguish supplier segmentation from real succession. |
 | Player | `spieler` ID | Useful public player bridge. Strong corroborator when DOB, nationality, birthplace, position, and career context agree. |
 | Coach | staff or manager profile ID | Treat as a person surface with role-specific career evidence, not a separate human identity. |
+
+## ID Scheme Notes
+
+The numeric IDs embedded in public URLs are the bridge surfaces. URL slugs are
+handles and can change without changing the underlying provider ID. Common URL
+families include `spieler` for players, `verein` for teams, `wettbewerb` for
+competitions, and match or game IDs for fixtures. Season query parameters and
+display labels are context, not independent canonical IDs.
 
 ## Useful Matching Fields
 
@@ -33,7 +48,7 @@ Its public website shape should not be copied blindly into a register ontology.
   round label.
 - Season: competition code, season year, display label, and match membership.
 
-## Quirks
+## Known Quirks
 
 - Transfermarkt sometimes models playoffs, cups, or provider-maintained
   containers differently from a canonical match feed. For example, a playoff
@@ -46,9 +61,9 @@ Its public website shape should not be copied blindly into a register ontology.
   ambiguous.
 - URL slugs are handles. Numeric IDs are the bridge surface.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-When documenting a Transfermarkt quirk from Reep work, include the public URL
-pattern, the entity type affected, and whether the conclusion came from public
-page evidence, local mirror evidence, or a human-reviewed register decision.
-Avoid copying private scraper paths or local database row IDs into public docs.
+Use this page as the public provider-fact reference for Transfermarkt identity
+surfaces. Reep Next can cite it for URL families, ID scheme notes, and matching
+quirks, but register decisions, mint salts, review outcomes, private mirrors,
+and scraper implementation details belong outside football-docs.

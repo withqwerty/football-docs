@@ -8,6 +8,16 @@ Searchable football data provider documentation for AI coding agents. Like [Cont
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
+## Provider identity facts
+
+football-docs is the public source for provider identity-surface facts: access
+shape, ID schemes, matching fields, provider quirks, and provenance rules.
+Curated Reep-derived notes belong here when they can be stated without private
+register state. They should say whether a fact comes from public docs, public
+page evidence, licensed feed shape, or a reviewed public-safe observation, and
+must not include private paths, credentials, scraper state, action ledgers, mint
+salts, or raw restricted payloads.
+
 MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard for connecting AI coding tools to external data sources.
 
 ## Quick start
@@ -101,23 +111,23 @@ Add to `claude_desktop_config.json`:
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| StatsBomb | 148 | event-types, data-model, coordinate-system, api-access, xg-model, identity-surfaces |
+| StatsBomb | 150 | event-types, data-model, coordinate-system, api-access, xg-model, identity-surfaces |
 | kloppy | 100 | data-model, usage, provider-mapping |
-| SportMonks | 76 | event-types, data-model, api-access, identity-surfaces |
+| SportMonks | 78 | event-types, data-model, api-access, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 62 | overview, pitch-types, visualizations |
-| Wyscout | 66 | event-types, data-model, coordinate-system, api-access, identity-surfaces |
+| Wyscout | 68 | event-types, data-model, coordinate-system, api-access, identity-surfaces |
 | Free sources | 45 | overview, fbref, understat |
 | soccerdata | 40 | overview, data-sources, usage |
-| Opta | 34 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
+| Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
 | socceraction | 26 | SPADL format, VAEP, Expected Threat |
-| FotMob | 5 | identity-surfaces |
-| Impect | 5 | identity-surfaces |
-| SkillCorner | 5 | identity-surfaces |
-| Soccerdonna | 5 | identity-surfaces |
-| Transfermarkt | 5 | identity-surfaces |
+| FotMob | 7 | identity-surfaces |
+| Impect | 7 | identity-surfaces |
+| SkillCorner | 7 | identity-surfaces |
+| Soccerdonna | 7 | identity-surfaces |
+| Transfermarkt | 7 | identity-surfaces |
 
-**685 searchable chunks** across 15 providers.
+**703 searchable chunks** across 15 providers.
 
 ## Contributing
 

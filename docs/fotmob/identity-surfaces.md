@@ -11,6 +11,13 @@ FotMob is useful as a public consumer-facing corroborator for fixtures, teams,
 players, and competition pages. It should generally be treated as a bridge and
 lookup surface rather than as the canonical ontology source.
 
+## Access Surface
+
+FotMob identity evidence usually comes from public web pages or undocumented
+consumer-facing endpoints. Treat access and response shape as mutable, record
+the public URL or endpoint family and snapshot date, and avoid publishing
+scraping bypass or rate-limit evasion details.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -22,6 +29,13 @@ lookup surface rather than as the canonical ontology source.
 | Player | player ID | Useful public profile bridge. Corroborate with DOB, nationality, team, and position from stronger sources. |
 | Coach or staff | manager profile where exposed | Treat as role evidence unless profile attributes are strong enough. |
 
+## ID Scheme Notes
+
+FotMob IDs are provider-scoped numeric IDs. Match, team, player, league, and
+season IDs are useful bridges, while URL slugs and display labels are handles.
+Because the public endpoint contract is undocumented, store source URL,
+endpoint family, and snapshot date alongside any bridge evidence.
+
 ## Useful Matching Fields
 
 - Match: FotMob match ID, date/time, home and away teams, score, league, season,
@@ -31,7 +45,7 @@ lookup surface rather than as the canonical ontology source.
 - Player: player ID, full name, date of birth where present, nationality,
   position, current team, shirt number, and match participation.
 
-## Quirks
+## Known Quirks
 
 - FotMob is optimised for product display. Display names, slugs, and grouping
   labels may change.
@@ -40,8 +54,9 @@ lookup surface rather than as the canonical ontology source.
 - Public endpoints may be undocumented. Treat access and response shape as
   mutable unless the provider documents the contract.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-Public notes should distinguish observed public-page behaviour from any private
-or reverse-engineered access method. Do not publish scraping bypass details or
-rate-limit evasion guidance.
+Use this page as the public provider-fact reference for FotMob identity
+surfaces, public URL families, and matching cautions. Reep Next can cite those
+facts, but private endpoint handling, scrape internals, rate-limit tactics,
+review outcomes, and register decisions belong outside football-docs.

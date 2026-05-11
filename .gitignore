@@ -19,3 +19,6 @@ data/test.db
 # MCP registry tokens
 .mcpregistry_*
 docs/wikidata-sparql-football-ids.md
+
+# Local AI agent notes
+CLAUDE.md

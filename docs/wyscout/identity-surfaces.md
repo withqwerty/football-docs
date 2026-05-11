@@ -12,6 +12,13 @@ seasons, matches, teams, players, coaches, lineups, events, and career-like
 profile fields. Treat its IDs as strong provider bridges, not as proof that its
 ontology is the register ontology.
 
+## Access Surface
+
+Primary access is through licensed Hudl Wyscout APIs or delivered exports.
+Public examples should stay at field-name and shape level unless Hudl has
+published equivalent documentation. Record entitlement scope, export date, and
+whether a fact came from match, event, profile, or career metadata.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -23,6 +30,13 @@ ontology is the register ontology.
 | Player | `playerId` | Strong person bridge when profile attributes and relationship evidence agree. |
 | Coach or referee | profile IDs in match/team metadata | Treat role-specific IDs as person or official surfaces only after attribute checks. |
 
+## ID Scheme Notes
+
+Wyscout IDs are provider-scoped keys. Store `competitionId`, `seasonId`,
+`matchId`, `teamId`, `playerId`, and profile IDs with provider and snapshot
+metadata, and treat round or stage IDs as provider structure until mapped into a
+target-register stage model.
+
 ## Useful Matching Fields
 
 - Match: `matchId`, `competitionId`, `seasonId`, `roundId`, date, home/away
@@ -32,7 +46,7 @@ ontology is the register ontology.
 - Player: `playerId`, name fields, birth date, birth area, passport area, role,
   foot, height, gender, current team, and status.
 
-## Quirks
+## Known Quirks
 
 - Wyscout's `currentTeamId` is point-in-time profile data. Do not use it as a
   historical membership edge without a snapshot date.
@@ -42,8 +56,9 @@ ontology is the register ontology.
   replace attribute evidence for person bridging.
 - Round and stage IDs are provider structure, not necessarily public ontology.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-Curated Wyscout notes should say whether a field came from match metadata,
-profile metadata, event data, or a cross-provider comparison. Do not publish
-private API tokens, customer URLs, or entitlement-specific examples.
+Use this page as the public provider-fact reference for Hudl Wyscout identity
+surfaces and field families. Reep Next can cite those facts, but entitlement
+coverage, canonical-source policy, private examples, review outputs, and
+provider-specific bridge decisions belong outside football-docs.

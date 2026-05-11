@@ -12,6 +12,13 @@ for teams, competitions, player profiles, staff pages, and match reports. Treat
 it as a public evidence provider whose coverage and structure vary by
 competition and era.
 
+## Access Surface
+
+Soccerdonna is a public website surface. Use public profile pages, competition
+pages, and match reports as corroborating evidence, with the page URL and
+snapshot date recorded. Do not publish private scraping state, retry logs, or
+local mirror paths.
+
 ## Stable Identity Surfaces
 
 | Entity | Common surface | Notes |
@@ -24,6 +31,13 @@ competition and era.
 | Player | player profile ID | Useful for names, DOB where present, nationality, position, and career/team membership evidence. |
 | Coach or staff | staff profile ID | Useful for coaching roles, but role labels need a normalised public vocabulary. |
 
+## ID Scheme Notes
+
+Treat profile, team, competition, and match-report IDs as provider-scoped
+bridges. URL text and slugs are handles, not identity. Season and competition
+URL parameters are useful context, but the target register still decides whether
+they map to a season, stage, or competition entity.
+
 ## Useful Matching Fields
 
 - Match reports: date, home team, away team, score, competition, round label,
@@ -33,7 +47,7 @@ competition and era.
 - Team pages: official name, competition entries, country, gender context, and
   match participation.
 
-## Quirks
+## Known Quirks
 
 - DOB coverage varies by era and competition. Missing DOB should create review
   residue rather than forcing a weak name-only bridge.
@@ -44,8 +58,9 @@ competition and era.
 - Some pages are better corroborators than canonical mint sources because their
   season and competition hierarchy can differ from the schedule feed.
 
-## Reep-Derived Provenance Rules
+## Reep Next Usage
 
-Curated Soccerdonna notes should distinguish profile evidence from match-report
-evidence and record the scrape date or source snapshot when possible. Do not
-publish private scraping state, retry logs, or local mirror paths.
+Use this page as the public provider-fact reference for Soccerdonna profile,
+team, competition, and match-report identity surfaces. Reep Next can cite those
+facts while keeping review decisions, private scrape state, action logs, and
+women's-football implementation plans outside football-docs.
