@@ -169,6 +169,36 @@ Even StatsBomb's model has inherent limitations:
 
 ---
 
-## Post-Shot xG (xGOT)
+## xG decomposition
 
-StatsBomb also provides post-shot expected goals (xGOT / expected goals on target) for shots that are on target. This considers where the shot was placed relative to the goal frame. xGOT is available in the commercial API and some derived datasets but is not a standard field in the open data event JSON.
+On the Events API v8 feed, the shot object carries a set of xG fields that
+split the chance into situation quality, execution, and goalkeeping
+components:
+
+| Field | Meaning |
+|---|---|
+| `statsbomb_xg` | **Chance quality** — likelihood of scoring from the *situation* (location, GK and blocker positions from the freeze frame), before the ball is struck. The headline xG. |
+| `shot_execution_xg` | Likelihood of scoring *after* execution — adds shot placement & velocity on top of the `statsbomb_xg` features. |
+| `shot_execution_xg_uplift` | `shot_execution_xg − statsbomb_xg`. Positive when execution improved the chance; negative for a misplaced/weak shot or one fired straight at the keeper. |
+| `gk_save_difficulty_xg` | Likelihood of the keeper conceding given placement, velocity and keeper position. On-target, unblocked shots only. Some feeds label this field `statsbomb_xg2`. |
+| `gk_positioning_xg_suppression` | Threat suppressed by the keeper's positioning vs an average keeper. |
+| `gk_shot_stopping_xg_suppression` | Goals prevented above expectation by the keeper's shot-stopping (rewards/penalises the keeper given outcome and difficulty). |
+
+This separates "how good was the chance" (`statsbomb_xg`) from "how well was it
+taken" (`shot_execution_xg` / `_uplift`) and "how much did the keeper do"
+(`gk_*_suppression`). These connect directly to the aggregated goalkeeping
+metrics in the stats endpoints — `np_psxg`, `npot_psxg_faced`, `gsaa`,
+`save_ratio`, `xs_ratio` — defined in `iq-metrics-glossary.md` and the
+`player-*-stats.md` catalogues.
+
+## Post-Shot xG (PSxG / xGOT)
+
+Post-shot xG models goal probability *after* the shot is struck, using
+placement and velocity; it is only defined for on-target, unblocked shots and is
+the basis for valuing goalkeeping. In the event feed this corresponds to the
+`gk_save_difficulty_xg` / execution fields above; in the stats endpoints it
+surfaces as `np_psxg` (earned), `np_psxg_faced` / `npot_psxg_faced` (faced by a
+keeper), and is turned into Goals Saved Above Average (`gsaa`, `gsaa_ratio`,
+`xs_ratio`). PSxG is a commercial-API concept — it is not a standard field in
+the open-data event JSON, where only `statsbomb_xg` (and, on v8+ feeds, the
+decomposition) appears.

@@ -37,6 +37,22 @@ StatsBomb Open Data exposes numeric `competition_id`, `season_id`, `match_id`,
 inside the provider dataset but should stay provider-scoped. Do not infer global
 identity from a bare number without provider and dataset context.
 
+### Two internal ID systems: live vs offline
+
+StatsBomb does **not** have a single ID space. Internally there is a *live*
+system and an *offline* system, each with its own ids for players, teams,
+country-of-birth, and matches (`live_player_id` vs `offline_player_id`,
+`live_team_id` vs `offline_team_id`, `live_match_id` vs `offline_match_id`,
+etc.). The same person/team has different integers in each. Which system's ids
+appear in a given feed depends on the system that produced it.
+
+Treat a StatsBomb id as a **(system, id)** pair, not a bare integer. Reconciling
+the two requires the commercial **Player Mapping** endpoint
+(`/api/v1/player-mapping`), which returns paired `live_*`/`offline_*` ids — see
+`player-mapping.md`. Open Data does not expose this duality or the mapping
+endpoint, so Open-Data-only workflows generally see one system's ids and should
+record which.
+
 ## Useful Matching Fields
 
 - Competitions and seasons: IDs, names, country, gender, and season label.
