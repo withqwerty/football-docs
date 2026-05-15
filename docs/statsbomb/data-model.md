@@ -98,9 +98,49 @@ File: `matches/{competition_id}/{season_id}.json`
 
 ### Data Quality Flags
 
-- `data_version` -- spec version (current: `"1.1.0"`)
-- `shot_fidelity_version` -- `"1"` (basic) or `"2"` (enhanced, includes freeze frames on shots)
-- `xy_fidelity_version` -- `"1"` (less precise locations) or `"2"` (high-precision x/y coordinates)
+`metadata` (object on each match; child attributes are optional and the object
+is empty for matches not yet `available`):
+
+- `data_version` -- the event-data collection version applied to this match (e.g. `1.0.0`, `1.0.1`, `1.0.2`, `1.0.3`, `1.1.0`). Which optional event fields are populated depends on this value; `1.1.0` is the fullest.
+- `shot_fidelity_version` -- `"1"` (basic) or `"2"` (high-fidelity x/y on shots, freeze frames and shot-paired events)
+- `xy_fidelity_version` -- `"1"` (standard location granularity) or `"2"` (high-precision x/y coordinates)
+
+### Match & collection status (Matches API v6)
+
+The Matches response carries several status fields. Events/360 are only
+fetchable once the relevant status reaches `available`:
+
+| Field | Values |
+|---|---|
+| `match_status` | `available` (event data obtainable), `scheduled`, `deleted` |
+| `match_status_360` | `available`, `scheduled` (awaiting 360), `unscheduled` (comp gets no 360) |
+| `play_status` | `Normal`, `Postponed`, `Cancelled`, `Abandoned`, `Forfeited` |
+| `collection_status` | collection pipeline state (16 values, below) |
+
+`collection_status` values: `Unassigned` (not started), `InProgress`,
+`WithoutLocation` (events not yet located on pitch), `WithoutFreezeFrame` (shot
+freeze-frame phase), `PendingValidation`, `Validating`, `Invalid`,
+`WithoutDirection`, `Complete`, `Postponed`, `NoVidError` (footage not sourced),
+`IncVidError` (incomplete footage), `PoorVidError`, `ErrorAbandoned`,
+`ErrorCancelled`, `ErrorForfeit`.
+
+Use `last_updated` / `last_updated_360` per match (and the Competitions
+`match_updated*` / `match_available*` timestamps) to drive incremental sync —
+see `api-endpoints.md`.
+
+### Competition stages
+
+`competition_stage` is an `{id, name}` pair. Stage IDs (from Matches/Events
+specs): 1 Regular Season, 2 Play-In Round, 6 Europa League Play-offs –
+Semi-finals, 8 MLS Cup – Conference Semi-finals, 9 3rd Qualifying Round,
+10 Group Stage, 11 Quarter-finals, 12 Europa League Play-offs – Finals,
+13 16th Finals, 14 Promotion Play-offs – Final, 15 Semi-finals, 18 Promotion
+Play-offs – Semi-finals, 19 Preliminary Round, 20 2nd Round, 21 Europa League
+Play-offs – Quarter-finals, 22 2nd Qualifying Round, 23 MLS Cup – Conference
+Finals, 24 Promotion Play-offs – 1st Round, 25 3rd Place Final, 26 Final,
+27 Promotion Play-offs – 2nd Round, 28 Play-offs, 29 1st Qualifying Round,
+31 Preliminary Round – Semi-finals, 33 8th Finals, 34 1st Phase, 35 Preliminary
+Round – Final.
 
 ---
 
@@ -316,11 +356,14 @@ Every event is tagged with how the current possession started (counter-attack, s
 
 ## Data Versions
 
-| Version | Field | Notes |
-|---------|-------|-------|
-| `data_version` | `1.0.0` | Original spec |
-| `data_version` | `1.1.0` | Current spec with carries, enhanced events |
-| `shot_fidelity_version` | `"1"` | Basic shot data |
-| `shot_fidelity_version` | `"2"` | Enhanced shots with freeze frames |
-| `xy_fidelity_version` | `"1"` | Standard coordinate precision |
-| `xy_fidelity_version` | `"2"` | High-precision coordinates |
+Each match's `metadata` reports the collection versions applied to it. The
+values you may see, side by side:
+
+| Field | Value | What this match contains |
+|-------|-------|--------------------------|
+| `data_version` | `1.0.0` | Core event set, no carry events |
+| `data_version` | `1.1.0` | Full event set including carries and the additional event attributes described on this page and in `event-types.md` |
+| `shot_fidelity_version` | `"1"` | Shots at standard location granularity |
+| `shot_fidelity_version` | `"2"` | Shots, their freeze frames, and shot-paired events at high-precision x/y |
+| `xy_fidelity_version` | `"1"` | Standard x/y location granularity |
+| `xy_fidelity_version` | `"2"` | High-precision x/y coordinates |

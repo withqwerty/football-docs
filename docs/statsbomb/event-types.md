@@ -9,6 +9,7 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 2 | Ball Recovery | Player regains possession from a loose ball |
 | 3 | Dispossessed | Player loses the ball through opponent action (not a failed dribble) |
 | 4 | Duel | Contested situation between two players (aerial or ground) |
+| 5 | Camera On* | Signals the camera resuming gameplay capture after a replay/cut (deprecated; superseded by `off_camera`) |
 | 6 | Block | Player blocks a shot, pass, or cross |
 | 8 | Offside | Player caught in an offside position |
 | 9 | Clearance | Defensive action to remove the ball from a dangerous area |
@@ -18,10 +19,12 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 17 | Pressure | Player applies pressure on an opponent in possession |
 | 18 | Half Start | Marks the start of each half/period |
 | 19 | Substitution | Player substitution |
+| 20 | Own Goal Against | An own goal scored against the team |
 | 21 | Foul Won | Player wins a foul from an opponent |
 | 22 | Foul Committed | Player commits a foul |
 | 23 | Goal Keeper | Goalkeeper-specific actions (saves, punches, claims, etc.) |
 | 24 | Bad Behaviour | Disciplinary action not linked to a foul (e.g. dissent) |
+| 25 | Own Goal For | An own goal scored for the team |
 | 26 | Player On | Player enters the pitch (substitution on) |
 | 27 | Player Off | Player leaves the pitch (substitution off) |
 | 28 | Shield | Player shields the ball from an opponent |
@@ -30,11 +33,19 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 34 | Half End | Marks the end of each half/period |
 | 35 | Starting XI | Starting lineup announcement (one per team per match) |
 | 36 | Tactical Shift | Formation or positional change during play |
+| 37 | Error | Player makes an on-the-ball mistake that leads to a shot on goal |
 | 38 | Miscontrol | Player fails to control the ball cleanly |
 | 39 | Dribbled Past | Player is beaten by an opponent's dribble |
 | 40 | Injury Stoppage | Play stopped due to injury |
+| 41 | Referee Ball-Drop | Referee drops the ball to resume play after an injury stoppage |
 | 42 | Ball Receipt* | Player receives a pass (the asterisk is part of the name) |
 | 43 | Carry | Player moves with the ball at their feet between events |
+
+> The event-type vocabulary and field set below describe the **Events API
+> v8.0.0** feed (`GET /api/v8/events/{match_id}`). Each match also carries a
+> `metadata.data_version` string (see `data-model.md`) — the exact set of
+> fields present on a given match depends on the data version it was collected
+> under.
 
 ---
 
@@ -76,6 +87,25 @@ Every event shares these base fields:
 - `duration` -- event duration in seconds (0.0 for instantaneous events)
 - `related_events` -- UUIDs of causally linked events (e.g. pass -> receipt)
 - `under_pressure` -- boolean, present and true when a defender is applying pressure
+- `off_camera` -- boolean, present and true only when the event occurred while the camera was off (data then logically inferred)
+- `out` -- boolean, present and true when the event's outcome is the ball going out of bounds
+- `counterpress` -- boolean, on various defensive events (pressure, dribbled past, 50-50, duel, block, interception, non-offensive foul committed): a pressing action within 5 seconds of an open-play turnover
+
+### On-Ball Value fields
+
+OBV-eligible events carry net/before/after value fields measuring the change in
+scoring/conceding likelihood caused by the event:
+
+- `obv_for_after`, `obv_for_before`, `obv_for_net` -- scoring likelihood within the possession chain after/before/net
+- `obv_against_after`, `obv_against_before`, `obv_against_net` -- conceding likelihood in the next possession chain
+- `obv_total_net` -- net expected goal-difference change over the next two possession chains
+
+OBV is populated only where play is not interrupted by off-ball events.
+Eligible types: Carry, Ground/High/Low Pass, Dribble, Shot, Goalkeeper
+Collection, Block, Tackle, Interception, Clearance, Goalkeeper Sweep,
+Goalkeeper Save, Foul Committed, Goalkeeper Concede. See
+`iq-metrics-glossary.md` for the OBV concept and its aggregated forms in the
+stats endpoints.
 
 ---
 
@@ -103,7 +133,12 @@ The `shot` object is nested within shot events.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `statsbomb_xg` | float | StatsBomb expected goals value (0.0 to 1.0) |
+| `statsbomb_xg` | float | xG "chance quality" -- likelihood of scoring from the shot situation (location, GK and blocker positions), **not** considering shot execution |
+| `gk_save_difficulty_xg` | float | Likelihood of the keeper conceding, given shot placement/velocity and keeper position (on-target, unblocked shots only). Some feeds label this field `statsbomb_xg2` |
+| `shot_execution_xg` | float | Likelihood of scoring after execution -- incorporates placement & velocity on top of the `statsbomb_xg` features |
+| `shot_execution_xg_uplift` | float | `shot_execution_xg − statsbomb_xg`; how much execution improved (or, if negative, worsened) the chance |
+| `gk_positioning_xg_suppression` | float | Goal-scoring threat suppressed by the keeper's positioning vs an average keeper |
+| `gk_shot_stopping_xg_suppression` | float | Goals prevented above expectation by the keeper's shot-stopping |
 | `end_location` | [x, y] or [x, y, z] | Where the shot ended up. Z is height in yards (present for shots that leave the ground) |
 | `key_pass_id` | string | UUID of the pass that assisted this shot |
 | `technique` | object | How the shot was struck |
@@ -207,6 +242,12 @@ The `pass` object is nested within pass events.
 | `no_touch` | boolean | Player intended the ball to run through |
 | `miscommunication` | boolean | Pass and recipient miscommunicated |
 | `backheel` | boolean | Whether the pass was a backheel |
+| `deflected` | boolean | Pass was deflected (can occur on complete or incomplete passes) |
+| `aerial_won` | boolean | The pass event was also an aerial duel won |
+| `pass_cluster_id` | integer | Which of 60 distinct pass clusters this pass is most associated with |
+| `pass_cluster_label` | string | Text description of that cluster, combining its starting third, side of the pitch, length (long/short), primary direction, and modal pass height |
+| `pass_cluster_probability` | float | Probability the pass belongs to `pass_cluster_id`/`label` |
+| `pass_success_probability` | float | Estimated likelihood of the attempted pass being completed, given pitch location, context and target |
 
 ### Pass Types
 

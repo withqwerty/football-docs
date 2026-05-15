@@ -172,32 +172,59 @@ The nested JSON objects (pass, shot, carry, etc.) are flattened with underscores
 ## 3. Commercial REST API
 
 **Access**: Requires a paid license from StatsBomb (contact sales@statsbomb.com)
-**Base URL**: `https://data.statsbomb.com/api/v2/`
 
 ### Authentication
 
-HTTP Basic Auth with username (email) and password provided by StatsBomb.
+HTTP Basic Auth with username (email) and password provided by StatsBomb. The
+same credentials work across every endpoint.
 
 ### Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /competitions` | List all licensed competitions |
-| `GET /competitions/{comp_id}/seasons/{season_id}/matches` | Matches for a competition/season |
-| `GET /matches/{match_id}/events` | Events for a match |
-| `GET /matches/{match_id}/lineups` | Lineups for a match |
-| `GET /matches/{match_id}/360-frames` | 360 freeze frames for a match |
+There is **no single base URL or global API version**. Each resource is
+independently versioned and the API spans **two hostnames**
+(`data.statsbombservices.com` and `data.statsbomb.com`). The full host/version
+matrix, query parameters, and caveats (including a host typo in StatsBomb's own
+Team Stats spec) are documented in **`api-endpoints.md`**. Summary:
+
+| Resource | Path (see api-endpoints.md for host + version) |
+|----------|-----------------------------------------------|
+| Competitions | `/api/v4/competitions` |
+| Matches | `/api/v6/competitions/{cid}/seasons/{sid}/matches` |
+| Lineups | `/api/v4/lineups/{mid}` |
+| Events | `/api/v8/events/{mid}` |
+| 360 Frames | `/api/v2/360-frames/{mid}` |
+| Player Mapping | `/api/v1/player-mapping?<params>` |
+| Player Match / Season Stats | `/api/v5/matches/{mid}/player-stats`, `/api/v4/competitions/{cid}/seasons/{sid}/player-stats` |
+| Team Match / Season Stats | `/api/v1/matches/{mid}/team-stats`, `/api/v2/competitions/{cid}/seasons/{sid}/team-stats` |
 
 ### Response Format
 
-The commercial API returns the same JSON structure as the open data files. The only differences are:
-- More competitions and seasons available
-- Data may be more current (open data can lag behind)
-- Some fields may be available earlier in the commercial feed
+For competitions, matches, lineups, events, and 360 frames the commercial API
+returns the same JSON structure as the open data files (more competitions,
+fresher data). The **stats endpoints and player-mapping have no open-data
+equivalent** — see the parity table below and the dedicated docs
+(`player-match-stats.md`, `player-season-stats.md`, `team-match-stats.md`,
+`team-season-stats.md`, `player-mapping.md`, `iq-metrics-glossary.md`).
+
+### Open Data vs Commercial parity
+
+| Capability | Open Data | Commercial API |
+|---|---|---|
+| Competitions / Matches / Lineups / Events / 360 | Yes (selective comps) | Yes (licensed scope) |
+| Player & Team Match/Season Stats (IQ metrics) | **No** | Yes |
+| Player Mapping (live/offline IDs) | **No** | Yes |
+| Freshness | Irregular GitHub updates | Near-live for licensed comps |
+
+Code written against open data cannot read OBV, xGChain, PPDA, PSxG, the IQ
+metric catalogues, or live/offline IDs — these exist only in the commercial
+feed.
 
 ### Rate Limits
 
-The commercial API has rate limits that vary by license tier. StatsBomb recommends caching responses locally and using bulk endpoints where possible.
+The commercial API has rate limits that vary by license tier. StatsBomb
+recommends caching responses locally and polling the Competitions/Matches
+`*_updated` / `last_updated` timestamps to refetch only changed data (see
+`api-endpoints.md` → Incremental sync).
 
 ---
 
