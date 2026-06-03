@@ -1,10 +1,10 @@
 # football-docs
 
-Searchable football data provider documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
+Searchable football data provider and tooling documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
 
-**Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot, Windsurf) to work with football data. Works with any tool that supports MCP.
+**Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 15 football data providers — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons. Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 15 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, and more). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -50,21 +50,6 @@ Add to `.vscode/mcp.json`:
 ```json
 {
   "servers": {
-    "football-docs": {
-      "command": "npx",
-      "args": ["-y", "football-docs"]
-    }
-  }
-}
-```
-
-### Windsurf
-
-Add to `~/.codeium/windsurf/mcp_config.json`:
-
-```json
-{
-  "mcpServers": {
     "football-docs": {
       "command": "npx",
       "args": ["-y", "football-docs"]
@@ -127,7 +112,7 @@ Add to `claude_desktop_config.json`:
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**968 searchable chunks** across 15 providers.
+**968 searchable chunks** across 15 providers and tools.
 
 ## Contributing
 
@@ -138,17 +123,6 @@ Contributions are welcome from everyone. There are three ways to help:
 3. **Open a PR** — fix errors, add new providers, or improve existing docs
 
 **You don't need to be an expert.** See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.
-
-### What we especially need
-
-| Provider | Priority | Source material to start from |
-|----------|----------|-------------------------------|
-| FPL (Fantasy Premier League) | High | [FPL APIs Explained](https://www.oliverlooney.com/blogs/FPL-APIs-Explained) |
-| API-Football (RapidAPI) | High | [API-Football docs](https://www.api-football.com/documentation-v3) |
-| Football-data.org | Medium | [Football-data.org docs](https://www.football-data.org/documentation/api) |
-| TheSportsDB | Medium | [TheSportsDB API](https://www.thesportsdb.com/api.php) |
-| WhoScored | Medium | Based on Opta F24, community-documented |
-| Sofascore | Medium | Unofficial API, community-documented |
 
 ## For maintainers
 
