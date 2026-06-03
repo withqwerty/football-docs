@@ -19,7 +19,7 @@
  *   npm run ingest -- --provider opta # ingest one provider
  */
 
-import { existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
@@ -248,7 +248,12 @@ function main() {
 
     const providers = readdirSync(DOCS_DIR).filter((d) => {
       const full = resolve(DOCS_DIR, d);
-      return existsSync(full) && readdirSync(full).some((f) => f.endsWith(".md"));
+      // Skip non-directory entries (e.g. macOS .DS_Store) so listing can't throw ENOTDIR.
+      return (
+        existsSync(full) &&
+        statSync(full).isDirectory() &&
+        readdirSync(full).some((f) => f.endsWith(".md"))
+      );
     });
 
     let total = 0;
