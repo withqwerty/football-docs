@@ -111,23 +111,23 @@ Add to `claude_desktop_config.json`:
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| StatsBomb | 150 | event-types, data-model, coordinate-system, api-access, xg-model, identity-surfaces |
+| StatsBomb | 231 | event-types, data-model, coordinate-system, api-access, api-endpoints, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
+| Wyscout | 157 | event-types, data-model, coordinate-system, api-access, api-endpoints, glossary, identity-surfaces |
 | kloppy | 100 | data-model, usage, provider-mapping |
 | SportMonks | 78 | event-types, data-model, api-access, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 62 | overview, pitch-types, visualizations |
-| Wyscout | 68 | event-types, data-model, coordinate-system, api-access, identity-surfaces |
+| Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
+| SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 45 | overview, fbref, understat |
 | soccerdata | 40 | overview, data-sources, usage |
 | Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
 | socceraction | 26 | SPADL format, VAEP, Expected Threat |
 | FotMob | 7 | identity-surfaces |
-| Impect | 7 | identity-surfaces |
-| SkillCorner | 7 | identity-surfaces |
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**703 searchable chunks** across 15 providers.
+**968 searchable chunks** across 15 providers.
 
 ## Contributing
 
