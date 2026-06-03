@@ -1,15 +1,40 @@
 ---
-source_type: curated
-source_url: null
-upstream_version: null
-crawled_at: null
+source_type: crawled
+source_url: https://api.impect.com
+upstream_version: Customer API v5.0
+crawled_at: 2026-06-03
 ---
 
 # Impect Identity Surfaces
 
-Impect is primarily useful as a commercial match and event data provider. Public
-documentation for identity surfaces is limited, so this page records cautious
-curated guidance for entity-resolution work that has legitimate data access.
+Impect is primarily useful as a commercial match and event data provider. The
+sections below combine **spec-confirmed** identity facts from the Customer API v5
+with cautious curated guidance for entity-resolution work that has legitimate
+data access.
+
+## ID Mappings (confirmed, v5 API)
+
+The v5 API exposes a first-class **`idMappings`** field on master-data objects —
+`IterationDto`, `SquadDto`, `PlayerDto`, `MatchInfoDto`, `CoachDto` and
+`StadiumDto` all carry it (i.e. nearly every entity except the nested single-match
+`MatchDto`). `IdMappingDto` is:
+
+> "ID mappings to external systems. Keys are provider names, values are arrays of
+> string identifiers." — i.e. each entry is a `map<providerName, string[]>`, and
+> the field is an array of such maps.
+
+This means Impect entities can be bridged to other providers **directly from the
+feed**, without inference — read `idMappings` on the iteration/squad/player/match/
+coach/stadium and match the external IDs to your register. An entity may map to
+multiple IDs per provider (hence arrays). Note matches expose `idMappings` on the
+flat list item (`MatchInfoDto`, from `GET /iterations/{id}/matches`), not on the
+single-match `MatchDto` from `GET /matches/{matchId}`. Impect also aligns events
+to **SkillCorner** frames via `GET /matches/{matchId}/skillcorner-frame-mappings`,
+a separate frame↔event bridge (not part of `idMappings`).
+
+Entity keys themselves are integer `id` fields: `iterationId`, `matchId`,
+`squadId`, player `id`, `coachId`, `stadiumId`, `countryId`. Iterations are the
+season×competition unit (`{season, competition{...}}`).
 
 ## Access Surface
 

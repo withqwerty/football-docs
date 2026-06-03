@@ -1,0 +1,3083 @@
+openapi: 3.0.1
+info:
+  title: Impect Customer API
+  description: >-
+    The Impect Customer API (v5) provides access to football match data,
+    iteration-level statistics, KPI definitions, player and squad scores,
+    event-level data, set pieces, and more.
+
+
+    Base URL: https://api.impect.com
+
+
+    Swagger docs: https://api.impect.com/v3/api-docs/CustomerAPI
+
+
+    # Authentication
+
+    All endpoints require a Bearer token obtained via Keycloak
+    (https://login.impect.com/). The token must be passed in the
+    `Authorization` header as `Bearer <token>`. All endpoints are protected
+    by `hasRole('API')`.
+
+
+    # Rate Limiting
+
+    Requests are rate limited. Use the `RateLimit-Policy` and
+    `RateLimit-Remaining` response headers to monitor usage. On receiving
+    a 429 response, wait for the duration specified in the `Retry-After`
+    header before retrying.
+  version: "5.0"
+  contact:
+    name: Impect
+    url: https://glossary.impect.com
+servers:
+  - url: https://api.impect.com
+    description: Production
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: V5 Master Data
+    description: Core reference data - iterations, matches, squads, players, coaches, stadiums, countries
+  - name: V5 Iteration Level Data
+    description: Aggregated KPIs and scores at the iteration (season/competition) level
+  - name: V5 Match Level Data
+    description: Match-level events, KPIs, scores, set pieces, and frame mappings
+  - name: V5 Definitions
+    description: KPI, score, profile, and squad score definitions
+  - name: V5 Squad Ratings & Predictions
+    description: Squad ratings and prediction model coefficients
+  - name: V5 Update Feed
+    description: Incremental update feeds for all entity types
+  - name: V5 Delete Feed
+    description: Incremental delete feeds for all entity types
+
+paths:
+  # ──────────────────────────────────────────────
+  # V5 Master Data
+  # ──────────────────────────────────────────────
+  /v5/customerapi/iterations:
+    get:
+      tags: [V5 Master Data]
+      summary: Get all iterations
+      operationId: getAllIterations
+      description: Get a list with all iterations and their attributes.
+      parameters:
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_IterationDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/matches:
+    get:
+      tags: [V5 Master Data]
+      summary: Get matches for single iteration
+      operationId: getMatches
+      description: Get matches for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_MatchDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squads:
+    get:
+      tags: [V5 Master Data]
+      summary: Get squads for single iteration
+      operationId: getSquadsForIteration
+      description: Get squads for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SquadDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/players:
+    get:
+      tags: [V5 Master Data]
+      summary: Get players for single iteration
+      operationId: getAllPlayersForIteration
+      description: Get players for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_PlayerDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/coaches:
+    get:
+      tags: [V5 Master Data]
+      summary: Get coaches for single iteration
+      operationId: getAllCoachesForIteration
+      description: Get coaches for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_CoachDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/stadiums:
+    get:
+      tags: [V5 Master Data]
+      summary: Get stadiums for single iteration
+      operationId: getStadiumsForIteration
+      description: Get stadiums for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_StadiumDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/countries:
+    get:
+      tags: [V5 Master Data]
+      summary: Get all countries
+      operationId: getAllCountries
+      description: Get all countries.
+      parameters:
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_CountryDetailDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Iteration Level Data
+  # ──────────────────────────────────────────────
+  /v5/customerapi/iterations/{iterationId}/squad-kpis:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get squad average KPIs for single iteration
+      operationId: getIterationAvgKpisForSquads
+      description: Get squad average KPIs for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_IterationAvgSquadKpisDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squad-scores:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get squad scores for single iteration
+      operationId: getIterationScoresForSquads
+      description: Get squad scores for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SquadScoreValuesDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squads/{squadId}/player-kpis:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get player average KPIs for single iteration
+      operationId: getIterationAvgKpisForPlayers
+      description: Get player average KPIs for a single iteration and squad.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/squadId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_IterationAvgPlayerKpisDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squads/{squadId}/player-scores:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get player scores for single iteration
+      operationId: getIterationScoresForPlayers
+      description: Get player scores for a single iteration and squad.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/squadId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_PlayerScoreValuesDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squads/{squadId}/positions/{positions}/player-profile-scores:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get player profile scores for single iteration
+      operationId: getIterationProfileScoresForPlayers
+      description: Get player profile scores for a single iteration, squad, and set of positions.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/squadId'
+        - $ref: '#/components/parameters/positions'
+        - name: minGames
+          in: query
+          required: false
+          description: Minimum number of games filter.
+          schema:
+            type: number
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_IterationPlayerProfileScoresDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/squads/{squadId}/positions/{positions}/player-scores:
+    get:
+      tags: [V5 Iteration Level Data]
+      summary: Get player scores for single iteration for given positions
+      operationId: getIterationScoresForPlayersAndPositions
+      description: Get player scores for a single iteration, squad, and set of positions.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/squadId'
+        - $ref: '#/components/parameters/positions'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_PlayerScorePlayerPositionDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Match Level Data
+  # ──────────────────────────────────────────────
+  /v5/customerapi/matches/{matchId}:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get match line-ups and substitutions
+      operationId: getMatch
+      description: >-
+        Get the starting formations, starting line-ups, substitutions and
+        tactical changes for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_MatchInfoDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/events:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get match events
+      operationId: getMatchEvents
+      description: Get event data for one match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_EventDto'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/event-kpis:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get KPIs on event level for single match
+      operationId: getMatchScorings
+      description: Get KPIs on event level for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_ScoringDto'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/player-kpis:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get KPIs on player level for single match
+      operationId: getMatchSumsForPlayers
+      description: Get KPIs on player level for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_MatchSumsPlayersDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/player-scores:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get scores on player level for single match
+      operationId: getMatchScoresForPlayers
+      description: Get scores on player level for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_PlayerScoreMatchValuesDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/positions/{positions}/player-scores:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get scores on player level for single match for given positions
+      operationId: getMatchScoresForPlayersAndPositions
+      description: Get scores on player level for a single match filtered by positions.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/positions'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_PlayerScoreMatchValuesAllPositionsDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/set-pieces:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get set pieces for single match
+      operationId: getSetPiecesForMatch
+      description: Get set pieces for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SetPieceDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/skillcorner-frame-mappings:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get Skillcorner frame mappings for single match
+      operationId: getSkillcornerFrameMappingsForMatch
+      description: Get Skillcorner frame mappings for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_SkillcornerMatchResultDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/squad-kpis:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get KPIs on squad level for single match
+      operationId: getMatchSumsForSquads
+      description: Get KPIs on squad level for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_MatchSumsSquadsDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/matches/{matchId}/squad-scores:
+    get:
+      tags: [V5 Match Level Data]
+      summary: Get scores on squad level for single match
+      operationId: getMatchScoresForSquads
+      description: Get scores on squad level for a single match.
+      parameters:
+        - $ref: '#/components/parameters/matchId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_SquadScoreMatchValuesDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Definitions
+  # ──────────────────────────────────────────────
+  /v5/customerapi/kpis:
+    get:
+      tags: [V5 Definitions]
+      summary: Get all KPI definitions
+      operationId: getAllKpiDefinitions
+      description: Get all KPI definitions.
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_KpiDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/kpis/event:
+    get:
+      tags: [V5 Definitions]
+      summary: Get event KPI definitions
+      operationId: getEventKpiDefinitions
+      description: Get event KPI definitions.
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_KpiDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/player-profiles:
+    get:
+      tags: [V5 Definitions]
+      summary: Get all profile definitions
+      operationId: getAllProfileDefinitions
+      description: Get all profile definitions.
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_ProfileDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/player-scores:
+    get:
+      tags: [V5 Definitions]
+      summary: Get all score definitions
+      operationId: getAllScoreDefinitions
+      description: Get all score definitions.
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_ScoreDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/squad-scores:
+    get:
+      tags: [V5 Definitions]
+      summary: Get all squad score definitions
+      operationId: getAllSquadScoreDefinitions
+      description: Get all squad score definitions.
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SquadScoreDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Squad Ratings & Predictions
+  # ──────────────────────────────────────────────
+  /v5/customerapi/iterations/{iterationId}/squads/ratings:
+    get:
+      tags: [V5 Squad Ratings & Predictions]
+      summary: Get squad ratings for single iteration
+      operationId: getSquadRatings
+      description: Get squad ratings for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_SquadRatingsForIterationDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/iterations/{iterationId}/predictions/model-coefficients:
+    get:
+      tags: [V5 Squad Ratings & Predictions]
+      summary: Get prediction model coefficients for single iteration
+      operationId: getSquadModelsForIteration
+      description: Get prediction model coefficients for a single iteration.
+      parameters:
+        - $ref: '#/components/parameters/iterationId'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_ModelCoefficientDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Update Feed
+  # ──────────────────────────────────────────────
+  /v5/customerapi/update/matchdata:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get match data updates
+      operationId: getMatchDataUpdates
+      description: Get match data updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_MatchDataDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/iterations:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get iteration updates
+      operationId: getCompetitionIterationUpdates
+      description: Get iteration updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_IterationDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/matches:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get match updates
+      operationId: getMatchUpdates
+      description: Get match updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_MatchDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/squads:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get squad updates
+      operationId: getSquadUpdates
+      description: Get squad updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SquadDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/players:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get player updates
+      operationId: getPlayerUpdates
+      description: Get player updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_PlayerDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/coaches:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get coach updates
+      operationId: getCoachUpdates
+      description: Get coach updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_CoachDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/stadiums:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get stadium updates
+      operationId: getStadiumUpdates
+      description: Get stadium updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_StadiumDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/update/skillcorner-frame-mappings:
+    get:
+      tags: [V5 Update Feed]
+      summary: Get Skillcorner frame mappings updates
+      operationId: getSkillcornerFrameMappingsUpdates
+      description: Get Skillcorner frame mapping updates since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_SkillcornerMappingUpdateDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  # ──────────────────────────────────────────────
+  # V5 Delete Feed
+  # ──────────────────────────────────────────────
+  /v5/customerapi/delete/iterations:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get iteration deletes
+      operationId: getCompetitionIterationDeletes
+      description: Get iteration deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/delete/matches:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get match deletes
+      operationId: getMatchDeletes
+      description: Get match deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/delete/squads:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get squad deletes
+      operationId: getSquadDeletes
+      description: Get squad deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/delete/players:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get player deletes
+      operationId: getPlayerDeletes
+      description: Get player deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/delete/coaches:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get coach deletes
+      operationId: getCoachDeletes
+      description: Get coach deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v5/customerapi/delete/stadiums:
+    get:
+      tags: [V5 Delete Feed]
+      summary: Get stadium deletes
+      operationId: getStadiumDeletes
+      description: Get stadium deletes since a given timestamp.
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/XRequestID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject_List_DeletedDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+components:
+  # ──────────────────────────────────────────────
+  # Security Schemes
+  # ──────────────────────────────────────────────
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Keycloak-issued JWT token. Obtain from https://login.impect.com/.
+        All endpoints require the 'API' role.
+
+  # ──────────────────────────────────────────────
+  # Reusable Parameters
+  # ──────────────────────────────────────────────
+  parameters:
+    iterationId:
+      name: iterationId
+      in: path
+      required: true
+      description: The iteration (season/competition) identifier.
+      schema:
+        type: integer
+        format: int64
+
+    matchId:
+      name: matchId
+      in: path
+      required: true
+      description: The match identifier.
+      schema:
+        type: integer
+        format: int64
+
+    squadId:
+      name: squadId
+      in: path
+      required: true
+      description: The squad identifier.
+      schema:
+        type: integer
+        format: int64
+
+    positions:
+      name: positions
+      in: path
+      required: true
+      description: Comma-separated list of positions to filter by.
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - BANK
+            - GOALKEEPER
+            - LEFT_BACK
+            - RIGHT_BACK
+            - CENTER_BACK
+            - LEFT_MIDFIELD
+            - RIGHT_MIDFIELD
+            - CENTER_MIDFIELD
+            - LEFT_WING
+            - RIGHT_WING
+            - CENTER_FORWARD
+      style: simple
+
+    since:
+      name: since
+      in: query
+      required: true
+      description: >-
+        ISO 8601 timestamp. Only records changed/deleted after this
+        timestamp will be returned.
+      schema:
+        type: string
+        format: date-time
+
+    language:
+      name: language
+      in: query
+      required: false
+      description: Language code for translated definitions.
+      schema:
+        type: string
+
+    XRequestID:
+      name: X-Request-ID
+      in: header
+      required: false
+      description: >-
+        Ideally a UUID to correlate requests between client and server.
+      schema:
+        type: string
+
+  # ──────────────────────────────────────────────
+  # Reusable Responses
+  # ──────────────────────────────────────────────
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseObject'
+
+    Unauthorized:
+      description: If no Authorization header is present.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseObject'
+
+    Forbidden:
+      description: Your role does not allow it.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseObject'
+
+    TooManyRequests:
+      description: >-
+        You have sent too many requests in a given amount of time.
+        Use the RateLimit-Remaining header or sleep for the duration
+        given by the Retry-After header.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseObject'
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+        RateLimit-Remaining:
+          description: Number of requests remaining in the current window.
+          schema:
+            type: integer
+        RateLimit-Policy:
+          description: Rate limit policy description.
+          schema:
+            type: string
+
+  # ──────────────────────────────────────────────
+  # Schemas
+  # ──────────────────────────────────────────────
+  schemas:
+    # ── Enums ──────────────────────────────────
+    Gender:
+      type: string
+      enum: [MALE, FEMALE]
+
+    SquadType:
+      type: string
+      enum: [NATIONAL_TEAM, CLUB]
+
+    Leg:
+      type: string
+      enum: [LEFT, RIGHT, BOTH]
+
+    DataVersion:
+      type: string
+      enum: [V1]
+
+    Position:
+      type: string
+      enum:
+        - BANK
+        - GOALKEEPER
+        - LEFT_BACK
+        - RIGHT_BACK
+        - CENTER_BACK
+        - LEFT_MIDFIELD
+        - RIGHT_MIDFIELD
+        - CENTER_MIDFIELD
+        - LEFT_WING
+        - RIGHT_WING
+        - CENTER_FORWARD
+
+    PositionSide:
+      type: string
+      enum: [LEFT, RIGHT, CENTER]
+
+    ActionType:
+      type: string
+      enum:
+        - SHOT
+        - PASS
+        - DRIBBLE
+        - TACKLE
+        - INTERCEPTION
+        - CLEARANCE
+        - CROSS
+        - FOUL
+        - OFFSIDE
+
+    Action:
+      type: string
+      enum:
+        - LOW_PASS
+        - HIGH_PASS
+        - GROUND_DUEL
+        - AIR_DUEL
+        - SHOT
+        - CROSS
+        - CLEARANCE
+        - INTERCEPTION
+        - TACKLE
+        - FOUL
+        - OFFSIDE
+
+    Phase:
+      type: string
+      enum:
+        - SECOND_BALL
+        - BUILD_UP
+        - COUNTER_ATTACK
+        - SET_PIECE
+
+    PackingZone:
+      type: string
+      enum:
+        - GKR
+        - FIRST_THIRD
+        - SECOND_THIRD
+        - FINAL_THIRD
+        - BOX
+
+    PitchPosition:
+      type: string
+      enum:
+        - OWN_BOX
+        - OWN_HALF
+        - OPPONENT_HALF
+        - OPPONENT_BOX
+
+    Lane:
+      type: string
+      enum:
+        - LEFT_WING
+        - LEFT_HALF_SPACE
+        - CENTER
+        - RIGHT_HALF_SPACE
+        - RIGHT_WING
+
+    SubstitutionType:
+      type: string
+      enum: [SUB_ON, SUB_OFF, TACTICAL_CHANGE]
+
+    DeleteType:
+      type: string
+      enum: [DELETED, MERGED]
+
+    SetPieceCategory:
+      type: string
+      enum:
+        - FREE_KICK
+        - CORNER
+        - GOAL_KICK
+        - THROW_IN
+        - PENALTY
+
+    SetPieceExecutionType:
+      type: string
+      enum: [DIRECT, INDIRECT]
+
+    DuelType:
+      type: string
+      enum: [GROUND_DUEL, AIR_DUEL]
+
+    ReceiverType:
+      type: string
+      enum: [TEAMMATE, OPPONENT]
+
+    BodyPart:
+      type: string
+      enum: [FOOT, HEAD, OTHER]
+
+    PassHeight:
+      type: string
+      enum: [LOW, MEDIUM, HIGH]
+
+    EventResult:
+      type: string
+      enum: [SUCCESS, FAIL]
+
+    DribbleType:
+      type: string
+      enum: [ONE_VS_ONE, ONE_VS_MANY]
+
+    DribbleResult:
+      type: string
+      enum: [WINNER, LOSER]
+
+    DistanceToOpponent:
+      type: string
+      enum:
+        - LESS_THAN_ONE_METER
+        - ONE_TO_THREE_METERS
+        - MORE_THAN_THREE_METERS
+
+    Woodwork:
+      type: string
+      enum: [LEFT_POST, RIGHT_POST, CROSSBAR]
+
+    ProfileFactorType:
+      type: string
+      enum: [KPI, SCORE]
+
+    EndZone:
+      description: >-
+        End-zone classification used in set-piece sub-phase analysis.
+        Values are context-dependent per sub-phase type (corner, free kick,
+        goal kick, throw-in, second delivery).
+      type: string
+      enum:
+        - FAR_LEFT
+        - FAR_RIGHT
+        - NEAR_POST
+        - FAR_POST
+        - OPPOSITE_SIDE_1
+        - OPPOSITE_SIDE_2
+        - SAME_SIDE_1
+        - SAME_SIDE_2
+        - SIX_YARD_BOX
+        - INSIDE_OWN_BOX
+        - INSIDE_OPPONENT_BOX
+        - OUTSIDE_BOX
+        - LEFT_GOAL_KICK_ZONE
+        - RIGHT_GOAL_KICK_ZONE
+        - CENTER
+
+    # ── Error Response ────────────────────────
+    ErrorResponseObject:
+      type: object
+      properties:
+        data:
+          type: object
+        status:
+          type: integer
+        message:
+          type: string
+        pagination:
+          type: object
+
+    # ── Common / Shared ────────────────────────
+    CoordinateDto:
+      type: object
+      properties:
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+
+    GameTimeDto:
+      type: object
+      properties:
+        gameTime:
+          type: string
+        gameTimeInSec:
+          type: number
+          format: double
+
+    IdMappingDto:
+      type: object
+      description: >-
+        ID mappings to external systems. Keys are provider names,
+        values are arrays of string identifiers.
+      additionalProperties:
+        type: array
+        items:
+          type: string
+
+    KpiDto:
+      type: object
+      properties:
+        kpiId:
+          type: integer
+        value:
+          type: number
+          format: double
+
+    IterationStepDto:
+      type: object
+      description: Represents a step or phase within an iteration.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    # ── Master Data ────────────────────────────
+    CompetitionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        type:
+          type: string
+        countryId:
+          type: integer
+        gender:
+          $ref: '#/components/schemas/Gender'
+
+    IterationDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        season:
+          type: string
+        competition:
+          $ref: '#/components/schemas/CompetitionDto'
+        dataVersion:
+          $ref: '#/components/schemas/DataVersion'
+        lastChangeTimestamp:
+          type: string
+          format: date-time
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+
+    MatchDayDto:
+      type: object
+      properties:
+        index:
+          type: integer
+        name:
+          type: string
+
+    MatchInfoDto:
+      type: object
+      properties:
+        iterationId:
+          type: integer
+        id:
+          type: integer
+        homeSquadId:
+          type: integer
+        awaySquadId:
+          type: integer
+        scheduledDate:
+          type: string
+          format: date-time
+        lastCalculationDate:
+          type: string
+          format: date-time
+        matchDay:
+          $ref: '#/components/schemas/MatchDayDto'
+        available:
+          type: boolean
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+
+    SquadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        countryId:
+          type: integer
+        type:
+          $ref: '#/components/schemas/SquadType'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        imageUrl:
+          type: string
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+        access:
+          type: boolean
+
+    PlayerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        commonname:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        birthplace:
+          type: string
+        leg:
+          $ref: '#/components/schemas/Leg'
+        countryIds:
+          type: array
+          items:
+            type: integer
+        gender:
+          $ref: '#/components/schemas/Gender'
+        currentSquadId:
+          type: integer
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+
+    CoachDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        shortName:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        gender:
+          $ref: '#/components/schemas/Gender'
+        countryIds:
+          type: array
+          items:
+            type: integer
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+
+    StadiumDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        pitchLength:
+          type: number
+          format: double
+        pitchWidth:
+          type: number
+          format: double
+        name:
+          type: string
+        address:
+          type: string
+        timeZone:
+          type: string
+        idMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdMappingDto'
+
+    CountryDetailDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        isoName:
+          type: string
+        isoCode:
+          type: string
+        fifaName:
+          type: string
+        fifaCode:
+          type: string
+
+    # ── Match Detail ───────────────────────────
+    PlayerInMatchSquadInfoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        shirtNumber:
+          type: integer
+
+    StartingPositionsInMatchSquadInfoDto:
+      type: object
+      properties:
+        playerId:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        positionSide:
+          $ref: '#/components/schemas/PositionSide'
+
+    SubstitutionInMatchSquadInfoDto:
+      type: object
+      properties:
+        gameTime:
+          $ref: '#/components/schemas/GameTimeDto'
+        playerId:
+          type: integer
+        toPosition:
+          $ref: '#/components/schemas/Position'
+        positionSide:
+          $ref: '#/components/schemas/PositionSide'
+        fromPosition:
+          $ref: '#/components/schemas/Position'
+        fromPositionSide:
+          $ref: '#/components/schemas/PositionSide'
+        exchangedPlayerId:
+          type: integer
+        substitutionType:
+          $ref: '#/components/schemas/SubstitutionType'
+
+    FormationAtGameTimeDto:
+      type: object
+      properties:
+        gameTime:
+          type: string
+        gameTimeInSec:
+          type: number
+          format: double
+        formation:
+          type: string
+
+    MatchSquadInfoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerInMatchSquadInfoDto'
+        startingPositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/StartingPositionsInMatchSquadInfoDto'
+        substitutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubstitutionInMatchSquadInfoDto'
+        startingFormation:
+          type: string
+        formations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormationAtGameTimeDto'
+        coachId:
+          type: integer
+
+    MatchDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        dateTime:
+          type: string
+          format: date-time
+        lastCalculationDate:
+          type: string
+          format: date-time
+        iterationId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/MatchSquadInfoDto'
+        squadAway:
+          $ref: '#/components/schemas/MatchSquadInfoDto'
+        stadiumId:
+          type: integer
+
+    # ── Events ─────────────────────────────────
+    EventPositionDto:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+        adjCoordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+        packingZone:
+          $ref: '#/components/schemas/PackingZone'
+        pitchPosition:
+          $ref: '#/components/schemas/PitchPosition'
+        lane:
+          $ref: '#/components/schemas/Lane'
+
+    EventPlayerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        positionSide:
+          $ref: '#/components/schemas/PositionSide'
+
+    DuelDto:
+      type: object
+      properties:
+        duelType:
+          $ref: '#/components/schemas/DuelType'
+        playerId:
+          type: integer
+
+    TargetPointDto:
+      type: object
+      properties:
+        y:
+          type: number
+          format: double
+        z:
+          type: number
+          format: double
+
+    ShotGoalkeeperDto:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+        adjCoordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+        divePoint:
+          $ref: '#/components/schemas/TargetPointDto'
+        woodwork:
+          $ref: '#/components/schemas/Woodwork'
+
+    ShotDto:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+        angle:
+          type: number
+          format: double
+        targetPoint:
+          $ref: '#/components/schemas/TargetPointDto'
+        gk:
+          $ref: '#/components/schemas/ShotGoalkeeperDto'
+
+    PassReceiverDto:
+      type: object
+      properties:
+        playerId:
+          type: integer
+        type:
+          $ref: '#/components/schemas/ReceiverType'
+
+    PxTDto:
+      type: object
+      properties:
+        team:
+          type: number
+          format: double
+        opponent:
+          type: number
+          format: double
+
+    PassDto:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+        angle:
+          type: number
+          format: double
+        receiver:
+          $ref: '#/components/schemas/PassReceiverDto'
+        currentAttackingSquadId:
+          type: integer
+        bodyPart:
+          $ref: '#/components/schemas/BodyPart'
+        bodyPartExtended:
+          type: string
+        previousPassHeight:
+          $ref: '#/components/schemas/PassHeight'
+        duration:
+          type: number
+          format: double
+        opponents:
+          type: integer
+        pxT:
+          $ref: '#/components/schemas/PxTDto'
+        distanceToGoal:
+          type: number
+          format: double
+
+    EventOpponentPositionDto:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+        adjCoordinates:
+          $ref: '#/components/schemas/CoordinateDto'
+
+    EventSetPieceDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        subPhaseId:
+          type: integer
+        mainEvent:
+          type: boolean
+
+    DribbleDto:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+        type:
+          $ref: '#/components/schemas/DribbleType'
+        result:
+          $ref: '#/components/schemas/DribbleResult'
+        playerId:
+          type: integer
+
+    FormationsDto:
+      type: object
+      properties:
+        team:
+          type: string
+        opponent:
+          type: string
+
+    EventDto:
+      type: object
+      properties:
+        index:
+          type: integer
+        id:
+          type: integer
+        gameTime:
+          $ref: '#/components/schemas/GameTimeDto'
+        squadId:
+          type: integer
+        player:
+          $ref: '#/components/schemas/EventPlayerDto'
+        pressure:
+          type: number
+          format: double
+        actionType:
+          $ref: '#/components/schemas/ActionType'
+        start:
+          $ref: '#/components/schemas/EventPositionDto'
+        end:
+          $ref: '#/components/schemas/EventPositionDto'
+        action:
+          $ref: '#/components/schemas/Action'
+        phase:
+          $ref: '#/components/schemas/Phase'
+        duel:
+          $ref: '#/components/schemas/DuelDto'
+        shot:
+          $ref: '#/components/schemas/ShotDto'
+        pass:
+          $ref: '#/components/schemas/PassDto'
+        result:
+          $ref: '#/components/schemas/EventResult'
+        periodId:
+          type: integer
+        pressingPlayerId:
+          type: integer
+        fouledPlayerId:
+          type: integer
+        distanceToOpponent:
+          $ref: '#/components/schemas/DistanceToOpponent'
+        formation:
+          $ref: '#/components/schemas/FormationsDto'
+        opponent:
+          $ref: '#/components/schemas/EventOpponentPositionDto'
+        setPiece:
+          $ref: '#/components/schemas/EventSetPieceDto'
+        dribble:
+          $ref: '#/components/schemas/DribbleDto'
+        sequenceIndex:
+          type: integer
+        inferredSetPiece:
+          type: boolean
+
+    # ── Event-level KPIs (Scorings) ────────────
+    ScoringDto:
+      type: object
+      properties:
+        position:
+          $ref: '#/components/schemas/Position'
+        playerId:
+          type: integer
+        eventId:
+          type: integer
+        kpiId:
+          type: integer
+        value:
+          type: number
+          format: double
+
+    # ── Match Player KPIs ──────────────────────
+    ScoringPlayerMatchSumDto:
+      type: object
+      description: Scoring-enriched player match sum with KPI aggregates.
+      properties:
+        id:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    PlayerMatchSumDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    MatchSumsPlayersSquadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerMatchSumDto'
+
+    MatchSumsPlayersDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/MatchSumsPlayersSquadDto'
+        squadAway:
+          $ref: '#/components/schemas/MatchSumsPlayersSquadDto'
+
+    # ── Match Squad KPIs ───────────────────────
+    ScoringMatchSumDto:
+      type: object
+      description: Scoring-enriched squad match sum with KPI aggregates.
+      properties:
+        id:
+          type: integer
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    SquadMatchSumDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    MatchSumsSquadsDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/SquadMatchSumDto'
+        squadAway:
+          $ref: '#/components/schemas/SquadMatchSumDto'
+
+    # ── Match Player Scores ────────────────────
+    PlayerScoreValueDto:
+      type: object
+      properties:
+        playerScoreId:
+          type: integer
+        value:
+          type: number
+          format: double
+
+    PlayerScorePlayerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        playerScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScoreValueDto'
+
+    PlayerScoreSquadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScorePlayerDto'
+
+    PlayerScoreMatchValuesDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/PlayerScoreSquadDto'
+        squadAway:
+          $ref: '#/components/schemas/PlayerScoreSquadDto'
+
+    PlayerScoreMatchPlayerPositionDto:
+      type: object
+      description: Player score data for a specific position filter.
+      properties:
+        id:
+          type: integer
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        playerScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScoreValueDto'
+
+    PlayerScorePlayerPositionDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        playerScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScoreValueDto'
+
+    PlayerScoreSquadAllPositionsDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScorePlayerPositionDto'
+
+    PlayerScoreMatchValuesAllPositionsDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/PlayerScoreSquadAllPositionsDto'
+        squadAway:
+          $ref: '#/components/schemas/PlayerScoreSquadAllPositionsDto'
+
+    # ── Match Squad Scores ─────────────────────
+    SquadScoreValueDto:
+      type: object
+      properties:
+        squadScoreId:
+          type: integer
+        value:
+          type: number
+          format: double
+
+    SquadScoreSquadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        squadScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadScoreValueDto'
+
+    SquadScoreMatchValuesDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        squadHome:
+          $ref: '#/components/schemas/SquadScoreSquadDto'
+        squadAway:
+          $ref: '#/components/schemas/SquadScoreSquadDto'
+
+    # ── Set Pieces ─────────────────────────────
+    SetPieceSubPhaseAggregatesDto:
+      type: object
+      properties:
+        SHOT_XG:
+          type: number
+          format: double
+        PACKING_XG:
+          type: number
+          format: double
+        POSTSHOT_XG:
+          type: number
+          format: double
+        SHOT_AT_GOAL_NUMBER:
+          type: number
+          format: double
+        GOALS:
+          type: number
+          format: double
+        PXT_POSITIVE:
+          type: number
+          format: double
+        BYPASSED_OPPONENTS:
+          type: number
+          format: double
+        BYPASSED_DEFENDERS:
+          type: number
+          format: double
+
+    SetPieceSubPhaseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        index:
+          type: integer
+        startZone:
+          type: string
+        cornerEndZone:
+          $ref: '#/components/schemas/EndZone'
+        cornerType:
+          type: string
+        freeKickEndZone:
+          $ref: '#/components/schemas/EndZone'
+        freeKickType:
+          type: string
+        goalKickEndZone:
+          $ref: '#/components/schemas/EndZone'
+        goalKickType:
+          type: string
+        throwInEndZone:
+          $ref: '#/components/schemas/EndZone'
+        throwInType:
+          type: string
+        secondDeliveryEndZone:
+          $ref: '#/components/schemas/EndZone'
+        secondDeliveryType:
+          type: string
+        mainEventPlayerId:
+          type: integer
+        mainEventOutcome:
+          type: string
+        passReceiverId:
+          type: integer
+        ballTrajectory:
+          type: string
+        firstTouchPlayerId:
+          type: integer
+        firstTouchWon:
+          type: boolean
+        indirectHeader:
+          type: string
+        secondTouchPlayerId:
+          type: integer
+        secondTouchWon:
+          type: boolean
+        secondTouchEndZone:
+          type: string
+        aggregates:
+          $ref: '#/components/schemas/SetPieceSubPhaseAggregatesDto'
+
+    SetPieceDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        matchId:
+          type: integer
+        startTime:
+          type: string
+        startTimeInSec:
+          type: number
+          format: double
+        endTime:
+          type: string
+        endTimeInSec:
+          type: number
+          format: double
+        squadId:
+          type: integer
+        phaseIndex:
+          type: integer
+        setPieceCategory:
+          $ref: '#/components/schemas/SetPieceCategory'
+        adjSetPieceCategory:
+          $ref: '#/components/schemas/SetPieceCategory'
+        setPieceExecutionType:
+          $ref: '#/components/schemas/SetPieceExecutionType'
+        setPieceSubPhase:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetPieceSubPhaseDto'
+
+    # ── Skillcorner Frame Mappings ─────────────
+    SkillcornerMatchFrameMappingDto:
+      type: object
+      properties:
+        frame:
+          type: integer
+        isMatched:
+          type: boolean
+        impectEventIndex:
+          type: integer
+
+    SkillcornerMatchResultDto:
+      type: object
+      properties:
+        trackingExtraV3LastModified:
+          type: string
+          format: date-time
+        lastCalculationDate:
+          type: string
+          format: date-time
+        mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillcornerMatchFrameMappingDto'
+
+    SkillcornerMappingUpdateDto:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        date:
+          type: string
+          format: date-time
+
+    # ── Iteration Level Aggregates ─────────────
+    IterationAvgKpiDto:
+      type: object
+      description: A single KPI average value within an iteration aggregate.
+      properties:
+        kpiId:
+          type: integer
+        value:
+          type: number
+          format: double
+
+    IterationAvgSquadKpisDto:
+      type: object
+      properties:
+        squadId:
+          type: integer
+        matches:
+          type: integer
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    IterationAvgPlayerKpisDto:
+      type: object
+      properties:
+        playerId:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        kpis:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDto'
+
+    SquadScoreValuesDto:
+      type: object
+      description: Squad score values aggregated at the iteration level.
+      properties:
+        squadId:
+          type: integer
+        matches:
+          type: integer
+        squadScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadScoreValueDto'
+
+    PlayerScoreValuesDto:
+      type: object
+      description: Player score values aggregated at the iteration level.
+      properties:
+        playerId:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        playerScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScoreValueDto'
+
+    IterationProfileScoreDto:
+      type: object
+      properties:
+        profileName:
+          type: string
+        value:
+          type: number
+          format: double
+
+    IterationPlayerProfileScoresDto:
+      type: object
+      properties:
+        playerId:
+          type: integer
+        playDuration:
+          type: number
+          format: double
+        matchShare:
+          type: number
+          format: double
+        profileScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/IterationProfileScoreDto'
+
+    # ── Definitions ────────────────────────────
+    KpiBasicDetailsDto:
+      type: object
+      properties:
+        label:
+          type: string
+        definition:
+          type: string
+        meaning:
+          type: string
+
+    KpiContextDetailsDto:
+      type: object
+      properties:
+        label:
+          type: string
+        name:
+          type: string
+        definition:
+          type: string
+        meaning:
+          type: string
+
+    KpiDetailsDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/KpiBasicDetailsDto'
+        parentKpi:
+          type: object
+          properties:
+            id:
+              type: integer
+            label:
+              type: string
+            name:
+              type: string
+            definition:
+              type: string
+            meaning:
+              type: string
+        context:
+          $ref: '#/components/schemas/KpiContextDetailsDto'
+        inverted:
+          type: boolean
+
+    ScoreDto:
+      type: object
+      description: Player score definition.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/KpiBasicDetailsDto'
+        inverted:
+          type: boolean
+
+    ScoreDetailsDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/KpiBasicDetailsDto'
+        inverted:
+          type: boolean
+
+    SquadScoreDto:
+      type: object
+      description: Squad score definition.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/KpiBasicDetailsDto'
+        inverted:
+          type: boolean
+
+    SquadScoreDetailsDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/KpiBasicDetailsDto'
+        inverted:
+          type: boolean
+
+    ProfileFactorDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProfileFactorType'
+        weight:
+          type: number
+          format: double
+        inverted:
+          type: boolean
+
+    ProfilePositionDto:
+      type: object
+      properties:
+        name:
+          type: string
+
+    ProfileDto:
+      type: object
+      properties:
+        name:
+          type: string
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileFactorDto'
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfilePositionDto'
+
+    # ── Squad Ratings & Predictions ────────────
+    SquadRatingDto:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        squadId:
+          type: integer
+
+    SquadRatingsForDateDto:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        squadRatings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadRatingDto'
+
+    SquadRatingsForIterationDto:
+      type: object
+      properties:
+        iterationId:
+          type: integer
+        squadRatingsEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadRatingsForDateDto'
+
+    ModelCoefficientSquadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        att:
+          type: number
+          format: double
+        def:
+          type: number
+          format: double
+
+    ModelCoefficientCompetitionDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        intercept:
+          type: number
+          format: double
+        home:
+          type: number
+          format: double
+        comp:
+          type: number
+          format: double
+
+    ModelCoefficientEntryDto:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        squads:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelCoefficientSquadDto'
+        competition:
+          $ref: '#/components/schemas/ModelCoefficientCompetitionDto'
+
+    ModelCoefficientDto:
+      type: object
+      properties:
+        iterationId:
+          type: integer
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelCoefficientEntryDto'
+
+    # ── Update / Delete Feed ───────────────────
+    MatchDataDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date-time
+
+    DeletedDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        mergedId:
+          type: integer
+        type:
+          $ref: '#/components/schemas/DeleteType'
+
+    # ── ResponseObject Wrappers ────────────────
+    # List wrappers (data is an array)
+    ResponseObject_List_StadiumDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StadiumDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_SquadDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_SkillcornerMappingUpdateDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillcornerMappingUpdateDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_PlayerDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_MatchDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchInfoDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_MatchDataDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchDataDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_IterationDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IterationDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_CoachDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoachDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_SquadScoreDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadScoreDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_ScoreDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_ProfileDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_EventDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_ScoringDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoringDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_KpiDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KpiDetailsDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_PlayerScoreValuesDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScoreValuesDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_IterationPlayerProfileScoresDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IterationPlayerProfileScoresDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_PlayerScorePlayerPositionDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerScorePlayerPositionDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_IterationAvgPlayerKpisDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IterationAvgPlayerKpisDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_IterationAvgSquadKpisDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IterationAvgSquadKpisDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_SquadScoreValuesDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SquadScoreValuesDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_SetPieceDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetPieceDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_DeletedDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_List_CountryDetailDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryDetailDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    # Single-object wrappers (data is a single object)
+    ResponseObject_MatchInfoDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MatchDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_SquadScoreMatchValuesDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SquadScoreMatchValuesDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_MatchSumsSquadsDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MatchSumsSquadsDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_SkillcornerMatchResultDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SkillcornerMatchResultDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_PlayerScoreMatchValuesDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PlayerScoreMatchValuesDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_PlayerScoreMatchValuesAllPositionsDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PlayerScoreMatchValuesAllPositionsDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_MatchSumsPlayersDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MatchSumsPlayersDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_SquadRatingsForIterationDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SquadRatingsForIterationDto'
+        status:
+          type: integer
+        message:
+          type: string
+
+    ResponseObject_ModelCoefficientDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ModelCoefficientDto'
+        status:
+          type: integer
+        message:
+          type: string

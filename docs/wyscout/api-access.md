@@ -1,191 +1,150 @@
+---
+source_url: https://apidocs.wyscout.com/
+source_type: crawled
+upstream_version: v3 2024-03-12 / v4 2024-05-09
+crawled_at: 2026-06-03
+---
+
 # Wyscout API Access
 
 ## Overview
 
-Wyscout is a **commercial football data provider** owned by Hudl. Access requires a paid license. There is no free tier, but academic research licenses are sometimes available.
+Wyscout is a **commercial football data provider** owned by Hudl. Access requires a paid license — there is no free public tier of the REST API. The product documentation is published as an OpenAPI (Redoc) portal at [apidocs.wyscout.com](https://apidocs.wyscout.com/), and the data dictionary at [dataglossary.wyscout.com](https://dataglossary.wyscout.com/).
+
+This document is sourced from the live OpenAPI specs behind the docs portal (`assets/specs/prod/current.yml` = v3, `next.yml` = v4 preview, `legacy.yml` = v2). Endpoint inventories live in [api-endpoints.md](api-endpoints.md); the event payload in [data-model.md](data-model.md); the event taxonomy in [event-types.md](event-types.md).
 
 ## Authentication
 
-API key-based authentication. The key is passed as a Basic Auth header:
+HTTP **Basic Access Authentication**. You are issued a username and password; supply them on every request.
 
 ```bash
 curl -u "username:password" "https://apirest.wyscout.com/v3/matches/5012345"
 ```
 
-Or as a header:
+To build the header manually:
 
-```
-Authorization: Basic base64(username:password)
-```
+1. Build the string `username:password`.
+2. Base64-encode it.
+3. Send `Authorization: Basic <encoded>`.
 
-Python example:
+For example `Aladdin:OpenSesame` encodes to `QWxhZGRpbjpPcGVuU2VzYW1l`, so the header is `Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l`.
+
+Python:
 
 ```python
 import requests
 from requests.auth import HTTPBasicAuth
 
 auth = HTTPBasicAuth("your_username", "your_password")
-response = requests.get(
-    "https://apirest.wyscout.com/v3/matches/5012345",
-    auth=auth
-)
+r = requests.get("https://apirest.wyscout.com/v3/matches/5012345", auth=auth)
+r.raise_for_status()
+data = r.json()
 ```
 
-## Base URLs
+## Base URLs and versions
 
-| Version | Base URL | Status |
-|---|---|---|
-| v3 (current) | `https://apirest.wyscout.com/v3/` | Active |
-| v2 (legacy) | `https://apirest.wyscout.com/v2/` | Deprecated |
+| Version | Base URL | Spec slug | Status |
+|---|---|---|---|
+| **v4** | `https://apirest.wyscout.com/v4` | `next` | **Preview** (beta of the next release) |
+| **v3** | `https://apirest.wyscout.com/v3` | `current` | **Current** (latest stable) |
+| v2 | `https://apirest.wyscout.com/v2` | `legacy` | Legacy (still running) |
 
-## Key Endpoints
+Most existing integrations run on **v3**. **v4** is the preview track where new endpoints land first — notably broadcast tracking, physical data, and match attack directions (see [api-endpoints.md](api-endpoints.md)). Anyone who started building on Wyscout recently may have begun on v4.
 
-### Competitions & Seasons
+## Versioning model
 
-```
-GET /v3/competitions
-GET /v3/competitions/{competitionId}
-GET /v3/competitions/{competitionId}/seasons
-GET /v3/seasons/{seasonId}
-```
+Wyscout maintains three parallel sets of endpoints:
 
-### Matches
+- **Current** — the latest stable version with the most recent endpoints and improvements.
+- **Preview** — the beta of the next official release; new endpoints are implemented here first.
+- **Legacy** — the previous version, kept running so users can migrate.
 
-```
-GET /v3/seasons/{seasonId}/matches
-GET /v3/matches/{matchId}
-GET /v3/matches/{matchId}/formations
-GET /v3/matches/{matchId}/players
-GET /v3/matches/{matchId}/advancedstats
-```
+When a new **Current** is released, the previous Current becomes **Legacy** and remains available for at least six months before being retired (i.e. until the *next* Current ships). Documentation on apidocs.wyscout.com stays available for the Legacy version too. The version is selected by the base-URL path segment (`/v2`, `/v3`, `/v4`) — there is no version header.
 
-### Events
+## Rate limits
 
-```
-GET /v3/matches/{matchId}/events
-```
-
-Returns all events for a match. This is the primary endpoint for event-level analysis.
-
-### Teams
-
-```
-GET /v3/teams/{teamId}
-GET /v3/teams/{teamId}/squad
-GET /v3/teams/{teamId}/transfers
-GET /v3/seasons/{seasonId}/teams
-```
-
-### Players
-
-```
-GET /v3/players/{playerId}
-GET /v3/players/{playerId}/advancedstats
-GET /v3/players/{playerId}/matches
-GET /v3/players/{playerId}/career
-```
-
-### Advanced Stats
-
-```
-GET /v3/matches/{matchId}/advancedstats
-GET /v3/players/{playerId}/advancedstats?seasonId={seasonId}&competitionId={competitionId}
-GET /v3/teams/{teamId}/advancedstats?seasonId={seasonId}&competitionId={competitionId}
-```
-
-Advanced stats include xG, xA, PPDA, deep completions, progressive passes/runs, and more.
-
-### Search
-
-```
-GET /v3/search?query=Salah&type=player
-GET /v3/search?query=Liverpool&type=team
-```
-
-## Rate Limits
-
-- Rate limits depend on your license tier
-- Typical limit: **12 requests per second** for standard licenses
-- Bulk data export endpoints may have separate limits
-- 429 responses include `Retry-After` header
-
-## Response Format
-
-All responses are JSON. Paginated endpoints use:
+The API enforces **12 requests per second per API key**. Exceeding it returns HTTP `429`:
 
 ```json
 {
-  "data": [...],
-  "meta": {
-    "page_count": 5,
-    "total_count": 100,
-    "page": 1
+  "error": {
+    "code": 429,
+    "message": "Too many requests"
   }
 }
 ```
 
-Use `?page=2` to paginate.
+## Pagination
 
-## Competition IDs (Common)
+List endpoints (e.g. `/competitions/{wyId}/players`, `/seasons/{wyId}/players`) accept:
 
-| Competition | ID |
+| Param | Meaning |
 |---|---|
-| Premier League | 524 |
-| La Liga | 795 |
-| Serie A | 524 |
-| Bundesliga | 528 |
-| Ligue 1 | 412 |
-| Champions League | 5 |
-| Europa League | 6 |
-| World Cup | 28 |
+| `limit` (alias `count`) | Results per page (max **100**) |
+| `page` | Page number (current page) |
+| `sort` | Sort the result set by a given field and direction |
+| `search` | Simple OR search across defined search fields |
+| `filter` | Simple AND/EQUAL filter on a given field |
 
-Note: IDs may vary by season for some cup competitions.
+Paged responses wrap results in a `meta` envelope alongside the data array.
 
-## Data Availability
+## Related-object expansion (`fetch` / `details` / `exclude`)
 
-- **Event data**: Available for top leagues, usually from 2014/15 onwards (coverage varies)
-- **Advanced stats**: xG, xA available from ~2017/18 onwards
-- **Video**: Match video may be available depending on license (separate from data API)
-- **Tracking data**: Not available through the standard API (Wyscout is primarily an event data provider)
+Many endpoints support querystring expansion so you can avoid extra round-trips:
 
-## Academic / Research Access
+- **`fetch`** — embed related top-level objects (e.g. `fetch=competition,season,round`).
+- **`details`** — embed nested detail objects (e.g. `details=teams,players`; on `/events`, `details=tag`).
+- **`exclude`** — drop sections from the payload to shrink responses (on `/events`: `possessions`, `names`, `positions`, `formations`).
 
-Wyscout has historically offered discounted or free access for academic research:
+Values are comma-separated. The accepted values differ per endpoint — see [api-endpoints.md](api-endpoints.md).
 
-- Contact Wyscout/Hudl directly for research licenses
-- Some universities have institutional access
-- The publicly available "Wyscout open data" (used in academic papers like Pappalardo et al.) covers World Cup 2018, Euro 2016, and top-5 league seasons in v2 format
-- This open dataset is available at: https://figshare.com/collections/Soccer_match_event_dataset/4415000
+## Identifiers
 
-## Python Client Libraries
+Every resource (competition, season, team, player, match, coach, referee, round, area) is keyed by an integer **`wyId`** (Wyscout ID). Path parameters are named `wyId` (or `matchWyId`, `matchId`). Areas additionally use a three-letter code (`areaId`, e.g. `ENG`). See [identity-surfaces.md](identity-surfaces.md) for cross-provider ID mapping.
 
-No official Python SDK. Common approaches:
+## Data availability
 
-```python
-# Direct requests
-import requests
-from requests.auth import HTTPBasicAuth
+- **Event data** — top leagues, broadly from 2014/15 onward (coverage varies by competition).
+- **Advanced stats** — aggregated xG/xA/PPDA and progressive metrics; see [data-model.md](data-model.md).
+- **Video** — match video endpoints exist (`/videos/{matchId}`) but availability depends on licence.
+- **Broadcast tracking** — v4 only, via `/matches/{wyId}/fulltracking` (returns a download URL to a tracking JSON file). Historically Wyscout was event-data only; v4 adds optical/broadcast tracking where available.
+- **Physical data** — v4 only, via `/matches/{wyId}/physicaldata` (per-player physical metrics by match phase, where available).
 
-class WyscoutClient:
-    BASE_URL = "https://apirest.wyscout.com/v3"
+## Loading Wyscout data (kloppy)
 
-    def __init__(self, username, password):
-        self.auth = HTTPBasicAuth(username, password)
-
-    def get_match_events(self, match_id):
-        r = requests.get(f"{self.BASE_URL}/matches/{match_id}/events", auth=self.auth)
-        r.raise_for_status()
-        return r.json()
-```
-
-For loading Wyscout data into analysis tools, use **kloppy**:
+There is no official Python SDK. For loading event data into analysis pipelines, use **kloppy**, which understands the Wyscout v2 and v3 event JSON formats:
 
 ```python
 from kloppy import wyscout
 
-# Load from file (v2 or v3 format)
 dataset = wyscout.load(event_data="events.json", data_version="V3")
-
-# Convert to pandas
 df = dataset.to_df()
 ```
+
+A minimal direct client:
+
+```python
+import requests
+from requests.auth import HTTPBasicAuth
+
+class WyscoutClient:
+    def __init__(self, username, password, version="v3"):
+        self.base = f"https://apirest.wyscout.com/{version}"
+        self.auth = HTTPBasicAuth(username, password)
+
+    def get(self, path, **params):
+        r = requests.get(f"{self.base}{path}", auth=self.auth, params=params)
+        r.raise_for_status()
+        return r.json()
+
+    def match_events(self, match_id, **params):
+        return self.get(f"/matches/{match_id}/events", **params)
+```
+
+## Open / academic data
+
+Wyscout has historically offered discounted or free access for academic research (contact Hudl/Wyscout; some universities hold institutional licences). A widely-cited **public open dataset** (Pappalardo et al.) covers the 2017/18 top-5 leagues, the 2018 World Cup and Euro 2016 in the older **v2** event format:
+
+- <https://figshare.com/collections/Soccer_match_event_dataset/4415000>
+
+Note this open dataset predates the v3/v4 event model documented here — its event/tag taxonomy differs from the current schema.

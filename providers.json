@@ -33,12 +33,14 @@
     },
     "wyscout": {
       "description": "Hudl/Wyscout event and match data",
-      "version": null,
+      "version": "v3 (current) / v4 (preview)",
       "package": null,
       "sources": [
-        { "type": "curated", "note": "Compiled from API documentation and community knowledge" }
+        { "url": "https://apidocs.wyscout.com/", "type": "api_docs", "note": "OpenAPI specs: assets/specs/prod/{current=v3,next=v4,legacy=v2}.yml" },
+        { "url": "https://dataglossary.wyscout.com/", "type": "api_docs", "note": "Event/metric/concept data glossary" },
+        { "type": "curated", "note": "kloppy loading, academic open-data (Pappalardo) pointers" }
       ],
-      "last_crawled": null
+      "last_crawled": "2026-06-03"
     },
     "sportmonks": {
       "description": "REST API for football fixtures, standings, and events",
@@ -78,22 +80,25 @@
       "last_crawled": null
     },
     "impect": {
-      "description": "Commercial football match and event data provider with team and player identity surfaces in delivered feeds",
-      "version": null,
-      "package": null,
+      "description": "Commercial football data provider; Packing/pxT metrics, KPI/score framework, detailed set-pieces (Customer API v5)",
+      "version": "Customer API v5.0",
+      "package": { "type": "pypi", "name": "impectPy", "repo": "ImpectAPI/impectPy" },
       "sources": [
-        { "type": "curated", "note": "High-level commercial-provider identity guidance; no proprietary payloads" }
+        { "url": "https://api.impect.com", "type": "api_docs", "note": "Customer API v5 OpenAPI spec (specs/impect/impect_openapi_docs.yml); Swagger at https://api.impect.com/v3/api-docs/CustomerAPI" },
+        { "type": "curated", "note": "Identity-resolution guidance; Packing/pxT framing" }
       ],
-      "last_crawled": null
+      "last_crawled": "2026-06-03"
     },
     "skillcorner": {
-      "description": "Commercial tracking and physical-data provider with match, team, and player identity surfaces in delivered feeds",
-      "version": null,
-      "package": null,
+      "description": "Commercial broadcast-tracking, physical and Game Intelligence (off-ball runs, on-ball engagements) data provider",
+      "version": "tracking v3 / physical v3 / dynamic events v2",
+      "package": { "type": "pypi", "name": "skillcorner", "repo": "SkillCorner/skillcorner-toolkit" },
       "sources": [
-        { "type": "curated", "note": "High-level commercial-provider identity guidance; no proprietary tracking payloads" }
+        { "url": "https://skillcorner.com/api/docs/", "type": "api_docs", "note": "Swagger/OpenAPI spec (specs/skillcorner/skillcorner_openapi.json)" },
+        { "url": "https://skillcorner.crunch.help/en", "type": "api_docs", "note": "Glossary & metric definitions" },
+        { "type": "curated", "note": "Identity-resolution guidance" }
       ],
-      "last_crawled": null
+      "last_crawled": "2026-06-03"
     },
     "kloppy": {
       "description": "Python library for standardising football data across providers",

@@ -1,15 +1,39 @@
 ---
-source_type: curated
-source_url: null
-upstream_version: null
-crawled_at: null
+source_type: crawled
+source_url: https://skillcorner.com/api/docs/
+upstream_version: SkillCorner API (Swagger 2.0)
+crawled_at: 2026-06-03
 ---
 
 # SkillCorner Identity Surfaces
 
 SkillCorner is mainly a tracking and physical-data provider. Its identity
 surfaces are most useful for linking delivered match, team, and player rows back
-to an existing register rather than minting a full football ontology.
+to an existing register rather than minting a full football ontology. The first
+section is **spec-confirmed** from the public API; the rest is curated guidance.
+
+## ID fields (confirmed, public API)
+
+Integer SkillCorner IDs key every entity, queryable as comma-separated multi-value
+filters across endpoints:
+
+| Entity | ID field | Other identity fields |
+|---|---|---|
+| Competition | `competition` (id) | name; editions & rounds are sub-resources |
+| Competition edition | `id` | `{competition, season, name}` — the season×competition unit |
+| Season | `id` | `start_year`, `end_year`, `name` |
+| Match | `match` / `id` | `date_time`, home/away team, score, stadium, competition_edition |
+| Team | `team` / `id` | `name`, `coach`, `stadium`, `players` |
+| Player | `player` / `id` | `first_name`, `last_name`, `short_name`, `birthday`, `gender` |
+| Role/position | role `id` | `position_group`, `name`, `acronym` |
+
+**Key cross-reference: `trackable_object`.** Each `Player` carries a
+`trackable_object` id that links the player to their positions inside tracking
+frames. It is the bridge between SkillCorner's identity layer and its tracking
+payloads — match a track to a person via `Player.trackable_object`.
+
+Filterable identity context on most data endpoints: `season`, `competition`,
+`competition_edition`, `match`, `team`, `player`, `position`, `position_group`.
 
 ## Access Surface
 
