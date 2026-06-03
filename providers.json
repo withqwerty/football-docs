@@ -150,33 +150,6 @@
       ],
       "last_crawled": null
     },
-    "api-football": {
-      "description": "REST API for football data via RapidAPI (fixtures, standings, players, live scores)",
-      "version": "3",
-      "package": null,
-      "sources": [
-        { "url": "https://www.api-football.com/documentation-v3", "type": "api_docs" }
-      ],
-      "last_crawled": null
-    },
-    "football-data-org": {
-      "description": "REST API for football competition data (v4) — fixtures, standings, teams, players",
-      "version": "4",
-      "package": null,
-      "sources": [
-        { "url": "https://docs.football-data.org/general/v4/index.html", "type": "api_docs" }
-      ],
-      "last_crawled": null
-    },
-    "fpl": {
-      "description": "Fantasy Premier League unofficial API — player stats, fixtures, gameweeks, transfers",
-      "version": null,
-      "package": null,
-      "sources": [
-        { "type": "curated", "note": "Unofficial undocumented API; compiled from community sources" }
-      ],
-      "last_crawled": null
-    },
     "floodlight": {
       "description": "Python library for spatial football data analysis (tracking, pitch control, metrics)",
       "version": null,
@@ -184,26 +157,6 @@
       "sources": [
         { "url": "https://floodlight.readthedocs.io/en/latest/", "type": "readthedocs" },
         { "url": "https://github.com/floodlight-sports/floodlight", "type": "github_docs" }
-      ],
-      "last_crawled": null
-    },
-    "thesportsdb-v1": {
-      "description": "TheSportsDB v1 API — free tier, search-based endpoints for teams, players, events, livescores",
-      "version": "1",
-      "package": null,
-      "sources": [
-        { "url": "https://www.thesportsdb.com/api/spec/v1/openapi.yaml", "type": "openapi" },
-        { "url": "https://www.thesportsdb.com/documentation", "type": "api_docs" }
-      ],
-      "last_crawled": null
-    },
-    "thesportsdb-v2": {
-      "description": "TheSportsDB v2 API — paid tier, expanded endpoints with schedules, statistics, lookups",
-      "version": "2",
-      "package": null,
-      "sources": [
-        { "url": "https://www.thesportsdb.com/api/spec/v2/openapi.yaml", "type": "openapi" },
-        { "url": "https://www.thesportsdb.com/documentation", "type": "api_docs" }
       ],
       "last_crawled": null
     },
