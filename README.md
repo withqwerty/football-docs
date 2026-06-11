@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/withqwerty-football-docs-badge.png)](https://mseep.ai/app/withqwerty-football-docs)
+
 # football-docs
 
 Searchable football data provider and tooling documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
