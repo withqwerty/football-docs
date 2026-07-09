@@ -117,9 +117,9 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
 | FotMob | 7 | identity-surfaces |
 | Soccerdonna | 7 | identity-surfaces |
-| Transfermarkt | 7 | identity-surfaces |
+| Transfermarkt | 8 | identity-surfaces |
 
-**1,190 searchable chunks** across 19 providers and tools.
+**1,191 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 
