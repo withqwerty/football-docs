@@ -3,12 +3,12 @@
   "name": "io.github.withqwerty/football-docs",
   "title": "football-docs",
   "description": "Searchable football data provider docs for AI coding agents.",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "football-docs",
-      "version": "0.5.2",
+      "version": "0.6.0",
       "transport": {
         "type": "stdio"
       }
