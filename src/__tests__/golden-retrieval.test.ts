@@ -178,6 +178,24 @@ describe("golden retrieval evals", () => {
       expected: ["120", "80", "100", "flip the coordinates"],
     },
     {
+      id: "statsbomb-lineups-team-sheet",
+      args: {
+        query:
+          "StatsBomb Open Data team sheet lineups events Starting XI tactics formation Substitution Tactical Shift starters bench shirt numbers cards position intervals from to start_reason end_reason ratings",
+        provider: "StatsBomb Open Data",
+        max_results: 5,
+      },
+      expectedProvider: "statsbomb",
+      expected: [
+        "Lineup data surfaces",
+        "`lineups/{match_id}.json`",
+        "event type `35` (`Starting XI`)",
+        "event type `19` (`Substitution`)",
+        "event type `36` (`Tactical Shift`)",
+        "Ratings are not part of the open-data lineups/events seam",
+      ],
+    },
+    {
       id: "wyscout-lineups-formations",
       args: {
         query: "Wyscout formation lineups team formation player positions starting eleven",
@@ -496,6 +514,9 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
+    expect(text).toContain("**statsbomb** (237 chunks)");
+    expect(text).toContain("charting-lineups (6)");
+    expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
     expect(text).toContain("**fmdb-pro** (36 chunks)");
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (38 chunks)");
