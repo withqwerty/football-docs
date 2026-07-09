@@ -55,4 +55,24 @@ describe("provider-alignment retrieval", () => {
     expect(text).toContain("game.synchronise_tracking_and_event_data");
     expect(text).toContain("game.get_event_frame");
   });
+
+  it("finds SkillCorner physical and Game Intelligence quality gates", () => {
+    const result = searchDocs(db, {
+      query:
+        "SkillCorner physical_check_passed dynamic_events_check Game Intelligence off_ball_runs bad data quality ignore_dynamic_events_check",
+      provider: "skillcorner",
+      max_results: 8,
+    });
+
+    const text = result.content.map((entry) => entry.text).join("\n");
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("Data quality gates");
+    expect(text).toContain("`physical_check_passed`");
+    expect(text).toContain("`dynamic_events_check`");
+    expect(text).toContain("`ignore_dynamic_events_check`");
+    expect(text).toContain("`403 Bad data quality`");
+    expect(text).toContain("`GET /metrics/game_intelligence/in_possession/off_ball_runs/`");
+    expect(text).toContain("`GET /match/{match_id}/dynamic_events/off_ball_runs/`");
+  });
 });
