@@ -52,6 +52,19 @@
       ],
       "last_crawled": null
     },
+    "sportradar": {
+      "description": "Commercial official soccer data API for schedules, live timelines, extended match/player/team statistics, probabilities, insights, and push feeds",
+      "version": "Soccer v4 / Soccer Extended v4",
+      "package": null,
+      "sources": [
+        { "url": "https://developer.sportradar.com/soccer/docs/soccer-ig-api-basics", "type": "api_docs", "note": "Soccer v4 integration guide, coverage tiers, auth, API style, languages" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-overview", "type": "api_docs", "note": "Soccer Extended v4 endpoint map and integration links" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-summary", "type": "api_docs", "note": "Sport Event Extended Summary reference" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline", "type": "api_docs", "note": "Sport Event Extended Timeline fields and coordinates" },
+        { "type": "curated", "note": "Project-oriented retrieval notes for charting, live match stories, IDs, probabilities, and official MCP usage" }
+      ],
+      "last_crawled": "2026-07-09"
+    },
     "transfermarkt": {
       "description": "Public football entity pages for players, teams, competitions, matches, transfers, and market values",
       "version": null,
