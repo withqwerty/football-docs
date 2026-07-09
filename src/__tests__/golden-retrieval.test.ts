@@ -115,17 +115,20 @@ describe("golden retrieval evals", () => {
       id: "opta-shot-placement-goal-mouth",
       args: {
         query:
-          "shot placement GoalMouthY GoalMouthZ goal mouth 102 103 post distance shot precision body part left foot right foot blocked shot xG qualifier 321 322 213",
+          "build a goalmouth shot chart with GoalMouthY GoalMouthZ xGOT PSxG marker size outcome colours saved goal post crossbar post distance Opta qualifiers 102 103 321 322",
         provider: "WhoScored",
-        max_results: 5,
+        max_results: 8,
       },
       expectedProvider: "opta",
       expected: [
-        "Shot placement data surfaces",
+        "Build a goalmouth shot chart",
+        "**Category:** charting-shot-placement",
+        "`matchexpectedgoals/{token}?fx={matchId}`",
         "`GoalMouthY`",
         "`GoalMouthZ`",
-        "qualifiers `321`",
-        "Do not assume qualifier `213`",
+        "not pitch coordinates",
+        "missing xGOT",
+        "outcome",
         "post distance",
       ],
     },
@@ -622,11 +625,11 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (58 chunks)");
+    expect(text).toContain("**opta** (59 chunks)");
     expect(text).toContain("charting-game-state (5)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
-    expect(text).toContain("charting-shot-placement (6)");
+    expect(text).toContain("charting-shot-placement (7)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
