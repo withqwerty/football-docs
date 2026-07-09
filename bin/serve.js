@@ -3,4 +3,9 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-await import(pathToFileURL(resolve(__dirname, "..", "dist", "index.js")).href);
+const { main } = await import(pathToFileURL(resolve(__dirname, "..", "dist", "index.js")).href);
+
+main().catch((error) => {
+  console.error("Failed to start football-docs MCP server:", error);
+  process.exit(1);
+});
