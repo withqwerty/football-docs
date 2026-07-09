@@ -78,6 +78,56 @@ Rendering guidance:
 Do not infer ball-in-play state from the ball being near the centre spot alone.
 Centre coordinates can be genuine in kick-off or restart phases.
 
+## Second Spectrum delivery-bundle validation recipe
+
+Use this recipe when an agent asks for a Second Spectrum delivery bundle,
+tracking metadata validation, JSONL/XML tracking ingest, physical summary/splits
+checks, or event-to-frame alignment between optical tracking and an Opta-style
+event feed.
+
+Common bundle components are contract-specific, but a robust ingest should model
+them separately:
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `metadata` | match metadata JSON/XML | Parse game ids, teams, players, pitch dimensions, fps, periods, and attacking direction before reading frame rows. |
+| `tracking_frames` | line-delimited JSON, XML, or provider frame stream | Treat each row/message as one frame with period, frame index, clock, player positions, ball position, live/dead state, and optional speed. |
+| `physical_summary` | provider physical summary CSV/table | Keep official match-level player aggregates separate from any metrics derived from raw frames. |
+| `physical_splits` | provider interval split CSV/table | Store split length, thresholds, team rows, player rows, and whether the final split is partial. |
+| `event_alignment` | event feed plus tracking alignment fields | Join events to frames through explicit aligned clock/frame fields when supplied; otherwise label any time-window join as inferred. |
+| `player_bridge` | tracking player id, shirt number, provider player id | Prefer explicit provider ids. Use shirt numbers only as a scoped fallback inside one team, match, and period. |
+| quality flags | missing files, duplicate frames, period bounds, fps, live flag, id joins | Report bundle completeness and clock consistency before exposing analytics. |
+
+Core check: event-to-frame alignment must use a period-local match clock or an
+explicit `aligned_frame_idx`, not wall-clock time alone.
+
+Safety rule: do not assume every contract includes the same delivery files.
+
+Source rule: official provider physical outputs stay separate from derived
+raw-tracking metrics.
+
+Implementation notes:
+
+- Do not assume every contract includes the same files or field names. Some
+  deliveries include metadata plus tracking only; others also include physical
+  summaries, physical splits, aligned event feeds, or signals. Detect the
+  available components and record the schema version or delivery note if known.
+- Validate periods before analytics: frame indices should be monotonic within a
+  period, period start/end bounds should match metadata, and frame spacing should
+  be consistent with fps apart from documented gaps.
+- Keep wall-clock timestamps, frame indices, and match clocks as separate
+  fields. Wall-clock time is useful for delivery/debugging; charting and
+  event-to-frame joins should use period and match clock.
+- Preserve both tracking ids and event-provider ids when the metadata supplies
+  them. A player can have a tracking-specific id and an Opta-style id in the
+  same bundle.
+- Treat `live`, last-touch, possession, and attacking-direction fields as
+  provider annotations when present. If they are missing, expose the missing
+  state rather than deriving silent substitutes.
+- Official provider physical outputs are not interchangeable with derived raw-
+  tracking metrics. If both are available, surface their source, threshold set,
+  and calculation basis separately.
+
 ## Speed and distance fallbacks
 
 Prefer provider speed and cumulative distance fields when they are present and
