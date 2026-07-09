@@ -73,6 +73,48 @@ for example, use their own glossary and are available as provider aggregates whe
 covered. Do not mix a custom `end_x - start_x >= 10` count with provider
 advanced-stat totals without labelling the source.
 
+## Player dossier progression recipe
+
+Use this recipe when an agent asks for a player dossier, progression plot,
+player pass map, take-on panel, shot-action summary, or single-player xT view
+from normalised event rows.
+
+| Action set | Required fields | Derived fields |
+|---|---|---|
+| passes | player id, team id, event id, period/clock, start `x`/`y`, end `x`/`y`, outcome | `cross`, `progressive`, `xT`, threat class |
+| take-ons | player id, team id, event id, period/clock, start `x`/`y`, outcome | success rate, next same-team threat action within a labelled time window |
+| shots | player id, event id, period/clock, `x`/`y`, result, body part, play kind | `xg`, `xg_source`, `zone_xT`, shot-result counts |
+| totals | all included action rows | pass count, completed passes, crosses, progressive passes, take-ons won, shots, goals, total xT |
+
+Implementation notes:
+
+- Filter to one player before plotting so the chart reads as a dossier rather
+  than a team pass map.
+- Require both start and end coordinates for pass vectors, progressive-pass
+  flags, and xT deltas. Missing end coordinates should drop that action from
+  vector/xT views rather than defaulting to zero.
+- For Opta-shaped pass events, end coordinates come from qualifiers `140` and
+  `141`; qualifier `2` marks crosses, qualifier `4` marks through balls, and
+  qualifier `196` marks switches of play.
+- For Wyscout, prefer provider tags such as `progressive_pass`,
+  `progressive_run`, `shot_assist`, and `deep_completition` when consuming event
+  tags; preserve the provider spelling in adapter code.
+- A "next threat" after a take-on should be explicitly labelled as a product
+  rule, for example the first same-team pass, carry, or shot within 10-15
+  seconds that adds positive xT. Do not present it as a provider event type.
+- Use a stable xT grid or model version and expose the threshold used for
+  colours such as "threatening pass" (`xT > 0.02`, `xT > 0.05`, etc.).
+- Shot body-part and play-kind logic is provider-specific. Opta body-part
+  qualifiers include `72` left foot, `20` right foot, `15`/`3` head, and `21`
+  other; set-piece qualifiers such as `6` corner, `9` penalty, and `26`
+  free-kick shot should be mapped before grouping.
+
+For public APIs, include both row-level actions and aggregate totals. This lets a
+UI draw pass/progression lines, take-on markers, and shot markers while also
+showing a compact summary. Label every derived field (`derived_xT`,
+`derived_progressive`, `next_threat_window_ms`) so it is not confused with a
+provider official aggregate.
+
 ## Field tilt
 
 Field tilt is usually the team's share of final-third touches:
