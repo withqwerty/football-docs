@@ -112,12 +112,12 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | TransferRoom | 38 | api-access, api-endpoints, data-model, identity-surfaces |
 | Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
 | FMDB Pro | 36 | api-access, api-endpoints, data-model, identity-surfaces |
-| socceraction | 26 | SPADL format, VAEP, Expected Threat |
+| socceraction | 27 | SPADL format, VAEP, Expected Threat |
 | FotMob | 7 | identity-surfaces |
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,042 searchable chunks** across 17 providers and tools.
+**1,043 searchable chunks** across 17 providers and tools.
 
 ## Contributing
 

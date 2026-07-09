@@ -162,6 +162,20 @@ describe("golden retrieval evals", () => {
       expected: ["Expected Threat", "xT", "grid", "xT(destination zone) - xT(origin zone)"],
     },
     {
+      id: "socceraction-kloppy-vaep-runtime-caveats",
+      args: {
+        query: "socceraction kloppy Opta convert_to_actions VAEP SPADL support best effort StatsBomb training",
+        max_results: 5,
+      },
+      expectedProvider: "socceraction",
+      expected: [
+        "kloppy bridge caveats",
+        "StatsBomb is the safe open-data training path",
+        "Opta via kloppy is a runtime compatibility path",
+        "105m x 68m",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
