@@ -148,6 +148,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-lineups-team-sheet",
+      args: {
+        query:
+          "Opta match lineups team sheet starters bench captain formation q130 q131 q194 shirt number q59 formation slot q145 substitutions ratings",
+        provider: "WhoScored",
+        max_results: 5,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Team setup qualifiers",
+        "typeId `34`",
+        "`59` | shirt numbers",
+        "`130` | team formation",
+        "`131` | team-player formation",
+        "`145` | formation slot",
+        "`194` | captain",
+        "Treat ratings as optional enrichment",
+      ],
+    },
+    {
       id: "statsbomb-chart-coordinate-normalisation",
       args: {
         query: "StatsBomb to 0-100 coordinate normalisation shot map xG chart",
@@ -484,8 +504,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (52 chunks)");
+    expect(text).toContain("**opta** (58 chunks)");
     expect(text).toContain("charting-game-state (5)");
+    expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("charting-shot-placement (6)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
