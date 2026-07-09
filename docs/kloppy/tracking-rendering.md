@@ -168,6 +168,48 @@ Implementation notes:
   detector is a product rule over frames; provider high-speed running or sprint
   counts may use different thresholds, smoothing, and live-ball handling.
 
+## Tracking-derived pitch-control overlay recipe
+
+Use this recipe when an agent asks for a simple pitch-control overlay, nearest-
+player dominance grid, territory-control field, or live tracking control map from
+optical tracking feeds. This is an indicative spatial overlay, not a provider
+official metric and not a probabilistic pitch-control model.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `period` / `t_ms` | frame period and timestamp | Use the current or interpolated live frame on the tracking period clock. |
+| `grid_cols` / `grid_rows` | renderer or API parameters | Declare the grid resolution used to sample the pitch. |
+| `cell_x` / `cell_y` | pitch dimensions | Store each cell centre in the same normalised coordinate frame as the renderer. |
+| `control` | nearest home and away player distance | Compute `(d_away - d_home) / (d_away + d_home + eps)` and clamp to `[-1, 1]`. Positive values mean home dominance, negative values mean away dominance, and values near zero mean an even contest. |
+| quality flags | live/dead state, visible home/away player counts, missing coordinates | Mark the field neutral or unavailable when the inputs cannot support a two-team comparison. |
+
+Implementation notes:
+
+- Build the field from player positions in a single live frame or from a frame
+  interpolated to the display clock. For UI overlays, recompute at a bounded
+  cadence such as once per second rather than on every render.
+- Split the pitch into fixed cells, map each cell centre to pitch coordinates,
+  and compute the nearest visible home-player and away-player distance for each
+  cell.
+- Convert player positions and cell centres to a common metric pitch coordinate
+  system before distance calculations. If the renderer uses 0-100 or 0-1
+  coordinates, scale x by `pitch_length` and y by `pitch_width` so the rectangular
+  pitch aspect ratio is preserved.
+- Require both teams to have visible player coordinates. If either team has no
+  visible players in the frame, emit a neutral or unavailable field rather than
+  painting the pitch as owned by the other team.
+- Skip players with missing coordinates and expose the visible-player counts so
+  downstream views can decide whether to hide, fade, or label the overlay.
+- Keep an even-contest band around zero, such as `abs(control) < 0.15`, when
+  rendering heatmap cells. Leaving uncertain cells unpainted is usually clearer
+  than implying confident ownership.
+- Do not narrow the underlying control calculation when a user filters the
+  display to one team unless the product is explicitly switching to a one-team
+  distance-to-space view. Two-team pitch control requires both teams.
+- Label the output as nearest-player dominance or derived control. Do not present
+  it as official provider pitch control, possession probability, or a modelled
+  reachable-space probability unless the provider supplies that metric directly.
+
 ## Joining tracking to events
 
 To combine tracking with event data:
