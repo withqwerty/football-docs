@@ -101,6 +101,43 @@ Source: sofascore.com API. HTTP-based JSON API.
 | `read_league_table()` | Standings | `[league, season]` | MP, W, D, L, GF, GA, GD, Pts |
 | `read_schedule()` | Match schedule | `[league, season, game]` | round, week, date, scores, game_id |
 
+### Sofascore match summary/status payload
+
+Project adapters often consume Sofascore's raw event objects directly for
+live/result cards, even when `soccerdata` only exposes schedule/table helpers.
+The useful match-summary fields are:
+
+| Raw field | Meaning |
+|---|---|
+| `id` | Sofascore event ID |
+| `status.code` | numeric status code |
+| `status.description` | display label such as `1st half`, `Halftime`, `Postponed`, `Removed` |
+| `status.type` | coarse bucket such as `notstarted`, `inprogress`, `finished`, `postponed`, `canceled` |
+| `startTimestamp` | Unix seconds kickoff timestamp |
+| `homeTeam.id/name`, `awayTeam.id/name` | team IDs and labels |
+| `homeScore.current`, `awayScore.current` | current/final scores when available |
+| `homeScore.penalties`, `awayScore.penalties` | penalty shootout scores when available |
+| `tournament.name`, `season.name`, `venue.name`, `roundInfo.round` | match context |
+
+Status handling should prefer `status.type` first, then use `status.code` to
+refine in-game states:
+
+| Status input | Recommended normalised status |
+|---|---|
+| `type="finished"` | `finished`, even for code `93` / description `Removed` |
+| `type="inprogress"`, code `31`, `41`, or `50` | `halftime` / break state |
+| `type="inprogress"`, code `6`, `7`, `8`, or `9` | `live` |
+| `type="notstarted"` or code `0` | `scheduled` |
+| `type="postponed"` or code `60` | `postponed` |
+| `type="canceled"` or code `70` | `canceled` |
+| code `90` | `abandoned` |
+| codes `100`, `110`, `120`, `130`, `140` | `finished` |
+
+Do not treat halftime as `unknown`: it is an in-game state. Do not treat
+postponed/cancelled matches as finished just because score fields are absent.
+Keep `statusCode` and `statusType` in source metadata when building a canonical
+match summary so downstream UI can audit edge cases.
+
 ## SoFIFA (sd.SoFIFA)
 
 Source: sofifa.com (FIFA video game ratings). HTTP-based, 1-second rate limit. Uses `versions` parameter instead of seasons -- maps to FIFA game database snapshots. Options: `'latest'` (default), `'all'`, specific version ID, or list of IDs.
