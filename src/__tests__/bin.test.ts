@@ -168,11 +168,14 @@ describe("npm bin entrypoint", () => {
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("WhoScored");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Metrica");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Second Spectrum");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("SportRadar API");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Soccer Extended");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sofascore");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("WhoScored");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sportec");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Second Spectrum");
+      expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("SportRadar API");
     } finally {
       child.kill();
     }

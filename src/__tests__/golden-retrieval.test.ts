@@ -218,6 +218,46 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "sportradar-api-alias",
+      args: {
+        query: "x-api-key soccer v4 extended summary base URL",
+        provider: "SportRadar API",
+        max_results: 5,
+      },
+      expectedProvider: "sportradar",
+      expected: [
+        "SportRadar API (sportradar)",
+        "**Provider:** sportradar",
+        "https://api.sportradar.com/soccer-extended",
+        "x-api-key",
+      ],
+    },
+    {
+      id: "sportradar-charting-surfaces",
+      args: {
+        query: "Sport Event Extended Timeline x y destination_x xg_value pass direction coordinates",
+        provider: "Sportradar",
+        max_results: 5,
+      },
+      expectedProvider: "sportradar",
+      expected: ["Shot map", "Pass map", "destination_x", "xg_value", "goalface_x"],
+    },
+    {
+      id: "soccer-extended-probability-alias",
+      args: {
+        query: "win probability momentum timeline probabilities game state chart",
+        provider: "Soccer Extended",
+        max_results: 5,
+      },
+      expectedProvider: "sportradar",
+      expected: [
+        "Soccer Extended (sportradar)",
+        "Win-probability chart",
+        "Sport Event Probabilities",
+        "Timeline Probabilities",
+      ],
+    },
+    {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
@@ -300,6 +340,10 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**kloppy** (100 chunks)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
+    expect(text).toContain("**sportradar** (29 chunks)");
+    expect(text).toContain(
+      "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
+    );
     expect(text).toContain("api-endpoints");
   });
 
@@ -430,6 +474,24 @@ describe("golden retrieval evals", () => {
     expect(text).not.toContain("No matching docs found for requested provider(s): metrica-sports");
     expect(text).not.toContain("No matching docs found for requested provider(s): sportec-dfl");
     expect(text).not.toContain("No matching docs found for requested provider(s): second-spectrum");
+  });
+
+  it("compares Sportradar chart fields with Opta and Wyscout shot surfaces", () => {
+    const result = compareProviders(db, {
+      topic: "shot maps xG event coordinates goal mouth post shot xG",
+      providers: ["Sportradar", "Opta", "Wyscout"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 3 provider(s)");
+    expect(text).toContain("## sportradar");
+    expect(text).toContain("goalface_x");
+    expect(text).toContain("xg_value");
+    expect(text).toContain("## opta");
+    expect(text).toContain("0-100");
+    expect(text).toContain("## wyscout");
+    expect(text).toContain("postShotXg");
   });
 
   it("routes WhoScored project adapter questions to Opta-family docs", () => {
