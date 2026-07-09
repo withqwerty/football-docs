@@ -31,20 +31,40 @@ pitch.scatter(x, y, marker='football', ax=ax)
 
 ## Heatmaps (Binned Statistics)
 
-Two-step workflow: bin the data, then plot.
+Two-step workflow: normalise the event coordinates, bin the data, then plot.
+Use this recipe for touch-density charts, defensive-action density, pass-origin
+density, reception maps, and other located-event surfaces.
+
+| Field | Heatmap use | Notes |
+|---|---|---|
+| `x`, `y` | bin assignment | Use one pitch type and orientation for the selected events before binning. |
+| `event_type` | event selection | State whether the heatmap counts all located touches, only passes, defensive actions, receptions, shots, or another subset. |
+| `team_id` / `player_id` | subject filter | Filter upstream; an empty selection should render an honest empty state rather than fake zero-density cells. |
+| `value` / `weight` | weighted heatmap | Counts are safest. If weighting by xT, OBV, pressure, or another metric, label the value source and units. |
+| `period` / `minute` | phase filters | Apply game-state or time-window filters before binning so the scale bar matches the plotted selection. |
+
+Choose the chart type deliberately:
+
+| Need | mplsoccer surface | Use when |
+|---|---|---|
+| inspectable event-density grid | `bin_statistic` + `heatmap` | You need transparent rectangular bins and tooltip/table-friendly counts or shares. |
+| fixed editorial zone read | `bin_statistic_positional` + `heatmap_positional` | You want Juego de Posición or territory zones with readable labels. |
+| smoothed local density | `kdeplot` | You want a visual concentration surface and can tolerate smoothing/interpolation. |
+| xT or value overlay | `heatmap` over a value grid | You are plotting a model grid; do not describe it as raw touch density. |
+
+For public charts, label the denominator: raw counts, share of selected events,
+relative frequency, or metric sum. Zero-event selections should be marked
+unavailable or empty; do not divide by zero or colour an all-zero chart as if it
+contains signal.
 
 ```python
-# Step 1: Bin the data
 bin_statistic = pitch.bin_statistic(x, y, statistic='count', bins=(25, 25))
 
-# Optional: Gaussian smoothing
 from scipy.ndimage import gaussian_filter
 bin_statistic['statistic'] = gaussian_filter(bin_statistic['statistic'], sigma=1)
 
-# Step 2: Plot
 pcm = pitch.heatmap(bin_statistic, ax=ax, cmap='hot', edgecolors='#22312b')
 
-# Optional: Add labels
 pitch.label_heatmap(bin_statistic, ax=ax, str_format='{:.0f}', color='white',
                      fontsize=8, exclude_zeros=True)
 ```
