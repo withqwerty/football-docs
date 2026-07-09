@@ -95,6 +95,41 @@ derive it consistently over live frames or label it unavailable; do not mix
 provider cumulative distance for some players with naive per-frame sums for others
 without marking the source.
 
+## Tracking-derived pressing timeline recipe
+
+Use this recipe when an agent asks for a rolling pressing-intensity timeline,
+pressure sparkline, out-of-possession pressure chart, or tracking-derived press
+dashboard from Second Spectrum, TRACAB, SkillCorner, Sportec, Metrica, or other
+optical tracking feeds.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `period` / `t_ms` | frame period and timestamp | Use the window centre on the period clock, not wall-clock time. |
+| `pressing_team` | player team, ball position | Attribute possession to the team whose player is nearest the ball across the window; the other team is pressing. |
+| `pressers_mean` | player coordinates, ball coordinates | Mean count of out-of-possession players within a labelled radius of the ball, such as 5-6 metres. |
+| `closing_mps_mean` | player-ball distance over time, frame rate | Mean positive closing speed towards the ball; floor negative values at zero so moving away does not reduce the metric. |
+| quality flags | live/dead state, missing ball/player coordinates | Report skipped or unavailable windows rather than filling with zero. |
+
+Implementation notes:
+
+- Compute player-to-ball distances once per frame and reuse that array for nearest
+  team, presser counts, and closing speed.
+- Use rolling windows that are long enough to dampen frame noise, for example five
+  seconds stepped every one second. Label both values in the API response.
+- Exclude dead-ball frames and frames without ball coordinates from possession and
+  pressure votes. If an older export has no live/dead flag, state the fallback.
+- When both teams are equally near the ball or all relevant coordinates are missing,
+  skip that frame or window instead of guessing possession.
+- Keep this separate from event-derived PPDA. PPDA counts passes and defensive
+  actions; a tracking pressing timeline measures spatial proximity and approach
+  speed around the ball.
+- Preserve the coordinate unit: tracking feeds may use metres, centimetres, or
+  normalised coordinates. Convert to metres before applying any radius or speed
+  threshold.
+- If the provider already supplies on-ball engagements, pressures, or out-of-
+  possession metrics, expose those as provider metrics and label this rolling
+  timeline as derived.
+
 ## Joining tracking to events
 
 To combine tracking with event data:

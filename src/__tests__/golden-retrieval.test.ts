@@ -422,7 +422,8 @@ describe("golden retrieval evals", () => {
         "`tracab`",
         "x100 = 50 +",
         "`x_m = x_cm / 100`",
-        "Ball live/dead handling",
+        "Tracking-derived pressing timeline recipe",
+        "ball_coordinates",
       ],
     },
     {
@@ -705,9 +706,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (59 chunks)");
     expect(text).toContain("visualizations (43)");
-    expect(text).toContain("**kloppy** (116 chunks)");
+    expect(text).toContain("**kloppy** (117 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (6)");
+    expect(text).toContain("tracking-rendering (7)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
