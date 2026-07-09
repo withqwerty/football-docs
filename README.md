@@ -83,7 +83,7 @@ Add to `claude_desktop_config.json`:
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queued for maintainer review. |
 | `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
 
-Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref` and `understat` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
+Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
 ## Example queries
 
@@ -107,7 +107,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | mplsoccer | 62 | overview, pitch-types, visualizations |
 | Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
 | SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
-| Free sources | 45 | overview, fbref, understat |
+| Free sources | 46 | overview, fbref, understat |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 38 | api-access, api-endpoints, data-model, identity-surfaces |
 | Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,090 searchable chunks** across 19 providers and tools.
+**1,091 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 

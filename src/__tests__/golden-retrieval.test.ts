@@ -133,6 +133,42 @@ describe("golden retrieval evals", () => {
       expected: ["understat (free-sources)", "**Provider:** free-sources", "read_shot_events"],
     },
     {
+      id: "clubelo-provider-alias",
+      args: {
+        query: "ClubElo historical Elo ratings API CSV run-in fixture difficulty",
+        provider: "ClubElo",
+        max_results: 5,
+      },
+      expectedProvider: "free-sources",
+      expected: ["ClubElo (free-sources)", "api.clubelo.com", "fixture-difficulty", "strength prior"],
+    },
+    {
+      id: "football-data-co-uk-provider-alias",
+      args: {
+        query: "football-data.co.uk Premier League CSV full time scores FTHG FTAG scorigami",
+        provider: "football-data.co.uk",
+        max_results: 5,
+      },
+      expectedProvider: "free-sources",
+      expected: [
+        "football-data.co.uk (free-sources)",
+        "https://www.football-data.co.uk/mmz4281",
+        "FTHG",
+        "FTAG",
+        "scorigami baselines",
+      ],
+    },
+    {
+      id: "engsoccerdata-provider-alias",
+      args: {
+        query: "engsoccerdata historical English football results scorigami baseline csv",
+        provider: "engsoccerdata",
+        max_results: 5,
+      },
+      expectedProvider: "free-sources",
+      expected: ["engsoccerdata (free-sources)", "James P. Curley", "`england`", "`hgoal`", "`vgoal`"],
+    },
+    {
       id: "fmdb-provider-alias",
       args: {
         query: "FMDB player endpoint API key",
@@ -354,8 +390,10 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (38 chunks)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (45 chunks)");
-    expect(text).toContain("aliases: fbref, football-reference, understat");
+    expect(text).toContain("**free-sources** (46 chunks)");
+    expect(text).toContain(
+      "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
+    );
     expect(text).toContain("**opta** (36 chunks)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (40 chunks)");
@@ -538,6 +576,22 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("CURRENT");
     expect(text).toContain("## sportradar");
     expect(text).toContain("Live Schedules");
+  });
+
+  it("compares historical baselines with live-score overlays for scoreline projects", () => {
+    const result = compareProviders(db, {
+      topic: "historical final scores live overlay Elo fixtures scorigami baseline",
+      providers: ["ClubElo", "football-data.co.uk", "TheSportsDB"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 2 provider(s)");
+    expect(text).toContain("## free-sources");
+    expect(text).toContain("football-data.co.uk");
+    expect(text).toContain("engsoccerdata");
+    expect(text).toContain("## thesportsdb");
+    expect(text).toContain("idEvent");
   });
 
   it("routes WhoScored project adapter questions to Opta-family docs", () => {
