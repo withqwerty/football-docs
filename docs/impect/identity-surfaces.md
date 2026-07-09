@@ -78,9 +78,8 @@ is globally stable until that is confirmed in the contract or repeated exports.
 - If profile attributes are thin, keep Impect as a corroborator rather than a
   canonical mint source.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for Impect identity field
-families and matching cautions. Reep Next can cite those public-safe field
-shapes, but customer deliveries, private IDs, raw feed payloads, and register
-review outcomes belong outside football-docs.
+families and matching cautions. Keep customer deliveries, non-public IDs, raw feed
+payloads, and register review outcomes outside football-docs.

@@ -137,12 +137,11 @@ Note in the example how the **offline and live ids differ** for player
 (10172 vs 32564), team (746 vs 389), country of birth (68 vs 2), and every
 match — exactly the crosswalk this endpoint exists to provide.
 
-## Relevance to reep
+## Implementation Notes
 
-reep is the entity register that answers "who is this player?" and holds
-provider cross-references. This endpoint is the canonical StatsBomb-internal
-crosswalk: a `custom_id` bridge to StatsBomb must record **which system** an id
-belongs to (live vs offline) and can use this endpoint to reconcile the two.
-Mapping only a bare StatsBomb player id without its system risks colliding live
+This endpoint is the canonical StatsBomb crosswalk between live and offline ID
+spaces. Any downstream provider cross-reference should record **which system** an
+ID belongs to (live vs offline) and can use this endpoint to reconcile the two.
+Mapping only a bare StatsBomb player ID without its system risks colliding live
 and offline spaces. The block-per-{competition,season,team} shape also captures
-transfer history within a season, useful as relationship evidence.
+transfer history within a season, which is useful as relationship evidence.

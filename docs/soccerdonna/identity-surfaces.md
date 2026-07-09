@@ -16,8 +16,8 @@ competition and era.
 
 Soccerdonna is a public website surface. Use public profile pages, competition
 pages, and match reports as corroborating evidence, with the page URL and
-snapshot date recorded. Do not publish private scraping state, retry logs, or
-local mirror paths.
+snapshot date recorded. Do not publish collection state, retry logs, or local
+mirror paths.
 
 ## Stable Identity Surfaces
 
@@ -58,9 +58,9 @@ they map to a season, stage, or competition entity.
 - Some pages are better corroborators than canonical mint sources because their
   season and competition hierarchy can differ from the schedule feed.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for Soccerdonna profile,
-team, competition, and match-report identity surfaces. Reep Next can cite those
-facts while keeping review decisions, private scrape state, action logs, and
-women's-football implementation plans outside football-docs.
+team, competition, and match-report identity surfaces. Keep review decisions,
+collection state, action logs, and project implementation plans outside
+football-docs.

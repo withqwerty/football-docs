@@ -76,9 +76,9 @@ season membership or person identity without corroborating attributes.
   matching.
 - A match-level tracking file is not proof of a season-long membership edge.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for SkillCorner identity
-surfaces in tracking and physical-data deliveries. Reep Next can cite the field
-families and matching cautions, but raw tracking payloads, private delivery
-examples, and register review outputs belong outside football-docs.
+surfaces in tracking and physical-data deliveries: field families and matching
+cautions. Keep raw tracking payloads, non-public delivery examples, and register
+review outputs outside football-docs.

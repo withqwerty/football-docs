@@ -56,9 +56,9 @@ target-register stage model.
   replace attribute evidence for person bridging.
 - Round and stage IDs are provider structure, not necessarily public ontology.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for Hudl Wyscout identity
-surfaces and field families. Reep Next can cite those facts, but entitlement
-coverage, canonical-source policy, private examples, review outputs, and
-provider-specific bridge decisions belong outside football-docs.
+surfaces and field families. Keep entitlement coverage, canonical-source policy,
+non-public examples, review outputs, and provider-specific bridge decisions
+outside football-docs.

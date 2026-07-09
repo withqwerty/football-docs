@@ -63,9 +63,9 @@ snapshot metadata.
 - Some person facts are current-point-in-time surfaces, especially active squad
   or career listings. Record the snapshot date when using them.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for Opta identity surfaces:
-access shape, ID families, matching fields, and known quirks. Reep Next
-acceptance policy, canonical-feed assignments, minting, review cases, action
-ledgers, and private feed observations belong outside football-docs.
+access shape, ID families, matching fields, and known quirks. Keep project
+acceptance policy, canonical-source assignments, review cases, action ledgers,
+and implementation-only feed observations outside football-docs.

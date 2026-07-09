@@ -54,9 +54,8 @@ endpoint family, and snapshot date alongside any bridge evidence.
 - Public endpoints may be undocumented. Treat access and response shape as
   mutable unless the provider documents the contract.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for FotMob identity
-surfaces, public URL families, and matching cautions. Reep Next can cite those
-facts, but private endpoint handling, scrape internals, rate-limit tactics,
-review outcomes, and register decisions belong outside football-docs.
+surfaces, public URL families, and matching cautions. Keep access implementation
+details, review outcomes, and register decisions outside football-docs.

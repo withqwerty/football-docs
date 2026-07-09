@@ -92,7 +92,13 @@ describe("corpus and public contract", () => {
   });
 
   it("does not leak local machine paths or obvious secrets into indexed docs", () => {
-    const forbidden = [/\/Users\//, /\/Volumes\//, /REEP_NEXT_API_KEY/, /sk-[A-Za-z0-9_-]{20,}/];
+    const forbidden = [
+      /\/Users\//,
+      /\/Volumes\//,
+      /sk-[A-Za-z0-9_-]{20,}/,
+      /[A-Z][A-Z0-9_]*_(?:NEXT|INTERNAL|PRIVATE)_[A-Z0-9_]*(?:API_KEY|TOKEN|SECRET)\b/,
+      /[A-Z][A-Z0-9_]*(?:API_KEY|TOKEN|SECRET)\s*=\s*["'][A-Za-z0-9_-]{20,}/,
+    ];
 
     for (const file of markdownFiles(resolve(ROOT, "docs"))) {
       const content = readFileSync(file, "utf-8");
