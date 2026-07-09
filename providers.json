@@ -70,7 +70,7 @@
       "version": null,
       "package": null,
       "sources": [
-        { "type": "curated", "note": "Public website identity surfaces and Reep-derived provider-quirk notes" }
+        { "type": "curated", "note": "Public website identity surfaces and provider-quirk notes" }
       ],
       "last_crawled": null
     },
@@ -102,7 +102,7 @@
       "version": null,
       "package": null,
       "sources": [
-        { "type": "curated", "note": "Public website identity surfaces and Reep-derived women's football matching notes" }
+        { "type": "curated", "note": "Public website identity surfaces and women's football matching notes" }
       ],
       "last_crawled": null
     },

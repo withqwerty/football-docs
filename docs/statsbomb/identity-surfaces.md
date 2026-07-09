@@ -73,9 +73,10 @@ record which.
 - Names can be display names. Use another attribute authority for DOB where a
   person bridge requires it.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for StatsBomb identity
-surfaces. Reep Next can cite Open Data ID families and matching cautions, while
-commercial entitlement assumptions, register acceptance policy, private review
-evidence, and derived bridge decisions belong outside football-docs.
+surfaces: Open Data ID families, commercial/live-data ID caveats, and matching
+cautions. Keep commercial entitlement assumptions, register acceptance policy,
+implementation-only review evidence, and derived bridge decisions outside
+football-docs.

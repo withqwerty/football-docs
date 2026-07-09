@@ -15,8 +15,8 @@ Its public website shape should not be copied blindly into a register ontology.
 
 Transfermarkt is primarily a public website surface, not an official public API.
 Use public entity pages, match reports, or licence-safe community exports as
-evidence, and record the public URL plus snapshot date. Do not publish scraper
-state, bypass details, or private mirror paths.
+evidence, and record the public URL plus snapshot date. Do not publish
+collection state, bypass details, or non-public mirror paths.
 
 ## Stable Identity Surfaces
 
@@ -61,9 +61,9 @@ display labels are context, not independent canonical IDs.
   ambiguous.
 - URL slugs are handles. Numeric IDs are the bridge surface.
 
-## Reep Next Usage
+## Implementation Notes
 
 Use this page as the public provider-fact reference for Transfermarkt identity
-surfaces. Reep Next can cite it for URL families, ID scheme notes, and matching
-quirks, but register decisions, mint salts, review outcomes, private mirrors,
-and scraper implementation details belong outside football-docs.
+surfaces: URL families, ID scheme notes, and matching quirks. Keep register
+decisions, salt or key material, review outcomes, non-public mirrors, and scraping
+implementation details outside football-docs.
