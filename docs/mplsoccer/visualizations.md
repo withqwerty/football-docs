@@ -231,6 +231,35 @@ Do not treat a radar or pizza chart as proof of player quality by itself. It is
 a profile view over pre-selected metrics; the comparison logic lives in the
 cohort, metric set, and normalisation.
 
+## Player Baseline Percentile Bars
+
+Use this recipe when an agent asks for player dossier baseline bars, percentile
+benchmarks, p50/p80 reference markers, peer-group comparison strips, or compact
+cross-match benchmark panels.
+
+| Field | Meaning | Display rule |
+|---|---|---|
+| `metric_id` / `metric_label` | stable metric key and label | Keep metric identity separate from display copy. |
+| `player_value` | the player's raw or per-90 value | Show with units, but do not place it on the percentile axis. |
+| `percentile` | rank of `player_value` within the named cohort | Bar fill / marker position on a fixed 0-100 percentile axis. |
+| `corpus_p50` / `corpus_p80` | raw-value benchmarks from the cohort | Draw as labelled reference values, not as axis positions unless explicitly converted to percentiles. |
+| `population_size` | number of comparable rows | Surface weak samples; do not hide the denominator. |
+| `sufficient` | whether the cohort passes the sample rule | When false, hide percentile, p50, and p80 together. |
+
+Implementation notes:
+
+- A percentile-bar track is a 0-100 percentile axis, not a raw metric-value
+  axis. Place the player marker at `percentile`, not at `player_value`.
+- Calculate `corpus_p50` and `corpus_p80` from the same filtered cohort used for
+  the percentile: league, season, position group, age band, and minutes floor.
+- If the cohort is too small, return `percentile`, `corpus_p50`, and
+  `corpus_p80` as unavailable together. A fake 0th percentile is worse than no
+  benchmark.
+- Store the raw value and percentile together so tooltips can say both, for
+  example `0.42 xG/90, 82nd percentile`.
+- For lower-is-better metrics, document whether the percentile has been inverted
+  so higher always reads better, or leave it uninverted and label that clearly.
+
 ## Radar Charts
 
 ```python
