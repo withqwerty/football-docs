@@ -67,3 +67,47 @@ Shot events are types 13 (miss), 14 (post), 15 (attempt saved), and 16 (goal). A
 | 2 | Second half |
 | 14 | Post-match / full-time |
 | 16 | Pre-match |
+
+## Event-stream validation recipe
+
+Use this recipe when an agent asks for Opta/WhoScored event-feed validation,
+logical event checks, state-transition tests, duplicate event handling, missing
+goal detection, or data-quality gates before deriving metrics such as xT, VAEP,
+PPDA, pass maps, dead-time, or game-state timelines.
+
+| Check | Source fields | Rule |
+|---|---|---|
+| `event_identity` | event id, match id, period, clock, team, player, typeId | Keep the raw provider event id as the primary audit key. If the feed lacks a stable id, build a scoped fingerprint and mark it inferred. |
+| `clock_order` | period id, `timeMin`, `timeSec`, `expandedMinute`, sequence index | Sort by period-aware clock plus provider sequence, not by display minute or array order alone. |
+| `duplicate_events` | event id or scoped fingerprint | De-duplicate exact repeats before state machines; keep a duplicate count in `quality_flags`. |
+| `paired_events` | typeId `4` fouls, typeId `5` outs, duel events, `relatedEventId` where available | Validate expected pairs or links, but do not fabricate the missing side. |
+| `scoreline_consistency` | typeId `16` goals, qualifier `8`, qualifier `28`, final score | Reconstruct valid goals and compare with the final score. Flag mismatches rather than forcing the event stream to agree. |
+| `lineup_state` | typeIds `18`, `19`, `34`, `43`, qualifiers `130`, `131`, `145` | Check that substitutions and formation changes do not create impossible on-pitch player states. |
+| `coordinate_bounds` | event `x`/`y`, pass end qualifiers `140`/`141`, goal-mouth qualifiers `102`/`103` | Validate against the field-specific coordinate scale before calculating derived metrics. |
+| `raw_vs_corrected` | raw event row plus validation output | Store validation flags and any corrected interpretation separately from raw provider facts. |
+
+Core rule: validation should produce quality flags and corrected interpretation
+layers, not overwrite the raw event stream. Downstream metrics can choose whether
+to exclude, repair, or display flagged rows.
+
+Safety rule: an impossible transition is not proof that the provider event type
+is wrong. It may be a missing event, duplicate event, clock-ordering issue,
+licence-tier omission, or parser bug. Preserve enough evidence to inspect it.
+
+Implementation notes:
+
+- Run validation before metric derivation. xT, VAEP, pass networks, dead-time
+  models, and game-state filters all inherit event ordering and scoreline errors.
+- Keep period boundaries explicit. Do not let pre-match, half-time, full-time,
+  extra-time, or post-match events leak into normal in-play state machines.
+- Treat duplicate rows differently from paired rows. Fouls, duels, and ball-out
+  sequences can legitimately involve more than one event at the same clock.
+- Validate scoreline reconstruction with the same rules used in charting:
+  exclude disallowed goals with qualifier `8` and credit own goals with qualifier
+  `28` to the opponent.
+- For coordinate checks, validate each coordinate family separately. Pitch
+  coordinates, pass-end qualifiers, and goal-mouth qualifiers do not share the
+  same scale.
+- Return a compact `quality_flags[]` array per event and a match-level summary
+  with counts for duplicates, ordering fixes, missing links, score mismatches,
+  coordinate failures, and unavailable checks.
