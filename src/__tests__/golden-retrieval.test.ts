@@ -199,6 +199,24 @@ describe("golden retrieval evals", () => {
       expected: ["Sofascore (soccerdata)", "**Provider:** soccerdata", "sd.Sofascore", "read_schedule"],
     },
     {
+      id: "sofascore-status-lifecycle",
+      args: {
+        query: "Sofascore status code 31 halftime inprogress code 93 removed finished postponed code 60",
+        provider: "Sofascore",
+        max_results: 5,
+      },
+      expectedProvider: "soccerdata",
+      expected: [
+        "Sofascore (soccerdata)",
+        "status.type",
+        "code `93` / description `Removed`",
+        "code `31`, `41`, or `50`",
+        "code `60`",
+        "statusCode",
+        "statusType",
+      ],
+    },
+    {
       id: "espn-soccerdata-alias",
       args: {
         query: "ESPN public API match summary schedule team scores lineups",
@@ -396,7 +414,7 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**opta** (36 chunks)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
-    expect(text).toContain("**soccerdata** (40 chunks)");
+    expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
     expect(text).toContain("**databallpy** (63 chunks)");
     expect(text).toContain(
@@ -517,10 +535,25 @@ describe("golden retrieval evals", () => {
     expect(result.isError).toBeUndefined();
     expect(text).toContain("across 1 provider(s)");
     expect(text).toContain("## soccerdata");
-    expect(text).toContain("Sofascore (sd.Sofascore)");
+    expect(text).toContain("Sofascore match summary/status payload");
     expect(text).toContain("ESPN (sd.ESPN)");
     expect(text).not.toContain("No matching docs found for requested provider(s): sofascore");
     expect(text).not.toContain("No matching docs found for requested provider(s): espn");
+  });
+
+  it("finds Sofascore lifecycle details in project-style status comparisons", () => {
+    const result = compareProviders(db, {
+      topic: "match summary status live halftime postponed finished scores",
+      providers: ["Sofascore", "FBref", "Understat"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 2 provider(s)");
+    expect(text).toContain("## soccerdata");
+    expect(text).toContain("Sofascore match summary/status payload");
+    expect(text).toContain("Do not treat halftime as");
+    expect(text).toContain("## free-sources");
   });
 
   it("routes open tracking adapter names to library docs", () => {
