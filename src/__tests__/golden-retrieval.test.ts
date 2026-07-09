@@ -476,6 +476,29 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "second-spectrum-insight-markings",
+      args: {
+        query:
+          "Second Spectrum insight feed aligned Opta event tracking marking pass pressure press run shot marking type expected completion defenders bypassed aligned clock aligned frame index",
+        provider: "Second Spectrum",
+        max_results: 8,
+      },
+      expectedProvider: "kloppy",
+      expected: [
+        "Second Spectrum insight-marking recipe",
+        "**Category:** tracking-rendering",
+        "`opta_event`",
+        "`tracking_marking`",
+        "`marking_type`",
+        "`aligned_frame_idx`",
+        "one side can be null",
+        "pass, shot, pressure, press, or run",
+        "expected completion",
+        "defenders bypassed",
+        "not a raw Opta event type",
+      ],
+    },
+    {
       id: "sportradar-api-alias",
       args: {
         query: "x-api-key soccer v4 extended summary base URL",
@@ -901,9 +924,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (121 chunks)");
+    expect(text).toContain("**kloppy** (122 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (11)");
+    expect(text).toContain("tracking-rendering (12)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
