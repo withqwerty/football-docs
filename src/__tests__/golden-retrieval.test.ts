@@ -498,6 +498,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "mplsoccer-pass-flow-data-contract",
+      args: {
+        query:
+          "pass flow chart pass origin bins circular mean resultant length relative frequency arrows missing end coordinates football",
+        provider: "mplsoccer",
+        max_results: 8,
+      },
+      expected: [
+        "Flow Maps",
+        "**Category:** visualizations",
+        "pass-origin",
+        "`direction_count`",
+        "`relative_frequency`",
+        "circular statistics",
+        "mean resultant length",
+        "at least two valid vectors",
+        "missing end coordinates",
+      ],
+    },
+    {
       id: "sportmonks-season-story-fixtures",
       args: {
         query:

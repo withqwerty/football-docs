@@ -166,12 +166,48 @@ Note: comet lines split each line into `n_segments` (default 100). Large dataset
 
 ## Flow Maps
 
-Binned average direction and distance as arrows:
+Binned average direction and distance as arrows. Use flow maps for pass-origin
+fields: where a team starts passes, how much of the pass volume each zone owns,
+and the average direction from each zone.
 
 ```python
 pitch.flow(xstart, ystart, xend, yend, ax=ax,
            bins=(6, 4), arrow_type='same', arrow_length=10, color='blue')
 ```
+
+Prepare the pass stream before plotting:
+
+| Field | Flow-map use | Notes |
+|---|---|---|
+| `xstart`, `ystart` | origin bin assignment | Normalise to one pitch frame before binning. |
+| `xend`, `yend` | direction vector | Missing end coordinates can still count toward origin volume, but should not contribute to average direction. |
+| `outcome` | completion filter | State whether the flow uses all attempted passes or completed passes only. |
+| `team_id` / `player_id` | subject filter | Filter to one team or player before binning; mixed-team flow fields are rarely interpretable. |
+| `minute` / `period` | phase filters | Apply time, game-state, or playhead filters before computing bin counts and arrows. |
+
+For each origin bin, track both `count` (passes starting in the bin) and
+`direction_count` (passes with usable end coordinates). Colour should normally
+encode one declared value mode:
+
+| Value mode | Formula | Use |
+|---|---|---|
+| `count` | bin pass count | Raw volume. |
+| `share` | `count / total_filtered_passes` | Share of the selected team's pass origins. |
+| `relative_frequency` | observed share divided by the bin's pitch-area share | Zones over- or under-used versus a uniform distribution. |
+
+For arrow direction, use circular statistics rather than a plain mean of angles:
+sum `cos(theta)` and `sin(theta)` for the valid pass vectors, then use
+`atan2(sum_sin, sum_cos)`. Report the mean resultant length `R` as a consistency
+signal. Sparse or low-consistency bins should show no arrow, a hollow marker, or
+a low-confidence glyph rather than a precise-looking direction.
+
+Common gates:
+
+- require at least two valid vectors before drawing an arrow;
+- require `R` above a declared floor, such as `0.3`;
+- keep empty bins visually empty rather than colouring them as zero insight;
+- expose dropped counts for missing start coordinates, missing end coordinates,
+  and missing outcome when a completion filter is active.
 
 ## Voronoi Diagrams
 
