@@ -12,8 +12,8 @@ available, the separate expected-goals endpoint:
 | Lineups and player labels | `matchstats/{token}?fx={matchId}` | Join by `playerId`; use `matchName`, position, and lineup fields for display. |
 
 Do not assume qualifier `213` supplies usable xG in the public Opta Analyst-style
-`matchevent` feed. It is defined in some F24 references, but project pipelines have
-observed xG populated as qualifier `321` on `matchexpectedgoals` instead.
+`matchevent` feed. It is defined in some F24 references, but this feed tier commonly
+populates xG as qualifier `321` on `matchexpectedgoals` instead.
 
 ## Shot event and result fields
 
@@ -60,7 +60,7 @@ stratify penalties, corners, direct free kicks, and other set-piece contexts.
 ## Goal-mouth scaling
 
 Goal-mouth coordinates are on the Opta goal-mouth scale, not pitch `x`/`y`.
-For physical distances, common project conventions are:
+For physical distances, a common football-analytics convention is:
 
 | Quantity | Formula or value |
 |---|---|
