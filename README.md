@@ -108,7 +108,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
 | SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 46 | overview, fbref, understat |
-| soccerdata | 40 | overview, data-sources, usage |
+| soccerdata | 41 | overview, data-sources, usage |
 | TransferRoom | 38 | api-access, api-endpoints, data-model, identity-surfaces |
 | Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
 | FMDB Pro | 36 | api-access, api-endpoints, data-model, identity-surfaces |
@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,091 searchable chunks** across 19 providers and tools.
+**1,092 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 
