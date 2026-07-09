@@ -201,7 +201,7 @@ export function createFootballDocsServer(): McpServer {
   return server;
 }
 
-async function main() {
+export async function main() {
   const transport = new StdioServerTransport();
   await createFootballDocsServer().connect(transport);
 }
