@@ -94,6 +94,24 @@ describe("golden retrieval evals", () => {
       expected: ["Q2", "Q5/Q6", "Q4", "Q3"],
     },
     {
+      id: "opta-passmap-receiver-surfaces",
+      args: {
+        query:
+          "Opta pass map receiver playerPass passmatrix passEndX 140 141 formationPlace matchstats inferred receiver xT game-state",
+        provider: "WhoScored",
+        max_results: 5,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Pass-map data surfaces",
+        "`passmatrix/{token}?fx={matchId}`",
+        "`playerPass[]`",
+        "not the receiving player",
+        "infer the receiver",
+        "`formationPlace`",
+      ],
+    },
+    {
       id: "statsbomb-chart-coordinate-normalisation",
       args: {
         query: "StatsBomb to 0-100 coordinate normalisation shot map xG chart",
@@ -412,7 +430,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (36 chunks)");
+    expect(text).toContain("**opta** (41 chunks)");
+    expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
@@ -639,6 +658,22 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("## opta");
     expect(text).toContain("Shot Qualifiers");
     expect(text).not.toContain("No matching docs found for requested provider(s): whoscored");
+  });
+
+  it("compares pass-map data extraction with rendering libraries", () => {
+    const result = compareProviders(db, {
+      topic: "pass maps passmatrix playerPass receiver inferred xT formationPlace lineup",
+      providers: ["WhoScored", "mplsoccer"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 2 provider(s)");
+    expect(text).toContain("## opta");
+    expect(text).toContain("Pass-map data surfaces");
+    expect(text).toContain("not the receiving player");
+    expect(text).toContain("## mplsoccer");
+    expect(text).toContain("Arrows (Pass Maps)");
   });
 
   it("suggests close provider matches for typoed provider filters", () => {
