@@ -130,6 +130,24 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-game-state-scoreline-reconstruction",
+      args: {
+        query:
+          "game state running scoreline goal events disallowed goal qualifier 8 own goal qualifier 28 expandedMinute winning losing level0 pass maps minute filter",
+        provider: "WhoScored",
+        max_results: 5,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Reconstructing running scoreline",
+        "qualifier `8`",
+        "qualifier `28`",
+        "`expandedMinute`",
+        "`level0`",
+        "Do not infer in-play score state from final score",
+      ],
+    },
+    {
       id: "statsbomb-chart-coordinate-normalisation",
       args: {
         query: "StatsBomb to 0-100 coordinate normalisation shot map xG chart",
@@ -448,7 +466,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (47 chunks)");
+    expect(text).toContain("**opta** (52 chunks)");
+    expect(text).toContain("charting-game-state (5)");
     expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("charting-shot-placement (6)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
@@ -665,6 +684,24 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("CURRENT");
     expect(text).toContain("## sportradar");
     expect(text).toContain("Live Schedules");
+  });
+
+  it("compares event-timeline game state with live-score providers", () => {
+    const result = compareProviders(db, {
+      topic: "game state running scoreline live scores final status disallowed own goals",
+      providers: ["WhoScored", "TheSportsDB", "SportMonks"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 3 provider(s)");
+    expect(text).toContain("## opta");
+    expect(text).toContain("Reconstructing running scoreline");
+    expect(text).toContain("Do not infer in-play score state from final score");
+    expect(text).toContain("## thesportsdb");
+    expect(text).toContain("Soccer Status Codes");
+    expect(text).toContain("## sportmonks");
+    expect(text).toContain("State IDs");
   });
 
   it("compares historical baselines with live-score overlays for scoreline projects", () => {
