@@ -153,6 +153,26 @@ describe("golden retrieval evals", () => {
       expected: ["WhoScored (opta)", "**Provider:** opta", "Shot Qualifiers"],
     },
     {
+      id: "sofascore-soccerdata-alias",
+      args: {
+        query: "Sofascore match summary public API schedule teams score status",
+        provider: "Sofascore",
+        max_results: 5,
+      },
+      expectedProvider: "soccerdata",
+      expected: ["Sofascore (soccerdata)", "**Provider:** soccerdata", "sd.Sofascore", "read_schedule"],
+    },
+    {
+      id: "espn-soccerdata-alias",
+      args: {
+        query: "ESPN public API match summary schedule team scores lineups",
+        provider: "ESPN",
+        max_results: 5,
+      },
+      expectedProvider: "soccerdata",
+      expected: ["ESPN (soccerdata)", "**Provider:** soccerdata", "sd.ESPN", "read_matchsheet"],
+    },
+    {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
@@ -227,6 +247,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: fbref, football-reference, understat");
     expect(text).toContain("**opta** (36 chunks)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
+    expect(text).toContain("**soccerdata** (40 chunks)");
+    expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
     expect(text).toContain("api-endpoints");
   });
 
@@ -313,15 +335,31 @@ describe("golden retrieval evals", () => {
   it("distinguishes an unindexed provider filter from an empty search", () => {
     const result = searchDocs(db, {
       query: "shot map expected threat player radar",
-      provider: "SofaScore",
+      provider: "API-Football",
       max_results: 3,
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBe(true);
-    expect(text).toContain('Provider "SofaScore (sofascore)" is not indexed');
+    expect(text).toContain('Provider "API-Football (api-football)" is not indexed');
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
+  });
+
+  it("routes narrow public match surface adapters to soccerdata docs", () => {
+    const result = compareProviders(db, {
+      topic: "public API match summary schedule team scores lineups",
+      providers: ["Sofascore", "ESPN"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 1 provider(s)");
+    expect(text).toContain("## soccerdata");
+    expect(text).toContain("Sofascore (sd.Sofascore)");
+    expect(text).toContain("ESPN (sd.ESPN)");
+    expect(text).not.toContain("No matching docs found for requested provider(s): sofascore");
+    expect(text).not.toContain("No matching docs found for requested provider(s): espn");
   });
 
   it("routes WhoScored project adapter questions to Opta-family docs", () => {
@@ -354,13 +392,13 @@ describe("golden retrieval evals", () => {
   it("reports unindexed providers when a comparison has no matches", () => {
     const result = compareProviders(db, {
       topic: "shot maps and xG",
-      providers: ["SofaScore"],
+      providers: ["API-Football"],
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBeUndefined();
     expect(text).toContain('No matching docs found for "shot maps and xG"');
-    expect(text).toContain("Requested provider(s) not indexed: sofascore");
+    expect(text).toContain("Requested provider(s) not indexed: api-football");
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
   });
