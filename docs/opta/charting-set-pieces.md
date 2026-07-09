@@ -19,6 +19,36 @@ and use qualifiers `321`/`322` from that endpoint when available. The standard
 `matchevent` feed should still drive the corner delivery, event clock, body part,
 and sequence context.
 
+## Build a long-throw analysis
+
+Use this recipe when an agent asks for long-throw threat, throw-in set-piece
+shots, direct throw-to-shot chains, goals per long throw, or throw-in xG from an
+Opta/WhoScored-style event stream.
+
+| Need | Opta surface | Implementation note |
+|---|---|---|
+| Throw-in delivery | `matchevent/{token}?fx={matchId}` pass events with qualifier `107` (`throwIn`) | Treat the throw as a pass-like restart. Filter to attacking-third or box-targeted throws before calling them dangerous set pieces. |
+| Long-throw flag | qualifier `160` where present | Use this when the feed exposes it; otherwise state the geometric proxy used, such as throw origin and endpoint into the box. |
+| Delivery endpoint | qualifiers `140` (`passEndX`) and `141` (`passEndY`) | Fall back to event `endX`/`endY` only when the export defines those fields. |
+| Throw-sourced shot | shot typeIds `13`, `14`, `15`, `16` after the throw | Link by related event when present, otherwise by same-team time proximity in the same period. |
+| Shot quality | `matchexpectedgoals` qualifiers `321`/`322` joined to shot rows | Keep xG per throw, shots per throw, and goals per throw as separate denominators. |
+
+Implementation notes:
+
+- Do not treat every qualifier `107` throw-in as a long throw. Define the entry
+  rule explicitly: qualifier `160`, endpoint into the penalty area, origin in
+  the final third, or another named proxy.
+- Long throws often create first contacts, flick-ons, blocks, and second balls.
+  Preserve the link method as `direct` when a related event points to the throw,
+  and `inferred` or `second_phase` when the shot is linked by time window.
+- Use a declared time window and period-aware clock. A short window captures
+  immediate box threat; a longer window captures second-phase play but increases
+  false positives after clearances.
+- Mirror or normalise coordinates before classifying near-post, far-post, or
+  box-entry zones, and keep the raw coordinates for audit.
+- Public labels should say whether the denominator is all throw-ins, attacking
+  throw-ins, long throws, box-targeted throws, linked shots, or goals.
+
 ## Delivery zones and mirroring
 
 Opta event coordinates use a 0-100 attacking pitch. For corner delivery zones:
