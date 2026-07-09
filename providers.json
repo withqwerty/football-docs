@@ -85,6 +85,18 @@
       ],
       "last_crawled": "2026-07-09"
     },
+    "thesportsdb": {
+      "description": "Open crowd-sourced sports database and JSON API used for football live scores, schedules, events, teams, players, artwork, and highlights",
+      "version": "v1 / v2",
+      "package": null,
+      "sources": [
+        { "url": "https://www.thesportsdb.com/docs_api_guide", "type": "api_docs", "note": "Official API guide covering v1/v2 auth, base URLs, rate limits, endpoint families, and extras" },
+        { "url": "https://www.thesportsdb.com/docs_api_data", "type": "api_docs", "note": "Official data guide for livescore fields and event status codes" },
+        { "url": "https://www.thesportsdb.com/docs_api_examples", "type": "api_docs", "note": "Official examples for v1 lookups/searches and v2 livescore/header authentication" },
+        { "type": "curated", "note": "Project-oriented live-score/scorigami notes and team-name mapping caveats from the public docs" }
+      ],
+      "last_crawled": "2026-07-09"
+    },
     "soccerdonna": {
       "description": "Public women's football entity pages, match reports, competition pages, player profiles, and staff profiles",
       "version": null,
