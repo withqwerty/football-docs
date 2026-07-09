@@ -115,6 +115,58 @@ showing a compact summary. Label every derived field (`derived_xT`,
 `derived_progressive`, `next_threat_window_ms`) so it is not confused with a
 provider official aggregate.
 
+## As-at-playhead cumulative metrics recipe
+
+Use this recipe when an agent asks for live match metrics, "up to playhead"
+analysis, cumulative xG/xT/PPDA/field-tilt panels, video-synced match summaries,
+or an event-derived table that updates as playback advances.
+
+The robust pattern is to precompute metric deltas from the normalised event feed,
+then build cumulative rows on the canonical match clock. A video player should
+look up the latest cumulative row at the current football time; it should not
+recompute event metrics on every animation frame.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `event_key` | provider event id, period, event index | Stable row id for the source event. Keep provider id and row order when both are available. |
+| `canonical_clock` | period plus milliseconds since period kick-off | Use the same period-local clock used for event, tracking, and media sync. |
+| `metric_delta` | event type, team, player, coordinates, outcome, xG/xT fields | Store per-event contributions such as `shot_count_delta`, `xg_delta`, `xT_delta`, `final_third_touch_delta`, `ppda_pass_allowed_delta`, and `ppda_def_action_delta`. |
+| `team_cumulative` | ordered metric deltas grouped by team | Emit running totals by team after each event or after declared time buckets. |
+| `player_cumulative` | ordered metric deltas grouped by player | Emit only metrics where the actor identity join is proven. Do not attribute team-only deltas to a guessed player. |
+| `score_state` | confirmed goal events and own-goal rules | Update from confirmed match-score events only. Keep disallowed goals, shootout penalties, and corrections as explicit states. |
+| `metric_version` | grid, thresholds, included event types, provider model source | Version every derived metric family so later chart reads can explain what changed. |
+| `quality_flags` | missing xG, missing end coordinates, unknown player, clock disorder, unavailable denominator | Return null/unavailable states rather than filling with zero when the source cannot support the metric. |
+
+Core rule: cumulative match metrics are step functions over event time. Sort by
+`canonical_clock`, then a stable provider order. Do not interpolate cumulative
+xG, xT, PPDA, field tilt, score, or shot counts across dead time.
+
+Safety rule: provider official aggregates and event-derived as-at metrics are
+different products. Use provider official match totals where the chart asks for
+final official numbers; use event-derived deltas when the chart asks "what did
+we know by this playhead time?"
+
+Implementation notes:
+
+- Build one event-delta table first, then derive team and player cumulative
+  views from it. This keeps xT, xG, shot count, and score panels reconcilable
+  because they share the same event ordering.
+- For a video playhead, convert media seconds to `canonical_clock`, then binary
+  search the cumulative table for the latest row at or before that period-local
+  time. If the selected asset has no sync, disable as-at metrics rather than
+  using raw media time.
+- Keep ratio metrics as numerator and denominator accumulators. For PPDA, field
+  tilt, shot conversion, or pass completion, serialise the ratio as `null` when
+  the denominator is zero or unavailable.
+- Treat xG and xT as separate model families. Do not sum provider xG, a custom
+  xT grid, and a VAEP/OBV model into one "threat" column unless a product-level
+  model explicitly defines that blend.
+- Rebuild cumulative state after corrections rather than patching visible totals
+  in place. Duplicate events, late corrections, and disallowed goals should
+  appear as quality or correction states tied to the raw event stream.
+- For player panels, aggregate only actor-owned actions unless the metric
+  definition explicitly shares credit, such as a documented xGChain model.
+
 ## Field tilt
 
 Field tilt is usually the team's share of final-third touches:

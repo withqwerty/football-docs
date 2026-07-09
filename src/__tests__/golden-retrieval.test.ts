@@ -920,6 +920,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-as-at-playhead-cumulative-metrics",
+      args: {
+        query:
+          "as at playhead cumulative per event table match metrics xT xGChain VAEP field tilt PPDA update as video plays event feed binary search canonical clock metric deltas",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "As-at-playhead cumulative metrics recipe",
+        "**Category:** event-derived-metrics",
+        "`metric_delta`",
+        "`team_cumulative`",
+        "`player_cumulative`",
+        "`metric_version`",
+        "cumulative match metrics are step functions",
+        "latest row at or before",
+        "different products",
+        "numerator and denominator accumulators",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -971,11 +992,12 @@ describe("golden retrieval evals", () => {
       },
       expectedProvider: "free-sources",
       expected: [
-        "xG Timeline Recipes",
+        "Data contract for agents",
         "**Category:** xg-timelines",
         "`score_events[]`",
         "`time_guides[]`",
         "Do not mix xG models silently",
+        "Cumulative step construction",
         "Render the lines as steps",
         "do not increment score",
       ],
@@ -1033,8 +1055,8 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (123 chunks)");
-    expect(text).toContain("event-derived-metrics (10)");
+    expect(text).toContain("**kloppy** (124 chunks)");
+    expect(text).toContain("event-derived-metrics (11)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
