@@ -1,5 +1,25 @@
 # Opta Shot Placement and Goal-Mouth Charts
 
+## Build a goalmouth shot chart
+
+A goalmouth shot chart needs the shot event, the goal-mouth endpoint qualifiers,
+and the expected-goals surface in one joined row. Use this recipe when an agent
+asks for a goalmouth chart, shot-placement chart, PSxG chart, xGOT marker-size
+plot, post-distance view, or crossbar/goal-frame analysis.
+
+| Chart field | Opta source | Implementation note |
+|---|---|---|
+| Shot outcome | `matchevent/{token}?fx={matchId}` typeIds `13`, `14`, `15`, `16` | Encode miss, post/woodwork, saved, blocked, and goal as separate outcomes before styling markers. |
+| Goal-mouth endpoint | qualifiers `102` (`GoalMouthY`) and `103` (`GoalMouthZ`) | These are goal-mouth coordinates, not pitch coordinates. Missing values mean the shot is not plottable in the goal frame. |
+| xG / PSxG / xGOT | `matchexpectedgoals/{token}?fx={matchId}` qualifiers `321` and `322` | Use xGOT/PSxG for marker radius only when present; missing xGOT should become an unavailable/default size, not zero danger. |
+| Marker style | derived from outcome plus xGOT | Goals, saved shots, posts, misses, and blocks should have distinct colour/shape/fill treatment; keep opacity low enough for clustered shots. |
+| Frame metrics | `GoalMouthY`, `GoalMouthZ`, goal-post/crossbar constants | Calculate post distance or frame distance only after declaring the coordinate scale and conversion. |
+
+Prefer a direct event-id join between `matchevent` shots and
+`matchexpectedgoals` rows. If that ID is not present in your feed, fall back to a
+strict match on match, team, player, period, clock, and shot order, then flag the
+join as inferred.
+
 ## Shot placement data surfaces
 
 Opta/WhoScored-style shot placement charts need the F24 event stream plus, when
