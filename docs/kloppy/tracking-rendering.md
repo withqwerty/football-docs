@@ -130,6 +130,44 @@ Implementation notes:
   possession metrics, expose those as provider metrics and label this rolling
   timeline as derived.
 
+## Tracking-derived off-ball runs recipe
+
+Use this recipe when an agent asks for off-ball runs, high-speed runs away from
+the ball, forward runs, channel runs, run maps, or run-detection timelines from
+optical tracking feeds.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `player_id` / `team_id` | tracking entity, lineup join | Emit provider ids and display labels only after the identity join is proven. |
+| `period` / `start_ms` / `end_ms` | frame period and timestamp | Use the tracking period clock, not wall-clock time. |
+| `duration_s` | consecutive above-threshold frames | Count the span of the run, not just the number of sampled frames. |
+| `distance_m` | player coordinates or provider cumulative distance | Prefer provider distance when documented; otherwise derive consistently from live-frame coordinates. |
+| `peak_speed_mps` | provider speed or coordinate delta / frame interval | Convert units before thresholding; keep the source of speed visible. |
+| `towards_goal` | attacking direction plus player displacement | Resolve attacking direction per team and period before labelling a run forward. |
+| quality flags | live/dead state, missing positions, ball proximity, direction confidence | Report rejected or skipped windows rather than filling with zero. |
+
+Implementation notes:
+
+- Filter to live frames when the feed exposes a live/dead flag. If an older
+  export lacks that flag, state the fallback rather than silently changing the
+  definition.
+- Detect candidate runs as contiguous spans above a declared speed threshold,
+  with an optional short-gap merge rule. Label both the threshold and the
+  minimum duration.
+- Exclude on-ball carrying or receiving actions by checking player-ball
+  proximity across the run. A common rule is to reject runs where the player is
+  close to the ball during the body of the run, while allowing a short trailing
+  receive window at the end.
+- Resolve attacking direction from provider metadata where available, such as
+  `home_team_side` plus period. If metadata is absent and you infer direction
+  from goalkeeper depth or team shape, label that inference and expose a
+  confidence flag.
+- Do not classify "towards goal" from raw `+x` movement until the coordinate
+  frame, team side, and period have been normalised.
+- Keep this separate from provider official physical metrics. A derived run
+  detector is a product rule over frames; provider high-speed running or sprint
+  counts may use different thresholds, smoothing, and live-ball handling.
+
 ## Joining tracking to events
 
 To combine tracking with event data:
