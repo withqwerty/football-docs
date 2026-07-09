@@ -128,6 +128,55 @@ Implementation notes:
   tracking metrics. If both are available, surface their source, threshold set,
   and calculation basis separately.
 
+## Second Spectrum insight-marking recipe
+
+Use this recipe when an agent asks for a Second Spectrum insight feed, aligned
+Opta events, event-to-marking joins, tracking markings, pass quality, pressure
+or press annotations, run annotations, expected completion, defenders bypassed,
+or an event-linked tracking analysis table.
+
+An insight feed should preserve the event record and the tracking-derived
+marking as separate nullable objects. Do not flatten the tracking marking into
+the raw event row without retaining source labels.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `opta_event` | aligned event object, event feed row | Keep the provider event id, event type, outcome, team, player, period, clock, and qualifiers as an event-source record. |
+| `tracking_marking` | Second Spectrum marking object | Keep the tracking-derived marking as its own source record; one side can be null when there is no matching event or no matching marking. |
+| `marking_type` | marking type field | Treat pass, shot, pressure, press, or run as tracking-enriched provider annotations, not a raw Opta event type. |
+| `aligned_clock` / `aligned_frame_idx` | alignment fields supplied with the feed | Join to tracking frames through explicit period-local clock and frame fields. Prefer `aligned_frame_idx` when present. |
+| `event_id` / `marking_id` | event id, marking id | Store both ids and label which system produced each id. Do not invent a shared id when the source only gives an alignment. |
+| `player_bridge` | event player id, tracking player id, roster metadata | Preserve both identity namespaces. Use lineup metadata to bridge them before player-level aggregation. |
+| `model_fields` | pass, shot, pressure, press, or run attributes | Keep expected completion, defenders bypassed, pressure, press, and run metrics as provider/model outputs with source/version labels when available. |
+
+Core join rule: an aligned Opta event and a Second Spectrum marking can be
+paired, but one side can be null. Model the relationship as an optional join
+instead of assuming one event always produces one marking.
+
+Safety rule: `marking_type` is not a raw Opta event type. It is a tracking-
+enriched annotation that may describe a pass, shot, pressure, press, or run
+around the event clock.
+
+Implementation notes:
+
+- Keep the original event semantics intact. A pass event remains the event
+  source record; the marking carries the provider's tracking annotation and
+  model fields.
+- Use `aligned_frame_idx`, aligned period clock, and period number for frame
+  joins. Do not join an event to tracking by wall-clock timestamp alone.
+- Preserve nullability explicitly. A marking without an event can still be
+  useful for tracking analysis; an event without a marking can still be useful
+  for event analysis.
+- Treat expected completion, defenders bypassed, and related pass-quality
+  fields as provider/model outputs. Do not compare them to another model unless
+  both model definitions and source versions are visible.
+- For pressure, press, and run markings, retain start/end clock or frame fields
+  separately from the event alignment point. A marking can span a window while
+  the aligned event is a single timestamp.
+- Avoid deriving identity bridges from shirt number or display name when both
+  event-player ids and tracking-player ids are present. Store the raw ids first,
+  then add a reviewed bridge if needed.
+
 ## Speed and distance fallbacks
 
 Prefer provider speed and cumulative distance fields when they are present and
