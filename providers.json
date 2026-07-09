@@ -61,6 +61,17 @@
       ],
       "last_crawled": null
     },
+    "transferroom": {
+      "description": "Commercial football transfer-market and recruitment API for player, coach, team, transfer, pitch, requirement, and injury data",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "url": "https://www.transferroom.com/api-docs", "type": "api_docs", "note": "Public API documentation page; embeds the current docs application" },
+        { "url": "https://v0-simple-api-documentation-templat.vercel.app/", "type": "api_docs", "note": "Embedded API documentation application with endpoint examples and field descriptions" },
+        { "type": "curated", "note": "Endpoint grouping, access-tier, data model, and identity-resolution guidance from the public docs" }
+      ],
+      "last_crawled": "2026-07-09"
+    },
     "soccerdonna": {
       "description": "Public women's football entity pages, match reports, competition pages, player profiles, and staff profiles",
       "version": null,
@@ -78,6 +89,17 @@
         { "type": "curated", "note": "Public website and undocumented endpoint identity-surface notes" }
       ],
       "last_crawled": null
+    },
+    "fmdb-pro": {
+      "description": "Sports Interactive commercial football database API for clubs, players, people, competitions, geography, values, appearances, and GBE-related fields",
+      "version": "latest",
+      "package": null,
+      "sources": [
+        { "url": "https://app.fmdb.pro/docs", "type": "api_docs", "note": "Redoc/Swagger documentation UI" },
+        { "url": "https://api.fmdb.pro/api/openapi", "type": "api_docs", "note": "OpenAPI 3.0.2 spec; local snapshot at specs/fmdb-pro/openapi.json" },
+        { "type": "curated", "note": "Endpoint grouping, data model, and identity-resolution guidance from the OpenAPI spec" }
+      ],
+      "last_crawled": "2026-07-09"
     },
     "impect": {
       "description": "Commercial football data provider; Packing/pxT metrics, KPI/score framework, detailed set-pieces (Customer API v5)",
