@@ -112,6 +112,24 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-shot-placement-goal-mouth",
+      args: {
+        query:
+          "shot placement GoalMouthY GoalMouthZ goal mouth 102 103 post distance shot precision body part left foot right foot blocked shot xG qualifier 321 322 213",
+        provider: "WhoScored",
+        max_results: 5,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Shot placement data surfaces",
+        "`GoalMouthY`",
+        "`GoalMouthZ`",
+        "qualifiers `321`",
+        "Do not assume qualifier `213`",
+        "post distance",
+      ],
+    },
+    {
       id: "statsbomb-chart-coordinate-normalisation",
       args: {
         query: "StatsBomb to 0-100 coordinate normalisation shot map xG chart",
@@ -430,8 +448,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (41 chunks)");
+    expect(text).toContain("**opta** (47 chunks)");
     expect(text).toContain("charting-passmaps (5)");
+    expect(text).toContain("charting-shot-placement (6)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
@@ -612,6 +631,24 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("postShotXg");
   });
 
+  it("compares shot placement fields across charting providers", () => {
+    const result = compareProviders(db, {
+      topic: "shot placement goal mouth coordinates xG xGOT body part blocked shot charts",
+      providers: ["WhoScored", "StatsBomb", "Sportradar"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 3 provider(s)");
+    expect(text).toContain("## opta");
+    expect(text).toContain("Shot placement data surfaces");
+    expect(text).toContain("Do not assume qualifier `213`");
+    expect(text).toContain("## statsbomb");
+    expect(text).toContain("Post-Shot xG");
+    expect(text).toContain("## sportradar");
+    expect(text).toContain("goalface_x");
+  });
+
   it("compares public live-score APIs for bot-style polling", () => {
     const result = compareProviders(db, {
       topic: "live scores fixtures event status livescore API final score polling",
@@ -656,7 +693,8 @@ describe("golden retrieval evals", () => {
     expect(result.isError).toBeUndefined();
     expect(text).toContain("across 1 provider(s)");
     expect(text).toContain("## opta");
-    expect(text).toContain("Shot Qualifiers");
+    expect(text).toContain("Shot placement data surfaces");
+    expect(text).toContain("Body part and play-kind filters");
     expect(text).not.toContain("No matching docs found for requested provider(s): whoscored");
   });
 
