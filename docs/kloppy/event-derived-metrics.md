@@ -40,6 +40,59 @@ For passes and carries, keep both start and end coordinates.
 If end coordinates are missing, do not calculate xT, progressive-pass distance,
 or pass vectors for that event.
 
+## Typed event-filter query recipe
+
+Use this recipe when an agent asks for a natural-language event search, event
+browser filters, "show me passes into the box", "progressive carries after the
+60th minute", or a query layer over normalised football events.
+
+The robust pattern is not free-form text-to-SQL. Translate user language into a
+small typed filter object, validate that object against the event taxonomy, then
+apply a deterministic filter executor to the normalised event rows.
+
+| Filter field | Source fields | Rule |
+|---|---|---|
+| `type_names[]` | kloppy `event_type`, provider raw type | Use canonical event types for broad filters, but preserve raw provider type when a provider-specific distinction matters. |
+| `team_id` / `player_id` | event actor ids, lineup bridge | Match stable ids exactly. Use display-name matching only as a fuzzy lookup step that resolves to ids. |
+| `period` / `min_minute` / `max_minute` | period and period-local timestamp | Convert the user's time phrase into explicit period/minute bounds before filtering. |
+| `outcome` | result enum, pass/shot outcome, raw provider outcome | Keep true, false, and unknown separate. Do not treat missing outcome as failed. |
+| `zone` | start coordinates, pitch dimensions, attacking convention | Resolve phrases such as defensive third, attacking third, or box into documented coordinate bounds after normalisation. |
+| `requires_end_coordinates` | pass/carry end coordinates | Use this guard for pass vectors, progressive passes, carries into the box, and xT filters. |
+| `qualifiers[]` | canonical qualifiers plus raw provider qualifiers | Map common concepts where possible, but keep provider ids for details such as Opta qualifier codes. |
+| `derived_predicates[]` | metric rules such as progressive pass, xT positive, shot assist window | Store product rules with a version, threshold, and coordinate convention. |
+| `explanation` | parsed slots and rejected terms | Echo the parsed filter and unsupported terms so users can see what will run. |
+
+Core rule: the language model, if present, fills slots; it does not execute the
+query. A handwritten executor should AND fields predictably, use stable ids, and
+return an empty result with an explanation when no events match.
+
+Safety rule: football concepts are versioned code, not prompt vibes. Definitions
+such as "into the box", "progressive carry", "open-play cross", or "pressure"
+must point to documented event types, coordinate bounds, qualifiers, and
+thresholds.
+
+Implementation notes:
+
+- Keep the filter object serialisable and versioned, for example
+  `{ schema_version: "event_filter.v1", ... }`. This lets saved searches and
+  prompt-generated filters survive taxonomy changes.
+- Apply filters before aggregation or charting. A pass map, xG timeline, heatmap,
+  or player dossier should receive the already-filtered event rows.
+- Treat zone filters as geometry over normalised coordinates. Do not use raw
+  provider coordinates until the coordinate frame and attacking direction are
+  resolved.
+- For natural-language input, run lookup steps before execution: team aliases to
+  `team_id`, player aliases to `player_id`, event vocabulary to canonical event
+  types, and provider-specific terms to qualifier predicates.
+- Return unsupported concepts explicitly, such as `unsupported_terms:
+  ["line-breaking pass"]`, unless the product has a tested definition for them.
+- Keep raw provider data available for advanced filters, but label those filters
+  provider-specific. A query that depends on Opta qualifier `140`, Wyscout tag
+  names, or StatsBomb 360 freeze frames is not portable without an adapter rule.
+- Test each filter field in isolation and test combined filters as intersections.
+  In particular, distinguish `outcome=false` from missing outcome, and ensure
+  null player/team owners never match string filters accidentally.
+
 ## xT from pass and carry events
 
 Expected threat can be implemented as a zone-grid delta for completed ball
