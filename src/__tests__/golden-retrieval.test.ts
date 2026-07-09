@@ -521,8 +521,11 @@ describe("golden retrieval evals", () => {
         max_results: 8,
       },
       expected: [
+        "Territory chart and field-tilt recipe",
         "**Category:** event-derived-metrics",
         "`x >= 66.7`",
+        "3x3 or 5x3 pitch zones",
+        "Fixed-zone territory is not a smoothed heatmap",
         "qualifiers `140` and `141`",
         "xT = value(end zone) - value(start zone)",
         "end_x - start_x >= 10",
@@ -637,8 +640,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**kloppy** (114 chunks)");
-    expect(text).toContain("event-derived-metrics (8)");
+    expect(text).toContain("**kloppy** (115 chunks)");
+    expect(text).toContain("event-derived-metrics (9)");
     expect(text).toContain("tracking-rendering (6)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
