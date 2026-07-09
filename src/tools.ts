@@ -440,6 +440,7 @@ export function requestUpdate(
   args: RequestUpdateArgs,
   options: { now?: Date; requestId?: string } = {},
 ): ToolResponse {
+  const requestedAt = (options.now ?? new Date()).toISOString();
   const countRow = db.prepare("SELECT COUNT(*) as cnt FROM requests").get() as { cnt: number };
   if (countRow.cnt >= 500) {
     return textResult(
@@ -452,10 +453,10 @@ export function requestUpdate(
     .prepare(
       `SELECT id, requested_at FROM requests
        WHERE lower(provider) = lower(?) AND status = 'pending'
-         AND datetime(requested_at) > datetime('now', '-7 days')
+         AND datetime(requested_at) > datetime(?, '-7 days')
        LIMIT 1`,
     )
-    .get(args.provider) as { id: string; requested_at: string } | undefined;
+    .get(args.provider, requestedAt) as { id: string; requested_at: string } | undefined;
 
   if (recentRequest) {
     return textResult(
@@ -467,7 +468,6 @@ export function requestUpdate(
   const id =
     options.requestId ??
     `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
-  const requestedAt = (options.now ?? new Date()).toISOString();
 
   db.prepare(
     `INSERT INTO requests (id, type, provider, reason, suggested_urls, requested_at, status)
