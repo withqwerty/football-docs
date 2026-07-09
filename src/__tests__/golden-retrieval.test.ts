@@ -98,6 +98,16 @@ describe("golden retrieval evals", () => {
       expected: ["FMDB (fmdb-pro)", "**Provider:** fmdb-pro", "x-api-key"],
     },
     {
+      id: "whoscored-opta-family-alias",
+      args: {
+        query: "WhoScored shot event types qualifiers body part xG fallback",
+        provider: "WhoScored",
+        max_results: 5,
+      },
+      expectedProvider: "opta",
+      expected: ["WhoScored (opta)", "**Provider:** opta", "Shot Qualifiers"],
+    },
+    {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
@@ -156,6 +166,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: transfer-room");
     expect(text).toContain("**free-sources** (45 chunks)");
     expect(text).toContain("aliases: fbref, football-reference, understat");
+    expect(text).toContain("**opta** (36 chunks)");
+    expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("api-endpoints");
   });
 
@@ -242,15 +254,29 @@ describe("golden retrieval evals", () => {
   it("distinguishes an unindexed provider filter from an empty search", () => {
     const result = searchDocs(db, {
       query: "shot map expected threat player radar",
-      provider: "WhoScored",
+      provider: "SofaScore",
       max_results: 3,
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBe(true);
-    expect(text).toContain('Provider "WhoScored (whoscored)" is not indexed');
+    expect(text).toContain('Provider "SofaScore (sofascore)" is not indexed');
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
+  });
+
+  it("routes WhoScored project adapter questions to Opta-family docs", () => {
+    const result = compareProviders(db, {
+      topic: "WhoScored Opta shot event qualifiers body part xG fallback",
+      providers: ["WhoScored", "Opta"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 1 provider(s)");
+    expect(text).toContain("## opta");
+    expect(text).toContain("Shot Qualifiers");
+    expect(text).not.toContain("No matching docs found for requested provider(s): whoscored");
   });
 
   it("suggests close provider matches for typoed provider filters", () => {
@@ -269,13 +295,13 @@ describe("golden retrieval evals", () => {
   it("reports unindexed providers when a comparison has no matches", () => {
     const result = compareProviders(db, {
       topic: "shot maps and xG",
-      providers: ["WhoScored", "SofaScore"],
+      providers: ["SofaScore"],
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBeUndefined();
     expect(text).toContain('No matching docs found for "shot maps and xG"');
-    expect(text).toContain("Requested provider(s) not indexed: whoscored, sofascore");
+    expect(text).toContain("Requested provider(s) not indexed: sofascore");
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
   });

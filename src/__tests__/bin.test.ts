@@ -164,7 +164,9 @@ describe("npm bin entrypoint", () => {
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("list_providers");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Common aliases");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("FMDB");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("WhoScored");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
+      expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("WhoScored");
     } finally {
       child.kill();
     }
