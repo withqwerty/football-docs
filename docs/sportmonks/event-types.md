@@ -25,7 +25,7 @@ These are the `type_id` values returned in the fixture events (incidents) endpoi
 
 | Type ID | Name | Description |
 |---|---|---|
-| 18 | Substitution | Player substitution (includes `player_id` subbed off, `related_player_id` subbed on) |
+| 18 | Substitution | Player substitution. `player_id` is the player coming on; `related_player_id` is the player coming off. |
 
 ### Penalties (Shootout)
 
