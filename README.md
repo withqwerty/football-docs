@@ -110,7 +110,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
 | soccerdata | 41 | overview, data-sources, usage |
 | TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
-| Opta | 65 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
+| Opta | 66 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
 | FMDB Pro | 36 | api-access, api-endpoints, data-model, identity-surfaces |
 | Sportradar | 29 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
 | socceraction | 27 | SPADL format, VAEP, Expected Threat |
@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,175 searchable chunks** across 19 providers and tools.
+**1,176 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 
