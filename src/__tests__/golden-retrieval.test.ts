@@ -962,6 +962,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-chart-ready-adapter-packets",
+      args: {
+        query:
+          "chart ready provider adapter packets shots passes lineups match summary first stage data contract second stage chart aggregate source metadata raw provider fields",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "Chart-ready adapter packet recipe",
+        "**Category:** event-derived-metrics",
+        "`events[]`",
+        "`shots[]`",
+        "`passes[]`",
+        "`lineups[]` / `match_lineups`",
+        "`source_meta`",
+        "Adapters normalise provider facts",
+        "chart-specific aggregates out of provider adapters",
+        "metric_version",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -1076,8 +1097,8 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (125 chunks)");
-    expect(text).toContain("event-derived-metrics (12)");
+    expect(text).toContain("**kloppy** (126 chunks)");
+    expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
