@@ -77,6 +77,8 @@ const PROVIDER_ALIASES: Record<string, string> = {
   statsperform: "opta",
   "stats-perform": "opta",
   "opta-f24": "opta",
+  whoscored: "opta",
+  "who-scored": "opta",
   "skill-corner": "skillcorner",
   "data-ball-py": "databallpy",
   "databall-py": "databallpy",
