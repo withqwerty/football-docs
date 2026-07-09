@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 15 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, and more). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 17 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, and more). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -106,13 +106,15 @@ Add to `claude_desktop_config.json`:
 | SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 45 | overview, fbref, understat |
 | soccerdata | 40 | overview, data-sources, usage |
+| TransferRoom | 38 | api-access, api-endpoints, data-model, identity-surfaces |
 | Opta | 36 | event-types, qualifiers, coordinate-system, api-access, identity-surfaces |
+| FMDB Pro | 36 | api-access, api-endpoints, data-model, identity-surfaces |
 | socceraction | 26 | SPADL format, VAEP, Expected Threat |
 | FotMob | 7 | identity-surfaces |
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**968 searchable chunks** across 15 providers and tools.
+**1,042 searchable chunks** across 17 providers and tools.
 
 ## Contributing
 
