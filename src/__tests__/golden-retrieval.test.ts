@@ -477,6 +477,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "mplsoccer-interactive-chart-filtering",
+      args: {
+        query:
+          "interactive football chart filters legend filter option counts dimensions selection state filter before aggregation shot map pass map heatmap outcome body part team player",
+        provider: "mplsoccer",
+        max_results: 8,
+      },
+      expected: [
+        "Interactive chart filtering",
+        "**Category:** visualizations",
+        "apply filters before computing the visual",
+        "stable semantic keys",
+        "Within one dimension",
+        "Across dimensions",
+        "Option counts",
+        "legend item",
+        "unfiltered item count",
+        "empty-state reason",
+      ],
+    },
+    {
       id: "sportmonks-season-story-fixtures",
       args: {
         query:
@@ -709,8 +730,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**mplsoccer** (62 chunks)");
-    expect(text).toContain("visualizations (46)");
+    expect(text).toContain("**mplsoccer** (63 chunks)");
+    expect(text).toContain("visualizations (47)");
     expect(text).toContain("**kloppy** (117 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
     expect(text).toContain("tracking-rendering (7)");
