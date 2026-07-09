@@ -166,6 +166,9 @@ describe("npm bin entrypoint", () => {
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("FMDB");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Sofascore");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("WhoScored");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("ClubElo");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("football-data.co.uk");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("engsoccerdata");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Metrica");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Second Spectrum");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("SportRadar API");
@@ -175,6 +178,8 @@ describe("npm bin entrypoint", () => {
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sofascore");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("WhoScored");
+      expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("ClubElo");
+      expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("football-data.co.uk");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sportec");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Second Spectrum");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("SportRadar API");

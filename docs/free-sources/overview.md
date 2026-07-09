@@ -9,6 +9,7 @@
 | Understat | xG, shot-level | Web scrape / soccerdata | Top 5 European leagues | Moderate |
 | ClubElo | Historical Elo ratings | HTTP API | All top European leagues, 1946-present | Generous |
 | football-data.co.uk | Match results + odds | CSV download | 25+ leagues, 20+ seasons | None |
+| engsoccerdata | Historical league results | R package / GitHub data | England 1888+, Spain 1928+, other leagues | None |
 | Transfermarkt | Market values, transfers, injuries | Web scrape | All professional leagues | Strict |
 | WhoScored | Match ratings, event-level (limited) | Web scrape (headed browser) | Top leagues | Strict, requires JS rendering |
 | European Football Statistics | Historical results | CSV download | Many European leagues | None |
@@ -99,6 +100,12 @@ Rank,Club,Country,Level,Elo,From,To
 
 **Used in**: myTeam's PL Era Champions story page (`scripts/fetch-elo-history.ts`).
 
+**Project use**: For run-in, fixture-difficulty, and season-story surfaces,
+ClubElo is useful as a lightweight strength prior. Join by a maintained club
+name map rather than assuming site labels match your canonical team labels.
+ClubElo is a rating source, not a fixture/result source, so combine it with
+fixtures from Opta, SportMonks, football-data.co.uk, or another schedule feed.
+
 ## football-data.co.uk
 
 **What it provides**: Match results, odds data, and basic match statistics. Excellent historical coverage.
@@ -117,6 +124,50 @@ Season format: `2425` for 2024/25. League codes: `E0` (Premier League), `E1` (Ch
 - `HS`, `AS` (Shots), `HST`, `AST` (Shots on Target)
 - `HC`, `AC` (Corners), `HF`, `AF` (Fouls), `HY`, `AY` (Yellows), `HR`, `AR` (Reds)
 - Betting odds from multiple bookmakers (B365H, B365D, B365A, etc.)
+
+**Project use**: Excellent for scorigami, scoreline grids, baseline baking,
+result-history charts, odds-history backfills, and simple match-stat trend
+stories. For scorigami baselines, use full-time fields (`FTHG`, `FTAG`, `FTR`)
+and ignore half-time or bookmaker columns unless the chart explicitly needs
+them. Keep a league-code map in project code (`E0`, `E1`, `SP1`, etc.) and a
+team-name map because historical labels and promoted/relegated club names can
+drift from canonical names.
+
+## engsoccerdata
+
+**What it provides**: Historical football result datasets packaged for R by
+James P. Curley. The GitHub package includes English league data, FA Cup data,
+playoff data, and several European leagues including Spain, Germany, Italy,
+France, Netherlands, Belgium, Portugal, Turkey, Scotland, Greece, South Africa,
+and MLS.
+
+**Useful datasets**:
+
+| Dataset | Notes |
+|---|---|
+| `england` | English league results, top four tiers, from 1888/89 in the classic package docs |
+| `englandplayoffs` | English playoff matches |
+| `facup` | FA Cup results |
+| `spain` | Spanish league results from 1928/29 in the classic package docs |
+
+**Common fields**:
+
+| Field | Meaning |
+|---|---|
+| `Date` | match date |
+| `Season` | season start year |
+| `home` / `visitor` | home and away teams |
+| `FT` | full-time score string |
+| `hgoal` / `vgoal` | home and away full-time goals |
+| `division` | division label |
+| `tier` | football pyramid tier |
+| `result` | `H`, `A`, or `D` |
+
+**Project use**: Useful as a deep historical baseline for scorigami and
+marcadorigami-style scoreline grids. Pair with football-data.co.uk for recent
+season gap fills or in-season updates. The package was formerly on CRAN and is
+now best treated as a GitHub/open-data source; cite James P. Curley when using
+it in public analysis.
 
 ## Transfermarkt
 
@@ -168,13 +219,13 @@ Season format: `2425` for 2024/25. League codes: `E0` (Premier League), `E1` (Ch
 
 ## Comparison Matrix
 
-| Feature | StatsBomb Open | FBref | Understat | ClubElo | football-data.co.uk | Transfermarkt | WhoScored |
-|---|---|---|---|---|---|---|---|
-| Event-level data | Full | No | Shot-level | No | No | No | Full |
-| Aggregated stats | Via events | Yes | Yes | No | Basic | No | Yes |
-| xG | Yes | Yes (Opta) | Yes (own model) | No | No | No | No |
-| Coordinates | Yes | No | Shot coords | No | No | No | Yes |
-| Historical depth | Limited | 2017+ detailed | 2014+ | 1946+ | 1993+ | 2004+ | ~2010+ |
-| League coverage | Select | Top 5+ | Top 5 | Europe | 25+ | Global | Top 5+ |
-| Commercial use | No | No | Unclear | Yes | Yes | No | No |
-| API available | GitHub | No | No | Yes (CSV) | CSV download | No | No |
+| Feature | StatsBomb Open | FBref | Understat | ClubElo | football-data.co.uk | engsoccerdata | Transfermarkt | WhoScored |
+|---|---|---|---|---|---|---|---|---|
+| Event-level data | Full | No | Shot-level | No | No | No | No | Full |
+| Aggregated stats | Via events | Yes | Yes | No | Basic | No | No | Yes |
+| xG | Yes | Yes (Opta) | Yes (own model) | No | No | No | No | No |
+| Coordinates | Yes | No | Shot coords | No | No | No | No | Yes |
+| Historical depth | Limited | 2017+ detailed | 2014+ | 1946+ | 1993+ | 1888+ England | 2004+ | ~2010+ |
+| League coverage | Select | Top 5+ | Top 5 | Europe | 25+ | England + selected global leagues | Global | Top 5+ |
+| Commercial use | No | No | Unclear | Yes | Yes | Non-commercial attribution expected | No | No |
+| API available | GitHub | No | No | Yes (CSV) | CSV download | R/GitHub data | No | No |
