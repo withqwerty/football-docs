@@ -69,6 +69,51 @@ pitch.label_heatmap(bin_statistic, ax=ax, str_format='{:.0f}', color='white',
                      fontsize=8, exclude_zeros=True)
 ```
 
+## Interactive chart filtering
+
+For interactive football charts, apply filters before computing the visual
+surface. A shot-map goal filter, pass-map completion filter, heatmap player
+filter, or game-state filter should narrow the event rows first, then rebuild
+the bins, lines, nodes, totals, labels, and legend from that scoped dataset.
+
+Represent filter state with stable semantic keys rather than ad hoc predicates:
+
+| Dimension | Common options | Chart surfaces |
+|---|---|---|
+| `team` | home, away, selected team id | shot maps, heatmaps, pass maps, xG timelines |
+| `player` | provider player ids | player dossiers, shot maps, touch maps, pass maps |
+| `outcome` | goal, non-goal, complete, incomplete | shot maps, pass maps, pass sonars |
+| `body_part` | foot, head, other | shot placement, xG timelines, player shot profiles |
+| `play_kind` | open play, corner, free kick, penalty | shot placement, set pieces, xG timelines |
+| `game_state` | winning, drawing, losing, level 0-0 | pass maps, heatmaps, shot maps |
+| `period` / `phase` | first half, second half, extra time, custom window | timelines and phase-split charts |
+
+Within one dimension, selected options normally combine as OR. Across dimensions,
+active filters combine as AND. For example, `outcome = goal OR post` plus
+`body_part = foot` means foot shots whose result was either goal or post.
+
+Option counts are most useful when computed against the current scoped dataset
+after all other active dimensions have been applied, but before that dimension's
+own selection. This lets a body-part menu answer "how many foot/head/other shots
+remain inside the current team, game-state, and outcome filters?"
+
+If a legend item is clickable, bind it to the same semantic option key used by
+the filter state. A "goal" marker legend should update `outcome=goal`; a pass
+completion legend should update `outcome=complete` or `pass_result=complete`.
+Do not let legend labels become a second, drift-prone filtering vocabulary.
+
+Every filtered chart response should expose:
+
+- the active filter selection;
+- the unfiltered item count after provider parsing and chart view rules;
+- the filtered item count after interactive filters;
+- the option catalogue and counts for visible filter controls;
+- an empty-state reason when no rows remain.
+
+Do not default missing provider fields into a real filter bucket. If body part,
+play kind, xG, receiver, or sync status is unknown, expose an `unknown` or
+`unavailable` option only when that distinction is useful to the analyst.
+
 ## Juego de Posición Heatmaps
 
 Positional play zones (used by Pep Guardiola-style analysis):
