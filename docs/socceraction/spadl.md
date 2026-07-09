@@ -105,3 +105,24 @@ import kloppy
 dataset = kloppy.load_statsbomb(event_data=..., lineup_data=...)
 actions = convert_to_actions(dataset)
 ```
+
+## kloppy bridge caveats for VAEP runtimes
+
+The `socceraction.spadl.kloppy.convert_to_actions` bridge is useful when an application
+already parses provider feeds through kloppy, but treat provider coverage carefully:
+
+- **StatsBomb is the safe open-data training path.** socceraction's StatsBomb loaders
+  and SPADL converter are the best-supported route for training public VAEP examples or
+  self-hosted models on open data.
+- **Opta via kloppy is a runtime compatibility path, not a universal guarantee.** It can
+  emit the same standard SPADL columns and the same 105m x 68m coordinate frame, but
+  Opta support through the generic kloppy bridge may lag specific kloppy/socceraction
+  versions. Smoke-test `convert_to_actions` against the pinned library versions before
+  relying on it in production.
+- **Keep training and rating distributions explicit.** A common self-hosted pattern is
+  to train on StatsBomb open data, store the model's `trained_on`/corpus metadata, and
+  rate a private Opta-derived feed only after converting both sources to the same SPADL
+  action/result/bodypart vocabulary and pitch frame.
+- **Non-actions are dropped.** Substitutions, cards, stoppages, VAR delays, and other
+  match-structure events are usually not valued actions; preserve them separately if the
+  user interface needs audit or story context.
