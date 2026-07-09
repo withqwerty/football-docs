@@ -277,6 +277,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-dead-time-restart-gap",
+      args: {
+        query:
+          "Opta ball in play approximation dead time barcode restart gap goalkeeper hold time wasting split event timeline typeId 5 ball out 16 goal 27 start delay 28 end delay qualifier 107 throw in 124 goal kick",
+        provider: "WhoScored",
+        max_results: 8,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Dead-time and restart-gap recipe",
+        "**Category:** charting-game-state",
+        "`event_derived_dead_time`",
+        "typeId `5` ball out",
+        "typeId `16` goal",
+        "typeId `28` end delay",
+        "dead-time barcode",
+        "half-time does not inflate dead time",
+        "official ball-in-play intervals",
+      ],
+    },
+    {
       id: "opta-lineups-team-sheet",
       args: {
         query:
