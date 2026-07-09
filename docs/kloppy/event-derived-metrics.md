@@ -93,6 +93,57 @@ Implementation notes:
   In particular, distinguish `outcome=false` from missing outcome, and ensure
   null player/team owners never match string filters accidentally.
 
+## Chart-ready adapter packet recipe
+
+Use this recipe when an agent asks how to design provider adapters for football
+charts, whether a chart should consume raw provider events or pre-aggregated
+rows, or which packet shape should sit between provider docs and a visual layer.
+
+The robust boundary is a small set of first-stage packets from the provider
+adapter, followed by second-stage chart products in application or analysis
+code. Adapters normalise provider facts; chart code bins, ranks, aggregates, and
+styles those facts.
+
+| Packet | Source fields | First-stage rule |
+|---|---|---|
+| `events[]` | provider event rows, period clock, actor, team, coordinates, qualifiers, raw event id | Canonical chronological event stream. Preserve raw provider identity and source metadata. |
+| `shots[]` | shot events, outcome, xG if provided, body part, play type, coordinates | Feed shot maps, goal-mouth charts, xG timelines, and finishing panels. Keep provider xG separate from derived xG. |
+| `passes[]` | pass events, start/end coordinates, recipient, outcome, qualifiers | Feed pass maps, pass flow, pass sonars, and pass networks. Do not require each chart to rediscover pass vectors from raw events. |
+| `lineups[]` / `match_lineups` | team sheet, starters, bench, substitutions, formation slots, shirt numbers | Feed formation cards and lineup panels. Formation-only snapshots are narrower than a full team sheet. |
+| `match_summary` | fixture metadata, score, status, home/away teams, headline provider totals | Feed match headers and score panels. Keep this narrow; it is not a replacement for event rows. |
+| `source_meta` | small provider-specific residual fields | Use for provenance/debugging only. Do not duplicate canonical fields or store chart styling instructions here. |
+
+Core rule: promote fields that multiple providers and charts genuinely need into
+canonical packets. Keep provider-only residuals in `source_meta`, and keep
+chart-specific aggregates out of provider adapters.
+
+Safety rule: do not make provider adapters return chart-shaped products such as
+pass-network nodes, percentile bars, pizza/radar rows, or heatmap bins unless
+the provider endpoint itself is the product being exposed. Those are usually
+second-stage products derived from `events[]`, `shots[]`, `passes[]`, lineups, or
+tracking frames.
+
+Implementation notes:
+
+- `shots[]` should be enough to draw a shot map, goal-mouth chart, and xG
+  timeline without reopening raw provider blobs. If a field is needed for all
+  three, promote it into the shot packet rather than hiding it in metadata.
+- `passes[]` should include start and end coordinates before downstream pass
+  charts run. Pass flow and pass sonar need vectors; pass networks need actor
+  and recipient joins; pass maps need event-level geometry.
+- `lineups[]` should distinguish starters, bench, substitutes, captain, shirt
+  numbers, formation slots, and substitution windows when the provider supplies
+  them. Do not flatten a full team sheet into only a formation string.
+- Aggregates such as xG timelines, field-tilt zones, pass-network edges,
+  percentile profiles, and radar/pizza rows should carry their own
+  `metric_version`, cohort, thresholds, and source labels.
+- Keep packet names stable even when provider coverage is partial. Return
+  unavailable/null fields with quality flags rather than silently dropping the
+  packet or filling fake values.
+- If a provider offers an official aggregate and you also derive the same family
+  from events, expose both with different source labels. Do not overwrite the
+  event-derived value with the official value or vice versa.
+
 ## xT from pass and carry events
 
 Expected threat can be implemented as a zone-grid delta for completed ball
