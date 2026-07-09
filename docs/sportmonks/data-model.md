@@ -52,17 +52,38 @@ The central entity. A single match.
 
 | State ID | Name | Description |
 |---|---|---|
-| 1 | Not Started | Match not yet started |
-| 2 | Inplay | Match in progress |
-| 3 | Finished | Full time (90 min) |
-| 4 | After Extra Time | Finished after extra time |
-| 5 | Finished | Final result confirmed |
-| 6 | Penalties | Finished after penalty shootout |
-| 7 | Cancelled | Match cancelled |
-| 8 | Postponed | Match postponed |
-| 13 | Half Time | Currently at half time |
-| 14 | Extra Time | Currently in extra time |
-| 22 | Awarded | Match awarded |
+| 1 | Not Started (`NS`) | Initial scheduled state. |
+| 2 | 1st Half (`INPLAY_1ST_HALF`) | The game is in play in the first half. |
+| 3 | Half-Time (`HT`) | The match is at half-time. |
+| 4 | Regular Time Finished (`BREAK`) | Waiting for extra time to start. |
+| 5 | Full-Time (`FT`) | The match ended after normal time. |
+| 6 | Extra Time (`INPLAY_ET`) | Extra time is in progress. |
+| 7 | Finished After Extra Time (`AET`) | The match ended after extra time. |
+| 8 | Full-Time After Penalties (`FT_PEN`) | The match ended after a penalty shootout. |
+| 9 | Penalty Shootout (`INPLAY_PENALTIES`) | Penalties are in progress. |
+| 10 | Postponed (`POSTPONED`) | The match has been postponed. |
+| 11 | Suspended (`SUSPENDED`) | The match is suspended and may continue later. |
+| 12 | Cancelled (`CANCELLED`) | The match has been permanently cancelled. |
+| 13 | To Be Announced (`TBA`) | Fixture has no confirmed date/time yet. |
+| 14 | Walk Over (`WO`) | A result was awarded because no opponent was available. |
+| 15 | Abandoned (`ABANDONED`) | The match was abandoned. |
+| 16 | Delayed (`DELAYED`) | Kick-off has been delayed. |
+| 17 | Awarded (`AWARDED`) | Winner decided externally. |
+| 18 | Interrupted (`INTERRUPTED`) | Match temporarily stopped, for example due to weather. |
+| 19 | Awaiting Updates (`AWAITING_UPDATES`) | Temporary delay in data or connectivity. |
+| 20 | Deleted (`DELETED`) | Fixture is no longer active in standard calls. |
+| 21 | Extra Time Break (`EXTRA_TIME_BREAK`) | Break between extra-time halves. |
+| 22 | 2nd Half (`INPLAY_2ND_HALF`) | The game is in play in the second half. |
+| 25 | Penalties Break (`PEN_BREAK`) | Waiting for penalties to start. |
+| 26 | Pending (`PENDING`) | Fixture awaits new data or verification. |
+
+For live-score polling and final-score workflows, use the fixture state ID as
+the match-status gate. Treat state `2`, `6`, `9`, and `22` as in-play states;
+state `3`, `4`, `21`, and `25` as break states; and state `5`, `7`, and `8` as
+normal final states depending on whether the fixture ended after normal time,
+extra time, or penalties. Do not infer final status from `scores.description`
+alone when a fixture `state_id` is available. Fetch `GET /v3/football/states`
+when you need the full current state list.
 
 ### Scores
 

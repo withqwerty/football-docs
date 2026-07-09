@@ -8,7 +8,7 @@ graphics if the include set is chosen deliberately.
 
 | Need | Endpoint and includes | Notes |
 |---|---|---|
-| Completed fixtures for a season | `GET /fixtures?filters=fixtureSeasons:{seasonId};fixtureStates:5&include=events.player;lineups.details;scores;round;participants` | State `5` is the confirmed finished state in SportMonks' fixture state model. |
+| Completed fixtures for a season | `GET /fixtures?filters=fixtureSeasons:{seasonId};fixtureStates:5,7,8&include=events.player;lineups.details;scores;round;participants` | States `5`, `7`, and `8` cover full-time, after-extra-time, and after-penalties finishes. |
 | Fixture team sheets | `lineups.details` plus `lineups.player` when display names or positions are needed | `type_id` `11` marks starters and `12` marks substitutes. |
 | Goals, assists, cards, substitutions | `events.player` | Event `type_id` values identify goal, card, substitution, and VAR incidents. |
 | Round-by-round table position | `GET /standings/rounds/{roundId}?include=participant;details` | Use after fetching season rounds. The `details` array carries points, wins, goals, and goal difference. |
@@ -18,6 +18,49 @@ graphics if the include set is chosen deliberately.
 For historical or post-match analysis pages, prefer fixture endpoints over
 livescores. Fixtures are designed for complete match data at any time; livescore
 endpoints are lighter surfaces for active polling.
+
+## Gameweek table-possibilities recipe
+
+Use this recipe when an agent asks for reachable league positions, gameweek table
+possibilities, a run-in range chart, or "where can each team finish after this
+round?" from SportMonks fixtures and standings.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `team_id` / `team_name` | standings participant, fixture participants | Use provider IDs internally; labels are display-only. |
+| `current_position` | current standings | Keep the current table snapshot alongside every range output. |
+| `pending_fixture_ids` | fixtures for the selected round or date window | De-duplicate by fixture ID so the same match is not counted once per team. |
+| `possible_positions` | scenario rankings | Emit every rank the team can occupy after the pending fixtures resolve. |
+| `position_status` | ranking certainty | Mark ranks as `reachable`, `goal_difference_dependent`, or `blocked`. |
+| `scenario_count` | pending fixture count | For result-only enumeration, `scenario_count = 3 ** pending_fixture_count`. |
+
+Implementation notes:
+
+- Start from a standings snapshot with at least points, played, wins, draws,
+  losses, goals for, goals against, and goal difference. If standings `details`
+  omit any tie-break field, keep it unavailable instead of silently inventing it.
+- Fetch pending fixtures for one explicit round, gameweek, or date window. Treat
+  postponed and rescheduled fixtures deliberately: either include them in the
+  selected window or label them excluded.
+- Enumerate each pending fixture once as home win, draw, or away win when the
+  product only needs result-level possibilities. Update points and W/D/L counts
+  for every scenario.
+- Result-only enumeration cannot know the future goal difference or goals scored.
+  If two or more teams can tie on points and a missing score swing could decide
+  the rank, mark that position as `goal_difference_dependent` rather than
+  presenting it as guaranteed.
+- For exact-score prediction modes, update goals for, goals against, and goal
+  difference per scenario, then sort with the competition's declared tie-break
+  order, for example points, goal difference, goals scored, then any
+  competition-specific head-to-head rules.
+- Cap exhaustive enumeration when the fixture count is too high for the target
+  runtime. Ten fixtures produce `3 ** 10 = 59049` result combinations; larger
+  windows usually need batching, worker threads, or Monte Carlo sampling.
+- Keep linked fixture state consistent in interactive tools. If the user sets
+  Team A to beat Team B, the same fixture must update Team B as a loss in the
+  table model.
+- If no fixtures remain, return the final table and mark prediction controls
+  inactive rather than showing an open possibility range.
 
 ## Player status from lineups and events
 
@@ -74,7 +117,7 @@ tests for:
 
 | Case | Expected handling |
 |---|---|
-| Finished fixtures filtered by season and state | Use `fixtureSeasons:{seasonId};fixtureStates:5`. |
+| Finished fixtures filtered by season and state | Use `fixtureSeasons:{seasonId};fixtureStates:5,7,8`. |
 | Substitute event | Player `player_id` is marked on; `related_player_id` is marked off. |
 | Bench player without substitution event or minutes | Remains bench / unused. |
 | Missing rating detail `118` | Render without rating. |
