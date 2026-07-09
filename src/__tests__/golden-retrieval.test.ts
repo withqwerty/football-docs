@@ -292,6 +292,19 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("skill-coner: did you mean skillcorner?");
   });
 
+  it("keeps typo suggestions when comparison has partial results", () => {
+    const result = compareProviders(db, {
+      topic: "tracking pitch length width physical data",
+      providers: ["SkillCorner", "Skill Coner"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("## skillcorner");
+    expect(text).toContain("No matching docs found for requested provider(s): skill-coner");
+    expect(text).toContain("skill-coner: did you mean skillcorner?");
+  });
+
   it("explains Reep authentication failures for entity resolution", async () => {
     const result = await resolveEntity(
       { name: "Arsenal", type: "team" },
