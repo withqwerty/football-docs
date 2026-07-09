@@ -588,7 +588,7 @@ describe("golden retrieval evals", () => {
         "3x3 or 5x3 pitch zones",
         "Fixed-zone territory is not a smoothed heatmap",
         "qualifiers `140` and `141`",
-        "xT = value(end zone) - value(start zone)",
+        "`derived_xT` or `xT_model` with grid version",
         "end_x - start_x >= 10",
         "serialise it as `null`",
       ],
@@ -705,8 +705,8 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (59 chunks)");
     expect(text).toContain("visualizations (43)");
-    expect(text).toContain("**kloppy** (115 chunks)");
-    expect(text).toContain("event-derived-metrics (9)");
+    expect(text).toContain("**kloppy** (116 chunks)");
+    expect(text).toContain("event-derived-metrics (10)");
     expect(text).toContain("tracking-rendering (6)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
