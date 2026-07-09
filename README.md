@@ -81,6 +81,7 @@ Add to `claude_desktop_config.json`:
 | `list_providers` | List all indexed providers and their doc coverage. |
 | `compare_providers` | Compare how different providers handle the same concept. |
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queued for maintainer review. |
+| `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
 
 ## Example queries
 

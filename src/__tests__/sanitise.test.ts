@@ -2,31 +2,30 @@ import { describe, expect, it } from "vitest";
 import { sanitiseFtsQuery } from "../index.js";
 
 describe("sanitiseFtsQuery", () => {
-  it("wraps plain text in double quotes", () => {
-    expect(sanitiseFtsQuery("shot events")).toBe('"shot events"');
+  it("turns natural-language text into a precise token query", () => {
+    expect(sanitiseFtsQuery("shot events")).toBe('"shot" AND "events"');
   });
 
-  it("escapes embedded double quotes", () => {
-    expect(sanitiseFtsQuery('the "best" xG')).toBe('"the ""best"" xG"');
+  it("extracts useful tokens from quoted text", () => {
+    expect(sanitiseFtsQuery('the "best" xG')).toBe('"the" AND "best" AND "xg"');
   });
 
   it("neutralises FTS5 AND/OR/NOT operators", () => {
     const result = sanitiseFtsQuery("pass AND shot");
-    // Inside double quotes, AND is treated as literal text, not an operator
-    expect(result).toBe('"pass AND shot"');
+    expect(result).toBe('"pass" AND "shot"');
   });
 
   it("neutralises FTS5 NEAR operator", () => {
-    expect(sanitiseFtsQuery("NEAR(pass shot)")).toBe('"NEAR(pass shot)"');
+    expect(sanitiseFtsQuery("NEAR(pass shot)")).toBe('"pass" AND "shot"');
   });
 
-  it("neutralises FTS5 wildcard and prefix operators", () => {
-    expect(sanitiseFtsQuery("pass*")).toBe('"pass*"');
-    expect(sanitiseFtsQuery("^shot")).toBe('"^shot"');
+  it("neutralises FTS5 wildcard and prefix operators while keeping the token", () => {
+    expect(sanitiseFtsQuery("pass*")).toBe('"pass"');
+    expect(sanitiseFtsQuery("^shot")).toBe('"shot"');
   });
 
-  it("neutralises FTS5 column filter syntax", () => {
-    expect(sanitiseFtsQuery("provider:opta")).toBe('"provider:opta"');
+  it("turns column filter syntax into normal tokens", () => {
+    expect(sanitiseFtsQuery("provider:opta")).toBe('"provider" AND "opta"');
   });
 
   it("handles empty string", () => {
@@ -34,6 +33,6 @@ describe("sanitiseFtsQuery", () => {
   });
 
   it("handles string that is just double quotes", () => {
-    expect(sanitiseFtsQuery('"')).toBe('""""');
+    expect(sanitiseFtsQuery('"')).toBe('""');
   });
 });
