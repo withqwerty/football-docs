@@ -510,13 +510,30 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-event-derived-metric-recipes",
+      args: {
+        query:
+          "event-derived metrics xT progressive passes field tilt PPDA end_x end_y 140 141 final third zero denominator null",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "**Category:** event-derived-metrics",
+        "`x >= 66.7`",
+        "qualifiers `140` and `141`",
+        "xT = value(end zone) - value(start zone)",
+        "end_x - start_x >= 10",
+        "serialise it as `null`",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
         max_results: 5,
       },
-      expectedProvider: "statsbomb",
-      expected: ["PPDA", "Passes Per Defensive Action", "defensive action"],
+      expectedProvider: "kloppy",
+      expected: ["PPDA", "passes allowed per defensive action", "defensive action"],
     },
     {
       id: "pass-network",
@@ -581,7 +598,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**kloppy** (106 chunks)");
+    expect(text).toContain("**kloppy** (114 chunks)");
+    expect(text).toContain("event-derived-metrics (8)");
     expect(text).toContain("tracking-rendering (6)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
