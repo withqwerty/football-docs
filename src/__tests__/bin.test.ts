@@ -17,6 +17,13 @@ type JsonRpcResponse = {
     capabilities?: {
       tools?: unknown;
     };
+    tools?: Array<{
+      name: string;
+      description?: string;
+      inputSchema?: {
+        properties?: Record<string, { description?: string }>;
+      };
+    }>;
   };
   error?: unknown;
 };
@@ -104,6 +111,60 @@ describe("npm bin entrypoint", () => {
       expect(response.result?.serverInfo?.name).toBe("nutmeg-football-docs");
       expect(response.result?.serverInfo?.version).toMatch(/^\d+\.\d+\.\d+/);
       expect(response.result?.capabilities?.tools).toBeDefined();
+    } finally {
+      child.kill();
+    }
+  });
+
+  it("exposes current provider guidance in the MCP tool schema", async () => {
+    const child = spawn("node", ["bin/serve.js"], {
+      cwd: ROOT,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+
+    let stderr = "";
+    child.stderr.on("data", (chunk: Buffer) => {
+      stderr += chunk.toString("utf-8");
+    });
+
+    try {
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "initialize",
+          params: {
+            protocolVersion: "2025-06-18",
+            capabilities: {},
+            clientInfo: { name: "football-docs-test", version: "0.0.0" },
+          },
+        })}\n`,
+      );
+      const initResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for initialize; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+      expect(initResponse.error).toBeUndefined();
+
+      child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized", params: {} })}\n`);
+      child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} })}\n`);
+
+      const toolsResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for tools/list; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+
+      const searchTool = toolsResponse.result?.tools?.find((tool) => tool.name === "search_docs");
+      const compareTool = toolsResponse.result?.tools?.find((tool) => tool.name === "compare_providers");
+
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("list_providers");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Common aliases");
+      expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("FMDB");
+      expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
     } finally {
       child.kill();
     }
