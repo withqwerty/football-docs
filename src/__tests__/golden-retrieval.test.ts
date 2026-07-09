@@ -277,6 +277,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-dead-time-restart-gap",
+      args: {
+        query:
+          "Opta ball in play approximation dead time barcode restart gap goalkeeper hold time wasting split event timeline typeId 5 ball out 16 goal 27 start delay 28 end delay qualifier 107 throw in 124 goal kick",
+        provider: "WhoScored",
+        max_results: 8,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Dead-time and restart-gap recipe",
+        "**Category:** charting-game-state",
+        "`event_derived_dead_time`",
+        "typeId `5` ball out",
+        "typeId `16` goal",
+        "typeId `28` end delay",
+        "dead-time barcode",
+        "half-time does not inflate dead time",
+        "official ball-in-play intervals",
+      ],
+    },
+    {
       id: "opta-lineups-team-sheet",
       args: {
         query:
@@ -687,6 +708,26 @@ describe("golden retrieval evals", () => {
         "Keep generated layers separate from data series",
         "model version or grid version",
         "Clip layers to the plot area",
+      ],
+    },
+    {
+      id: "mplsoccer-bumpy-rank-snapshots",
+      args: {
+        query:
+          "league table bump chart rank snapshots matchweek standings reachable positions ties highlighted teams bumpy chart",
+        provider: "mplsoccer",
+        max_results: 8,
+      },
+      expected: [
+        "Bumpy Charts (Rank Changes)",
+        "**Category:** visualizations",
+        "`Bumpy` expects already-prepared rank snapshots",
+        "`timepoint` / `x_list`",
+        "`rank` / `y_list`",
+        "`highlight_dict`",
+        "Preserve ties and tie-break rules",
+        "state whether each rank is a provider standings snapshot",
+        "rather than silently interpolating",
       ],
     },
     {
