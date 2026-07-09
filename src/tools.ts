@@ -431,7 +431,13 @@ export function compareProviders(
     .join("\n\n---\n\n");
   const missingProviders = requestedProviders.filter((provider) => !grouped.has(provider));
   const missingNote = missingProviders.length
-    ? `\n\nNo matching docs found for requested provider(s): ${missingProviders.join(", ")}.`
+    ? `\n\nNo matching docs found for requested provider(s): ${missingProviders.join(", ")}.${missingProviders
+        .map((provider) => {
+          if (providerSet.has(provider)) return "";
+          const suggestions = providerSuggestions(provider, providerSet);
+          return suggestions.length ? ` ${provider}: did you mean ${suggestions.join(", ")}?` : "";
+        })
+        .join("")}`
     : "";
 
   return textResult(
