@@ -941,6 +941,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-typed-event-filter-query",
+      args: {
+        query:
+          "natural language event query typed filter DSL slot filling not text to SQL zone into the box progressive carry provider taxonomy qualifiers event browser unsupported terms deterministic executor",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "Typed event-filter query recipe",
+        "**Category:** event-derived-metrics",
+        "`type_names[]`",
+        "`requires_end_coordinates`",
+        "`derived_predicates[]`",
+        "not free-form text-to-SQL",
+        "the language model, if present, fills slots",
+        "football concepts are versioned code",
+        "unsupported_terms",
+        "Test each filter field in isolation",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -1055,8 +1076,8 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (124 chunks)");
-    expect(text).toContain("event-derived-metrics (11)");
+    expect(text).toContain("**kloppy** (125 chunks)");
+    expect(text).toContain("event-derived-metrics (12)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
