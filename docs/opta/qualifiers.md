@@ -32,14 +32,17 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | ID | Name | Notes |
 |----|------|-------|
 | 15 | head | Headed shot/goal |
-| 56 | rightFoot | Right-footed action |
+| 20 | rightFoot / involvedPlayer | Right-footed shot in some WhoScored-shaped shot exports; involved-player field on some non-shot event families. Interpret by event family, not globally. |
+| 56 | rightFoot | Right-footed action in some F24 references |
 | 72 | leftFoot | Left-footed action |
 | 22 | otherBodyPart | Knee, chest, etc. |
+| 25 | fromCorner | Shot came from a corner sequence in some Opta/WhoScored-shaped exports |
 | 76 | bigChance | Big chance (high xG situation) |
 | 9 | penalty | Penalty shot flag in some match-events JSON exports and foul-award workflows |
 | 108 | penalty | Penalty kick |
 | 136 | directFK | Direct free kick goal |
 | 154 | volley | Volley |
+| 263 | directCorner | Direct shot from a corner / Olimpico marker where supplied |
 | 328 | strong | Powerful shot |
 | 17 | blockX | Block x-coordinate |
 | 18 | blockY | Block y-coordinate |

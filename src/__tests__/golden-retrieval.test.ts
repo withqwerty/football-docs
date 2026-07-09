@@ -133,6 +133,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-corner-delivery-sequence-analysis",
+      args: {
+        query:
+          "build corner delivery set piece analysis second phase shots FromCorner qualifier 25 CornerTaken 6 PassEndX 140 PassEndY 141 Head 15 right foot left foot DirectCorner 263 delivery zone near post far post short corner link delivery to shot relatedEventId time window",
+        provider: "WhoScored",
+        max_results: 10,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Build a corner-delivery analysis",
+        "**Category:** charting-set-pieces",
+        "typeId `1` + Q6",
+        "qualifier `25` (`fromCorner`)",
+        "Direct corner / Olimpico",
+        "Delivery zones and mirroring",
+        "Link deliveries to shots",
+        "goals per corner",
+        "delivery or goals per corner-sourced shot",
+      ],
+    },
+    {
       id: "opta-game-state-scoreline-reconstruction",
       args: {
         query:
@@ -628,10 +649,11 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (59 chunks)");
+    expect(text).toContain("**opta** (64 chunks)");
     expect(text).toContain("charting-game-state (5)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
+    expect(text).toContain("charting-set-pieces (5)");
     expect(text).toContain("charting-shot-placement (7)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
