@@ -53,6 +53,31 @@ When deriving a shot result, handle qualifier `82` before treating typeId `15` a
 a normal saved shot. Some serializers classify a shot as blocked from the qualifier
 even when the broader type branch would otherwise be "attempt saved".
 
+## Shot context and consequence filters
+
+Shot-placement stories often ask whether a miss, save, post hit, or weak finish
+changed the match state. Join each shot row to a running scoreline timeline before
+building late-game, close-game, or "mattered" filters.
+
+| Derived field | How to derive it | Use |
+|---|---|---|
+| `team_score_at_shot` / `opp_score_at_shot` | Count valid goals strictly before the shot clock, from the shooting team's perspective | Tooltip, score-state splits, consequence labels |
+| `goal_diff_at_shot` | `team_score_at_shot - opp_score_at_shot` | Classify whether the shooter was leading, level, or trailing |
+| `state_at_shot` | `winning`, `drawing`, or `losing` from `goal_diff_at_shot` | Filter shot maps by game state or pressure context |
+| `is_late` | minute threshold such as `minute >= 80`, using expanded minutes when available | Late-shot and stoppage-time story filters |
+| `is_close_final` | final margin within one goal, after converting to the shooting team's perspective | Avoid overstating misses in already-decided matches |
+| `mattered` | shot taken while the goal difference was within one and the final margin was within one | Narrative filter for chances that could plausibly change the result |
+
+Use the goal-timeline reconstruction in [charting-game-state.md](charting-game-state.md):
+drop disallowed goals with qualifier `8`, credit own goals with qualifier `28` to
+the opposing team, and sort by period-aware clock or `expandedMinute`. Count only
+goals before the shot; a goal event at the same clock should not retroactively
+change the shot's pre-shot state unless the provider explicitly links them.
+
+Keep these consequence fields separate from provider facts. `mattered`,
+`late`, `close final`, and `pressure shot` are analysis labels layered on top of
+Opta events, not Opta event types.
+
 ## Body part and play-kind filters
 
 Low-xG finishing or shot-placement work usually needs foot shots only and explicit
