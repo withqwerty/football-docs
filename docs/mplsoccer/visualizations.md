@@ -232,6 +232,35 @@ fig, ax = baker.make_pizza(
 
 ## Bumpy Charts (Rank Changes)
 
+`Bumpy` expects already-prepared rank snapshots. Use this recipe for league-table
+bump charts, title-race trackers, relegation-race trackers, or form-table rank
+stories:
+
+| Field | Bumpy use | Notes |
+|---|---|---|
+| `timepoint` / `x_list` | matchweek, round, season, or snapshot label | Keep discrete labels ordered; do not use match dates if several teams have played different numbers of matches unless that is the intended story. |
+| `rank` / `y_list` | ordinal position | Rank `1` belongs at the top. Preserve ties and tie-break rules from the standings source. |
+| `entity` / `values` | team or player label | Use stable IDs internally and display names only for labels. |
+| `value` | tooltip enrichment | Points, goal difference, expected points, or projected finish can be shown, but the line position should remain rank. |
+| `highlight_dict` | editorial emphasis | Highlight the story teams and dim the field rather than assigning unrelated colours to every club. |
+
+Provider surfaces:
+
+- SportMonks: `GET /standings/rounds/{roundId}?include=participant;details`
+  gives round standings after fetching season rounds.
+- Wyscout: `/seasons/{wyId}/standings` and `/seasons/{wyId}/career` can supply
+  standings and gameweek-filtered history where licensed.
+- Opta: `/standings/{token}?tmcl={seasonId}` gives league-table views; a
+  rank-over-time chart still needs snapshots per round or a local history table.
+- soccerdata/Sofascore can provide season schedule plus final/current league
+  table, but round-by-round reconstruction may need completed fixtures and
+  tie-break logic.
+
+For public charts, state whether each rank is a provider standings snapshot,
+live/current table, reconstructed table from completed fixtures, or projected
+simulation output. If a round is missing for an entity, break or mark the line
+rather than silently interpolating through an unavailable rank.
+
 ```python
 from mplsoccer import Bumpy
 
