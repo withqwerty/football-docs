@@ -258,6 +258,32 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "thesportsdb-livescore-alias",
+      args: {
+        query: "livescore soccer API X-API-KEY event status team name mapping",
+        provider: "TheSportsDB",
+        max_results: 5,
+      },
+      expectedProvider: "thesportsdb",
+      expected: [
+        "TheSportsDB (thesportsdb)",
+        "**Provider:** thesportsdb",
+        "X-API-KEY",
+        "livescore/soccer",
+        "Brighton and Hove Albion",
+      ],
+    },
+    {
+      id: "tsdb-scorigami-live-score-alias",
+      args: {
+        query: "Premier League live scores scorigami final status idEvent strProgress",
+        provider: "TSDB",
+        max_results: 5,
+      },
+      expectedProvider: "thesportsdb",
+      expected: ["TSDB (thesportsdb)", "idEvent", "strProgress", "`FT`", "match finished"],
+    },
+    {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
@@ -344,6 +370,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
     );
+    expect(text).toContain("**thesportsdb** (18 chunks)");
+    expect(text).toContain("aliases: tsdb, the-sports-db, the-sportsdb, sportsdb");
     expect(text).toContain("api-endpoints");
   });
 
@@ -492,6 +520,24 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("0-100");
     expect(text).toContain("## wyscout");
     expect(text).toContain("postShotXg");
+  });
+
+  it("compares public live-score APIs for bot-style polling", () => {
+    const result = compareProviders(db, {
+      topic: "live scores fixtures event status livescore API final score polling",
+      providers: ["TheSportsDB", "SportMonks", "Sportradar"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 3 provider(s)");
+    expect(text).toContain("## thesportsdb");
+    expect(text).toContain("idEvent");
+    expect(text).toContain("De-duplicate final-score actions");
+    expect(text).toContain("## sportmonks");
+    expect(text).toContain("CURRENT");
+    expect(text).toContain("## sportradar");
+    expect(text).toContain("Live Schedules");
   });
 
   it("routes WhoScored project adapter questions to Opta-family docs", () => {
