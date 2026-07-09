@@ -426,6 +426,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "wyscout-analysis-story-metrics",
+      args: {
+        query:
+          "Wyscout entertainment index PPDA possession adjusted PAdj progressive passes progressive runs deep completions deep_completition xA shot assists key passes counterpressing recoveries pressing lower 60 defensive actions",
+        provider: "Wyscout",
+        max_results: 5,
+      },
+      expectedProvider: "wyscout",
+      expected: [
+        "Story metric fields and tags",
+        "`PPDA`",
+        "`PAdj` / `Opp30`",
+        "`progressive_pass`",
+        "`progressive_run`",
+        "`deep_completition`",
+        "`shot_assist`",
+        "`counterpressing_recovery`",
+      ],
+    },
+    {
       id: "soccer-extended-probability-alias",
       args: {
         query: "win probability momentum timeline probabilities game state chart",
@@ -536,6 +556,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**statsbomb** (237 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
+    expect(text).toContain("**wyscout** (163 chunks)");
+    expect(text).toContain("charting-analysis-metrics (6)");
+    expect(text).toContain("aliases: hudl, hudl-wyscout");
     expect(text).toContain("**sportmonks** (84 chunks)");
     expect(text).toContain("charting-season-stories (6)");
     expect(text).toContain("**fmdb-pro** (36 chunks)");
