@@ -95,6 +95,50 @@ derive it consistently over live frames or label it unavailable; do not mix
 provider cumulative distance for some players with naive per-frame sums for others
 without marking the source.
 
+## Tracking-derived physical output recipe
+
+Use this recipe when an agent asks for a physical report, raw-tracking workload
+table, speed-band totals, top-speed list, sprint count, or high-speed-running
+summary from kloppy `TrackingDataset` frames rather than from a provider's
+official physical endpoint.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `player_id` / `team_id` | tracking player object, lineup join | Emit stable provider ids only after the tracking roster has been joined to match players. |
+| `minutes_observed` | player coordinates, frame rate | Count frames where the player has a usable position; report the denominator before ranking rates. |
+| `total_distance_m` | provider cumulative distance or player coordinates | Prefer documented provider cumulative distance; otherwise derive frame-to-frame distance in metres with a consistent missing-position rule. |
+| speed-band distances | provider speed or derived speed, live flag | Bucket live-frame distance into declared walking, jogging, HSR, and sprint bands. Keep thresholds in the response metadata. |
+| `sprint_count` | speed series, frame rate, live flag | Count sustained contiguous live-frame runs above the sprint threshold, with an explicit minimum duration and optional short-gap merge rule. |
+| `top_speed_mps` | provider speed or derived speed | Use the maximum non-glitch speed from live frames; return `null` when no usable speed sample exists. |
+| quality flags | missing speed, missing distance, live/dead state, coordinate unit | State whether values are provider supplied, derived, partially unavailable, or computed without a live-ball flag. |
+
+Core fallback: derive speed from adjacent coordinates when no trusted provider
+speed is available.
+
+Safety rule: this is not the same contract as official provider physical metrics.
+
+Implementation notes:
+
+- Use provider speed when present and documented. If it is missing, derive speed
+  from adjacent coordinates as `distance_m / dt_seconds`, then smooth or
+  aggregate before displaying labels so one-frame jitter does not dominate.
+- Convert coordinates to metres before computing distance or speed. Tracking
+  feeds may expose metres, centimetres, or normalised pitch coordinates.
+- Apply a declared glitch guard before top speed, speed-band totals, and sprint
+  detection. Impossible spikes should become missing samples, not records.
+- Treat period boundaries separately for speed derivation, smoothing, and sprint
+  detection. Do not connect a run across half-time or extra-time breaks.
+- Filter speed-band totals and sprint detection to live frames when the feed
+  exposes a live/dead flag. Distance covered and observed minutes may still count
+  every tracked frame, but label that choice.
+- Keep a provider/derived source flag per metric family. It is acceptable for
+  distance to be provider supplied while speed is derived, but the API response
+  should make that visible.
+- Do not compare custom thresholds against SkillCorner, Wyscout, or other
+  provider physical outputs without labelling the threshold set. A derived
+  tracking workload report is not the same contract as official provider
+  physical metrics.
+
 ## Tracking-derived pressing timeline recipe
 
 Use this recipe when an agent asks for a rolling pressing-intensity timeline,
