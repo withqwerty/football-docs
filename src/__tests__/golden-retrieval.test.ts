@@ -238,6 +238,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-event-stream-validation",
+      args: {
+        query:
+          "Opta event stream validation duplicate events missing goals impossible state transitions chronological order period clock relatedEventId scoreline consistency coordinate bounds raw corrected quality flags data quality",
+        provider: "WhoScored",
+        max_results: 8,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Event-stream validation recipe",
+        "**Category:** event-types",
+        "`duplicate_events`",
+        "`paired_events`",
+        "`scoreline_consistency`",
+        "`raw_vs_corrected`",
+        "validation should produce quality flags and corrected interpretation",
+        "not overwrite the raw event stream",
+        "missing event, duplicate event, clock-ordering issue",
+      ],
+    },
+    {
       id: "opta-game-state-scoreline-reconstruction",
       args: {
         query:
@@ -974,12 +995,13 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (73 chunks)");
+    expect(text).toContain("**opta** (74 chunks)");
     expect(text).toContain("charting-game-state (9)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (6)");
     expect(text).toContain("charting-set-pieces (6)");
     expect(text).toContain("charting-shot-placement (10)");
+    expect(text).toContain("event-types (6)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
