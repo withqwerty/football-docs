@@ -197,12 +197,21 @@ Their xG model is independent from StatsBomb and Opta. Values will differ. The m
 - xG model methodology is not fully published. It's a black box.
 - No event data beyond shots. No passes, tackles, etc.
 - Data updates can lag 1-2 days after matches.
-- Match IDs are internal and don't map to other providers. Match by teams + date.
+- Match IDs are source-specific and don't map to other providers. Match by teams + date.
 - Player names may differ from other sources (transliterations, shortened forms).
 
-## Used In
+## Project use
 
-The myTeam project uses Understat data:
-- `scripts/fetch-season-story.ts` references Understat xG data
-- `src/data/game-state/understat-xg.json` stores cached xG values
-- The `--skip-xg` flag on `fetch-season-story.ts` reuses existing Understat xG data
+Understat is useful as an xG enrichment source for match-result, season-story,
+and game-state surfaces when the primary fixture provider does not include
+shot-level or match-level xG. Cache by competition, season, team names, and match
+date rather than by Understat match ID alone, because Understat IDs are not
+portable across providers.
+
+When joining to Opta, SportMonks, football-data.co.uk, or another fixture source:
+
+- match by date plus home/away team aliases;
+- keep the provider's final score as the fixture authority;
+- store Understat `xG` and `xGA` as an enrichment layer;
+- expose the xG model name so it is not confused with StatsBomb, Opta, or
+  provider-supplied expected-goals values.
