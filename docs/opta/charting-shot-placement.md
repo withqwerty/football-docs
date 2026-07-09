@@ -35,6 +35,50 @@ Do not assume qualifier `213` supplies usable xG in the public Opta Analyst-styl
 `matchevent` feed. It is defined in some F24 references, but this feed tier commonly
 populates xG as qualifier `321` on `matchexpectedgoals` instead.
 
+## Provider-first xG service recipe
+
+Use this recipe when an agent asks for an xG service, xG API response, provider
+xG fallback, local model fallback, penalty xG rule, or source caption for an
+Opta/WhoScored-style shot feed.
+
+Resolve each shot in an explicit order:
+
+| Priority | Source | Handling |
+|---|---|---|
+| 1 | provider xG from `matchexpectedgoals` qualifier `321` | Prefer the licensed provider value when present and numeric. Do not overwrite it with a local model. |
+| 2 | penalty rule | If the shot is a penalty and no provider value is available, use a declared constant or provider policy; record the source as a rule, not a model. |
+| 3 | local fallback model | Only use a trained fallback for non-penalty shots without provider xG. Expose model version/training metadata when returning the value. |
+| 4 | unavailable | If no source resolves the shot, return an unavailable reason rather than `0`. |
+
+Recommended response bookkeeping:
+
+| Field | Meaning |
+|---|---|
+| `xg` | resolved shot value, when available |
+| `xg_source` | `provider`, `rule`, or `model` |
+| `provider_shots` / `rule_shots` / `model_shots` | counts of shots resolved by each source |
+| `unresolved_shots` | count of shots with no usable xG source |
+| `model` | descriptor for fallback model version, feature columns, corpus, and training date when model values were used |
+| `reason` | machine-readable unavailable reason when a block cannot produce values |
+
+Implementation notes:
+
+- Provider xG should be treated as the best available value for that feed. A
+  local model is a fallback for missing values, not a replacement for the
+  provider's own model.
+- Keep penalty handling outside a geometry-trained open-play model unless the
+  model was explicitly trained and calibrated for penalties. Penalty constants
+  should be labelled as rule-derived.
+- When building a fallback model, document geometry inputs, body-part fields,
+  play-kind/context fields, missing-level handling, training corpus, and model
+  version. Missing body part or play context should remain an explicit unknown
+  level rather than being imputed silently.
+- Source captions should describe the sources that actually resolved shots in
+  the current fixture. For example, do not say "provider xG" if all values came
+  from a fallback model or penalty rule.
+- Malformed qualifier `321` values should degrade to "no provider value" for
+  that shot, not crash the whole match response.
+
 ## Shot event and result fields
 
 | Event or qualifier | Meaning |

@@ -322,7 +322,12 @@ describe("golden retrieval evals", () => {
         max_results: 5,
       },
       expectedProvider: "opta",
-      expected: ["WhoScored (opta)", "**Provider:** opta", "Shot Qualifiers"],
+      expected: [
+        "WhoScored (opta)",
+        "**Provider:** opta",
+        "Provider-first xG service recipe",
+        "Body part and play-kind filters",
+      ],
     },
     {
       id: "sofascore-soccerdata-alias",
@@ -691,12 +696,12 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (68 chunks)");
+    expect(text).toContain("**opta** (69 chunks)");
     expect(text).toContain("charting-game-state (8)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("charting-set-pieces (5)");
-    expect(text).toContain("charting-shot-placement (8)");
+    expect(text).toContain("charting-shot-placement (9)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
