@@ -173,6 +173,51 @@ describe("golden retrieval evals", () => {
       expected: ["ESPN (soccerdata)", "**Provider:** soccerdata", "sd.ESPN", "read_matchsheet"],
     },
     {
+      id: "metrica-databallpy-alias",
+      args: {
+        query: "Metrica tracking events open data game provider coordinates",
+        provider: "Metrica",
+        max_results: 5,
+      },
+      expectedProvider: "databallpy",
+      expected: [
+        "Metrica (databallpy)",
+        "**Provider:** databallpy",
+        'tracking_data_provider="metrica"',
+        "Has open data support",
+      ],
+    },
+    {
+      id: "sportec-databallpy-alias",
+      args: {
+        query: "Sportec DFL open tracking event data load_open_tracking_data",
+        provider: "Sportec",
+        max_results: 5,
+      },
+      expectedProvider: "databallpy",
+      expected: [
+        "Sportec (databallpy)",
+        "**Provider:** databallpy",
+        "sportec.load_open_tracking_data",
+        "sportec.load_open_event_data",
+      ],
+    },
+    {
+      id: "second-spectrum-kloppy-alias",
+      args: {
+        query: "Second Spectrum tracking provider kloppy load optical data coordinates",
+        provider: "Second Spectrum",
+        max_results: 5,
+      },
+      expectedProvider: "kloppy",
+      expected: [
+        "Second Spectrum (kloppy)",
+        "**Provider:** kloppy",
+        "Second Spectrum (Tracking)",
+        "secondspectrum.load",
+      ],
+    },
+    {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
@@ -249,6 +294,12 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (40 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
+    expect(text).toContain("**databallpy** (63 chunks)");
+    expect(text).toContain(
+      "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
+    );
+    expect(text).toContain("**kloppy** (100 chunks)");
+    expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("api-endpoints");
   });
 
@@ -360,6 +411,25 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("ESPN (sd.ESPN)");
     expect(text).not.toContain("No matching docs found for requested provider(s): sofascore");
     expect(text).not.toContain("No matching docs found for requested provider(s): espn");
+  });
+
+  it("routes open tracking adapter names to library docs", () => {
+    const result = compareProviders(db, {
+      topic: "tracking coordinates pitch length width event data loaders",
+      providers: ["Metrica Sports", "Sportec DFL", "Second Spectrum"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 2 provider(s)");
+    expect(text).toContain("## databallpy");
+    expect(text).toContain("pitch_dimensions");
+    expect(text).toContain("tracking_data");
+    expect(text).toContain("## kloppy");
+    expect(text).toContain("Second Spectrum");
+    expect(text).not.toContain("No matching docs found for requested provider(s): metrica-sports");
+    expect(text).not.toContain("No matching docs found for requested provider(s): sportec-dfl");
+    expect(text).not.toContain("No matching docs found for requested provider(s): second-spectrum");
   });
 
   it("routes WhoScored project adapter questions to Opta-family docs", () => {
