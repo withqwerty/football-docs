@@ -553,6 +553,22 @@ describe("golden retrieval evals", () => {
       expectedProvider: "statsbomb",
       expected: ["Set pieces", "team_match_corner_xg", "xG per corner"],
     },
+    {
+      id: "free-source-contextual-story-joins",
+      args: {
+        query:
+          "weather travel distance home advantage story fixtures results ClubElo Open-Meteo venue pitch dimensions Elo adjusted xG public data",
+        max_results: 8,
+      },
+      expectedProvider: "free-sources",
+      expected: [
+        "Contextual Story Joins",
+        "`away_travel_km >= 300`",
+        "ClubElo(home_team, fixture_date)",
+        "observed match weather",
+        "never overwrite official scores",
+      ],
+    },
   ])("answers $id from sourced docs", ({ args, expected, expectedProvider }) => {
     const result = searchDocs(db, args);
     const text = result.content[0].text;
@@ -582,7 +598,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (38 chunks)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (46 chunks)");
+    expect(text).toContain("**free-sources** (54 chunks)");
+    expect(text).toContain("contextual-story-joins (8)");
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
