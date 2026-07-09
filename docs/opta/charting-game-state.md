@@ -131,6 +131,41 @@ Implementation notes:
 - Do not compare scores across providers unless component definitions, event
   inclusion rules, and optional-source fallbacks are aligned.
 
+## Dead-time and restart-gap recipe
+
+Use this recipe when an agent asks for a ball-in-play approximation, dead-time
+barcode, restart-gap chart, goalkeeper hold-time chart, or time-wasting split
+from Opta/WhoScored-style event streams.
+
+This is an event-derived model, not official Opta ball-in-play data. Label it as
+`event_derived_dead_time` or similar unless your feed explicitly provides
+official ball-in-play intervals.
+
+| Transition | Event rule | Notes |
+|---|---|---|
+| play to dead | typeId `5` ball out, typeId `16` goal, typeId `27` start delay, typeId `4` foul | For paired foul/out events, define which outcome/team is treated as the causer. |
+| dead to play | typeId `1` pass with restart qualifier `107`, `124`, `6`, `279`, or `5`; or typeId `28` end delay | Qualifier `107` = throw-in, `124` = goal kick in many JSON exports, `6` = corner, `279` = kick-off/restart, `5` = free kick. |
+| restart gap | dead trigger timestamp to matching restart pass timestamp | Keep restart type, period, time, and restarting team. |
+| goal-to-restart gap | goal event to following kick-off/restart | Useful for post-goal delay stories; keep it separate from generic ball-out gaps. |
+| dead-time barcode | dead segments over period start/end bounds | Render halves separately and show the half-time gap as a gap, not as dead time. |
+| winning/losing split | dead segment causer plus running scoreline | Treat as coarse attribution; do not present it as official time-wasting proof. |
+
+Implementation notes:
+
+- Process each period independently. Close any open dead segment at the period
+  end so half-time does not inflate dead time.
+- De-duplicate duplicate event rows before building the state machine; event
+  streams can contain paired or repeated rows at the same timestamp.
+- Cap or flag very long segments such as VAR reviews, injuries, or data gaps so
+  one malformed interval does not dominate a match barcode.
+- Corners are best measured from corner-awarded to corner-taken; throw-ins, goal
+  kicks, and free kicks can use the prior ball-out or foul trigger.
+- Preserve announced added-time fields separately from played added time. The
+  difference is a derived story metric, not a provider score.
+- If the product needs exact BIP, prefer a provider metric such as StatsBomb
+  `team_match_ball_in_play_time` or a tracking/physical feed with explicit BIP
+  phases.
+
 ## Edge cases to test
 
 Add tests or fixtures for these cases when implementing game-state logic:

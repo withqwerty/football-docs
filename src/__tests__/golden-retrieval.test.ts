@@ -691,8 +691,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (67 chunks)");
-    expect(text).toContain("charting-game-state (7)");
+    expect(text).toContain("**opta** (68 chunks)");
+    expect(text).toContain("charting-game-state (8)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("charting-set-pieces (5)");
