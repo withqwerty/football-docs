@@ -518,6 +518,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "mplsoccer-chart-reference-layers",
+      args: {
+        query:
+          "football chart reference layers target line benchmark peer band league average percentile band threshold annotations keep metric separate from visual overlay",
+        provider: "mplsoccer",
+        max_results: 8,
+      },
+      expected: [
+        "Chart Reference Layers",
+        "**Category:** visualizations",
+        "`layer_kind`",
+        "same unit",
+        "required-pace lines",
+        "rolling-form envelopes",
+        "Keep generated layers separate from data series",
+        "model version or grid version",
+        "Clip layers to the plot area",
+      ],
+    },
+    {
       id: "sportmonks-season-story-fixtures",
       args: {
         query:
@@ -814,8 +834,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**mplsoccer** (63 chunks)");
-    expect(text).toContain("visualizations (47)");
+    expect(text).toContain("**mplsoccer** (64 chunks)");
+    expect(text).toContain("visualizations (48)");
     expect(text).toContain("**kloppy** (119 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
     expect(text).toContain("tracking-rendering (9)");
