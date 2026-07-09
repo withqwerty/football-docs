@@ -35,6 +35,26 @@ describe("golden retrieval evals", () => {
       expected: ["bearer token", "apiprod.transferroom.com"],
     },
     {
+      id: "transferroom-availability-story",
+      args: {
+        query:
+          "build player availability injury burden story injury timeline missing players injuries player matchdays squad value availability heatmap forest plot TransferRoom FMDB Pro Sportradar SportMonks Transfermarkt",
+        max_results: 10,
+      },
+      expectedProvider: "transferroom",
+      expected: [
+        "Build an availability story",
+        "**Category:** charting-availability",
+        "`GET /injuries/competitions`",
+        "`GET /injuries/players`",
+        "`matches_missed_burden`",
+        "`xAvailability`",
+        "historical absence",
+        "Do not infer causality from injury endpoints alone",
+        "coefficient / forest plot",
+      ],
+    },
+    {
       id: "statsbomb-shot-freeze-frame",
       args: { query: "StatsBomb shot freeze frame xG", provider: "statsbomb", max_results: 5 },
       expected: ["Shot", "xG", "freeze frame"],
@@ -641,7 +661,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("charting-season-stories (6)");
     expect(text).toContain("**fmdb-pro** (36 chunks)");
     expect(text).toContain("aliases: fmdb");
-    expect(text).toContain("**transferroom** (38 chunks)");
+    expect(text).toContain("**transferroom** (43 chunks)");
+    expect(text).toContain("charting-availability (5)");
     expect(text).toContain("aliases: transfer-room");
     expect(text).toContain("**free-sources** (62 chunks)");
     expect(text).toContain("contextual-story-joins (8)");
