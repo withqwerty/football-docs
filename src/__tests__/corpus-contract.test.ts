@@ -82,6 +82,50 @@ describe("corpus and public contract", () => {
     }
   });
 
+  it("requires public metadata for every registered provider", () => {
+    const registry = readJson<{
+      providers: Record<
+        string,
+        {
+          display_name?: string;
+          aliases?: unknown;
+          access_level?: string;
+          licence_status?: string;
+          public_safety_notes?: string;
+          sources?: unknown;
+        }
+      >;
+    }>(resolve(ROOT, "providers.json"));
+
+    for (const [provider, metadata] of Object.entries(registry.providers)) {
+      expect(metadata.display_name, `${provider} display_name`).toBeTruthy();
+      expect(Array.isArray(metadata.aliases), `${provider} aliases`).toBe(true);
+      expect(metadata.access_level, `${provider} access_level`).toBeTruthy();
+      expect(metadata.licence_status, `${provider} licence_status`).toBeTruthy();
+      expect(metadata.public_safety_notes, `${provider} public_safety_notes`).toBeTruthy();
+      expect(Array.isArray(metadata.sources), `${provider} sources`).toBe(true);
+    }
+  });
+
+  it("keeps provider aliases unique in the public registry", () => {
+    const registry = readJson<{
+      providers: Record<string, { display_name: string; aliases: string[] }>;
+    }>(resolve(ROOT, "providers.json"));
+    const seen = new Map<string, string>();
+
+    for (const [provider, metadata] of Object.entries(registry.providers)) {
+      for (const alias of [provider, metadata.display_name, ...metadata.aliases]) {
+        const slug = slugProvider(alias);
+        const existing = seen.get(slug);
+        expect(
+          existing === undefined || existing === provider,
+          `alias "${alias}" is shared by ${existing} and ${provider}`,
+        ).toBe(true);
+        seen.set(slug, provider);
+      }
+    }
+  });
+
   it("ships the runtime files needed by the npm package", () => {
     const pkg = readJson<{ bin: Record<string, string>; files: string[] }>(resolve(ROOT, "package.json"));
 
