@@ -260,6 +260,47 @@ Implementation notes:
 - For lower-is-better metrics, document whether the percentile has been inverted
   so higher always reads better, or leave it uninverted and label that clearly.
 
+## Metric Distribution and Density Charts
+
+Use this recipe when an agent asks for a metric distribution chart, KDE density
+curve, team-sample comparison, keeper shot-stopping distribution, shots-per-match
+distribution, xG-per-shot density, or stacked row-wise metric comparison.
+
+A distribution chart consumes one-dimensional numeric samples. It is not a
+percentile bar, radar chart, histogram-only view, or time series. The chart
+should show the shape of a selected cohort and optionally mark a reference
+statistic such as the subject's mean, median, or current value.
+
+| Field | Meaning | Display rule |
+|---|---|---|
+| `metric_id` / `metric_label` | stable metric key and label | Keep labels, units, and provider fields separate from display copy. |
+| `series_id` / `series_label` | team, player group, league, season, or cohort | Use stable IDs internally; repeated row comparisons should reuse the same series IDs across rows. |
+| `values[]` | finite numeric sample used for the distribution | Exclude `null`, missing, and non-finite values with a data-quality warning. |
+| `unit` | shots per match, npxG, xG per shot, PSxG delta, percentage, etc. | Format axes and tooltips in the metric's native unit. |
+| `marker_value` | optional subject value, mean, median, or benchmark | Label the marker source; do not mix a percentile marker onto a raw-value x-axis. |
+| `sample_size` | count of valid values after filtering | Surface low sample sizes; sparse curves should be described as low-confidence. |
+
+Implementation notes:
+
+- Prepare the metric samples upstream. StatsBomb, Wyscout, FBref/soccerdata,
+  Sportradar, and provider-specific reports can all supply scalar values, but
+  the chart should receive already-selected numeric arrays rather than raw
+  provider blobs.
+- Use one metric unit per row. Do not put shots per match, npxG, and xG per
+  shot on one shared raw-value axis unless the values have first been
+  normalised into a stated common scale.
+- For KDE or smoothed density, choose and document the bandwidth rule. Sparse,
+  single-value, or highly discrete samples should show warnings or fall back to
+  points/summary markers instead of pretending smooth certainty.
+- For row-wise comparisons across several metrics, use independent row scales
+  by default. A shared scale is only meaningful when every row has the same
+  metric unit and comparable domain.
+- Keep invalid-value handling explicit: exclude missing, `NaN`, and infinite
+  values; keep a warning count rather than silently treating them as zero.
+- If a public story needs exact percentile language, compute percentiles from
+  the same filtered cohort. A density peak, mean marker, or median marker is not
+  a percentile by itself.
+
 ## Radar Charts
 
 ```python

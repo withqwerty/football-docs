@@ -704,8 +704,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**mplsoccer** (60 chunks)");
-    expect(text).toContain("visualizations (44)");
+    expect(text).toContain("**mplsoccer** (61 chunks)");
+    expect(text).toContain("visualizations (45)");
     expect(text).toContain("**kloppy** (117 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
     expect(text).toContain("tracking-rendering (7)");
