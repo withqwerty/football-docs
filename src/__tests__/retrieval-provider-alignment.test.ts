@@ -36,4 +36,23 @@ describe("provider-alignment retrieval", () => {
     expect(text).toContain("ID Mappings");
     expect(text).toContain("not part of `idMappings`");
   });
+
+  it("finds DataBallPy tracking-event synchronisation guidance", () => {
+    const result = searchDocs(db, {
+      query:
+        "DataBallPy synchronise tracking event data Needleman Wunsch sync_certainty tracking_frame get_event_frame",
+      provider: "databallpy",
+      max_results: 8,
+    });
+
+    const text = result.content.map((entry) => entry.text).join("\n");
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("Synchronization");
+    expect(text).toContain("Needleman-Wunsch algorithm");
+    expect(text).toContain("`sync_certainty`");
+    expect(text).toContain("`tracking_frame`");
+    expect(text).toContain("game.synchronise_tracking_and_event_data");
+    expect(text).toContain("game.get_event_frame");
+  });
 });
