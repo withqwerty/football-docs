@@ -49,6 +49,51 @@ describe("golden retrieval evals", () => {
       expected: ["321", "322", "matchexpectedgoals", "213"],
     },
     {
+      id: "opta-goal-kick-story-qualifiers",
+      args: {
+        query: "Opta goal kick qualifier 124 pass end coordinates 140 141 short long goal kicks",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["124", "goal-kick distribution charts", "Q140/Q141"],
+    },
+    {
+      id: "opta-var-review-delay-qualifier",
+      args: {
+        query: "Opta VAR review qualifier 364 delay start typeId 27 delay end typeId 28",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["364", "typeId 27 + Q364", "typeId 28 + Q364"],
+    },
+    {
+      id: "opta-penalty-qualifier-variants",
+      args: {
+        query: "Opta penalty qualifier 9 108 penalty shot foul awarded",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["9", "108", "Penalty"],
+    },
+    {
+      id: "opta-own-goal-qualifier-variants",
+      args: {
+        query: "Opta own goal qualifier 28 280 OWN_GOAL shot distance attribution",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["28", "280", "OWN_GOAL", "reattribute"],
+    },
+    {
+      id: "opta-open-play-cross-story-qualifiers",
+      args: {
+        query: "Opta open play crosses Q2 excluding Q6 corner Q5 free kick through ball Q4 headed pass Q3",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["Q2", "Q5/Q6", "Q4", "Q3"],
+    },
+    {
       id: "statsbomb-chart-coordinate-normalisation",
       args: {
         query: "StatsBomb to 0-100 coordinate normalisation shot map xG chart",
