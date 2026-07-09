@@ -326,6 +326,24 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "second-spectrum-tracking-rendering",
+      args: {
+        query:
+          "tracking data centre origin centimetres pitch_length pitch_width project to 0-100 fps live dead ball speed distance windows Second Spectrum Tracab",
+        provider: "Second Spectrum",
+        max_results: 5,
+      },
+      expectedProvider: "kloppy",
+      expected: [
+        "Rendering centre-origin tracking data",
+        "`secondspectrum`",
+        "`tracab`",
+        "x100 = 50 +",
+        "`x_m = x_cm / 100`",
+        "Ball live/dead handling",
+      ],
+    },
+    {
       id: "sportradar-api-alias",
       args: {
         query: "x-api-key soccer v4 extended summary base URL",
@@ -477,7 +495,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**kloppy** (100 chunks)");
+    expect(text).toContain("**kloppy** (106 chunks)");
+    expect(text).toContain("tracking-rendering (6)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
@@ -626,10 +645,29 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("pitch_dimensions");
     expect(text).toContain("tracking_data");
     expect(text).toContain("## kloppy");
-    expect(text).toContain("Second Spectrum");
+    expect(text).toContain("Rendering centre-origin tracking data");
     expect(text).not.toContain("No matching docs found for requested provider(s): metrica-sports");
     expect(text).not.toContain("No matching docs found for requested provider(s): sportec-dfl");
     expect(text).not.toContain("No matching docs found for requested provider(s): second-spectrum");
+  });
+
+  it("compares tracking rendering semantics across tracking providers", () => {
+    const result = compareProviders(db, {
+      topic:
+        "tracking render pitch coordinates centre origin centimetres fps live ball speed distance pitch_length pitch_width",
+      providers: ["Second Spectrum", "TRACAB", "SkillCorner"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("across 3 provider(s)");
+    expect(text).toContain("## kloppy");
+    expect(text).toContain("Rendering centre-origin tracking data");
+    expect(text).toContain("Ball live/dead handling");
+    expect(text).toContain("## databallpy");
+    expect(text).toContain("Origin at center of pitch");
+    expect(text).toContain("## skillcorner");
+    expect(text).toContain("pitch_length");
   });
 
   it("compares Sportradar chart fields with Opta and Wyscout shot surfaces", () => {
