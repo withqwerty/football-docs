@@ -99,6 +99,38 @@ Keep the model labels separate from the raw event data. Terms such as
 `comfortable`, `protecting`, `level`, `chasing`, or `desperate` are project
 classifications layered on top of the Opta event stream, not provider event types.
 
+## Match drama score recipe
+
+Use this recipe when an agent asks for a post-match entertainment score, drama
+ranking, blockbuster index, weekend replay chart, or match receipt from
+Opta/WhoScored-style event timelines.
+
+| Component | Source | Rule |
+|---|---|---|
+| total goals | final score or valid goal timeline | Cap at a stated football-realistic maximum rather than min-maxing a single match. |
+| lead changes | running scoreline milestones | Count only changes from one non-level leader to the other; drawing level is not a lead change unless your product says so. |
+| comeback | running scoreline plus final result | Label whether it means draw-from-behind, win-from-behind, or both. |
+| late drama | goal milestones | Count goals after a declared minute threshold, such as 80, only when they change match state. |
+| xG swing | shot xG events split by half or interval | Compare expected-goal differential between periods; return unavailable if xG is not licensed. |
+| possession volatility | possession intervals, where available | Count flips in the possession-leading team across stable intervals; do not infer this from final possession alone. |
+| spectacle/flair | event types and qualifiers | Examples include volleys, direct free kicks, long-range goals, good-skill events, and successful take-ons. |
+
+Implementation notes:
+
+- Build the score from named components, then expose both the final score and the
+  component values. A one-number drama score without components is hard to audit.
+- Keep provider facts separate from product judgements. `lead_changes`,
+  `late_drama_goals`, and `xg_swing` can be derived facts; `entertainment_score`
+  is a product metric with chosen weights and caps.
+- Use absolute caps for per-match components, then document them. Cross-match
+  min-max normalisation can make early-season rankings unstable.
+- Treat missing optional sources honestly: if xG, xGOT, or possession intervals
+  are unavailable, either omit those components or use a labelled neutral value.
+- Use the same valid-goal reconstruction rules as the rest of this document:
+  disallowed goals do not count, and own goals are credited to the opponent.
+- Do not compare scores across providers unless component definitions, event
+  inclusion rules, and optional-source fallbacks are aligned.
+
 ## Edge cases to test
 
 Add tests or fixtures for these cases when implementing game-state logic:
