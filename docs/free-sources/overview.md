@@ -98,8 +98,6 @@ Rank,Club,Country,Level,Elo,From,To
 1,Liverpool,ENG,1,2050,2024-11-30,2024-12-07
 ```
 
-**Used in**: myTeam's PL Era Champions story page (`scripts/fetch-elo-history.ts`).
-
 **Project use**: For run-in, fixture-difficulty, and season-story surfaces,
 ClubElo is useful as a lightweight strength prior. Join by a maintained club
 name map rather than assuming site labels match your canonical team labels.
@@ -206,8 +204,6 @@ it in public analysis.
 - Requires headed browser (Puppeteer/Playwright) -- no simple HTTP scraping
 - Rate limiting is strict; adding delays between requests is essential
 - Data is Opta-sourced, so event types and qualifier IDs match Opta's system
-
-**Used in**: myTeam's passmap data pipeline (`scripts/fetch-whoscored-events.ts` stores events in Postgres, `scripts/generate-passmap-data.ts` processes them).
 
 ## European Football Statistics
 
