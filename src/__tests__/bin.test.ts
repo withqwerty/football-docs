@@ -262,4 +262,73 @@ describe("npm bin entrypoint", () => {
       child.kill();
     }
   });
+
+  it("answers compare_providers over the stdio tools/call transport with aliases", async () => {
+    const child = spawn("node", ["bin/serve.js"], {
+      cwd: ROOT,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+
+    let stderr = "";
+    child.stderr.on("data", (chunk: Buffer) => {
+      stderr += chunk.toString("utf-8");
+    });
+
+    try {
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "initialize",
+          params: {
+            protocolVersion: "2025-06-18",
+            capabilities: {},
+            clientInfo: { name: "football-docs-test", version: "0.0.0" },
+          },
+        })}\n`,
+      );
+      const initResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for initialize; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+      expect(initResponse.error).toBeUndefined();
+
+      child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized", params: {} })}\n`);
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 2,
+          method: "tools/call",
+          params: {
+            name: "compare_providers",
+            arguments: {
+              topic: "tracking pitch length width physical data",
+              providers: ["Second Spectrum", "TRACAB", "SkillCorner"],
+            },
+          },
+        })}\n`,
+      );
+
+      const compareResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for tools/call; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+
+      const text = compareResponse.result?.content?.map((entry) => entry.text).join("\n") ?? "";
+
+      expect(compareResponse.error).toBeUndefined();
+      expect(compareResponse.result?.isError).not.toBe(true);
+      expect(compareResponse.id).toBe(2);
+      expect(text).toContain('Comparison for "tracking pitch length width physical data" across 3 provider(s)');
+      expect(text).toContain("## kloppy");
+      expect(text).toContain("## databallpy");
+      expect(text).toContain("## skillcorner");
+    } finally {
+      child.kill();
+    }
+  });
 });
