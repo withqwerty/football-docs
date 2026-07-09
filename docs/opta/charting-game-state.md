@@ -52,6 +52,36 @@ Use expanded minutes or period-aware clocks for the filter. If the pass event on
 has period-local minute/second fields, convert them to a continuous match minute
 before applying states such as "after minute 60" or "while losing".
 
+## Season minutes-ahead recipe
+
+Use this recipe when an agent asks for a minutes-ahead chart, percent of season
+spent leading, time spent drawing/trailing, comeback-rate panel, or club dashboard
+from Opta/WhoScored-style event timelines.
+
+| Aggregate | Minute states to include | Display |
+|---|---|---|
+| leading share | selected team score greater than opponent score | `% of observed match minutes spent leading` |
+| drawing share | score is level, including `0-0` unless split separately | `% of observed match minutes spent drawing` |
+| trailing share | selected team score lower than opponent score | `% of observed match minutes spent trailing` |
+| comeback denominator | matches with more than a labelled threshold of trailing time | count the threshold in minutes, e.g. `> 10` |
+| rescued points | matches from the comeback denominator ending in win or draw | rate or count, labelled as a project metric |
+
+Implementation notes:
+
+- Build the same running scoreline timeline once per match, then derive minute
+  states for both teams from that single source.
+- Use observed match duration as the denominator when stoppage-time events extend
+  beyond 90 minutes. Do not silently divide every match by 90 if the chart includes
+  90+ minutes.
+- Decide whether `level0` is a separate state or part of drawing before aggregating
+  across matches; expose the choice in the API response or chart notes.
+- For stacked bars, store both raw minute counts and percentages so labels can
+  survive rounding.
+- Penalty shootouts should not contribute to normal leading/drawing/trailing
+  minutes unless the story explicitly models shootout state.
+- If the event feed lacks a reliable goal timeline, do not backfill minute states
+  from the final score. Return the aggregate as unavailable for that match.
+
 ## Win-probability game-state stories
 
 For richer season or match stories, the same scoreline timeline can drive a
