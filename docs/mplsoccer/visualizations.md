@@ -427,6 +427,52 @@ Implementation notes:
 - When comparing teams across leagues, state whether metrics are league-relative,
   raw provider values, or normalised against a shared benchmark.
 
+## Chart Reference Layers
+
+Use this recipe when an agent asks for target lines, benchmark overlays, peer
+bands, shaded zones, required-pace lines, rolling-form envelopes, or contextual
+reference layers on a football chart. Reference layers are visual context; they
+should not rewrite the underlying metric values.
+
+| Field | Meaning | Display rule |
+|---|---|---|
+| `layer_id` / `layer_label` | stable reference-layer key and display label | Keep layer identity separate from visible copy so tooltips, legends, and accessibility text stay stable. |
+| `layer_kind` | `horizontal`, `vertical`, `diagonal`, `band`, or `envelope` | Declare the geometry explicitly; do not infer it from label text. |
+| `metric_id` / `unit` | metric and unit the layer belongs to | A layer may only share an axis with series in the same unit unless it is clearly normalised. |
+| `source` / `methodology` | provider, model, or cohort used to build the layer | Label whether the reference is a league average, club target, model threshold, or peer cohort. |
+| `confidence` / `sample_size` | optional quality signal | Surface weak bands or sparse peer cohorts rather than drawing them as authoritative. |
+
+Common football examples:
+
+- target lines such as top-four pace, safety pace, or expected-points baseline;
+- horizontal reference lines for league average xG/90, PPDA, or save percentage;
+- vertical markers for manager changes, transfer windows, injuries, or tactical
+  shifts;
+- shaded bands for relegation/title zones, age-curve expectation ranges, peer
+  cohort percentiles, or rolling-form confidence intervals;
+- envelopes between actual points and required pace, or between rolling xG and
+  its uncertainty bounds.
+
+Implementation notes:
+
+- Build reference layers from the same filtered competition, season, time range,
+  and cohort as the plotted series unless the story intentionally uses an
+  external benchmark. Surface that choice in `source` or `methodology`.
+- Keep generated layers separate from data series. A benchmark line can influence
+  annotation and colour, but it should not be counted as a team, player, or shot
+  series in totals.
+- For diagonal pace lines, define both endpoints in data space, for example
+  matchweek 1 to 38 and points 0 to 68. Do not draw a diagonal by eye in pixel
+  coordinates.
+- For bands and envelopes, store upper and lower bounds with the same x-axis
+  semantics as the main series. Break the layer where either bound is missing.
+- If a layer is derived from a model, record the model version or grid version
+  alongside the chart response. Do not mix model-derived targets with provider
+  facts without labelling the distinction.
+- Clip layers to the plot area, but allow labels outside only when the layout
+  explicitly reserves space. Overlapping reference labels should collapse,
+  prioritise, or move to a legend rather than covering the data.
+
 ## Radar Charts
 
 ```python
