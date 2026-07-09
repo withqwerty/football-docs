@@ -107,13 +107,13 @@ export function createFootballDocsServer(): McpServer {
     "Search football data provider documentation. Use for finding event types, qualifier IDs, API endpoints, coordinate systems, data models, and cross-provider mappings. Returns the most relevant documentation chunks.",
     {
       query: z.string().describe(
-        "Search query. Examples: 'Opta goal qualifier', 'StatsBomb shot event type', 'coordinate system differences', 'xG qualifier ID', 'SportMonks fixture endpoint'",
+        "Search query. Examples: 'Opta goal qualifier', 'StatsBomb shot event type', 'coordinate system differences', 'xG qualifier ID', 'SportMonks fixture endpoint', 'FMDB Pro players endpoint'",
       ),
       provider: z
         .string()
         .optional()
         .describe(
-          "Filter to a specific provider: opta, statsbomb, wyscout, sportmonks, fbref, understat, kloppy, or leave empty for all",
+          "Optional provider filter. Use list_providers for indexed provider keys. Common aliases such as fbref, understat, FMDB, TransferRoom, Hudl Wyscout, and Stats Perform are accepted.",
         ),
       max_results: z
         .number()
@@ -143,7 +143,9 @@ export function createFootballDocsServer(): McpServer {
       providers: z
         .array(z.string())
         .optional()
-        .describe("Providers to compare. If omitted, compares all indexed providers."),
+        .describe(
+          "Providers to compare. If omitted, compares all indexed providers. Use list_providers for indexed keys; common aliases are accepted.",
+        ),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     async (args) => withDocsDb((db) => compareProviders(db, args)),

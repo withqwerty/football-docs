@@ -64,6 +64,40 @@ type CompareRow = {
 };
 
 const QUERY_STOP_WORDS = new Set(["and", "or", "not", "near"]);
+const PROVIDER_ALIASES: Record<string, string> = {
+  fbref: "free-sources",
+  "football-reference": "free-sources",
+  understat: "free-sources",
+  free: "free-sources",
+  "free-source": "free-sources",
+  fmdb: "fmdb-pro",
+  "transfer-room": "transferroom",
+  hudl: "wyscout",
+  "hudl-wyscout": "wyscout",
+  statsperform: "opta",
+  "stats-perform": "opta",
+  "opta-f24": "opta",
+  "skill-corner": "skillcorner",
+  "data-ball-py": "databallpy",
+  "databall-py": "databallpy",
+  "mpl-soccer": "mplsoccer",
+  "soccer-action": "socceraction",
+  "soccer-data": "soccerdata",
+  "soccer-donna": "soccerdonna",
+  "sport-monks": "sportmonks",
+  "stats-bomb": "statsbomb",
+  "statsbomb-open-data": "statsbomb",
+  "statsbomb-open": "statsbomb",
+};
+const DISPLAY_PROVIDER_ALIASES: Record<string, string[]> = Object.entries(PROVIDER_ALIASES).reduce(
+  (aliasesByProvider, [alias, provider]) => {
+    const aliases = aliasesByProvider[provider] ?? [];
+    aliases.push(alias);
+    aliasesByProvider[provider] = aliases;
+    return aliasesByProvider;
+  },
+  {} as Record<string, string[]>,
+);
 
 function textResult(text: string, isError = false): ToolResponse {
   return {
@@ -103,8 +137,35 @@ function relaxedFtsQuery(query: string): string {
   return tokens.map(quoteFtsToken).join(" OR ");
 }
 
+function slugProvider(provider: string): string {
+  return provider
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function normaliseProvider(provider: string): string {
-  return provider.trim().toLowerCase();
+  const slug = slugProvider(provider);
+  return PROVIDER_ALIASES[slug] ?? slug;
+}
+
+function providerFilterLabel(original: string | undefined, normalised: string | undefined): string {
+  if (!original || !normalised) return "";
+  const trimmed = original.trim();
+  return trimmed === normalised ? normalised : `${trimmed} (${normalised})`;
+}
+
+function indexedProviders(db: Database.Database): Set<string> {
+  const rows = db.prepare("SELECT DISTINCT provider FROM docs ORDER BY provider").all() as Array<{
+    provider: string;
+  }>;
+  return new Set(rows.map((row) => row.provider));
+}
+
+function unknownProviderMessage(original: string, provider: string): string {
+  return `Provider "${providerFilterLabel(original, provider)}" is not indexed. Call list_providers for available provider keys, or use request_update to suggest adding it.`;
 }
 
 function normaliseLimit(value: number | undefined, defaultValue: number, maxValue: number): number {
@@ -163,6 +224,25 @@ function compareRows(
   return db.prepare(sql).all(...params) as CompareRow[];
 }
 
+function compareRowsForProvider(
+  db: Database.Database,
+  matchQuery: string,
+  provider: string,
+  limit: number,
+): CompareRow[] {
+  return db
+    .prepare(
+      `SELECT d.provider, d.category, d.title, d.content,
+              rank * -1 as relevance
+       FROM docs_fts
+       JOIN docs d ON d.id = docs_fts.rowid
+       WHERE docs_fts MATCH ? AND d.provider = ?
+       ORDER BY rank
+       LIMIT ?`,
+    )
+    .all(matchQuery, normaliseProvider(provider), limit) as CompareRow[];
+}
+
 function sourceLabel(row: SearchRow): string {
   if (row.source_type === "curated") {
     return "**Source:** curated by football-docs contributors";
@@ -176,15 +256,22 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
   const limit = normaliseLimit(args.max_results, 10, 50);
   const strictQuery = sanitiseFtsQuery(args.query);
   const fallbackQuery = relaxedFtsQuery(args.query);
-  let rows = searchRows(db, strictQuery, args.provider, limit);
+  const provider = args.provider ? normaliseProvider(args.provider) : undefined;
+
+  if (args.provider && provider && !indexedProviders(db).has(provider)) {
+    return textResult(unknownProviderMessage(args.provider, provider), true);
+  }
+
+  let rows = searchRows(db, strictQuery, provider, limit);
 
   if (rows.length === 0 && fallbackQuery !== strictQuery) {
-    rows = searchRows(db, fallbackQuery, args.provider, limit);
+    rows = searchRows(db, fallbackQuery, provider, limit);
   }
 
   if (rows.length === 0) {
+    const providerLabel = providerFilterLabel(args.provider, provider);
     return textResult(
-      `No results found for "${args.query}"${args.provider ? ` in ${args.provider}` : ""}. Try broader terms or remove the provider filter.`,
+      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}. Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
     );
   }
 
@@ -196,9 +283,10 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
     })
     .join("\n\n---\n\n");
 
+  const providerLabel = providerFilterLabel(args.provider, provider);
   return textResult(
     `Found ${rows.length} result(s) for "${args.query}"${
-      args.provider ? ` in ${args.provider}` : ""
+      providerLabel ? ` in ${providerLabel}` : ""
     }:\n\n${results}`,
   );
 }
@@ -223,7 +311,9 @@ export function listProviders(db: Database.Database): ToolResponse {
 
   const lines = [...byProvider.entries()]
     .map(([provider, info]) => {
-      return `**${provider}** (${info.total} chunks): ${info.categories.join(", ")}`;
+      const aliases = DISPLAY_PROVIDER_ALIASES[provider];
+      const aliasText = aliases?.length ? ` | aliases: ${aliases.join(", ")}` : "";
+      return `**${provider}** (${info.total} chunks): ${info.categories.join(", ")}${aliasText}`;
     })
     .join("\n");
 
@@ -236,13 +326,37 @@ export function compareProviders(
 ): ToolResponse {
   const strictQuery = sanitiseFtsQuery(args.topic);
   const fallbackQuery = relaxedFtsQuery(args.topic);
-  let rows = compareRows(db, strictQuery, args.providers);
+  let rows: CompareRow[];
+  let requestedProviders: string[] = [];
+  const providerSet = indexedProviders(db);
 
-  if (rows.length === 0 && fallbackQuery !== strictQuery) {
-    rows = compareRows(db, fallbackQuery, args.providers);
+  if (args.providers?.length) {
+    requestedProviders = [...new Set(args.providers.map(normaliseProvider))];
+    rows = requestedProviders.flatMap((provider) => {
+      if (!providerSet.has(provider)) return [];
+      const strictRows = compareRowsForProvider(db, strictQuery, provider, 3);
+      if (strictRows.length > 0 || fallbackQuery === strictQuery) return strictRows;
+      return compareRowsForProvider(db, fallbackQuery, provider, 3);
+    });
+  } else {
+    rows = compareRows(db, strictQuery, args.providers);
+
+    if (rows.length === 0 && fallbackQuery !== strictQuery) {
+      rows = compareRows(db, fallbackQuery, args.providers);
+    }
   }
 
   if (rows.length === 0) {
+    if (requestedProviders.length > 0) {
+      const missingProviders = requestedProviders.filter((provider) => !providerSet.has(provider));
+      const providerNote = missingProviders.length
+        ? ` Requested provider(s) not indexed: ${missingProviders.join(", ")}.`
+        : "";
+      return textResult(
+        `No matching docs found for "${args.topic}" across requested provider(s): ${requestedProviders.join(", ")}.${providerNote} Call list_providers to inspect coverage, or use request_update to suggest missing provider docs.`,
+      );
+    }
+
     return textResult(`No documentation found for "${args.topic}". Try different terms.`);
   }
 
@@ -256,8 +370,14 @@ export function compareProviders(
   const sections = [...grouped.entries()]
     .map(([provider, chunks]) => `## ${provider}\n\n${chunks.slice(0, 3).join("\n\n")}`)
     .join("\n\n---\n\n");
+  const missingProviders = requestedProviders.filter((provider) => !grouped.has(provider));
+  const missingNote = missingProviders.length
+    ? `\n\nNo matching docs found for requested provider(s): ${missingProviders.join(", ")}.`
+    : "";
 
-  return textResult(`Comparison for "${args.topic}" across ${grouped.size} provider(s):\n\n${sections}`);
+  return textResult(
+    `Comparison for "${args.topic}" across ${grouped.size} provider(s):\n\n${sections}${missingNote}`,
+  );
 }
 
 export function requestUpdate(
@@ -347,6 +467,13 @@ export async function resolveEntity(
   try {
     const response = await fetchImpl(url);
     if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        return textResult(
+          `Reep API authentication failed (${response.status} ${response.statusText}). Entity resolution is optional and needs a Reep API credential/configured endpoint before provider ID lookup can work. Docs search tools still work without Reep access.`,
+          true,
+        );
+      }
+
       return textResult(`Reep API error: ${response.status} ${response.statusText}`, true);
     }
 
