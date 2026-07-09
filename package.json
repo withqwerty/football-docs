@@ -3,6 +3,7 @@
   "version": "0.6.2",
   "description": "Searchable football data provider documentation for AI coding agents. Like Context7 for football data.",
   "type": "module",
+  "packageManager": "pnpm@10.34.4",
   "mcpName": "io.github.withqwerty/football-docs",
   "bin": {
     "football-docs": "bin/serve.js"
@@ -49,7 +50,7 @@
     "@apidevtools/swagger-parser": "^12.1.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@mozilla/readability": "^0.6.0",
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^12.11.1",
     "linkedom": "^0.18.12",
     "turndown": "^7.2.2",
     "zod": "^4.4.3"
