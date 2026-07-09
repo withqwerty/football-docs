@@ -665,6 +665,28 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "wyscout-video-offset-clip-sync",
+      args: {
+        query:
+          "Wyscout video offsets videoTimestamp matchTimestamp event browser seek to event clip basket highlight export start end quality available qualities sync source match clock media time",
+        provider: "Hudl Wyscout",
+        max_results: 8,
+      },
+      expectedProvider: "wyscout",
+      expected: [
+        "Wyscout video-offset and clip-sync recipe",
+        "**Category:** charting-analysis-metrics",
+        "`GET /videos/{matchId}/offsets`",
+        "`videoTimestamp`",
+        "`matchTimestamp`",
+        "`clip_url_request`",
+        "`available_qualities`",
+        "keep match clock and media time as separate clocks",
+        "video availability is licence-dependent",
+        "show sync as unavailable rather than guessing",
+      ],
+    },
+    {
       id: "soccer-extended-probability-alias",
       args: {
         query: "win probability momentum timeline probabilities game state chart",
@@ -893,8 +915,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**statsbomb** (237 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
-    expect(text).toContain("**wyscout** (163 chunks)");
-    expect(text).toContain("charting-analysis-metrics (6)");
+    expect(text).toContain("**wyscout** (164 chunks)");
+    expect(text).toContain("api-endpoints (13)");
+    expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
     expect(text).toContain("**sportmonks** (85 chunks)");
     expect(text).toContain("charting-season-stories (7)");

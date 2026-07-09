@@ -67,6 +67,49 @@ For cancelled or invalidated play, follow the provider event state: offside and
 VAR-cancelled actions should not become xA-bearing assists if Wyscout excludes
 the action.
 
+## Wyscout video-offset and clip-sync recipe
+
+Use this recipe when an agent asks for a video-synced Wyscout event browser,
+seek-to-event behaviour, clip basket, custom highlight export, multi-quality
+video picker, or timeline where match events need to line up with match video.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `event_id` | `MatchEvent.id` | Keep the stable event id so clips, notes, pins, and related-event links survive re-renders. |
+| `match_clock_ms` | `matchPeriod`, `minute`, `second`, `matchTimestamp` | Store a period-local match clock for event sorting and analytics. Do not use display minute alone. |
+| `video_timestamp` | `MatchEvent.videoTimestamp` | Treat as media time for the Wyscout video asset, not as the event clock. Leave null if unavailable. |
+| `offset_map` | `GET /videos/{matchId}/offsets` | Prefer official video offsets when syncing events to a selected video asset or angle. |
+| `clip_url_request` | `GET /videos/{matchId}` with `start`, `end`, `quality` | Request clips with explicit media-time bounds and a declared quality. |
+| `available_qualities` | `GET /videos/{matchId}/qualities` | Offer only returned qualities such as `lq`, `sd`, `hd`, or `fullhd`; do not assume every match has every rendition. |
+| `clip_start_ms` / `clip_end_ms` | event/moment span plus padding | Add lead-in and lead-out padding, then clamp inside the available media range. |
+| `sync_source` | event timestamp, offsets endpoint, or external table | Label whether sync came from `videoTimestamp`, official offsets, an external/manual table, or is unavailable. |
+
+Core rule: keep match clock and media time as separate clocks. A Wyscout event can
+have a `matchTimestamp` for football ordering and a `videoTimestamp` or offset-
+derived media time for playback.
+
+Safety rule: video availability is licence-dependent. If `/videos/{matchId}`,
+`/videos/{matchId}/offsets`, or `/videos/{matchId}/qualities` is unavailable,
+the event analytics should still work, but seek-to-event and clip export should
+show sync as unavailable rather than guessing.
+
+Implementation notes:
+
+- Sort analytics timelines by period and match clock. Use media time only for
+  playback, clip ranges, and "events up to playhead" calculations.
+- For grouped moments such as shots plus rebounds, cards plus fouls, or
+  substitutions, build the event cluster on match clock first, then convert the
+  moment span to media time using the selected sync source.
+- Seek slightly before the event or clustered moment so the action is visible.
+  Clip export should use the full moment span plus explicit padding.
+- Do not join video sync by array order. Use `event_id`, `relatedEventId`, period,
+  match clock, and the official offset map where available.
+- Cache quality options and offsets by `matchId` and selected asset/angle when
+  the API distinguishes video assets. A match-level cache is unsafe if different
+  assets have different offsets.
+- When video sync is missing, keep the event row visible and disable only the
+  video-specific actions such as seek, open clip, or export clip.
+
 ## Implementation checks
 
 When building Wyscout metric adapters or story charts, include tests for:
