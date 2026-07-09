@@ -166,6 +166,42 @@ Implementation notes:
   `team_match_ball_in_play_time` or a tracking/physical feed with explicit BIP
   phases.
 
+## Video-synced moment timeline recipe
+
+Use this recipe when an agent asks for a dense match timeline, video-synced
+event list, clustered moments, playhead marker, seek-to-event behaviour, or
+automatic clip ranges from an Opta/WhoScored-style event feed.
+
+| Output field | Source | Rule |
+|---|---|---|
+| `event_id` | provider event id | Keep stable IDs so clips, pins, and related-event links survive re-renders. |
+| `period` / `start_ms` / `end_ms` | event clock, qualifiers, and neighbouring events | Convert minute/second fields to a period-local millisecond clock; derive a short span for point events. |
+| `media_seconds` | video offset map or external sync table | Store separately from match clock; leave null when the event cannot be synced to the selected angle. |
+| `kind` | event type and qualifiers | Classify headline moments such as `goal`, `shot`, `card`, `substitution`, `restart`, or `cluster`. |
+| `events[]` | events grouped into one moment | Cluster near-simultaneous events in the same period so rebounds, cards, fouls, and restarts do not overwhelm the timeline. |
+| `clip_start_ms` / `clip_end_ms` | moment span plus padding | Add a declared lead-in/lead-out, but clamp inside the period and available media range. |
+| `link_method` | sync provenance | Distinguish provider video offsets, external manual sync, inferred offset, and unavailable sync. |
+
+Implementation notes:
+
+- Keep match time and media time as different clocks. A period-local event at
+  `57:34` may map to a different `media_seconds` on each video angle.
+- Sort by period and millisecond clock, not by array order or display minute
+  alone. Stoppage-time labels can be duplicated while the underlying clock is
+  still ordered.
+- Cluster events with a small, declared window, then choose a headline event by
+  priority: goal, shot, card, substitution, restart/dead-ball, then generic
+  cluster. Keep the original events in the moment for audit and filters.
+- For "up to playhead" analysis views, include only events whose synced
+  `media_seconds` is known and less than or equal to the selected media time.
+  Events without sync should be excluded from playhead-window counts rather than
+  guessed into the window.
+- Seek behaviour should land slightly before the moment start so the action is
+  visible. Clip generation should use the full moment span plus padding.
+- If a feed has video endpoints with official offsets, such as Wyscout video
+  offsets, prefer those offsets. For Opta-only feeds, require an external sync
+  table or state that video sync is unavailable.
+
 ## Edge cases to test
 
 Add tests or fixtures for these cases when implementing game-state logic:
