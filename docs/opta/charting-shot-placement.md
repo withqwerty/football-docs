@@ -164,6 +164,53 @@ For physical distances, a common football-analytics convention is:
 Use post distance for "how close to the corners" and frame distance for miss quality.
 Do not calculate these metrics unless both qualifiers `102` and `103` are present.
 
+## Wide-miss and true-endpoint recipe
+
+Use this recipe when an agent asks for worst-shot charts, wide-miss bands,
+off-target shot placement, angular deviation, spectacle scores, miss-distance
+rankings, or any Opta/WhoScored-style chart that mixes shots on the goal frame
+with shots that went wide, high, or out of play.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `goal_frame_y` / `goal_frame_z` | qualifiers `102` and `103` | Treat these as the shot's endpoint on the Opta goal-mouth scale, not as pitch coordinates. |
+| `wide_miss_band` | `GoalMouthY` vs post bounds | Classify shots outside the post bounds as a separate wide band before near-post, inner, or central bands. |
+| `over_miss_band` | `GoalMouthZ` vs crossbar bound | Classify shots above the crossbar as over/high before normal height bands. |
+| `frame_distance_m` | `GoalMouthY`, `GoalMouthZ`, post/crossbar constants | Compute distance to the nearest point on the goal frame for misses, posts, saves, and goals only after converting the goal-mouth scale. |
+| `true_exit_point` | paired ball-out event, related event, or explicit exit coordinates when available | Prefer the provider's explicit ball-out/touchline/byline coordinate for where the ball actually left play. |
+| `endpoint_source` | goal-mouth qualifier, paired exit event, or inferred line intersection | Label whether the endpoint came from goal-mouth projection, explicit exit data, or an inferred trajectory. |
+| `quality_flags` | missing qualifiers, clipped coordinates, unavailable paired event | Report when the true endpoint is unavailable instead of silently treating goal-mouth projection as the actual exit point. |
+
+Core rule: separate goal-frame placement from true ball-exit location.
+`GoalMouthY` and `GoalMouthZ` are the right source for goal-frame miss distance,
+but a wide shot may leave the pitch through the touchline before it reaches the
+goal line. Use an explicit paired ball-out event or exit coordinate when the
+product needs the true endpoint of the ball path.
+
+Safety rule: wide misses should not be folded into central or near-post bins just
+because their distance from the nearest post is large or small. Add an outside-posts guard first;
+otherwise wide misses can contaminate conversion, save, and
+placement-quality bands.
+
+Implementation notes:
+
+- Classify horizontal placement in this order: missing endpoint, outside posts
+  (`wide_miss_band`), near post, inner, central. Classify vertical placement
+  similarly: missing endpoint, over/high, then within-frame height bands.
+- Keep `frame_distance_m` and `true_exit_distance_m` separate if both are
+  available. Frame distance answers "how close was the shot to the goal frame";
+  true-exit distance answers "where did the ball actually leave the pitch".
+- Treat typeId `13` misses, typeId `14` post hits, typeId `15` saved attempts,
+  and typeId `16` goals as different outcomes before computing spectacle or
+  worst-shot rankings.
+- If a feed clips pitch coordinates to `[0, 100]`, do not infer side-line versus
+  byline exit only from clipped pitch values. Use provider event semantics,
+  related-event links, or an explicit exit field when available.
+- Do not use xGOT qualifier `322` as a miss-quality value for off-target shots
+  without checking the feed semantics. Some expected-goals endpoints set xGOT to
+  zero for off-target shots; that is not the same as "barely wide" versus
+  "skied into the stand".
+
 ## Zone and low-xG proxies
 
 If a continuous xG source is unavailable, zone qualifiers can be used as a rough

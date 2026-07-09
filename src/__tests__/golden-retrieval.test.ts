@@ -175,6 +175,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-wide-miss-true-endpoint",
+      args: {
+        query:
+          "Opta worst shots wide miss distance GoalMouthY GoalMouthZ outside posts off target angular deviation spectacle score paired ball out event touchline byline clipped coordinates true endpoint",
+        provider: "WhoScored",
+        max_results: 8,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Wide-miss and true-endpoint recipe",
+        "**Category:** charting-shot-placement",
+        "`wide_miss_band`",
+        "`true_exit_point`",
+        "`endpoint_source`",
+        "separate goal-frame placement from true ball-exit location",
+        "outside-posts guard first",
+        "clips pitch coordinates",
+        "xGOT qualifier `322`",
+      ],
+    },
+    {
       id: "opta-corner-delivery-sequence-analysis",
       args: {
         query:
@@ -932,12 +953,12 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (71 chunks)");
+    expect(text).toContain("**opta** (72 chunks)");
     expect(text).toContain("charting-game-state (9)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (5)");
     expect(text).toContain("charting-set-pieces (6)");
-    expect(text).toContain("charting-shot-placement (9)");
+    expect(text).toContain("charting-shot-placement (10)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (41 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
