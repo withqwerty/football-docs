@@ -59,20 +59,9 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.15.2",
     "@types/turndown": "^5.0.6",
-    "tsx": "^4.19.4",
+    "tsx": "^4.23.0",
     "typescript": "^5.8.3",
-    "vitest": "^4.1.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3",
-      "esbuild"
-    ],
-    "overrides": {
-      "vite@<8.0.5": ">=8.0.5",
-      "fast-uri@<3.1.2": ">=3.1.2",
-      "qs@<6.15.2": ">=6.15.2"
-    }
+    "vitest": "^4.1.10"
   },
   "files": [
     "dist/",
