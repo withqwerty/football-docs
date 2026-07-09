@@ -164,6 +164,8 @@ describe("npm bin entrypoint", () => {
       ]);
 
       const searchTool = toolsResponse.result?.tools?.find((tool) => tool.name === "search_docs");
+      const resolveProviderTool = toolsResponse.result?.tools?.find((tool) => tool.name === "resolve_provider_id");
+      const getProviderDocsTool = toolsResponse.result?.tools?.find((tool) => tool.name === "get_provider_docs");
       const compareTool = toolsResponse.result?.tools?.find((tool) => tool.name === "compare_providers");
 
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("list_providers");
@@ -180,6 +182,9 @@ describe("npm bin entrypoint", () => {
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("Soccer Extended");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("TheSportsDB");
       expect(searchTool?.inputSchema?.properties?.provider?.description).toContain("TSDB");
+      expect(resolveProviderTool?.inputSchema?.properties?.query?.description).toContain("Provider name");
+      expect(getProviderDocsTool?.inputSchema?.properties?.provider?.description).toContain("Provider key or alias");
+      expect(getProviderDocsTool?.inputSchema?.properties?.topic?.description).toContain("Optional topic");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sofascore");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("WhoScored");
@@ -258,6 +263,100 @@ describe("npm bin entrypoint", () => {
       expect(text).toContain("Rate Limits and Retries");
       expect(text).toContain("soccerdata");
       expect(text).toContain("no_cache=True");
+    } finally {
+      child.kill();
+    }
+  });
+
+  it("answers Context7-style provider tools over the stdio tools/call transport", async () => {
+    const child = spawn("node", ["bin/serve.js"], {
+      cwd: ROOT,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+
+    let stderr = "";
+    child.stderr.on("data", (chunk: Buffer) => {
+      stderr += chunk.toString("utf-8");
+    });
+
+    try {
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "initialize",
+          params: {
+            protocolVersion: "2025-06-18",
+            capabilities: {},
+            clientInfo: { name: "football-docs-test", version: "0.0.0" },
+          },
+        })}\n`,
+      );
+      const initResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for initialize; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+      expect(initResponse.error).toBeUndefined();
+
+      child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized", params: {} })}\n`);
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 2,
+          method: "tools/call",
+          params: {
+            name: "resolve_provider_id",
+            arguments: { query: "Stats Perform" },
+          },
+        })}\n`,
+      );
+
+      const resolveResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for resolve_provider_id; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+      const resolveText = resolveResponse.result?.content?.map((entry) => entry.text).join("\n") ?? "";
+
+      expect(resolveResponse.error).toBeUndefined();
+      expect(resolveResponse.result?.isError).not.toBe(true);
+      expect(resolveResponse.id).toBe(2);
+      expect(resolveText).toContain("provider ID: **opta**");
+      expect(resolveText).toContain("**Indexed:** yes");
+
+      child.stdin.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 3,
+          method: "tools/call",
+          params: {
+            name: "get_provider_docs",
+            arguments: {
+              provider: "Transfer Room",
+              topic: "bearer token apiprod",
+              max_results: 3,
+            },
+          },
+        })}\n`,
+      );
+
+      const docsResponse = await Promise.race([
+        readJsonLine(child.stdout),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error(`timed out waiting for get_provider_docs; stderr=${stderr}`)), 5_000);
+        }),
+      ]);
+      const docsText = docsResponse.result?.content?.map((entry) => entry.text).join("\n") ?? "";
+
+      expect(docsResponse.error).toBeUndefined();
+      expect(docsResponse.result?.isError).not.toBe(true);
+      expect(docsResponse.id).toBe(3);
+      expect(docsText).toContain("Provider docs for **transferroom**");
+      expect(docsText).toContain("Bearer");
+      expect(docsText).toContain("apiprod.transferroom.com");
     } finally {
       child.kill();
     }

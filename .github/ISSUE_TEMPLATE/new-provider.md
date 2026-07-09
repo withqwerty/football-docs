@@ -30,6 +30,13 @@ labels: new-provider, help wanted
 - [ ] File download
 - [ ] Other:
 
+## Public metadata
+
+**Common aliases / brand names:**
+**Access level:** public / public-api-docs / public-web / open-source / licensed
+**Licence or upstream status notes:**
+**Public-safety notes:** what can be indexed safely, and what should stay out?
+
 ## Are you offering to write the docs?
 
 - [ ] Yes, I'll create a PR (see [CONTRIBUTING.md](../CONTRIBUTING.md) for how)
@@ -51,4 +58,3 @@ Help us find the best docs to crawl. Check all that apply:
 - [ ] npm: package name
 - [ ] GitHub release: owner/repo
 - [ ] N/A (no versioned package)
-

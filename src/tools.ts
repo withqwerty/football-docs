@@ -1,7 +1,12 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type Database from "better-sqlite3";
 
 export const TOOL_NAMES = [
   "search_docs",
+  "resolve_provider_id",
+  "get_provider_docs",
   "list_providers",
   "compare_providers",
   "request_update",
@@ -21,6 +26,17 @@ export type ToolResponse = {
 export type SearchDocsArgs = {
   query: string;
   provider?: string;
+  max_results?: number;
+};
+
+export type ResolveProviderIdArgs = {
+  query: string;
+};
+
+export type GetProviderDocsArgs = {
+  provider: string;
+  topic?: string;
+  category?: string;
   max_results?: number;
 };
 
@@ -52,6 +68,7 @@ type SearchRow = {
   source_type: string;
   source_url: string | null;
   upstream_version: string | null;
+  crawled_at: string | null;
   relevance: number;
 };
 
@@ -64,62 +81,52 @@ type CompareRow = {
 };
 
 const QUERY_STOP_WORDS = new Set(["and", "or", "not", "near"]);
-const PROVIDER_ALIASES: Record<string, string> = {
-  fbref: "free-sources",
-  "football-reference": "free-sources",
-  understat: "free-sources",
-  clubelo: "free-sources",
-  "club-elo": "free-sources",
-  "football-data": "free-sources",
-  "football-data-uk": "free-sources",
-  "football-data-co-uk": "free-sources",
-  engsoccerdata: "free-sources",
-  free: "free-sources",
-  "free-source": "free-sources",
-  fmdb: "fmdb-pro",
-  "transfer-room": "transferroom",
-  hudl: "wyscout",
-  "hudl-wyscout": "wyscout",
-  statsperform: "opta",
-  "stats-perform": "opta",
-  "opta-f24": "opta",
-  whoscored: "opta",
-  "who-scored": "opta",
-  "skill-corner": "skillcorner",
-  "data-ball-py": "databallpy",
-  "databall-py": "databallpy",
-  metrica: "databallpy",
-  "metrica-sports": "databallpy",
-  metricasports: "databallpy",
-  sportec: "databallpy",
-  dfl: "databallpy",
-  "sportec-dfl": "databallpy",
-  "open-dfl": "databallpy",
-  tracab: "databallpy",
-  "mpl-soccer": "mplsoccer",
-  secondspectrum: "kloppy",
-  "second-spectrum": "kloppy",
-  "soccer-action": "socceraction",
-  "soccer-data": "soccerdata",
-  sofascore: "soccerdata",
-  "sofa-score": "soccerdata",
-  espn: "soccerdata",
-  "sport-radar": "sportradar",
-  "sportradar-api": "sportradar",
-  "soccer-extended": "sportradar",
-  "sportradar-soccer": "sportradar",
-  tsdb: "thesportsdb",
-  "the-sports-db": "thesportsdb",
-  "the-sportsdb": "thesportsdb",
-  sportsdb: "thesportsdb",
-  "soccer-donna": "soccerdonna",
-  "sport-monks": "sportmonks",
-  "stats-bomb": "statsbomb",
-  "statsbomb-open-data": "statsbomb",
-  "statsbomb-open": "statsbomb",
+
+type ProviderRegistryEntry = {
+  description: string;
+  display_name: string;
+  aliases: string[];
+  access_level: string;
+  licence_status: string;
+  public_safety_notes: string;
+  version: string | null;
+  sources: Array<{ url?: string; type: string; note?: string }>;
+  last_crawled: string | null;
 };
+
+type ProvidersFile = {
+  providers: Record<string, ProviderRegistryEntry>;
+};
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
+const PROVIDER_REGISTRY = JSON.parse(readFileSync(PROVIDERS_PATH, "utf-8")) as ProvidersFile;
+
+function slugProvider(provider: string): string {
+  return provider
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function buildProviderAliases(): Record<string, string> {
+  const aliases: Record<string, string> = {};
+  for (const [provider, metadata] of Object.entries(PROVIDER_REGISTRY.providers)) {
+    aliases[slugProvider(provider)] = provider;
+    aliases[slugProvider(metadata.display_name)] = provider;
+    for (const alias of metadata.aliases) {
+      aliases[slugProvider(alias)] = provider;
+    }
+  }
+  return aliases;
+}
+
+const PROVIDER_ALIASES: Record<string, string> = buildProviderAliases();
 const DISPLAY_PROVIDER_ALIASES: Record<string, string[]> = Object.entries(PROVIDER_ALIASES).reduce(
   (aliasesByProvider, [alias, provider]) => {
+    if (alias === provider) return aliasesByProvider;
     const aliases = aliasesByProvider[provider] ?? [];
     aliases.push(alias);
     aliasesByProvider[provider] = aliases;
@@ -164,15 +171,6 @@ function relaxedFtsQuery(query: string): string {
   const tokens = extractFtsTokens(query);
   if (tokens.length === 0) return '""';
   return tokens.map(quoteFtsToken).join(" OR ");
-}
-
-function slugProvider(provider: string): string {
-  return provider
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
 }
 
 function normaliseProvider(provider: string): string {
@@ -248,6 +246,29 @@ function requestProviderKey(provider: string): string {
   return slugProvider(provider).replace(/-/g, "");
 }
 
+function requestIssueTemplate(type: RequestUpdateArgs["type"]): string {
+  return {
+    new_provider: "new-provider.md",
+    recrawl: "flag-outdated.md",
+    flag_outdated: "flag-outdated.md",
+    suggest_source: "suggest-source.md",
+  }[type];
+}
+
+function requestIssueUrl(args: RequestUpdateArgs): string {
+  const titlePrefix = {
+    new_provider: "New provider",
+    recrawl: "Recrawl",
+    flag_outdated: "Outdated",
+    suggest_source: "Better source",
+  }[args.type];
+  const params = new URLSearchParams({
+    template: requestIssueTemplate(args.type),
+    title: `${titlePrefix}: ${args.provider}`,
+  });
+  return `https://github.com/withqwerty/football-docs/issues/new?${params.toString()}`;
+}
+
 function normaliseLimit(value: number | undefined, defaultValue: number, maxValue: number): number {
   if (value === undefined || !Number.isFinite(value)) return defaultValue;
   return Math.min(Math.max(Math.trunc(value), 1), maxValue);
@@ -262,6 +283,7 @@ function searchRows(
   let sql = `
     SELECT d.provider, d.category, d.title, d.content,
            d.source_type, d.source_url, d.upstream_version,
+           d.crawled_at,
            rank * -1 as relevance
     FROM docs_fts
     JOIN docs d ON d.id = docs_fts.rowid
@@ -324,12 +346,179 @@ function compareRowsForProvider(
 }
 
 function sourceLabel(row: SearchRow): string {
+  const crawledAt = row.crawled_at ? ` | crawled ${row.crawled_at}` : "";
   if (row.source_type === "curated") {
-    return "**Source:** curated by football-docs contributors";
+    return `**Source:** curated by football-docs contributors${crawledAt}`;
   }
   return `**Source:** ${row.source_type}${row.source_url ? ` (${row.source_url})` : ""}${
     row.upstream_version ? ` | v${row.upstream_version}` : ""
-  }`;
+  }${crawledAt}`;
+}
+
+function providerMetadata(provider: string): ProviderRegistryEntry | undefined {
+  return PROVIDER_REGISTRY.providers[provider];
+}
+
+function providerCoverage(db: Database.Database, provider: string): {
+  indexed: boolean;
+  total: number;
+  categories: string[];
+} {
+  const rows = db
+    .prepare(
+      `SELECT category, COUNT(*) as chunks
+       FROM docs
+       WHERE provider = ?
+       GROUP BY category
+       ORDER BY category`,
+    )
+    .all(provider) as Array<{ category: string; chunks: number }>;
+  return {
+    indexed: rows.length > 0,
+    total: rows.reduce((sum, row) => sum + row.chunks, 0),
+    categories: rows.map((row) => `${row.category} (${row.chunks})`),
+  };
+}
+
+function formatProviderResolution(
+  db: Database.Database,
+  provider: string,
+  originalQuery: string,
+): string {
+  const metadata = providerMetadata(provider);
+  const coverage = providerCoverage(db, provider);
+  const aliasText = metadata?.aliases.length ? metadata.aliases.join(", ") : "none";
+  const sourceText = metadata?.sources
+    .map((source) => `${source.type}${source.url ? `: ${source.url}` : ""}`)
+    .join("; ") || "none registered";
+
+  return [
+    `Resolved "${originalQuery}" to provider ID: **${provider}**`,
+    `**Display name:** ${metadata?.display_name ?? provider}`,
+    `**Indexed:** ${coverage.indexed ? `yes (${coverage.total} chunks)` : "no"}`,
+    `**Categories:** ${coverage.categories.length ? coverage.categories.join(", ") : "none indexed"}`,
+    `**Aliases:** ${aliasText}`,
+    `**Access level:** ${metadata?.access_level ?? "unknown"}`,
+    `**Licence/status:** ${metadata?.licence_status ?? "unknown"}`,
+    `**Public-safety notes:** ${metadata?.public_safety_notes ?? "none registered"}`,
+    `**Version:** ${metadata?.version ?? "unversioned"}`,
+    `**Last crawled:** ${metadata?.last_crawled ?? "not crawled"}`,
+    `**Registered sources:** ${sourceText}`,
+  ].join("\n");
+}
+
+function providerDocsRows(
+  db: Database.Database,
+  provider: string,
+  matchQuery: string | undefined,
+  category: string | undefined,
+  limit: number,
+): SearchRow[] {
+  const params: (string | number)[] = [];
+  let sql: string;
+
+  if (matchQuery) {
+    sql = `
+      SELECT d.provider, d.category, d.title, d.content,
+             d.source_type, d.source_url, d.upstream_version,
+             d.crawled_at,
+             rank * -1 as relevance
+      FROM docs_fts
+      JOIN docs d ON d.id = docs_fts.rowid
+      WHERE docs_fts MATCH ? AND d.provider = ?
+    `;
+    params.push(matchQuery, provider);
+  } else {
+    sql = `
+      SELECT d.provider, d.category, d.title, d.content,
+             d.source_type, d.source_url, d.upstream_version,
+             d.crawled_at,
+             0 as relevance
+      FROM docs d
+      WHERE d.provider = ?
+    `;
+    params.push(provider);
+  }
+
+  if (category) {
+    sql += " AND d.category = ?";
+    params.push(category);
+  }
+
+  sql += matchQuery ? " ORDER BY rank LIMIT ?" : " ORDER BY d.category, d.id LIMIT ?";
+  params.push(limit);
+  return db.prepare(sql).all(...params) as SearchRow[];
+}
+
+export function resolveProviderId(
+  db: Database.Database,
+  args: ResolveProviderIdArgs,
+): ToolResponse {
+  const provider = normaliseProvider(args.query);
+  const registryProviders = new Set(Object.keys(PROVIDER_REGISTRY.providers));
+  const indexedProviderSet = indexedProviders(db);
+
+  if (registryProviders.has(provider)) {
+    return textResult(formatProviderResolution(db, provider, args.query));
+  }
+
+  const suggestions = providerSuggestions(provider, new Set([...registryProviders, ...indexedProviderSet]));
+  const suggestionText = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
+  return textResult(
+    `Provider "${args.query}" is not registered.${suggestionText} Use request_update to suggest adding it, or open a GitHub issue with the new-provider template.`,
+    true,
+  );
+}
+
+export function getProviderDocs(
+  db: Database.Database,
+  args: GetProviderDocsArgs,
+): ToolResponse {
+  const provider = normaliseProvider(args.provider);
+  const providerSet = indexedProviders(db);
+  if (!providerSet.has(provider)) {
+    const registryProviders = new Set(Object.keys(PROVIDER_REGISTRY.providers));
+    if (registryProviders.has(provider)) {
+      return textResult(
+        `Provider "${providerFilterLabel(args.provider, provider)}" is registered but has no indexed docs yet. Use request_update to ask maintainers to crawl or curate it.`,
+        true,
+      );
+    }
+    return textResult(unknownProviderMessage(args.provider, provider, providerSet), true);
+  }
+
+  const limit = normaliseLimit(args.max_results, 10, 50);
+  const category = args.category ? slugProvider(args.category) : undefined;
+  const strictQuery = args.topic ? sanitiseFtsQuery(args.topic) : undefined;
+  const fallbackQuery = args.topic ? relaxedFtsQuery(args.topic) : undefined;
+  let rows = providerDocsRows(db, provider, strictQuery, category, limit);
+
+  if (rows.length === 0 && fallbackQuery && fallbackQuery !== strictQuery) {
+    rows = providerDocsRows(db, provider, fallbackQuery, category, limit);
+  }
+
+  if (rows.length === 0) {
+    return textResult(
+      `No provider docs found for "${providerFilterLabel(args.provider, provider)}"${
+        category ? ` in category "${category}"` : ""
+      }${args.topic ? ` matching "${args.topic}"` : ""}. Call resolve_provider_id or list_providers to inspect available coverage.`,
+    );
+  }
+
+  const metadata = providerMetadata(provider);
+  const docs = rows
+    .map((row, index) => {
+      return `## [${index + 1}] ${row.title}\n**Provider:** ${row.provider} | **Category:** ${
+        row.category
+      } | ${sourceLabel(row)}\n\n${row.content}`;
+    })
+    .join("\n\n---\n\n");
+
+  return textResult(
+    `Provider docs for **${provider}** (${metadata?.display_name ?? provider})${
+      args.topic ? ` matching "${args.topic}"` : ""
+    }${category ? ` in category "${category}"` : ""}:\n\n${docs}`,
+  );
 }
 
 export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolResponse {
@@ -533,7 +722,7 @@ export function requestUpdate(
       args.suggested_urls?.length
         ? `\nSuggested URLs:\n${args.suggested_urls.map((url) => `  - ${url}`).join("\n")}`
         : ""
-    }\n\nThis request will be reviewed by maintainers. You can also file an issue at https://github.com/withqwerty/football-docs/issues for community visibility.`,
+    }\n\nThis local request will be reviewed by maintainers. For community visibility, also open the matching GitHub issue: ${requestIssueUrl(args)}`,
   );
 }
 

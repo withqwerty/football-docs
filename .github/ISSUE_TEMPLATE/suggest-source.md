@@ -24,6 +24,16 @@ labels: source-discovery
 
 Explain why this source would produce better results — more comprehensive, maintained by the library author, structured for search, etc.
 
+## Source status
+
+- [ ] Public docs
+- [ ] Public API spec
+- [ ] Open-source project docs
+- [ ] Licensed docs that need public-safe summarisation
+- [ ] Other:
+
+Does this source contain anything that should not be indexed publicly?
+
 ## Current source (if known)
 
 What does football-docs currently index for this provider? You can check with the `list_providers` tool.

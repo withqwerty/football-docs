@@ -8,6 +8,13 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
+## Strategy
+
+football-docs is intended to be a community-owned, source-transparent Context7
+for football data. The public operating contract is in
+[STRATEGY.md](STRATEGY.md): what belongs here, what must stay out, how we handle
+public-safe provider facts, and how contributors should prove retrieval quality.
+
 ## Provider identity facts
 
 football-docs is the public source for provider identity-surface facts: access
@@ -78,9 +85,11 @@ Add to `claude_desktop_config.json`:
 | Tool | Description |
 |------|-------------|
 | `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version). |
+| `resolve_provider_id` | Resolve provider names and aliases to canonical indexed provider keys before searching. |
+| `get_provider_docs` | Retrieve docs for a resolved provider, optionally filtered by topic or category. |
 | `list_providers` | List all indexed providers and their doc coverage. |
 | `compare_providers` | Compare how different providers handle the same concept. |
-| `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queued for maintainer review. |
+| `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
 | `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
 
 Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
@@ -126,7 +135,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 Contributions are welcome from everyone. There are three ways to help:
 
 1. **Open an issue** — [request a new provider](https://github.com/withqwerty/football-docs/issues/new/choose), [flag outdated docs](https://github.com/withqwerty/football-docs/issues/new/choose), or [suggest a better doc source](https://github.com/withqwerty/football-docs/issues/new/choose)
-2. **Use the `request_update` tool** — AI agents can flag outdated or missing docs directly via the MCP server, which queues requests for maintainer review
+2. **Use the `request_update` tool** — AI agents can flag outdated or missing docs directly via the MCP server, which queues requests locally and points to the matching public GitHub issue template
 3. **Open a PR** — fix errors, add new providers, or improve existing docs
 
 **You don't need to be an expert.** See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.

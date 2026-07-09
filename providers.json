@@ -14,6 +14,11 @@
   "providers": {
     "statsbomb": {
       "description": "Event data provider with free open-data repository",
+      "display_name": "StatsBomb",
+      "aliases": ["stats-bomb", "statsbomb-open-data", "statsbomb-open"],
+      "access_level": "public",
+      "licence_status": "Public open-data repository and public documentation; verify upstream licence before redistributing raw data.",
+      "public_safety_notes": "Index public docs and public-safe event/data-model notes only.",
       "version": null,
       "package": { "type": "github", "repo": "statsbomb/open-data" },
       "sources": [
@@ -24,6 +29,11 @@
     },
     "opta": {
       "description": "Stats Perform event data (F24/F7 XML format)",
+      "display_name": "Opta",
+      "aliases": ["statsperform", "stats-perform", "opta-f24", "whoscored", "who-scored"],
+      "access_level": "licensed",
+      "licence_status": "No complete public API contract; curated notes must avoid restricted payloads.",
+      "public_safety_notes": "Keep examples general and public-safe; do not include customer feeds or private paths.",
       "version": null,
       "package": null,
       "sources": [
@@ -33,6 +43,11 @@
     },
     "wyscout": {
       "description": "Hudl/Wyscout event and match data",
+      "display_name": "Wyscout",
+      "aliases": ["hudl", "hudl-wyscout"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation with commercial access requirements.",
+      "public_safety_notes": "Use public API and glossary facts; avoid restricted customer payloads.",
       "version": "v3 (current) / v4 (preview)",
       "package": null,
       "sources": [
@@ -44,6 +59,11 @@
     },
     "sportmonks": {
       "description": "REST API for football fixtures, standings, and events",
+      "display_name": "SportMonks",
+      "aliases": ["sport-monks"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public documentation; API access depends on SportMonks plan and key.",
+      "public_safety_notes": "Document public endpoint shapes and plan caveats only.",
       "version": null,
       "package": null,
       "sources": [
@@ -54,6 +74,11 @@
     },
     "sportradar": {
       "description": "Commercial official soccer data API for schedules, live timelines, extended match/player/team statistics, probabilities, insights, and push feeds",
+      "display_name": "Sportradar",
+      "aliases": ["sport-radar", "sportradar-api", "soccer-extended", "sportradar-soccer"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public documentation with commercial API access requirements.",
+      "public_safety_notes": "Use official public docs and avoid licensed responses or credentials.",
       "version": "Soccer v4 / Soccer Extended v4",
       "package": null,
       "sources": [
@@ -67,6 +92,11 @@
     },
     "transfermarkt": {
       "description": "Public football entity pages for players, teams, competitions, matches, transfers, and market values",
+      "display_name": "Transfermarkt",
+      "aliases": [],
+      "access_level": "public-web",
+      "licence_status": "Public website evidence; respect upstream terms and avoid scraped payload dumps.",
+      "public_safety_notes": "Use identity-surface facts and public-safe observations only.",
       "version": null,
       "package": null,
       "sources": [
@@ -76,6 +106,11 @@
     },
     "transferroom": {
       "description": "Commercial football transfer-market and recruitment API for player, coach, team, transfer, pitch, requirement, and injury data",
+      "display_name": "TransferRoom",
+      "aliases": ["transfer-room"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation with commercial access requirements.",
+      "public_safety_notes": "Index public docs and general access-tier caveats only.",
       "version": null,
       "package": null,
       "sources": [
@@ -87,6 +122,11 @@
     },
     "thesportsdb": {
       "description": "Open crowd-sourced sports database and JSON API used for football live scores, schedules, events, teams, players, artwork, and highlights",
+      "display_name": "TheSportsDB",
+      "aliases": ["tsdb", "the-sports-db", "the-sportsdb", "sportsdb"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation; some features require paid access or keys.",
+      "public_safety_notes": "Use public API docs and clearly mark live-score/metadata limits.",
       "version": "v1 / v2",
       "package": null,
       "sources": [
@@ -99,6 +139,11 @@
     },
     "soccerdonna": {
       "description": "Public women's football entity pages, match reports, competition pages, player profiles, and staff profiles",
+      "display_name": "Soccerdonna",
+      "aliases": ["soccer-donna"],
+      "access_level": "public-web",
+      "licence_status": "Public website evidence; respect upstream terms and avoid scraped payload dumps.",
+      "public_safety_notes": "Use public identity-surface facts and coverage caveats only.",
       "version": null,
       "package": null,
       "sources": [
@@ -108,6 +153,11 @@
     },
     "fotmob": {
       "description": "Consumer-facing football fixtures, teams, competitions, player profiles, lineups, and match statistics",
+      "display_name": "FotMob",
+      "aliases": [],
+      "access_level": "public-web",
+      "licence_status": "Public app/site evidence; no official public data API contract is indexed.",
+      "public_safety_notes": "Document public identity surfaces and avoid private app internals.",
       "version": null,
       "package": null,
       "sources": [
@@ -117,6 +167,11 @@
     },
     "fmdb-pro": {
       "description": "Sports Interactive commercial football database API for clubs, players, people, competitions, geography, values, appearances, and GBE-related fields",
+      "display_name": "FMDB Pro",
+      "aliases": ["fmdb"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation with commercial access requirements.",
+      "public_safety_notes": "Use public API documentation only; do not include customer keys or private responses.",
       "version": "latest",
       "package": null,
       "sources": [
@@ -128,6 +183,11 @@
     },
     "impect": {
       "description": "Commercial football data provider; Packing/pxT metrics, KPI/score framework, detailed set-pieces (Customer API v5)",
+      "display_name": "Impect",
+      "aliases": [],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation with commercial access requirements.",
+      "public_safety_notes": "Use public Customer API docs and public-safe metric descriptions only.",
       "version": "Customer API v5.0",
       "package": { "type": "pypi", "name": "impectPy", "repo": "ImpectAPI/impectPy" },
       "sources": [
@@ -138,6 +198,11 @@
     },
     "skillcorner": {
       "description": "Commercial broadcast-tracking, physical and Game Intelligence (off-ball runs, on-ball engagements) data provider",
+      "display_name": "SkillCorner",
+      "aliases": ["skill-corner"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation with commercial access requirements.",
+      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads.",
       "version": "tracking v3 / physical v3 / dynamic events v2",
       "package": { "type": "pypi", "name": "skillcorner", "repo": "SkillCorner/skillcorner-toolkit" },
       "sources": [
@@ -149,6 +214,11 @@
     },
     "kloppy": {
       "description": "Python library for standardising football data across providers",
+      "display_name": "kloppy",
+      "aliases": ["secondspectrum", "second-spectrum"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
+      "public_safety_notes": "Use public library docs and general provider-mapping guidance only.",
       "version": "3.16.0",
       "package": { "type": "pypi", "name": "kloppy" },
       "sources": [
@@ -159,6 +229,11 @@
     },
     "socceraction": {
       "description": "Python library for SPADL representation and VAEP/xT action valuation",
+      "display_name": "socceraction",
+      "aliases": ["soccer-action"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation.",
+      "public_safety_notes": "Use public library docs and open research concepts only.",
       "version": "1.5.3",
       "package": { "type": "pypi", "name": "socceraction" },
       "sources": [
@@ -169,6 +244,11 @@
     },
     "soccerdata": {
       "description": "Python library for scraping football data from popular websites",
+      "display_name": "soccerdata",
+      "aliases": ["soccer-data", "sofascore", "sofa-score", "espn"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation; upstream site terms vary.",
+      "public_safety_notes": "Describe supported public sources and avoid private scraper state.",
       "version": "1.8.8",
       "package": { "type": "pypi", "name": "soccerdata" },
       "sources": [
@@ -179,6 +259,11 @@
     },
     "mplsoccer": {
       "description": "Python library for drawing soccer pitches and visualisations with matplotlib",
+      "display_name": "mplsoccer",
+      "aliases": ["mpl-soccer"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation.",
+      "public_safety_notes": "Use public plotting docs and examples only.",
       "version": "1.6.1",
       "package": { "type": "pypi", "name": "mplsoccer" },
       "sources": [
@@ -189,6 +274,11 @@
     },
     "databallpy": {
       "description": "Python library for loading, synchronising, and analysing tracking and event data",
+      "display_name": "databallpy",
+      "aliases": ["data-ball-py", "databall-py", "metrica", "metrica-sports", "metricasports", "sportec", "dfl", "sportec-dfl", "open-dfl", "tracab"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
+      "public_safety_notes": "Use public docs and open-data provider examples only.",
       "version": "0.7.2",
       "package": { "type": "pypi", "name": "databallpy" },
       "sources": [
@@ -199,6 +289,11 @@
     },
     "floodlight": {
       "description": "Python library for spatial football data analysis (tracking, pitch control, metrics)",
+      "display_name": "floodlight",
+      "aliases": [],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation.",
+      "public_safety_notes": "Use public library docs and open examples only.",
       "version": null,
       "package": { "type": "pypi", "name": "floodlight" },
       "sources": [
@@ -209,6 +304,11 @@
     },
     "free-sources": {
       "description": "Free football data sources (FBref, Understat, ClubElo, football-data.co.uk)",
+      "display_name": "Free sources",
+      "aliases": ["fbref", "football-reference", "understat", "clubelo", "club-elo", "football-data", "football-data-uk", "football-data-co-uk", "engsoccerdata", "free", "free-source"],
+      "access_level": "public-web",
+      "licence_status": "Public sources with differing terms; verify upstream terms before redistribution.",
+      "public_safety_notes": "Document source shapes, joins, and public-safe usage caveats only.",
       "version": null,
       "package": null,
       "sources": [

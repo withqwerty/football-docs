@@ -53,6 +53,8 @@ describe("requestUpdate", () => {
     expect(result.isError).toBeUndefined();
     expect(text).toContain('New provider request queued for "WhoScored"');
     expect(text).toContain("https://example.com/whoscored-docs");
+    expect(text).toContain("template=new-provider.md");
+    expect(text).toContain("New+provider%3A+WhoScored");
     expect(row).toMatchObject({
       type: "new_provider",
       provider: "whoscored",
@@ -170,5 +172,34 @@ describe("requestUpdate", () => {
 
     expect(result.isError).toBe(true);
     expect(result.content[0].text).toContain("Request queue is full (500 entries)");
+  });
+
+  it.each([
+    { type: "recrawl" as const, template: "flag-outdated.md", title: "Recrawl%3A+Opta" },
+    {
+      type: "flag_outdated" as const,
+      template: "flag-outdated.md",
+      title: "Outdated%3A+Opta",
+    },
+    {
+      type: "suggest_source" as const,
+      template: "suggest-source.md",
+      title: "Better+source%3A+Opta",
+    },
+  ])("points $type requests at the matching public issue template", ({ type, template, title }) => {
+    const result = requestUpdate(
+      db,
+      {
+        type,
+        provider: "Opta",
+        reason: "Public workflow test.",
+      },
+      { now: new Date("2026-07-09T10:00:00Z"), requestId: `req_${type}` },
+    );
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain(`template=${template}`);
+    expect(text).toContain(`title=${title}`);
   });
 });
