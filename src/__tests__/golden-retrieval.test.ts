@@ -454,6 +454,28 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "second-spectrum-delivery-bundle-validation",
+      args: {
+        query:
+          "Second Spectrum delivery bundle metadata tracking jsonl xml physical summary splits Opta event sync aligned frame index match clock period fps player ids",
+        provider: "Second Spectrum",
+        max_results: 8,
+      },
+      expectedProvider: "kloppy",
+      expected: [
+        "Second Spectrum delivery-bundle validation recipe",
+        "**Category:** tracking-rendering",
+        "`metadata`",
+        "`tracking_frames`",
+        "`physical_summary`",
+        "`aligned_frame_idx`",
+        "period-local match clock",
+        "do not assume every contract",
+        "event-to-frame alignment",
+        "official provider physical outputs",
+      ],
+    },
+    {
       id: "sportradar-api-alias",
       args: {
         query: "x-api-key soccer v4 extended summary base URL",
@@ -879,9 +901,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (120 chunks)");
+    expect(text).toContain("**kloppy** (121 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (10)");
+    expect(text).toContain("tracking-rendering (11)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
