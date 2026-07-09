@@ -253,6 +253,19 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("request_update");
   });
 
+  it("suggests close provider matches for typoed provider filters", () => {
+    const result = searchDocs(db, {
+      query: "shot freeze frame xG",
+      provider: "StatBomb",
+      max_results: 3,
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBe(true);
+    expect(text).toContain('Provider "StatBomb (statbomb)" is not indexed');
+    expect(text).toContain("Did you mean: statsbomb?");
+  });
+
   it("reports unindexed providers when a comparison has no matches", () => {
     const result = compareProviders(db, {
       topic: "shot maps and xG",
@@ -265,6 +278,18 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("Requested provider(s) not indexed: whoscored, sofascore");
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
+  });
+
+  it("suggests close provider matches for comparison provider typos", () => {
+    const result = compareProviders(db, {
+      topic: "tracking pitch length width physical data",
+      providers: ["Skill Coner"],
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("Requested provider(s) not indexed: skill-coner");
+    expect(text).toContain("skill-coner: did you mean skillcorner?");
   });
 
   it("explains Reep authentication failures for entity resolution", async () => {

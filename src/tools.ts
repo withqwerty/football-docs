@@ -164,8 +164,55 @@ function indexedProviders(db: Database.Database): Set<string> {
   return new Set(rows.map((row) => row.provider));
 }
 
-function unknownProviderMessage(original: string, provider: string): string {
-  return `Provider "${providerFilterLabel(original, provider)}" is not indexed. Call list_providers for available provider keys, or use request_update to suggest adding it.`;
+function editDistance(a: string, b: string): number {
+  const previous = Array.from({ length: b.length + 1 }, (_, index) => index);
+  const current = Array.from({ length: b.length + 1 }, () => 0);
+
+  for (let i = 1; i <= a.length; i += 1) {
+    current[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        current[j - 1] + 1,
+        previous[j] + 1,
+        previous[j - 1] + cost,
+      );
+    }
+    previous.splice(0, previous.length, ...current);
+  }
+
+  return previous[b.length];
+}
+
+function providerSuggestions(provider: string, providerSet: Set<string>): string[] {
+  const candidates = new Map<string, string>();
+  for (const indexedProvider of providerSet) {
+    candidates.set(indexedProvider, indexedProvider);
+  }
+  for (const [alias, indexedProvider] of Object.entries(PROVIDER_ALIASES)) {
+    if (providerSet.has(indexedProvider)) {
+      candidates.set(alias, indexedProvider);
+    }
+  }
+
+  const threshold = Math.max(2, Math.ceil(provider.length * 0.3));
+  return [...candidates.entries()]
+    .map(([candidate, indexedProvider]) => ({
+      candidate,
+      indexedProvider,
+      distance: editDistance(provider, candidate),
+    }))
+    .filter((suggestion) => suggestion.distance <= threshold)
+    .sort((a, b) => a.distance - b.distance || a.candidate.localeCompare(b.candidate))
+    .map((suggestion) => suggestion.indexedProvider)
+    .filter((providerName, index, suggestions) => suggestions.indexOf(providerName) === index)
+    .slice(0, 3);
+}
+
+function unknownProviderMessage(original: string, provider: string, providerSet: Set<string>): string {
+  const suggestions = providerSuggestions(provider, providerSet);
+  const suggestionText = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
+  return `Provider "${providerFilterLabel(original, provider)}" is not indexed.${suggestionText} Call list_providers for available provider keys, or use request_update to suggest adding it.`;
 }
 
 function normaliseLimit(value: number | undefined, defaultValue: number, maxValue: number): number {
@@ -258,8 +305,11 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
   const fallbackQuery = relaxedFtsQuery(args.query);
   const provider = args.provider ? normaliseProvider(args.provider) : undefined;
 
-  if (args.provider && provider && !indexedProviders(db).has(provider)) {
-    return textResult(unknownProviderMessage(args.provider, provider), true);
+  if (args.provider && provider) {
+    const providerSet = indexedProviders(db);
+    if (!providerSet.has(provider)) {
+      return textResult(unknownProviderMessage(args.provider, provider, providerSet), true);
+    }
   }
 
   let rows = searchRows(db, strictQuery, provider, limit);
@@ -350,7 +400,12 @@ export function compareProviders(
     if (requestedProviders.length > 0) {
       const missingProviders = requestedProviders.filter((provider) => !providerSet.has(provider));
       const providerNote = missingProviders.length
-        ? ` Requested provider(s) not indexed: ${missingProviders.join(", ")}.`
+        ? ` Requested provider(s) not indexed: ${missingProviders.join(", ")}.${missingProviders
+            .map((provider) => {
+              const suggestions = providerSuggestions(provider, providerSet);
+              return suggestions.length ? ` ${provider}: did you mean ${suggestions.join(", ")}?` : "";
+            })
+            .join("")}`
         : "";
       return textResult(
         `No matching docs found for "${args.topic}" across requested provider(s): ${requestedProviders.join(", ")}.${providerNote} Call list_providers to inspect coverage, or use request_update to suggest missing provider docs.`,
