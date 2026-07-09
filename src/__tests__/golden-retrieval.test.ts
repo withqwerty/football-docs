@@ -562,6 +562,28 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "second-spectrum-canonical-match-clock-sync",
+      args: {
+        query:
+          "canonical match clock period milliseconds event tracking video sync playhead multi angle clip offset frame alignment media time frame index",
+        provider: "Second Spectrum",
+        max_results: 8,
+      },
+      expectedProvider: "kloppy",
+      expected: [
+        "Canonical match-clock sync recipe",
+        "**Category:** tracking-rendering",
+        "`canonical_clock`",
+        "`event_clock`",
+        "`tracking_clock`",
+        "`media_clock`",
+        "one canonical, period-local football clock",
+        "do not sync two video assets directly",
+        "Keep per-asset offsets",
+        "`quality_flags`",
+      ],
+    },
+    {
       id: "sportradar-api-alias",
       args: {
         query: "x-api-key soccer v4 extended summary base URL",
@@ -1011,9 +1033,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (122 chunks)");
+    expect(text).toContain("**kloppy** (123 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (12)");
+    expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(

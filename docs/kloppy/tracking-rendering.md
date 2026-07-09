@@ -353,6 +353,57 @@ Implementation notes:
   it as official provider pitch control, possession probability, or a modelled
   reachable-space probability unless the provider supplies that metric directly.
 
+## Canonical match-clock sync recipe
+
+Use this recipe when an agent asks for a shared match clock, event-to-tracking
+alignment, video playhead analytics, multi-angle clip sync, frame-to-event
+joins, or a cross-surface timeline that combines events, optical tracking, and
+media assets.
+
+The robust pattern is to keep one canonical, period-local football clock, then
+convert each source clock into it. Do not collapse provider event time, tracking
+frame time, wall-clock timestamps, and media playback seconds into a single raw
+field.
+
+| Output field | Source fields | Rule |
+|---|---|---|
+| `canonical_clock` | period plus milliseconds since period kick-off | Store as `{ period, t_ms }`. This is the ordering key for football analytics, not a display string. |
+| `event_clock` | event period, minute, second, expanded minute, timestamp, or aligned event time | Convert events into `canonical_clock`, but preserve the original event clock and conversion source. |
+| `tracking_clock` | tracking period, frame index, fps, frame timestamp, or aligned frame fields | Convert frames into `canonical_clock`; keep `frame_idx` because frame-perfect joins and debugging still need it. |
+| `media_clock` | video asset seconds, stream timestamp, provider offset map, or manual sync table | Store media time per asset or angle. Resolve media time through `canonical_clock`, not by joining videos to each other. |
+| `clip_range` | canonical start/end plus lead-in/out | Build football clip windows on `canonical_clock`, then convert to media seconds for the selected asset and clamp to asset bounds. |
+| `sync_source` | provider offsets, aligned frame fields, external table, manual sync, or inferred offset | Label the source of every conversion. Treat inferred sync as lower confidence than official offsets or explicit alignment fields. |
+| `quality_flags` | missing offset, period mismatch, drift, dropped frames, duplicate frames, unmatched events | Return explicit flags instead of silently filling gaps or borrowing another clock. |
+
+Core rule: one canonical clock coordinates the surfaces, but the source clocks
+remain separate. Use `canonical_clock` to ask "what happened by this football
+time?" and `media_clock` only to seek, play, and export clips.
+
+Safety rule: do not sync two video assets directly to each other. Sync each
+asset to the canonical match clock with its own offset because camera angles,
+tactical feeds, and broadcast cuts can have different starts, gaps, or drift.
+
+Implementation notes:
+
+- Validate monotonic clocks inside each period before joining sources. Do not
+  bridge half-time, extra-time, or shootout boundaries by continuing one running
+  timestamp unless the provider explicitly defines that clock.
+- When a user scrubs video, convert the current `media_clock` into
+  `canonical_clock`, then filter events and tracking frames at or before that
+  period-local time. If sync is unavailable, disable playhead-window analytics
+  rather than guessing.
+- For event-to-frame joins, prefer explicit aligned frame indices or aligned
+  period clocks. A nearest-frame join is acceptable only when labelled with a
+  tolerance window and a quality flag.
+- Keep per-asset offsets. A tactical angle, broadcast angle, and clip export can
+  have different lead-in, frame rate, or dropped-frame behaviour even when they
+  cover the same match.
+- Store both `frame_idx` and `t_ms` for tracking. The frame index is the stable
+  row key; the period-local clock is the cross-source join key.
+- Treat missing events, missing frames, and unsynchronised assets as normal data
+  quality outcomes. Public APIs should return unavailable/null states with
+  quality flags, not invented joins.
+
 ## Joining tracking to events
 
 To combine tracking with event data:
