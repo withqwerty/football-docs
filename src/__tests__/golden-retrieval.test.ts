@@ -528,12 +528,33 @@ describe("golden retrieval evals", () => {
       expectedProvider: "sportmonks",
       expected: [
         "Season-story data surfaces",
-        "`fixtureSeasons:{seasonId};fixtureStates:5`",
-        "`GET /fixtures?filters=fixtureSeasons:{seasonId};fixtureStates:5&include=events.player;lineups.details;scores;round;participants`",
+        "`fixtureSeasons:{seasonId};fixtureStates:5,7,8`",
+        "`GET /fixtures?filters=fixtureSeasons:{seasonId};fixtureStates:5,7,8&include=events.player;lineups.details;scores;round;participants`",
         "`118` | `RATING`",
         "`119` | `MINUTES_PLAYED`",
         "`player_id` is the player coming on",
         "`related_player_id` is the player coming off",
+      ],
+    },
+    {
+      id: "sportmonks-table-possibilities",
+      args: {
+        query:
+          "gameweek table possibilities pending fixtures simulate all win draw loss combinations reachable positions goal difference dependent tiebreaker points goal difference goals scored SportMonks standings fixture grid run-in",
+        provider: "sportmonks",
+        max_results: 8,
+      },
+      expectedProvider: "sportmonks",
+      expected: [
+        "Gameweek table-possibilities recipe",
+        "**Category:** charting-season-stories",
+        "`pending_fixture_ids`",
+        "`possible_positions`",
+        "`goal_difference_dependent`",
+        "`scenario_count = 3 ** pending_fixture_count`",
+        "De-duplicate by fixture ID",
+        "points, goal difference, goals scored",
+        "If no fixtures remain",
       ],
     },
     {
@@ -767,8 +788,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**wyscout** (163 chunks)");
     expect(text).toContain("charting-analysis-metrics (6)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (84 chunks)");
-    expect(text).toContain("charting-season-stories (6)");
+    expect(text).toContain("**sportmonks** (85 chunks)");
+    expect(text).toContain("charting-season-stories (7)");
     expect(text).toContain("**fmdb-pro** (36 chunks)");
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (43 chunks)");
@@ -1041,6 +1062,10 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("Soccer Status Codes");
     expect(text).toContain("## sportmonks");
     expect(text).toContain("State IDs");
+    expect(text).toContain("`INPLAY_2ND_HALF`");
+    expect(text).toContain("To Be Announced");
+    expect(text).toContain("Walk Over");
+    expect(text).toContain("Fetch `GET /v3/football/states`");
   });
 
   it("compares historical baselines with live-score overlays for scoreline projects", () => {
