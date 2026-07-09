@@ -451,6 +451,26 @@ describe("golden retrieval evals", () => {
       expected: ["Shot map", "Pass map", "destination_x", "xg_value", "goalface_x"],
     },
     {
+      id: "mplsoccer-profile-chart-data-prep",
+      args: {
+        query:
+          "build player radar pizza chart scouting profile percentiles per 90 metrics cohort minutes threshold benchmark distribution Wyscout StatsBomb SkillCorner FMDB Pro mplsoccer PyPizza Radar lower is better",
+        max_results: 10,
+      },
+      expectedProvider: "mplsoccer",
+      expected: [
+        "Player Profile Radar and Pizza Data Prep",
+        "**Category:** visualizations",
+        "`Radar` and `PyPizza` are chart renderers, not metric engines",
+        "`percentile`",
+        "named cohort",
+        "minimum minutes",
+        "`lower_is_better`",
+        "Choose one normalisation",
+        "source of each metric family",
+      ],
+    },
+    {
       id: "sportmonks-season-story-fixtures",
       args: {
         query:
@@ -683,6 +703,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
+    expect(text).toContain("**mplsoccer** (63 chunks)");
+    expect(text).toContain("visualizations (47)");
     expect(text).toContain("**kloppy** (115 chunks)");
     expect(text).toContain("event-derived-metrics (9)");
     expect(text).toContain("tracking-rendering (6)");

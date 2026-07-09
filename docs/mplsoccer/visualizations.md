@@ -145,6 +145,38 @@ pitch.sonar(bin_statistic, ax=ax, fc='cornflowerblue')
 pitch.sonar_grid(bin_statistic, ax=ax)
 ```
 
+## Player Profile Radar and Pizza Data Prep
+
+`Radar` and `PyPizza` are chart renderers, not metric engines. Prepare aggregate
+rows before plotting:
+
+| Field | Radar / pizza use | Notes |
+|---|---|---|
+| `metric` / `params` | axis or slice label | Order metrics by football meaning, not alphabetically. |
+| `raw_value` | badge, tooltip, or display text | Keep the original unit, such as per 90, percentage, or total. |
+| `percentile` | pizza slice length or radar value in percentile mode | Calculate against a named cohort: league, season, position group, age band, and minimum minutes. |
+| `min_range` / `max_range` | `Radar` range mode | Use defensible bounds; do not mix raw totals and per-90 values on the same range. |
+| `lower_is_better` | inverted radar axes | Mark turnover, loss, goals conceded, or fouls-style metrics explicitly. |
+| `category` | grouped colours/legend | Use stable attacking, progression, defending, physical, or goalkeeping buckets. |
+
+Provider data is usually not ready for these charts directly. Wyscout and
+StatsBomb expose many per-90 player metrics, SkillCorner exposes physical and
+Game Intelligence metrics with `p90`/`p60bip`/possession normalisations, and
+FMDB Pro exposes attributes plus percentile groups. Choose one normalisation
+contract before combining sources.
+
+For public scouting profiles, include methodology next to the chart:
+
+- cohort definition and sample size;
+- minutes threshold, especially when using per-90 rates;
+- whether percentiles are position-specific;
+- whether lower-is-better metrics were inverted;
+- source of each metric family when mixing providers.
+
+Do not treat a radar or pizza chart as proof of player quality by itself. It is
+a profile view over pre-selected metrics; the comparison logic lives in the
+cohort, metric set, and normalisation.
+
 ## Radar Charts
 
 ```python
