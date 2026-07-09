@@ -81,6 +81,8 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | 130 | teamFormation | Formation ID (on lineup events) |
 | 131 | teamPlayerFormation | Player positions 1-11 (on lineup events) |
 | 145 | formationSlot | Formation position of player coming on (1-11) |
+| 59 | jerseyNumber | Shirt number of player(s), shown for substitutions, lineups, and lineup changes |
+| 194 | captain | Player ID of the team captain |
 | 214 | length | Estimated metres ball travelled |
 | 292 | detailedPositionId | Granular position on sub-on events (1-10) |
 | 364 | VARReview | VAR review marker on delay events. In PL match-events JSON, typeId 27 + Q364 marks VAR review start/pause and typeId 28 + Q364 marks review end. |
