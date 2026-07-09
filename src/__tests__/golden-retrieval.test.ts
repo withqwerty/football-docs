@@ -2,7 +2,14 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { compareProviders, listProviders, resolveEntity, searchDocs } from "../tools.js";
+import {
+  compareProviders,
+  getProviderDocs,
+  listProviders,
+  resolveEntity,
+  resolveProviderId,
+  searchDocs,
+} from "../tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "..", "data", "docs.db");
@@ -1149,6 +1156,114 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**thesportsdb** (18 chunks)");
     expect(text).toContain("aliases: tsdb, the-sports-db, the-sportsdb, sportsdb");
     expect(text).toContain("api-endpoints");
+  });
+
+  it.each([
+    {
+      query: "Stats Perform",
+      provider: "opta",
+      expected: ["**Display name:** Opta", "**Indexed:** yes", "**Access level:** licensed"],
+    },
+    {
+      query: "Hudl Wyscout",
+      provider: "wyscout",
+      expected: ["**Display name:** Wyscout", "**Indexed:** yes", "hudl-wyscout"],
+    },
+    {
+      query: "Second Spectrum",
+      provider: "kloppy",
+      expected: ["**Display name:** kloppy", "**Indexed:** yes", "second-spectrum"],
+    },
+    {
+      query: "Transfer Room",
+      provider: "transferroom",
+      expected: ["**Display name:** TransferRoom", "**Indexed:** yes", "transfer-room"],
+    },
+    {
+      query: "FMDB",
+      provider: "fmdb-pro",
+      expected: ["**Display name:** FMDB Pro", "**Indexed:** yes", "fmdb"],
+    },
+  ])("resolves provider alias $query to $provider", ({ query, provider, expected }) => {
+    const result = resolveProviderId(db, { query });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain(`provider ID: **${provider}**`);
+    for (const term of expected) {
+      expect(text).toContain(term);
+    }
+  });
+
+  it("reports registered providers that are not indexed yet", () => {
+    const result = resolveProviderId(db, { query: "floodlight" });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("provider ID: **floodlight**");
+    expect(text).toContain("**Indexed:** no");
+  });
+
+  it.each([
+    {
+      provider: "Opta F24",
+      topic: "qualifier 76 big chance",
+      expectedProvider: "opta",
+      expected: ["Big chance", "**Source:** curated"],
+    },
+    {
+      provider: "StatsBomb Open Data",
+      topic: "shot freeze frame xG",
+      expectedProvider: "statsbomb",
+      expected: ["freeze frame", "**Source:**"],
+    },
+    {
+      provider: "Hudl Wyscout",
+      topic: "api match events",
+      expectedProvider: "wyscout",
+      expected: ["**Category:** api-endpoints", "**Source:**"],
+    },
+    {
+      provider: "FMDB",
+      topic: "players endpoint x-api-key",
+      expectedProvider: "fmdb-pro",
+      expected: ["/api/players", "x-api-key"],
+    },
+    {
+      provider: "Transfer Room",
+      topic: "bearer token apiprod",
+      expectedProvider: "transferroom",
+      expected: ["Bearer", "apiprod.transferroom.com"],
+    },
+    {
+      provider: "Second Spectrum",
+      topic: "tracking rendering official physical outputs",
+      expectedProvider: "kloppy",
+      expected: ["tracking-rendering", "Second Spectrum"],
+    },
+  ])("gets provider docs for $provider", ({ provider, topic, expectedProvider, expected }) => {
+    const result = getProviderDocs(db, { provider, topic, max_results: 5 });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain(`Provider docs for **${expectedProvider}**`);
+    for (const term of expected) {
+      expect(text).toContain(term);
+    }
+  });
+
+  it("normalises get_provider_docs category labels", () => {
+    const result = getProviderDocs(db, {
+      provider: "Hudl Wyscout",
+      category: "api endpoints",
+      max_results: 2,
+    });
+    const text = result.content[0].text;
+
+    expect(result.isError).toBeUndefined();
+    expect(text).toContain("Provider docs for **wyscout**");
+    expect(text).toContain('in category "api-endpoints"');
+    expect(text).toContain("**Category:** api-endpoints");
   });
 
   it("compares coordinate systems across multiple providers", () => {

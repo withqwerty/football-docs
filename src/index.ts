@@ -20,9 +20,11 @@ import Database from "better-sqlite3";
 import { z } from "zod";
 import {
   compareProviders,
+  getProviderDocs,
   listProviders,
   requestUpdate,
   resolveEntity,
+  resolveProviderId,
   searchDocs,
 } from "./tools.js";
 
@@ -123,6 +125,40 @@ export function createFootballDocsServer(): McpServer {
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     async (args) => withDocsDb((db) => searchDocs(db, args)),
+  );
+
+  server.tool(
+    "resolve_provider_id",
+    "Resolve a football data provider name or alias to the canonical football-docs provider key before searching. Use when users mention brands, vendors, products, or aliases such as Stats Perform, Opta F24, Hudl Wyscout, Second Spectrum, FMDB, Transfer Room, FBref, Sofascore, or TheSportsDB.",
+    {
+      query: z
+        .string()
+        .describe("Provider name, brand, product, or alias to resolve to a canonical provider key."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    async (args) => withDocsDb((db) => resolveProviderId(db, args)),
+  );
+
+  server.tool(
+    "get_provider_docs",
+    "Retrieve documentation for a resolved provider, optionally filtered by topic or indexed category. Use after resolve_provider_id when you know which provider to inspect and want provenance-bearing docs.",
+    {
+      provider: z
+        .string()
+        .describe("Provider key or alias. Use resolve_provider_id first when the provider name is ambiguous."),
+      topic: z.string().optional().describe("Optional topic to search within this provider's docs."),
+      category: z
+        .string()
+        .optional()
+        .describe("Optional indexed category to restrict results, such as api-endpoints, qualifiers, identity-surfaces, or tracking-rendering."),
+      max_results: z
+        .number()
+        .optional()
+        .default(10)
+        .describe("Maximum number of provider docs to return (default 10)."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    async (args) => withDocsDb((db) => getProviderDocs(db, args)),
   );
 
   server.tool(
