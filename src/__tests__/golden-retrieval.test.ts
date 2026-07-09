@@ -661,6 +661,29 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-tracking-pitch-control-overlay",
+      args: {
+        query:
+          "tracking pitch control nearest player dominance grid home away control field not probabilistic missing players one team neutral overlay live frame football analytics",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "Tracking-derived pitch-control overlay recipe",
+        "**Category:** tracking-rendering",
+        "player dominance grid",
+        "not a probabilistic pitch-control model",
+        "`grid_cols` / `grid_rows`",
+        "`control`",
+        "common metric pitch coordinate",
+        "`pitch_length`",
+        "`pitch_width`",
+        "both teams",
+        "neutral or unavailable field",
+        "distance-to-space view",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -772,9 +795,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (63 chunks)");
     expect(text).toContain("visualizations (47)");
-    expect(text).toContain("**kloppy** (118 chunks)");
+    expect(text).toContain("**kloppy** (119 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (8)");
+    expect(text).toContain("tracking-rendering (9)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
