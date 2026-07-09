@@ -92,6 +92,33 @@ describe("requestUpdate", () => {
     expect(count.count).toBe(1);
   });
 
+  it("treats spacing and case variants as the same pending provider", () => {
+    db.prepare(
+      `INSERT INTO requests (id, type, provider, reason, requested_at, status)
+       VALUES (?, ?, ?, ?, ?, 'pending')`,
+    ).run(
+      "req_existing_variant",
+      "new_provider",
+      "sofascore",
+      "Need SofaScore docs.",
+      "2026-07-04T10:00:00.000Z",
+    );
+
+    const result = requestUpdate(
+      db,
+      {
+        type: "new_provider",
+        provider: "Sofa Score",
+        reason: "Need public app/API surface docs.",
+      },
+      { now: new Date("2026-07-09T10:00:00Z"), requestId: "req_duplicate_variant" },
+    );
+
+    expect(result.isError).toBe(true);
+    expect(result.content[0].text).toContain("req_existing_variant");
+    expect((db.prepare("SELECT COUNT(*) as count FROM requests").get() as { count: number }).count).toBe(1);
+  });
+
   it("allows a fresh request after the cooldown window", () => {
     db.prepare(
       `INSERT INTO requests (id, type, provider, reason, requested_at, status)
