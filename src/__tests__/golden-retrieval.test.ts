@@ -641,6 +641,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-tracking-off-ball-runs",
+      args: {
+        query:
+          "tracking off-ball run detection speed threshold ball proximity trailing receive towards goal attacking direction goalkeeper anchor fps live frames football analytics",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "Tracking-derived off-ball runs recipe",
+        "**Category:** tracking-rendering",
+        "`duration_s`",
+        "`peak_speed_mps`",
+        "`towards_goal`",
+        "live/dead flag",
+        "short trailing",
+        "`home_team_side` plus period",
+        "provider official physical metrics",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -752,9 +772,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (63 chunks)");
     expect(text).toContain("visualizations (47)");
-    expect(text).toContain("**kloppy** (117 chunks)");
+    expect(text).toContain("**kloppy** (118 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (7)");
+    expect(text).toContain("tracking-rendering (8)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
