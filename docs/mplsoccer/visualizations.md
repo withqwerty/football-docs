@@ -139,6 +139,40 @@ pitch.goal_angle(x, y, ax=ax, goal='right', alpha=0.3, color='red')
 
 ## Pass Sonars
 
+Pass sonars and pass-flow charts need event-level pass vectors, not just pass
+counts. Prepare the pass stream before calling mplsoccer:
+
+| Field | Sonar / flow use | Notes |
+|---|---|---|
+| `x`, `y` | pass-origin binning | Normalise every provider to one pitch frame before mixing teams or sources. |
+| `end_x`, `end_y` | direction vector | Do not infer a direction when destination coordinates are missing. |
+| `angle` | sonar wedge assignment | Prefer recomputing from start/end coordinates after standardisation unless the provider angle convention is known. |
+| `outcome` | completed-only filters and completion rings | State whether the chart uses attempted passes, completed passes, or both. |
+| `player_id` / `team_id` | subject filter | A player sonar should use one filtered player; a team flow map should use one team or one phase of play. |
+| `minute` / `period` | game-state or phase filters | Use expanded minutes if stoppage-time filters matter. |
+
+Provider caveats:
+
+- StatsBomb exposes `pass_end_location`, `pass_angle`, `pass_length`,
+  `pass_recipient`, and `outcome` in event data. Its angles are radians, but a
+  charting adapter should still standardise coordinates first.
+- Opta F24 pass events need qualifiers `140` and `141` for end coordinates.
+  `passmatrix` is useful for player-to-player connection counts, but it is not
+  enough for directional sonars or flow fields because it lacks event-level
+  vectors.
+- Wyscout pass `angle` is degrees with `0°` as forward, positive values to the
+  right, negative values to the left, and `180°` as straight back. Recompute or
+  convert angles carefully when plotting in a different visual frame.
+- Kloppy can normalise many providers into `event.coordinates` and
+  `event.raw_event`; use that normalised layer rather than mixing raw coordinate
+  conventions in a plotting function.
+
+For flow maps, aggregate origins into spatial bins and compute the mean
+direction with circular statistics (`sin`/`cos` components), not a plain
+arithmetic mean of degrees. This avoids broken averages at the `-180°` / `180°`
+boundary. Sparse bins should show no arrow or a low-confidence marker rather
+than a misleading direction from one pass.
+
 ```python
 bin_statistic = pitch.bin_statistic_sonar(x, y, angle, bins=(6, 4, 8))
 pitch.sonar(bin_statistic, ax=ax, fc='cornflowerblue')
