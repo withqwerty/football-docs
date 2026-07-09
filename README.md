@@ -83,7 +83,7 @@ Add to `claude_desktop_config.json`:
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queued for maintainer review. |
 | `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
 
-Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref` and `understat` search `free-sources`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `StatsBomb Open Data` searches `statsbomb`.
+Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref` and `understat` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `StatsBomb Open Data` searches `statsbomb`.
 
 ## Example queries
 
