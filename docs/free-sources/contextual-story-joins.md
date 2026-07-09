@@ -80,50 +80,6 @@ fields such as:
 If the base provider also supplies expected goals, do not average the values unless
 the chart explicitly describes a blended model. Expose both model names instead.
 
-## Prediction-market context
-
-Prediction markets can add public expectation and attention signals to football
-stories, especially around title races, top-four races, relegation, transfers,
-manager markets, and major tournaments. Treat these as market context, not as
-official football facts.
-
-For Polymarket-style public market APIs, keep this data contract:
-
-| Field | Meaning | Notes |
-|---|---|---|
-| `market_id` / `market_slug` | stable market identity | Keep separate from the fixture or competition id. |
-| `market_type` | title, top-four, relegation, match winner, transfer, manager, other | Use a local taxonomy; market question text changes over time. |
-| `outcome` | team, player, yes/no, or other outcome label | Preserve the displayed label and any mapped canonical entity id. |
-| `price` | current outcome price / implied probability in `[0, 1]` | Label as market-implied probability, not model probability. |
-| `volume` / `volume_24h` | total or rolling traded volume | Store currency and fetch date; volume is attention/liquidity, not confidence. |
-| `snapshot_date` | date/time of the observation | Needed for odds history and movement charts. |
-| `source_tag` | league, sport, or topic tag used to fetch markets | For example, Premier League, La Liga, Bundesliga, Soccer, or Sports. |
-
-Useful chart outputs:
-
-| Output | Rule |
-|---|---|
-| odds card | latest price, previous price, percentage-point change, market type, volume |
-| swing detector | flag absolute moves such as `abs(delta) >= 0.05`, plus ratio moves such as halving/doubling |
-| volume comparison | sum event or market volume by source tag, but keep tag ids and fetch date |
-| story join | join to fixtures, clubs, or competitions by maintained aliases; never by fuzzy names only |
-
-Implementation notes:
-
-- Prediction-market APIs and bookmaker-odds CSVs are different sources. Do not
-  mix exchange prices, bookmaker odds, and model probabilities in one field.
-- Market prices can be illiquid or stale. Surface volume, last updated time, and
-  minimum-history requirements before showing a "biggest mover" card.
-- Many football markets are season or proposition markets rather than match
-  fixtures. Store the market question and market type so agents do not force a
-  fixture schema onto title, top-four, relegation, or transfer markets.
-- When using public tags or topic ids to fetch markets, keep those ids in config
-  and cache responses. Tag taxonomies can change independently of football
-  provider ids.
-- For regulated or user-facing products, add jurisdiction and availability
-  checks outside the data pipeline. The football-docs guidance is only about
-  data joins and chart semantics.
-
 ## Additive factor stories
 
 For home-advantage, away-day, and match-context stories, build factors from

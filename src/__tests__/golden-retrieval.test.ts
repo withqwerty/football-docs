@@ -690,8 +690,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**transferroom** (43 chunks)");
     expect(text).toContain("charting-availability (5)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (63 chunks)");
-    expect(text).toContain("contextual-story-joins (9)");
+    expect(text).toContain("**free-sources** (62 chunks)");
+    expect(text).toContain("contextual-story-joins (8)");
     expect(text).toContain("xg-timelines (8)");
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
