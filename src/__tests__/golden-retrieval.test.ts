@@ -55,6 +55,28 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "transfermarkt-squad-effective-age-story",
+      args: {
+        query:
+          "squad effective age story minutes weighted squad profile player date of birth career minutes Transfermarkt market value squad planning age curve promoted clubs goalkeepers",
+        provider: "transfermarkt",
+        max_results: 8,
+      },
+      expected: [
+        "Squad effective-age story recipe",
+        "**Category:** identity-surfaces",
+        "`calendar_age`",
+        "`career_minutes`",
+        "`minutes_weight`",
+        "`weighted_effective_age`",
+        "minutes-weighted",
+        "fit an age-to-minutes curve",
+        "goalkeeper",
+        "promoted",
+        "Do not treat market value as playing load",
+      ],
+    },
+    {
       id: "statsbomb-shot-freeze-frame",
       args: { query: "StatsBomb shot freeze frame xG", provider: "statsbomb", max_results: 5 },
       expected: ["Shot", "xG", "freeze frame"],
