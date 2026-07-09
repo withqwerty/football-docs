@@ -7,13 +7,14 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | ID | Name | Notes |
 |----|------|-------|
 | 1 | longBall | Long pass |
-| 2 | cross | Cross |
-| 3 | headPass | Headed pass |
-| 4 | throughBall | Through ball |
-| 5 | freeKickTaken | Free kick pass |
-| 6 | cornerTaken | Corner kick |
-| 7 | goalKick | Goal kick |
+| 2 | cross | Cross (Q2). Corners commonly carry Q2 + Q6; free-kick crosses commonly carry Q2 + Q5; open-play crosses are Q2 without Q5/Q6. |
+| 3 | headPass | Headed pass (Q3). Distinct from a headed shot qualifier. |
+| 4 | throughBall | Through ball (Q4). Do not confuse with Q5 free-kick delivery. |
+| 5 | freeKickTaken | Free kick pass / free-kick delivery (Q5). |
+| 6 | cornerTaken | Corner kick / corner delivery (Q6). |
+| 7 | goalKick | Goal kick in the F24 spec. Some JSON/event-stream exports use qualifier 124 for goal-kick passes instead. |
 | 107 | throwIn | Throw-in |
+| 124 | goalKick | Goal kick pass in some match-events JSON exports. For goal-kick distribution charts, combine with pass end coordinates Q140/Q141. |
 | 24 | assistedShot | Pass led to a shot |
 | 210 | intentionalAssist | Pass led to a goal |
 | 196 | switchOfPlay | Pass crossing centre zone, y-distance > 60 |
@@ -35,6 +36,7 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | 72 | leftFoot | Left-footed action |
 | 22 | otherBodyPart | Knee, chest, etc. |
 | 76 | bigChance | Big chance (high xG situation) |
+| 9 | penalty | Penalty shot flag in some match-events JSON exports and foul-award workflows |
 | 108 | penalty | Penalty kick |
 | 136 | directFK | Direct free kick goal |
 | 154 | volley | Volley |
@@ -47,6 +49,7 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | ID | Name | Notes |
 |----|------|-------|
 | 28 | ownGoal | Own goal. contestantId is the team that scored it; credit opposing team |
+| 280 | ownGoal | Own-goal marker in some JSON exports, often with value `OWN_GOAL`. Own-goal coordinates may be near the defending end, so exclude or reattribute before shot-distance analysis. |
 | 8 | goalDisallowed | Goal ruled out (offside/foul) |
 | 102 | goalMouthY | Y coord in goal mouth (45.2-54.8 range) |
 | 103 | goalMouthZ | Z coord / height in goal mouth (0-38 range) |
@@ -80,6 +83,7 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 | 145 | formationSlot | Formation position of player coming on (1-11) |
 | 214 | length | Estimated metres ball travelled |
 | 292 | detailedPositionId | Granular position on sub-on events (1-10) |
+| 364 | VARReview | VAR review marker on delay events. In PL match-events JSON, typeId 27 + Q364 marks VAR review start/pause and typeId 28 + Q364 marks review end. |
 
 ## Card Qualifiers
 
