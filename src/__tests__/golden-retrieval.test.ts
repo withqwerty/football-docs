@@ -569,6 +569,24 @@ describe("golden retrieval evals", () => {
         "never overwrite official scores",
       ],
     },
+    {
+      id: "free-source-xg-timeline-recipes",
+      args: {
+        query:
+          "cumulative xG timeline shot flow score strip halftime guide full time guide goal markers sparse shots Understat Opta StatsBomb shot xG source model provider labels",
+        max_results: 10,
+      },
+      expectedProvider: "free-sources",
+      expected: [
+        "xG Timeline Recipes",
+        "**Category:** xg-timelines",
+        "`score_events[]`",
+        "`time_guides[]`",
+        "Do not mix xG models silently",
+        "Render the lines as steps",
+        "do not increment score",
+      ],
+    },
   ])("answers $id from sourced docs", ({ args, expected, expectedProvider }) => {
     const result = searchDocs(db, args);
     const text = result.content[0].text;
@@ -598,8 +616,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (38 chunks)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (54 chunks)");
+    expect(text).toContain("**free-sources** (62 chunks)");
     expect(text).toContain("contextual-story-joins (8)");
+    expect(text).toContain("xg-timelines (8)");
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
