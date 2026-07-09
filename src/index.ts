@@ -113,7 +113,7 @@ export function createFootballDocsServer(): McpServer {
         .string()
         .optional()
         .describe(
-          "Optional provider filter. Use list_providers for indexed provider keys. Common aliases such as fbref, understat, Sofascore, ESPN, FMDB, TransferRoom, Hudl Wyscout, Stats Perform, Opta F24, WhoScored, Metrica, Sportec/DFL, TRACAB, Second Spectrum, SportRadar API, and Soccer Extended are accepted.",
+          "Optional provider filter. Use list_providers for indexed provider keys. Common aliases such as fbref, understat, Sofascore, ESPN, FMDB, TransferRoom, Hudl Wyscout, Stats Perform, Opta F24, WhoScored, Metrica, Sportec/DFL, TRACAB, Second Spectrum, SportRadar API, Soccer Extended, TheSportsDB, and TSDB are accepted.",
         ),
       max_results: z
         .number()
@@ -144,7 +144,7 @@ export function createFootballDocsServer(): McpServer {
         .array(z.string())
         .optional()
         .describe(
-          "Providers to compare. If omitted, compares all indexed providers. Use list_providers for indexed keys; common aliases such as Sofascore, ESPN, StatsBomb Open Data, Opta F24, WhoScored, SkillCorner, Metrica, Sportec/DFL, TRACAB, Second Spectrum, SportRadar API, and Soccer Extended are accepted.",
+          "Providers to compare. If omitted, compares all indexed providers. Use list_providers for indexed keys; common aliases such as Sofascore, ESPN, StatsBomb Open Data, Opta F24, WhoScored, SkillCorner, Metrica, Sportec/DFL, TRACAB, Second Spectrum, SportRadar API, Soccer Extended, TheSportsDB, and TSDB are accepted.",
         ),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
