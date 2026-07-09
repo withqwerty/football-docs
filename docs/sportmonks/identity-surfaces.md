@@ -57,9 +57,9 @@ endpoint and include path that supplied them.
 - Stages and rounds are provider shape. Keep the canonical ontology decision
   separate from the SportMonks response nesting.
 
-## Reep Next Usage
+## Provider-Fact Usage
 
 Use this page as the public provider-fact reference for SportMonks ID families,
-API identity surfaces, include paths, and matching cautions. Reep Next can cite
-those facts, but contaminated-bridge review, private validation output, API
-keys, paid-tier payloads, and register decisions belong outside football-docs.
+API identity surfaces, include paths, and matching cautions. Private validation
+output, API keys, paid-tier payloads, and register decisions belong outside
+football-docs.

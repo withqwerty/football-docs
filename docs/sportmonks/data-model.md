@@ -323,4 +323,6 @@ League ──── Season ──── Round ──── Fixture
 }
 ```
 
-This is particularly useful for season story absence detection (see the myTeam season-story pipeline which uses this as its primary data source).
+This is particularly useful for season-story and availability timelines when a
+project needs to distinguish injured, suspended, unavailable, and not-in-squad
+states.
