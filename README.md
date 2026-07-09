@@ -104,7 +104,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | kloppy | 117 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | SportMonks | 84 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
-| mplsoccer | 61 | overview, pitch-types, visualizations |
+| mplsoccer | 62 | overview, pitch-types, visualizations |
 | Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
 | SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,182 searchable chunks** across 19 providers and tools.
+**1,183 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 

@@ -301,6 +301,51 @@ Implementation notes:
   the same filtered cohort. A density peak, mean marker, or median marker is not
   a percentile by itself.
 
+## Comet and Metric-Trail Charts
+
+Use this recipe when an agent asks for a comet chart, scatter trail, team
+movement through two metrics, season-by-season xG profile, player development
+trajectory, or latest-point labelled two-axis chart.
+
+A comet chart is a time-ordered trail through a two-metric space. It consumes
+already-aggregated rows; it should not calculate xG, PPDA, league-table ranks,
+or player metrics inside the chart renderer.
+
+| Field | Meaning | Display rule |
+|---|---|---|
+| `entity_id` / `entity_label` | team, player, or cohort being tracked | Group rows by stable ID; use labels only for display. |
+| `timepoint` | season, matchweek, phase, or snapshot date | Sort with a canonical order, not input array position. |
+| `x_metric_id` / `x_value` | metric on the x-axis, such as npxG/90, PPDA, or points above expected | Keep metric ID, label, and unit together. |
+| `y_metric_id` / `y_value` | metric on the y-axis, such as npxGA/90 or defensive action height | Use one unit per axis; do not mix raw totals and per-90 values. |
+| `latest` | whether the row is the latest point for that entity | Label latest points, not every point, unless the chart is sparse. |
+| `source` / `methodology` | provider and transformation notes | Surface source changes when a trail mixes providers or model versions. |
+
+Provider surfaces:
+
+- Understat and FBref/soccerdata are good public sources for team-season xG,
+  npxG, xGA, npxGA, xPTS, and PPDA-style aggregates.
+- StatsBomb team season stats provide richer commercial aggregates where
+  licensed; use provider metric names and per-90/per-game units explicitly.
+- Wyscout advancedstats can supply team or player aggregates by competition and
+  season where licensed.
+- For player trails, enforce a minutes floor per timepoint before comparing
+  per-90 values, and preserve unavailable points instead of drawing through
+  missing seasons.
+
+Implementation notes:
+
+- Declare axis direction. If lower is better, such as npxGA or PPDA, either
+  invert the axis and label it clearly or keep the raw direction and explain the
+  interpretation.
+- Trails should break when an entity lacks a timepoint or changes metric source.
+  Do not interpolate through unavailable seasons.
+- If multiple entities share the same latest location, use a label strategy
+  such as highlighted entities only, latest top/bottom movers, or hover labels.
+- Tooltips should include entity, timepoint, both raw metric values, units,
+  provider/source, and any sample-size caveat.
+- When comparing teams across leagues, state whether metrics are league-relative,
+  raw provider values, or normalised against a shared benchmark.
+
 ## Radar Charts
 
 ```python
