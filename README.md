@@ -12,11 +12,11 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 football-docs is the public source for provider identity-surface facts: access
 shape, ID schemes, matching fields, provider quirks, and provenance rules.
-Curated Reep-derived notes belong here when they can be stated without private
-register state. They should say whether a fact comes from public docs, public
-page evidence, licensed feed shape, or a reviewed public-safe observation, and
-must not include private paths, credentials, scraper state, action ledgers, mint
-salts, or raw restricted payloads.
+Curated provider identity notes belong here when they can be stated without
+private register state. They should say whether a fact comes from public docs,
+public page evidence, licensed feed shape, or a reviewed public-safe
+observation, and must not include private paths, credentials, scraper state,
+action ledgers, mint salts, or raw restricted payloads.
 
 MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard for connecting AI coding tools to external data sources.
 
@@ -102,7 +102,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | StatsBomb | 237 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
 | Wyscout | 157 | event-types, data-model, coordinate-system, api-access, api-endpoints, glossary, identity-surfaces |
 | kloppy | 106 | data-model, usage, provider-mapping, tracking-rendering |
-| SportMonks | 78 | event-types, data-model, api-access, identity-surfaces |
+| SportMonks | 84 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 62 | overview, pitch-types, visualizations |
 | Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 7 | identity-surfaces |
 
-**1,126 searchable chunks** across 19 providers and tools.
+**1,132 searchable chunks** across 19 providers and tools.
 
 ## Contributing
 

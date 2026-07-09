@@ -407,6 +407,25 @@ describe("golden retrieval evals", () => {
       expected: ["Shot map", "Pass map", "destination_x", "xg_value", "goalface_x"],
     },
     {
+      id: "sportmonks-season-story-fixtures",
+      args: {
+        query:
+          "SportMonks season story fixtures completed fixtureStates 5 include events.player lineups.details scores round participants standings rounds participant details lineup type_id 11 12 rating 118 minutes 119 substitution player_id related_player_id",
+        provider: "sportmonks",
+        max_results: 5,
+      },
+      expectedProvider: "sportmonks",
+      expected: [
+        "Season-story data surfaces",
+        "`fixtureSeasons:{seasonId};fixtureStates:5`",
+        "`GET /fixtures?filters=fixtureSeasons:{seasonId};fixtureStates:5&include=events.player;lineups.details;scores;round;participants`",
+        "`118` | `RATING`",
+        "`119` | `MINUTES_PLAYED`",
+        "`player_id` is the player coming on",
+        "`related_player_id` is the player coming off",
+      ],
+    },
+    {
       id: "soccer-extended-probability-alias",
       args: {
         query: "win probability momentum timeline probabilities game state chart",
@@ -517,6 +536,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**statsbomb** (237 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
+    expect(text).toContain("**sportmonks** (84 chunks)");
+    expect(text).toContain("charting-season-stories (6)");
     expect(text).toContain("**fmdb-pro** (36 chunks)");
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (38 chunks)");
