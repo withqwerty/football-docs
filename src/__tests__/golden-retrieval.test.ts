@@ -154,6 +154,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "opta-passmap-game-state-aggregates",
+      args: {
+        query:
+          "Opta season pass map gameStateAggregates gameStateMinutes winning losing level0 drawing state minutes denominator pass network edges nodes xT filter before aggregation empty state",
+        provider: "WhoScored",
+        max_results: 8,
+      },
+      expectedProvider: "opta",
+      expected: [
+        "Season game-state pass-map aggregate recipe",
+        "**Category:** charting-passmaps",
+        "`game_state_aggregates`",
+        "`game_state_minutes`",
+        "`state_key_policy`",
+        "`empty_state_reason`",
+        "filter the pass rows before aggregation",
+        "state minutes are denominators, not pass counts",
+        "Label season/game-state edges as inferred",
+      ],
+    },
+    {
       id: "opta-shot-placement-goal-mouth",
       args: {
         query:
@@ -953,10 +974,10 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (72 chunks)");
+    expect(text).toContain("**opta** (73 chunks)");
     expect(text).toContain("charting-game-state (9)");
     expect(text).toContain("charting-lineups (6)");
-    expect(text).toContain("charting-passmaps (5)");
+    expect(text).toContain("charting-passmaps (6)");
     expect(text).toContain("charting-set-pieces (6)");
     expect(text).toContain("charting-shot-placement (10)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
