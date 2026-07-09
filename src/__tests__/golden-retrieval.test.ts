@@ -725,6 +725,27 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "kloppy-tracking-physical-output",
+      args: {
+        query:
+          "derive physical output from raw tracking speed bands sprint count live ball glitch speed missing provider speed distance fallback high speed running top speed",
+        provider: "kloppy",
+        max_results: 8,
+      },
+      expected: [
+        "Tracking-derived physical output recipe",
+        "**Category:** tracking-rendering",
+        "`total_distance_m`",
+        "`sprint_count`",
+        "`top_speed_mps`",
+        "provider speed",
+        "derive speed from adjacent coordinates",
+        "glitch guard",
+        "contiguous live-frame runs",
+        "not the same contract as official provider physical metrics",
+      ],
+    },
+    {
       id: "ppda-pressing",
       args: {
         query: "PPDA pressing passes allowed defensive actions opponent build-up zone",
@@ -836,9 +857,9 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (64 chunks)");
     expect(text).toContain("visualizations (48)");
-    expect(text).toContain("**kloppy** (119 chunks)");
+    expect(text).toContain("**kloppy** (120 chunks)");
     expect(text).toContain("event-derived-metrics (10)");
-    expect(text).toContain("tracking-rendering (9)");
+    expect(text).toContain("tracking-rendering (10)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
     expect(text).toContain("**sportradar** (29 chunks)");
     expect(text).toContain(
@@ -1005,7 +1026,8 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("across 3 provider(s)");
     expect(text).toContain("## kloppy");
     expect(text).toContain("Rendering centre-origin tracking data");
-    expect(text).toContain("Ball live/dead handling");
+    expect(text).toContain("Tracking-derived physical output recipe");
+    expect(text).toContain("live/dead flag");
     expect(text).toContain("## databallpy");
     expect(text).toContain("Origin at center of pitch");
     expect(text).toContain("## skillcorner");
