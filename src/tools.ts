@@ -215,6 +215,10 @@ function unknownProviderMessage(original: string, provider: string, providerSet:
   return `Provider "${providerFilterLabel(original, provider)}" is not indexed.${suggestionText} Call list_providers for available provider keys, or use request_update to suggest adding it.`;
 }
 
+function requestProviderKey(provider: string): string {
+  return slugProvider(provider).replace(/-/g, "");
+}
+
 function normaliseLimit(value: number | undefined, defaultValue: number, maxValue: number): number {
   if (value === undefined || !Number.isFinite(value)) return defaultValue;
   return Math.min(Math.max(Math.trunc(value), 1), maxValue);
@@ -441,6 +445,7 @@ export function requestUpdate(
   options: { now?: Date; requestId?: string } = {},
 ): ToolResponse {
   const requestedAt = (options.now ?? new Date()).toISOString();
+  const providerKey = requestProviderKey(args.provider);
   const countRow = db.prepare("SELECT COUNT(*) as cnt FROM requests").get() as { cnt: number };
   if (countRow.cnt >= 500) {
     return textResult(
@@ -452,11 +457,11 @@ export function requestUpdate(
   const recentRequest = db
     .prepare(
       `SELECT id, requested_at FROM requests
-       WHERE lower(provider) = lower(?) AND status = 'pending'
+       WHERE provider = ? AND status = 'pending'
          AND datetime(requested_at) > datetime(?, '-7 days')
        LIMIT 1`,
     )
-    .get(args.provider, requestedAt) as { id: string; requested_at: string } | undefined;
+    .get(providerKey, requestedAt) as { id: string; requested_at: string } | undefined;
 
   if (recentRequest) {
     return textResult(
@@ -475,7 +480,7 @@ export function requestUpdate(
   ).run(
     id,
     args.type,
-    args.provider.toLowerCase(),
+    providerKey,
     args.reason,
     args.suggested_urls ? JSON.stringify(args.suggested_urls) : null,
     requestedAt,
