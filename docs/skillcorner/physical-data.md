@@ -9,6 +9,41 @@ crawled_at: 2026-06-03
 
 `GET /physical/` returns aggregated physical metrics per match-player (and rolls up via `group_by`). Each row carries identity fields (`player_id`, `player_name`, `team_id`, `match_id`, `match_date`, `competition_id`, `season_id`, `competition_edition_id`, `position`, `position_group`), playing-time fields, and a large set of physical metrics following a strict **naming convention**.
 
+## Player workload table recipe
+
+Use this recipe when an agent asks for a physical table, player workload view,
+high-speed running leaderboard, sprint chart, or top-speed comparison from
+SkillCorner-style physical data.
+
+| Display field | SkillCorner source | Notes |
+|---|---|---|
+| minutes observed | `minutes_full_all` or the relevant split | Show the denominator next to rate metrics; do not compare tiny samples to full-match workloads without a minutes filter. |
+| distance | `total_distance_full_all` | Values are metres. Convert to kilometres for display, but keep raw metres in data exports. |
+| metres per minute | `total_metersperminute_full_all` or derived from distance/minutes | Useful when comparing players with different minutes; state whether it is all time or ball-in-play. |
+| HSR distance/count | `hsr_distance_*`, `hsr_count_*` | HSR thresholds come from the SkillCorner glossary and may differ from Wyscout or a custom tracking pipeline. |
+| sprint distance/count | `sprint_distance_*`, `sprint_count_*` | Counts are efforts, not metres; keep count and distance separate. |
+| high-intensity output | `hi_distance_*`, `hi_count_*` | HI combines HSR and sprint bands. Avoid double-counting it with HSR/sprint components in totals. |
+| top-speed proxy | `psv99` or `psv99_top5` | Peak/time metrics are bare fields, not split fields. Do not construct `psv99_full_all`. |
+| acceleration load | `medaccel_count_*`, `highaccel_count_*`, `meddecel_count_*`, `highdecel_count_*` | Treat acceleration/deceleration counts as a separate load family from distance. |
+| quality status | `physical_check_passed`, `count_match`, `count_match_failed` | Filter or flag rows that fail QC before ranking players. |
+
+Choose one comparison basis before plotting:
+
+- absolute match output: `*_full_all` values, best for "what did this player do
+  today?";
+- per-90: `*_p90`, best for season/competition leaderboards with minutes
+  thresholds;
+- ball-in-play: `*_p60bip`, best when comparing intensity independent of dead
+  time;
+- possession phase: `*_p30tip` / `*_p30otip`, best for in-possession versus
+  out-of-possession physical profiles.
+
+Do not mix providers' speed bands silently. SkillCorner HSR/sprint thresholds are
+defined in its glossary; Wyscout exposes similar labels with km/h thresholds, and
+custom tracking pipelines often use local m/s cut-offs. When joining physical
+data to event or video views, keep `match_id`, `player_id`, `team_id`, period,
+minutes basis, units, and QC flags in the exported data.
+
 ## Metric naming convention
 
 Most physical fields are named:
