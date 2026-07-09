@@ -690,6 +690,26 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "mplsoccer-bumpy-rank-snapshots",
+      args: {
+        query:
+          "league table bump chart rank snapshots matchweek standings reachable positions ties highlighted teams bumpy chart",
+        provider: "mplsoccer",
+        max_results: 8,
+      },
+      expected: [
+        "Bumpy Charts (Rank Changes)",
+        "**Category:** visualizations",
+        "`Bumpy` expects already-prepared rank snapshots",
+        "`timepoint` / `x_list`",
+        "`rank` / `y_list`",
+        "`highlight_dict`",
+        "Preserve ties and tie-break rules",
+        "state whether each rank is a provider standings snapshot",
+        "rather than silently interpolating",
+      ],
+    },
+    {
       id: "sportmonks-season-story-fixtures",
       args: {
         query:
