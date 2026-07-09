@@ -85,6 +85,25 @@ With the 0-100 attacking convention, count located touch or on-ball events where
 `x >= 66.7`. If neither team has a final-third touch, return `0` for both teams
 or mark the metric unavailable consistently; do not divide by zero.
 
+## Territory chart and field-tilt recipe
+
+Use this recipe when an agent asks for a territory chart, field-tilt chart,
+touch map, final-third touch share, or progressive-pass territory view from
+normalised provider events.
+
+| Step | Rule | Caveat |
+|---|---|---|
+| Normalise coordinates | Convert every provider into one attacking convention, such as 0-100 with the acting team attacking towards `x=100`. | Do this before applying any third, half, or zone threshold. |
+| Select touch events | Count located on-ball events for each team: passes, carries, receptions, shots, recoveries, and other intentional touches if your event model exposes them. | State the included event types; providers differ on whether duels, deflections, or fouls count as touches. |
+| Calculate field tilt | `team_final_third_touches / all_final_third_touches`, with final third usually `x >= 66.7` after normalisation. | If the denominator is zero, return `0` for both teams or `null`, but do not divide by zero. |
+| Build fixed-zone territory | Bin the selected events into 3x3 or 5x3 pitch zones and label each zone as a share of the selected event set. | Fixed-zone territory is not a smoothed heatmap; use a heatmap/KDE only when local density is the story. |
+| Add progression context | For passes, require both start and end coordinates; a simple product rule is `end_x - start_x >= 10`. | Label the threshold and do not mix it with provider official progressive-pass aggregates without explanation. |
+
+For cross-provider comparisons, keep the metric label explicit: for example,
+`event_derived_field_tilt`, `final_third_touch_share`, or
+`provider_official_final_third_entries`. A chart should not silently combine a
+custom touch count with a provider aggregate in the same series.
+
 ## PPDA
 
 PPDA is passes allowed per defensive action. A lightweight event-derived version:
