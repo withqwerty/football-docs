@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 19 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, and more). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 20 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, and more). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -111,6 +111,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | StatsBomb | 237 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
 | Wyscout | 164 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
+| floodlight | 145 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
 | SportMonks | 85 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 64 | overview, pitch-types, visualizations |
@@ -128,7 +129,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 7 | identity-surfaces |
 | Transfermarkt | 8 | identity-surfaces |
 
-**1,201 searchable chunks** across 19 providers and tools.
+**1,346 searchable chunks** across 20 providers and tools.
 
 ## Contributing
 
