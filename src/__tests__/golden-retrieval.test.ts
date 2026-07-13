@@ -2,6 +2,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { SCHEMA_SQL } from "../ingest.js";
 import {
   compareProviders,
   getProviderDocs,
@@ -1196,8 +1197,18 @@ describe("golden retrieval evals", () => {
   });
 
   it("reports registered providers that are not indexed yet", () => {
-    const result = resolveProviderId(db, { query: "floodlight" });
+    // Every provider in providers.json is indexed in the real data/docs.db
+    // as of this test, so this exercises the "registered but zero rows"
+    // path against a throwaway in-memory db instead of relying on some
+    // real provider staying uncrawled forever (that's what broke this test
+    // when floodlight — its previous example — got crawled).
+    const emptyDb = new Database(":memory:");
+    emptyDb.exec(SCHEMA_SQL);
+
+    const result = resolveProviderId(emptyDb, { query: "floodlight" });
     const text = result.content[0].text;
+
+    emptyDb.close();
 
     expect(result.isError).toBeUndefined();
     expect(text).toContain("provider ID: **floodlight**");
