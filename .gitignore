@@ -20,5 +20,8 @@ data/test.db
 .mcpregistry_*
 docs/wikidata-sparql-football-ids.md
 
+# Raw reference pulls (not curated/shipped docs, local reference only)
+docs/_reference/
+
 # Local AI agent notes
 CLAUDE.md
