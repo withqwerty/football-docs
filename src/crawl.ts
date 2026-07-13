@@ -39,6 +39,62 @@ const turndown = new TurndownService({
   bulletListMarker: "-",
 });
 
+// Sphinx (and other Pygments-based renderers) mark up code blocks as bare
+// <pre> containing syntax-highlighting <span>s, not <pre><code>. Turndown's
+// built-in fenced-code rule only matches <pre><code>, so these fall through
+// to plain-text handling where markdown-escaping mangles identifiers (e.g.
+// `read_position_data_json` becomes `read\_position\_data\_json`). Read
+// textContent directly to bypass that escaping.
+turndown.addRule("preBlock", {
+  filter: "pre",
+  replacement: (_content, node) => {
+    const code = (node as unknown as Element).textContent?.replace(/\n+$/, "") ?? "";
+    if (!code.trim()) return "";
+    const parentClass = (node as unknown as Element).parentElement?.getAttribute?.("class") ?? "";
+    const langMatch = parentClass.match(/highlight-(\w+)/);
+    const lang = langMatch && langMatch[1] !== "default" ? langMatch[1] : "";
+    return `\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n`;
+  },
+});
+
+// Sphinx marks up identifiers/parameter names/default values in signatures
+// with <span class="pre"> (a "don't word-wrap" hint, not semantic <code>).
+// Same escaping problem as above — render as inline code instead.
+turndown.addRule("sphinxPreSpan", {
+  filter: (node) =>
+    node.nodeName === "SPAN" &&
+    ((node as unknown as Element).getAttribute?.("class") ?? "")
+      .split(/\s+/)
+      .includes("pre"),
+  replacement: (_content, node) => `\`${(node as unknown as Element).textContent ?? ""}\``,
+});
+
+// Turndown escapes every underscore in plain text nodes by default (guarding
+// against accidental markdown emphasis), including identifiers that carry no
+// code markup at all — e.g. Sphinx renders parameter/return names in
+// "Variables:" lists as plain `<strong>essential_missing</strong>`, no <code>
+// or .pre span in sight. Since this corpus exists for full-text search rather
+// than pixel-perfect rendering, an escaped underscore that breaks substring
+// matches on the real identifier is worse than the rare accidental italics.
+const defaultEscape = turndown.escape.bind(turndown);
+turndown.escape = (text: string) => defaultEscape(text).replace(/\\_/g, "_");
+
+// Turndown's built-in image rule escapes alt text via a private module-level
+// helper, not the overridable `escape` method above, so alt text (often just
+// the image's own filename, e.g. "pitch_positive.png") still comes out with
+// escaped underscores. Same fix, applied to this one rule directly.
+turndown.addRule("unescapedImageAlt", {
+  filter: "img",
+  replacement: (_content, node) => {
+    const el = node as unknown as Element;
+    const alt = el.getAttribute?.("alt") ?? "";
+    const src = el.getAttribute?.("src") ?? "";
+    const title = el.getAttribute?.("title");
+    const titlePart = title ? ` "${title.replace(/"/g, '\\"')}"` : "";
+    return src ? `![${alt}](${src}${titlePart})` : "";
+  },
+});
+
 // ── Types ────────────────────────────────────────────────────────────
 
 interface ProviderConfig {
@@ -79,7 +135,13 @@ export function htmlToMarkdown(html: string, url: string): string | null {
     : html.replace(/(<head[^>]*>)/i, `$1<base href="${url}">`);
   const { document } = parseHTML(htmlWithBase);
 
-  const reader = new Readability(document, { charThreshold: 100 });
+  // classesToPreserve keeps class="pre" (Sphinx's no-wrap marker for inline
+  // literals) alive through Readability's cleanup, so the sphinxPreSpan
+  // Turndown rule above can still detect and unescape it.
+  const reader = new Readability(document, {
+    charThreshold: 100,
+    classesToPreserve: ["pre"],
+  });
   const article = reader.parse();
 
   if (!article?.content) return null;
