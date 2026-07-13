@@ -300,7 +300,7 @@
         { "url": "https://floodlight.readthedocs.io/en/latest/", "type": "readthedocs" },
         { "url": "https://github.com/floodlight-sports/floodlight", "type": "github_docs" }
       ],
-      "last_crawled": null
+      "last_crawled": "2026-07-13"
     },
     "free-sources": {
       "description": "Free football data sources (FBref, Understat, ClubElo, football-data.co.uk)",
