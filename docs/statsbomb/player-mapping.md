@@ -7,7 +7,7 @@ crawled_at: null
 
 # StatsBomb Player Mapping API
 
-The Player Mapping endpoint bridges StatsBomb's **two internal ID systems** —
+The Player Mapping endpoint reconciles StatsBomb's **two internal ID systems** —
 the *live* system and the *offline* system — for players, teams, and countries.
 **Commercial API only**; there is no Open Data equivalent.
 
@@ -26,7 +26,7 @@ the authoritative crosswalk between the two.
 
 Treat StatsBomb IDs as **(system, id)** pairs, not bare integers. A
 `player_id` seen elsewhere is only unambiguous once you know whether it is a
-live or offline id. See `identity-surfaces.md`.
+live or offline ID. See `identity-surfaces.md`.
 
 ## Request parameters
 
@@ -137,11 +137,11 @@ Note in the example how the **offline and live ids differ** for player
 (10172 vs 32564), team (746 vs 389), country of birth (68 vs 2), and every
 match — exactly the crosswalk this endpoint exists to provide.
 
-## Implementation Notes
+## Notes
 
-This endpoint is the canonical StatsBomb crosswalk between live and offline ID
-spaces. Any downstream provider cross-reference should record **which system** an
-ID belongs to (live vs offline) and can use this endpoint to reconcile the two.
-Mapping only a bare StatsBomb player ID without its system risks colliding live
-and offline spaces. The block-per-{competition,season,team} shape also captures
-transfer history within a season, which is useful as relationship evidence.
+This endpoint is the crosswalk between StatsBomb's live and offline ID
+spaces. A bare StatsBomb player ID without its system (live vs offline) is
+ambiguous, since the same person has different integers in each. The
+block-per-{competition,season,team} shape also captures transfer history
+within a season — a mid-season transfer produces multiple blocks for the
+same player.

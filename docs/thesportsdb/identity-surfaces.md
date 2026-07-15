@@ -19,8 +19,7 @@ TheSportsDB uses numeric IDs for its public entities.
 | Player | `idPlayer` |
 | Venue | venue lookup IDs where available |
 
-When building football products, store these IDs alongside canonical team/player
-IDs from your own register. Names are display labels, not reliable identity keys.
+Names are display labels, not reliable identity keys.
 
 ## Team Names And Artwork
 
