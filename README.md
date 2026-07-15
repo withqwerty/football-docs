@@ -99,7 +99,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 - "What is Opta qualifier 76?" (big chance)
 - "How does StatsBomb represent shot events?"
 - "Compare Opta and Wyscout coordinate systems"
-- "Which provider IDs are safe identity bridges for Transfermarkt players?"
+- "What player ID fields does Transfermarkt expose?"
 - "Does SportMonks have xG data?"
 - "What event types does kloppy map to GenericEvent?"
 - "How does SPADL represent a tackle?"
@@ -108,28 +108,28 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| StatsBomb | 237 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
-| Wyscout | 164 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
+| StatsBomb | 234 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
+| Wyscout | 161 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 145 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
-| SportMonks | 85 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
+| SportMonks | 82 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 64 | overview, pitch-types, visualizations |
-| Impect | 58 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
-| SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
+| Impect | 55 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
+| SkillCorner | 48 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
 | soccerdata | 41 | overview, data-sources, usage |
 | TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
-| Opta | 74 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
-| FMDB Pro | 36 | api-access, api-endpoints, data-model, identity-surfaces |
+| Opta | 71 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
+| FMDB Pro | 35 | api-access, api-endpoints, data-model, identity-surfaces |
 | Sportradar | 29 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
 | socceraction | 27 | SPADL format, VAEP, Expected Threat |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
-| FotMob | 7 | identity-surfaces |
-| Soccerdonna | 7 | identity-surfaces |
-| Transfermarkt | 8 | identity-surfaces |
+| FotMob | 3 | identity-surfaces |
+| Soccerdonna | 3 | identity-surfaces |
+| Transfermarkt | 3 | identity-surfaces |
 
-**1,346 searchable chunks** across 20 providers and tools.
+**1,313 searchable chunks** across 20 providers and tools.
 
 ## Contributing
 
