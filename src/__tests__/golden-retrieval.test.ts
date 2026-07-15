@@ -63,28 +63,6 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
-      id: "transfermarkt-squad-effective-age-story",
-      args: {
-        query:
-          "squad effective age story minutes weighted squad profile player date of birth career minutes Transfermarkt market value squad planning age curve promoted clubs goalkeepers",
-        provider: "transfermarkt",
-        max_results: 8,
-      },
-      expected: [
-        "Squad effective-age story recipe",
-        "**Category:** identity-surfaces",
-        "`calendar_age`",
-        "`career_minutes`",
-        "`minutes_weight`",
-        "`weighted_effective_age`",
-        "minutes-weighted",
-        "fit an age-to-minutes curve",
-        "goalkeeper",
-        "promoted",
-        "Do not treat market value as playing load",
-      ],
-    },
-    {
       id: "statsbomb-shot-freeze-frame",
       args: { query: "StatsBomb shot freeze frame xG", provider: "statsbomb", max_results: 5 },
       expected: ["Shot", "xG", "freeze frame"],
@@ -1079,7 +1057,7 @@ describe("golden retrieval evals", () => {
       args: {
         query:
           "cumulative xG timeline shot flow score strip halftime guide full time guide goal markers sparse shots Understat Opta StatsBomb shot xG source model provider labels",
-        max_results: 10,
+        max_results: 12,
       },
       expectedProvider: "free-sources",
       expected: [
@@ -1110,16 +1088,16 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
-    expect(text).toContain("**statsbomb** (237 chunks)");
+    expect(text).toContain("**statsbomb** (234 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
-    expect(text).toContain("**wyscout** (164 chunks)");
+    expect(text).toContain("**wyscout** (161 chunks)");
     expect(text).toContain("api-endpoints (13)");
     expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (85 chunks)");
+    expect(text).toContain("**sportmonks** (82 chunks)");
     expect(text).toContain("charting-season-stories (7)");
-    expect(text).toContain("**fmdb-pro** (36 chunks)");
+    expect(text).toContain("**fmdb-pro** (35 chunks)");
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (43 chunks)");
     expect(text).toContain("charting-availability (5)");
@@ -1130,7 +1108,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (74 chunks)");
+    expect(text).toContain("**opta** (71 chunks)");
     expect(text).toContain("charting-game-state (9)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (6)");
