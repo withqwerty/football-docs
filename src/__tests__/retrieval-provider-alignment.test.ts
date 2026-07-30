@@ -2,6 +2,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { FORBIDDEN_PATTERNS } from "../impect-truth.js";
 import { searchDocs } from "../tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -18,10 +19,10 @@ describe("provider-alignment retrieval", () => {
     db.close();
   });
 
-  it("finds Impect event-to-SkillCorner frame mapping guidance", () => {
+  it("finds Impect cross-provider idMappings guidance", () => {
     const result = searchDocs(db, {
       query:
-        "join Impect events to SkillCorner tracking frames isMatched event index frame mappings update feed idMappings",
+        "Impect idMappings cross provider IDs skill_corner heim_spiel players squads matches iterations arrays of strings",
       provider: "impect",
       max_results: 8,
     });
@@ -29,12 +30,29 @@ describe("provider-alignment retrieval", () => {
     const text = result.content.map((entry) => entry.text).join("\n");
 
     expect(result.isError).toBeUndefined();
-    expect(text).toContain("SkillCorner integration");
-    expect(text).toContain("`GET [impect-api-reference-removed]`");
-    expect(text).toContain("`isMatched`");
-    expect(text).toContain("`GET /update/skillcorner-frame-mappings`");
-    expect(text).toContain("ID Mappings");
-    expect(text).toContain("not part of `idMappings`");
+    expect(text).toContain("Cross-provider IDs");
+    expect(text).toContain("skill_corner");
+    expect(text).toContain("heim_spiel");
+    // idMappings is an array of single-key objects whose values are string arrays -
+    // both shapes are easy to mis-parse, so the docs must keep saying so.
+    expect(text).toContain("array of single-key objects");
+    expect(text).toContain("arrays of strings");
+  });
+
+  it("does not surface Impect commercial API material", () => {
+    const result = searchDocs(db, {
+      query: "Impect commercial endpoints authentication bearer token update feed delete feed",
+      provider: "impect",
+      max_results: 20,
+    });
+
+    const text = result.content.map((entry) => entry.text).join("\n");
+
+    expect(result.isError).toBeUndefined();
+    // The Impect corpus is rebuilt from the public open-data repository only.
+    for (const { label, pattern } of FORBIDDEN_PATTERNS) {
+      expect(text, `Impect results should not contain ${label}`).not.toMatch(pattern);
+    }
   });
 
   it("finds DataBallPy tracking-event synchronisation guidance", () => {

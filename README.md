@@ -115,7 +115,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | SportMonks | 82 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 64 | overview, pitch-types, visualizations |
-| Impect | 55 | api-access, api-endpoints, data-model, event-types, coordinate-system, concepts, identity-surfaces |
+| Impect | 77 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces |
 | SkillCorner | 48 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
 | soccerdata | 41 | overview, data-sources, usage |
@@ -129,7 +129,16 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**1,313 searchable chunks** across 20 providers and tools.
+**1,335 searchable chunks** across 20 providers and tools.
+
+> **Impect** documentation is built solely from the public
+> [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
+> static Bundesliga 2023/24 snapshot, representative of Impect's structure and
+> metric definitions rather than a complete or current mirror. Impect's
+> commercial API is deliberately not documented here. Every enum value, KPI name
+> and field name in `docs/impect/` is validated against that repository in CI
+> (`pnpm impect:truth`, `src/__tests__/impect-open-data-validation.test.ts`).
+> Data source: **Impect**; use is subject to the repository's own Terms of Use.
 
 ## Contributing
 

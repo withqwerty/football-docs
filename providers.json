@@ -182,19 +182,19 @@
       "last_crawled": "2026-07-09"
     },
     "impect": {
-      "description": "Commercial football data provider; Packing/pxT metrics, KPI/score framework, detailed set-pieces ([impect-api-reference-removed] v5)",
+      "description": "German football data provider; Packing (bypassed opponents) and pxT possession-value metrics. Documented from the public open-data repository only",
       "display_name": "Impect",
       "aliases": [],
-      "access_level": "public-api-docs",
-      "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Use public [impect-api-reference-removed] docs and public-safe metric descriptions only.",
-      "version": "[impect-api-reference-removed] v5.0",
-      "package": { "type": "pypi", "name": "impectPy", "repo": "ImpectAPI/impectPy" },
+      "access_level": "open-data",
+      "licence_status": "Open-data repository governed by Impect's Terms of Use (LICENSE.pdf): analytical and research use only, no redistribution or commercial use, attribution to Impect required. Impect reserves all rights in its data, documentation and APIs.",
+      "public_safety_notes": "Document the open-data repository ONLY. Do not document, crawl or infer Impect's commercial API surface (endpoints, authentication, update/delete feeds). All enum values, KPI names and field names must be validated against the open-data repository before publishing - see scripts/validate-impect.ts.",
+      "version": "open-data snapshot (Bundesliga 2023/24, dataVersion V3)",
+      "package": null,
       "sources": [
-        { "url": "[impect-api-reference-removed]", "type": "api_docs", "note": "[impect-api-reference-removed] v5 OpenAPI spec ([impect-api-reference-removed]); Swagger at [impect-api-reference-removed]" },
-        { "type": "curated", "note": "Identity-resolution guidance; Packing/pxT framing" }
+        { "url": "https://github.com/ImpectAPI/open-data", "type": "github", "note": "Sole permitted source: sample datasets, Documentation.pdf, kpi_definitions.json" },
+        { "type": "curated", "note": "Schema, enum and KPI documentation derived from the open-data repository and validated against it" }
       ],
-      "last_crawled": "2026-06-03"
+      "last_crawled": "2026-07-30"
     },
     "skillcorner": {
       "description": "Commercial broadcast-tracking, physical and Game Intelligence (off-ball runs, on-ball engagements) data provider",
