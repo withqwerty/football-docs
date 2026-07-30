@@ -815,7 +815,7 @@
     "mplsoccer.utils.inset_image": "inset_image(x, y, image, width=None, height=None, vertical=False, ax=None, **kwargs)",
     "mplsoccer.utils.set_labels": "set_labels(ax, label_value, label_axis)",
     "mplsoccer.utils.set_visible": "set_visible(ax, spine_bottom=False, spine_top=False, spine_left=False, spine_right=False, grid=False, tick=False, label=False)",
-    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x102503330>, *, cafile=None, capath=None, cadefault=False, context=None)",
+    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x1048db330>, *, cafile=None, capath=None, cadefault=False, context=None)",
     "mplsoccer.utils.validate_ax": "validate_ax(ax)",
     "mplsoccer.validate_ax": "validate_ax(ax)"
   }

@@ -96,6 +96,16 @@ def collect_value_lists(mod, prefix: str, out: dict[str, list[str]]) -> None:
             out[f"{prefix}.{name}"] = values
 
 
+def scrub_local_paths(text: str) -> str:
+    """Replace machine-specific paths captured from default arguments.
+
+    Some packages default a path argument to the working directory, so a raw
+    signature bakes in whoever generated the file. That would churn the diff for
+    every contributor and leak local directory layout into a public repo.
+    """
+    return text.replace(str(Path.cwd()), "<cwd>").replace(str(REPO), "<repo>")
+
+
 def collect_signatures(mod, prefix: str, out: dict[str, str]) -> None:
     for name in public_names(mod):
         try:
@@ -104,7 +114,7 @@ def collect_signatures(mod, prefix: str, out: dict[str, str]) -> None:
             continue
         if inspect.isfunction(obj) or inspect.ismethod(obj):
             try:
-                out[f"{prefix}.{name}"] = f"{name}{inspect.signature(obj)}"
+                out[f"{prefix}.{name}"] = scrub_local_paths(f"{name}{inspect.signature(obj)}")
             except (ValueError, TypeError):
                 pass
 

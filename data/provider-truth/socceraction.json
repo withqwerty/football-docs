@@ -1069,7 +1069,7 @@
     "socceraction.data.statsbomb.loader.extract_player_games": "extract_player_games(events: pandas.core.frame.DataFrame) -> pandas.core.frame.DataFrame",
     "socceraction.data.wyscout.loader.cast": "cast(typ, val)",
     "socceraction.data.wyscout.loader.is_zipfile": "is_zipfile(filename)",
-    "socceraction.data.wyscout.loader.urlopen": "urlopen(url, data=None, timeout=<object object at 0x10454f740>, *, cafile=None, capath=None, cadefault=False, context=None)",
+    "socceraction.data.wyscout.loader.urlopen": "urlopen(url, data=None, timeout=<object object at 0x102693740>, *, cafile=None, capath=None, cadefault=False, context=None)",
     "socceraction.data.wyscout.loader.urlparse": "urlparse(url, scheme='', allow_fragments=True)",
     "socceraction.data.wyscout.loader.urlretrieve": "urlretrieve(url, filename=None, reporthook=None, data=None)",
     "socceraction.spadl.actiontypes_df": "actiontypes_df() -> pandas.core.frame.DataFrame",
