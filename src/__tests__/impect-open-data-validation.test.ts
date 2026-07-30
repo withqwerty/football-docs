@@ -11,7 +11,6 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const IMPECT_DOCS = resolve(__dirname, "..", "..", "docs", "impect");
-const TRUTH_PATH = resolve(__dirname, "..", "..", "data", "impect-open-data-truth.json");
 
 function loadImpectDocs(): DocFile[] {
   return readdirSync(IMPECT_DOCS)
@@ -20,7 +19,7 @@ function loadImpectDocs(): DocFile[] {
 }
 
 describe("impect docs are grounded in the open-data repository", () => {
-  const truth = loadTruth(TRUTH_PATH);
+  const truth = loadTruth();
   const docs = loadImpectDocs();
 
   it("has docs to validate", () => {

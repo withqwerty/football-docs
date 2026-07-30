@@ -38,30 +38,18 @@ export interface ImpectTruth {
     matches: number;
     events: number;
   };
-  /** Enum members actually observed in the snapshot, by field name. */
+  /** Enum members observed in the snapshot, by field name. */
   enums: Record<string, string[]>;
   /** KPI id (as string) -> machine name, from kpi_definitions.json. */
   kpis: Record<string, string>;
   /** ISO and FIFA country codes from countries.json. */
   countryCodes: string[];
-  /**
-   * Values described in the repository's Documentation.pdf but absent from this
-   * snapshot — mostly dataV4+ attributes, and members of competitions the
-   * snapshot does not cover. Legitimate to document, so long as the docs say so.
-   */
-  documentedOnly: string[];
-  /**
-   * Values the docs deliberately name as NOT belonging to Impect, to steer
-   * agents off plausible-looking inventions. Allowed only as negative examples.
-   */
-  nonMembers: string[];
-  /** Non-Impect tokens permitted in prose (other tools, format markers). */
-  allowlist: string[];
 }
 
 /**
- * Documented in the open-data repository's Documentation.pdf but not present in
- * the snapshot itself, so the generator cannot observe them in the JSON.
+ * Documented in the repository's Documentation.pdf but not present in the
+ * snapshot, so the generator cannot observe them. Editorial, not derived from
+ * the data — which is why these live here rather than in the truth file.
  */
 const DOCUMENTED_ONLY = [
   // dataV4+ woodwork enum
@@ -81,11 +69,7 @@ const DOCUMENTED_ONLY = [
   "NATIONAL_TEAM",
 ];
 
-/**
- * Values the Impect docs mention only to rule them out. These are exactly the
- * kind of plausible-sounding value a model invents, so naming them is useful —
- * but they must never be presented as real.
- */
+/** Values the docs name only to rule them out, as negative examples. */
 const NON_MEMBERS = ["BUILD_UP", "COUNTER_ATTACK"];
 
 /** Tokens that are not Impect data values at all. */
@@ -96,10 +80,8 @@ const ALLOWLIST = [
 
 /**
  * Guards against Impect's commercial API surface reappearing in the corpus.
- *
- * Written as assembled patterns rather than literal strings deliberately: this
- * file is the enforcement mechanism, so it should not itself carry a copy of the
- * hostnames and paths it exists to keep out.
+ * Assembled patterns rather than literal strings: this file is the enforcement
+ * mechanism, so it should not carry a copy of what it exists to keep out.
  */
 export const FORBIDDEN_PATTERNS: Array<{ label: string; pattern: RegExp }> = [
   { label: "Impect API hostname", pattern: /\b(?:api|login)\.impect\.com\b/i },
@@ -227,9 +209,6 @@ export function generateTruth(openDataDir: string, commit: string, generatedAt: 
     ),
     kpis,
     countryCodes,
-    documentedOnly: [...DOCUMENTED_ONLY].sort(),
-    nonMembers: [...NON_MEMBERS].sort(),
-    allowlist: [...ALLOWLIST].sort(),
   };
 }
 
@@ -258,9 +237,9 @@ export function validateImpectDocs(docs: DocFile[], truth: ImpectTruth): string[
     ...Object.values(truth.enums).flat(),
     ...Object.values(truth.kpis),
     ...truth.countryCodes,
-    ...truth.documentedOnly,
-    ...truth.nonMembers,
-    ...truth.allowlist,
+    ...DOCUMENTED_ONLY,
+    ...NON_MEMBERS,
+    ...ALLOWLIST,
   ]);
 
   for (const { file, text } of docs) {

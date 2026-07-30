@@ -627,25 +627,5 @@
     "ZIM",
     "ZMB",
     "ZWE"
-  ],
-  "documentedOnly": [
-    "CROSSBAR",
-    "CROSSBAR_LEFT_POST",
-    "CROSSBAR_RIGHT_POST",
-    "FEMALE",
-    "GROUND_DUEL",
-    "LEFT_POST",
-    "NATIONAL_TEAM",
-    "PXT_NOVIDEO",
-    "RIGHT_POST",
-    "YELLOW_CARD"
-  ],
-  "nonMembers": [
-    "BUILD_UP",
-    "COUNTER_ATTACK"
-  ],
-  "allowlist": [
-    "OPP_",
-    "STATIC_HOME_AWAY"
   ]
 }
