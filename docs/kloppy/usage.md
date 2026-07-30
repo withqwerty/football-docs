@@ -110,15 +110,18 @@ dataset = skillcorner.load(
 ## Transforming Coordinates
 
 ```python
-from kloppy.domain import PitchDimensions, Dimension
+from kloppy.domain import MetricPitchDimensions, Dimension
 
 # Transform to a standard 105x68 metre pitch
 dataset = dataset.transform(
-    to_pitch_dimensions=PitchDimensions(
+    to_pitch_dimensions=MetricPitchDimensions(
         x_dim=Dimension(0, 105),
-        y_dim=Dimension(0, 68)
+        y_dim=Dimension(0, 68),
+        pitch_length=105,
+        pitch_width=68,
+        standardized=False,
     ),
-    to_orientation="FIXED_HOME_AWAY"
+    to_orientation="STATIC_HOME_AWAY"
 )
 
 # Or transform to match another provider's system
@@ -129,23 +132,20 @@ dataset = dataset.transform(
 
 ## Exporting to pandas
 
+kloppy doesn't export a top-level `to_pandas` function -- exporting is a method
+on the dataset itself, `Dataset.to_df(*columns, engine=..., **named_columns)`:
+
 ```python
-from kloppy import to_pandas
-
 # Basic export
-df = to_pandas(dataset)
+df = dataset.to_df(engine="pandas")
 
-# With additional columns
-df = to_pandas(
-    dataset,
-    additional_columns={
-        "coordinates_x": lambda event: event.coordinates.x if event.coordinates else None,
-        "coordinates_y": lambda event: event.coordinates.y if event.coordinates else None,
-        "end_x": lambda event: event.end_coordinates.x if event.end_coordinates else None,
-        "end_y": lambda event: event.end_coordinates.y if event.end_coordinates else None,
-        "receiver": lambda event: event.receiver_player.name if event.receiver_player else None,
-        "is_goal": lambda event: event.result.value == "GOAL" if hasattr(event.result, 'value') else False,
-    }
+# With additional derived columns (passed as keyword arguments)
+df = dataset.to_df(
+    engine="pandas",
+    end_x=lambda event: event.end_coordinates.x if event.end_coordinates else None,
+    end_y=lambda event: event.end_coordinates.y if event.end_coordinates else None,
+    receiver=lambda event: event.receiver_player.name if event.receiver_player else None,
+    is_goal=lambda event: event.result.value == "GOAL" if hasattr(event.result, 'value') else False,
 )
 
 # The DataFrame includes these columns by default:
@@ -157,10 +157,8 @@ df = to_pandas(
 ## Exporting to Polars
 
 ```python
-from kloppy import to_polars
-
-# Same interface as to_pandas
-df = to_polars(dataset)
+# Same to_df() method, different engine
+df = dataset.to_df(engine="polars")
 ```
 
 ## Filtering Events
@@ -235,7 +233,7 @@ headers = dataset.filter(
 ### By Location
 
 ```python
-# Events in the final third (assuming 105m pitch, FIXED_HOME_AWAY orientation)
+# Events in the final third (assuming 105m pitch, STATIC_HOME_AWAY orientation)
 final_third = dataset.filter(
     lambda event: event.coordinates and event.coordinates.x > 70
 )
@@ -272,13 +270,19 @@ progressive = dataset.filter(
 
 ```python
 from collections import defaultdict
-from kloppy import statsbomb, to_pandas
+from kloppy import statsbomb
 from kloppy.domain import EventType, PassResult
 
 dataset = statsbomb.load_open_data(match_id=3788741)
 dataset = dataset.transform(
-    to_pitch_dimensions=PitchDimensions(x_dim=Dimension(0, 105), y_dim=Dimension(0, 68)),
-    to_orientation="FIXED_HOME_AWAY"
+    to_pitch_dimensions=MetricPitchDimensions(
+        x_dim=Dimension(0, 105),
+        y_dim=Dimension(0, 68),
+        pitch_length=105,
+        pitch_width=68,
+        standardized=False,
+    ),
+    to_orientation="STATIC_HOME_AWAY"
 )
 
 home_team = dataset.metadata.teams[0]
@@ -316,19 +320,17 @@ avg_positions = {
 ### Shot Map with xG
 
 ```python
-from kloppy import statsbomb, to_pandas
+from kloppy import statsbomb
 from kloppy.domain import EventType
 
 dataset = statsbomb.load_open_data(match_id=3788741)
-df = to_pandas(
-    dataset.filter(lambda e: e.event_type == EventType.SHOT),
-    additional_columns={
-        "x": lambda e: e.coordinates.x if e.coordinates else None,
-        "y": lambda e: e.coordinates.y if e.coordinates else None,
-        "xg": lambda e: e.raw_event.get("shot", {}).get("statsbomb_xg"),
-        "outcome": lambda e: e.result.value if e.result else None,
-        "body_part": lambda e: str(e.get_qualifier_value(BodyPartQualifier)),
-    }
+df = dataset.filter(lambda e: e.event_type == EventType.SHOT).to_df(
+    engine="pandas",
+    x=lambda e: e.coordinates.x if e.coordinates else None,
+    y=lambda e: e.coordinates.y if e.coordinates else None,
+    xg=lambda e: e.raw_event.get("shot", {}).get("statsbomb_xg"),
+    outcome=lambda e: e.result.value if e.result else None,
+    body_part=lambda e: str(e.get_qualifier_value(BodyPartQualifier)),
 )
 ```
 
@@ -336,17 +338,20 @@ df = to_pandas(
 
 ```python
 from kloppy import statsbomb, wyscout
-from kloppy.domain import PitchDimensions, Dimension
+from kloppy.domain import MetricPitchDimensions, Dimension
 
 # Load same match from two providers
 sb_dataset = statsbomb.load(event_data="sb_events.json", lineup_data="sb_lineups.json")
 wy_dataset = wyscout.load(event_data="wy_events.json", data_version="V3")
 
 # Normalise both to the same coordinate system
-target_dims = PitchDimensions(x_dim=Dimension(0, 105), y_dim=Dimension(0, 68))
+target_dims = MetricPitchDimensions(
+    x_dim=Dimension(0, 105), y_dim=Dimension(0, 68),
+    pitch_length=105, pitch_width=68, standardized=False,
+)
 
-sb_dataset = sb_dataset.transform(to_pitch_dimensions=target_dims, to_orientation="FIXED_HOME_AWAY")
-wy_dataset = wy_dataset.transform(to_pitch_dimensions=target_dims, to_orientation="FIXED_HOME_AWAY")
+sb_dataset = sb_dataset.transform(to_pitch_dimensions=target_dims, to_orientation="STATIC_HOME_AWAY")
+wy_dataset = wy_dataset.transform(to_pitch_dimensions=target_dims, to_orientation="STATIC_HOME_AWAY")
 
 # Now both datasets use the same coordinates and event model
 sb_passes = len(sb_dataset.filter(lambda e: e.event_type == EventType.PASS).events)
@@ -370,18 +375,25 @@ for frame in dataset.frames[:10]:
         print(f"  {player.name}: ({data.coordinates.x:.1f}, {data.coordinates.y:.1f})")
 
 # Convert to DataFrame
-df = to_pandas(dataset)
+df = dataset.to_df(engine="pandas")
 ```
 
 ## Serialisation
 
+kloppy has no top-level `to_json`/`load` pair for round-tripping a full
+dataset. To serialise, export the flattened records with `to_records()` or
+`to_dict()` and write them out yourself:
+
 ```python
-# Save dataset to kloppy's JSON format
-from kloppy import to_json
+import json
 
-to_json(dataset, "output.json")
-
-# Load back
-from kloppy import load
-dataset = load("output.json")
+# Flattened list of dicts, one per event/frame
+# (use default=str since fields like `timestamp` are timedelta objects)
+records = dataset.to_records()
+with open("output.json", "w") as f:
+    json.dump(records, f, default=str)
 ```
+
+To get data back into kloppy, re-run the original provider loader (e.g.
+`statsbomb.load(...)`) against the source files -- there is no generic
+loader for kloppy's own export format.

@@ -2,7 +2,7 @@
 
 ## FBref (sd.FBref)
 
-Source: fbref.com, powered by StatsBomb/Opta data. HTTP-based, 7-second rate limit enforced. Supports "Big 5 European Leagues Combined" as a virtual league for efficient bulk scraping.
+Source: fbref.com, powered by StatsBomb/Opta data. Selenium-based (requires Chrome/Chromium), 7-second rate limit enforced. Supports "Big 5 European Leagues Combined" as a virtual league for efficient bulk scraping.
 
 **Methods**:
 
@@ -18,11 +18,11 @@ Source: fbref.com, powered by StatsBomb/Opta data. HTTP-based, 7-second rate lim
 | `read_lineup(match_id=None)` | Lineups | `[league, season, game]` | jersey_number, position, minutes_played, is_starter |
 | `read_events(match_id=None)` | In-match events | `[league, season, game]` | Goals, cards, substitutions with timing |
 
-**Team season stat types**: `standard`, `keeper`, `keeper_adv`, `shooting`, `passing`, `passing_types`, `goal_shot_creation`, `defense`, `possession`, `playing_time`, `misc`.
+**Team season stat types** (as of soccerdata 1.9.1; `keeper_adv`, `passing`, `passing_types`, `goal_shot_creation`, `defense`, and `possession` were removed after fbref.com restricted access to those pages): `standard`, `keeper`, `shooting`, `playing_time`, `misc`.
 
-**Team match stat types**: `schedule`, `keeper`, `shooting`, `passing`, `passing_types`, `goal_shot_creation`, `defense`, `possession`, `misc`.
+**Team match stat types** (as of soccerdata 1.9.1; same removals as above): `schedule`, `shooting`, `keeper`, `misc`.
 
-**Player match stat types**: `summary`, `keepers`, `passing`, `passing_types`, `defense`, `possession`, `misc`.
+**Player match stat types** (as of soccerdata 1.9.1; same removals as above): `summary`, `keepers`.
 
 ## Understat (sd.Understat)
 
@@ -101,46 +101,9 @@ Source: sofascore.com API. HTTP-based JSON API.
 | `read_league_table()` | Standings | `[league, season]` | MP, W, D, L, GF, GA, GD, Pts |
 | `read_schedule()` | Match schedule | `[league, season, game]` | round, week, date, scores, game_id |
 
-### Sofascore match summary/status payload
-
-Project adapters often consume Sofascore's raw event objects directly for
-live/result cards, even when `soccerdata` only exposes schedule/table helpers.
-The useful match-summary fields are:
-
-| Raw field | Meaning |
-|---|---|
-| `id` | Sofascore event ID |
-| `status.code` | numeric status code |
-| `status.description` | display label such as `1st half`, `Halftime`, `Postponed`, `Removed` |
-| `status.type` | coarse bucket such as `notstarted`, `inprogress`, `finished`, `postponed`, `canceled` |
-| `startTimestamp` | Unix seconds kickoff timestamp |
-| `homeTeam.id/name`, `awayTeam.id/name` | team IDs and labels |
-| `homeScore.current`, `awayScore.current` | current/final scores when available |
-| `homeScore.penalties`, `awayScore.penalties` | penalty shootout scores when available |
-| `tournament.name`, `season.name`, `venue.name`, `roundInfo.round` | match context |
-
-Status handling should prefer `status.type` first, then use `status.code` to
-refine in-game states:
-
-| Status input | Recommended normalised status |
-|---|---|
-| `type="finished"` | `finished`, even for code `93` / description `Removed` |
-| `type="inprogress"`, code `31`, `41`, or `50` | `halftime` / break state |
-| `type="inprogress"`, code `6`, `7`, `8`, or `9` | `live` |
-| `type="notstarted"` or code `0` | `scheduled` |
-| `type="postponed"` or code `60` | `postponed` |
-| `type="canceled"` or code `70` | `canceled` |
-| code `90` | `abandoned` |
-| codes `100`, `110`, `120`, `130`, `140` | `finished` |
-
-Do not treat halftime as `unknown`: it is an in-game state. Do not treat
-postponed/cancelled matches as finished just because score fields are absent.
-Keep `statusCode` and `statusType` in source metadata when building a canonical
-match summary so downstream UI can audit edge cases.
-
 ## SoFIFA (sd.SoFIFA)
 
-Source: sofifa.com (FIFA video game ratings). HTTP-based, 1-second rate limit. Uses `versions` parameter instead of seasons -- maps to FIFA game database snapshots. Options: `'latest'` (default), `'all'`, specific version ID, or list of IDs.
+Source: sofifa.com (FIFA video game ratings). Selenium-based (requires Chrome/Chromium), 1-second rate limit. Uses `versions` parameter instead of seasons -- maps to FIFA game database snapshots. Options: `'latest'` (default), `'all'`, specific version ID, or list of IDs.
 
 **Methods**:
 

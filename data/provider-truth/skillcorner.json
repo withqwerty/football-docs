@@ -1,0 +1,91 @@
+{
+  "provider": "skillcorner",
+  "kind": "python-package",
+  "source": {
+    "package": "skillcorner",
+    "version": "3.2.0",
+    "generated_at": "2026-07-30"
+  },
+  "modules": {
+    "skillcorner": [],
+    "skillcorner.client": [
+      "FitConfig",
+      "SkillcornerClient",
+      "class_config"
+    ],
+    "skillcorner.errors": [
+      "InfinitePaginationError",
+      "SkillcornerRuntimeError",
+      "asdict",
+      "dataclass",
+      "re"
+    ],
+    "skillcorner.pagination": [
+      "Any",
+      "Bar",
+      "Callable",
+      "InfinitePaginationError",
+      "inspect",
+      "logger",
+      "logging",
+      "makefun",
+      "paginated"
+    ],
+    "skillcorner.params_list": [
+      "Any",
+      "Callable",
+      "Iterable",
+      "makefun",
+      "params_list"
+    ]
+  },
+  "enums": {},
+  "valueLists": {
+    "skillcorner.client.class_config": [
+      "auth",
+      "base_url",
+      "class_name",
+      "client_name",
+      "family_name_templates",
+      "method_config_list",
+      "method_decorators",
+      "method_docstring"
+    ]
+  },
+  "classes": [
+    "Any",
+    "Bar",
+    "Callable",
+    "FitConfig",
+    "InfinitePaginationError",
+    "Iterable",
+    "SkillcornerClient",
+    "SkillcornerRuntimeError"
+  ],
+  "symbols": [
+    "Any",
+    "Bar",
+    "Callable",
+    "FitConfig",
+    "InfinitePaginationError",
+    "Iterable",
+    "SkillcornerClient",
+    "SkillcornerRuntimeError",
+    "asdict",
+    "class_config",
+    "dataclass",
+    "inspect",
+    "logger",
+    "logging",
+    "makefun",
+    "paginated",
+    "params_list",
+    "re"
+  ],
+  "signatures": {
+    "skillcorner.errors.asdict": "asdict(obj, *, dict_factory=<class 'dict'>)",
+    "skillcorner.errors.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
+    "skillcorner.pagination.paginated": "paginated(fit_request: collections.abc.Callable) -> collections.abc.Callable",
+    "skillcorner.params_list.params_list": "params_list(fit_request: collections.abc.Callable) -> collections.abc.Callable"
+  }
+}

@@ -8,7 +8,7 @@ Repository: https://github.com/kloppy-project/kloppy
 
 ## Canonical Event Types
 
-kloppy defines **13 canonical event types** that all provider events map to:
+kloppy defines **19 canonical event types** that all provider events map to:
 
 | Event Type | Class | Description |
 |---|---|---|
@@ -25,6 +25,12 @@ kloppy defines **13 canonical event types** that all provider events map to:
 | `GOALKEEPER` | `GoalkeeperEvent` | Goalkeeper-specific action (save, punch, claim, etc.) |
 | `FORMATION_CHANGE` | `FormationChangeEvent` | Tactical formation change |
 | `GENERIC` | `GenericEvent` | Catch-all for provider events that don't map to a canonical type |
+| `SUBSTITUTION` | `SubstitutionEvent` | A player is substituted off and replaced by another player |
+| `CARD` | `CardEvent` | A player receives a card |
+| `PLAYER_ON` | `PlayerOnEvent` | A player returns to the pitch after a `PLAYER_OFF` event |
+| `PLAYER_OFF` | `PlayerOffEvent` | A player goes/is carried off the pitch without a substitution |
+| `RECOVERY` | `RecoveryEvent` | A player gathers a loose ball and gains possession for their team |
+| `PRESSURE` | `PressureEvent` | A player pressures an opponent to force a mistake |
 
 ### Result Enums
 
@@ -48,6 +54,7 @@ Each event has a `result` property with type-specific enum values:
 | `OFF_TARGET` | Shot off target (wide or over) |
 | `BLOCKED` | Shot blocked by defender |
 | `POST` | Shot hit the post/crossbar |
+| `OWN_GOAL` | Shot resulted in an own goal |
 
 #### TakeOnResult
 
@@ -55,13 +62,15 @@ Each event has a `result` property with type-specific enum values:
 |---|---|
 | `COMPLETE` | Successful dribble |
 | `INCOMPLETE` | Failed dribble, lost possession |
+| `OUT` | Ball went out of play during the take-on |
 
 #### DuelResult
 
 | Value | Description |
 |---|---|
-| `WON` | Won the duel |
-| `LOST` | Lost the duel |
+| `WON` | Won the duel (player touching the ball first) |
+| `LOST` | Lost the duel (opponent touches the ball first) |
+| `NEUTRAL` | Neither player won the duel (mainly for Wyscout v2) |
 
 #### InterceptionResult
 
@@ -69,14 +78,9 @@ Each event has a `result` property with type-specific enum values:
 |---|---|
 | `SUCCESS` | Successfully intercepted |
 | `LOST` | Interception attempt failed |
-| `WON` | Interception won (alias for SUCCESS in some contexts) |
+| `OUT` | Interception knocked the ball out of play |
 
-#### GoalkeeperActionResult
-
-| Value | Description |
-|---|---|
-| `SUCCESS` | Successful goalkeeper action |
-| `FAILURE` | Failed goalkeeper action |
+Note: `GoalkeeperEvent` has no `result` property (its `result` is always `None`) -- there is no `GoalkeeperActionResult` enum in kloppy.
 
 ## Qualifiers
 
@@ -97,10 +101,18 @@ Qualifiers add additional context to events without creating separate event type
 
 | Value | Description |
 |---|---|
-| `RIGHT_FOOT` | Right foot |
-| `LEFT_FOOT` | Left foot |
-| `HEAD` | Header |
-| `NO_TOUCH` | No body part (e.g., deflection) |
+| `RIGHT_FOOT` | Pass, shot, or (for goalkeepers) save with the right foot |
+| `LEFT_FOOT` | Pass, shot, or (for goalkeepers) save with the left foot |
+| `HEAD` | Pass, shot, or (for goalkeepers) save with the head |
+| `OTHER` | Other body part (chest, back, etc.), for pass and shot |
+| `HEAD_OTHER` | Pass or shot with head or other body part (used when the provider does not distinguish `HEAD` from `OTHER`) |
+| `BOTH_HANDS` | Goalkeeper only. Save with both hands |
+| `CHEST` | Goalkeeper only. Save with chest |
+| `LEFT_HAND` | Goalkeeper only. Save with left hand |
+| `RIGHT_HAND` | Goalkeeper only. Save with right hand |
+| `DROP_KICK` | Pass is a keeper drop kick |
+| `KEEPER_ARM` | Pass thrown from the keeper's hands |
+| `NO_TOUCH` | Pass only. A player deliberately let the pass go past them instead of receiving it (a "dummy") |
 
 ### CardQualifier
 
@@ -115,26 +127,32 @@ Qualifiers add additional context to events without creating separate event type
 | Value | Description |
 |---|---|
 | `CROSS` | Cross into the box |
-| `LONG_BALL` | Long ball |
-| `THROUGH_BALL` | Through ball |
-| `CHIPPED` | Chipped pass |
-| `SWITCH` | Switch of play |
-| `LAUNCH` | Long launch |
+| `LONG_BALL` | A pass that travels at least 32 metres |
+| `THROUGH_BALL` | Through ball, played into space behind the defence |
+| `CHIPPED_PASS` | Chipped pass, lifted into the air |
+| `SWITCH_OF_PLAY` | Any pass which crosses the centre zone and travels more than 50% of the pitch width |
+| `LAUNCH` | A long forward pass with no specific target |
 | `HEAD_PASS` | Headed pass |
 | `HIGH_PASS` | High/lofted pass |
 | `HAND_PASS` | Goalkeeper hand pass |
-| `SMART_PASS` | Creative pass (Wyscout-specific) |
+| `SMART_PASS` | Creative, penetrative pass attempting to break defensive lines |
+| `SIMPLE_PASS` | A standard pass without complex manoeuvres |
+| `FLICK_ON` | A pass where a player flicks the ball on towards a teammate, usually with their head |
+| `SHOT_ASSIST` | A pass leading directly to a shot attempt (not necessarily a goal) |
+| `ASSIST` | A pass leading directly to a goal |
+| `ASSIST_2ND` | A pass leading to another pass which then leads to a goal |
 
 ### GoalkeeperQualifier
 
 | Value | Description |
 |---|---|
-| `SAVE` | Save attempt |
-| `CLAIM` | Claim / catch |
-| `PUNCH` | Punch clear |
-| `PICK_UP` | Pick up ball |
-| `SMOTHER` | Smother at feet |
-| `KEEPER_SWEEP` | Sweeper keeper action |
+| `SAVE` | Goalkeeper faces a shot and saves |
+| `CLAIM` | Goalkeeper catches a cross |
+| `PUNCH` | Goalkeeper punches ball clear |
+| `PICK_UP` | Goalkeeper picks up the ball |
+| `SMOTHER` | Goalkeeper comes out to dispossess a player (equivalent to a tackle for an outfield player) |
+| `REFLEX` | Goalkeeper performs a reflex save |
+| `SAVE_ATTEMPT` | Goalkeeper attempts to save a shot |
 
 ## Event Structure
 
@@ -143,7 +161,7 @@ Every event shares a common base:
 ```python
 class Event:
     event_id: str                    # Unique event ID
-    event_type: EventType            # One of the 13 canonical types
+    event_type: EventType            # One of the 19 canonical types
     result: Optional[ResultType]     # Type-specific result enum
     qualifiers: List[Qualifier]      # Additional context
     period: Period                    # Match period (1H, 2H, etc.)
@@ -192,43 +210,49 @@ kloppy abstracts coordinate systems through the `CoordinateSystem` class.
 
 | System | Dimensions | Origin | Y Direction |
 |---|---|---|---|
-| `kloppy` | 105 x 68 | Bottom-left | Up |
+| `kloppy` | 1 x 1 | Top-left | Down (normalised) |
 | `opta` | 100 x 100 | Bottom-left | Up |
 | `wyscout` | 100 x 100 | Top-left | Down |
 | `statsbomb` | 120 x 80 | Top-left | Down |
 | `secondspectrum` | 105 x 68 | Centre | Up |
 | `tracab` | 10500 x 6800 | Centre | Up (centimetres) |
-| `metrica` | 1 x 1 | Bottom-left | Up (normalised) |
+| `metrica` | 1 x 1 | Top-left | Down (normalised) |
 | `sportec` | 105 x 68 | Bottom-left | Up |
 | `skillcorner` | 105 x 68 | Centre | Up |
-| `datafactory` | 100 x 100 | Bottom-left | Up |
+| `datafactory` | 2 x 2 | Centre | Down (normalised) |
 
 ### Transforming Coordinates
 
 ```python
-from kloppy.domain import TransformationModel
+from kloppy.domain import MetricPitchDimensions, Dimension
 
 # Transform to kloppy's standard system
 dataset = dataset.transform(
-    to_pitch_dimensions=PitchDimensions(x_dim=Dimension(0, 105), y_dim=Dimension(0, 68)),
-    to_orientation="FIXED_HOME_AWAY"
+    to_pitch_dimensions=MetricPitchDimensions(
+        x_dim=Dimension(0, 105),
+        y_dim=Dimension(0, 68),
+        pitch_length=105,
+        pitch_width=68,
+        standardized=False,
+    ),
+    to_orientation="STATIC_HOME_AWAY"
 )
 
-# Or use a named coordinate system
-from kloppy.helpers import to_pandas
-df = to_pandas(dataset, additional_columns={"coordinates_x": lambda e: e.coordinates.x})
+# Or export with additional derived columns
+df = dataset.to_df(engine="pandas", coordinates_x=lambda e: e.coordinates.x)
 ```
 
 ### Orientation
 
 | Orientation | Description |
 |---|---|
-| `FIXED_HOME_AWAY` | Home team always attacks left-to-right in both halves |
-| `ACTION_EXECUTING_TEAM` | Attacking team always goes left-to-right (like Opta/Wyscout raw) |
-| `HOME_TEAM` | Home team's perspective throughout |
-| `AWAY_TEAM` | Away team's perspective throughout |
-| `BALL_OWNING_TEAM` | Ball-owning team always goes left-to-right |
-| `STATIC_HOME_AWAY` | Home attacks right in 1H, left in 2H (physical pitch) |
+| `BALL_OWNING_TEAM` | The team currently in possession always attacks left-to-right |
+| `ACTION_EXECUTING_TEAM` | The team executing the action always attacks left-to-right (event data only; equivalent to `BALL_OWNING_TEAM` for tracking data) |
+| `HOME_AWAY` | Home team attacks left-to-right in the first period, away team in the second |
+| `AWAY_HOME` | Away team attacks left-to-right in the first period, home team in the second |
+| `STATIC_HOME_AWAY` | Home team attacks left-to-right in both periods (physical pitch) |
+| `STATIC_AWAY_HOME` | Away team attacks left-to-right in both periods (physical pitch) |
+| `NOT_SET` | Attacking direction is not defined |
 
 ## Dataset Structure
 
@@ -269,7 +293,8 @@ class Player:
     name: str
     team: Team
     jersey_no: Optional[int]
-    position: Optional[Position]  # GOALKEEPER, DEFENDER, MIDFIELDER, FORWARD
+    position: Optional[Position]  # PositionType has 33 members, e.g. Goalkeeper,
+                                  # LeftBack, CenterDefensiveMidfield, Striker
     starting: bool                # In starting XI
 ```
 

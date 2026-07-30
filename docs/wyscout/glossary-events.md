@@ -329,7 +329,7 @@ If a defending player lets the attacking player progress with the ball, it's con
 
 A less sophisticated algorithm for defining the outcome of the duel. If the next action of the duel is one of the players in the duel, the duel is assigned a clearly won value to this player and a clearly lost value for his opponent. All other cases are neutral.
 
-#### Anticipation (API tagId: 20): Yes / No
+#### Anticipation (API tagId: 602): Yes / No
 
 A defensive player is positioning himself better to reach the ball first. Used together with the **Beaten to the ball** attribute in a corresponding [Offensive duel](/offensive_duel).
 
@@ -1745,7 +1745,7 @@ A smart pass is considered successful if the next touch of the ball is by a team
 
 Marks the pass as an [Interception](/interception).
 
-#### Link-up play (API tagId: 7): Yes / No
+#### Link-up play: Yes / No
 
 Marks the pass as a [Link-up play](/linkup_play).
 

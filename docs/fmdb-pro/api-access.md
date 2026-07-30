@@ -94,8 +94,8 @@ Sorting cannot be used with continuation pagination.
 Use `includeFields` or `excludeFields` to shape first-level response fields:
 
 ```http
-GET /api/players?includeFields=id,name,dateOfBirth,fmId,externalIds
-GET /api/clubs?excludeFields=kits,finances,wageHistory
+GET /api/players?includeFields=id,name,dateOfBirth,fmId,currentAbility
+GET /api/clubs?excludeFields=stadium,trainingGround,trainingFacilities
 ```
 
 Field shaping applies only to first-level fields, not nested objects.

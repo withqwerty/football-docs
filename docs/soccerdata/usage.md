@@ -54,7 +54,7 @@ All data returns as pandas DataFrames with **MultiIndex**. Common index patterns
 
 **Game ID format**: `"YYYY-MM-DD home_team-away_team"` (constructed by `make_game_id()`).
 
-**Column naming**: All columns converted to snake_case. FBref often has multi-level column headers (level 0 = stat category, level 1 = specific stat).
+**Column naming**: Most scrapers convert columns to snake_case via `standardize_colnames` (used by FBref, SoFIFA, ClubElo, ESPN, WhoScored). `MatchHistory.read_games()` is the exception -- it only renames 6 columns (`Div`, `Date`, `Time`, `HomeTeam`, `AwayTeam`, `Referee`); every other column (e.g. `FTHG`, `HS`, `HY`, bookmaker odds columns like `B365H`) passes through unmodified in its original football-data.co.uk casing. FBref often has multi-level column headers (level 0 = stat category, level 1 = specific stat).
 
 ## Team Name Standardization
 

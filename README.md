@@ -108,7 +108,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| StatsBomb | 234 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
+| StatsBomb | 235 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
 | Wyscout | 161 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 145 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
@@ -118,18 +118,18 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Impect | 77 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces |
 | SkillCorner | 48 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
-| soccerdata | 41 | overview, data-sources, usage |
+| soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
 | Opta | 71 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
 | FMDB Pro | 35 | api-access, api-endpoints, data-model, identity-surfaces |
 | Sportradar | 29 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
-| socceraction | 27 | SPADL format, VAEP, Expected Threat |
+| socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
 | FotMob | 3 | identity-surfaces |
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**1,335 searchable chunks** across 20 providers and tools.
+**1,342 searchable chunks** across 20 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
@@ -139,6 +139,33 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 > and field name in `docs/impect/` is validated against that repository in CI
 > (`pnpm impect:truth`, `src/__tests__/impect-open-data-validation.test.ts`).
 > Data source: **Impect**; use is subject to the repository's own Terms of Use.
+
+## Documentation validation
+
+Docs for AI agents are only useful if they are correct, and prose about an API is
+exactly the kind of thing that drifts or gets invented. Where a machine-readable
+source of truth exists, this repo checks the docs against it in CI rather than
+trusting them.
+
+| Providers | Ground truth | Checked by |
+|---|---|---|
+| kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner | The installed package itself — enum members, importable symbols, class constants | `src/__tests__/provider-truth.test.ts` |
+| Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
+
+Truth files live in `data/provider-truth/` and are generated, not hand-written:
+
+```bash
+pnpm provider:truth      # rebuild every package truth file (needs python3.11)
+```
+
+Each package gets its own pinned venv — co-installing them makes pip silently
+downgrade conflicting versions, which would produce truth that disagrees with the
+docs. Bump a pin in `scripts/gen_all_truth.sh` and the matching `version` in
+`providers.json` together, then re-run and fix whatever the tests flag.
+
+A doc that names an enum member or importable symbol which does not exist in the
+real package fails the build. `scripts/gen_openapi_truth.py` derives the same kind
+of facts from a vendor OpenAPI spec, for providers documented that way.
 
 ## Contributing
 

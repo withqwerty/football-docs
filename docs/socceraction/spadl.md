@@ -4,22 +4,27 @@ A standardised action format from the DTAI Sports Analytics Lab. Converts provid
 
 ## Action attributes
 
-Every action in SPADL has 12 attributes:
+The `SPADLSchema` produced by `convert_to_actions` has 17 columns:
 
 | Attribute | Type | Description |
 |-----------|------|-------------|
-| game_id | int | Match identifier |
+| game_id | any | Match identifier |
+| original_event_id | any | Identifier of the source event this action was derived from (nullable) |
+| action_id | int | Sequential identifier of the action within the game |
 | period_id | int | Game period (1=first half, 2=second half) |
-| seconds | float | Timestamp in seconds from period start |
-| player | string | Player performing the action |
-| team | string | Player's team |
+| time_seconds | float | Timestamp in seconds from period start |
+| team_id | any | Player's team |
+| player_id | any | Player performing the action |
 | start_x | float | Starting X coordinate (0-105m) |
 | start_y | float | Starting Y coordinate (0-68m) |
 | end_x | float | Ending X coordinate (0-105m) |
 | end_y | float | Ending Y coordinate (0-68m) |
-| action_type | string | One of 22 types (see below) |
-| result | string | success, fail, offside, own_goal, yellow_card, red_card |
-| bodypart | string | foot, head, other, none |
+| bodypart_id | int | Numeric ID of the body part used (see below) |
+| bodypart_name | string | foot, head, other, head/other, foot_left, foot_right |
+| type_id | int | Numeric ID of the action type (see below) |
+| type_name | string | One of 23 types (see below) |
+| result_id | int | Numeric ID of the result (see below) |
+| result_name | string | success, fail, offside, owngoal, yellow_card, red_card |
 
 ## Coordinate system
 
@@ -29,7 +34,7 @@ Every action in SPADL has 12 attributes:
 - Y-axis: 0 = bottom touchline, 68 = top touchline
 - Use `play_left_to_right()` to standardise attack direction
 
-## Action types (22)
+## Action types (23)
 
 | Type | Description |
 |------|-------------|
@@ -64,7 +69,7 @@ Every action in SPADL has 12 attributes:
 | success | Action completed successfully |
 | fail | Action failed |
 | offside | Offside |
-| own_goal | Own goal scored |
+| owngoal | Own goal scored |
 | yellow_card | Yellow card received |
 | red_card | Red card received |
 
@@ -73,7 +78,7 @@ Every action in SPADL has 12 attributes:
 A variant that removes the `result` attribute and splits compound actions into separate initiation and completion events.
 
 - A pass becomes two actions: "pass" (by the passer) and "receival" (by the receiver)
-- Uses 11 attributes: single x/y position plus dx/dy deltas instead of start/end pairs
+- Uses 15 attributes (the `AtomicSPADLSchema` columns): single x/y position plus dx/dy deltas instead of start/end pairs
 - Enables finer-grained player attribution (credit passer and receiver separately)
 
 ## Converting from providers

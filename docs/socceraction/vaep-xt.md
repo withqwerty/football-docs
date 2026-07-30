@@ -55,13 +55,15 @@ Values every on-ball action by how it changes the probability of scoring minus c
 
 ### Features
 
-The feature set encodes ~20 dimensions per action in the game state:
+The default feature set (`xfns_default`) produces 568 columns for the default 3-action
+game state (188 columns if `nb_prev_actions=1`) — largely driven by the action-type
+one-hot encoding alone contributing 23 columns per action in the state:
 
 | Feature group | Examples |
 |--------------|---------|
 | Action type | One-hot encoded action type |
 | Result | One-hot encoded result |
-| Body part | foot, head, other |
+| Body part | foot, head, other, head/other, foot_left, foot_right |
 | Location | start_x, start_y, end_x, end_y |
 | Polar coordinates | Distance and angle to goal from start/end |
 | Movement | dx, dy between start and end |
@@ -74,8 +76,16 @@ The feature set encodes ~20 dimensions per action in the game state:
 from socceraction.vaep import VAEP
 
 vaep = VAEP()
-vaep.fit(actions, games)  # Train on SPADL actions
-values = vaep.rate(actions, games)  # Rate each action
+
+# fit() takes precomputed feature/label matrices (X, y), not raw SPADL actions.
+# Build them per game with compute_features()/compute_labels(), then concatenate
+# across games before fitting.
+X = pd.concat([vaep.compute_features(game, game_actions) for game, game_actions in games_actions])
+y = pd.concat([vaep.compute_labels(game, game_actions) for game, game_actions in games_actions])
+vaep.fit(X, y)
+
+# rate() operates on a single game (a pd.Series) plus that game's actions
+values = vaep.rate(game, game_actions)
 
 # Decompose into offensive and defensive contributions
 values[["offensive_value", "defensive_value"]].head()
@@ -105,8 +115,15 @@ VAEP applied to Atomic-SPADL actions. The key difference:
 from socceraction.atomic.vaep import AtomicVAEP
 
 avaep = AtomicVAEP()
-avaep.fit(atomic_actions, games)
-values = avaep.rate(atomic_actions, games)
+
+# AtomicVAEP inherits fit()/rate() from VAEP unchanged: fit() takes precomputed
+# feature/label matrices (built per game and concatenated), and rate() operates
+# on a single game plus that game's atomic actions.
+X = pd.concat([avaep.compute_features(game, game_actions) for game, game_actions in games_actions])
+y = pd.concat([avaep.compute_labels(game, game_actions) for game, game_actions in games_actions])
+avaep.fit(X, y)
+
+values = avaep.rate(game, game_actions)
 ```
 
 ## Key academic reference

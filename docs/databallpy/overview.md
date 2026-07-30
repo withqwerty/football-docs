@@ -2,7 +2,7 @@
 
 ## Overview
 
-DataBallPy is a Python package for loading, synchronizing, and analyzing soccer event and tracking data. Developed by Alexander Oonk and Daan Grob, licensed under MIT. Current version: 0.7.2.
+DataBallPy is a Python package for loading, synchronizing, and analyzing soccer event and tracking data. Developed by Alexander Oonk and Daan Grob, licensed under MIT. Current version: 0.7.3.
 
 Its key distinguishing feature is **smart synchronization of tracking and event data** using the Needleman-Wunsch algorithm (borrowed from bioinformatics sequence alignment), which preserves event ordering during alignment. Naive cost-function approaches do not guarantee this.
 

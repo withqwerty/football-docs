@@ -24,7 +24,8 @@
     "lint:fix": "biome check --write src/",
     "prepublishOnly": "pnpm build && pnpm ingest",
     "start": "node dist/index.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "provider:truth": "bash scripts/gen_all_truth.sh"
   },
   "keywords": [
     "football",

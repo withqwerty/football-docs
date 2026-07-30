@@ -36,7 +36,7 @@ pitch = Pitch(
     stripe=True,               # alternating grass stripes
     stripe_color='#c2d59d',
     half=True,                 # show only half pitch
-    goal_type='box',           # 'line', 'box', 'circle', or None
+    goal_type='box',           # 'line', 'box', or 'circle' (required; None raises TypeError)
     positional=True,           # Juego de Posición zone lines
     corner_arcs=True,
     pad_left=5, pad_right=5,   # padding in data units
@@ -70,10 +70,10 @@ std = Standardizer(
 
 ## Custom Dimensions
 
-For normalised ML coordinate systems, use `center_scale_dims()`:
+For normalised ML coordinate systems, use `center_scale_dims()`. Note this is not part of mplsoccer's public API (it is not re-exported from the top-level `mplsoccer` package or listed in its module's `__all__`), so import it directly from the submodule and expect it to be undocumented/unstable across releases:
 
 ```python
-from mplsoccer.dimensions import center_scale_dims
+from mplsoccer.soccer.dimensions import center_scale_dims
 
 # Create a -1 to 1 coordinate space
 custom_dims = center_scale_dims(

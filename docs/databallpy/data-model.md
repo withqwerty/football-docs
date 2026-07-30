@@ -12,12 +12,12 @@ The `Game` dataclass is the central object, holding tracking data, event data, a
 | `event_data` | `EventData` | Custom pandas DataFrame subclass |
 | `pitch_dimensions` | `list[float]` | [length, width] in metres (typically [106.0, 68.0]) |
 | `periods` | `pd.DataFrame` | Start/end frames and datetimes for periods 1-5 |
-| `home_team_id` | `int` | |
+| `home_team_id` | `int \| str` | |
 | `home_team_name` | `str` | |
 | `home_players` | `pd.DataFrame` | Player info (see PlayersSchema) |
 | `home_score` | `int` | |
 | `home_formation` | `str` | |
-| `away_team_id` | `int` | |
+| `away_team_id` | `int \| str` | |
 | `away_team_name` | `str` | |
 | `away_players` | `pd.DataFrame` | |
 | `away_score` | `int` | |
@@ -66,10 +66,10 @@ Custom `pd.DataFrame` subclass with extra attribute: `provider: str`.
 | `databallpy_event` | str (nullable) | One of: `"pass"`, `"shot"`, `"dribble"`, `"tackle"`, `"own_goal"` |
 | `period_id` | int | Period number |
 | `minutes` | int | Minute of event |
-| `seconds` | int | Second within minute |
-| `player_id` | int | Player identifier |
+| `seconds` | float | Second within minute |
+| `player_id` | object | Player identifier (coerced; not int-only, some providers use non-integer IDs) |
 | `player_name` | str | |
-| `team_id` | int | |
+| `team_id` | object | Coerced; not int-only, some providers use non-integer IDs |
 | `is_successful` | bool | |
 | `start_x` | float | Range: -60 to 60 |
 | `start_y` | float | Range: -45 to 45 |
@@ -85,7 +85,7 @@ Custom `pd.DataFrame` subclass with extra attribute: `provider: str`.
 
 | Column | Type | Constraints |
 |---|---|---|
-| `id` | int | Unique |
+| `id` | object | Unique, coerced; not int-only, some providers use non-integer IDs |
 | `full_name` | str | Unique |
 | `shirt_num` | int | Unique, 0-100 |
 | `position` | str | goalkeeper / defender / midfielder / forward / unspecified |

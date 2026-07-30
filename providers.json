@@ -219,7 +219,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
       "public_safety_notes": "Use public library docs and general provider-mapping guidance only.",
-      "version": "3.16.0",
+      "version": "3.19.0",
       "package": { "type": "pypi", "name": "kloppy" },
       "sources": [
         { "url": "https://kloppy.pysport.org/", "type": "readthedocs" },
@@ -249,7 +249,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; upstream site terms vary.",
       "public_safety_notes": "Describe supported public sources and avoid private scraper state.",
-      "version": "1.8.8",
+      "version": "1.9.1",
       "package": { "type": "pypi", "name": "soccerdata" },
       "sources": [
         { "url": "https://soccerdata.readthedocs.io/en/latest/", "type": "readthedocs" },
@@ -279,7 +279,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
       "public_safety_notes": "Use public docs and open-data provider examples only.",
-      "version": "0.7.2",
+      "version": "0.7.3",
       "package": { "type": "pypi", "name": "databallpy" },
       "sources": [
         { "url": "https://databallpy.readthedocs.io/en/latest/", "type": "readthedocs" },

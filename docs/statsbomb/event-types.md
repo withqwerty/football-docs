@@ -9,7 +9,7 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 2 | Ball Recovery | Player regains possession from a loose ball |
 | 3 | Dispossessed | Player loses the ball through opponent action (not a failed dribble) |
 | 4 | Duel | Contested situation between two players (aerial or ground) |
-| 5 | Camera On* | Signals the camera resuming gameplay capture after a replay/cut (deprecated; superseded by `off_camera`) |
+| 5 | Camera On* | Signals the stop of the camera capturing gameplay for a replay/video cut (deprecated; superseded by `off_camera`) |
 | 6 | Block | Player blocks a shot, pass, or cross |
 | 8 | Offside | Player caught in an offside position |
 | 9 | Clearance | Defensive action to remove the ball from a dangerous area |
@@ -173,7 +173,7 @@ The `shot` object is nested within shot events.
 | 37 | Head |
 | 38 | Left Foot |
 | 40 | Right Foot |
-| 70 | No Touch |
+| 70 | Other |
 
 ### Shot Types
 
@@ -276,10 +276,10 @@ Note: Regular open-play passes have no `type` field.
 | ID | Name |
 |----|------|
 | 9 | Incomplete |
-| 74 | Out |
-| 75 | Pass Offside |
-| 76 | Unknown |
-| 77 | Injury Clearance |
+| 74 | Injury Clearance |
+| 75 | Out |
+| 76 | Pass Offside |
+| 77 | Unknown |
 
 A successful pass has **no** `outcome` field. The absence of `outcome` means the pass was completed.
 
@@ -330,11 +330,19 @@ A contest between two players.
 | ID | Name |
 |----|------|
 | 10 | Aerial Lost |
-| 11 | Aerial Won |
-| 16 | Lost |
-| 17 | Won |
+| 11 | Tackle |
 
-The type encodes both the duel category (aerial vs ground/tackle) and the outcome.
+### Duel Outcomes
+
+| ID | Name |
+|----|------|
+| 1 | Lost |
+| 4 | Won |
+| 13 | Lost In Play |
+| 14 | Lost Out |
+| 15 | Success |
+| 16 | Success In Play |
+| 17 | Success Out |
 
 ---
 
@@ -355,15 +363,19 @@ The `goalkeeper` object contains keeper-specific action details.
 | ID | Name |
 |----|------|
 | 25 | Collected |
-| 27 | Keeper Pick-Up |
-| 28 | Keeper Sweep |
-| 31 | Punch |
+| 26 | Goal Conceded |
+| 27 | Keeper Sweeper |
+| 28 | Penalty Conceded |
+| 29 | Penalty Saved |
+| 30 | Punch |
+| 31 | Save |
+| 32 | Shot Faced |
 | 33 | Shot Saved |
-| 34 | Shot Saved Off Target |
-| 35 | Shot Saved to Post |
-| 37 | Smother |
-| 44 | Goal Conceded |
-| 57 | Shot Faced |
+| 34 | Smother |
+| 109 | Penalty Saved to Post |
+| 110 | Saved to Post |
+| 113 | Shot Saved Off Target |
+| 114 | Shot Saved to Post |
 
 ### Goalkeeper Body Parts
 
@@ -376,7 +388,6 @@ The `goalkeeper` object contains keeper-specific action details.
 | 39 | Left Hand |
 | 40 | Right Foot |
 | 41 | Right Hand |
-| 69 | No Touch |
 
 ### Goalkeeper Techniques
 
@@ -389,20 +400,24 @@ The `goalkeeper` object contains keeper-specific action details.
 
 | ID | Name |
 |----|------|
-| 1 | Claim |
+| 4 | Won |
+| 13 | Lost In Play |
+| 14 | Lost Out |
 | 15 | Success |
 | 16 | Success In Play |
 | 17 | Success Out |
-| 47 | Clear |
-| 48 | Fail |
-| 49 | In Play |
-| 50 | In Play Danger |
-| 51 | In Play Safe |
-| 52 | No Touch |
-| 53 | Punched Out |
-| 55 | Touched In |
-| 56 | Touched Out |
-| 58 | Won |
+| 47 | Claim |
+| 48 | Clear |
+| 49 | Collected Twice |
+| 50 | Fail |
+| 51 | In Play |
+| 52 | In Play Danger |
+| 53 | In Play Safe |
+| 55 | No Touch |
+| 56 | Saved Twice |
+| 58 | Touched In |
+| 59 | Touched Out |
+| 117 | Punched Out |
 
 ---
 
@@ -412,7 +427,10 @@ The `goalkeeper` object contains keeper-specific action details.
 
 | ID | Name |
 |----|------|
+| 1 | Lost |
 | 4 | Won |
+| 13 | Lost In Play |
+| 14 | Lost Out |
 | 15 | Success |
 | 16 | Success In Play |
 | 17 | Success Out |
@@ -517,8 +535,8 @@ Formation is encoded as an integer: 433 = 4-3-3, 442 = 4-4-2, 352 = 3-5-2, etc.
 
 | ID | Name |
 |----|------|
-| 101 | Injury |
-| 102 | Tactical |
+| 102 | Injury |
+| 103 | Tactical |
 
 ---
 

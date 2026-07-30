@@ -2,9 +2,9 @@
 
 ## How Mapping Works
 
-kloppy maps each provider's native event types to its 13 canonical event types. When a provider event has no clean canonical match, it becomes a `GenericEvent` with the original type preserved in `raw_event`.
+kloppy maps each provider's native event types to its 19 canonical event types. When a provider event has no clean canonical match, it becomes a `GenericEvent` with the original type preserved in `raw_event`.
 
-Each provider has a **deserializer** class (e.g., `OptaDeserializer`, `StatsBombDeserializer`) that handles the translation. The mapping is deterministic -- the same provider event always produces the same kloppy event type.
+Each provider has a **deserializer** class (e.g., `StatsPerformDeserializer` for Opta, `StatsBombDeserializer`) that handles the translation. The mapping is deterministic -- the same provider event always produces the same kloppy event type.
 
 ## Mapping Tables
 
@@ -12,66 +12,45 @@ Each provider has a **deserializer** class (e.g., `OptaDeserializer`, `StatsBomb
 
 | Opta Type ID | Opta Name | kloppy Event Type | Notes |
 |---|---|---|---|
-| 1 | Pass | `PASS` | Includes all pass subtypes |
+| 1 | Pass | `PASS` | Subtypes preserved as qualifiers |
 | 2 | Offside Pass | `PASS` | Result set to `OFFSIDE` |
 | 3 | Take On | `TAKE_ON` | |
-| 4 | Foul | `FOUL_COMMITTED` | |
+| 4 | Foul Committed | `FOUL_COMMITTED` | Only when `outcome == 0` |
 | 5 | Out | `BALL_OUT` | |
-| 6 | Corner Awarded | `GENERIC` | Set piece qualifier added |
-| 7 | Tackle | `DUEL` | |
+| 6 | Corner Awarded | `BALL_OUT` | |
+| 7 | Tackle | `DUEL` | With `GROUND` duel qualifier |
 | 8 | Interception | `INTERCEPTION` | |
-| 9 | Turnover | `GENERIC` | |
 | 10 | Save | `GOALKEEPER` | With `SAVE` qualifier |
 | 11 | Claim | `GOALKEEPER` | With `CLAIM` qualifier |
 | 12 | Clearance | `CLEARANCE` | |
 | 13 | Miss | `SHOT` | Result: `OFF_TARGET` |
-| 14 | Post | `SHOT` | Result: `POST` |
+| 14 | Post | `SHOT` | Result: `OFF_TARGET` |
 | 15 | Attempt Saved | `SHOT` | Result: `SAVED` |
 | 16 | Goal | `SHOT` | Result: `GOAL` |
-| 17 | Card | `GENERIC` | Card qualifier attached |
-| 27 | Player Off | `GENERIC` | Substitution |
-| 28 | Player On | `GENERIC` | Substitution |
-| 30 | End | `GENERIC` | Period end |
-| 32 | Start | `GENERIC` | Period start |
-| 34 | Team Set Piece | `GENERIC` | |
-| 35 | Player Changed Position | `GENERIC` | |
-| 36 | Player Changed Jersey | `GENERIC` | |
-| 37 | Collection End | `GENERIC` | |
-| 38 | Temp_GoalKick | `GENERIC` | |
-| 39 | Temp_FreekickCross | `GENERIC` | |
+| 17 | Card | `CARD` | |
+| 18 | Player Off | `PLAYER_OFF` | |
+| 19 | Player On | `PLAYER_ON` | Also read as the replacement in a substitution |
+| 27 | Start Delay | — | Treated as a dead-ball event |
+| 28 | End Delay | — | Treated as a dead-ball event |
+| 30 | End Period | — | Sets the period end timestamp |
+| 32 | Start Period | — | Sets the period start timestamp |
+| 34 | Team Set Up | — | Starting formations and line-ups |
 | 40 | Formation Change | `FORMATION_CHANGE` | |
 | 41 | Punch | `GOALKEEPER` | With `PUNCH` qualifier |
-| 42 | Good Skill | `GENERIC` | |
-| 43 | Deleted Event | `GENERIC` | |
-| 44 | Aerial | `DUEL` | Aerial duel |
-| 45 | Challenge | `DUEL` | |
-| 49 | Ball Recovery | `GENERIC` | |
-| 50 | Blocked Pass | `PASS` | Result: `INCOMPLETE` |
-| 51 | Delay of Play | `GENERIC` | |
-| 52 | Opponent Half | `GENERIC` | |
-| 53 | Own Half | `GENERIC` | |
-| 54 | Error | `MISCONTROL` | |
-| 55 | Tackle | `DUEL` | |
-| 56 | Temp_Save | `GOALKEEPER` | |
-| 57 | Resume | `GENERIC` | |
-| 58 | Contentious Referee | `GENERIC` | |
-| 59 | Possession Loss | `GENERIC` | |
-| 61 | Keeper Pick-up | `GOALKEEPER` | With `PICK_UP` qualifier |
-| 63 | Temp_Thing | `GENERIC` | |
-| 64 | Shield Ball | `GENERIC` | |
-| 65 | Ball Touch | `GENERIC` | |
-| 66 | Temp_Cross | `GENERIC` | |
-| 67 | Keeper Sweeper | `GOALKEEPER` | With `KEEPER_SWEEP` qualifier |
-| 68 | Chance Missed | `SHOT` | |
-| 69 | Ball Recovery | `GENERIC` | |
-| 70 | Blocked | `SHOT` | Result: `BLOCKED` |
-| 71 | Delayed Start | `GENERIC` | |
-| 72 | Tackle Effective | `DUEL` | |
-| 73 | Attendance | `GENERIC` | |
-| 74 | Referee Stop | `GENERIC` | |
-| 75 | Injury Clearance | `CLEARANCE` | |
-| 76 | Tackle | `DUEL` | |
-| 77 | Keeper Smother | `GOALKEEPER` | With `SMOTHER` qualifier |
+| 43 | Deleted Event | — | Filtered out before parsing |
+| 44 | Aerial | `DUEL` | With `AERIAL` duel qualifier |
+| 45 | Challenge | — | Read as look-ahead context for take-ons |
+| 49 | Ball Recovery | `RECOVERY` | |
+| 52 | Keeper Pick-up | `GOALKEEPER` | With `PICK_UP` qualifier |
+| 54 | Smother | `GOALKEEPER` | With `SMOTHER` qualifier |
+| 55 | Offside Provoked | — | Treated as a dead-ball event |
+| 61 | Ball Touch | `MISCONTROL` | Only when `outcome == 0` |
+| 67 | 50/50 | `DUEL` | With `LOOSE_BALL` and `GROUND` qualifiers |
+| 74 | Blocked Pass | `PASS` | |
+
+These are the 35 Opta type IDs kloppy's `StatsPerformDeserializer` names explicitly;
+IDs it does not name are not silently mapped, so check the deserializer source before
+relying on any other ID.
 
 ### StatsBomb to kloppy
 
@@ -247,4 +226,4 @@ elif dataset.metadata.provider == Provider.WYSCOUT:
     print("Wyscout data")
 ```
 
-Available providers: `OPTA`, `STATSBOMB`, `WYSCOUT`, `METRICA`, `TRACAB`, `SECONDSPECTRUM`, `SKILLCORNER`, `SPORTEC`, `DATAFACTORY`, `HAWKEYE`, `STATSPERFORM`.
+Available providers (`kloppy.domain.Provider`, 17 members): `DATAFACTORY`, `HAWKEYE`, `IMPECT`, `KLOPPY`, `METRICA`, `OPTA`, `OTHER`, `PFF`, `SECONDSPECTRUM`, `SIGNALITY`, `SKILLCORNER`, `SPORTEC`, `SPORTVU`, `STATSBOMB`, `STATSPERFORM`, `TRACAB`, `WYSCOUT`.
