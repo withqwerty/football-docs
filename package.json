@@ -25,7 +25,8 @@
     "prepublishOnly": "pnpm build && pnpm ingest",
     "start": "node dist/index.js",
     "test": "vitest run",
-    "provider:truth": "bash scripts/gen_all_truth.sh"
+    "provider:truth": "bash scripts/gen_all_truth.sh",
+    "openapi:truth": "bash scripts/gen_all_openapi_truth.sh"
   },
   "keywords": [
     "football",

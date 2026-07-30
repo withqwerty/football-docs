@@ -150,13 +150,20 @@ trusting them.
 | Providers | Ground truth | Checked by |
 |---|---|---|
 | kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner | The installed package itself — enum members, importable symbols, class constants | `src/__tests__/provider-truth.test.ts` |
+| Wyscout, SkillCorner, FMDB Pro | The vendor's own publicly published OpenAPI spec — endpoint paths and methods | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
 
 Truth files live in `data/provider-truth/` and are generated, not hand-written:
 
 ```bash
 pnpm provider:truth      # rebuild every package truth file (needs python3.11)
+pnpm openapi:truth       # rebuild every spec-derived truth file
 ```
+
+The specs those derive from are snapshots of **publicly published, unauthenticated**
+vendor documentation. Source URLs, fetch dates and refresh instructions are in
+[`specs/README.md`](specs/README.md). Wyscout's three API versions merge into one
+truth file, because its docs legitimately span v2, v3 and v4.
 
 Each package gets its own pinned venv — co-installing them makes pip silently
 downgrade conflicting versions, which would produce truth that disagrees with the

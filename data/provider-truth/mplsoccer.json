@@ -3,12 +3,13 @@
   "kind": "python-package",
   "source": {
     "package": "mplsoccer",
-    "version": "1.6.1",
+    "version": "1.7.1",
     "generated_at": "2026-07-30"
   },
   "modules": {
     "mplsoccer": [
       "Bumpy",
+      "CurvedText",
       "FontManager",
       "Pitch",
       "PyPizza",
@@ -46,6 +47,7 @@
       "set_labels",
       "set_visible",
       "soccer",
+      "text",
       "utils",
       "validate_ax"
     ],
@@ -111,6 +113,7 @@
       "warnings"
     ],
     "mplsoccer.py_pizza": [
+      "CurvedText",
       "PyPizza",
       "np",
       "plt"
@@ -126,6 +129,7 @@
       "validate_ax"
     ],
     "mplsoccer.radar_chart": [
+      "CurvedText",
       "PatchCollection",
       "Polygon",
       "Radar",
@@ -175,6 +179,22 @@
       "uefa_dims",
       "valid",
       "wyscout_dims"
+    ],
+    "mplsoccer.text": [
+      "Affine2D",
+      "Artist",
+      "Bbox",
+      "CurvedText",
+      "Literal",
+      "PathPatch",
+      "Text",
+      "TextPath",
+      "cbook",
+      "dataclass",
+      "np",
+      "text_to_path",
+      "validate_ax",
+      "warnings"
     ],
     "mplsoccer.utils": [
       "FontManager",
@@ -558,11 +578,15 @@
     ]
   },
   "classes": [
+    "Affine2D",
+    "Artist",
     "BaseDims",
     "BaseSoccerDims",
+    "Bbox",
     "BinnedStatisticResult",
     "Bumpy",
     "Coordinate",
+    "CurvedText",
     "CustomDims",
     "FixedDims",
     "FontManager",
@@ -579,6 +603,7 @@
     "Normalize",
     "PatchCollection",
     "Path",
+    "PathPatch",
     "PolarAxes",
     "Polygon",
     "PositionLine4",
@@ -589,19 +614,25 @@
     "Radar",
     "ScaleCenterDims",
     "Standardizer",
+    "Text",
+    "TextPath",
     "VariableCenterDims",
     "Wedge",
     "partial"
   ],
   "symbols": [
+    "Affine2D",
+    "Artist",
     "BaseDims",
     "BaseSoccerDims",
+    "Bbox",
     "BinnedStatisticResult",
     "Bumpy",
     "CLOSEPOLY",
     "CURVE3",
     "CURVE4",
     "Coordinate",
+    "CurvedText",
     "CustomDims",
     "Dict",
     "FixedDims",
@@ -617,6 +648,7 @@
     "LineCollection",
     "LinearSegmentedColormap",
     "ListedColormap",
+    "Literal",
     "MOVETO",
     "MetricasportsDims",
     "NUM_VERTICES_FOR_CODE",
@@ -625,6 +657,7 @@
     "Optional",
     "PatchCollection",
     "Path",
+    "PathPatch",
     "Pitch",
     "PolarAxes",
     "Polygon",
@@ -640,6 +673,8 @@
     "Sbopen",
     "ScaleCenterDims",
     "Standardizer",
+    "Text",
+    "TextPath",
     "VariableCenterDims",
     "VerticalPitch",
     "Wedge",
@@ -654,6 +689,7 @@
     "binned_statistic_2d",
     "binned_statistic_dd",
     "bumpy_chart",
+    "cbook",
     "center_scale_dims",
     "circmean",
     "cm",
@@ -700,6 +736,8 @@
     "soccer",
     "sonar",
     "statsbomb_dims",
+    "text",
+    "text_to_path",
     "textwrap",
     "to_rgba",
     "to_rgba_array",
@@ -767,6 +805,8 @@
     "mplsoccer.soccer.dimensions.tracab_dims": "tracab_dims(pitch_width, pitch_length)",
     "mplsoccer.soccer.dimensions.uefa_dims": "uefa_dims()",
     "mplsoccer.soccer.dimensions.wyscout_dims": "wyscout_dims()",
+    "mplsoccer.text.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
+    "mplsoccer.text.validate_ax": "validate_ax(ax)",
     "mplsoccer.utils.NamedTemporaryFile": "NamedTemporaryFile(mode='w+b', buffering=-1, encoding=None, newline=None, suffix=None, prefix=None, dir=None, delete=True, *, errors=None)",
     "mplsoccer.utils.add_image": "add_image(image, fig, left, bottom, width=None, height=None, **kwargs)",
     "mplsoccer.utils.copy_doc": "copy_doc(func)",
@@ -775,7 +815,7 @@
     "mplsoccer.utils.inset_image": "inset_image(x, y, image, width=None, height=None, vertical=False, ax=None, **kwargs)",
     "mplsoccer.utils.set_labels": "set_labels(ax, label_value, label_axis)",
     "mplsoccer.utils.set_visible": "set_visible(ax, spine_bottom=False, spine_top=False, spine_left=False, spine_right=False, grid=False, tick=False, label=False)",
-    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x1009a7330>, *, cafile=None, capath=None, cadefault=False, context=None)",
+    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x102503330>, *, cafile=None, capath=None, cadefault=False, context=None)",
     "mplsoccer.utils.validate_ax": "validate_ax(ax)",
     "mplsoccer.validate_ax": "validate_ax(ax)"
   }

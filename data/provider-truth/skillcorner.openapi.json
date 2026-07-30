@@ -1,0 +1,244 @@
+{
+  "provider": "skillcorner",
+  "kind": "openapi",
+  "source": {
+    "specs": [
+      {
+        "spec": "specs/skillcorner/skillcorner_openapi.json",
+        "title": "SkillCorner API",
+        "version": ""
+      }
+    ],
+    "generated_at": "2026-07-30"
+  },
+  "paths": {
+    "/beta/out_of_possession/": [
+      "GET"
+    ],
+    "/competition_editions/": [
+      "GET"
+    ],
+    "/competitions/": [
+      "GET"
+    ],
+    "/competitions/{competition_id}/editions/": [
+      "GET"
+    ],
+    "/competitions/{competition_id}/rounds/": [
+      "GET"
+    ],
+    "/data_collections/": [
+      "GET"
+    ],
+    "/data_collections/custom/": [
+      "GET"
+    ],
+    "/in_possession/off_ball_runs/": [
+      "GET"
+    ],
+    "/in_possession/on_ball_pressures/": [
+      "GET"
+    ],
+    "/in_possession/passes/": [
+      "GET"
+    ],
+    "/match/{match_id}/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/data_collection/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/off_ball_runs/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/on_ball_engagements/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/passing_options/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/phases_of_play/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/dynamic_events/player_possessions/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/in_possession/off_ball_runs/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/in_possession/on_ball_pressures/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/in_possession/passes/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/out_of_possession/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/physical/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/tracking/": [
+      "GET"
+    ],
+    "/match/{match_id}/data_collection/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/off_ball_runs/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/on_ball_engagements/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/passing_options/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/phases_of_play/": [
+      "GET"
+    ],
+    "/match/{match_id}/dynamic_events/player_possessions/": [
+      "GET"
+    ],
+    "/match/{match_id}/metrics/game_intelligence/in_possession/off_ball_runs/": [
+      "GET"
+    ],
+    "/match/{match_id}/metrics/game_intelligence/in_possession/passes/": [
+      "GET"
+    ],
+    "/match/{match_id}/metrics/game_intelligence/in_possession/passing_options/": [
+      "GET"
+    ],
+    "/match/{match_id}/metrics/game_intelligence/in_possession/player_possessions/": [
+      "GET"
+    ],
+    "/match/{match_id}/metrics/game_intelligence/out_of_possession/on_ball_engagements/": [
+      "GET"
+    ],
+    "/match/{match_id}/tracking/": [
+      "GET"
+    ],
+    "/matches/": [
+      "GET"
+    ],
+    "/matches/custom/": [
+      "GET"
+    ],
+    "/metrics/game_intelligence/in_possession/off_ball_runs/": [
+      "GET"
+    ],
+    "/metrics/game_intelligence/in_possession/passes/": [
+      "GET"
+    ],
+    "/metrics/game_intelligence/in_possession/passing_options/": [
+      "GET"
+    ],
+    "/metrics/game_intelligence/in_possession/player_possessions/": [
+      "GET"
+    ],
+    "/metrics/game_intelligence/out_of_possession/on_ball_engagements/": [
+      "GET"
+    ],
+    "/physical/": [
+      "GET"
+    ],
+    "/players/": [
+      "GET"
+    ],
+    "/players/{player_id}/": [
+      "GET"
+    ],
+    "/roles/": [
+      "GET"
+    ],
+    "/seasons/": [
+      "GET"
+    ],
+    "/teams/": [
+      "GET"
+    ],
+    "/teams/{team_id}/": [
+      "GET"
+    ]
+  },
+  "parameters": [
+    "after",
+    "age__gte",
+    "age__lte",
+    "average_per",
+    "channel",
+    "competition",
+    "competition_edition",
+    "competition_id",
+    "component_permission_for",
+    "count_match__gte",
+    "data_version",
+    "date__gte",
+    "date__lte",
+    "date_time__gte",
+    "date_time__lte",
+    "dynamic_events_last_modified__gte",
+    "dynamic_events_v2_last_modified__gte",
+    "extrapolated_tracking_last_modified__gte",
+    "extrapolated_tracking_v3_last_modified__gte",
+    "feed_type",
+    "file_format",
+    "group",
+    "group_by",
+    "ignore_dynamic_events_check",
+    "in_possession_dealing_with_pressure_last_modified__gte",
+    "in_possession_off_ball_runs_last_modified__gte",
+    "in_possession_passes_last_modified__gte",
+    "include_metadata",
+    "lang",
+    "limit",
+    "match",
+    "match_id",
+    "metrics_gi_ip_off_ball_runs_v2_last_modified__gte",
+    "metrics_gi_ip_passes_v2_last_modified__gte",
+    "metrics_gi_ip_passing_options_v2_last_modified__gte",
+    "metrics_gi_ip_player_possession_v2_last_modified__gte",
+    "metrics_gi_oop_on_ball_engagements_v2_last_modified__gte",
+    "offset",
+    "order_by",
+    "performance_included_count__gte",
+    "period",
+    "period_starts",
+    "physical_check_passed",
+    "physical_v3_last_modified__gte",
+    "player",
+    "player_id",
+    "playing_time__gte",
+    "playing_time__lte",
+    "position",
+    "position_group",
+    "possession",
+    "pressure_intensity",
+    "response_format",
+    "result",
+    "results",
+    "role",
+    "run_type",
+    "search",
+    "season",
+    "stadium",
+    "team",
+    "team_id",
+    "third",
+    "tracking_last_modified__gte",
+    "user",
+    "variants",
+    "venue"
+  ],
+  "schemas": [],
+  "fields": [],
+  "enums": {}
+}

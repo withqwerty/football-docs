@@ -64,47 +64,35 @@ def walk_schemas(node: Any, fields: set[str], enums: dict[str, list[str]], name:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("spec", type=Path)
+    ap.add_argument("spec", type=Path, nargs="+", help="one or more spec files to merge")
     ap.add_argument("--provider", required=True)
     args = ap.parse_args()
 
-    spec = load_spec(args.spec)
-
     paths: dict[str, list[str]] = {}
     parameters: set[str] = set()
-
-    for path, item in (spec.get("paths") or {}).items():
-        if not isinstance(item, dict):
-            continue
-        methods = sorted(m.upper() for m in item if m.lower() in HTTP_METHODS)
-        paths[str(path)] = methods
-        for method, op in item.items():
-            if method.lower() not in HTTP_METHODS and method != "parameters":
-                continue
-            params = op.get("parameters") if isinstance(op, dict) else op
-            if isinstance(params, list):
-                for p in params:
-                    if isinstance(p, dict) and isinstance(p.get("name"), str):
-                        parameters.add(p["name"])
-
-    for p in (spec.get("components", {}).get("parameters") or {}).values():
-        if isinstance(p, dict) and isinstance(p.get("name"), str):
-            parameters.add(p["name"])
-
     fields: set[str] = set()
     enums: dict[str, list[str]] = {}
-    schemas = spec.get("components", {}).get("schemas") or spec.get("definitions") or {}
-    for schema_name, schema in schemas.items():
-        walk_schemas(schema, fields, enums, str(schema_name))
+    schemas: dict[str, Any] = {}
+    infos: list[dict[str, str]] = []
 
-    info = spec.get("info") or {}
+    # A provider's docs can legitimately span several API versions (Wyscout
+    # documents v2, v3 and v4), so merge every spec given rather than treating
+    # one version's absence as a documentation error.
+    for spec_path in args.spec:
+        spec = load_spec(spec_path)
+        info = spec.get("info") or {}
+        infos.append({
+            "spec": str(spec_path),
+            "title": str(info.get("title", "")),
+            "version": str(info.get("version", "unknown")),
+        })
+        _collect(spec, paths, parameters, fields, enums, schemas)
+
     truth = {
         "provider": args.provider,
         "kind": "openapi",
         "source": {
-            "spec": str(args.spec),
-            "title": str(info.get("title", "")),
-            "version": str(info.get("version", "unknown")),
+            "specs": infos,
             "generated_at": datetime.date.today().isoformat(),
         },
         "paths": {k: paths[k] for k in sorted(paths)},
@@ -119,10 +107,37 @@ def main() -> None:
     out_path.write_text(json.dumps(truth, indent=2) + "\n")
 
     print(
-        f"{args.provider}: {args.spec.name} -> {out_path.name} "
+        f"{args.provider}: {len(args.spec)} spec(s) -> {out_path.name} "
         f"({len(paths)} paths, {len(parameters)} params, {len(schemas)} schemas, "
         f"{len(fields)} fields, {len(enums)} enums)"
     )
+
+
+def _collect(spec, paths, parameters, fields, enums, schemas) -> None:
+    for path, item in (spec.get("paths") or {}).items():
+        if not isinstance(item, dict):
+            continue
+        methods = {m.upper() for m in item if m.lower() in HTTP_METHODS}
+        # Union across versions: the same path can expose different methods in
+        # different API versions, and the docs cover all of them.
+        paths[str(path)] = sorted(set(paths.get(str(path), [])) | methods)
+        for method, op in item.items():
+            if method.lower() not in HTTP_METHODS and method != "parameters":
+                continue
+            params = op.get("parameters") if isinstance(op, dict) else op
+            if isinstance(params, list):
+                for p in params:
+                    if isinstance(p, dict) and isinstance(p.get("name"), str):
+                        parameters.add(p["name"])
+
+    for p in (spec.get("components", {}).get("parameters") or {}).values():
+        if isinstance(p, dict) and isinstance(p.get("name"), str):
+            parameters.add(p["name"])
+
+    found = spec.get("components", {}).get("schemas") or spec.get("definitions") or {}
+    for schema_name, schema in found.items():
+        schemas[str(schema_name)] = True
+        walk_schemas(schema, fields, enums, str(schema_name))
 
 
 if __name__ == "__main__":

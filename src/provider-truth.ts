@@ -75,6 +75,107 @@ export interface DocFile {
   text: string;
 }
 
+export interface OpenApiTruth {
+  provider: string;
+  kind: string;
+  source: {
+    specs: Array<{ spec: string; title: string; version: string }>;
+    generated_at: string;
+  };
+  /** Endpoint path -> the HTTP methods the spec defines on it. */
+  paths: Record<string, string[]>;
+  parameters: string[];
+  schemas: string[];
+  fields: string[];
+  enums: Record<string, string[]>;
+}
+
+/**
+ * Endpoint paths a doc set may cite without the spec defining them - other
+ * vendors' endpoints named in comparison prose, and illustrative examples.
+ */
+const ENDPOINT_ALLOWLIST: Record<string, string[]> = {
+  wyscout: [],
+  skillcorner: [],
+  "fmdb-pro": [],
+};
+
+/**
+ * Compare endpoints on shape, not on parameter naming. Docs and specs often use
+ * different placeholder names for the same path segment, and that is a style
+ * difference rather than a documentation error.
+ */
+export function normalisePath(path: string): string {
+  return path
+    .split("?")[0]
+    .replace(/\{[^}]*\}/g, "{}")
+    .replace(/\/+$/, "")
+    .trim();
+}
+
+/** `GET /matches/{wyId}/events` occurrences inside code spans. */
+export function extractDocumentedEndpoints(text: string): Array<{ method: string; path: string }> {
+  const out: Array<{ method: string; path: string }> = [];
+  const seen = new Set<string>();
+  for (const match of text.matchAll(/`(GET|POST|PUT|PATCH|DELETE)\s+(\/[^`\s]*)`/g)) {
+    // `GET /metrics/game_intelligence/...` is prose shorthand for a family of
+    // endpoints, not a claim that this exact path exists.
+    if (match[2].includes("...")) continue;
+    const key = `${match[1]} ${match[2]}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push({ method: match[1], path: match[2] });
+    }
+  }
+  return out;
+}
+
+export function loadOpenApiTruth(provider: string): OpenApiTruth {
+  return JSON.parse(
+    readFileSync(resolve(TRUTH_DIR, `${provider}.openapi.json`), "utf-8"),
+  ) as OpenApiTruth;
+}
+
+export function listOpenApiProviders(): string[] {
+  return readdirSync(TRUTH_DIR)
+    .filter((f) => f.endsWith(".openapi.json"))
+    .map((f) => f.replace(/\.openapi\.json$/, ""))
+    .sort();
+}
+
+/** Check that every endpoint a doc set cites exists in the vendor's own spec. */
+export function validateOpenApiDocs(docs: DocFile[], truth: OpenApiTruth): string[] {
+  const violations: string[] = [];
+
+  const byShape = new Map<string, Set<string>>();
+  for (const [path, methods] of Object.entries(truth.paths)) {
+    const shape = normalisePath(path);
+    const set = byShape.get(shape) ?? new Set<string>();
+    for (const m of methods) set.add(m);
+    byShape.set(shape, set);
+  }
+
+  const allowed = new Set((ENDPOINT_ALLOWLIST[truth.provider] ?? []).map(normalisePath));
+
+  for (const { file, text } of docs) {
+    for (const { method, path } of extractDocumentedEndpoints(text)) {
+      const shape = normalisePath(path);
+      if (allowed.has(shape)) continue;
+
+      const methods = byShape.get(shape);
+      if (!methods) {
+        violations.push(`${file}: \`${method} ${path}\` - no such path in the ${truth.provider} spec`);
+      } else if (!methods.has(method)) {
+        violations.push(
+          `${file}: \`${method} ${path}\` - spec defines ${[...methods].sort().join(", ")} on this path, not ${method}`,
+        );
+      }
+    }
+  }
+
+  return violations;
+}
+
 export function loadProviderTruth(provider: string): PythonPackageTruth {
   return JSON.parse(
     readFileSync(resolve(TRUTH_DIR, `${provider}.json`), "utf-8"),
@@ -83,7 +184,7 @@ export function loadProviderTruth(provider: string): PythonPackageTruth {
 
 export function listTruthProviders(): string[] {
   return readdirSync(TRUTH_DIR)
-    .filter((f) => f.endsWith(".json"))
+    .filter((f) => f.endsWith(".json") && !f.endsWith(".openapi.json"))
     .map((f) => f.replace(/\.json$/, ""))
     .sort();
 }

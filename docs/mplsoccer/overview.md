@@ -2,7 +2,7 @@
 
 ## Overview
 
-mplsoccer is a Python library for plotting soccer/football charts using Matplotlib and loading StatsBomb open data. Created by Andrew Rowlinson and Anmol Durgapal, licensed under MIT. Current version: 1.6.1.
+mplsoccer is a Python library for plotting soccer/football charts using Matplotlib and loading StatsBomb open data. Created by Andrew Rowlinson and Anmol Durgapal, licensed under MIT. Current version: 1.7.1.
 
 - **Install**: `pip install mplsoccer` or `conda install -c conda-forge mplsoccer`
 - **Dependencies**: matplotlib>=3.6, numpy, pandas, pillow, requests, scipy, seaborn

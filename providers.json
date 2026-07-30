@@ -47,7 +47,7 @@
       "aliases": ["hudl", "hudl-wyscout"],
       "access_level": "public-api-docs",
       "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Use public API and glossary facts; avoid restricted customer payloads.",
+      "public_safety_notes": "Use public API and glossary facts; avoid restricted customer payloads. Spec snapshots in specs/wyscout/ come from the public, unauthenticated https://apidocs.wyscout.com/ - see specs/README.md. Endpoint claims are validated against them in CI.",
       "version": "v3 (current) / v4 (preview)",
       "package": null,
       "sources": [
@@ -171,7 +171,7 @@
       "aliases": ["fmdb"],
       "access_level": "public-api-docs",
       "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Use public API documentation only; do not include customer keys or private responses.",
+      "public_safety_notes": "Use public API documentation only; do not include customer keys or private responses. Spec snapshot in specs/fmdb-pro/ comes from the public, unauthenticated https://api.fmdb.pro/api/openapi - see specs/README.md. Endpoint claims are validated against it in CI.",
       "version": "latest",
       "package": null,
       "sources": [
@@ -202,7 +202,7 @@
       "aliases": ["skill-corner"],
       "access_level": "public-api-docs",
       "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads.",
+      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads. Spec snapshot in specs/skillcorner/ comes from the public, unauthenticated https://skillcorner.com/api/docs/ - see specs/README.md. Endpoint claims are validated against it in CI.",
       "version": "tracking v3 / physical v3 / dynamic events v2",
       "package": { "type": "pypi", "name": "skillcorner", "repo": "SkillCorner/skillcorner-toolkit" },
       "sources": [
@@ -264,7 +264,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation.",
       "public_safety_notes": "Use public plotting docs and examples only.",
-      "version": "1.6.1",
+      "version": "1.7.1",
       "package": { "type": "pypi", "name": "mplsoccer" },
       "sources": [
         { "url": "https://mplsoccer.readthedocs.io/en/latest/", "type": "readthedocs" },
