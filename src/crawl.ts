@@ -127,7 +127,14 @@ turndown.addRule("gfmTable", {
       };
       visit(cell);
       // Flatten to one line and neutralise pipes, which would invent columns.
-      return text.replace(/\s+/g, " ").replace(/\|/g, "\\|").trim();
+      // Backslashes have to go first: escaping only the pipe turns a cell reading
+      // `a\|b` into `a\\|b`, where the backslash escapes itself and the pipe is
+      // left live, splitting the row.
+      return text
+        .replace(/\s+/g, " ")
+        .replace(/\\/g, "\\\\")
+        .replace(/\|/g, "\\|")
+        .trim();
     };
 
     const body = rows
@@ -663,7 +670,15 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error("Crawl failed:", err);
-  process.exit(1);
-});
+// Only run when executed directly. Importing this module for its exported
+// helpers - which the tests do - must not start a crawl: it writes over docs/
+// for every provider in the registry, from whatever upstream happens to serve
+// that minute. Compare resolved paths rather than matching on the filename, so
+// a same-named script elsewhere on the path cannot trigger it either.
+const entrypoint = process.argv[1] ? resolve(process.argv[1]) : "";
+if (entrypoint && entrypoint === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error("Crawl failed:", err);
+    process.exit(1);
+  });
+}
