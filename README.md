@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 21 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, and more). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 23 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -92,7 +92,7 @@ Add to `claude_desktop_config.json`:
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
 | `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
 
-Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
+Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` and `ESPN` search `soccerdata`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
 ## Example queries
 
@@ -108,7 +108,9 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
+| fast-forward | 251 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
 | StatsBomb | 235 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
+| unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 161 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 145 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
@@ -130,7 +132,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**1,356 searchable chunks** across 21 providers and tools.
+**1,809 searchable chunks** across 23 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
@@ -150,7 +152,7 @@ trusting them.
 
 | Providers | Ground truth | Checked by |
 |---|---|---|
-| kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner | The installed package itself — enum members, importable symbols, class constants | `src/__tests__/provider-truth.test.ts` |
+| kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner, fast-forward, unravelsports | The installed package itself — enum members, importable symbols, class constants, `Literal` parameter vocabularies | `src/__tests__/provider-truth.test.ts` |
 | Wyscout, SkillCorner, FMDB Pro, Sportradar | The vendor's own publicly published OpenAPI spec — endpoint paths and methods | `src/__tests__/provider-truth.test.ts` |
 | BeSoccer | The vendor's published Postman collection — request vocabulary and parameters | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
@@ -175,6 +177,11 @@ docs. Bump a pin in `scripts/gen_all_truth.sh` and the matching `version` in
 A doc that names an enum member or importable symbol which does not exist in the
 real package fails the build. `scripts/gen_openapi_truth.py` derives the same kind
 of facts from a vendor OpenAPI spec, for providers documented that way.
+
+Not every vocabulary is an enum. fast-forward's coordinate systems, orientations
+and layouts are lowercase strings on `Literal`-annotated parameters, so the truth
+files also record what each parameter accepts, and a doc writing
+`coordinates="statsbomb"` fails the same way an invented enum member would.
 
 ## Contributing
 

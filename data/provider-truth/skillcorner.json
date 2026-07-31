@@ -4,7 +4,7 @@
   "source": {
     "package": "skillcorner",
     "version": "3.2.0",
-    "generated_at": "2026-07-30"
+    "generated_at": "2026-07-31"
   },
   "modules": {
     "skillcorner": [],
@@ -52,6 +52,8 @@
       "method_docstring"
     ]
   },
+  "literals": {},
+  "literalsByFunction": {},
   "classes": [
     "Any",
     "Bar",
