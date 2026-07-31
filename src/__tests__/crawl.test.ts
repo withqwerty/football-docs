@@ -74,6 +74,68 @@ console.log(x);</code></pre>
     expect(result).toContain("const x = 1;");
   });
 
+  it("converts tables to GFM, keeping cells on their own row", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>Coordinate Systems</h1>
+          <p>This page documents the coordinate systems the loader accepts as arguments.</p>
+          <table>
+            <thead><tr><th>Name</th><th>Origin</th><th>Units</th></tr></thead>
+            <tbody>
+              <tr><td><code>cdf</code></td><td>Center</td><td>meters</td></tr>
+              <tr><td><code>opta</code></td><td>Bottom-left</td><td>0-100</td></tr>
+            </tbody>
+          </table>
+          <p>Every transformation passes through the intermediate system before reaching the target.</p>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    expect(result).toContain("| Name | Origin | Units |");
+    expect(result).toContain("| `cdf` | Center | meters |");
+    expect(result).toContain("| `opta` | Bottom-left | 0-100 |");
+  });
+
+  it("escapes backslashes before pipes, so a cell cannot split its row", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>Separators</h1>
+          <p>This page documents the escape sequences the parser accepts in its arguments.</p>
+          <table>
+            <tr><th>Pattern</th><th>Meaning</th></tr>
+            <tr><td>a\\|b</td><td>literal pipe</td></tr>
+          </table>
+          <p>Any other character is passed through to the underlying regular expression engine.</p>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    // Both characters escaped: the row keeps exactly two columns.
+    expect(result).toContain("| a\\\\\\|b | literal pipe |");
+  });
+
+  it("drops the permalink anchor Sphinx and mkdocs append to every heading", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>Orientations</h1>
+          <p>This page explains how the attacking direction is normalised across periods.</p>
+          <h2>Static<a class="headerlink" href="#static" title="Permanent link">¶</a></h2>
+          <p>Static orientations keep coordinates consistent across every period of the match.</p>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    expect(result).toContain("## Static");
+    expect(result).not.toContain("Permanent link");
+    expect(result).not.toContain("¶");
+  });
+
   it("returns null for empty or script-only pages", () => {
     const html = "<html><body><script>var x = 1;</script></body></html>";
     const result = htmlToMarkdown(html, "https://example.com");
