@@ -19,11 +19,11 @@ public-safe provider facts, and how contributors should prove retrieval quality.
 
 football-docs is the public source for provider identity-surface facts: access
 shape, ID schemes, matching fields, provider quirks, and provenance rules.
-Curated provider identity notes belong here when they can be stated without
-private register state. They should say whether a fact comes from public docs,
+Curated provider identity notes belong here when they can be stated as public
+facts about the provider. They should say whether a fact comes from public docs,
 public page evidence, licensed feed shape, or a reviewed public-safe
-observation, and must not include private paths, credentials, scraper state,
-action ledgers, mint salts, or raw restricted payloads.
+observation, and must not include credentials, local paths, internal tooling
+details, or restricted payloads from any private project.
 
 MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard for connecting AI coding tools to external data sources.
 
