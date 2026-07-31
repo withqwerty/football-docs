@@ -317,6 +317,36 @@
       ],
       "last_crawled": "2026-07-13"
     },
+    "fast-forward": {
+      "description": "Rust-powered loader that reads tracking data from 12 providers into Polars, PySpark, or Arrow",
+      "display_name": "fast-forward",
+      "aliases": ["fastforward", "fast-forward-football", "unravel-fast-forward", "hawkeye", "hawk-eye", "scisports", "signality", "respovision", "gradientsports", "optavision"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation (BSD-3-Clause); provider support depends on licensed input files.",
+      "public_safety_notes": "Use public library docs and general provider-format guidance only.",
+      "version": "0.2.0",
+      "package": { "type": "pypi", "name": "fast-forward-football", "module": "fastforward" },
+      "sources": [
+        { "url": "https://fast-forward.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/UnravelSports/fast-forward", "type": "github_docs" }
+      ],
+      "last_crawled": "2026-07-31"
+    },
+    "unravelsports": {
+      "description": "Python library turning tracking data into graph representations, pressing intensity, and formation detection",
+      "display_name": "unravelsports",
+      "aliases": ["unravel", "unravel-sports", "bigdatabowl", "big-data-bowl"],
+      "access_level": "open-source",
+      "licence_status": "Open-source library documentation (MPL-2.0); provider support depends on licensed input files.",
+      "public_safety_notes": "Use public library docs and open-data examples only.",
+      "version": "1.2.1",
+      "package": { "type": "pypi", "name": "unravelsports", "module": "unravel" },
+      "sources": [
+        { "url": "https://unravelsports.readthedocs.io/en/latest/", "type": "readthedocs" },
+        { "url": "https://github.com/UnravelSports/unravelsports", "type": "github_docs" }
+      ],
+      "last_crawled": "2026-07-31"
+    },
     "free-sources": {
       "description": "Free football data sources (FBref, Understat, ClubElo, football-data.co.uk)",
       "display_name": "Free sources",

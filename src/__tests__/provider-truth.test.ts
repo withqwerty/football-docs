@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   countDocumentedEndpoints,
+  countDocumentedLiteralArguments,
   extractDispatchValues,
   extractDocumentedEndpoints,
   extractEnumTokens,
   extractImportedSymbols,
+  extractLiteralArguments,
   listOpenApiProviders,
   listPostmanProviders,
   listTruthProviders,
@@ -13,6 +15,7 @@ import {
   loadProviderDocs,
   loadProviderTruth,
   normalisePath,
+  validateLiteralArguments,
   validateOpenApiDocs,
   validatePostmanDocs,
   validateProviderDocs,
@@ -32,12 +35,52 @@ describe("provider docs are grounded in the real package", () => {
     expect(violations).toEqual([]);
   });
 
+  it.each(providers)("%s docs pass only values the parameter accepts", (provider) => {
+    const truth = loadProviderTruth(provider);
+    const violations = validateLiteralArguments(loadProviderDocs(provider), truth);
+    expect(violations).toEqual([]);
+  });
+
   it.each(providers)("%s truth file records the version it was built from", (provider) => {
     const truth = loadProviderTruth(provider);
     expect(truth.source.package).toBeTruthy();
     expect(truth.source.version).not.toBe("unknown");
     expect(Object.keys(truth.modules).length).toBeGreaterThan(0);
     expect(truth.symbols.length).toBeGreaterThan(0);
+  });
+
+  /**
+   * fast-forward's entire vocabulary - coordinate systems, orientations, layouts,
+   * engines - is lowercase strings passed as arguments, so the import and enum
+   * checks above find nothing to check in its docs. This is the check that
+   * actually holds them to the package, and it has to be seen to be doing work.
+   */
+  it("fast-forward docs actually cite literal arguments, so the check is not vacuous", () => {
+    const truth = loadProviderTruth("fast-forward");
+    expect(countDocumentedLiteralArguments(loadProviderDocs("fast-forward"), truth)).toBeGreaterThan(
+      20,
+    );
+  });
+
+  it("flags a coordinate system the package does not accept", () => {
+    const truth = loadProviderTruth("fast-forward");
+    const violations = validateLiteralArguments(
+      [{ file: "fake.md", text: 'Load with `coordinates="statsbomb"` for StatsBomb pitches.' }],
+      truth,
+    );
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toContain('coordinates="statsbomb"');
+  });
+
+  it("reads transform()'s to_-prefixed arguments as the same vocabulary", () => {
+    const found = extractLiteralArguments(
+      'dataset.transform(to_coordinates="opta", to_orientation="home_away")',
+      ["coordinates", "orientation"],
+    );
+    expect(found).toEqual([
+      { param: "coordinates", value: "opta" },
+      { param: "orientation", value: "home_away" },
+    ]);
   });
 });
 

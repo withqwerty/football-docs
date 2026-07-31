@@ -22,6 +22,7 @@ import importlib
 import inspect
 import json
 import pkgutil
+import typing
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -96,6 +97,51 @@ def collect_value_lists(mod, prefix: str, out: dict[str, list[str]]) -> None:
             out[f"{prefix}.{name}"] = values
 
 
+def literal_params(func, mod) -> dict[str, list[str]]:
+    """Accepted values for every Literal-annotated parameter of a function.
+
+    Not every controlled vocabulary is an enum. fast-forward expresses its
+    coordinate systems, orientations and layouts as lowercase string Literals on
+    load_tracking's parameters, so without this they are unvalidatable - a doc
+    could invent an orientation and nothing in the corpus would disagree.
+
+    Annotations are resolved one parameter at a time rather than through
+    typing.get_type_hints, which resolves the whole signature at once: these
+    modules use `from __future__ import annotations` alongside TYPE_CHECKING-only
+    imports, so the first unresolvable forward reference (FileLike) fails the
+    call and takes every Literal in that signature down with it.
+    """
+    namespace = {**vars(typing), **vars(mod)}
+    found: dict[str, list[str]] = {}
+    try:
+        params = inspect.signature(func).parameters
+    except (ValueError, TypeError):
+        return found
+    for name, param in params.items():
+        annotation = param.annotation
+        if isinstance(annotation, str):
+            try:
+                annotation = eval(annotation, namespace)  # noqa: S307 - package's own namespace
+            except Exception:
+                continue
+        if typing.get_origin(annotation) is typing.Literal:
+            found[name] = sorted(str(arg) for arg in typing.get_args(annotation))
+    return found
+
+
+def collect_literals(mod, prefix: str, out: dict[str, dict[str, list[str]]]) -> None:
+    for name in public_names(mod):
+        try:
+            obj = getattr(mod, name)
+        except Exception:
+            continue
+        if not (inspect.isfunction(obj) or inspect.ismethod(obj)):
+            continue
+        found = literal_params(obj, mod)
+        if found:
+            out[f"{prefix}.{name}"] = found
+
+
 def scrub_local_paths(text: str) -> str:
     """Replace machine-specific paths captured from default arguments.
 
@@ -140,12 +186,14 @@ def main() -> None:
     enums: dict[str, list[str]] = {}
     signatures: dict[str, str] = {}
     value_lists: dict[str, list[str]] = {}
+    literals_by_function: dict[str, dict[str, list[str]]] = {}
     classes: set[str] = set()
     class_constants: set[str] = set()
 
     collect_enums(root, enums)
     collect_signatures(root, args.package, signatures)
     collect_value_lists(root, args.package, value_lists)
+    collect_literals(root, args.package, literals_by_function)
 
     targets = list(EXTRA_MODULES.get(args.package, [])) + list(args.extra_module)
 
@@ -168,6 +216,7 @@ def main() -> None:
         collect_enums(mod, enums)
         collect_signatures(mod, mod_name, signatures)
         collect_value_lists(mod, mod_name, value_lists)
+        collect_literals(mod, mod_name, literals_by_function)
         for name in public_names(mod):
             try:
                 obj = getattr(mod, name)
@@ -183,6 +232,15 @@ def main() -> None:
 
     all_symbols = sorted({n for names in modules.values() for n in names} | classes | class_constants)
 
+    # Union per parameter name. A value is legitimate if any function in the
+    # package accepts it; which functions accept which is recorded separately,
+    # because it varies (fast-forward's provider modules each accept the shared
+    # coordinate systems plus their own native one, and nobody else's).
+    literals: dict[str, list[str]] = {}
+    for params in literals_by_function.values():
+        for param, values in params.items():
+            literals[param] = sorted(set(literals.get(param, [])) | set(values))
+
     truth = {
         "provider": args.provider,
         "kind": "python-package",
@@ -194,6 +252,11 @@ def main() -> None:
         "modules": {k: v for k, v in sorted(modules.items())},
         "enums": {k: sorted(v) for k, v in sorted(enums.items())},
         "valueLists": {k: v for k, v in sorted(value_lists.items())},
+        "literals": {k: v for k, v in sorted(literals.items())},
+        "literalsByFunction": {
+            k: {p: v for p, v in sorted(params.items())}
+            for k, params in sorted(literals_by_function.items())
+        },
         "classes": sorted(classes),
         "symbols": all_symbols,
         "signatures": {k: v for k, v in sorted(signatures.items())},
@@ -205,8 +268,8 @@ def main() -> None:
 
     print(
         f"{args.provider}: {args.package} {version} -> {out_path.name} "
-        f"({len(enums)} enums, {len(value_lists)} value-lists, {len(all_symbols)} symbols, "
-        f"{len(signatures)} signatures)"
+        f"({len(enums)} enums, {len(value_lists)} value-lists, {len(literals)} literal params, "
+        f"{len(all_symbols)} symbols, {len(signatures)} signatures)"
     )
 
 
