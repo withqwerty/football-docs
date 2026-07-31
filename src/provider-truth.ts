@@ -6,12 +6,17 @@
  * checks docs/<provider>/*.md against those facts and is run by the test suite,
  * so a doc claiming a symbol or enum member that does not exist fails the build.
  *
- * Two checks, both chosen for precision over coverage:
+ * Three checks, all chosen for precision over coverage:
  *
  *   1. Imports  - every `from <package> import X` in a doc must resolve to a real
  *                 symbol. This is what catches fabricated API surface.
  *   2. Enum members - every SCREAMING_SNAKE token in a code span must belong to
  *                 one of the package's enums, or be explicitly allowlisted below.
+ *   3. Literal arguments - every `param="value"` a doc writes must be a value that
+ *                 parameter's Literal annotation actually accepts. Checks 1 and 2
+ *                 both assume a vocabulary is made of identifiers; fast-forward's
+ *                 is entirely lowercase strings, so without this its docs would
+ *                 pass while naming a coordinate system that does not exist.
  *
  * Regenerate a truth file after a version bump:
  *   python3 scripts/gen_python_truth.py kloppy --provider kloppy
@@ -32,6 +37,10 @@ export interface PythonPackageTruth {
   modules: Record<string, string[]>;
   enums: Record<string, string[]>;
   valueLists: Record<string, string[]>;
+  /** Parameter name -> every value any function in the package accepts for it. */
+  literals: Record<string, string[]>;
+  /** Qualified function -> its own Literal parameters, which are often narrower. */
+  literalsByFunction: Record<string, Record<string, string[]>>;
   classes: string[];
   symbols: string[];
   signatures: Record<string, string>;
@@ -68,6 +77,11 @@ const TOKEN_ALLOWLIST: Record<string, string[]> = {
   databallpy: [],
   // HTTP verbs in the endpoint tables.
   skillcorner: ["GET", "POST"],
+  // Match-official position codes emitted when include_officials=True. They come
+  // from the Rust core rather than a Python enum, so introspection cannot see them.
+  "fast-forward": ["REF", "AREF", "VAR", "AVAR"],
+  // A torchmetrics metric the training loop tracks, not an unravel symbol.
+  unravelsports: ["AUROC"],
 };
 
 export interface DocFile {
@@ -317,6 +331,61 @@ export function validateProviderDocs(docs: DocFile[], truth: PythonPackageTruth)
   }
 
   return violations;
+}
+
+/**
+ * `param="value"` pairs a doc writes, for parameters with a Literal annotation.
+ *
+ * Also matches the `to_`-prefixed form: fast-forward's transform() takes
+ * `to_coordinates` and `to_orientation` typed as plain `Optional[str]`, but the
+ * values they accept are the same vocabulary as the `coordinates` and
+ * `orientation` load parameters, and that is where a wrong value would be written.
+ */
+export function extractLiteralArguments(
+  text: string,
+  params: string[],
+): Array<{ param: string; value: string }> {
+  if (params.length === 0) return [];
+  const alternation = params.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+  const re = new RegExp(`\\b(?:to_)?(${alternation})\\s*=\\s*["']([^"'\\n]+)["']`, "g");
+  const out: Array<{ param: string; value: string }> = [];
+  for (const match of text.matchAll(re)) out.push({ param: match[1], value: match[2] });
+  return out;
+}
+
+export function validateLiteralArguments(
+  docs: DocFile[],
+  truth: PythonPackageTruth,
+): string[] {
+  const violations: string[] = [];
+  const params = Object.keys(truth.literals);
+
+  for (const { file, text } of docs) {
+    for (const { param, value } of extractLiteralArguments(text, params)) {
+      if (!truth.literals[param].includes(value)) {
+        violations.push(
+          `${file}: \`${param}="${value}"\` - not accepted by any ${truth.source.package} ${truth.source.version} function; valid: ${truth.literals[param].join(", ")}`,
+        );
+      }
+    }
+  }
+
+  return violations;
+}
+
+/**
+ * How many literal arguments a doc set actually cites.
+ *
+ * validateLiteralArguments returns no violations both when every documented value
+ * is real and when the docs cite none at all, so the tests assert this separately
+ * rather than reading an empty violation list as coverage.
+ */
+export function countDocumentedLiteralArguments(
+  docs: DocFile[],
+  truth: PythonPackageTruth,
+): number {
+  const params = Object.keys(truth.literals);
+  return docs.reduce((n, d) => n + extractLiteralArguments(d.text, params).length, 0);
 }
 
 export interface PostmanTruth {

@@ -4,7 +4,7 @@
   "source": {
     "package": "kloppy",
     "version": "3.19.0",
-    "generated_at": "2026-07-30"
+    "generated_at": "2026-07-31"
   },
   "modules": {
     "kloppy": [],
@@ -3409,6 +3409,30 @@
       "M"
     ]
   },
+  "literals": {
+    "key": [
+      "adapters.http.basic_authentication",
+      "adapters.s3.s3fs",
+      "adapters.zip.fo",
+      "cache",
+      "coordinate_system",
+      "dataframe.engine",
+      "event_factory"
+    ]
+  },
+  "literalsByFunction": {
+    "kloppy.config.set_config": {
+      "key": [
+        "adapters.http.basic_authentication",
+        "adapters.s3.s3fs",
+        "adapters.zip.fo",
+        "cache",
+        "coordinate_system",
+        "dataframe.engine",
+        "event_factory"
+      ]
+    }
+  },
   "classes": [
     "ABC",
     "AbstractContextManager",
@@ -4781,18 +4805,18 @@
     "kloppy.domain.create_event": "create_event(event_cls: type[~T], **kwargs) -> ~T",
     "kloppy.domain.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.deprecated": "deprecated(reason)",
-    "kloppy.domain.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.fields": "fields(class_or_instance)",
     "kloppy.domain.models.abstractmethod": "abstractmethod(funcobj)",
     "kloppy.domain.models.build_coordinate_system": "build_coordinate_system(provider: kloppy.domain.models.common.Provider, dataset_type: kloppy.domain.models.common.DatasetType = EVENT, pitch_length: Optional[float] = None, pitch_width: Optional[float] = None) -> kloppy.domain.models.common.CoordinateSystem",
     "kloppy.domain.models.code.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.models.code.docstring_inherit_attributes": "docstring_inherit_attributes(parent)",
-    "kloppy.domain.models.code.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.models.code.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.models.common.abstractmethod": "abstractmethod(funcobj)",
     "kloppy.domain.models.common.build_coordinate_system": "build_coordinate_system(provider: kloppy.domain.models.common.Provider, dataset_type: kloppy.domain.models.common.DatasetType = EVENT, pitch_length: Optional[float] = None, pitch_width: Optional[float] = None) -> kloppy.domain.models.common.CoordinateSystem",
     "kloppy.domain.models.common.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.models.common.deprecated": "deprecated(reason)",
-    "kloppy.domain.models.common.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.models.common.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.models.common.fields": "fields(class_or_instance)",
     "kloppy.domain.models.common.overload": "overload(func)",
     "kloppy.domain.models.common.replace": "replace(obj, /, **changes)",
@@ -4805,7 +4829,7 @@
     "kloppy.domain.models.event.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.models.event.docstring_inherit_attributes": "docstring_inherit_attributes(parent)",
     "kloppy.domain.models.event.removes_suffix": "removes_suffix(string: str, suffix: str) -> str",
-    "kloppy.domain.models.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.models.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.models.fields": "fields(class_or_instance)",
     "kloppy.domain.models.overload": "overload(func)",
     "kloppy.domain.models.pitch.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
@@ -4815,11 +4839,11 @@
     "kloppy.domain.models.statsbomb.event.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.models.statsbomb.event.docstring_inherit_attributes": "docstring_inherit_attributes(parent)",
     "kloppy.domain.models.time.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
-    "kloppy.domain.models.time.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.models.time.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.models.time.overload": "overload(func)",
     "kloppy.domain.models.tracking.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
     "kloppy.domain.models.tracking.docstring_inherit_attributes": "docstring_inherit_attributes(parent)",
-    "kloppy.domain.models.tracking.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.domain.models.tracking.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.domain.overload": "overload(func)",
     "kloppy.domain.replace": "replace(obj, /, **changes)",
     "kloppy.domain.services.aggregators.aggregator.NamedTuple": "NamedTuple(typename, fields=None, /, **kwargs)",
@@ -4937,7 +4961,7 @@
     "kloppy.infra.serializers.event.statsperform.deserializer.get_parser": "get_parser(feed: IO[bytes], feed_code: str, feed_format: Optional[str] = None, **kwargs) -> kloppy.infra.serializers.event.statsperform.parsers.base.OptaParser",
     "kloppy.infra.serializers.event.statsperform.deserializer.performance_logging": "performance_logging(description: str, counter: Optional[int] = None, logger: Optional[logging.Logger] = None)",
     "kloppy.infra.serializers.event.statsperform.parsers.base.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
-    "kloppy.infra.serializers.event.statsperform.parsers.base.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.infra.serializers.event.statsperform.parsers.base.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.infra.serializers.event.statsperform.parsers.get_parser": "get_parser(feed: IO[bytes], feed_code: str, feed_format: Optional[str] = None, **kwargs) -> kloppy.infra.serializers.event.statsperform.parsers.base.OptaParser",
     "kloppy.infra.serializers.event.wyscout.deserializer_v2.NamedTuple": "NamedTuple(typename, fields=None, /, **kwargs)",
     "kloppy.infra.serializers.event.wyscout.deserializer_v2.performance_logging": "performance_logging(description: str, counter: Optional[int] = None, logger: Optional[logging.Logger] = None)",
@@ -4969,7 +4993,7 @@
     "kloppy.infra.serializers.tracking.metrica_epts.metadata.load_metadata": "load_metadata(metadata_file: IO[bytes], provider: Optional[kloppy.domain.models.common.Provider] = None) -> kloppy.infra.serializers.tracking.metrica_epts.models.EPTSMetadata",
     "kloppy.infra.serializers.tracking.metrica_epts.metadata.noop": "noop(x)",
     "kloppy.infra.serializers.tracking.metrica_epts.models.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
-    "kloppy.infra.serializers.tracking.metrica_epts.models.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x104fd2590>, default_factory=<dataclasses._MISSING_TYPE object at 0x104fd2590>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104fd2590>)",
+    "kloppy.infra.serializers.tracking.metrica_epts.models.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, default_factory=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1032ee0d0>)",
     "kloppy.infra.serializers.tracking.metrica_epts.reader.build_regex": "build_regex(data_format_specification: kloppy.infra.serializers.tracking.metrica_epts.models.DataFormatSpecification, player_channels: list[kloppy.infra.serializers.tracking.metrica_epts.models.PlayerChannel], sensors: list[kloppy.infra.serializers.tracking.metrica_epts.models.Sensor]) -> str",
     "kloppy.infra.serializers.tracking.metrica_epts.reader.read_raw_data": "read_raw_data(raw_data: IO[bytes], metadata: kloppy.infra.serializers.tracking.metrica_epts.models.EPTSMetadata, sensor_ids: list[str] = None, sample_rate: float = 1.0, limit: int = 0) -> collections.abc.Iterator[dict]",
     "kloppy.infra.serializers.tracking.pff.NamedTuple": "NamedTuple(typename, fields=None, /, **kwargs)",
@@ -5063,7 +5087,7 @@
     "kloppy.utils.removes_suffix": "removes_suffix(string: str, suffix: str) -> str",
     "kloppy.utils.snake_case": "snake_case(s: str) -> str",
     "kloppy.utils.to_file_object": "to_file_object(s: Union[bytes, BinaryIO]) -> <class 'BinaryIO'>",
-    "kloppy.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x104a609b0>, *, cafile=None, capath=None, cadefault=False, context=None)",
+    "kloppy.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x1029589b0>, *, cafile=None, capath=None, cadefault=False, context=None)",
     "kloppy.wyscout.load": "load(event_data: Union[str, bytes, os.PathLike, IO, kloppy.io.Source], event_types: Optional[list[str]] = None, coordinates: Optional[str] = None, event_factory: Optional[kloppy.domain.services.event_factory.EventFactory] = None, data_version: Optional[str] = None) -> kloppy.domain.models.event.EventDataset",
     "kloppy.wyscout.load_open_data": "load_open_data(match_id: Union[str, int] = '2499841', event_types: Optional[list[str]] = None, coordinates: Optional[str] = None, event_factory: Optional[kloppy.domain.services.event_factory.EventFactory] = None) -> kloppy.domain.models.event.EventDataset"
   }

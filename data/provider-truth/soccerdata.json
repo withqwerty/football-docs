@@ -4,7 +4,7 @@
   "source": {
     "package": "soccerdata",
     "version": "1.9.1",
-    "generated_at": "2026-07-30"
+    "generated_at": "2026-07-31"
   },
   "modules": {
     "soccerdata": [
@@ -325,6 +325,8 @@
       "y"
     ]
   },
+  "literals": {},
+  "literalsByFunction": {},
   "classes": [
     "Any",
     "BaseRequestsReader",

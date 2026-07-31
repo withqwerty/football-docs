@@ -4,7 +4,7 @@
   "source": {
     "package": "databallpy",
     "version": "0.7.3",
-    "generated_at": "2026-07-30"
+    "generated_at": "2026-07-31"
   },
   "modules": {
     "databallpy": [
@@ -1211,6 +1211,8 @@
       "Vrouwen Eredivisie"
     ]
   },
+  "literals": {},
+  "literalsByFunction": {},
   "classes": [
     "Colormap",
     "ConfigParser",
@@ -1799,9 +1801,9 @@
     "databallpy.version": "version(distribution_name)",
     "databallpy.visualize.logging_wrapper": "logging_wrapper(file_name: str) -> Callable[[Callable[..., ~R]], Callable[..., ~R]]",
     "databallpy.visualize.pick_bw_for_contrast": "pick_bw_for_contrast(rgb)",
-    "databallpy.visualize.plot_events": "plot_events(game: databallpy.game.Game, events: list[str] = [], outcome: bool | None = None, player_ids: list[str] = [], team_id: int | str | None = None, fig: <function figure at 0x1141da520> = None, ax: <function axes at 0x1141db240> = None, color_by_col: str = None, team_colors: list[str] = ['orange', 'red'], title: str | None = None) -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
-    "databallpy.visualize.plot_soccer_pitch": "plot_soccer_pitch(field_dimen: tuple[float, float] = (106.0, 68.0), pitch_color: str = 'mediumseagreen', linewidth: int = 2, markersize: int = 20, fig: <function figure at 0x1141da520> = None, ax: <function axes at 0x1141db240> = None) -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
-    "databallpy.visualize.plot_tracking_data": "plot_tracking_data(game: databallpy.game.Game, idx: int, team_colors: list[str] = ['green', 'red'], *, fig: <function figure at 0x1141da520> = None, ax: <function axes at 0x1141db240> = None, title: str = None, events: list = [], variable_of_interest: <built-in function any> = None, add_player_possession: bool = False, add_velocities: bool = False, heatmap_overlay: numpy.ndarray | None = None, overlay_cmap: matplotlib.colors.Colormap | str = 'viridis') -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
+    "databallpy.visualize.plot_events": "plot_events(game: databallpy.game.Game, events: list[str] = [], outcome: bool | None = None, player_ids: list[str] = [], team_id: int | str | None = None, fig: <function figure at 0x11296e700> = None, ax: <function axes at 0x11296f420> = None, color_by_col: str = None, team_colors: list[str] = ['orange', 'red'], title: str | None = None) -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
+    "databallpy.visualize.plot_soccer_pitch": "plot_soccer_pitch(field_dimen: tuple[float, float] = (106.0, 68.0), pitch_color: str = 'mediumseagreen', linewidth: int = 2, markersize: int = 20, fig: <function figure at 0x11296e700> = None, ax: <function axes at 0x11296f420> = None) -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
+    "databallpy.visualize.plot_tracking_data": "plot_tracking_data(game: databallpy.game.Game, idx: int, team_colors: list[str] = ['green', 'red'], *, fig: <function figure at 0x11296e700> = None, ax: <function axes at 0x11296f420> = None, title: str = None, events: list = [], variable_of_interest: <built-in function any> = None, add_player_possession: bool = False, add_velocities: bool = False, heatmap_overlay: numpy.ndarray | None = None, overlay_cmap: matplotlib.colors.Colormap | str = 'viridis') -> tuple[matplotlib.pyplot.figure, matplotlib.pyplot.axes]",
     "databallpy.visualize.requires_ffmpeg": "requires_ffmpeg(func)",
     "databallpy.visualize.save_tracking_video": "save_tracking_video(game: databallpy.game.Game, start_idx: int, end_idx: int, save_folder: str, *, title: str = 'test_clip', team_colors: list = ['green', 'red'], events: list = [], variable_of_interest: pandas.core.series.Series | list = None, add_player_possession: bool = False, add_velocities: bool = False, heatmap_overlay: numpy.ndarray | None = None, overlay_cmap: matplotlib.colors.Colormap | str = 'viridis', verbose: bool = True)",
     "databallpy.visualize.to_rgb": "to_rgb(c)",

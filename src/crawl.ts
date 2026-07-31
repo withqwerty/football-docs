@@ -69,6 +69,86 @@ turndown.addRule("sphinxPreSpan", {
   replacement: (_content, node) => `\`${(node as unknown as Element).textContent ?? ""}\``,
 });
 
+// Sphinx and mkdocs both append a permalink anchor to every heading. Left in, it
+// becomes `## Orientations[¶](https://.../#orientations "Permanent link")`, and
+// since a chunk is titled by its heading that URL is the first thing an agent
+// reads in a search result. It carries no information the frontmatter lacks.
+turndown.addRule("headerlink", {
+  filter: (node) =>
+    node.nodeName === "A" &&
+    ((node as unknown as Element).getAttribute?.("class") ?? "")
+      .split(/\s+/)
+      .includes("headerlink"),
+  replacement: () => "",
+});
+
+// Turndown has no table rule, so a <table> falls through to block handling and
+// every cell lands on its own line. That is worse than losing the table: a
+// coordinate-system alias table becomes a column of unattached words, and an
+// agent reading "cdf / CDF / Center / meters / Up" cannot tell which value
+// belongs to which heading. Emit GFM instead - the corpus is markdown that
+// models read, and the row is the unit of meaning.
+turndown.addRule("gfmTable", {
+  filter: "table",
+  replacement: (_content, node) => {
+    // Turndown parses with its own bundled DOM, whose NodeList is neither
+    // spreadable nor guaranteed to implement querySelectorAll. Walking direct
+    // children is portable, and it keeps a nested table's rows out of this one.
+    const childrenNamed = (parent: Element, names: string[]): Element[] => {
+      const out: Element[] = [];
+      const kids = parent.childNodes;
+      for (let i = 0; i < (kids?.length ?? 0); i++) {
+        const kid = kids[i] as unknown as Element;
+        if (names.includes(kid.nodeName)) out.push(kid);
+      }
+      return out;
+    };
+
+    const table = node as unknown as Element;
+    const rows: Element[] = [];
+    for (const section of [table, ...childrenNamed(table, ["THEAD", "TBODY", "TFOOT"])]) {
+      rows.push(...childrenNamed(section, ["TR"]));
+    }
+    if (rows.length === 0) return "";
+
+    // textContent alone would flatten `<code>cdf</code>` to bare cdf, and the
+    // enum-member check only looks inside backticks - so a vocabulary documented
+    // in a table would silently stop being validated.
+    const cellText = (cell: Element): string => {
+      let text = "";
+      const visit = (element: Element) => {
+        const kids = element.childNodes;
+        for (let i = 0; i < (kids?.length ?? 0); i++) {
+          const kid = kids[i] as unknown as Element;
+          if (kid.nodeName === "CODE") text += `\`${kid.textContent ?? ""}\``;
+          else if (kid.nodeName === "#text") text += kid.textContent ?? "";
+          else visit(kid);
+        }
+      };
+      visit(cell);
+      // Flatten to one line and neutralise pipes, which would invent columns.
+      return text.replace(/\s+/g, " ").replace(/\|/g, "\\|").trim();
+    };
+
+    const body = rows
+      .map((row) => childrenNamed(row, ["TH", "TD"]).map(cellText))
+      .filter((cells) => cells.length > 0);
+    if (body.length === 0) return "";
+
+    // A table whose first row carries <th> has an explicit header; otherwise GFM
+    // still requires a delimiter row, so synthesise an empty one.
+    const hasHeader = childrenNamed(rows[0], ["TH"]).length > 0;
+    const width = Math.max(...body.map((cells) => cells.length));
+    const pad = (cells: string[]) => [...cells, ...Array(width - cells.length).fill("")];
+    const line = (cells: string[]) => `| ${pad(cells).join(" | ")} |`;
+
+    const header = hasHeader ? body[0] : Array(width).fill("");
+    const rest = hasHeader ? body.slice(1) : body;
+
+    return `\n\n${[line(header), `|${" --- |".repeat(width)}`, ...rest.map(line)].join("\n")}\n\n`;
+  },
+});
+
 // Turndown escapes every underscore in plain text nodes by default (guarding
 // against accidental markdown emphasis), including identifiers that carry no
 // code markup at all — e.g. Sphinx renders parameter/return names in
@@ -136,11 +216,12 @@ export function htmlToMarkdown(html: string, url: string): string | null {
   const { document } = parseHTML(htmlWithBase);
 
   // classesToPreserve keeps class="pre" (Sphinx's no-wrap marker for inline
-  // literals) alive through Readability's cleanup, so the sphinxPreSpan
-  // Turndown rule above can still detect and unescape it.
+  // literals) and class="headerlink" (both Sphinx's and mkdocs' per-heading
+  // permalink) alive through Readability's cleanup, so the sphinxPreSpan and
+  // headerlink Turndown rules above can still detect them.
   const reader = new Readability(document, {
     charThreshold: 100,
-    classesToPreserve: ["pre"],
+    classesToPreserve: ["pre", "headerlink"],
   });
   const article = reader.parse();
 
@@ -230,8 +311,13 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
     });
   }
 
-  // Extract links from the index page
-  const linkPattern = /href="([^"]*\.html?)"/g;
+  // Extract links from the index page.
+  //
+  // Sphinx writes page links as `concepts/dataset.html`; mkdocs and anything else
+  // using directory URLs writes `concepts/dataset/`. Matching only the first form
+  // is why a mkdocs site used to yield its index page and nothing else.
+  const linkPattern = /href="([^"]+)"/g;
+  const rootPath = new URL(`${root}/`).pathname;
   const links = new Set<string>();
   for (const match of indexHtml.matchAll(linkPattern)) {
     const href = match[1];
@@ -243,15 +329,22 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
       href.includes("_sources")
     ) continue;
 
-    let fullUrl: string;
+    let url: URL;
     try {
-      fullUrl = new URL(href, `${root}/`).href;
+      url = new URL(href, `${root}/`);
     } catch {
       continue;
     }
 
-    if (new URL(fullUrl).hostname !== rootHost) continue;
-    links.add(fullUrl);
+    if (url.hostname !== rootHost) continue;
+    if (!/\.html?$/.test(url.pathname) && !url.pathname.endsWith("/")) continue;
+    // The index page is already captured above, and every nav links back to it.
+    if (url.pathname === rootPath) continue;
+
+    // Anchors and queries point into a page already queued, not at a new one.
+    url.hash = "";
+    url.search = "";
+    links.add(url.href);
   }
 
   // Cap at 50 pages to avoid hammering upstream
@@ -264,11 +357,15 @@ async function crawlDocsSite(baseUrl: string): Promise<CrawledDoc[]> {
     const content = htmlToMarkdown(html, pageUrl);
     if (!content || content.length < 100) continue;
 
-    // Use last 2 path segments to avoid duplicate category names
+    // Use last 2 path segments to avoid duplicate category names, minus the
+    // language and version segments ReadTheDocs puts in every URL - without this
+    // a top-level page at /en/latest/getting-started/ is filed as
+    // "latest-getting-started", which reads as a version rather than a topic.
     const pathSegments = new URL(pageUrl).pathname
       .replace(/\.(html?|htm)$/, "")
       .split("/")
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter((segment) => !/^(en|latest|stable|v?\d+(\.\d+)*)$/i.test(segment));
     let category = slugify(pathSegments.slice(-2).join("-") || "page");
 
     // Deduplicate: append a suffix if the category is already used

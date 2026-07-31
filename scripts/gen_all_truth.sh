@@ -27,10 +27,18 @@ PINS=(
   "floodlight==1.2.0"
   "databallpy==0.7.3"
   "skillcorner==3.2.0"
+  "unravelsports==1.2.1"
+  "fast-forward-football==0.2.0"
 )
 
 # socceraction 1.5.3 imports `overload` from multimethod, removed in multimethod 2.
-declare -a EXTRA_socceraction=("multimethod<2")
+extras_for() { case "$1" in socceraction) echo "multimethod<2" ;; *) echo "" ;; esac; }
+
+# Most packages are installed, imported and indexed under one name. These are not:
+# fast-forward-football imports as `fastforward` and is indexed as `fast-forward`
+# (matching its repo and docs site), and unravelsports imports as `unravel`.
+module_for() { case "$1" in fast-forward-football) echo fastforward ;; unravelsports) echo unravel ;; *) echo "$1" ;; esac; }
+provider_for() { case "$1" in fast-forward-football) echo fast-forward ;; *) echo "$1" ;; esac; }
 
 mkdir -p "$VENV_ROOT"
 
@@ -41,12 +49,13 @@ for spec in "${PINS[@]}"; do
   [ -d "$venv" ] || "$PY" -m venv "$venv"
   "$venv/bin/pip" install -q "$spec"
 
-  extra_var="EXTRA_${pkg}[@]"
-  if [ -n "${!extra_var+set}" ]; then
-    "$venv/bin/pip" install -q "${!extra_var}"
+  extras="$(extras_for "$pkg")"
+  if [ -n "$extras" ]; then
+    "$venv/bin/pip" install -q "$extras"
   fi
 
-  "$venv/bin/python" "$REPO/scripts/gen_python_truth.py" "$pkg" --provider "$pkg"
+  "$venv/bin/python" "$REPO/scripts/gen_python_truth.py" \
+    "$(module_for "$pkg")" --provider "$(provider_for "$pkg")"
 done
 
 echo
