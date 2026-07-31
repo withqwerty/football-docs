@@ -15,7 +15,7 @@ consumer-facing endpoints.
 | Entity | Common surface |
 |---|---|
 | Competition | league or tournament ID |
-| Season | season ID or season path parameter where exposed |
+| Season | expressed as a parameter value on competition and team surfaces; no standalone season entity observed |
 | Match | match ID |
 | Team | team ID |
 | Player | player ID |

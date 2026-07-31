@@ -5,7 +5,7 @@
 | Source | Data Type | Access Method | Coverage | Rate Limits |
 |---|---|---|---|---|
 | StatsBomb Open Data | Event-level (full) | GitHub download / API | Select matches (World Cups, specific leagues/seasons) | None |
-| FBref | Aggregated stats | Web scrape / soccerdata | Top leagues, 5+ seasons | Strict (3s between requests) |
+| FBref | Results, basic stats (no advanced metrics since Jan 2026) | Web scrape / soccerdata | 100+ competitions | Strict (3s between requests) |
 | Understat | xG, shot-level | Web scrape / soccerdata | Top 5 European leagues | Moderate |
 | ClubElo | Historical Elo ratings | HTTP API | All top European leagues, 1946-present | Generous |
 | football-data.co.uk | Match results + odds | CSV download | 25+ leagues, 20+ seasons | None |
@@ -46,11 +46,20 @@ dataset = statsbomb.load_open_data(match_id=3788741)
 
 ## FBref
 
-**What it provides**: Comprehensive aggregated statistics sourced from Opta (via StatsPerform). Player-level and team-level stats across many categories.
+**What it provides**: Historical results, basic player and team statistics, and squad
+information across 100+ competitions.
 
-**Stat categories**: Passing, shooting, pass types, goal & shot creation (GCA/SCA), defensive actions, possession, playing time, miscellaneous, goalkeeping, advanced goalkeeping.
+**Advanced statistics ended on 20 January 2026**, when Stats Perform terminated
+FBref's access to the Opta feeds that supplied them. No replacement has been
+announced. Treat any guidance that presents FBref as a free source of xG or
+possession-adjusted metrics as out of date.
 
-**Coverage**: Top 5 European leagues + MLS, plus many others. Detailed stats from 2017/18 onwards (when Opta data begins); basic stats go back further.
+**Stat categories still available**: goals, assists, appearances, minutes, cards and
+match results. The advanced tables (passing detail, pass types, GCA/SCA, defensive
+actions, possession, advanced goalkeeping) are no longer served.
+
+**Coverage**: 100+ competitions. Basic stats and results run back to the 1990s for
+many leagues. Advanced metrics covered 2017/18 to January 2026 only.
 
 **Access**: Web scraping or `soccerdata` Python library. See `fbref.md` for details.
 

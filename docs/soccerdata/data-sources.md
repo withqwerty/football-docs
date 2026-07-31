@@ -2,7 +2,9 @@
 
 ## FBref (sd.FBref)
 
-Source: fbref.com, powered by StatsBomb/Opta data. Selenium-based (requires Chrome/Chromium), 7-second rate limit enforced. Supports "Big 5 European Leagues Combined" as a virtual league for efficient bulk scraping.
+Source: fbref.com. Note that FBref lost its Opta feed in January 2026 and no longer
+serves advanced statistics, which is why several `stat_type` values below were removed
+upstream. Selenium-based (requires Chrome/Chromium), 7-second rate limit enforced. Supports "Big 5 European Leagues Combined" as a virtual league for efficient bulk scraping.
 
 **Methods**:
 

@@ -58,13 +58,24 @@ fixture = get_fixture(19145782, includes=["events", "lineups", "statistics"])
 | Advanced | 3,000 | 50,000 |
 | Enterprise | Custom | Custom |
 
-Rate limit headers are included in every response:
+**Limits are per entity, not per account.** Each entity type (Fixture, Team, Player
+and so on) has its own quota, shared across every endpoint that returns that entity.
+On a plan allowing 3,000 requests per hour you could therefore make 3,000 Fixture
+requests *and* 3,000 Team requests in the same hour, rather than 3,000 in total.
 
+Rate limit state is returned in the JSON response body, not in HTTP headers:
+
+```json
+{
+  "rate_limit": {
+    "resets_in_seconds": 3600,
+    "remaining": 2999,
+    "requested_entity": "Team"
+  }
+}
 ```
-X-RateLimit-Limit: 180
-X-RateLimit-Remaining: 175
-X-RateLimit-Reset: 1702300800
-```
+
+`requested_entity` tells you which quota the call was counted against.
 
 ## Plans & Coverage
 
@@ -199,7 +210,8 @@ GET /fixtures?select=id,name,starting_at&include=scores:select(id,score)
 GET /fixtures?per_page=50&page=2
 ```
 
-Default: 25 per page. Maximum depends on plan (typically 150).
+Default: 50 per page. The maximum is a fixed API-wide ceiling rather than a
+plan-scaled figure — add `filters=populate` to raise it, up to 1,000.
 
 Response includes pagination metadata:
 

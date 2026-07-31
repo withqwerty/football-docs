@@ -70,7 +70,9 @@ describe("public-safety boundary", () => {
   });
 
   it("detects a planted violation", () => {
-    const planted = "see WIT-1234 for the backfill";
+    // Assembled at runtime: this file is scanned by the very check it defines, so a
+    // literal example would make the guard fail on itself.
+    const planted = `see ${"WIT"}-1234 for the backfill`;
     expect(FORBIDDEN.some(({ pattern }) => pattern.test(planted))).toBe(true);
   });
 });

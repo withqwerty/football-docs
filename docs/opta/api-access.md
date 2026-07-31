@@ -42,7 +42,12 @@ The public Opta Analyst website (theanalyst.com) uses a static feed key that pro
 ## Data Availability
 
 - Premier League seasons available back to 1901/02
-- Per-match event data available for all played matches
+- Per-match detail is **not** uniform across that range. How far back structured
+  per-match data goes varies by competition and era: top-flight European leagues
+  reach full per-match detail much later than their earliest listed season, and
+  continental, international, lower-tier and youth competitions later still or not
+  at all. Probe the specific competition-season you need rather than assuming
+  parity with the earliest season shown
 - xG (q321) and xGOT (q322) available on `matchexpectedgoals` endpoint only (NOT on standard `matchevent`)
 - Pass matrix includes average positions for all players
 

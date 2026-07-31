@@ -1525,7 +1525,10 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("across 1 provider(s)");
     expect(text).toContain("## opta");
     expect(text).toContain("Shot placement data surfaces");
-    expect(text).toContain("Body part and play-kind filters");
+    // The query also asks about xG fallback; assert on that rather than a second
+    // shot-placement heading, which sat close enough to its neighbours in the
+    // ranking to move on unrelated edits elsewhere in the Opta corpus.
+    expect(text).toContain("Provider-first xG service recipe");
     expect(text).not.toContain("No matching docs found for requested provider(s): whoscored");
   });
 
