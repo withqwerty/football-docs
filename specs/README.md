@@ -16,6 +16,7 @@ anyone can re-fetch and diff.
 | `wyscout/v2-legacy.yml` | https://apidocs.wyscout.com/assets/specs/prod/legacy.yml | 2026-06-03 | 2026-07-30 |
 | `skillcorner/skillcorner_openapi.json` | https://skillcorner.com/api/docs/?format=openapi | 2026-06-03 | 2026-07-30 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-07-09 | 2026-07-30 |
+| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-07-31 | 2026-07-31 |
 
 On 2026-07-30 each snapshot was re-fetched from the URL above and compared with
 the copy in this directory. All were **structurally identical** — same paths,
@@ -30,7 +31,14 @@ curl -sL -o specs/wyscout/v4-next.yml    https://apidocs.wyscout.com/assets/spec
 curl -sL -o specs/wyscout/v2-legacy.yml  https://apidocs.wyscout.com/assets/specs/prod/legacy.yml
 curl -sL -o specs/skillcorner/skillcorner_openapi.json "https://skillcorner.com/api/docs/?format=openapi"
 curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
+curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
 ```
+
+The Sportradar spec is the one the public Swagger UI at
+`https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html` loads; it is
+served unauthenticated from the trial host and describes Soccer v4 only. Sportradar's
+Soccer Extended, Probabilities and Push feeds are separate APIs with their own specs
+and are not covered here.
 
 Then regenerate the derived truth and re-run the tests:
 

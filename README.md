@@ -150,7 +150,7 @@ trusting them.
 | Providers | Ground truth | Checked by |
 |---|---|---|
 | kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner | The installed package itself — enum members, importable symbols, class constants | `src/__tests__/provider-truth.test.ts` |
-| Wyscout, SkillCorner, FMDB Pro | The vendor's own publicly published OpenAPI spec — endpoint paths and methods | `src/__tests__/provider-truth.test.ts` |
+| Wyscout, SkillCorner, FMDB Pro, Sportradar | The vendor's own publicly published OpenAPI spec — endpoint paths and methods | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
 
 Truth files live in `data/provider-truth/` and are generated, not hand-written:

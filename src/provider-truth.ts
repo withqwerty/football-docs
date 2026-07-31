@@ -82,6 +82,8 @@ export interface OpenApiTruth {
     specs: Array<{ spec: string; title: string; version: string }>;
     generated_at: string;
   };
+  /** Server base paths (e.g. /soccer/trial/v4), which callable URLs include. */
+  basePaths?: string[];
   /** Endpoint path -> the HTTP methods the spec defines on it. */
   paths: Record<string, string[]>;
   parameters: string[];
@@ -105,29 +107,67 @@ const ENDPOINT_ALLOWLIST: Record<string, string[]> = {
  * different placeholder names for the same path segment, and that is a style
  * difference rather than a documentation error.
  */
-export function normalisePath(path: string): string {
-  return path
-    .split("?")[0]
+export function normalisePath(path: string, basePaths: string[] = []): string {
+  let p = path.split("?")[0].trim();
+  // Docs cite the callable URL, which carries the server base path and often a
+  // response-format extension; the spec lists neither.
+  for (const base of [...basePaths].sort((a, b) => b.length - a.length)) {
+    if (p.startsWith(base)) {
+      p = p.slice(base.length);
+      break;
+    }
+  }
+  return p
+    .replace(/\.(json|xml)$/i, "")
     .replace(/\{[^}]*\}/g, "{}")
     .replace(/\/+$/, "")
     .trim();
 }
 
-/** `GET /matches/{wyId}/events` occurrences inside code spans. */
+/**
+ * Endpoint claims in a doc set, from both notations the corpus uses: inline code
+ * spans (`GET /matches/{wyId}/events`) and HTTP request lines inside fenced
+ * blocks (```http ... GET /api/players HTTP/1.1).
+ */
 export function extractDocumentedEndpoints(text: string): Array<{ method: string; path: string }> {
   const out: Array<{ method: string; path: string }> = [];
   const seen = new Set<string>();
-  for (const match of text.matchAll(/`(GET|POST|PUT|PATCH|DELETE)\s+(\/[^`\s]*)`/g)) {
+
+  const add = (method: string, rawPath: string) => {
     // `GET /metrics/game_intelligence/...` is prose shorthand for a family of
     // endpoints, not a claim that this exact path exists.
-    if (match[2].includes("...")) continue;
-    const key = `${match[1]} ${match[2]}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      out.push({ method: match[1], path: match[2] });
+    if (rawPath.includes("...")) return;
+    const key = `${method} ${rawPath}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({ method, path: rawPath });
+  };
+
+  for (const match of text.matchAll(/`(GET|POST|PUT|PATCH|DELETE)\s+(\/[^`\s]*)`/g)) {
+    add(match[1], match[2]);
+  }
+
+  // Request lines are anchored to the start of a line and may carry an HTTP
+  // version suffix, which keeps ordinary prose from matching.
+  for (const block of text.matchAll(/```[a-z]*\n([\s\S]*?)```/g)) {
+    for (const line of block[1].split("\n")) {
+      const m = line.match(/^\s*(GET|POST|PUT|PATCH|DELETE)\s+(\/\S*)(?:\s+HTTP\/[\d.]+)?\s*$/);
+      if (m) add(m[1], m[2]);
     }
   }
+
   return out;
+}
+
+/**
+ * How many endpoint claims a doc set actually makes.
+ *
+ * validateOpenApiDocs returns no violations both when every endpoint is correct
+ * and when a doc set cites no endpoints at all. Those are very different states,
+ * and only one of them means anything, so callers can check coverage separately.
+ */
+export function countDocumentedEndpoints(docs: DocFile[]): number {
+  return docs.reduce((n, d) => n + extractDocumentedEndpoints(d.text).length, 0);
 }
 
 export function loadOpenApiTruth(provider: string): OpenApiTruth {
@@ -147,22 +187,42 @@ export function listOpenApiProviders(): string[] {
 export function validateOpenApiDocs(docs: DocFile[], truth: OpenApiTruth): string[] {
   const violations: string[] = [];
 
-  const byShape = new Map<string, Set<string>>();
+  const bases = truth.basePaths ?? [];
+
+  // Spec paths as segment arrays. A placeholder segment matches any concrete
+  // value, so a doc showing a worked example (/en/...) still matches a spec
+  // written with a variable (/{locale}/...).
+  const specPaths: Array<{ segments: string[]; methods: Set<string> }> = [];
   for (const [path, methods] of Object.entries(truth.paths)) {
-    const shape = normalisePath(path);
-    const set = byShape.get(shape) ?? new Set<string>();
-    for (const m of methods) set.add(m);
-    byShape.set(shape, set);
+    const segments = normalisePath(path, bases).split("/").filter(Boolean);
+    const existing = specPaths.find(
+      (s) => s.segments.length === segments.length && s.segments.every((seg, i) => seg === segments[i]),
+    );
+    const target = existing ?? { segments, methods: new Set<string>() };
+    for (const m of methods) target.methods.add(m);
+    if (!existing) specPaths.push(target);
   }
 
-  const allowed = new Set((ENDPOINT_ALLOWLIST[truth.provider] ?? []).map(normalisePath));
+  const matchSpec = (docPath: string): Set<string> | undefined => {
+    const segments = normalisePath(docPath, bases).split("/").filter(Boolean);
+    const hit = specPaths.find(
+      (s) =>
+        s.segments.length === segments.length &&
+        s.segments.every((seg, i) => seg === "{}" || seg === segments[i]),
+    );
+    return hit?.methods;
+  };
+
+  const allowed = new Set(
+    (ENDPOINT_ALLOWLIST[truth.provider] ?? []).map((p) => normalisePath(p, bases)),
+  );
 
   for (const { file, text } of docs) {
     for (const { method, path } of extractDocumentedEndpoints(text)) {
-      const shape = normalisePath(path);
+      const shape = normalisePath(path, bases);
       if (allowed.has(shape)) continue;
 
-      const methods = byShape.get(shape);
+      const methods = matchSpec(path);
       if (!methods) {
         violations.push(`${file}: \`${method} ${path}\` - no such path in the ${truth.provider} spec`);
       } else if (!methods.has(method)) {

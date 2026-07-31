@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  countDocumentedEndpoints,
   extractDocumentedEndpoints,
   extractEnumTokens,
   extractImportedSymbols,
@@ -102,6 +103,21 @@ describe("provider docs are grounded in the vendor's OpenAPI spec", () => {
     expect(Object.keys(truth.paths).length).toBeGreaterThan(0);
   });
 
+  /**
+   * Providers whose docs cite endpoints as paths, so the endpoint check has
+   * something to check. A clean result for one of these is meaningful; if the
+   * count ever drops to zero the docs changed style and the check went blind.
+   *
+   * Sportradar mostly names feeds the way its own documentation does ("Daily
+   * Schedules") rather than citing paths, so its coverage here is thin by nature -
+   * the spec earns its place through field and enum accuracy more than endpoints.
+   */
+  const PATH_CITING = ["wyscout", "skillcorner", "fmdb-pro", "sportradar"];
+
+  it.each(PATH_CITING)("%s docs actually cite endpoints, so the check is not vacuous", (provider) => {
+    expect(countDocumentedEndpoints(loadProviderDocs(provider))).toBeGreaterThan(0);
+  });
+
   it("flags an endpoint the spec does not define", () => {
     const truth = loadOpenApiTruth("wyscout");
     const violations = validateOpenApiDocs(
@@ -119,6 +135,39 @@ describe("provider docs are grounded in the vendor's OpenAPI spec", () => {
       truth,
     );
     expect(violations.some((v) => v.includes("not DELETE"))).toBe(true);
+  });
+
+  it("still rejects a fake path once placeholders match concrete values", () => {
+    // Segment-wise matching lets a doc's worked example (/en/...) satisfy a spec
+    // variable (/{locale}/...). It must not become a wildcard for everything.
+    const truth = loadOpenApiTruth("sportradar");
+    expect(
+      validateOpenApiDocs(
+        [{ file: "fake.md", text: "`GET /soccer/trial/v4/en/not_a_thing/{id}/summary.json`" }],
+        truth,
+      ),
+    ).toHaveLength(1);
+    expect(
+      validateOpenApiDocs(
+        [{ file: "ok.md", text: "`GET /soccer/trial/v4/en/sport_events/{id}/timeline.json`" }],
+        truth,
+      ),
+    ).toEqual([]);
+  });
+
+  it("requires the same number of path segments", () => {
+    const truth = loadOpenApiTruth("sportradar");
+    expect(
+      validateOpenApiDocs(
+        [{ file: "fake.md", text: "`GET /soccer/trial/v4/en/sport_events/timeline.json`" }],
+        truth,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("reads endpoints from fenced http blocks as well as code spans", () => {
+    const text = ["```http", "GET /api/players?pageSize=20 HTTP/1.1", "Host: api.fmdb.pro", "```"].join("\n");
+    expect(extractDocumentedEndpoints(text)).toEqual([{ method: "GET", path: "/api/players?pageSize=20" }]);
   });
 
   it("accepts a real endpoint", () => {

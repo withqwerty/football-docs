@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -74,6 +75,7 @@ def main() -> None:
     enums: dict[str, list[str]] = {}
     schemas: dict[str, Any] = {}
     infos: list[dict[str, str]] = []
+    base_paths: set[str] = set()
 
     # A provider's docs can legitimately span several API versions (Wyscout
     # documents v2, v3 and v4), so merge every spec given rather than treating
@@ -86,6 +88,16 @@ def main() -> None:
             "title": str(info.get("title", "")),
             "version": str(info.get("version", "unknown")),
         })
+        # Docs cite the full callable URL, which includes the server base path
+        # (e.g. /soccer/trial/v4). Record it so comparison can strip it.
+        for server in spec.get("servers") or []:
+            url = server.get("url") if isinstance(server, dict) else None
+            if isinstance(url, str):
+                path_part = re.sub(r"^https?://[^/]+", "", url).rstrip("/")
+                if path_part:
+                    base_paths.add(path_part)
+        if spec.get("basePath"):
+            base_paths.add(str(spec["basePath"]).rstrip("/"))
         _collect(spec, paths, parameters, fields, enums, schemas)
 
     truth = {
@@ -95,6 +107,7 @@ def main() -> None:
             "specs": infos,
             "generated_at": datetime.date.today().isoformat(),
         },
+        "basePaths": sorted(base_paths),
         "paths": {k: paths[k] for k in sorted(paths)},
         "parameters": sorted(parameters),
         "schemas": sorted(str(s) for s in schemas),
