@@ -15,9 +15,9 @@ They are easy to test in a browser and useful for metadata lookup.
 | Family | Examples |
 |---|---|
 | Search | `searchteams.php?t=Arsenal`, `searchevents.php?e=Arsenal_vs_Chelsea`, `searchplayers.php?p=Danny_Welbeck` |
-| Lookup | `lookupevent.php?id={idEvent}`, plus team, player, league, venue, and table lookups |
-| List | list leagues, seasons, teams, countries, sports, honours, and related catalogue data |
-| Schedule | previous/next events, events by date, events by league, events by round |
+| Lookup | `lookupevent.php?id={idEvent}`, plus team, player, league, venue and table lookups. Player honours are a lookup, not a catalogue: `lookuphonours.php?id={idPlayer}` (5 results free, 500 premium) |
+| List | `all_sports.php`, `all_countries.php`, `all_leagues.php`, `search_all_leagues.php`, `search_all_seasons.php`, `search_all_teams.php`, `lookup_all_players.php` |
+| Schedule | `eventsnext.php`, `eventslast.php`, `eventsnextleague.php`, `eventspastleague.php`, `eventsday.php`, `eventsseason.php`, `eventstv.php` |
 | Video | event highlight/video methods where available |
 
 For football metadata tasks, a common chain is:
@@ -25,6 +25,11 @@ For football metadata tasks, a common chain is:
 1. Find the league/team/player with a search/list endpoint.
 2. Store TheSportsDB IDs such as `idLeague`, `idTeam`, and `idEvent`.
 3. Use lookup or schedule endpoints by ID for stable polling.
+
+There is no endpoint that filters events by round. Round appears only as a code
+*inside* event and season data, where special values carry meaning — 125 =
+Quarter-Final, 150 = Semi-Final, 160 = Playoff, 200 = Final, 400 = Qualifier,
+500 = Pre-Season. Filter on `intRound` client-side after fetching a season.
 
 ## v2 Endpoints
 

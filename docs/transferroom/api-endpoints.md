@@ -69,6 +69,7 @@ Common query parameters:
 |---|---|---|
 | `position` | integer | Starting point in list for pagination. |
 | `amount` | integer | Number of results to return. |
+| `competitionid` | integer | Filter by competition ID. Specify `-1` for free agents. |
 | `playerid` | integer | Filter by TransferRoom player ID where available. |
 | `myshortlist` | bit/string | Filter to players on your TransferRoom shortlists; docs show `true`. |
 | `mysquad` | bit/string | Filter to players in your team; docs show `true`. |
@@ -95,7 +96,14 @@ Sample response fields include:
 
 `GET /coaches`
 
-Common query parameters follow the same list pattern as players: `position`, `amount`, and coach-specific filters where enabled by account access.
+Common query parameters:
+
+| Parameter | Type | Notes |
+|---|---|---|
+| `position` | integer | Starting point in list for pagination. |
+| `amount` | integer | Number of results to return. |
+| `competitionid` | integer | Filter by competition ID. Specify `-1` for free agents. |
+| `staffid` | integer | Filter by staff ID. |
 
 Sample response fields include:
 
@@ -115,11 +123,12 @@ Sample response fields include:
 
 `GET /teams`
 
-Documented query parameter:
+Documented query parameters:
 
 | Parameter | Type | Notes |
 |---|---|---|
-| `competitionid` | integer | Filter teams by competition ID. |
+| `competitionid` | integer | **Required.** Filter by competition ID. |
+| `TeamId` | integer | Filter by team ID. |
 
 Sample response fields include:
 
@@ -141,11 +150,13 @@ Sample response fields include:
 
 `GET /transfers`
 
-Documented query parameter:
+Documented query parameters:
 
 | Parameter | Type | Notes |
 |---|---|---|
-| `competitionid` | integer | Filter transfers by competition ID. |
+| `competitionid` | integer | **Required.** Filter by competition ID. |
+| `TeamId` | integer | Filter by team ID. |
+| `PlayerId` | integer | Filter by player ID. |
 
 Sample response fields include:
 
