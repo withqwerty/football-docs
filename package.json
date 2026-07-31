@@ -26,7 +26,8 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "provider:truth": "bash scripts/gen_all_truth.sh",
-    "openapi:truth": "bash scripts/gen_all_openapi_truth.sh"
+    "openapi:truth": "bash scripts/gen_all_openapi_truth.sh",
+    "postman:truth": "python3 scripts/gen_postman_truth.py"
   },
   "keywords": [
     "football",

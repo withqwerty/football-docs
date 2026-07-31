@@ -61,6 +61,24 @@ pnpm test
   (`data/provider-truth/<provider>.openapi.json`), so validation survives without
   keeping the file itself.
 
+## Note on BeSoccer
+
+BeSoccer is documented from a public Postman collection, which is deliberately
+**not** kept here. 86% of that 9.7MB collection is saved response bodies full of
+real competition and match data — BeSoccer's data, not their API documentation.
+`scripts/gen_postman_truth.py` derives the request surface (base URL, the 57 `req`
+values, per-request parameters, access levels) into
+`data/provider-truth/besoccer.postman.json` at 12KB, and the tests assert no
+response bodies survive into it.
+
+Refresh with:
+
+```bash
+curl -sL -o /tmp/besoccer.json \
+  https://documenter.gw.postman.com/api/collections/6414020/2s93JwM1t4
+pnpm postman:truth /tmp/besoccer.json --provider besoccer --dispatch-param req --group-prefix EN
+```
+
 ## Note on Impect
 
 Impect is deliberately absent. Its documentation is built solely from the public

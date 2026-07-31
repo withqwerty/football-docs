@@ -243,8 +243,10 @@ export function loadProviderTruth(provider: string): PythonPackageTruth {
 }
 
 export function listTruthProviders(): string[] {
+  // Package truth is <provider>.json. Other kinds carry a qualifier
+  // (<provider>.openapi.json, <provider>.postman.json), so require a bare name.
   return readdirSync(TRUTH_DIR)
-    .filter((f) => f.endsWith(".json") && !f.endsWith(".openapi.json"))
+    .filter((f) => /^[a-z0-9-]+\.json$/.test(f))
     .map((f) => f.replace(/\.json$/, ""))
     .sort();
 }
@@ -311,6 +313,71 @@ export function validateProviderDocs(docs: DocFile[], truth: PythonPackageTruth)
           `${file}: \`${token}\` is not a member of any ${pkg} enum - invented, renamed, or needs an allowlist entry`,
         );
       }
+    }
+  }
+
+  return violations;
+}
+
+export interface PostmanTruth {
+  provider: string;
+  kind: string;
+  source: {
+    collection: string;
+    name: string;
+    dispatch_param: string | null;
+    generated_at: string;
+  };
+  baseUrls: string[];
+  parameters: string[];
+  operations: Record<string, { group: string; methods: string[]; names: string[]; params: string[] }>;
+}
+
+export function loadPostmanTruth(provider: string): PostmanTruth {
+  return JSON.parse(
+    readFileSync(resolve(TRUTH_DIR, `${provider}.postman.json`), "utf-8"),
+  ) as PostmanTruth;
+}
+
+export function listPostmanProviders(): string[] {
+  return readdirSync(TRUTH_DIR)
+    .filter((f) => f.endsWith(".postman.json"))
+    .map((f) => f.replace(/\.postman\.json$/, ""))
+    .sort();
+}
+
+/** Resource selectors a doc set cites, e.g. `req=match_lineups`. */
+export function extractDispatchValues(text: string, param: string): string[] {
+  const out = new Set<string>();
+  const inline = new RegExp(`${param}=([A-Za-z0-9_]+)`, "g");
+  for (const m of text.matchAll(inline)) out.add(m[1]);
+  // Reference tables list the value on its own, in a code span.
+  for (const m of text.matchAll(/\|\s*`([a-z][a-z0-9_]{2,})`\s*\|/g)) out.add(m[1]);
+  return [...out];
+}
+
+/**
+ * Check a single-endpoint API's docs against the published request vocabulary.
+ *
+ * With no paths to get wrong, the failure mode moves to the dispatch parameter:
+ * an invented or misspelled `req` value is not a routing error and will not
+ * necessarily look like one at runtime.
+ */
+export function validatePostmanDocs(docs: DocFile[], truth: PostmanTruth): string[] {
+  const violations: string[] = [];
+  const param = truth.source.dispatch_param;
+  if (!param) return violations;
+
+  const known = new Set(Object.keys(truth.operations));
+  const params = new Set(truth.parameters);
+
+  for (const { file, text } of docs) {
+    for (const value of extractDispatchValues(text, param)) {
+      // A table cell may hold a parameter name rather than a resource selector.
+      if (known.has(value) || params.has(value)) continue;
+      violations.push(
+        `${file}: \`${value}\` is not a published ${truth.provider} ${param} value or parameter`,
+      );
     }
   }
 

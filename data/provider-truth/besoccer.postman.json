@@ -1,0 +1,751 @@
+{
+  "provider": "besoccer",
+  "kind": "postman",
+  "source": {
+    "collection": "bsc.json",
+    "name": "Apiclient",
+    "dispatch_param": "req",
+    "generated_at": "2026-07-31"
+  },
+  "baseUrls": [
+    "https://apiclient.besoccerapps.com/scripts/api/api.php"
+  ],
+  "parameters": [
+    "category",
+    "competition",
+    "competitions",
+    "date",
+    "extra",
+    "filter",
+    "format",
+    "id",
+    "isocode",
+    "key",
+    "lang",
+    "league",
+    "match",
+    "p1",
+    "p2",
+    "page",
+    "players",
+    "req",
+    "team",
+    "teams",
+    "tz",
+    "year"
+  ],
+  "operations": {
+    "agenda": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Calendar"
+      ],
+      "params": [
+        "page"
+      ]
+    },
+    "all_stats_team": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team statistics in match"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "categories": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competitions"
+      ],
+      "params": [
+        "filter"
+      ]
+    },
+    "competition": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Complete competition detail"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "competition_info": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Detail of competition phases"
+      ],
+      "params": [
+        "competitions",
+        "year"
+      ]
+    },
+    "competition_playoffs": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Table of matches"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "competition_referees": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competition referees"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "competition_summary": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competition summary"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "competitions": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Top competitions"
+      ],
+      "params": []
+    },
+    "countries_competitions": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competitions by continent"
+      ],
+      "params": [
+        "filter",
+        "lang"
+      ]
+    },
+    "crosses": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Crosses"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "data_competitions": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competition detail"
+      ],
+      "params": [
+        "competitions"
+      ]
+    },
+    "get_players_club": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Obtain player equipment"
+      ],
+      "params": [
+        "players"
+      ]
+    },
+    "get_teams": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Get equipment"
+      ],
+      "params": []
+    },
+    "historical_players_team": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team player history"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "league_stats": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Statistics competition"
+      ],
+      "params": [
+        "league"
+      ]
+    },
+    "league_status": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Competition status"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "live": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Live match"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "live_matches": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Live matches"
+      ],
+      "params": []
+    },
+    "live_results_today": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Consult matches of the day"
+      ],
+      "params": [
+        "competitions"
+      ]
+    },
+    "match": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Match detail"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "match_history": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Historic match detail"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "match_lineups": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Match lineups"
+      ],
+      "params": [
+        "match",
+        "year"
+      ]
+    },
+    "matches_team": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Matches by team"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "matchs": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Matches per day"
+      ],
+      "params": [
+        "league"
+      ]
+    },
+    "matchs_month": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Matches of the month"
+      ],
+      "params": [
+        "category",
+        "extra",
+        "year"
+      ]
+    },
+    "matchsday": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Matches of the day"
+      ],
+      "params": []
+    },
+    "matchsday_watch": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Matches of the day"
+      ],
+      "params": []
+    },
+    "player": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player detail"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "player_detail_info": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Detailed player information"
+      ],
+      "params": [
+        "id",
+        "lang"
+      ]
+    },
+    "player_injuries": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player injury information"
+      ],
+      "params": [
+        "id",
+        "lang"
+      ]
+    },
+    "player_matches": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player games in season"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "player_matches_st": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Detail of player matches"
+      ],
+      "params": [
+        "category",
+        "id",
+        "year"
+      ]
+    },
+    "player_palmares_st": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player's achievements extended"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "player_seasons": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player seasons"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "player_teams_seasons": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player team information"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "player_trajectory": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player's trajectory"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "player_transfers_history": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player transfers complete"
+      ],
+      "params": [
+        "id",
+        "lang"
+      ]
+    },
+    "players_compare": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Players compare"
+      ],
+      "params": [
+        "competition",
+        "p1",
+        "p2",
+        "year"
+      ]
+    },
+    "players_status": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Player status"
+      ],
+      "params": [
+        "id",
+        "lang",
+        "year"
+      ]
+    },
+    "quiniela": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Quiniela"
+      ],
+      "params": []
+    },
+    "quinigol": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Quinigol"
+      ],
+      "params": []
+    },
+    "seasons": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Seasons"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "tables": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Classification"
+      ],
+      "params": [
+        "league"
+      ]
+    },
+    "team": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team detail"
+      ],
+      "params": [
+        "id",
+        "year"
+      ]
+    },
+    "team_competitions": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team Core Competition"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "team_complete_stats": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team statistics in seasons"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "team_info": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Equipment information"
+      ],
+      "params": [
+        "id"
+      ]
+    },
+    "team_players": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Squad competition"
+      ],
+      "params": [
+        "team",
+        "year"
+      ]
+    },
+    "team_players_stats": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Advanced equipment statistics"
+      ],
+      "params": [
+        "category",
+        "team",
+        "year"
+      ]
+    },
+    "team_squad": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team squad"
+      ],
+      "params": [
+        "category",
+        "team",
+        "year"
+      ]
+    },
+    "teams": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Teams"
+      ],
+      "params": [
+        "league"
+      ]
+    },
+    "teams_history": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Team history"
+      ],
+      "params": [
+        "id",
+        "teams",
+        "year"
+      ]
+    },
+    "transfer_leagues": {
+      "group": "Level 3",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Transfers by competition"
+      ],
+      "params": [
+        "id",
+        "isocode",
+        "team",
+        "year"
+      ]
+    },
+    "transfer_market": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Transfers"
+      ],
+      "params": [
+        "league"
+      ]
+    },
+    "tv_channel_matches": {
+      "group": "Level 2",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "TV and matches"
+      ],
+      "params": [
+        "date"
+      ]
+    },
+    "verify_datetime": {
+      "group": "Level 1",
+      "methods": [
+        "GET"
+      ],
+      "names": [
+        "Modified timetables"
+      ],
+      "params": [
+        "competitions"
+      ]
+    }
+  }
+}

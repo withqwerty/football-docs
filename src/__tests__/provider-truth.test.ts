@@ -1,16 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
   countDocumentedEndpoints,
+  extractDispatchValues,
   extractDocumentedEndpoints,
   extractEnumTokens,
   extractImportedSymbols,
   listOpenApiProviders,
+  listPostmanProviders,
   listTruthProviders,
   loadOpenApiTruth,
+  loadPostmanTruth,
   loadProviderDocs,
   loadProviderTruth,
   normalisePath,
   validateOpenApiDocs,
+  validatePostmanDocs,
   validateProviderDocs,
 } from "../provider-truth.js";
 
@@ -189,5 +193,56 @@ describe("provider docs are grounded in the vendor's OpenAPI spec", () => {
     expect(extractDocumentedEndpoints("`GET /competitions`")).toEqual([
       { method: "GET", path: "/competitions" },
     ]);
+  });
+});
+
+describe("single-endpoint provider docs are grounded in the published collection", () => {
+  const postmanProviders = listPostmanProviders();
+
+  it("has collection truth files to validate against", () => {
+    expect(postmanProviders.length).toBeGreaterThan(0);
+  });
+
+  it.each(postmanProviders)("%s docs cite only published request values", (provider) => {
+    const truth = loadPostmanTruth(provider);
+    expect(validatePostmanDocs(loadProviderDocs(provider), truth)).toEqual([]);
+  });
+
+  it.each(postmanProviders)("%s docs actually cite request values", (provider) => {
+    const truth = loadPostmanTruth(provider);
+    const param = truth.source.dispatch_param as string;
+    const cited = loadProviderDocs(provider).reduce(
+      (n, d) => n + extractDispatchValues(d.text, param).length,
+      0,
+    );
+    expect(cited).toBeGreaterThan(0);
+  });
+
+  it("flags an invented request value", () => {
+    const truth = loadPostmanTruth("besoccer");
+    const violations = validatePostmanDocs(
+      [{ file: "fake.md", text: "Call `?req=totally_made_up_thing`" }],
+      truth,
+    );
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toContain("totally_made_up_thing");
+  });
+
+  it("flags a plausible misspelling", () => {
+    // BeSoccer's matches-per-day selector is `matchs`, not `matches` - precisely
+    // the kind of value a model corrects into something that does not exist.
+    const truth = loadPostmanTruth("besoccer");
+    expect(
+      validatePostmanDocs([{ file: "fake.md", text: "Use `?req=matches`" }], truth),
+    ).toHaveLength(1);
+    expect(validatePostmanDocs([{ file: "ok.md", text: "Use `?req=matchs`" }], truth)).toEqual([]);
+  });
+
+  it("does not retain response bodies from the collection", () => {
+    // The published collection is mostly saved responses full of BeSoccer's own
+    // match data; the truth file must carry only the request surface.
+    const raw = JSON.stringify(loadPostmanTruth("besoccer"));
+    expect(raw).not.toContain("league_logos");
+    expect(raw.length).toBeLessThan(200_000);
   });
 });
