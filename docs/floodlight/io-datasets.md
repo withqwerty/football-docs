@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/datasets.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.560Z
+crawled_at: 2026-08-11T09:08:54.624Z
 ---
 Note
 
@@ -10,13 +10,13 @@ We cannot guarantee data availability for public data sets, unfortunately. Data 
 
 As public data sets for proprietary sports data are fairly rare, the standard way of accessing data is still via provider raw data files. To load these, we have more than ten parser for different provider formats in the IO submodule!
 
-_`class`_ `floodlight.io.datasets.``EIGDDataset`(_`dataset_dir_name``=``'eigd_dataset'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset)
+_`class`_ `floodlight.io.datasets.``EIGDDataset`(_`dataset_dir_name``=``'eigd_dataset'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset) `floodlight.io.datasets.EIGDDataset`
 
 This dataset loads the EIGD-H data from the _A Unified Taxonomy and Multimodal Dataset for Events in Invasion Games_ paper. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/io/datasets.html#id2)
 
 Upon instantiation, the class checks if the data already exists in the repository’s root `` `.data` ``\-folder, and will download the files (~120MB) to this folder if not.
 
-Parameters:
+**Parameters:**
 
 **dataset_dir_name** (_str, optional_) – Name of subdirectory where the dataset is stored within the root .data directory. Defaults to ‘eigd_dataset’.
 
@@ -51,45 +51,43 @@ Examples
 
 References
 
-`get`(_`match_name``=``'48dcd3'`_, _`segment``=``'00-06-00'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset.get)
+`get`(_`match_name``=``'48dcd3'`_, _`segment``=``'00-06-00'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset.get) `floodlight.io.datasets.EIGDDataset.get`
 
 Get one sample from the EIGD dataset.
 
-Parameters:
+**Parameters:**
 
 -   **match_name** (_str, optional_) – Match name, check Notes section for valid arguments. Defaults to the first match (“48dcd3”).
     
 -   **segment** (_str, optional_) – Segment identifier, check Notes section for valid arguments. Defaults to the first segment (“00-06-00”).
-    
 
-Returns:
+**Returns:**
 
 **sample** – Returns three XY objects of the form (teamA, teamB, ball) for the requested sample.
 
-Return type:
+**Return type:**
 
 Tuple\[[XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]
 
-_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset.get_pitch)
+_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#EIGDDataset.get_pitch) `floodlight.io.datasets.EIGDDataset.get_pitch`
 
 Returns a Pitch object corresponding to the EIGD-data.
 
-Return type:
+**Return type:**
 
 [`` `Pitch` ``](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-_`class`_ `floodlight.io.datasets.``IDSSEDataset`(_`dataset_dir_name``=``'idsse_dataset'`_, _`match_id``=``'J03WMX'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset)
+_`class`_ `floodlight.io.datasets.``IDSSEDataset`(_`dataset_dir_name``=``'idsse_dataset'`_, _`match_id``=``'J03WMX'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset) `floodlight.io.datasets.IDSSEDataset`
 
 This dataset loads the accompanying data set from the _An integrated dataset of spatiotemporal and event data in elite soccer_ paper. [\[2\]](https://floodlight.readthedocs.io/en/latest/modules/io/datasets.html#id4)
 
 Upon instantiation, the class checks if the specified data already exists in the repository’s root `` `.data` ``\-folder, and will download the files to this folder if not. The default setting is to load the first match from the dataset. However, any individual match or the entire dataset (~2.4 GB) can be downloaded.
 
-Parameters:
+**Parameters:**
 
 -   **dataset_dir_name** (_str, optional_) – Name of subdirectory where the dataset is stored within the root .data directory. Defaults to ‘idsse_dataset’.
     
 -   **match_id** (_str, optional_) – Match-ID of either one of the matches or ‘all’. Defaults to ‘J03WMX’. Setting it to one of the matches will download the data of this individual match, if it does not exist in the repository’s root `` `.data` ``\-folder. Setting it to ‘all’ will download the data of all matches that do not exist in `` `.data` ``.
-    
 
 Notes
 
@@ -123,57 +121,55 @@ Examples
 
 References
 
-`get`(_`match_id``=``'J03WMX'`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_, _`events``=``True`_, _`positions``=``True`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset.get)
+`get`(_`match_id``=``'J03WMX'`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_, _`events``=``True`_, _`positions``=``True`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset.get) `floodlight.io.datasets.IDSSEDataset.get`
 
 Get event and position data from the IDSSE dataset.
 
-Parameters:
+**Parameters:**
 
 -   **match_id** (_str, optional_) – Match name, check Notes section for valid arguments. Defaults to the first match “J03WMX”.
     
 -   **teamsheet_home** (_Teamsheet, optional_) –
     
-    Teamsheet-object for the home team used to create link dictionaries of the
+    **Teamsheet-object for the home team used to create link dictionaries of the**
     
     form links\[pID\] = team. If given as None (default), teamsheet is extracted from the data.
     
 -   **teamsheet_away** (_Teamsheet, optional_) –
     
-    Teamsheet-object for the away team used to create link dictionaries of the
+    **Teamsheet-object for the away team used to create link dictionaries of the**
     
     form links\[pID\] = team. If given as None (default), teamsheet is extracted from the data.
     
 -   **events** (_bool, optional_) – Specifies whether the event data should be returned. Default is True. If false None will be returned instead of the events-objects.
     
 -   **positions** (_bool, optional_) – Specifies whether the position data should be returned. Default is True. If false None will be returned instead of the XY-objects, possession-objects, and ballstatus-objects. This will improve performance considerably if only event data is required.
-    
 
-Return type:
+**Return type:**
 
 `` `Tuple` ``\[`` `Dict` ``\[`` `str` ``, `` `Dict` ``\[`` `str` ``, [`` `Events` ``](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], `` `Dict` ``\[`` `str` ``, `` `Dict` ``\[`` `str` ``, [`` `XY` ``](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]\], `` `Dict` ``\[`` `str` ``, [`` `Code` ``](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], `` `Dict` ``\[`` `str` ``, [`` `Code` ``](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], `` `Dict` ``\[`` `str` ``, [`` `Teamsheet` ``](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [`` `Pitch` ``](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-Returns:
+**Returns:**
 
 -   **match_data** (_Tuple\[Dict\[str, Dict\[str, Events\]\], Dict\[str, Dict\[str, XY\]\],_)
     
 -   _Dict\[str, Code\], Dict\[str, Code\], Dict\[str, Teamsheet\],Pitch\]_ – Returns a tuple of shape (events_objects, xy_objects, possession_objects, ballstatus_objects, teamsheets_objects, pitch_object) as returned by the `` `floodlight.io.dfl.read_event_data_xml()` `` and `` `floodlight.io.dfl.read_position_data_xml()` `` functions for the requested match. If any of the arguments `` `events` `` or `` `positions` `` are set to False, None is returned instead of event_data or xy_objects, possession_objects, and ballstatus_objects, respectively.
-    
 
-_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset.get_pitch)
+_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#IDSSEDataset.get_pitch) `floodlight.io.datasets.IDSSEDataset.get_pitch`
 
 Returns a Pitch object corresponding to the IDSSE-data.
 
-Return type:
+**Return type:**
 
 [`` `Pitch` ``](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-_`class`_ `floodlight.io.datasets.``StatsBombOpenDataset`(_`dataset_dir_name``=``'statsbomb_dataset'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset)
+_`class`_ `floodlight.io.datasets.``StatsBombOpenDataset`(_`dataset_dir_name``=``'statsbomb_dataset'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset) `floodlight.io.datasets.StatsBombOpenDataset`
 
 This dataset loads the StatsBomb open data provided by the [official data repository](https://github.com/statsbomb/open-data).
 
 Due to the size of the full dataset (~5GB), only metadata (~2MB) are downloaded to the repository’s root `` `.data` ``\-folder upon instantiation while the other data are only downloaded on demand. All downloaded files stay on disk if not manually removed.
 
-Parameters:
+**Parameters:**
 
 **dataset_dir_name** (_str, optional_) – Name of subdirectory where the dataset is stored within the root .data directory. Defaults to ‘statsbomb_dataset’.
 
@@ -240,25 +236,25 @@ Examples
 >>>     clasico_events.append(data)
 ```
 
-_`property`_ `available_matches`_`:` `DataFrame`_
+_`property`_ `available_matches`_`:` `DataFrame`_ `floodlight.io.datasets.StatsBombOpenDataset.available_matches`
 
 Creates and returns a DataFrame with information for all available matches from the metadata that is downloaded upon instantiation.
 
-Returns:
+**Returns:**
 
 **summary** – Table where the rows contain meta information of individual games such as `` `competition_name` ``, `` `season_name` ``, and `` `match_name` `` (in the format Home vs. Away), location of the match (`` `stadium` `` and `` `country` ``), `` `sex` `` of the players (female or male), the `` `StatsBomb360_status` `` and the final `` `score` ``.
 
-Return type:
+**Return type:**
 
 pd.DataFrame
 
-`get`(_`competition_name``=``'La` `Liga'`_, _`season_name``=``'2020/2021'`_, _`match_name``=``None`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get)
+`get`(_`competition_name``=``'La` `Liga'`_, _`season_name``=``'2020/2021'`_, _`match_name``=``None`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get) `floodlight.io.datasets.StatsBombOpenDataset.get`
 
 Get events and teamsheets from one match of the StatsBomb open dataset.
 
 If [StatsBomb360data](https://statsbomb.com/articles/soccer/statsbomb-360-freeze-frame-viewer-a-new-release-in-statsbomb-iq/) are available, they are stored in the `` `qualifier` `` column of the Events object. If the files are not contained in the repository’s root `` `.data` `` folder they are downloaded to the folder and will be stored until removed by hand.
 
-Parameters:
+**Parameters:**
 
 -   **competition_name** (_str, optional_) – Competition name for which the match is played, check Notes section for possible competitions. Defaults to “La Liga”.
     
@@ -269,9 +265,8 @@ Parameters:
 -   **teamsheet_home** (_Teamsheet, optional_) – Teamsheet-object for the home team used to create link dictionaries of the form links\[pID\] = team. If given as None (default), teamsheet is extracted from the data.
     
 -   **teamsheet_away** (_Teamsheet, optional_) – Teamsheet-object for the away team. If given as None (default), teamsheet is extracted from data.
-    
 
-Returns:
+**Returns:**
 
 **data_objects** – Tuple of (nested) floodlight core objects with shape (events_objects, teamsheets).
 
@@ -279,40 +274,39 @@ Returns:
 
 `` `teamsheets` `` is a dictionary containing `` `Teamsheet` `` objects for each team of the form `` `teamsheets[team]` `=` `Teamsheet` ``.
 
-Return type:
+**Return type:**
 
 Tuple\[Dict\[str, Dict\[str, [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\]\]
 
-_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get_pitch)
+_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get_pitch) `floodlight.io.datasets.StatsBombOpenDataset.get_pitch`
 
 Returns a Pitch-object corresponding to the StatsBomb Dataset.
 
-Return type:
+**Return type:**
 
 [`` `Pitch` ``](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-`get_teamsheets`(_`competition_name``=``'La` `Liga'`_, _`season_name``=``'2020/2021'`_, _`match_name``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get_teamsheets)
+`get_teamsheets`(_`competition_name``=``'La` `Liga'`_, _`season_name``=``'2020/2021'`_, _`match_name``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#StatsBombOpenDataset.get_teamsheets) `floodlight.io.datasets.StatsBombOpenDataset.get_teamsheets`
 
 Returns a dictionary with Teamsheet-objects for both teams (“Home” and “Away”) from one match of the StatsBomb open dataset.
 
-Parameters:
+**Parameters:**
 
 -   **competition_name** (_str, optional_) – Competition name for which the match is played, check Notes section for possible competitions. Defaults to “La Liga”.
     
 -   **season_name** (_str, optional_) – Season name during which the match is played. For league matches use the format YYYY/YYYY and for international cup matches the format YYYY. Check Notes for available seasons of every competition. Defaults to “2020/2021”.
     
 -   **match_name** (_str, optional_) – Match name relating to the available matches in the chosen competition and season. If equal to None (default), the first available match of the given competition and season is chosen.
-    
 
-Returns:
+**Returns:**
 
 **teamsheets** – Teamsheet-objects for both teams (“Home” and “Away”) of the given match.
 
-Return type:
+**Return type:**
 
 Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\]
 
-_`class`_ `floodlight.io.datasets.``ToyDataset`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset)
+_`class`_ `floodlight.io.datasets.``ToyDataset`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset) `floodlight.io.datasets.ToyDataset`
 
 This dataset loads synthetic data for a (very) short artificial football match.
 
@@ -340,26 +334,26 @@ Examples
 >>> pitch = dataset.get_pitch()
 ```
 
-`get`(_`segment``=``'HT1'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset.get)
+`get`(_`segment``=``'HT1'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset.get) `floodlight.io.datasets.ToyDataset.get`
 
 Get data objects for one segment from the toy dataset.
 
-Parameters:
+**Parameters:**
 
 **segment** (_{‘HT1’, ‘HT2’}, optional_) – Segment identifier for the first (“HT1”, default)) or the second (“HT2”) half.
 
-Returns:
+**Returns:**
 
 **toy_dataset** – Returns seven core objects of the form (xy_home, xy_away, xy_ball, events_home, events_away, possession, ballstatus) for the requested segment.
 
-Return type:
+**Return type:**
 
 Tuple\[[XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events"), [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events"), [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code"), [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\]
 
-_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset.get_pitch)
+_`static`_ `get_pitch`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/datasets.html#ToyDataset.get_pitch) `floodlight.io.datasets.ToyDataset.get_pitch`
 
 Returns a Pitch object corresponding to the Toy Dataset.
 
-Return type:
+**Return type:**
 
 [`` `Pitch` ``](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")

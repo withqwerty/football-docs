@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/reporting-issues/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.332Z
+crawled_at: 2026-08-11T09:09:50.139Z
 ---
 Found a bug or have a feature request? We'd love to hear from you.
 

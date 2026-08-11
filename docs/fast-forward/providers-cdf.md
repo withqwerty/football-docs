@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/cdf/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.332Z
+crawled_at: 2026-08-11T09:09:50.141Z
 ---
 The **Common Data Format (CDF)** is fast-forward's internal standardized format. Use this provider to load data that is already in CDF format.
 

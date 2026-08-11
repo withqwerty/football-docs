@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/getting_started.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.556Z
+crawled_at: 2026-08-11T09:08:54.620Z
 ---
 Here’s everything you need to know to quickly get set up and start using floodlight!
 

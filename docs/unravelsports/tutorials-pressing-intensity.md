@@ -2,7 +2,7 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/tutorials/pressing_intensity.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.096Z
 ---
 Pressing Intensity is a metric that quantifies the defensive pressure applied to ball carriers in soccer. This tutorial explains how to compute and visualize pressing intensity using the unravelsports package.
 

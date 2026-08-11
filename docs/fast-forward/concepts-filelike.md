@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/filelike/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.332Z
+crawled_at: 2026-08-11T09:09:50.140Z
 ---
 All `load_tracking()` functions accept `FileLike` parameters for their input files. `FileLike` is a flexible type from [kloppy](https://kloppy.pysport.org/reference/io/#kloppy.io.FileLike) that lets you pass data in several ways:
 

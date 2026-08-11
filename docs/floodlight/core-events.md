@@ -2,22 +2,21 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/events.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.559Z
+crawled_at: 2026-08-11T09:08:54.623Z
 ---
-_`class`_ `floodlight.core.events.``Events`(_`events`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events)
+_`class`_ `floodlight.core.events.``Events`(_`events`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events) `floodlight.core.events.Events`
 
 Event data fragment. Core class of floodlight.
 
 Event data is stored in a pandas `` `DataFrame` ``, where each row stores one event with its different properties organized in columns. Columns may contain any relevant information. An “eID” (event ID) and “gameclock” column is required for instantiation, to identify and time-locate events. Some particular column names are protected (see Notes).
 
-Parameters:
+**Parameters:**
 
 -   **events** (_pd.DataFrame_) – DataFrame containing rows of events and columns of respective event properties.
     
 -   **direction** (_str, optional_) – Playing direction of players in data fragment, should be either ‘lr’ (left-to-right) or ‘rl’ (right-to-left).
-    
 
-Variables:
+**Variables:**
 
 -   **essential** (_list_) – List of essential columns available for stored events.
     
@@ -32,38 +31,36 @@ Variables:
 -   **protected_missing** (_list_) – List of missing protected columns.
     
 -   **protected_invalid** (_list_) – List of protected columns that violate the definitions.
-    
 
 Notes
 
 Event data, particularly information available for each event, may vary across data providers. To accommodate all data flavours, any column name or data type is permissible. However, two essential columns are required (“eID” and “gameclock”). Other column names are protected. Using these names assumes that data stored in these columns follows conventions in terms of data types and value ranges. These are required for methods working with protected columns to assure correct calculations. Definitions for essential and protected columns can be found in [floodlight.core.definitions](https://floodlight.readthedocs.io/en/latest/modules/core/definitions.html#definitions-target).
 
-`add_frameclock`(_`framerate`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.add_frameclock)
+`add_frameclock`(_`framerate`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.add_frameclock) `floodlight.core.events.Events.add_frameclock`
 
 Add the column “frameclock”, computed as the rounded multiplication of gameclock and framerate, to the inner events DataFrame.
 
-Parameters:
+**Parameters:**
 
 **framerate** (_int_) – Temporal resolution of data in frames per second/Hertz.
 
-`column_values_in_range`(_`col`_, _`definitions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.column_values_in_range)
+`column_values_in_range`(_`col`_, _`definitions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.column_values_in_range) `floodlight.core.events.Events.column_values_in_range`
 
 Check if values for a single column of the inner event DataFrame are in correct range using the specifications from [floodlight.core.definitions](https://floodlight.readthedocs.io/en/latest/modules/core/definitions.html#definitions-target).
 
-Parameters:
+**Parameters:**
 
 -   **col** (_str_) – Column name of the inner events DataFrame to be checked
     
 -   **definitions** (_Dict_) – Dictionary (from floodlight.core.definitions) containing specifications for the columns to be checked.
     
     The definitions need to contain an entry for the column to be checked and this entry needs to contain information about the value range in the form: `` `definitions[col][value_range]` `=` `(min,` `max)` ``.
-    
 
-Returns:
+**Returns:**
 
 True if the checks for value range pass and False otherwise
 
-Return type:
+**Return type:**
 
 bool
 
@@ -71,7 +68,7 @@ Notes
 
 Non-integer results of this computation will always be rounded to the next smaller integer.
 
-`get_event_stream`(_`fade``=``0`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.get_event_stream)
+`get_event_stream`(_`fade``=``0`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.get_event_stream) `floodlight.core.events.Events.get_event_stream`
 
 Generates a Code object containing the eIDs of all events at the respective frame and optionally subsequent frames as defined by the fade argument.
 
@@ -81,75 +78,73 @@ Notes
 
 Requires the DataFrame to contain the protected `` `frameclock` `` column.
 
-Parameters:
+**Parameters:**
 
 -   **fade** (_int, optional_) – Number of additional frames for which the Code object should stay at a value after the event occurred. The value is overwritten if another event occurs within the fade duration. If chosen to zero, the value is maintained only for a single frame. If chosen to None, the value is maintained until either the next event or until the end of the sequence. Defaults to 0.
     
 -   **kwargs** – Keyword arguments of the Code object (“name”, “definitions”, “framerate”) that are passed down to instantiate the returned event_stream.
-    
 
-Returns:
+**Returns:**
 
 **event_stream** – Generated continuous event stream describing the designated game state.
 
-Return type:
+**Return type:**
 
 [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")
 
-`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.reflect)
+`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.reflect) `floodlight.core.events.Events.reflect`
 
 Reflects data on given axis.
 
-Parameters:
+**Parameters:**
 
 **axis** (_{‘x’, ‘y’}_) – Name of reflection axis. If set to “x”, data is reflected on x-axis, if set to “y”, data is reflected on y-axis.
 
-`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.rotate)
+`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.rotate) `floodlight.core.events.Events.rotate`
 
 Rotates data on given angle ‘alpha’ around the origin.
 
-Parameters:
+**Parameters:**
 
 **alpha** (_float_) – Rotation angle in degrees. Alpha must be between -360 and 360. If positive alpha, data is rotated in counter clockwise direction. If negative, data is rotated in clockwise direction around the origin.
 
-`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.scale)
+`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.scale) `floodlight.core.events.Events.scale`
 
 Scales data by a given factor and optionally selected axis.
 
-Parameters:
+**Parameters:**
 
 -   **factor** (_float_) – Scaling factor.
     
 -   **axis** (_{None, ‘x’, ‘y’}, optional_) – Name of scaling axis. If set to ‘x’ data is scaled on x-axis, if set to ‘y’ data is scaled on y-axis. If None, data is scaled in both directions (default).
-    
 
-`select`(_`conditions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.select)
+`select`(_`conditions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.select) `floodlight.core.events.Events.select`
 
-Returns a DataFrame containing all entries from the inner events DataFrame
+**Returns a DataFrame containing all entries from the inner events DataFrame**
 
 that satisfy all given conditions.
 
-Parameters:
+**Parameters:**
 
 **conditions** (_Tuple or List of Tuples_) – A single or a list of conditions used for filtering. Each condition should follow the form `` `(column,` `value)` ``. If `` `value` `` is given as a variable (can also be None), it is used to filter for an exact value. If given as a tuple `` `value` `=` `(min,` `max)` `` that specifies a minimum and maximum value, it is filtered for a value range.
 
 For example, to filter all events that have the `` `eID` `` of `` `"Pass"` `` and that happened within the first 1000 seconds of the segment, conditions should look like: `` `conditions` `=` `[("eID",` `"Pass"),` `("gameclock",` `(0,` `1000))]` ``
 
-Returns:
+**Returns:**
 
 **filtered_events** – A view of the inner events DataFrame with rows fulfilling all criteria specified in conditions. The DataFrame can be empty if no row fulfills all specified criteria.
 
-Return type:
+**Return type:**
 
 pd.DataFrame
 
-`slice`(_`start``=``None`_, _`end``=``None`_, _`slice_by``=``'gameclock'`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.slice)
+`slice`(_`start``=``None`_, _`end``=``None`_, _`slice_by``=``'gameclock'`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.slice) `floodlight.core.events.Events.slice`
 
 Return copy of object with events sliced in a time interval.
 
 Intended columns for using this function are `` `gameclock` `` (total seconds) or `` `frameclock` ``. However, also allows slicing by any other column that manifests a temporal relation between events (e.g. `` `minute` ``). Excludes all entries without a valid entry in the specified column (e.g. None).
 
-Parameters:
+**Parameters:**
 
 -   **start** (_float, optional_) – Start frame or second of slice. Defaults to beginning of segment.
     
@@ -158,20 +153,19 @@ Parameters:
 -   **slice_by** (_{‘gameclock’, ‘frameclock’}, optional_) – Column used to slice the events. Defaults to `` `gameclock` ``.
     
 -   **inplace** (_bool, optional_) – If set to `` `False` `` (default), a new object is returned, otherwise the operation is performed in place on the called object.
-    
 
-Returns:
+**Returns:**
 
 **events_sliced**
 
-Return type:
+**Return type:**
 
 Union\[[Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events"), None\]
 
-`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.translate)
+`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.translate) `floodlight.core.events.Events.translate`
 
 Translates data by shift vector.
 
-Parameters:
+**Parameters:**
 
 **shift** (_list or array-like_) – Shift vector of form v = (x, y). Any iterable data type with two numeric entries is accepted.

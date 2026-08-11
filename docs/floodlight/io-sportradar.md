@@ -2,25 +2,25 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/sportradar.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.561Z
+crawled_at: 2026-08-11T09:08:54.625Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.sportradar.``read_event_data_json`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/sportradar.html#read_event_data_json)
+`floodlight.io.sportradar.``read_event_data_json`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/sportradar.html#read_event_data_json) `floodlight.io.sportradar.read_event_data_json`
 
 Parses the Sportradar timeline files in json format and extracts the event data.
 
 This function provides access to [Sport Event Timeline](https://developer.sportradar.com/docs/read/handball/Handball_v2#sport-event-timeline) files from the data provider [Sportradar](https://sportradar.com/) exported in json format and returns Event objects for all teams and segments of the game.
 
-Parameters:
+**Parameters:**
 
 **filepath_events** (_str or pathlib.Path_) – Full path to json file where the Sport Event Timeline is saved.
 
-Returns:
+**Returns:**
 
 **data_objects** – Nested dictionary with `` `Events` `` objects for all teams and segments. The returned dictionary contains one dictionary per segment, which in return contain one `` `Events` `` object per team. For a usual league match with two halves and two teams this dictionary looks like: `` `{"HT1":` `{"Home":` `Events,` `"Away":` `Events},` `"HT2":` `{Home:` `Events,` `Away:` `Events}}` ``
 
-Return type:
+**Return type:**
 
 Dict\[str: Dict\[str: Events\]\]
 

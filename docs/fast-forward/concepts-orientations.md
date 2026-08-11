@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/orientations/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.332Z
+crawled_at: 2026-08-11T09:09:50.140Z
 ---
 Orientation controls the attacking direction of teams in the coordinate space. In real matches, teams switch sides at halftime. Orientation settings let you normalize this so your analysis doesn't need to handle side-switching manually.
 

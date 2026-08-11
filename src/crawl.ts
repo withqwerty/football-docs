@@ -73,13 +73,32 @@ turndown.addRule("sphinxPreSpan", {
 // becomes `## Orientations[¶](https://.../#orientations "Permanent link")`, and
 // since a chunk is titled by its heading that URL is the first thing an agent
 // reads in a search result. It carries no information the frontmatter lacks.
+// Sphinx and mkdocs append a permalink anchor to every heading and every API
+// definition. Its visible text is junk (a pilcrow, or nothing at all), so it
+// has to go. But on an API definition the href fragment is the only place the
+// fully-qualified name appears: the signature itself renders as `frame`(t),
+// and dropping the anchor took floodlight.core.xy.XY.frame out of the corpus
+// with it - 93 identifiers on floodlight alone. A heading's fragment is a
+// slug (#decoupling-data-and-pitches) and carries nothing, so keep the
+// fragment only when it looks like a dotted identifier.
+const DOTTED_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+$/;
+
 turndown.addRule("headerlink", {
   filter: (node) =>
     node.nodeName === "A" &&
     ((node as unknown as Element).getAttribute?.("class") ?? "")
       .split(/\s+/)
       .includes("headerlink"),
-  replacement: () => "",
+  replacement: (_content, node) => {
+    const href = (node as unknown as Element).getAttribute?.("href") ?? "";
+    const fragment = href.slice(href.indexOf("#") + 1);
+    if (!href.includes("#") || !DOTTED_IDENTIFIER.test(fragment)) return "";
+    // A code span, not bare text: the name sits immediately after the
+    // signature, and backticks keep it one searchable token. The enum-member
+    // check only matches SCREAMING_SNAKE inside backticks, so a dotted
+    // lowercase path adds search coverage without inventing a truth-file claim.
+    return ` \`${fragment}\``;
+  },
 });
 
 // Turndown has no table rule, so a <table> falls through to block handling and
@@ -156,6 +175,40 @@ turndown.addRule("gfmTable", {
   },
 });
 
+// Definition lists lose their structure the same way tables did. Sphinx writes
+// prose glossaries and "Parameters:"/"Returns:" field lists as <dl>, and with no
+// rule the terms and their descriptions all land as unattached paragraphs -
+// "Unit of measurement" then "What's x and y measured in?", with nothing to say
+// which is the term. Bold marks the term, so the pair survives as a pair.
+//
+// Scoped deliberately: Sphinx also renders API signatures as <dl class="py
+// method">, where the <dt> is the signature itself. Bolding those would fight
+// the code formatting they already carry, so only plain and field-list <dl>s
+// are rewritten.
+const isPlainDefinitionList = (node: Element): boolean => {
+  const parent = node.parentNode as unknown as Element | null;
+  if (parent?.nodeName !== "DL") return false;
+  const classes = (parent.getAttribute?.("class") ?? "").split(/\s+/);
+  if (classes.includes("py")) return false;
+  return classes.includes("simple") || classes.includes("field-list");
+};
+
+turndown.addRule("definitionTerm", {
+  filter: (node) => node.nodeName === "DT" && isPlainDefinitionList(node as unknown as Element),
+  replacement: (content) => {
+    const term = content.replace(/\s+/g, " ").trim();
+    return term ? `\n\n**${term}**\n\n` : "";
+  },
+});
+
+turndown.addRule("definitionDescription", {
+  filter: (node) => node.nodeName === "DD" && isPlainDefinitionList(node as unknown as Element),
+  replacement: (content) => {
+    const body = content.trim();
+    return body ? `${body}\n\n` : "";
+  },
+});
+
 // Turndown escapes every underscore in plain text nodes by default (guarding
 // against accidental markdown emphasis), including identifiers that carry no
 // code markup at all — e.g. Sphinx renders parameter/return names in
@@ -222,13 +275,16 @@ export function htmlToMarkdown(html: string, url: string): string | null {
     : html.replace(/(<head[^>]*>)/i, `$1<base href="${url}">`);
   const { document } = parseHTML(htmlWithBase);
 
-  // classesToPreserve keeps class="pre" (Sphinx's no-wrap marker for inline
-  // literals) and class="headerlink" (both Sphinx's and mkdocs' per-heading
-  // permalink) alive through Readability's cleanup, so the sphinxPreSpan and
-  // headerlink Turndown rules above can still detect them.
+  // Readability strips every class it is not told to keep, so any Turndown rule
+  // that keys off one has to name it here:
+  //   pre         Sphinx's no-wrap marker for inline literals (sphinxPreSpan)
+  //   headerlink  Sphinx's and mkdocs' permalink anchor (headerlink)
+  //   simple      a plain <dl> glossary (definitionTerm/definitionDescription)
+  //   field-list  a Sphinx "Parameters:"/"Returns:" block, same rules
+  //   py          a Python API signature <dl>, which those rules must skip
   const reader = new Readability(document, {
     charThreshold: 100,
-    classesToPreserve: ["pre", "headerlink"],
+    classesToPreserve: ["pre", "headerlink", "simple", "field-list", "py"],
   });
   const article = reader.parse();
 

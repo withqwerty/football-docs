@@ -2,11 +2,11 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/api/american_football/graphs.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.098Z
 ---
 Converting NFL tracking data to graph structures.
 
-_`class`_ `unravel.american_football.``AmericanFootballGraphConverter`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/american_football/graphs/graph_converter.html#AmericanFootballGraphConverter)
+_`class`_ `unravel.american_football.``AmericanFootballGraphConverter`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/american_football/graphs/graph_converter.html#AmericanFootballGraphConverter) `unravel.american_football.AmericanFootballGraphConverter`
 
 Bases: `` `DefaultGraphConverter` ``
 
@@ -16,7 +16,7 @@ This class transforms American Football tracking data from Polars DataFrames int
 
 The converter supports two GNN frameworks: - PyTorch Geometric (recommended) via `` `to_pytorch_graphs()` `` - Spektral (deprecated, Python 3.11 only) via `` `to_spektral_graphs()` ``
 
-Graph Structure:
+**Graph Structure:**
 
 -   **Nodes**: Players (22 total: 11 offense + 11 defense) and football
     
@@ -29,11 +29,10 @@ Graph Structure:
 -   **Global Features**: Optional play-level features attached to football node
     
 -   **Labels**: Play outcome or custom labels (e.g., yards gained, tackle probability)
-    
 
 The graph structure captures: - Offensive and defensive formations - Player movements and accelerations - Spatial relationships between players - Position-specific information (QB, WR, CB, etc.) - Body orientations and movement directions - Anthropometric data (height, weight)
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([`` `BigDataBowlDataset` ``](https://unravelsports.readthedocs.io/en/latest/api/generated/unravel.american_football.BigDataBowlDataset.html#unravel.american_football.BigDataBowlDataset "unravel.american_football.BigDataBowlDataset")) – Preprocessed NFL tracking data with player positions, velocities, and play information.
     
@@ -44,41 +43,40 @@ Parameters:
 -   **graph_feature_cols** (`` `Optional[List[str]]` ``, _optional_) – List of column names containing graph-level features (e.g., win probability, expected points) to attach to the football node. These columns must have the same value for all nodes in each frame. Defaults to None (no graph features).
     
 -   **\*\*kwargs** – Additional parameters passed to DefaultGraphConverter, including: - adjacency_matrix_type: Edge connectivity pattern - label_col: Column name for graph labels - graph_id_col: Column name for graph identifiers - prediction: Whether in prediction mode (no labels)
-    
 
-`dataset`
+`dataset` `unravel.american_football.AmericanFootballGraphConverter.dataset`
 
 Processed tracking data from BigDataBowlDataset.
 
-Type:
+**Type:**
 
 `` `pl.DataFrame` ``
 
-`settings`
+`settings` `unravel.american_football.AmericanFootballGraphConverter.settings`
 
 Configuration with pitch dimensions, adjacency patterns, and feature settings.
 
-Type:
+**Type:**
 
 `` `AmericanFootballGraphSettings` ``
 
-`label_column`
+`label_column` `unravel.american_football.AmericanFootballGraphConverter.label_column`
 
 Name of the label column for supervised learning.
 
-Type:
+**Type:**
 
 [`` `str` ``](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")
 
-`graph_id_column`
+`graph_id_column` `unravel.american_football.AmericanFootballGraphConverter.graph_id_column`
 
 Name of the graph ID column for batching.
 
-Type:
+**Type:**
 
 [`` `str` ``](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")
 
-Raises:
+**Raises:**
 
 -   [**Exception**](https://docs.python.org/3/library/exceptions.html#Exception "(in Python v3.14)") – If dataset is not an instance of BigDataBowlDataset.
     
@@ -91,7 +89,6 @@ Raises:
 -   [**Exception**](https://docs.python.org/3/library/exceptions.html#Exception "(in Python v3.14)") – If attacking_non_qb_node_value is not float or int.
     
 -   [**Exception**](https://docs.python.org/3/library/exceptions.html#Exception "(in Python v3.14)") – If frames with missing football or insufficient players are detected.
-    
 
 Example
 
@@ -157,15 +154,15 @@ Spektral support is deprecated and only works on Python 3.11. Use PyTorch Geomet
 
 See also
 
-`` `BigDataBowlDataset` ``: Data loading
+**`` `BigDataBowlDataset` ``: Data loading**
 
 and preprocessing.
 
 `` `to_pytorch_graphs()` ``: Convert to PyTorch Geometric DataLoader. `` `to_spektral_graphs()` ``: Convert to Spektral format (deprecated). ../tutorials/american_football: Complete tutorial on NFL GNN modeling.
 
-`__init__`(_`dataset`_, _`chunk_size``=``2000`_, _`attacking_non_qb_node_value``=``0.1`_, _`graph_feature_cols``=``None`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/american_football/graphs/graph_converter.html#AmericanFootballGraphConverter.__init__)
+`__init__`(_`dataset`_, _`chunk_size``=``2000`_, _`attacking_non_qb_node_value``=``0.1`_, _`graph_feature_cols``=``None`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/american_football/graphs/graph_converter.html#AmericanFootballGraphConverter.__init__) `unravel.american_football.AmericanFootballGraphConverter.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([_BigDataBowlDataset_](https://unravelsports.readthedocs.io/en/latest/api/generated/unravel.american_football.BigDataBowlDataset.html#unravel.american_football.BigDataBowlDataset "unravel.american_football.dataset.dataset.BigDataBowlDataset"))
     
@@ -174,9 +171,8 @@ Parameters:
 -   **attacking_non_qb_node_value** ([_float_](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)"))
     
 -   **graph_feature_cols** ([_List_](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")_\[_[_str_](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")_\]_ _|_ _None_)
-    
 
-_`property`_ `return_dtypes`
+_`property`_ `return_dtypes` `unravel.american_football.AmericanFootballGraphConverter.return_dtypes`
 
 ```
 from unravel.american_football import AmericanFootballGraphConverter

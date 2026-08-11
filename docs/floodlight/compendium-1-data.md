@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/1_data.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.557Z
+crawled_at: 2026-08-11T09:08:54.621Z
 ---
 The core idea behind this package is to provide streamlined data structures that can hold the various information contained in sports data. This is realized by a set of Python classes, each of which is handling exactly one type of information. But before we dig deeper into implementation details we start with a closer look at what we’re dealing with: the data.
 

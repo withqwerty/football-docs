@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/sportec/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.333Z
+crawled_at: 2026-08-11T09:09:50.143Z
 ---
 Load tracking data from **Sportec** XML format (used in the Bundesliga).
 

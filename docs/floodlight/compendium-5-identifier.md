@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/5_identifier.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.558Z
+crawled_at: 2026-08-11T09:08:54.622Z
 ---
 ## Identifier - Linking Information
 
@@ -16,27 +16,27 @@ In this package, we aim to fit these different systems under one hood by providi
 
 Below is a list of IDs and according names have a special meaning within our package. This is one of the (rare) cases we deliberately deviate from PEP8 naming conventions to keep variable names short and quickly identifiable (_pun intended_). You will also find these IDs throughout the code.
 
-pID
+**pID**
 
 player identifier - Unique number or string for player identification.
 
-jID
+**jID**
 
 jersey identifier - A players jersey number within a single observation.
 
-xID
+**xID**
 
 index identifier - A players index in the list of all players of a team for a given observation. Starts counting at **0**. This identifier is primarily used for locating players in [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html) objects, but can also be helpful iterating over or displaying all players of a team.
 
-tID
+**tID**
 
 team identifier - Unique number or string for team identification.
 
-mID
+**mID**
 
 match identifier - Unique number or string for match identification.
 
-cID
+**cID**
 
 competition identifier - Unique number or string for competition (e.g. league or cup) identification.
 

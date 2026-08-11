@@ -2,15 +2,15 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.565Z
+crawled_at: 2026-08-11T09:08:54.627Z
 ---
-`floodlight.transforms.filter.``butterworth_lowpass`(_`xy`_, _`order``=``3`_, _`Wn``=``1`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#butterworth_lowpass)
+`floodlight.transforms.filter.``butterworth_lowpass`(_`xy`_, _`order``=``3`_, _`Wn``=``1`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#butterworth_lowpass) `floodlight.transforms.filter.butterworth_lowpass`
 
 Applies a digital Butterworth lowpass-filter to an XY data object. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id4)
 
 For filtering, the [scipy.filter.butter](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html) and the [scipy.signal.filtfilt](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html) functions are used. This function provides a convenience access to both functions, directly applying the filter to all non-NaN sequences in all columns.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -21,13 +21,12 @@ Parameters:
 -   **remove_short_seqs** (_bool, optional_) – If True, sequences that are too short for the filter with the specified settings are replaced with np.nan. If False, they are kept unfiltered. Default is False.
     
 -   **kwargs** – Optional arguments {‘padtype’, ‘padlen’, ‘method’, ‘irlen’} that can be passed to the [scipy.signal.filtfilt](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html) function.
-    
 
-Returns:
+**Returns:**
 
 **xy_filtered** – XY object with position data filtered by designed Butterworth low pass filter.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -93,13 +92,13 @@ Apply the filter with different specifications.
 
 References
 
-`floodlight.transforms.filter.``fir_lowpass`(_`xy`_, _`numtaps``=``21`_, _`cutoff``=``1`_, _`window``=``'hamming'`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#fir_lowpass)
+`floodlight.transforms.filter.``fir_lowpass`(_`xy`_, _`numtaps``=``21`_, _`cutoff``=``1`_, _`window``=``'hamming'`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#fir_lowpass) `floodlight.transforms.filter.fir_lowpass`
 
 Applies a FIR lowpass-filter to an XY data object.
 
 For filtering, the [scipy.signal.firwin](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.firwin.html) and the [scipy.signal.filtfilt](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html) functions are used. This function provides a convenience access to both functions, directly applying the filter to all non-NaN sequences in all columns.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -112,13 +111,12 @@ Parameters:
 -   **remove_short_seqs** (_bool, optional_) – If True, sequences that are too short for the filter with the specified settings are replaced with np.nans. If False, they are kept unfiltered. Default is False.
     
 -   **kwargs** – Optional arguments {‘padtype’, ‘padlen’, ‘method’, ‘irlen’} that can be passed to the [scipy.signal.filtfilt](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html) function.
-    
 
-Returns:
+**Returns:**
 
 **xy_filtered** – XY object with position data filtered by the designed FIR lowpass filter.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -170,26 +168,25 @@ Apply the filter with different specifications.
 
 ![../../_images/fir_adjusted_example.png](https://floodlight.readthedocs.io/en/latest/_images/fir_adjusted_example.png)
 
-`floodlight.transforms.filter.``kalman`(_`xy`_, _`process_noise``=``1.0`_, _`measurement_noise``=``0.04`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#kalman)
+`floodlight.transforms.filter.``kalman`(_`xy`_, _`process_noise``=``1.0`_, _`measurement_noise``=``0.04`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#kalman) `floodlight.transforms.filter.kalman`
 
 Applies a forward Kalman filter to an XY data object. [\[3\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id13)
 
 Uses a constant-velocity motion model where the state vector consists of position and velocity. Only positions are observed. The filter smooths noisy position data by combining predictions from the motion model with the observed measurements.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object. Must have `` `framerate` `` set.
     
 -   **process_noise** (_float, optional_) – Process noise intensity (acceleration variance in m²/s⁴) that controls how much the model trusts the constant-velocity prediction. Larger values allow faster changes in velocity. Default corresponds to \\(\\sigma_a = 1\\,\\mathrm{m/s^2}\\), which is a conservative smoothing prior.
     
 -   **measurement_noise** (_float, optional_) – Measurement noise variance (in m²) controlling how much the model trusts the observed positions. Larger values produce smoother output. Default is 0.04, corresponding to 0.20 m RMSE, a conservative estimate for common optical [\[4\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id14) and local [\[5\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id15) tracking systems during high-dynamic situations.
-    
 
-Returns:
+**Returns:**
 
 **xy_filtered** – XY object with position data filtered by the Kalman filter.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -247,13 +244,13 @@ Apply the filter with increased measurement noise for stronger smoothing.
 
 References
 
-`floodlight.transforms.filter.``savgol_lowpass`(_`xy`_, _`window_length``=``5`_, _`poly_order``=``3`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#savgol_lowpass)
+`floodlight.transforms.filter.``savgol_lowpass`(_`xy`_, _`window_length``=``5`_, _`poly_order``=``3`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#savgol_lowpass) `floodlight.transforms.filter.savgol_lowpass`
 
 Applies a Savitzky-Golay lowpass-filter to an XY data object. [\[2\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id19)
 
 For filtering, the [scipy.filter.savgol](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.savgol_filter.html) function is used. This function provides a convenient access to the function, directly applying the filter to all non-NaN sequences in all columns.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -264,13 +261,12 @@ Parameters:
 -   **remove_short_seqs** (_bool, optional_) – If True, sequences that are too short for the filter with the specified settings are removed from the data. If False, they are kept unfiltered. Default is False.
     
 -   **kwargs** – Optional arguments {‘deriv’, ‘delta’, ‘mode’, ‘cval’} that can be passed to the [scipy.signal.savgol](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.savgol_filter.html) function.
-    
 
-Returns:
+**Returns:**
 
 **xy_filtered** – XY object with position data filtered by designed Savitzky-Golay low pass filter.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -336,13 +332,13 @@ Apply the filter with different specifications.
 
 References
 
-`floodlight.transforms.filter.``wiener`(_`xy`_, _`window_size``=``5`_, _`noise``=``None`_, _`remove_short_seqs``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#wiener)
+`floodlight.transforms.filter.``wiener`(_`xy`_, _`window_size``=``5`_, _`noise``=``None`_, _`remove_short_seqs``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#wiener) `floodlight.transforms.filter.wiener`
 
 Applies a Wiener filter to an XY data object. [\[6\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id23)
 
 For filtering, the [scipy.signal.wiener](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html) function is used. This function provides a convenient access to the function, directly applying the filter to all non-NaN sequences in all columns.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -351,13 +347,12 @@ Parameters:
 -   **noise** (_float, optional_) – Noise power estimate. If None, the noise power is estimated locally from the data within the window. Corresponds to the argument `` `noise` `` from the [scipy.signal.wiener](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html) function. Default is None.
     
 -   **remove_short_seqs** (_bool, optional_) – If True, sequences that are too short for the filter with the specified settings are replaced with np.nan. If False, they are kept unfiltered. Default is False.
-    
 
-Returns:
+**Returns:**
 
 **xy_filtered** – XY object with position data filtered by the Wiener filter.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 

@@ -136,6 +136,67 @@ console.log(x);</code></pre>
     expect(result).not.toContain("¶");
   });
 
+  it("keeps the qualified name a definition permalink carries, and drops a heading slug", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>XY</h1>
+          <p>The XY object stores position data for one team over a full match period.</p>
+          <h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
+          <dl class="py method">
+            <dt><code>frame</code><a class="headerlink" href="https://ex.com/xy.html#floodlight.core.xy.XY.frame" title="Link to this definition"></a></dt>
+            <dd><p>Returns data for the given frame.</p></dd>
+          </dl>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    expect(result).toContain("`floodlight.core.xy.XY.frame`");
+    expect(result).toContain("## Methods");
+    expect(result).not.toContain("#methods");
+    expect(result).not.toContain("Link to this");
+  });
+
+  it("marks the terms of a definition list so they stay attached to their descriptions", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>Space</h1>
+          <p>Providers differ in how they encode the playing surface, so we summarise the properties.</p>
+          <dl class="simple">
+            <dt>Unit of measurement</dt><dd><p>What is x and y measured in?</p></dd>
+            <dt>Pitch dimension</dt><dd><p>What is the length and width of the pitch?</p></dd>
+          </dl>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    expect(result).toContain("**Unit of measurement**");
+    expect(result).toContain("What is x and y measured in?");
+    expect(result).toContain("**Pitch dimension**");
+  });
+
+  it("leaves an API signature list unbolded, since the signature is already code", () => {
+    const html = `
+      <html><body>
+        <article>
+          <h1>Reference</h1>
+          <p>This module exposes a single parser for the provider position data files.</p>
+          <dl class="py function">
+            <dt><code>read_position_data_dat</code>(<em>path</em>)</dt>
+            <dd><p>Parses a TRACAB file and extracts position data.</p></dd>
+          </dl>
+        </article>
+      </body></html>
+    `;
+
+    const result = htmlToMarkdown(html, "https://example.com");
+    expect(result).toContain("read_position_data_dat");
+    expect(result).not.toContain("**`read_position_data_dat`");
+  });
+
   it("returns null for empty or script-only pages", () => {
     const html = "<html><body><script>var x = 1;</script></body></html>";
     const result = htmlToMarkdown(html, "https://example.com");

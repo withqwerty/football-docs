@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.554Z
+crawled_at: 2026-08-11T09:08:54.618Z
 ---
 **floodlight** is a Python package for streamlined analysis of sports data. It is designed with a clear focus on scientific computing and built upon popular libraries such as _numpy_ or _pandas_.
 

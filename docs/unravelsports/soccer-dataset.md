@@ -2,11 +2,11 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.097Z
 ---
 Loading and converting soccer tracking data.
 
-_`class`_ `unravel.soccer.``KloppyPolarsDataset`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset)
+_`class`_ `unravel.soccer.``KloppyPolarsDataset`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset) `unravel.soccer.KloppyPolarsDataset`
 
 Bases: `` `DefaultDataset` ``
 
@@ -16,7 +16,7 @@ This class takes tracking data loaded via Kloppy (supporting providers like Spor
 
 The conversion process includes: - Coordinate system standardization - Velocity and acceleration computation with optional smoothing - Ball carrier and ball owning team inference - Goalkeeper position identification - Speed and acceleration filtering to remove outliers - Optional orientation normalization (attacking left-to-right)
 
-Parameters:
+**Parameters:**
 
 -   **kloppy_dataset** – A Kloppy TrackingDataset instance containing the raw tracking data.
     
@@ -35,49 +35,48 @@ Parameters:
 -   **add_smoothing** – If True, apply Savitzky-Golay smoothing to velocities to reduce noise. Defaults to True.
     
 -   **\*\*kwargs** – Additional keyword arguments passed to DefaultDataset.
-    
 
-`data`
+`data` `unravel.soccer.KloppyPolarsDataset.data`
 
 The converted Polars DataFrame with all tracking data.
 
-Type:
+**Type:**
 
 `` `pl.DataFrame` ``
 
-`settings`
+`settings` `unravel.soccer.KloppyPolarsDataset.settings`
 
 Configuration and metadata for the dataset.
 
-Type:
+**Type:**
 
 `` `DefaultSettings` ``
 
-`home_players`
+`home_players` `unravel.soccer.KloppyPolarsDataset.home_players`
 
 List of home team player objects.
 
-Type:
+**Type:**
 
 `` `List[SoccerObject]` ``
 
-`away_players`
+`away_players` `unravel.soccer.KloppyPolarsDataset.away_players`
 
 List of away team player objects.
 
-Type:
+**Type:**
 
 `` `List[SoccerObject]` ``
 
-`kloppy_dataset`
+`kloppy_dataset` `unravel.soccer.KloppyPolarsDataset.kloppy_dataset`
 
 The original Kloppy dataset.
 
-Type:
+**Type:**
 
 `` `TrackingDataset` ``
 
-Raises:
+**Raises:**
 
 -   [**Exception**](https://docs.python.org/3/library/exceptions.html#Exception "(in Python v3.14)") – If kloppy_dataset is not a TrackingDataset instance.
     
@@ -86,7 +85,6 @@ Raises:
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If the dataset orientation is NOT_SET.
     
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If ball owning team must be inferred but ball_carrier_threshold is None.
-    
 
 Example
 
@@ -124,9 +122,9 @@ Warning
 
 If the dataset doesn’t include ball owning team information, it will be inferred using distance to ball. This may cause unexpected results in situations where the ball is contested or in the air.
 
-`__init__`(_`kloppy_dataset`_, _`ball_carrier_threshold``=``25.0`_, _`max_player_speed``=``12.0`_, _`max_ball_speed``=``28.0`_, _`max_player_acceleration``=``6.0`_, _`max_ball_acceleration``=``13.5`_, _`orient_ball_owning``=``True`_, _`add_smoothing``=``True`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.__init__)
+`__init__`(_`kloppy_dataset`_, _`ball_carrier_threshold``=``25.0`_, _`max_player_speed``=``12.0`_, _`max_ball_speed``=``28.0`_, _`max_player_acceleration``=``6.0`_, _`max_ball_acceleration``=``13.5`_, _`orient_ball_owning``=``True`_, _`add_smoothing``=``True`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.__init__) `unravel.soccer.KloppyPolarsDataset.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **kloppy_dataset** ([_TrackingDataset_](https://kloppy.pysport.org/reference/domain/models/tracking/tracking-dataset/#kloppy.domain.TrackingDataset "(in kloppy 3.18.0 v0.0.0)"))
     
@@ -143,9 +141,8 @@ Parameters:
 -   **orient_ball_owning** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
     
 -   **add_smoothing** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
-    
 
-`convert_orientation_to_ball_owning`(_`df`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.convert_orientation_to_ball_owning)
+`convert_orientation_to_ball_owning`(_`df`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.convert_orientation_to_ball_owning) `unravel.soccer.KloppyPolarsDataset.convert_orientation_to_ball_owning`
 
 Convert field orientation so attacking team always goes left-to-right.
 
@@ -153,19 +150,19 @@ This method normalizes the coordinate system so that the team with possession al
 
 When the away team has possession, all spatial coordinates (x, y) and their derivatives (vx, vy, ax, ay) are multiplied by -1.
 
-Parameters:
+**Parameters:**
 
 **df** (_DataFrame_) – The DataFrame with STATIC_HOME_AWAY orientation.
 
-Returns:
+**Returns:**
 
 DataFrame with BALL_OWNING_TEAM orientation.
 
-Return type:
+**Return type:**
 
 pl.DataFrame
 
-Raises:
+**Raises:**
 
 [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If orientation is already BALL_OWNING_TEAM.
 
@@ -187,7 +184,7 @@ See also
 
 Kloppy Orientation documentation for more details on coordinate systems.
 
-`load`()[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.load)
+`load`()[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.load) `unravel.soccer.KloppyPolarsDataset.load`
 
 Load and process the Kloppy tracking dataset into Polars DataFrame.
 
@@ -214,20 +211,19 @@ This method performs the complete data transformation pipeline:
 
 The resulting DataFrame is stored in `` `self.data` `` and contains columns: - period_id, timestamp, frame_id: Temporal identifiers - id, team_id, position_name: Object identifiers - x, y, z: Positions - vx, vy, vz, speed: Velocities - ax, ay, az, acceleration: Accelerations - ball_state: Ball in/out of play - ball_owning_team_id: Team with possession - is_ball_carrier: Boolean flag for ball carrier - game_id: Match identifier
 
-Returns:
+**Returns:**
 
 Self, for method chaining.
 
-Return type:
+**Return type:**
 
 [KloppyPolarsDataset](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")
 
-Raises:
+**Raises:**
 
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If dataset orientation is NOT_SET.
     
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If ball owning team inference is needed but ball_carrier_threshold is None.
-    
 
 Example
 
@@ -245,24 +241,23 @@ Warning
 
 If ball owning team is not provided in the data, it will be inferred using distance thresholds, which may be inaccurate during contested ball situations.
 
-`add_dummy_labels`(_`by``=``['game_id',` `'frame_id']`_, _`random_seed``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.add_dummy_labels)
+`add_dummy_labels`(_`by``=``['game_id',` `'frame_id']`_, _`random_seed``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.add_dummy_labels) `unravel.soccer.KloppyPolarsDataset.add_dummy_labels`
 
 Add a column of random binary labels for testing/demonstration purposes.
 
 This method adds a ‘label’ column with random 0/1 values to the dataset. Useful for testing graph neural network pipelines before you have real labels.
 
-Parameters:
+**Parameters:**
 
 -   **by** ([_List_](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")_\[_[_str_](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")_\]_) – Column names to group by before assigning labels. Each unique combination gets the same random label. Defaults to \[“game_id”, “frame_id”\].
     
 -   **random_seed** ([_int_](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)") _|_ _None_) – Random seed for reproducibility. If None, labels will be different each time. Defaults to None.
-    
 
-Returns:
+**Returns:**
 
 The updated DataFrame with ‘label’ column added.
 
-Return type:
+**Return type:**
 
 pl.DataFrame
 
@@ -289,21 +284,21 @@ In real applications, replace this with actual labels from your data:
 >>> dataset.data = dataset.data.join(labels, on="frame_id")
 ```
 
-`add_graph_ids`(_`by``=``['game_id',` `'period_id']`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.add_graph_ids)
+`add_graph_ids`(_`by``=``['game_id',` `'period_id']`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.add_graph_ids) `unravel.soccer.KloppyPolarsDataset.add_graph_ids`
 
 Add a graph_id column for grouping frames into graph samples.
 
 This method adds a ‘graph_id’ column that groups tracking frames into distinct graph samples for GNN training. This is crucial for proper train/test splitting to avoid data leakage.
 
-Parameters:
+**Parameters:**
 
 **by** ([_List_](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")_\[_[_str_](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")_\]_) – Column names to group by. Each unique combination gets a unique graph_id. Defaults to \[“game_id”, “period_id”\].
 
-Returns:
+**Returns:**
 
 The updated DataFrame with ‘graph_id’ column added.
 
-Return type:
+**Return type:**
 
 pl.DataFrame
 
@@ -339,25 +334,25 @@ See also
 
 [`` `add_graph_id_column()` ``](https://unravelsports.readthedocs.io/en/latest/api/utils/helpers.html#unravel.utils.add_graph_id_column "unravel.utils.add_graph_id_column"): Underlying utility function. `` `split_test_train_validation()` ``: Splitting method.
 
-`get_player_by_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.get_player_by_id)
+`get_player_by_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.get_player_by_id) `unravel.soccer.KloppyPolarsDataset.get_player_by_id`
 
-`get_team_id_by_player_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.get_team_id_by_player_id)
+`get_team_id_by_player_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.get_team_id_by_player_id) `unravel.soccer.KloppyPolarsDataset.get_team_id_by_player_id`
 
-`sample`(_`sample_rate`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.sample)
+`sample`(_`sample_rate`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/dataset/kloppy_polars.html#KloppyPolarsDataset.sample) `unravel.soccer.KloppyPolarsDataset.sample`
 
 Downsample the dataset by keeping every Nth frame.
 
 This method reduces the temporal resolution of the data by keeping only a subset of frames. Useful for faster experimentation or when full temporal resolution is not needed.
 
-Parameters:
+**Parameters:**
 
 **sample_rate** ([_float_](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)")) – Sampling rate. For example: - 2.0 keeps every 2nd frame (halves data size) - 5.0 keeps every 5th frame (reduces to 20% of original) - 10.0 keeps every 10th frame (reduces to 10% of original)
 
-Returns:
+**Returns:**
 
 Self, for method chaining.
 
-Return type:
+**Return type:**
 
 [KloppyPolarsDataset](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")
 

@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/utils/utils.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.566Z
+crawled_at: 2026-08-11T09:08:54.628Z
 ---
 -   [](https://floodlight.readthedocs.io/en/latest/index.html)
 -   floodlight.utils
