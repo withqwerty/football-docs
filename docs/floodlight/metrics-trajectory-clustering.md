@@ -2,15 +2,15 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.563Z
+crawled_at: 2026-08-11T09:08:54.626Z
 ---
-`floodlight.metrics.trajectory_clustering.``formation_similarity`(_`xy`_, _`template`_, _`exclude_xIDs``=``None`_, _`role_assignment``=``True`_, _`n_iter``=``1`_, _`delta``=``0.3333333333333333`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/trajectory_clustering.html#formation_similarity)
+`floodlight.metrics.trajectory_clustering.``formation_similarity`(_`xy`_, _`template`_, _`exclude_xIDs``=``None`_, _`role_assignment``=``True`_, _`n_iter``=``1`_, _`delta``=``0.3333333333333333`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/trajectory_clustering.html#formation_similarity) `floodlight.metrics.trajectory_clustering.formation_similarity`
 
 Computes formation similarity (FSIM) between observed player positions and a formation template via template matching. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html#id5)
 
 The algorithm classifies a team’s formation by comparing role-resolved average positions against an idealized formation template.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Spatiotemporal tracking data for one team, shape (T, 2\*N).
     
@@ -23,13 +23,12 @@ Parameters:
 -   **n_iter** (_int, optional_) – Number of role assignment iterations. Only used when `` `role_assignment` `` is True. Defaults to 1.
     
 -   **delta** (_float, optional_) – Similarity decay parameter controlling how quickly similarity drops with distance between role positions. Motivated by a coarse 3x3 pitch partitioning where roles one zone apart should have near-zero similarity. Defaults to 1/3 according to [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html#id5).
-    
 
-Returns:
+**Returns:**
 
 **fsim** – Formation similarity score in \[0, 1\].
 
-Return type:
+**Return type:**
 
 float
 

@@ -2,24 +2,23 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/secondspectrum.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.561Z
+crawled_at: 2026-08-11T09:08:54.625Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.secondspectrum.``read_event_data_jsonl`(_`filepath_insight`_, _`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_event_data_jsonl)
+`floodlight.io.secondspectrum.``read_event_data_jsonl`(_`filepath_insight`_, _`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_event_data_jsonl) `floodlight.io.secondspectrum.read_event_data_jsonl`
 
 Parse Second Spectrum’s Insight file (containing match events) and extract event data and pitch information.
 
 This function provides a high-level access to the particular Second Spectrum Insight file and will return event objects for both teams. The number of segments is inferred from the data, yet data for each segment is stored in a separate object.
 
-Parameters:
+**Parameters:**
 
 -   **filepath_insight** (_str or pathlib.Path_) – Full path to .jsonl-file.
     
 -   **filepath_metadata** (_str or pathlib.Path_) – Full path to _meta.json file.
-    
 
-Returns:
+**Returns:**
 
 **data_objects** – Tuple of (nested) floodlight core objects with shape (events_objects, pitch).
 
@@ -27,7 +26,7 @@ Returns:
 
 `` `pitch` `` is a `` `Pitch` `` object corresponding to the data.
 
-Return type:
+**Return type:**
 
 Tuple\[Dict\[str, Dict\[str, [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
@@ -35,13 +34,13 @@ Notes
 
 Second Spectrum’s Insight files can be seen as a union of (wrapped) Opta event feeds and attached Second Spectrum markings. Thus, properties of the Opta F24-feed parser also mostly apply to this parser. This particularly includes the handling of qualifiers, which are included as a string in the `` `qualifier` `` column of the returned DataFrame’s. Second Spectrum markings are disregarded at this moment, but could be included in future releases.
 
-`floodlight.io.secondspectrum.``read_position_data_jsonl`(_`filepath_position`_, _`filepath_metadata`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_position_data_jsonl)
+`floodlight.io.secondspectrum.``read_position_data_jsonl`(_`filepath_position`_, _`filepath_metadata`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_position_data_jsonl) `floodlight.io.secondspectrum.read_position_data_jsonl`
 
 Parse Second Spectrum files and extract position data, possession and ballstatus codes, as well as pitch information.
 
 Second Spectrum data is typically stored in two separate files, a .jsonl file containing the actual data as well as a _meta.json containing information about pitch size, framerate, lineups and start- and endframes of match periods. This function provides a high-level access to Second Spectrum data by parsing “the full match” given both files.
 
-Parameters:
+**Parameters:**
 
 -   **filepath_position** (_str or pathlib.Path_) – Full path to .jsonl-file.
     
@@ -50,9 +49,8 @@ Parameters:
 -   **teamsheet_home** (_Teamsheet, optional_) – Teamsheet object for the home team used to create link dictionaries of the form links\[team\]\[jID\] = xID. The links are used to map players to a specific xID in the respective XY objects. Should be supplied for custom ordering. If given as None (default), teamsheet is extracted from the meta.json file and xIDs are assigned based on the ordering determined by the `` `read_teamsheets_from_metajson` `` function (see for details).
     
 -   **teamsheet_away** (_Teamsheet, optional_) – Teamsheet object for the away team. If given as None (default), teamsheet is extracted from the meta.json-file. See teamsheet_home for details.
-    
 
-Returns:
+**Returns:**
 
 **data_objects** – Tuple of (nested) floodlight core objects with shape (xy_objects, possession_objects, ballstatus_objects, teamsheets, pitch).
 
@@ -66,23 +64,23 @@ Returns:
 
 `` `pitch` `` is a `` `Pitch` `` object corresponding to the data.
 
-Return type:
+**Return type:**
 
 Tuple\[Dict\[str, Dict\[str, [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.secondspectrum.``read_teamsheets_from_meta_json`(_`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_teamsheets_from_meta_json)
+`floodlight.io.secondspectrum.``read_teamsheets_from_meta_json`(_`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_teamsheets_from_meta_json) `floodlight.io.secondspectrum.read_teamsheets_from_meta_json`
 
 Parses the Second Spectrum meta.json-file and creates respective teamsheets for the home and the away team.
 
-Parameters:
+**Parameters:**
 
 **filepath_metadata** (_str or pathlib.Path_) – Full path to _meta.json file.
 
-Returns:
+**Returns:**
 
 **teamsheets** – Dictionary with teamsheets for the home team and the away team.
 
-Return type:
+**Return type:**
 
 Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\]
 

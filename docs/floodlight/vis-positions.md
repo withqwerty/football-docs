@@ -2,13 +2,13 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/vis/positions.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.567Z
+crawled_at: 2026-08-11T09:08:54.628Z
 ---
-`floodlight.vis.positions.``plot_positions`(_`xy`_, _`frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_positions)
+`floodlight.vis.positions.``plot_positions`(_`xy`_, _`frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_positions) `floodlight.vis.positions.plot_positions`
 
 Scatter plots positions for a given frame of an XY object on a matplotlib.axes.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_floodlight.core.xy.XY_) – XY object containing spatiotemporal data to be plotted.
     
@@ -19,13 +19,12 @@ Parameters:
 -   **ax** (_matplotlib.axes_) – Axes from matplotlib library on which the positions are plotted.
     
 -   **kwargs** – Optional keyworded arguments e.g. {‘color’, ‘zorder’, ‘marker’} which can be used for the plot functions from matplotlib. The kwargs are only passed to the plot functions of matplotlib.
-    
 
-Returns:
+**Returns:**
 
 **axes** – Axes from matplotlib library on which the positions are plotted.
 
-Return type:
+**Return type:**
 
 matplotlib.axes
 
@@ -65,11 +64,11 @@ Examples
 
 ![../../_images/positions_example.png](https://floodlight.readthedocs.io/en/latest/_images/positions_example.png)
 
-`floodlight.vis.positions.``plot_trajectories`(_`xy`_, _`start_frame`_, _`end_frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_trajectories)
+`floodlight.vis.positions.``plot_trajectories`(_`xy`_, _`start_frame`_, _`end_frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_trajectories) `floodlight.vis.positions.plot_trajectories`
 
 Draws the trajectories of an XY object from a given time interval on a matplotlib.axes.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_floodlight.core.xy.XY_) – XY object containing spatiotemporal data to be plotted.
     
@@ -82,13 +81,12 @@ Parameters:
 -   **ax** (_matplotlib.axes_) – Axes from matplotlib library on which the trajectories are drawn.
     
 -   **kwargs** – Optional keyworded arguments e.g. {‘linewidth’, ‘zorder’, ‘linestyle’, ‘alpha’} which can be used for the plot functions from matplotlib. The kwargs are only passed to all the plot functions of matplotlib.
-    
 
-Returns:
+**Returns:**
 
 **axes** – Axes from matplotlib library on which the trajectories are drawn.
 
-Return type:
+**Return type:**
 
 matplotlib.axes
 

@@ -2,30 +2,29 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/interpolation.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.565Z
+crawled_at: 2026-08-11T09:08:54.628Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.interpolation.``interpolate_linear`(_`xy`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_linear)
+`floodlight.transforms.interpolation.``interpolate_linear`(_`xy`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_linear) `floodlight.transforms.interpolation.interpolate_linear`
 
 Linearly interpolates gaps in XY tracking data along the temporal axis.
 
 For each column, missing data gaps that are bounded by valid data on both sides are filled using linear interpolation via [numpy.interp](https://numpy.org/doc/stable/reference/generated/numpy.interp.html). Leading and trailing missing values are never interpolated.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
 -   **xIDs** (_list of int, optional_) – Player indices to interpolate. Each xID maps to two columns in the XY object (columns `` `2` `*` `xID` `` and `` `2` `*` `xID` `+` `1` ``). If None, all columns are interpolated. Default is None.
     
 -   **max_gap** (_int, optional_) – Maximum gap length (in frames) to interpolate. Gaps longer than this are left unchanged. If None, all bounded gaps are interpolated regardless of length. Default is None.
-    
 
-Returns:
+**Returns:**
 
 **xy_interpolated** – XY object with linearly interpolated position data.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -77,13 +76,13 @@ Apply linear interpolation with a maximum gap length of 25 frames.
 
 ![../../_images/interpolate_linear_max_gap_example.png](https://floodlight.readthedocs.io/en/latest/_images/interpolate_linear_max_gap_example.png)
 
-`floodlight.transforms.interpolation.``interpolate_polynomial`(_`xy`_, _`order``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_polynomial)
+`floodlight.transforms.interpolation.``interpolate_polynomial`(_`xy`_, _`order``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_polynomial) `floodlight.transforms.interpolation.interpolate_polynomial`
 
 Interpolates gaps in XY tracking data using piecewise polynomial interpolation along the temporal axis.
 
 For each column, gaps that are bounded by valid data on both sides are filled using piecewise polynomial interpolation via [scipy.interpolate.interp1d](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html). Leading and trailing missing values are not extrapolated.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -92,13 +91,12 @@ Parameters:
 -   **xIDs** (_list of int, optional_) – Player indices to interpolate. Each xID maps to two columns in the XY object (columns `` `2` `*` `xID` `` and `` `2` `*` `xID` `+` `1` ``). If None, all columns are interpolated. Default is None.
     
 -   **max_gap** (_int, optional_) – Maximum gap length (in frames) to interpolate. Gaps longer than this are left unchanged. If None, all bounded gaps are interpolated regardless of length. Default is None.
-    
 
-Returns:
+**Returns:**
 
 **xy_interpolated** – XY object with polynomial-interpolated position data.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
@@ -152,13 +150,13 @@ Apply polynomial interpolation with a maximum gap length of 25 frames.
 
 ![../../_images/interpolate_polynomial_max_gap_example.png](https://floodlight.readthedocs.io/en/latest/_images/interpolate_polynomial_max_gap_example.png)
 
-`floodlight.transforms.interpolation.``interpolate_spline`(_`xy`_, _`k``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_spline)
+`floodlight.transforms.interpolation.``interpolate_spline`(_`xy`_, _`k``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_spline) `floodlight.transforms.interpolation.interpolate_spline`
 
 Interpolates gaps in XY tracking data using spline interpolation along the temporal axis.
 
 For each column, gaps that are bounded by valid data on both sides are filled using spline interpolation via [scipy.interpolate.make_interp_spline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.make_interp_spline.html). Leading and trailing missing values are never interpolated.
 
-Parameters:
+**Parameters:**
 
 -   **xy** (_XY_) – Floodlight XY Data object.
     
@@ -167,13 +165,12 @@ Parameters:
 -   **xIDs** (_list of int, optional_) – Player indices to interpolate. Each xID maps to two columns in the XY object (columns `` `2` `*` `xID` `` and `` `2` `*` `xID` `+` `1` ``). If None, all columns are interpolated. Default is None.
     
 -   **max_gap** (_int, optional_) – Maximum gap length (in frames) to interpolate. Gaps longer than this are left unchanged. If None, all bounded gaps are interpolated regardless of length. Default is None.
-    
 
-Returns:
+**Returns:**
 
 **xy_interpolated** – XY object with spline-interpolated position data.
 
-Return type:
+**Return type:**
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 

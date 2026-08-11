@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/models/space.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.564Z
+crawled_at: 2026-08-11T09:08:54.627Z
 ---
-_`class`_ `floodlight.models.space.``DiscreteVoronoiModel`(_`pitch`_, _`mesh``=``'square'`_, _`xpoints``=``100`_, _`motion_model``=``'euclidean'`_, _`max_acceleration``=``4.2`_, _`vmax``=``7.8`_, _`alpha``=``1.3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel)
+_`class`_ `floodlight.models.space.``DiscreteVoronoiModel`(_`pitch`_, _`mesh``=``'square'`_, _`xpoints``=``100`_, _`motion_model``=``'euclidean'`_, _`max_acceleration``=``4.2`_, _`vmax``=``7.8`_, _`alpha``=``1.3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel) `floodlight.models.space.DiscreteVoronoiModel`
 
 Calculates discretized dominant regions commonly used to assess space control.
 
@@ -22,7 +22,7 @@ Furthermore, the following plotting methods are available to visualize the model
 > -   Plot mesh grid –> [`` `plot_mesh()` ``](https://floodlight.readthedocs.io/en/latest/modules/models/space.html#floodlight.models.space.DiscreteVoronoiModel.plot_mesh "floodlight.models.space.DiscreteVoronoiModel.plot_mesh")
 >     
 
-Parameters:
+**Parameters:**
 
 -   **pitch** (_Pitch_) – A floodlight Pitch object corresponding to the XY data that will be supplied to the model. The mesh created during instantiation will span this pitch.
     
@@ -37,7 +37,6 @@ Parameters:
 -   **vmax** (_float, optional_) – Terminal velocity in m/s used by ‘fujimura_sugihara’. Defaults to 7.8, according to [\[4\]](https://floodlight.readthedocs.io/en/latest/modules/models/space.html#id12).
     
 -   **alpha** (_float, optional_) – Drag coefficient controlling how quickly players approach terminal velocity used by ‘fujimura_sugihara’. Defaults to 1.3 according to [\[4\]](https://floodlight.readthedocs.io/en/latest/modules/models/space.html#id12).
-    
 
 Notes
 
@@ -92,34 +91,33 @@ Examples
  [46.91]]
 ```
 
-`fit`(_`xy1`_, _`xy2`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.fit)
+`fit`(_`xy1`_, _`xy2`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.fit) `floodlight.models.space.DiscreteVoronoiModel.fit`
 
 Fit the model to the given data and calculate control values for mesh points.
 
-Parameters:
+**Parameters:**
 
 -   **xy1** (_XY_) – Player spatiotemporal data of the first team.
     
 -   **xy2** (_XY_) – Player spatiotemporal data of the second team.
-    
 
-`player_controls`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.player_controls)
+`player_controls`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.player_controls) `floodlight.models.space.DiscreteVoronoiModel.player_controls`
 
 Returns the percentage of mesh points controlled by each player of the first and second team.
 
-Returns:
+**Returns:**
 
 **player_controls** – One Property object for each team (corresponding to the fitted xy1 and xy2) of shape (n_frames x n_players), respectively. Property objects contain the percentage of points controlled by each player on the pitch.
 
-Return type:
+**Return type:**
 
 Tuple\[[PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty"), [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")\]
 
-`plot`(_`t``=``0`_, _`team_colors``=``('red',` `'blue')`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.plot)
+`plot`(_`t``=``0`_, _`team_colors``=``('red',` `'blue')`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.plot) `floodlight.models.space.DiscreteVoronoiModel.plot`
 
 Plots the fitted mesh grid colored by team controls for a given time point on a matplotlib axes.
 
-Parameters:
+**Parameters:**
 
 -   **t** (_int, optional_) – Frame for which controls are plotted. Defaults to 0.
     
@@ -128,13 +126,12 @@ Parameters:
 -   **ax** (_matplotlib.axes, optional_) – Axes from matplotlib library to plot on. Defaults to None.
     
 -   **kwargs** – Optional keyworded arguments e.g. {‘zorder’, ‘ec’, ‘alpha’} which can be used for the plot functions from matplotlib. The kwargs are only passed to all the plot functions of matplotlib. If not given default values are used.
-    
 
-Returns:
+**Returns:**
 
 **axes** – Axes from matplotlib library with plot.
 
-Return type:
+**Return type:**
 
 matplotlib.axes
 
@@ -162,19 +159,19 @@ Given a DiscreteVoronoiModel that has already been fitted:
 
 ![../../_images/sample_dvm_plot_hex.png](https://floodlight.readthedocs.io/en/latest/_images/sample_dvm_plot_hex.png)
 
-`plot_mesh`(_`ax``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.plot_mesh)
+`plot_mesh`(_`ax``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.plot_mesh) `floodlight.models.space.DiscreteVoronoiModel.plot_mesh`
 
 Plots the generated mesh on a matplotlib.axes.
 
-Parameters:
+**Parameters:**
 
 **ax** (_matplotlib.axes, optional_) – Matplotlib axes on which the mesh points are plotted. If ax is None, a default-sized matplotlib.axes object is created.
 
-Returns:
+**Returns:**
 
 **axes** – Matplotlib axes on which the mesh points are plotted.
 
-Return type:
+**Return type:**
 
 matplotlib.axes
 
@@ -189,14 +186,14 @@ Given a DiscreteVoronoiModel that has already been fitted:
 
 ![../../_images/sample_dvm_plot_hex_mesh.png](https://floodlight.readthedocs.io/en/latest/_images/sample_dvm_plot_hex_mesh.png)
 
-`team_controls`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.team_controls)
+`team_controls`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/space.html#DiscreteVoronoiModel.team_controls) `floodlight.models.space.DiscreteVoronoiModel.team_controls`
 
 Returns the percentage of mesh points controlled by the first and second team.
 
-Returns:
+**Returns:**
 
 **team_controls** – One Property object for each team (corresponding to the fitted xy1 and xy2) of shape (n_frames x 1), respectively. Property objects contain the percentage of points controlled by each team on the pitch.
 
-Return type:
+**Return type:**
 
 Tuple\[[TeamProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.TeamProperty "floodlight.core.property.TeamProperty"), [TeamProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.TeamProperty "floodlight.core.property.TeamProperty")\]

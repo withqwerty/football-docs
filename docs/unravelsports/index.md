@@ -2,7 +2,7 @@
 source_url: https://unravelsports.readthedocs.io/en/latest
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.623Z
+crawled_at: 2026-08-11T09:09:59.093Z
 ---
 ![unravelsports logo](https://github.com/UnravelSports/unravelsports.github.io/blob/main/imgs/unravelsports-5500x800.png?raw=true) [![UnravelSports](https://img.shields.io/badge/powered%20by-UnravelSports-orange.svg?style=flat&colorB=E6B611&colorA=C3C3C3) ](https://unravelsports.github.io/)[![License](https://img.shields.io/badge/license-Mozilla%20Public%20License%20v2.0-orange.svg?style=flat&colorA=C3C3C3&colorB=E20E6A)](https://www.tldrlegal.com/license/mozilla-public-license-2-0-mpl-2)
 

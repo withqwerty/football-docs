@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/3_time.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.558Z
+crawled_at: 2026-08-11T09:08:54.622Z
 ---
 Sports data naturally capture phenomena unfolding through time. That’s not too big of a problem per se, but a few challenges arise managing the time dimension of the data. Plus, a lack of naming conventions leads to sometimes confusing references to parts of sports play (e.g. some call it half times, some periods). So we’ve decided to keep naming of things consistent. Let’s go through this top-down:
 

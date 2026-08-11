@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/definitions.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.559Z
+crawled_at: 2026-08-11T09:08:54.623Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 

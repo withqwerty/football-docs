@@ -2,15 +2,15 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.559Z
+crawled_at: 2026-08-11T09:08:54.623Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-_`class`_ `floodlight.core.pitch.``Pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`boundaries`_, _`length``=``None`_, _`width``=``None`_, _`sport``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch)
+_`class`_ `floodlight.core.pitch.``Pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`boundaries`_, _`length``=``None`_, _`width``=``None`_, _`sport``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch) `floodlight.core.pitch.Pitch`
 
 Pitch and coordinate system specifications. Core class of floodlight.
 
-Parameters:
+**Parameters:**
 
 -   **xlim** (_Tuple\[Numeric, Numeric\]_) – Limits of pitch boundaries in longitudinal direction. This tuple has the form (x_min, x_max) and delimits the length of the pitch (not of any actual data) within the coordinate system.
     
@@ -25,39 +25,36 @@ Parameters:
 -   **width** (_Numeric, optional_) – Actual pitch width in _m_.
     
 -   **sport** (_str, optional_) – Sport for which the pitch is used. This is used to automatically generate lines and markings.
-    
 
-Variables:
+**Variables:**
 
 -   **center** (_tuple_) – Returns coordinates of the pitch center.
     
 -   **is_metrical** (_bool_) – Returns True if the object’s unit is metrical, False otherwise.
-    
 
-_`classmethod`_ `from_template`(_`template_name`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.from_template)
+_`classmethod`_ `from_template`(_`template_name`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.from_template) `floodlight.core.pitch.Pitch.from_template`
 
 Creates a Pitch object representing common data provider formats.
 
-Parameters:
+**Parameters:**
 
 -   **template_name** (_str_) – The name of the template the pitch should follow. Currently supported are {‘dfl’, ‘eigd’, ‘opta’, ‘statsbomb’, ‘secondspectrum’, ‘statsperform_event’, ‘statsperform_tracking’, ‘statsperform_open’, ‘tracab’}.
     
 -   **kwargs** – You may pass optional arguments (length, width, sport) used for class instantiation. For some data providers, additional kwargs are needed to represent their format correctly. For example, pass the length and width argument to create a Pitch object in the ‘tracab’ format.
-    
 
-Returns:
+**Returns:**
 
 **pitch** – A class instance of the given provider format.
 
-Return type:
+**Return type:**
 
 [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-`plot`(_`color_scheme``=``'standard'`_, _`show_axis_ticks``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.plot)
+`plot`(_`color_scheme``=``'standard'`_, _`show_axis_ticks``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.plot) `floodlight.core.pitch.Pitch.plot`
 
 Plots a pitch on a matplotlib.axes for a given sport.
 
-Parameters:
+**Parameters:**
 
 -   **color_scheme** (_str, optional_) – Color scheme of the plot. One of {‘standard’, ‘bw’}. Defaults to ‘standard’.
     
@@ -66,13 +63,12 @@ Parameters:
 -   **ax** (_matplotlib.axes, optional_) – Axes from matplotlib library on which the playing field is plotted. If ax is None, a default-sized matplotlib.axes object is created.
     
 -   **kwargs** – Optional keyworded arguments {‘linewidth’, ‘zorder’, ‘scalex’, ‘scaley’} which can be used for the plot functions from matplotlib. The kwargs are only passed to all the plot functions of matplotlib.
-    
 
-Returns:
+**Returns:**
 
 **axes** – Axes from matplotlib library on which the specified pitch is plotted.
 
-Return type:
+**Return type:**
 
 matplotlib.axes
 

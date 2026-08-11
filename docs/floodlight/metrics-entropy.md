@@ -2,28 +2,27 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/entropy.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.563Z
+crawled_at: 2026-08-11T09:08:54.626Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.metrics.entropy.``approx_entropy`(_`sig`_, _`m``=``2`_, _`r``=``0.5`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/entropy.html#approx_entropy)
+`floodlight.metrics.entropy.``approx_entropy`(_`sig`_, _`m``=``2`_, _`r``=``0.5`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/entropy.html#approx_entropy) `floodlight.metrics.entropy.approx_entropy`
 
 Calculates the Approximate Entropy ApEn(m,r) of sig according to Pincus (1991). [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/entropy.html#id3)
 
-Parameters:
+**Parameters:**
 
 -   **sig** (_np.array_) – A time-series as np.ndarray with a single dimension (sig.ndim == 1).
     
 -   **m** (_int, optional_) – Comparison length of runs. Typically, m in {2,3}. Defaults to 2.
     
 -   **r** (_float, optional_) – Filtering level. Defaults to 0.5.
-    
 
-Returns:
+**Returns:**
 
 **ApEn** – The Approximate Entropy of sig.
 
-Return type:
+**Return type:**
 
 float
 

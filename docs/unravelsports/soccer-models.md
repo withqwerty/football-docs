@@ -2,11 +2,11 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.097Z
 ---
 Soccer-specific analytical models.
 
-_`class`_ `unravel.soccer.``PressingIntensity`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/pressing_intensity.html#PressingIntensity)
+_`class`_ `unravel.soccer.``PressingIntensity`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/pressing_intensity.html#PressingIntensity) `unravel.soccer.PressingIntensity`
 
 Bases: [`` `object` ``](https://docs.python.org/3/library/functions.html#object "(in Python v3.14)")
 
@@ -25,22 +25,21 @@ These matrices enable analysis of: - Defensive compactness and coverage - Pressi
 
 The implementation is based on tracking data research and extends concepts from pitch control and space occupation models.
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([`` `KloppyPolarsDataset` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")) – Dataset containing soccer tracking data with positions, velocities, and ball ownership information.
     
 -   **chunk_size** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"), _optional_) – Number of frames to process in each batch for memory efficiency. Defaults to 20000.
-    
 
-`output`
+`output` `unravel.soccer.PressingIntensity.output`
 
 Computed pressing intensity matrices with columns: - frame_id, period_id, timestamp: Frame identifiers - time_to_intercept: List\[List\[float\]\] - TTI matrix (rows × columns) - probability_to_intercept: List\[List\[float\]\] - PTI matrix (rows × columns) - columns: List\[str\] - Object IDs for column players (typically attackers) - rows: List\[str\] - Object IDs for row players (typically defenders)
 
-Type:
+**Type:**
 
 `` `pl.DataFrame` ``
 
-Raises:
+**Raises:**
 
 [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If dataset is not of type KloppyPolarsDataset.
 
@@ -97,11 +96,11 @@ See also
 
 `` `KloppyPolarsDataset` ``: Data loading and preprocessing. [`` `fit()` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.PressingIntensity.fit "unravel.soccer.PressingIntensity.fit"): Configure and compute pressing intensity metrics. ../tutorials/pressing_intensity: Tutorial on pressing intensity analysis.
 
-`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset")_
+`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset")_ `unravel.soccer.PressingIntensity.dataset`
 
-`chunk_size`_`:` [`int`](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")_ _`=` `20000`_
+`chunk_size`_`:` [`int`](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")_ _`=` `20000`_ `unravel.soccer.PressingIntensity.chunk_size`
 
-`fit`(_`start_time``=``None`_, _`end_time``=``None`_, _`period_id``=``None`_, _`speed_threshold``=``None`_, _`reaction_time``=``0.7`_, _`time_threshold``=``1.5`_, _`sigma``=``0.45`_, _`method``=``'teams'`_, _`ball_method``=``'max'`_, _`orient``=``'ball_owning'`_, _`line_method``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/pressing_intensity.html#PressingIntensity.fit)
+`fit`(_`start_time``=``None`_, _`end_time``=``None`_, _`period_id``=``None`_, _`speed_threshold``=``None`_, _`reaction_time``=``0.7`_, _`time_threshold``=``1.5`_, _`sigma``=``0.45`_, _`method``=``'teams'`_, _`ball_method``=``'max'`_, _`orient``=``'ball_owning'`_, _`line_method``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/pressing_intensity.html#PressingIntensity.fit) `unravel.soccer.PressingIntensity.fit`
 
 Compute pressing intensity metrics for tracking data.
 
@@ -109,7 +108,7 @@ Calculates time-to-intercept (TTI) and probability-to-intercept (PTI) matrices q
 
 The computation considers: - Player positions and velocities - Reaction time delays - Maximum acceleration capabilities - Ball position and ball carrier proximity
 
-Parameters:
+**Parameters:**
 
 -   **start_time** (`` `pl.duration` ``, _optional_) – Start time for analysis window. Must be specified together with end_time and period_id. Defaults to None (processes all frames).
     
@@ -138,17 +137,16 @@ Parameters:
 -   **orient** (`` `Literal[``` ``”ball_owning”`` `,` ```"pressing"` ``, `` `"home_away"` ``, `` `"away_home"` ```` `]` ``, _optional_) – Matrix orientation perspective: - “ball_owning”: Rows = ball-owning team, Cols = non-owning team - “pressing”: Rows = non-owning team, Cols = ball-owning team (transpose) - “home_away”: Rows = home team, Cols = away team - “away_home”: Rows = away team, Cols = home team Defaults to “ball_owning”.
     
 -   **line_method** (`` `Union[None` ``, `` `Literal[``` ``”touchline”`` `,` ```"byline"` ``, `` `"all"` ```` `]]` ``, _optional_) – Reserved for future development (include pitch boundaries in calculations). Currently has no effect. Defaults to None.
-    
 
-Returns:
+**Returns:**
 
 Self, with computed results stored in [`` `output` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.PressingIntensity.output "unravel.soccer.PressingIntensity.output").
 
-Return type:
+**Return type:**
 
 [PressingIntensity](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.PressingIntensity "unravel.soccer.PressingIntensity")
 
-Raises:
+**Raises:**
 
 -   [**TypeError**](https://docs.python.org/3/library/exceptions.html#TypeError "(in Python v3.14)") – If period_id is not an integer.
     
@@ -157,7 +155,6 @@ Raises:
 -   [**TypeError**](https://docs.python.org/3/library/exceptions.html#TypeError "(in Python v3.14)") – If reaction_time, speed_threshold, time_threshold, or sigma have invalid types.
     
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If start_time, end_time, and period_id are partially specified (must be all or none).
-    
 
 Example
 
@@ -210,20 +207,19 @@ See also
 
 [`` `PressingIntensity` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.PressingIntensity "unravel.soccer.PressingIntensity"): Class documentation with conceptual overview. ../tutorials/pressing_intensity: Complete tutorial with visualizations.
 
-`__init__`(_`dataset`_, _`chunk_size``=``20000`_)
+`__init__`(_`dataset`_, _`chunk_size``=``20000`_) `unravel.soccer.PressingIntensity.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([_KloppyPolarsDataset_](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset"))
     
 -   **chunk_size** ([_int_](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"))
-    
 
-Return type:
+**Return type:**
 
 None
 
-_`class`_ `unravel.soccer.``EFPI`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/formations/efpi.html#EFPI)
+_`class`_ `unravel.soccer.``EFPI`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/formations/efpi.html#EFPI) `unravel.soccer.EFPI`
 
 Bases: `` `FormationDetection` ``
 
@@ -237,35 +233,33 @@ Key features: - Automatic formation detection with no manual labeling - Separate
 
 The algorithm is based on research in formation detection and extends methods from Decroos et al. and Shaw & Glickman’s formation analysis work.
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([`` `KloppyPolarsDataset` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")) – Soccer tracking dataset with player positions and ball ownership information.
     
 -   **formations** (`` `Union[List[str]` ``, `` `Literal[``` ``”shaw-glickman”[\`\`](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#id1)`` `]]` ``, _optional_) – Formation templates to use. Either a list of formation names (e.g., \[“4-3-3”, “4-4-2”\]) or “shaw-glickman” for the alternative template set. Defaults to None (uses mplsoccer formations).
-    
 
-`output`
+`output` `unravel.soccer.EFPI.output`
 
 Detected formations with columns: - object_id: Player ID - team_id: Team ID - position: Assigned position label (e.g., “LW”, “CM”, “GK”) - formation: Formation name (e.g., “4-3-3”) - is_attacking: Boolean indicating attacking (True) or defending (False) - frame_id (if every=”frame”): Frame identifier - \[segment_id\] (if every != “frame”): Possession or time window identifier
 
-Type:
+**Type:**
 
 `` `pl.DataFrame` ``
 
-`segments`
+`segments` `unravel.soccer.EFPI.segments`
 
 When using temporal aggregation (every != “frame”), contains segment metadata: - segment_id: Unique segment identifier - n_frames: Number of frames in segment - start_timestamp / end_timestamp: Time bounds - start_frame_id / end_frame_id: Frame bounds
 
-Type:
+**Type:**
 
 `` `pl.DataFrame` ``, _optional_
 
-Raises:
+**Raises:**
 
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If dataset is not of type KloppyPolarsDataset.
     
 -   [**ImportError**](https://docs.python.org/3/library/exceptions.html#ImportError "(in Python v3.14)") – If scipy is not installed (required for linear_sum_assignment).
-    
 
 Example
 
@@ -321,22 +315,21 @@ See also
 
 `` `KloppyPolarsDataset` ``: Data loading and preprocessing. [`` `fit()` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI.fit "unravel.soccer.EFPI.fit"): Configure and run formation detection. ../tutorials/formation_detection: Tutorial on formation analysis.
 
-_`property`_ `return_dtypes`
+_`property`_ `return_dtypes` `unravel.soccer.EFPI.return_dtypes`
 
-`__init__`(_`dataset`_, _`chunk_size``=``2000`_)
+`__init__`(_`dataset`_, _`chunk_size``=``2000`_) `unravel.soccer.EFPI.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([_KloppyPolarsDataset_](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset"))
     
 -   **chunk_size** ([_int_](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"))
-    
 
-Return type:
+**Return type:**
 
 None
 
-`fit`(_`start_time``=``None`_, _`end_time``=``None`_, _`period_id``=``None`_, _`every``=``'frame'`_, _`formations``=``None`_, _`substitutions``=``'drop'`_, _`change_after_possession``=``True`_, _`change_threshold``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/formations/efpi.html#EFPI.fit)
+`fit`(_`start_time``=``None`_, _`end_time``=``None`_, _`period_id``=``None`_, _`every``=``'frame'`_, _`formations``=``None`_, _`substitutions``=``'drop'`_, _`change_after_possession``=``True`_, _`change_threshold``=``None`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/models/formations/efpi.html#EFPI.fit) `unravel.soccer.EFPI.fit`
 
 Detect team formations from player positions.
 
@@ -344,7 +337,7 @@ Runs the EFPI formation detection algorithm on tracking data, identifying format
 
 The detection process: 1. Groups data by the specified temporal unit (every) 2. For each group, extracts attacking and defending team positions 3. Compares positions to formation templates using optimal assignment 4. Selects best-fit formation and assigns positional labels 5. Handles substitutions and formation changes based on thresholds
 
-Parameters:
+**Parameters:**
 
 -   **start_time** (`` `pl.duration` ``, _optional_) – Start time for analysis window. Must be specified together with end_time and period_id. Defaults to None (processes all data).
     
@@ -361,19 +354,18 @@ Parameters:
 -   **change_after_possession** ([`` `bool` ``](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"), _optional_) – Whether to re-detect formations when possession changes (even within the same temporal window). Defaults to True.
     
 -   **change_threshold** ([`` `float` ``](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)"), _optional_) – Minimum relative cost improvement (0-1) required to update the detected formation. For example, 0.2 means the new formation must have 20% lower cost to replace the current one. Helps stabilize detections. Defaults to None (always update).
-    
 
-Returns:
+**Returns:**
 
-Self, with detected formations stored in [`` `output` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI.output "unravel.soccer.EFPI.output") and temporal
+**Self, with detected formations stored in [`` `output` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI.output "unravel.soccer.EFPI.output") and temporal**
 
 segments in [`` `segments` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI.segments "unravel.soccer.EFPI.segments").
 
-Return type:
+**Return type:**
 
 [EFPI](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI "unravel.soccer.EFPI")
 
-Raises:
+**Raises:**
 
 [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If start_time, end_time, and period_id are partially specified (must be all or none).
 
@@ -439,7 +431,7 @@ See also
 
 [`` `EFPI` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/models.html#unravel.soccer.EFPI "unravel.soccer.EFPI"): Class documentation with algorithm overview. ../tutorials/formation_detection: Complete tutorial with examples.
 
-`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")_
+`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")_ `unravel.soccer.EFPI.dataset`
 
 ```
 from unravel.soccer import PressingIntensity

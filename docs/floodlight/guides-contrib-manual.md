@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.556Z
+crawled_at: 2026-08-11T09:08:54.620Z
 ---
 Do you consider contributing to our project? That’s great! We welcome all kinds of contributions - whether you discovered a bug, want to support the project by helping other users, code new features or just give some general feedback.
 
@@ -307,14 +307,13 @@ tests/
 
 ### Arrange-Act-Assert model
 
-Every unit test should follow the Arrange-Act-Assert model.
+**Every unit test should follow the Arrange-Act-Assert model.**
 
 1.  Arrange (set up) the input or conditions for the test
     
 2.  Act by calling a method
     
 3.  Assert whether some end condition is true
-    
 
 To clarify this structure here is a very simple example:
 

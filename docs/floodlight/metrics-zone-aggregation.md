@@ -2,17 +2,17 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/zone_aggregation.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.563Z
+crawled_at: 2026-08-11T09:08:54.626Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.metrics.zone_aggregation.``aggregate_property_by_zones`(_`property_to_aggregate`_, _`binning_property`_, _`zones`_, _`zone_names``=``None`_, _`aggregation``=``'sum'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/zone_aggregation.html#aggregate_property_by_zones)
+`floodlight.metrics.zone_aggregation.``aggregate_property_by_zones`(_`property_to_aggregate`_, _`binning_property`_, _`zones`_, _`zone_names``=``None`_, _`aggregation``=``'sum'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/zone_aggregation.html#aggregate_property_by_zones) `floodlight.metrics.zone_aggregation.aggregate_property_by_zones`
 
 Aggregates a property over threshold-based zones of another property.
 
 This function bins frames based on the value of `` `binning_property` `` and aggregates values from `` `property_to_aggregate` `` within each zone. Common use cases include calculating distance covered per velocity zone or time spent in different intensity zones [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/zone_aggregation.html#id2).
 
-Parameters:
+**Parameters:**
 
 -   **property_to_aggregate** (_PlayerProperty or TeamProperty_) – Property values to aggregate. For PlayerProperty, shape is (T, N) where T is the number of frames and N is the number of players. For TeamProperty, shape is (T,) where T is the number of frames.
     
@@ -36,13 +36,12 @@ Parameters:
         
     
     Default is ‘sum’.
-    
 
-Returns:
+**Returns:**
 
 **zone_aggregates** – DataFrame with aggregated values. For PlayerProperty inputs, rows correspond to players and columns to zones. For TeamProperty inputs, a single-row DataFrame is returned. Empty zones (no frames matching) return NaN for mean/min/max and 0 for sum/count.
 
-Return type:
+**Return type:**
 
 pd.DataFrame
 

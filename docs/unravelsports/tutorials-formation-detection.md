@@ -2,7 +2,7 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/tutorials/formation_detection.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.096Z
 ---
 EFPI (Elastic Formation and Position Identification) is an algorithm for detecting team formations and assigning tactical positions to players in soccer. This tutorial explains how to use EFPI with the unravelsports package.
 

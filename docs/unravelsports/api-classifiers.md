@@ -2,7 +2,7 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/api/classifiers.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.096Z
 ---
 Graph Neural Network classifiers for sports analytics.
 
@@ -20,7 +20,7 @@ This class wraps `` `PyGCrystalGraphClassifier` `` with PyTorch Lightning functi
 
 The model includes: - Automatic training/validation/test loops - AUROC and accuracy metric tracking - Learning rate scheduling with ReduceLROnPlateau - Automatic checkpointing and logging - Easy prediction interface
 
-Parameters:
+**Parameters:**
 
 -   **n_layers** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"), _optional_) – Number of CGConv layers. Defaults to 3.
     
@@ -33,9 +33,8 @@ Parameters:
 -   **lr** ([`` `float` ``](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)"), _optional_) – Learning rate for Adam optimizer. Defaults to 0.001.
     
 -   **weight_decay** ([`` `float` ``](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)"), _optional_) – L2 penalty coefficient. Defaults to 0.0.
-    
 
-Raises:
+**Raises:**
 
 [**ImportError**](https://docs.python.org/3/library/exceptions.html#ImportError "(in Python v3.14)") – If PyTorch Lightning or torchmetrics is not installed.
 
@@ -43,7 +42,7 @@ Raises:
 
 The underlying GNN model.
 
-Type:
+**Type:**
 
 `` `PyGCrystalGraphClassifier` ``
 
@@ -51,7 +50,7 @@ Type:
 
 Binary cross-entropy loss function.
 
-Type:
+**Type:**
 
 [`` `torch.nn.BCELoss` ``](https://docs.pytorch.org/docs/stable/generated/torch.nn.BCELoss.html#torch.nn.BCELoss "(in PyTorch v2.9)")
 
@@ -59,7 +58,7 @@ Type:
 
 Training AUROC metric.
 
-Type:
+**Type:**
 
 `` `AUROC` ``
 
@@ -67,7 +66,7 @@ Type:
 
 Training accuracy metric.
 
-Type:
+**Type:**
 
 `` `Accuracy` ``
 
@@ -75,7 +74,7 @@ Type:
 
 Validation AUROC metric.
 
-Type:
+**Type:**
 
 `` `AUROC` ``
 
@@ -83,7 +82,7 @@ Type:
 
 Validation accuracy metric.
 
-Type:
+**Type:**
 
 `` `Accuracy` ``
 
@@ -91,7 +90,7 @@ Type:
 
 Test AUROC metric.
 
-Type:
+**Type:**
 
 `` `AUROC` ``
 
@@ -99,7 +98,7 @@ Type:
 
 Test accuracy metric.
 
-Type:
+**Type:**
 
 `` `Accuracy` ``
 
@@ -142,7 +141,7 @@ This model uses binary cross-entropy loss and is designed for binary classificat
 
 Forward pass through the model.
 
-Parameters:
+**Parameters:**
 
 -   **x** ([`` `torch.Tensor` ``](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")) – Node features.
     
@@ -151,13 +150,12 @@ Parameters:
 -   **edge_attr** ([`` `torch.Tensor` ``](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")) – Edge features.
     
 -   **batch** (`` `torch.LongTensor` ``) – Batch vector.
-    
 
-Returns:
+**Returns:**
 
 Predictions with shape \[batch_size\].
 
-Return type:
+**Return type:**
 
 [torch.Tensor](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")
 
@@ -165,18 +163,17 @@ Return type:
 
 Training step executed for each batch.
 
-Parameters:
+**Parameters:**
 
 -   **batch** – Batch of graph data from DataLoader.
     
 -   **batch_idx** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")) – Index of the current batch.
-    
 
-Returns:
+**Returns:**
 
 Training loss for this batch.
 
-Return type:
+**Return type:**
 
 [torch.Tensor](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")
 
@@ -184,18 +181,17 @@ Return type:
 
 Validation step executed for each batch.
 
-Parameters:
+**Parameters:**
 
 -   **batch** – Batch of graph data from DataLoader.
     
 -   **batch_idx** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")) – Index of the current batch.
-    
 
-Returns:
+**Returns:**
 
 Validation loss for this batch.
 
-Return type:
+**Return type:**
 
 [torch.Tensor](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")
 
@@ -205,18 +201,17 @@ Test step for model evaluation.
 
 Computes test loss and metrics (AUROC and accuracy) for the given batch.
 
-Parameters:
+**Parameters:**
 
 -   **batch** – Batch of graph data from DataLoader.
     
 -   **batch_idx** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")) – Index of the current batch.
-    
 
-Returns:
+**Returns:**
 
 Test loss for this batch.
 
-Return type:
+**Return type:**
 
 [torch.Tensor](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")
 
@@ -226,20 +221,19 @@ Prediction step for inference.
 
 Returns predicted probabilities for the given batch without computing loss.
 
-Parameters:
+**Parameters:**
 
 -   **batch** – Batch of graph data from DataLoader.
     
 -   **batch_idx** ([`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")) – Index of the current batch.
-    
 
-Returns:
+**Returns:**
 
-Predicted probabilities with shape \[batch_size\].
+**Predicted probabilities with shape \[batch_size\].**
 
 Values are in range \[0, 1\].
 
-Return type:
+**Return type:**
 
 [torch.Tensor](https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor "(in PyTorch v2.9)")
 
@@ -257,16 +251,15 @@ Configure optimizer and learning rate scheduler.
 
 Uses Adam optimizer with learning rate scheduling via ReduceLROnPlateau. The learning rate is reduced by a factor of 0.5 when validation loss plateaus for 3 epochs.
 
-Returns:
+**Returns:**
 
-Dictionary containing:
+**Dictionary containing:**
 
 -   ’optimizer’: Adam optimizer instance
     
 -   ’lr_scheduler’: Dict with scheduler and monitoring configuration
-    
 
-Return type:
+**Return type:**
 
 [dict](https://docs.python.org/3/library/stdtypes.html#dict "(in Python v3.14)")
 
@@ -276,15 +269,15 @@ The learning rate scheduler monitors ‘val_loss’ and reduces the learning rat
 
 ## Spektral
 
-_`class`_ `unravel.classifiers.``CrystalGraphClassifier`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier)
+_`class`_ `unravel.classifiers.``CrystalGraphClassifier`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier) `unravel.classifiers.CrystalGraphClassifier`
 
 Bases: `` `Model` ``
 
 Default Graph Classifier with CrystalConvolution layers as presented in Sahasrabudhe & Bekkers (2023)
 
-`__init__`(_`n_layers``=``3`_, _`channels``=``128`_, _`drop_out``=``0.5`_, _`n_out``=``1`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier.__init__)
+`__init__`(_`n_layers``=``3`_, _`channels``=``128`_, _`drop_out``=``0.5`_, _`n_out``=``1`_, _`**``kwargs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier.__init__) `unravel.classifiers.CrystalGraphClassifier.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **n_layers** ([_int_](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"))
     
@@ -293,9 +286,8 @@ Parameters:
 -   **drop_out** ([_float_](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)"))
     
 -   **n_out** ([_int_](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)"))
-    
 
-`call`(_`inputs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier.call)
+`call`(_`inputs`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/classifiers/crystal_graph.html#CrystalGraphClassifier.call) `unravel.classifiers.CrystalGraphClassifier.call`
 
 ## Usage Examples
 

@@ -2,7 +2,7 @@
 source_url: https://fast-forward.readthedocs.io/en/latest/api/
 source_type: crawled
 upstream_version: 0.2.0
-crawled_at: 2026-07-31T18:45:12.332Z
+crawled_at: 2026-08-11T09:09:50.139Z
 ---
 ## TrackingDataset
 
@@ -31,7 +31,7 @@ Examples:
 >>> dataset.periods   # pl.DataFrame (2+ rows)
 ```
 
-### tracking `property` 
+### tracking `property`  `fastforward._dataset.TrackingDataset.tracking`
 
 ```
 tracking
@@ -39,7 +39,7 @@ tracking
 
 Get tracking data as a DataFrame.
 
-### metadata `property` 
+### metadata `property`  `fastforward._dataset.TrackingDataset.metadata`
 
 ```
 metadata
@@ -47,7 +47,7 @@ metadata
 
 Get metadata DataFrame (single row).
 
-### teams `property` 
+### teams `property`  `fastforward._dataset.TrackingDataset.teams`
 
 ```
 teams
@@ -55,7 +55,7 @@ teams
 
 Get teams DataFrame.
 
-### players `property` 
+### players `property`  `fastforward._dataset.TrackingDataset.players`
 
 ```
 players
@@ -63,7 +63,7 @@ players
 
 Get players DataFrame.
 
-### periods `property` 
+### periods `property`  `fastforward._dataset.TrackingDataset.periods`
 
 ```
 periods
@@ -71,7 +71,7 @@ periods
 
 Get periods DataFrame with period_id, start_frame_id, end_frame_id.
 
-### engine `property` 
+### engine `property`  `fastforward._dataset.TrackingDataset.engine`
 
 ```
 engine
@@ -79,7 +79,7 @@ engine
 
 Get the DataFrame engine ('polars', 'pyspark', or 'arrow').
 
-### coordinate_system `property` 
+### coordinate_system `property`  `fastforward._dataset.TrackingDataset.coordinate_system`
 
 ```
 coordinate_system
@@ -87,7 +87,7 @@ coordinate_system
 
 Get the current coordinate system.
 
-### orientation `property` 
+### orientation `property`  `fastforward._dataset.TrackingDataset.orientation`
 
 ```
 orientation
@@ -95,7 +95,7 @@ orientation
 
 Get the current orientation.
 
-### pitch_dimensions `property` 
+### pitch_dimensions `property`  `fastforward._dataset.TrackingDataset.pitch_dimensions`
 
 ```
 pitch_dimensions
@@ -103,7 +103,7 @@ pitch_dimensions
 
 Get current pitch dimensions (length, width) in meters.
 
-### to_polars 
+### to_polars  `fastforward._dataset.TrackingDataset.to_polars`
 
 ```
 to_polars()
@@ -113,7 +113,7 @@ Convert all DataFrames to Polars.
 
 If already using Polars engine, returns self unchanged. Arrow tables are converted zero-copy via `pl.from_arrow` (Arrow C Data Interface capsule). PySpark DataFrames go via pandas (the round trip the JVM side wants).
 
-### to_pyspark 
+### to_pyspark  `fastforward._dataset.TrackingDataset.to_pyspark`
 
 ```
 to_pyspark(spark=None)
@@ -123,7 +123,7 @@ Convert all DataFrames to PySpark.
 
 If already using PySpark engine, returns self unchanged. Arrow tables go straight via `spark.createDataFrame(arrow_table)` (Spark 3.4+). Polars DataFrames convert through the Arrow capsule, skipping pandas.
 
-### transform 
+### transform  `fastforward._dataset.TrackingDataset.transform`
 
 ```
 transform(to_orientation=None, to_dimensions=None, to_coordinates=None)

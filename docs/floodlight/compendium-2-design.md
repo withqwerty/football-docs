@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/2_design.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.557Z
+crawled_at: 2026-08-11T09:08:54.622Z
 ---
 At this point, let’s summarize a few design principles that we decided build our package around. These are problem-specific and on top of any general software design principles. During implementation, we’ve naturally encountered questions on how to solve _this_ or how to incorporate _that_ special case. Often then, half a dozen possible solutions come to mind, none of which appears to be clearly right or wrong. If you’ve decided to contribute and find yourself in this situation, these principles hopefully come in handy.
 

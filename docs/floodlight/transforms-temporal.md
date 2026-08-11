@@ -2,17 +2,17 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/temporal.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.566Z
+crawled_at: 2026-08-11T09:08:54.628Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.temporal.``resample`(_`obj`_, _`target_framerate`_, _`interp_method``=``None`_, _`order``=``3`_, _`k``=``3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/temporal.html#resample)
+`floodlight.transforms.temporal.``resample`(_`obj`_, _`target_framerate`_, _`interp_method``=``None`_, _`order``=``3`_, _`k``=``3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/temporal.html#resample) `floodlight.transforms.temporal.resample`
 
 Resample a floodlight core object to a new framerate.
 
 Rescales any framerate-bearing core object (`` `XY` ``, `` `Code` ``, `` `TeamProperty` ``, `` `PlayerProperty` ``, or `` `DyadicProperty` ``) to a target framerate.
 
-Parameters:
+**Parameters:**
 
 -   **obj** (_XY | Code | TeamProperty | PlayerProperty | DyadicProperty_) – Framerate-bearing core object to resample.
     
@@ -23,13 +23,12 @@ Parameters:
 -   **order** (_int, optional_) – Polynomial order for `` `interp_method="polynomial"` ``. Default 3.
     
 -   **k** (_int, optional_) – Spline degree for `` `interp_method="spline"` ``. Default 3.
-    
 
-Returns:
+**Returns:**
 
 **obj_resampled** – New object with `` `framerate` `` rescaled to `` `target_framerate` ``.
 
-Return type:
+**Return type:**
 
 same type as `` `obj` ``
 

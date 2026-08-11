@@ -2,37 +2,37 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/opta.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.561Z
+crawled_at: 2026-08-11T09:08:54.624Z
 ---
-`floodlight.io.opta.``get_opta_feedtype`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#get_opta_feedtype)
+`floodlight.io.opta.``get_opta_feedtype`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#get_opta_feedtype) `floodlight.io.opta.get_opta_feedtype`
 
 Tries to extract the feed type from Opta’s XML feed.
 
 This function assumes that the file follows Opta’s format of producing feeds. Thus it should have a “PRODUCTION HEADER” comment at the top of the file so that on line 6 it reads something like `` `production` `module:`  `Opta::Feed::XML::Soccer::F24` ``.
 
-Parameters:
+**Parameters:**
 
 **filepath** (_Union\[str, Path\]_) – Full path to Opta XML file.
 
-Returns:
+**Returns:**
 
 **feedtype** – Returns the type of the feed as a string in case it finds it, e.g. ‘F24’, and None otherwise.
 
-Return type:
+**Return type:**
 
 str or None
 
-`floodlight.io.opta.``read_event_data_xml`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#read_event_data_xml)
+`floodlight.io.opta.``read_event_data_xml`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#read_event_data_xml) `floodlight.io.opta.read_event_data_xml`
 
 Parse Opta’s f24 feed (containing match events) and extract event data and pitch information.
 
 This function provides a high-level access to the particular f24 feed and will return event objects for both teams. The number of segments is inferred from the data, yet data for each segment is stored in a separate object.
 
-Parameters:
+**Parameters:**
 
 **filepath** (_str or pathlib.Path_) – Full path to the XML feed.
 
-Returns:
+**Returns:**
 
 **data_objects** – Tuple of (nested) floodlight core objects with shape (events_objects, pitch).
 
@@ -40,7 +40,7 @@ Returns:
 
 `` `pitch` `` is a `` `Pitch` `` object corresponding to the data.
 
-Return type:
+**Return type:**
 
 Tuple\[Dict\[str, Dict\[str, [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 

@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/4_space.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-08-11T08:29:26.558Z
+crawled_at: 2026-08-11T09:08:54.622Z
 ---
 Space, next to time, is the second primary data dimension that is of importance when handling sports data. For position data, as the name suggest, both dimensions are crucial, which is why they are often called spatiotemporal data in the scientific literature. Event data, in contrast, could technically live only in the temporal domain, without any spatial information attached. Locating events on the pitch is nonetheless of great interest, and many data providers include information as to where events happen on the pitch.
 
@@ -46,23 +46,23 @@ These examples include the most common approaches we’ve encountered to define 
 
 In our attempt, the first step towards achieving this is to extract all properties necessary to pin down the exact format of a certain playing surface. We’ve covered that previously, so let’s summarize:
 
-Unit of measurement
+**Unit of measurement**
 
 What’s x and y measured in?
 
-Pitch dimension
+**Pitch dimension**
 
 What’s the length and width of the pitch?
 
-Anchoring
+**Anchoring**
 
 Where’s the pitch “anchored” on the coordinate system, i.e. where exactly is _(0,0)_?
 
-Standardization
+**Standardization**
 
 Are the positions “actual” points in meter or centimeter, or on some form of standardized/projected pitch?
 
-Playing direction
+**Playing direction**
 
 What’s the direction of play, per team?
 

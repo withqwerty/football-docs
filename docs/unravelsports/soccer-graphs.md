@@ -2,11 +2,11 @@
 source_url: https://unravelsports.readthedocs.io/en/latest/api/soccer/graphs.html
 source_type: crawled
 upstream_version: 1.2.1
-crawled_at: 2026-07-31T18:45:15.624Z
+crawled_at: 2026-08-11T09:09:59.097Z
 ---
 Converting soccer tracking data to graph structures for GNN training.
 
-_`class`_ `unravel.soccer.``SoccerGraphConverter`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter)
+_`class`_ `unravel.soccer.``SoccerGraphConverter`[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter) `unravel.soccer.SoccerGraphConverter`
 
 Bases: `` `DefaultGraphConverter` ``
 
@@ -16,7 +16,7 @@ This class transforms soccer tracking data into graph representations suitable f
 
 The converter supports two GNN frameworks: - PyTorch Geometric (recommended) via `` `to_pytorch_graphs()` `` - Spektral (deprecated, Python 3.11 only) via `` `to_spektral_graphs()` ``
 
-Graph Structure:
+**Graph Structure:**
 
 -   **Nodes**: Players (home team, away team) and ball
     
@@ -27,9 +27,8 @@ Graph Structure:
 -   **Edge Features**: Distances, angles, relative velocities (6-7 default features)
     
 -   **Global Features**: Optional match-level features attached to ball node
-    
 
-Key Features:
+**Key Features:**
 
 -   Configurable node and edge feature engineering
     
@@ -42,9 +41,8 @@ Key Features:
 -   Ball connection strategies (all players, carrier only, none)
     
 -   Permutation invariance via random node ordering
-    
 
-Parameters:
+**Parameters:**
 
 -   **dataset** ([`` `KloppyPolarsDataset` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.KloppyPolarsDataset")) – Polars dataset with tracking data. Must have been processed with [`` `add_graph_ids()` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset.add_graph_ids "unravel.soccer.KloppyPolarsDataset.add_graph_ids") and optionally [`` `add_dummy_labels()` ``](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset.add_dummy_labels "unravel.soccer.KloppyPolarsDataset.add_dummy_labels").
     
@@ -61,48 +59,46 @@ Parameters:
 -   **global_feature_type** (`` `Literal[``` ``”ball”`` `,` ```"all"` ```` `]` ``, _optional_) – Where to attach global features. “ball” attaches to ball node only, “all” attaches to all nodes. Defaults to “ball”.
     
 -   **additional_feature_cols** (`` `List[str]` ``, _optional_) – Extra columns from dataset to make available to custom feature functions (e.g., player height, position). Defaults to empty list.
-    
 
-`settings`
+`settings` `unravel.soccer.SoccerGraphConverter.settings`
 
 Configuration for graph conversion including adjacency matrix type, padding, and feature settings.
 
-Type:
+**Type:**
 
 `` `GraphSettingsPolars` ``
 
-`n_node_features`
+`n_node_features` `unravel.soccer.SoccerGraphConverter.n_node_features`
 
 Total number of node features per node.
 
-Type:
+**Type:**
 
 [`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")
 
-`n_edge_features`
+`n_edge_features` `unravel.soccer.SoccerGraphConverter.n_edge_features`
 
 Total number of edge features per edge.
 
-Type:
+**Type:**
 
 [`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")
 
-`n_graph_features`
+`n_graph_features` `unravel.soccer.SoccerGraphConverter.n_graph_features`
 
 Total number of global/graph-level features.
 
-Type:
+**Type:**
 
 [`` `int` ``](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")
 
-Raises:
+**Raises:**
 
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If dataset is not a KloppyPolarsDataset.
     
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If required columns (graph_id, label) are missing.
     
 -   [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If custom feature functions are not properly decorated.
-    
 
 Example
 
@@ -140,37 +136,37 @@ Warning
 
 If not using padding (`` `pad=False` ``), graphs with incomplete player data (< 22 players) will be dropped. Use `` `pad=True` `` for variable-sized teams.
 
-`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset")_ _`=` `None`_
+`dataset`_`:` [`KloppyPolarsDataset`](https://unravelsports.readthedocs.io/en/latest/api/soccer/dataset.html#unravel.soccer.KloppyPolarsDataset "unravel.soccer.dataset.kloppy_polars.KloppyPolarsDataset")_ _`=` `None`_ `unravel.soccer.SoccerGraphConverter.dataset`
 
-`chunk_size`_`:` [`int`](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")_ _`=` `20000`_
+`chunk_size`_`:` [`int`](https://docs.python.org/3/library/functions.html#int "(in Python v3.14)")_ _`=` `20000`_ `unravel.soccer.SoccerGraphConverter.chunk_size`
 
-`non_potential_receiver_node_value`_`:` [`float`](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)")_ _`=` `0.1`_
+`non_potential_receiver_node_value`_`:` [`float`](https://docs.python.org/3/library/functions.html#float "(in Python v3.14)")_ _`=` `0.1`_ `unravel.soccer.SoccerGraphConverter.non_potential_receiver_node_value`
 
-`edge_feature_funcs`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable "(in Python v3.14)")`[``[`[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`,` [`Any`](https://docs.python.org/3/library/typing.html#typing.Any "(in Python v3.14)")`]``]``,` [`ndarray`](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray "(in NumPy v2.4)")`]``]`_
+`edge_feature_funcs`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable "(in Python v3.14)")`[``[`[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`,` [`Any`](https://docs.python.org/3/library/typing.html#typing.Any "(in Python v3.14)")`]``]``,` [`ndarray`](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray "(in NumPy v2.4)")`]``]`_ `unravel.soccer.SoccerGraphConverter.edge_feature_funcs`
 
-`node_feature_funcs`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable "(in Python v3.14)")`[``[`[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`,` [`Any`](https://docs.python.org/3/library/typing.html#typing.Any "(in Python v3.14)")`]``]``,` [`ndarray`](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray "(in NumPy v2.4)")`]``]`_
+`node_feature_funcs`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable "(in Python v3.14)")`[``[`[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`,` [`Any`](https://docs.python.org/3/library/typing.html#typing.Any "(in Python v3.14)")`]``]``,` [`ndarray`](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray "(in NumPy v2.4)")`]``]`_ `unravel.soccer.SoccerGraphConverter.node_feature_funcs`
 
-`global_feature_cols`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`]` `|` [`None`](https://docs.python.org/3/library/constants.html#None "(in Python v3.14)")_
+`global_feature_cols`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`]` `|` [`None`](https://docs.python.org/3/library/constants.html#None "(in Python v3.14)")_ `unravel.soccer.SoccerGraphConverter.global_feature_cols`
 
-`global_feature_type`_`:` [`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal "(in Python v3.14)")`[``'ball'``,` `'all'``]`_ _`=` `'ball'`_
+`global_feature_type`_`:` [`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal "(in Python v3.14)")`[``'ball'``,` `'all'``]`_ _`=` `'ball'`_ `unravel.soccer.SoccerGraphConverter.global_feature_type`
 
-`additional_feature_cols`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`]` `|` [`None`](https://docs.python.org/3/library/constants.html#None "(in Python v3.14)")_
+`additional_feature_cols`_`:` [`List`](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")`[`[`str`](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")`]` `|` [`None`](https://docs.python.org/3/library/constants.html#None "(in Python v3.14)")_ `unravel.soccer.SoccerGraphConverter.additional_feature_cols`
 
-_`property`_ `default_node_feature_funcs`_`:` [`list`](https://docs.python.org/3/library/stdtypes.html#list "(in Python v3.14)")_
+_`property`_ `default_node_feature_funcs`_`:` [`list`](https://docs.python.org/3/library/stdtypes.html#list "(in Python v3.14)")_ `unravel.soccer.SoccerGraphConverter.default_node_feature_funcs`
 
-_`property`_ `default_edge_feature_funcs`_`:` [`list`](https://docs.python.org/3/library/stdtypes.html#list "(in Python v3.14)")_
+_`property`_ `default_edge_feature_funcs`_`:` [`list`](https://docs.python.org/3/library/stdtypes.html#list "(in Python v3.14)")_ `unravel.soccer.SoccerGraphConverter.default_edge_feature_funcs`
 
-`get_players_by_team_id`(_`team_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.get_players_by_team_id)
+`get_players_by_team_id`(_`team_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.get_players_by_team_id) `unravel.soccer.SoccerGraphConverter.get_players_by_team_id`
 
-`get_player_by_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.get_player_by_id)
+`get_player_by_id`(_`player_id`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.get_player_by_id) `unravel.soccer.SoccerGraphConverter.get_player_by_id`
 
-`plot`(_`file_path`_, _`fps``=``None`_, _`timestamp``=``None`_, _`end_timestamp``=``None`_, _`period_id``=``None`_, _`team_color_a``=``'#CD0E61'`_, _`team_color_b``=``'#0066CC'`_, _`ball_color``=``'black'`_, _`sort``=``True`_, _`color_by``=``'ball_owning'`_, _`anonymous``=``False`_, _`plot_type``=``'full'`_, _`show_label``=``True`_, _`show_ball_label``=``False`_, _`show_timestamp``=``True`_, _`next_closest_timestamp``=``False`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.plot)
+`plot`(_`file_path`_, _`fps``=``None`_, _`timestamp``=``None`_, _`end_timestamp``=``None`_, _`period_id``=``None`_, _`team_color_a``=``'#CD0E61'`_, _`team_color_b``=``'#0066CC'`_, _`ball_color``=``'black'`_, _`sort``=``True`_, _`color_by``=``'ball_owning'`_, _`anonymous``=``False`_, _`plot_type``=``'full'`_, _`show_label``=``True`_, _`show_ball_label``=``False`_, _`show_timestamp``=``True`_, _`next_closest_timestamp``=``False`_)[`[source]`](https://unravelsports.readthedocs.io/en/latest/_modules/unravel/soccer/graphs/graph_converter.html#SoccerGraphConverter.plot) `unravel.soccer.SoccerGraphConverter.plot`
 
 Plot tracking data as a static image or video file.
 
 This method visualizes tracking data for players and the ball. It can generate either: - A single PNG image (if either fps or end_timestamp is None, or both are None) - An MP4 video (if both fps and end_timestamp are provided)
 
-Parameters:
+**Parameters:**
 
 -   **file_path** ([`` `str` ``](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")) – The output path where the PNG or MP4 file will be saved
     
@@ -207,13 +203,12 @@ Parameters:
 -   **show_ball_label** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
     
 -   **show_timestamp** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
-    
 
-Returns:
+**Returns:**
 
 The function saves the output file to the specified file_path but doesn’t return any value
 
-Return type:
+**Return type:**
 
 [`` `None` ``](https://docs.python.org/3/library/constants.html#None "(in Python v3.14)")
 
@@ -221,11 +216,11 @@ Notes
 
 Output file type is determined by parameters: - PNG: Generated when either fps or end_timestamp is None, or both are None - MP4: Generated when both fps and end_timestamp are provided
 
-Raises:
+**Raises:**
 
 [**ValueError**](https://docs.python.org/3/library/exceptions.html#ValueError "(in Python v3.14)") – If file extension doesn’t match the parameters provided (e.g., .mp4 extension but missing fps or end_timestamp, or .png extension with both fps and end_timestamp)
 
-Parameters:
+**Parameters:**
 
 -   **file_path** ([_str_](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)"))
     
@@ -258,11 +253,10 @@ Parameters:
 -   **show_timestamp** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
     
 -   **next_closest_timestamp** ([_bool_](https://docs.python.org/3/library/functions.html#bool "(in Python v3.14)"))
-    
 
-`__init__`(_`engine='auto'`_, _`prediction=False`_, _`self_loop_ball=False`_, _`adjacency_matrix_connect_type='ball'`_, _`adjacency_matrix_type='split_by_team'`_, _`label_type='binary'`_, _`defending_team_node_value=0.1`_, _`random_seed=False`_, _`pad=False`_, _`verbose=False`_, _`label_col=None`_, _`graph_id_col=None`_, _`sample_rate=None`_, _`dataset=None`_, _`chunk_size=20000`_, _`non_potential_receiver_node_value=0.1`_, _`edge_feature_funcs=<factory>`_, _`node_feature_funcs=<factory>`_, _`global_feature_cols=<factory>`_, _`global_feature_type='ball'`_, _`additional_feature_cols=<factory>`_)
+`__init__`(_`engine='auto'`_, _`prediction=False`_, _`self_loop_ball=False`_, _`adjacency_matrix_connect_type='ball'`_, _`adjacency_matrix_type='split_by_team'`_, _`label_type='binary'`_, _`defending_team_node_value=0.1`_, _`random_seed=False`_, _`pad=False`_, _`verbose=False`_, _`label_col=None`_, _`graph_id_col=None`_, _`sample_rate=None`_, _`dataset=None`_, _`chunk_size=20000`_, _`non_potential_receiver_node_value=0.1`_, _`edge_feature_funcs=<factory>`_, _`node_feature_funcs=<factory>`_, _`global_feature_cols=<factory>`_, _`global_feature_type='ball'`_, _`additional_feature_cols=<factory>`_) `unravel.soccer.SoccerGraphConverter.__init__`
 
-Parameters:
+**Parameters:**
 
 -   **engine** ([_Literal_](https://docs.python.org/3/library/typing.html#typing.Literal "(in Python v3.14)")_\[__'auto'__,_ _'gpu'__\]_)
     
@@ -305,9 +299,8 @@ Parameters:
 -   **global_feature_type** ([_Literal_](https://docs.python.org/3/library/typing.html#typing.Literal "(in Python v3.14)")_\[__'ball'__,_ _'all'__\]_)
     
 -   **additional_feature_cols** ([_List_](https://docs.python.org/3/library/typing.html#typing.List "(in Python v3.14)")_\[_[_str_](https://docs.python.org/3/library/stdtypes.html#str "(in Python v3.14)")_\]_ _|_ _None_)
-    
 
-Return type:
+**Return type:**
 
 None
 
