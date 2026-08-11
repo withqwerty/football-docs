@@ -52,20 +52,20 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.1.0",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "@mozilla/readability": "^0.6.0",
     "better-sqlite3": "^12.11.1",
-    "linkedom": "^0.18.12",
-    "turndown": "^7.2.2",
+    "linkedom": "^0.18.13",
+    "turndown": "^7.2.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.9",
+    "@biomejs/biome": "^2.5.7",
     "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^22.15.2",
+    "@types/node": "^22.20.1",
     "@types/turndown": "^5.0.6",
-    "tsx": "^4.23.0",
-    "typescript": "^5.8.3",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3",
     "vitest": "^4.1.10"
   },
   "files": [
@@ -74,5 +74,11 @@
     "data/docs.db",
     "docs/",
     "providers.json"
-  ]
+  ],
+  "pnpm": {
+    "overrides": {
+      "js-yaml": "^4.3.1",
+      "hono": "^4.12.34"
+    }
+  }
 }
