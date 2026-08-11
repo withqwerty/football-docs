@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.564Z
 ---
-_`class`_ `floodlight.models.kinetics.``MetabolicPowerModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel "Link to this definition")
+_`class`_ `floodlight.models.kinetics.``MetabolicPowerModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel)
 
 Class for calculating Metabolic Power and derived metrics from spatiotemporal data.
 
@@ -55,13 +55,13 @@ PlayerProperty(property=array([[ 323.49936949],
 
 References
 
-`ECW_ES_CUTOFFS` _`=` `array([-0.3,` `-0.2,` `-0.1,`  `0.` `,`  `0.1,`  `0.2,`  `0.3,`  `0.4])`_[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.ECW_ES_CUTOFFS "Link to this definition")
+`ECW_ES_CUTOFFS` _`=` `array([-0.3,` `-0.2,` `-0.1,`  `0.` `,`  `0.1,`  `0.2,`  `0.3,`  `0.4])`_
 
-`ECW_POLY_COEFF` _`=` `array([[` `2.8000e-01,` `-1.6600e+00,`  `3.8100e+00,` `-3.9600e+00,`  `4.0100e+00],`        `[` `3.0000e-02,` `-1.5000e-01,`  `9.8000e-01,` `-2.2500e+00,`  `3.1400e+00],`        `[` `6.9000e-01,` `-3.2100e+00,`  `5.9400e+00,` `-5.0700e+00,`  `2.7900e+00],`        `[` `1.2500e+00,` `-6.5700e+00,`  `1.3140e+01,` `-1.1150e+01,`  `5.3500e+00],`        `[` `6.8000e-01,` `-4.1700e+00,`  `1.0170e+01,` `-1.0310e+01,`  `8.6600e+00],`        `[` `3.8000e+00,` `-1.4910e+01,`  `2.2940e+01,` `-1.4530e+01,`  `1.1240e+01],`        `[` `4.4950e+01,` `-1.2288e+02,`  `1.2694e+02,` `-5.7460e+01,`  `2.1390e+01],`        `[` `9.4620e+01,` `-2.1394e+02,`  `1.8443e+02,` `-6.8490e+01,`  `2.5040e+01]])`_[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.ECW_POLY_COEFF "Link to this definition")
+`ECW_POLY_COEFF` _`=` `array([[` `2.8000e-01,` `-1.6600e+00,`  `3.8100e+00,` `-3.9600e+00,`  `4.0100e+00],`        `[` `3.0000e-02,` `-1.5000e-01,`  `9.8000e-01,` `-2.2500e+00,`  `3.1400e+00],`        `[` `6.9000e-01,` `-3.2100e+00,`  `5.9400e+00,` `-5.0700e+00,`  `2.7900e+00],`        `[` `1.2500e+00,` `-6.5700e+00,`  `1.3140e+01,` `-1.1150e+01,`  `5.3500e+00],`        `[` `6.8000e-01,` `-4.1700e+00,`  `1.0170e+01,` `-1.0310e+01,`  `8.6600e+00],`        `[` `3.8000e+00,` `-1.4910e+01,`  `2.2940e+01,` `-1.4530e+01,`  `1.1240e+01],`        `[` `4.4950e+01,` `-1.2288e+02,`  `1.2694e+02,` `-5.7460e+01,`  `2.1390e+01],`        `[` `9.4620e+01,` `-2.1394e+02,`  `1.8443e+02,` `-6.8490e+01,`  `2.5040e+01]])`_
 
-`RUNNING_TRANSITION_COEFF` _`=` `array([-107.05,`  `113.13,`   `-1.13,`  `-15.84,`   `-1.7` `,`    `2.27])`_[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.RUNNING_TRANSITION_COEFF "Link to this definition")
+`RUNNING_TRANSITION_COEFF` _`=` `array([-107.05,`  `113.13,`   `-1.13,`  `-15.84,`   `-1.7` `,`    `2.27])`_
 
-`cumulative_equivalent_distance`(_`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.cumulative_equivalent_distance)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.cumulative_equivalent_distance "Link to this definition")
+`cumulative_equivalent_distance`(_`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.cumulative_equivalent_distance)
 
 Returns cumulative equivalent distance defined as the distance a player could have run if moving at a constant speed and calculated as the fraction of metabolic work and the cost of constant running.
 
@@ -77,7 +77,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`cumulative_metabolic_power`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.cumulative_metabolic_power)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.cumulative_metabolic_power "Link to this definition")
+`cumulative_metabolic_power`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.cumulative_metabolic_power)
 
 Returns the cumulative metabolic power.
 
@@ -89,7 +89,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`equivalent_distance`(_`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.equivalent_distance)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.equivalent_distance "Link to this definition")
+`equivalent_distance`(_`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.equivalent_distance)
 
 Returns frame-wise equivalent distance, defined as the distance a player could have run if moving at a constant speed and calculated as the fraction of metabolic work and the cost of constant running.
 
@@ -105,7 +105,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_, _`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.fit "Link to this definition")
+`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_, _`eccr``=``3.6`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.fit)
 
 Fit the model to the given data and calculate metabolic power for every player.
 
@@ -124,7 +124,7 @@ Parameters:
 -   **eccr** (_Numeric_) – Energy cost of constant running. Default is set to 3.6 \\(\\frac{J}{kg \\cdot m}\\) according to di Prampero (2018). Can differ for different turfs.
     
 
-`metabolic_power`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.metabolic_power)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinetics.html#floodlight.models.kinetics.MetabolicPowerModel.metabolic_power "Link to this definition")
+`metabolic_power`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinetics.html#MetabolicPowerModel.metabolic_power)
 
 Returns the frame-wise metabolic power as computed by the `` `fit()` ``\-method.
 

@@ -2,13 +2,13 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/tutorial_matchsheets.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.363Z
+crawled_at: 2026-08-11T08:29:26.557Z
 ---
-## Tutorial: Match Sheet Creation[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_matchsheets.html#tutorial-match-sheet-creation "Link to this heading")
+## Tutorial: Match Sheet Creation
 
 In this tutorial we will create match sheets from the openly published event data from StatsBomb with the interface and objects provided by floodlight. Our goal is to load a match from the dataset, extract information about the scored goals, and use this information to create a match sheet.
 
-## Setup[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_matchsheets.html#setup "Link to this heading")
+## Setup
 
 First we need some data to work with. The open StatsBomb dataset contains (amongst others) data from the UEFA Euro 2020 with (partial) information about the player positions at the events which can be used for our purpose. From this dataset we load a single match from the dataset and also get the corresponding pitch information.
 
@@ -29,7 +29,7 @@ away_ht2 = events_objects["HT2"]["Away"]
 
 The variables `` `home_ht1` ``, `` `home_ht2` ``, `` `away_ht1` ``, and `` `away_ht2` `` are Events objects containing the events of the teams during the first and second half. These will be used to create the match sheets. The `` `pitch` `` variable is a Pitch object that contains information regarding the pitch specification and coordinate system our data live in.
 
-## Data Preparation[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_matchsheets.html#data-preparation "Link to this heading")
+## Data Preparation
 
 To create match sheets from the event data we want to select certain (important) events to look at. To keep it short and simple we stick to goals. We use the `` `select` `` function from the `` `floodlight.core.events` `` submodule to find all shots with a positive outcome (1).
 
@@ -86,245 +86,16 @@ all_goals = pd.concat(
 
 Here’s the (formatted) DataFrame you should get:
 
-eID
-
-gameclock
-
-pID
-
-tID
-
-mID
-
-outcome
-
-timestamp
-
-minute
-
-second
-
-at_x
-
-at_y
-
-to_x
-
-to_y
-
-event_name
-
-player_name
-
-team_name
-
-qualifier
-
-25
-
-1172.344
-
-nan
-
-785
-
-3794686
-
-nan
-
-0:19:32.433
-
-19
-
-32
-
-68.3
-
-62.1
-
-nan
-
-nan
-
-Own Goal For
-
-None
-
-Croatia
-
-…
-
-16
-
-2248.398
-
-6720
-
-772
-
-3794686
-
-1
-
-0:37:28.398
-
-37
-
-28
-
-109.0
-
-43.3
-
-120.0
-
-42.6
-
-Shot
-
-Pablo Sarabia Garcia
-
-Spain
-
-…
-
-16
-
-3366.771
-
-3957
-
-772
-
-3794686
-
-1
-
-0:11:06.771
-
-56
-
-6
-
-115.3
-
-42.4
-
-120.0
-
-41.0
-
-Shot
-
-Cesar Azpilicueta Tanco
-
-Spain
-
-…
-
-16
-
-4562.056
-
-6748
-
-772
-
-3794686
-
-1
-
-0:31:02.056
-
-76
-
-2
-
-112.1
-
-51.2
-
-120.0
-
-39.5
-
-Shot
-
-Ferran Torres Garcia
-
-Spain
-
-…
-
-16
-
-5056.385
-
-16527
-
-772
-
-3794686
-
-1
-
-0:39:16.385
-
-84
-
-16
-
-119.0
-
-40.9
-
-120.0
-
-42.5
-
-Shot
-
-Mislav Orsic
-
-Croatia
-
-…
-
-16
-
-5511.058
-
-11603
-
-772
-
-3794686
-
-1
-
-0:46:51.058
-
-91
-
-51
-
-114.2
-
-37.2
-
-120.0
-
-41.9
-
-Shot
-
-Mario Pasalic
-
-Croatia
-
-…
-
-## Plotting[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_matchsheets.html#plotting "Link to this heading")
+| eID | gameclock | pID | tID | mID | outcome | timestamp | minute | second | at_x | at_y | to_x | to_y | event_name | player_name | team_name | qualifier |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 25 | 1172.344 | nan | 785 | 3794686 | nan | 0:19:32.433 | 19 | 32 | 68.3 | 62.1 | nan | nan | Own Goal For | None | Croatia | … |
+| 16 | 2248.398 | 6720 | 772 | 3794686 | 1 | 0:37:28.398 | 37 | 28 | 109.0 | 43.3 | 120.0 | 42.6 | Shot | Pablo Sarabia Garcia | Spain | … |
+| 16 | 3366.771 | 3957 | 772 | 3794686 | 1 | 0:11:06.771 | 56 | 6 | 115.3 | 42.4 | 120.0 | 41.0 | Shot | Cesar Azpilicueta Tanco | Spain | … |
+| 16 | 4562.056 | 6748 | 772 | 3794686 | 1 | 0:31:02.056 | 76 | 2 | 112.1 | 51.2 | 120.0 | 39.5 | Shot | Ferran Torres Garcia | Spain | … |
+| 16 | 5056.385 | 16527 | 772 | 3794686 | 1 | 0:39:16.385 | 84 | 16 | 119.0 | 40.9 | 120.0 | 42.5 | Shot | Mislav Orsic | Croatia | … |
+| 16 | 5511.058 | 11603 | 772 | 3794686 | 1 | 0:46:51.058 | 91 | 51 | 114.2 | 37.2 | 120.0 | 41.9 | Shot | Mario Pasalic | Croatia | … |
+
+## Plotting
 
 Now we can use the predefined functions to create a plot of a single goal (e.g. the last) with the plotting functionality of the XY and Pitch object.
 

@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/secondspectrum.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.561Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.secondspectrum.``read_event_data_jsonl`(_`filepath_insight`_, _`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_event_data_jsonl)[](https://floodlight.readthedocs.io/en/latest/modules/io/secondspectrum.html#floodlight.io.secondspectrum.read_event_data_jsonl "Link to this definition")
+`floodlight.io.secondspectrum.``read_event_data_jsonl`(_`filepath_insight`_, _`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_event_data_jsonl)
 
 Parse Second Spectrum’s Insight file (containing match events) and extract event data and pitch information.
 
@@ -35,7 +35,7 @@ Notes
 
 Second Spectrum’s Insight files can be seen as a union of (wrapped) Opta event feeds and attached Second Spectrum markings. Thus, properties of the Opta F24-feed parser also mostly apply to this parser. This particularly includes the handling of qualifiers, which are included as a string in the `` `qualifier` `` column of the returned DataFrame’s. Second Spectrum markings are disregarded at this moment, but could be included in future releases.
 
-`floodlight.io.secondspectrum.``read_position_data_jsonl`(_`filepath_position`_, _`filepath_metadata`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_position_data_jsonl)[](https://floodlight.readthedocs.io/en/latest/modules/io/secondspectrum.html#floodlight.io.secondspectrum.read_position_data_jsonl "Link to this definition")
+`floodlight.io.secondspectrum.``read_position_data_jsonl`(_`filepath_position`_, _`filepath_metadata`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_position_data_jsonl)
 
 Parse Second Spectrum files and extract position data, possession and ballstatus codes, as well as pitch information.
 
@@ -70,7 +70,7 @@ Return type:
 
 Tuple\[Dict\[str, Dict\[str, [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.secondspectrum.``read_teamsheets_from_meta_json`(_`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_teamsheets_from_meta_json)[](https://floodlight.readthedocs.io/en/latest/modules/io/secondspectrum.html#floodlight.io.secondspectrum.read_teamsheets_from_meta_json "Link to this definition")
+`floodlight.io.secondspectrum.``read_teamsheets_from_meta_json`(_`filepath_metadata`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/secondspectrum.html#read_teamsheets_from_meta_json)
 
 Parses the Second Spectrum meta.json-file and creates respective teamsheets for the home and the away team.
 

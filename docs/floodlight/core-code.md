@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/code.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.365Z
+crawled_at: 2026-08-11T08:29:26.559Z
 ---
-_`class`_ `floodlight.core.code.``Code`(_`code`_, _`name`_, _`definitions``=``None`_, _`framerate``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code)[](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "Link to this definition")
+_`class`_ `floodlight.core.code.``Code`(_`code`_, _`name`_, _`definitions``=``None`_, _`framerate``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code)
 
 Fragment of continuous signal encoding one game state. Core class of floodlight.
 
@@ -23,7 +23,7 @@ Variables:
 
 **token** (_list_) – A list of all tokens used in game code, in ascending order.
 
-`find_sequences`(_`return_type``=``'dict'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code.find_sequences)[](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code.find_sequences "Link to this definition")
+`find_sequences`(_`return_type``=``'dict'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code.find_sequences)
 
 Finds all sequences of consecutive appearances for each token and returns their start and end indices.
 
@@ -59,7 +59,7 @@ Examples
 [(0, 2, 'A'), (2, 6, 'H'), (6, 9, 'A')]
 ```
 
-`slice`(_`startframe``=``None`_, _`endframe``=``None`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code.slice)[](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code.slice "Link to this definition")
+`slice`(_`startframe``=``None`_, _`endframe``=``None`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/code.html#Code.slice)
 
 Return copy of object with sliced code. Mimics numpy’s array slicing.
 
@@ -80,6 +80,6 @@ Return type:
 
 Union\[[Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code"), None\]
 
-_`property`_ `token`_`:` `list`_[](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code.token "Link to this definition")
+_`property`_ `token`_`:` `list`_
 
 A list of all tokens used in game code, in ascending order.

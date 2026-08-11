@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/permutation.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.565Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.permutation.``assign_roles`(_`xy`_, _`reference``=``None`_, _`n_iter``=``1`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/permutation.html#assign_roles)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/permutation.html#floodlight.transforms.permutation.assign_roles "Link to this definition")
+`floodlight.transforms.permutation.``assign_roles`(_`xy`_, _`reference``=``None`_, _`n_iter``=``1`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/permutation.html#assign_roles)
 
 Assigns consistent roles to players across frames using the Hungarian algorithm. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/permutation.html#id3)
 

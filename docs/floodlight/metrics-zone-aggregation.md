@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/zone_aggregation.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.563Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.metrics.zone_aggregation.``aggregate_property_by_zones`(_`property_to_aggregate`_, _`binning_property`_, _`zones`_, _`zone_names``=``None`_, _`aggregation``=``'sum'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/zone_aggregation.html#aggregate_property_by_zones)[](https://floodlight.readthedocs.io/en/latest/modules/metrics/zone_aggregation.html#floodlight.metrics.zone_aggregation.aggregate_property_by_zones "Link to this definition")
+`floodlight.metrics.zone_aggregation.``aggregate_property_by_zones`(_`property_to_aggregate`_, _`binning_property`_, _`zones`_, _`zone_names``=``None`_, _`aggregation``=``'sum'`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/zone_aggregation.html#aggregate_property_by_zones)
 
 Aggregates a property over threshold-based zones of another property.
 

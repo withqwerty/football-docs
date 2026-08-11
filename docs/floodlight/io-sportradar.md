@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/sportradar.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.561Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.sportradar.``read_event_data_json`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/sportradar.html#read_event_data_json)[](https://floodlight.readthedocs.io/en/latest/modules/io/sportradar.html#floodlight.io.sportradar.read_event_data_json "Link to this definition")
+`floodlight.io.sportradar.``read_event_data_json`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/sportradar.html#read_event_data_json)
 
 Parses the Sportradar timeline files in json format and extracts the event data.
 

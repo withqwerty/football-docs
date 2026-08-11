@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/4_space.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.364Z
+crawled_at: 2026-08-11T08:29:26.558Z
 ---
 Space, next to time, is the second primary data dimension that is of importance when handling sports data. For position data, as the name suggest, both dimensions are crucial, which is why they are often called spatiotemporal data in the scientific literature. Event data, in contrast, could technically live only in the temporal domain, without any spatial information attached. Locating events on the pitch is nonetheless of great interest, and many data providers include information as to where events happen on the pitch.
 
@@ -12,7 +12,7 @@ Note
 
 The dimension of playing grounds can - in some sports - change from location to location. There are typically preferred sizes (e.g. documented by the FIFA in football), but also allowed ranges. Changing pitch sizes are the main reason why handling space (across games and providers) is a little complex.
 
-## Coordinate Systems[](https://floodlight.readthedocs.io/en/latest/compendium/4_space.html#coordinate-systems "Link to this heading")
+## Coordinate Systems
 
 Let’s start with a quick example. The most straightforward way to fixate position data in a coordinate system is to center the playing field. This way, the center mark of the pitch is at the coordinate _(0,0)_. It looks something like this:
 
@@ -42,7 +42,7 @@ There is another aspect to standardization. Maybe you noticed that the two playe
 
 These examples include the most common approaches we’ve encountered to define the space where position data are encoded. All have pros and cons, and we are not the ones to judge. We’d like to incorporate all these formats which begs the question as how to make all these pitches work together. Or, on an implementation level, how can we design a general data structure that makes transformations between these pitches straightforward.
 
-## Decoupling Data and Pitches[](https://floodlight.readthedocs.io/en/latest/compendium/4_space.html#decoupling-data-and-pitches "Link to this heading")
+## Decoupling Data and Pitches
 
 In our attempt, the first step towards achieving this is to extract all properties necessary to pin down the exact format of a certain playing surface. We’ve covered that previously, so let’s summarize:
 
@@ -80,7 +80,7 @@ but that’s just the mathematical operation of rotating all points counterclock
 
 The second choice is to create a dedicated core object, named Pitch, that handles all information about the pitch. It does so, however, without explicitly specifying the underlying Cartesian coordinate system. Its attributes instead specify _how the pitch is located within this coordinate system_.
 
-## The Pitch object[](https://floodlight.readthedocs.io/en/latest/compendium/4_space.html#the-pitch-object "Link to this heading")
+## The Pitch object
 
 The [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html) object collects pitch properties as class attributes. This is how the class looks like:
 

@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/opta.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.561Z
 ---
-`floodlight.io.opta.``get_opta_feedtype`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#get_opta_feedtype)[](https://floodlight.readthedocs.io/en/latest/modules/io/opta.html#floodlight.io.opta.get_opta_feedtype "Link to this definition")
+`floodlight.io.opta.``get_opta_feedtype`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#get_opta_feedtype)
 
 Tries to extract the feed type from Opta’s XML feed.
 
@@ -22,7 +22,7 @@ Return type:
 
 str or None
 
-`floodlight.io.opta.``read_event_data_xml`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#read_event_data_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/opta.html#floodlight.io.opta.read_event_data_xml "Link to this definition")
+`floodlight.io.opta.``read_event_data_xml`(_`filepath`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/opta.html#read_event_data_xml)
 
 Parse Opta’s f24 feed (containing match events) and extract event data and pitch information.
 

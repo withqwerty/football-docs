@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.563Z
 ---
-`floodlight.metrics.trajectory_clustering.``formation_similarity`(_`xy`_, _`template`_, _`exclude_xIDs``=``None`_, _`role_assignment``=``True`_, _`n_iter``=``1`_, _`delta``=``0.3333333333333333`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/trajectory_clustering.html#formation_similarity)[](https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html#floodlight.metrics.trajectory_clustering.formation_similarity "Link to this definition")
+`floodlight.metrics.trajectory_clustering.``formation_similarity`(_`xy`_, _`template`_, _`exclude_xIDs``=``None`_, _`role_assignment``=``True`_, _`n_iter``=``1`_, _`delta``=``0.3333333333333333`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/trajectory_clustering.html#formation_similarity)
 
 Computes formation similarity (FSIM) between observed player positions and a formation template via template matching. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/trajectory_clustering.html#id5)
 

@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/temporal.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.566Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.temporal.``resample`(_`obj`_, _`target_framerate`_, _`interp_method``=``None`_, _`order``=``3`_, _`k``=``3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/temporal.html#resample)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/temporal.html#floodlight.transforms.temporal.resample "Link to this definition")
+`floodlight.transforms.temporal.``resample`(_`obj`_, _`target_framerate`_, _`interp_method``=``None`_, _`order``=``3`_, _`k``=``3`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/temporal.html#resample)
 
 Resample a floodlight core object to a new framerate.
 

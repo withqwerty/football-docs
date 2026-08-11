@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.365Z
+crawled_at: 2026-08-11T08:29:26.559Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-_`class`_ `floodlight.core.pitch.``Pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`boundaries`_, _`length``=``None`_, _`width``=``None`_, _`sport``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch)[](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "Link to this definition")
+_`class`_ `floodlight.core.pitch.``Pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`boundaries`_, _`length``=``None`_, _`width``=``None`_, _`sport``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch)
 
 Pitch and coordinate system specifications. Core class of floodlight.
 
@@ -34,7 +34,7 @@ Variables:
 -   **is_metrical** (_bool_) – Returns True if the object’s unit is metrical, False otherwise.
     
 
-_`classmethod`_ `from_template`(_`template_name`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.from_template)[](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch.from_template "Link to this definition")
+_`classmethod`_ `from_template`(_`template_name`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.from_template)
 
 Creates a Pitch object representing common data provider formats.
 
@@ -53,7 +53,7 @@ Return type:
 
 [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-`plot`(_`color_scheme``=``'standard'`_, _`show_axis_ticks``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.plot)[](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch.plot "Link to this definition")
+`plot`(_`color_scheme``=``'standard'`_, _`show_axis_ticks``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/pitch.html#Pitch.plot)
 
 Plots a pitch on a matplotlib.axes for a given sport.
 

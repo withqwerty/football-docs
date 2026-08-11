@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/events.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.365Z
+crawled_at: 2026-08-11T08:29:26.559Z
 ---
-_`class`_ `floodlight.core.events.``Events`(_`events`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "Link to this definition")
+_`class`_ `floodlight.core.events.``Events`(_`events`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events)
 
 Event data fragment. Core class of floodlight.
 
@@ -38,7 +38,7 @@ Notes
 
 Event data, particularly information available for each event, may vary across data providers. To accommodate all data flavours, any column name or data type is permissible. However, two essential columns are required (“eID” and “gameclock”). Other column names are protected. Using these names assumes that data stored in these columns follows conventions in terms of data types and value ranges. These are required for methods working with protected columns to assure correct calculations. Definitions for essential and protected columns can be found in [floodlight.core.definitions](https://floodlight.readthedocs.io/en/latest/modules/core/definitions.html#definitions-target).
 
-`add_frameclock`(_`framerate`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.add_frameclock)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.add_frameclock "Link to this definition")
+`add_frameclock`(_`framerate`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.add_frameclock)
 
 Add the column “frameclock”, computed as the rounded multiplication of gameclock and framerate, to the inner events DataFrame.
 
@@ -46,7 +46,7 @@ Parameters:
 
 **framerate** (_int_) – Temporal resolution of data in frames per second/Hertz.
 
-`column_values_in_range`(_`col`_, _`definitions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.column_values_in_range)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.column_values_in_range "Link to this definition")
+`column_values_in_range`(_`col`_, _`definitions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.column_values_in_range)
 
 Check if values for a single column of the inner event DataFrame are in correct range using the specifications from [floodlight.core.definitions](https://floodlight.readthedocs.io/en/latest/modules/core/definitions.html#definitions-target).
 
@@ -71,7 +71,7 @@ Notes
 
 Non-integer results of this computation will always be rounded to the next smaller integer.
 
-`get_event_stream`(_`fade``=``0`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.get_event_stream)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.get_event_stream "Link to this definition")
+`get_event_stream`(_`fade``=``0`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.get_event_stream)
 
 Generates a Code object containing the eIDs of all events at the respective frame and optionally subsequent frames as defined by the fade argument.
 
@@ -96,7 +96,7 @@ Return type:
 
 [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")
 
-`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.reflect)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.reflect "Link to this definition")
+`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.reflect)
 
 Reflects data on given axis.
 
@@ -104,7 +104,7 @@ Parameters:
 
 **axis** (_{‘x’, ‘y’}_) – Name of reflection axis. If set to “x”, data is reflected on x-axis, if set to “y”, data is reflected on y-axis.
 
-`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.rotate)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.rotate "Link to this definition")
+`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.rotate)
 
 Rotates data on given angle ‘alpha’ around the origin.
 
@@ -112,7 +112,7 @@ Parameters:
 
 **alpha** (_float_) – Rotation angle in degrees. Alpha must be between -360 and 360. If positive alpha, data is rotated in counter clockwise direction. If negative, data is rotated in clockwise direction around the origin.
 
-`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.scale)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.scale "Link to this definition")
+`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.scale)
 
 Scales data by a given factor and optionally selected axis.
 
@@ -123,7 +123,7 @@ Parameters:
 -   **axis** (_{None, ‘x’, ‘y’}, optional_) – Name of scaling axis. If set to ‘x’ data is scaled on x-axis, if set to ‘y’ data is scaled on y-axis. If None, data is scaled in both directions (default).
     
 
-`select`(_`conditions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.select)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.select "Link to this definition")
+`select`(_`conditions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.select)
 
 Returns a DataFrame containing all entries from the inner events DataFrame
 
@@ -143,7 +143,7 @@ Return type:
 
 pd.DataFrame
 
-`slice`(_`start``=``None`_, _`end``=``None`_, _`slice_by``=``'gameclock'`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.slice)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.slice "Link to this definition")
+`slice`(_`start``=``None`_, _`end``=``None`_, _`slice_by``=``'gameclock'`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.slice)
 
 Return copy of object with events sliced in a time interval.
 
@@ -168,7 +168,7 @@ Return type:
 
 Union\[[Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events"), None\]
 
-`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.translate)[](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events.translate "Link to this definition")
+`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/events.html#Events.translate)
 
 Translates data by shift vector.
 

@@ -2,13 +2,13 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/1_data.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.364Z
+crawled_at: 2026-08-11T08:29:26.557Z
 ---
 The core idea behind this package is to provide streamlined data structures that can hold the various information contained in sports data. This is realized by a set of Python classes, each of which is handling exactly one type of information. But before we dig deeper into implementation details we start with a closer look at what we’re dealing with: the data.
 
 We found that sports data from across major providers typically differs drastically in format and shape. In general, there are three main data types that can be identified: tracking or position data, event data, and video. Each of these three data sources has its own history, and their appearances have changed over the years. Let’s have a quick look at each one of them.
 
-## Provider Data[](https://floodlight.readthedocs.io/en/latest/compendium/1_data.html#provider-data "Link to this heading")
+## Provider Data
 
 **Event data** has its root in so called hand annotations: back in the days analysts came up with annotation schemes to manually track actions over the course of the game on their notepads. This task is now primarily in the hands of companies that supply sports organizations with packages of entire leagues being annotated - match by match, and still mostly by hand.
 
@@ -20,7 +20,7 @@ As far as we know, there hardly exist any conventions in this domain and consequ
 
 Although these are the three main data sources, sometimes there’s even more data collected for a match! Looking at recent tracking data, they often come with frame-by-frame **contextual tags** regarding ball possession or ball status, i.e., information whether the play is underway or interrupted. Additionally, professional sports teams still have their own analysts who cover every match **manually coding** phases of interesting play for effective post-game video analysis. Plus, as of recently, advances in deep learning have produced first results on generating player actions from video or tracking data, or tracking data from moving, single-camera setups.
 
-## The Challenge[](https://floodlight.readthedocs.io/en/latest/compendium/1_data.html#the-challenge "Link to this heading")
+## The Challenge
 
 The sheer amount of data, it’s different types, formats and heterogeneity are a natural cause of complexity for the analysis process. If you’ve ever worked with any one these data sources, you most probably have encountered some challenges during processing. The task becomes even more complex when integrating multiple of these data sources. Event- and tracking data are still typically out of sync due to timing errors in event data acquisition. Differing frame rates or coordinate systems are another hurdle to take in multimodal analyses.
 
@@ -30,7 +30,7 @@ Last but not least, the events under observation (we collectively call these _ob
 
 To sum up, sports data analysis is awesome, but it can become quickly complicated and rather tedious on the implementation level looking at these challenges. All this complication ultimately leads to massive overhead effort needed for data parsing, pre-processing and wrangling. Furthermore, the formal incompatibility of different data sources is a noticeable hindrance on unfolding the data’s full potential. There’s a good reason why, to our knowledge, hardly any applications or scientific publications exist that combine two of the aforementioned data sources (with a few exceptions).
 
-## Core Objects[](https://floodlight.readthedocs.io/en/latest/compendium/1_data.html#core-objects "Link to this heading")
+## Core Objects
 
 As stated before, the aim of this package is to tackle some of these challenges. The starting point is to formalize the logic behind team sport data and systematically break down inherent complexity into stand-alone data structures by abstraction and generalization. Most importantly, the desired data classes should be independent from any data provider or source. They should also be performant, clear and intuitive to use and allow a clean interface to data loading and processing. That way, any data processing is attached to the data objects and effectively decoupled from any provider specifics.
 
@@ -45,7 +45,7 @@ To realize this idea, we’ve attempted to break down all that information you c
 
 On the following pages we discuss a range of topics that are directly linked to the creation and handling of these core data structures, such as handling spatial and temporal data, identities, and so on.
 
-## But… why?[](https://floodlight.readthedocs.io/en/latest/compendium/1_data.html#but-why "Link to this heading")
+## But… why?
 
 Before we proceed, a quick personal note on the necessity of this package. At this point you might be rightfully asking yourself: Why do we need another package that introduces its own data structures and ways of dealing with certain problems? And what’s the purpose of trying to integrate all different data sources and fit them into a single framework? Especially since there already exist packages that aim to solve certain parts of that pipeline?
 

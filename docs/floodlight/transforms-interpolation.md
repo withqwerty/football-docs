@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/interpolation.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.565Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.interpolation.``interpolate_linear`(_`xy`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_linear)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/interpolation.html#floodlight.transforms.interpolation.interpolate_linear "Link to this definition")
+`floodlight.transforms.interpolation.``interpolate_linear`(_`xy`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_linear)
 
 Linearly interpolates gaps in XY tracking data along the temporal axis.
 
@@ -77,7 +77,7 @@ Apply linear interpolation with a maximum gap length of 25 frames.
 
 ![../../_images/interpolate_linear_max_gap_example.png](https://floodlight.readthedocs.io/en/latest/_images/interpolate_linear_max_gap_example.png)
 
-`floodlight.transforms.interpolation.``interpolate_polynomial`(_`xy`_, _`order``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_polynomial)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/interpolation.html#floodlight.transforms.interpolation.interpolate_polynomial "Link to this definition")
+`floodlight.transforms.interpolation.``interpolate_polynomial`(_`xy`_, _`order``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_polynomial)
 
 Interpolates gaps in XY tracking data using piecewise polynomial interpolation along the temporal axis.
 
@@ -152,7 +152,7 @@ Apply polynomial interpolation with a maximum gap length of 25 frames.
 
 ![../../_images/interpolate_polynomial_max_gap_example.png](https://floodlight.readthedocs.io/en/latest/_images/interpolate_polynomial_max_gap_example.png)
 
-`floodlight.transforms.interpolation.``interpolate_spline`(_`xy`_, _`k``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_spline)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/interpolation.html#floodlight.transforms.interpolation.interpolate_spline "Link to this definition")
+`floodlight.transforms.interpolation.``interpolate_spline`(_`xy`_, _`k``=``3`_, _`xIDs``=``None`_, _`max_gap``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/interpolation.html#interpolate_spline)
 
 Interpolates gaps in XY tracking data using spline interpolation along the temporal axis.
 

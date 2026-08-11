@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/xy.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.365Z
+crawled_at: 2026-08-11T08:29:26.558Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-_`class`_ `floodlight.core.xy.``XY`(_`xy`_, _`framerate``=``None`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "Link to this definition")
+_`class`_ `floodlight.core.xy.``XY`(_`xy`_, _`framerate``=``None`_, _`direction``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY)
 
 Spatio-temporal data fragment. Core class of floodlight.
 
@@ -28,7 +28,7 @@ Variables:
 -   **N** (_int_) – The object’s number of players.
     
 
-`frame`(_`t`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.frame)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.frame "Link to this definition")
+`frame`(_`t`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.frame)
 
 Returns data for given frame _t_.
 
@@ -44,7 +44,7 @@ Return type:
 
 np.ndarray
 
-`player`(_`xID`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.player)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.player "Link to this definition")
+`player`(_`xID`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.player)
 
 Returns data for player with given player index _xID_.
 
@@ -60,7 +60,7 @@ Return type:
 
 np.ndarray
 
-`plot`(_`t`_, _`plot_type``=``'positions'`_, _`ball``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.plot)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.plot "Link to this definition")
+`plot`(_`t`_, _`plot_type``=``'positions'`_, _`ball``=``False`_, _`ax``=``None`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.plot)
 
 Plots a snapshot or time interval of the object’s spatiotemporal data on a matplotlib axes.
 
@@ -96,7 +96,7 @@ Examples
 -   [Trajectories plot](https://floodlight.readthedocs.io/en/latest/modules/vis/positions.html#trajectories-plot-label)
     
 
-`point`(_`t`_, _`xID`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.point)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.point "Link to this definition")
+`point`(_`t`_, _`xID`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.point)
 
 Returns data for a point determined by frame _t_ and player index _xID_.
 
@@ -115,7 +115,7 @@ Return type:
 
 np.ndarray
 
-`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.reflect)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.reflect "Link to this definition")
+`reflect`(_`axis`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.reflect)
 
 Reflects data on given axis.
 
@@ -123,7 +123,7 @@ Parameters:
 
 **axis** (_{‘x’, ‘y’}_) – Name of reflection axis. If set to “x”, data is reflected on x-axis, if set to “y”, data is reflected on y-axis.
 
-`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.rotate)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.rotate "Link to this definition")
+`rotate`(_`alpha`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.rotate)
 
 Rotates data on given angle ‘alpha’ around the origin.
 
@@ -135,7 +135,7 @@ Notes
 
 Executing this method will cast the object’s xy attribute to dtype np.float32 if it previously has a non-floating dtype.
 
-`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.scale)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.scale "Link to this definition")
+`scale`(_`factor`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.scale)
 
 Scales data by a given factor and optionally selected axis.
 
@@ -150,7 +150,7 @@ Notes
 
 Executing this method will cast the object’s xy attribute to dtype np.float32 if it previously has a non-floating dtype.
 
-`slice`(_`startframe``=``None`_, _`endframe``=``None`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.slice)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.slice "Link to this definition")
+`slice`(_`startframe``=``None`_, _`endframe``=``None`_, _`inplace``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.slice)
 
 Return copy of object with sliced data. Mimics numpy’s array slicing.
 
@@ -171,7 +171,7 @@ Return type:
 
 Union\[[XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY"), None\]
 
-`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.translate)[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.translate "Link to this definition")
+`translate`(_`shift`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/core/xy.html#XY.translate)
 
 Translates data by shift vector.
 
@@ -183,10 +183,10 @@ Notes
 
 Executing this method will cast the object’s xy attribute to dtype np.float32 if it previously has a non-floating dtype.
 
-_`property`_ `x`_`:` `array`_[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.x "Link to this definition")
+_`property`_ `x`_`:` `array`_
 
 X-data array, where each player’s x-coordinates occupy one column.
 
-_`property`_ `y`_`:` `array`_[](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY.y "Link to this definition")
+_`property`_ `y`_`:` `array`_
 
 Y-data array, where each player’s y-coordinates occupy one column.

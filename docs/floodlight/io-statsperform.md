@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.367Z
+crawled_at: 2026-08-11T08:29:26.562Z
 ---
-`floodlight.io.statsperform.``read_event_data_from_url`(_`url`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_event_data_from_url)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_event_data_from_url "Link to this definition")
+`floodlight.io.statsperform.``read_event_data_from_url`(_`url`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_event_data_from_url)
 
 Reads a URL containing a StatsPerform events CSV file and extracts the stored event data, pitch information, and teamsheets.
 
@@ -33,7 +33,7 @@ Return type:
 
 Tuple\[Dict\[str, Dict\[str, [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.statsperform.``read_event_data_xml`(_`filepath_events`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_event_data_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_event_data_xml "Link to this definition")
+`floodlight.io.statsperform.``read_event_data_xml`(_`filepath_events`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_event_data_xml)
 
 Parses a StatsPerform XML file and extracts event data and pitch information.
 
@@ -62,7 +62,7 @@ Return type:
 
 Tuple\[Dict\[str, Dict\[str, [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html#floodlight.core.events.Events "floodlight.core.events.Events")\]\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.statsperform.``read_open_event_data_csv`(_`filepath_events`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_open_event_data_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_open_event_data_csv "Link to this definition")
+`floodlight.io.statsperform.``read_open_event_data_csv`(_`filepath_events`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_open_event_data_csv)
 
 Parses an open StatsPerform Match Event CSV file and extracts the event data and teamsheets.
 
@@ -93,7 +93,7 @@ Notes
 
 StatsPerform’s open format of handling provides certain additional event attributes, which attach additional information to certain events. As of now, these information are parsed as a string in the `` `qualifier` `` column of the returned DataFrame and can be transformed to a dict of form `` `{attribute:` `value}` ``.
 
-`floodlight.io.statsperform.``read_open_position_data_csv`(_`filepath_position`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_open_position_data_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_open_position_data_csv "Link to this definition")
+`floodlight.io.statsperform.``read_open_position_data_csv`(_`filepath_position`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_open_position_data_csv)
 
 Parses an open StatsPerform CSV file and extract position data and possession codes as well as teamsheets and pitch information.
 
@@ -124,7 +124,7 @@ Return type:
 
 Tuple\[Dict\[int, Dict\[str, [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]\], Dict\[int, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.statsperform.``read_position_data_from_url`(_`url`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_position_data_from_url)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_position_data_from_url "Link to this definition")
+`floodlight.io.statsperform.``read_position_data_from_url`(_`url`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_position_data_from_url)
 
 Reads a URL from the StatsPerform API (StatsEdgeViewer) containing a position data TXT file and extracts position data and teamsheets.
 
@@ -155,7 +155,7 @@ Notes
 
 Statsperform position data does not contain any player information expect jersey numbers by default. Thus, the teamsheet objects generated by this method will name players ‘Player i’ with i starting at 1. To identify players, use the jersey numbers of players or provide custom teamsheets (e.g. by parsing teamsheets from the Statsperform event data or another data provider).
 
-`floodlight.io.statsperform.``read_position_data_txt`(_`filepath_position`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_position_data_txt)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_position_data_txt "Link to this definition")
+`floodlight.io.statsperform.``read_position_data_txt`(_`filepath_position`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_position_data_txt)
 
 Parses a StatsPerform TXT file and extracts position data and teamsheets.
 
@@ -186,7 +186,7 @@ Notes
 
 Statsperform position data does not contain any player information expect jersey numbers by default. Thus, the teamsheet objects generated by this method will name players ‘Player i’ with i starting at 1. To identify players, use the jersey numbers of players or provide custom teamsheets (e.g. by parsing teamsheets from the Statsperform event data or another data provider).
 
-`floodlight.io.statsperform.``read_teamsheets_from_event_data_xml`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_event_data_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_teamsheets_from_event_data_xml "Link to this definition")
+`floodlight.io.statsperform.``read_teamsheets_from_event_data_xml`(_`filepath_events`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_event_data_xml)
 
 Parses the StatsPerform event file and returns two Teamsheet-objects with detailed player information for the home and the away team.
 
@@ -202,7 +202,7 @@ Return type:
 
 Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\]
 
-`floodlight.io.statsperform.``read_teamsheets_from_open_data_csv`(_`filepath_csv`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_open_data_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_teamsheets_from_open_data_csv "Link to this definition")
+`floodlight.io.statsperform.``read_teamsheets_from_open_data_csv`(_`filepath_csv`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_open_data_csv)
 
 Parses the entire open StatsPerform position data CSV file for unique jIDs (jerseynumbers) and creates teamsheets for both teams.
 
@@ -222,7 +222,7 @@ Notes
 
 Statsperform open data does not contain any player names. Thus, the teamsheet objects generated by this method will name players ‘Player i’ with i starting at 1. To identify players, use the jersey numbers of players or provide custom teamsheets generated by a different parser if Statsperform open data is used in combination with other data providers.
 
-`floodlight.io.statsperform.``read_teamsheets_from_position_data_txt`(_`filepath_position`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_position_data_txt)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsperform.html#floodlight.io.statsperform.read_teamsheets_from_position_data_txt "Link to this definition")
+`floodlight.io.statsperform.``read_teamsheets_from_position_data_txt`(_`filepath_position`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsperform.html#read_teamsheets_from_position_data_txt)
 
 Parses the StatsPerform position file and returns two simple Teamsheet-objects containing only two columns “player” and “jID” for the home and the away team.
 

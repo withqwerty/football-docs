@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/vis/pitches.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.566Z
 ---
-`floodlight.vis.pitches.``plot_football_pitch`(_`xlim`_, _`ylim`_, _`length`_, _`width`_, _`unit`_, _`color_scheme`_, _`show_axis_ticks`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/pitches.html#plot_football_pitch)[](https://floodlight.readthedocs.io/en/latest/modules/vis/pitches.html#floodlight.vis.pitches.plot_football_pitch "Link to this definition")
+`floodlight.vis.pitches.``plot_football_pitch`(_`xlim`_, _`ylim`_, _`length`_, _`width`_, _`unit`_, _`color_scheme`_, _`show_axis_ticks`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/pitches.html#plot_football_pitch)
 
 Plots a football pitch on a given matplotlib.axes.
 
@@ -59,7 +59,7 @@ Examples
 
 ![../../_images/pitch_football_example.png](https://floodlight.readthedocs.io/en/latest/_images/pitch_football_example.png)
 
-`floodlight.vis.pitches.``plot_handball_pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`color_scheme`_, _`show_axis_ticks`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/pitches.html#plot_handball_pitch)[](https://floodlight.readthedocs.io/en/latest/modules/vis/pitches.html#floodlight.vis.pitches.plot_handball_pitch "Link to this definition")
+`floodlight.vis.pitches.``plot_handball_pitch`(_`xlim`_, _`ylim`_, _`unit`_, _`color_scheme`_, _`show_axis_ticks`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/pitches.html#plot_handball_pitch)
 
 Plots a handball pitch on a given matplotlib.axes.
 

@@ -113,7 +113,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 161 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
-| floodlight | 145 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
+| floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
 | SportMonks | 82 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 64 | overview, pitch-types, visualizations |
@@ -132,7 +132,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**1,809 searchable chunks** across 23 providers and tools.
+**1,808 searchable chunks** across 23 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
