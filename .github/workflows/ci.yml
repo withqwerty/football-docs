@@ -9,6 +9,11 @@ on:
   # with CodeQL green and check(20)/check(22) never having run.
   pull_request:
 
+# The job only reads the repository. Without this block it inherits whatever
+# the repository default grants, which is write on many settings.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
