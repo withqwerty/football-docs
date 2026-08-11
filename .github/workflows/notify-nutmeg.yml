@@ -6,6 +6,13 @@ on:
     paths:
       - 'package.json'
 
+# checkout is the only thing this job needs the workflow token for. The issue
+# it opens lands in another repository and uses NUTMEG_REPO_TOKEN, which
+# carries its own scopes - GITHUB_TOKEN could never write there whatever this
+# block said, which is why the step already tolerates its own failure.
+permissions:
+  contents: read
+
 jobs:
   check-version:
     runs-on: ubuntu-latest
