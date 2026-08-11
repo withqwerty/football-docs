@@ -3,8 +3,11 @@ name: CI
 on:
   push:
     branches: [main]
+  # Every pull request, not only those targeting main. A stacked pull request
+  # is based on the branch below it, so scoping this to main skipped the whole
+  # suite on every pull request except the bottom of the stack - #10 merged
+  # with CodeQL green and check(20)/check(22) never having run.
   pull_request:
-    branches: [main]
 
 jobs:
   check:
