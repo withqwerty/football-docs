@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.564Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-_`class`_ `floodlight.models.kinematics.``AccelerationModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.AccelerationModel "Link to this definition")
+_`class`_ `floodlight.models.kinematics.``AccelerationModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel)
 
 Computations for accelerations of all players.
 
@@ -56,7 +56,7 @@ PlayerProperty(property=array([[-117.15728753],
    [ 118.47182945]]), name='acceleration', framerate=20)
 ```
 
-`acceleration`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel.acceleration)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.AccelerationModel.acceleration "Link to this definition")
+`acceleration`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel.acceleration)
 
 Returns the frame-wise acceleration as computed by the fit method.
 
@@ -68,7 +68,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.AccelerationModel.fit "Link to this definition")
+`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#AccelerationModel.fit)
 
 Fits a model calculating accelerations of each player to an XY object.
 
@@ -81,7 +81,7 @@ Parameters:
 -   **axis** (_{None, ‘x’, ‘y’}, optional_) – Optional argument that restricts distance calculation to either the x- or y-dimension of the data. If set to None (default), distances are calculated in both dimensions.
     
 
-_`class`_ `floodlight.models.kinematics.``DistanceModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.DistanceModel "Link to this definition")
+_`class`_ `floodlight.models.kinematics.``DistanceModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel)
 
 Computations for Euclidean distances of all players.
 
@@ -138,7 +138,7 @@ PlayerProperty(property=array([[1.        ],
    [1.41421356]]), name='distance_covered')
 ```
 
-`cumulative_distance_covered`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.cumulative_distance_covered)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.DistanceModel.cumulative_distance_covered "Link to this definition")
+`cumulative_distance_covered`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.cumulative_distance_covered)
 
 Returns the cumulative distance covered.
 
@@ -150,7 +150,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`distance_covered`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.distance_covered)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.DistanceModel.distance_covered "Link to this definition")
+`distance_covered`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.distance_covered)
 
 Returns the frame-wise distance covered as computed by the fit method.
 
@@ -162,7 +162,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.DistanceModel.fit "Link to this definition")
+`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#DistanceModel.fit)
 
 Fits a model calculating Euclidean distances of each player to an XY object.
 
@@ -175,7 +175,7 @@ Parameters:
 -   **axis** (_{None, ‘x’, ‘y’}, optional_) – Optional argument that restricts distance calculation to either the x- or y-dimension of the data. If set to None (default), distances are calculated in both dimensions.
     
 
-_`class`_ `floodlight.models.kinematics.``VelocityModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.VelocityModel "Link to this definition")
+_`class`_ `floodlight.models.kinematics.``VelocityModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel)
 
 Computations for velocities of all players.
 
@@ -225,7 +225,7 @@ PlayerProperty(property=array([[20.        ],
    [28.28427125]]), name='velocity', framerate=20)
 ```
 
-`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.VelocityModel.fit "Link to this definition")
+`fit`(_`xy`_, _`difference``=``'central'`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel.fit)
 
 Fits a model calculating velocities of each player to an XY object.
 
@@ -238,7 +238,7 @@ Parameters:
 -   **axis** (_{None, ‘x’, ‘y’}, optional_) – Optional argument that restricts distance calculation to either the x- or y-dimension of the data. If set to None (default), distances are calculated in both dimensions.
     
 
-`velocity`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel.velocity)[](https://floodlight.readthedocs.io/en/latest/modules/models/kinematics.html#floodlight.models.kinematics.VelocityModel.velocity "Link to this definition")
+`velocity`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/kinematics.html#VelocityModel.velocity)
 
 Returns the frame-wise velocity as computed by the fit method.
 

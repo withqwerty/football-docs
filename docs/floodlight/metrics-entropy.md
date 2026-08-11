@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/metrics/entropy.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.563Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.metrics.entropy.``approx_entropy`(_`sig`_, _`m``=``2`_, _`r``=``0.5`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/entropy.html#approx_entropy)[](https://floodlight.readthedocs.io/en/latest/modules/metrics/entropy.html#floodlight.metrics.entropy.approx_entropy "Link to this definition")
+`floodlight.metrics.entropy.``approx_entropy`(_`sig`_, _`m``=``2`_, _`r``=``0.5`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/metrics/entropy.html#approx_entropy)
 
 Calculates the Approximate Entropy ApEn(m,r) of sig according to Pincus (1991). [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/metrics/entropy.html#id3)
 

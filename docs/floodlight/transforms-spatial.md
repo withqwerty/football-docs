@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/spatial.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.565Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.transforms.spatial.``min_max_normalize`(_`positions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/spatial.html#min_max_normalize)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/spatial.html#floodlight.transforms.spatial.min_max_normalize "Link to this definition")
+`floodlight.transforms.spatial.``min_max_normalize`(_`positions`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/spatial.html#min_max_normalize)
 
 Min-max normalizes an (N, 2) formation array to \[0, 1\] per axis.
 
@@ -28,7 +28,7 @@ Notes
 
 If all positions share the same value along one axis (zero range), that axis is left at 0.0 rather than producing a division-by-zero error.
 
-`floodlight.transforms.spatial.``subtract_centroid`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/spatial.html#subtract_centroid)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/spatial.html#floodlight.transforms.spatial.subtract_centroid "Link to this definition")
+`floodlight.transforms.spatial.``subtract_centroid`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/spatial.html#subtract_centroid)
 
 Subtracts the per-frame team centroid from all player positions.
 

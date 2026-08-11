@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.563Z
 ---
-_`class`_ `floodlight.models.geometry.``CentroidModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.CentroidModel "Link to this definition")
+_`class`_ `floodlight.models.geometry.``CentroidModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel)
 
 Computations based on the geometric center of all players, commonly referred to as a team’s _centroid_.
 
@@ -46,7 +46,7 @@ TeamProperty(property=array([0.5, 0.]), name='stretch_index', framerate=None)
 
 References
 
-`centroid`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.centroid)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.CentroidModel.centroid "Link to this definition")
+`centroid`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.centroid)
 
 Returns the team centroid positions as computed by the fit method.
 
@@ -58,7 +58,7 @@ Return type:
 
 [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")
 
-`centroid_distance`(_`xy`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.centroid_distance)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.CentroidModel.centroid_distance "Link to this definition")
+`centroid_distance`(_`xy`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.centroid_distance)
 
 Calculates the Euclidean distance of each player to the fitted centroids.
 
@@ -77,7 +77,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`fit`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.CentroidModel.fit "Link to this definition")
+`fit`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.fit)
 
 Fit the model to the given data and calculate team centroids.
 
@@ -88,7 +88,7 @@ Parameters:
 -   **exclude_xIDs** (_list, optional_) – A list of xIDs to be excluded from computation. This can be useful if one would like, for example, to exclude goalkeepers from analysis.
     
 
-`stretch_index`(_`xy`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.stretch_index)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.CentroidModel.stretch_index "Link to this definition")
+`stretch_index`(_`xy`_, _`axis``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#CentroidModel.stretch_index)
 
 Calculates the _Stretch Index_, i.e., the mean distance of all players to the team centroid.
 
@@ -107,7 +107,7 @@ Return type:
 
 [TeamProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.TeamProperty "floodlight.core.property.TeamProperty")
 
-_`class`_ `floodlight.models.geometry.``ConvexHullModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.ConvexHullModel "Link to this definition")
+_`class`_ `floodlight.models.geometry.``ConvexHullModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel)
 
 Computations based on the convex hull of player positions.
 
@@ -160,7 +160,7 @@ TeamProperty(property=array([400., 200.]), name='convex_hull_area', framerate=No
 
 References
 
-`convex_hull_area`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.convex_hull_area)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.ConvexHullModel.convex_hull_area "Link to this definition")
+`convex_hull_area`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.convex_hull_area)
 
 Calculates the area enclosed by the convex hull.
 
@@ -181,7 +181,7 @@ If the model was fitted with:
 -   Multiple XY objects: returns the effective area of play (EAP)
     
 
-`fit`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.ConvexHullModel.fit "Link to this definition")
+`fit`(_`xy`_, _`exclude_xIDs``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.fit)
 
 Fit the model to the given data and calculate convex hulls.
 
@@ -198,7 +198,7 @@ Parameters:
     -   Two XYs with both xID=0 excluded: `` `[[0],` `[0]]` ``
         
 
-`plot`(_`t`_, _`ax``=``None`_, _`fill``=``True`_, _`fill_alpha``=``0.3`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.plot)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.ConvexHullModel.plot "Link to this definition")
+`plot`(_`t`_, _`ax``=``None`_, _`fill``=``True`_, _`fill_alpha``=``0.3`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#ConvexHullModel.plot)
 
 Plot the convex hull for a given time point on a matplotlib axes.
 
@@ -263,7 +263,7 @@ Examples
 
 ![../../_images/sample_chm_plot_dashed.png](https://floodlight.readthedocs.io/en/latest/_images/sample_chm_plot_dashed.png)
 
-_`class`_ `floodlight.models.geometry.``NearestMateModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestMateModel "Link to this definition")
+_`class`_ `floodlight.models.geometry.``NearestMateModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel)
 
 Computations for within-team distance metrics.
 
@@ -317,7 +317,7 @@ TeamProperty(property=array([3.16227766, nan]), name='team_spread', framerate=No
 
 References
 
-`distance_to_nearest_mate`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.distance_to_nearest_mate)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestMateModel.distance_to_nearest_mate "Link to this definition")
+`distance_to_nearest_mate`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.distance_to_nearest_mate)
 
 Calculates the distance to the nearest teammate for each player.
 
@@ -329,7 +329,7 @@ Return type:
 
 [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")
 
-`fit`(_`xy`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestMateModel.fit "Link to this definition")
+`fit`(_`xy`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.fit)
 
 Fit the model to the given data and calculate pairwise distances.
 
@@ -337,7 +337,7 @@ Parameters:
 
 **xy** (_XY_) – Player spatiotemporal data for which the pairwise distances are calculated.
 
-`team_spread`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.team_spread)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestMateModel.team_spread "Link to this definition")
+`team_spread`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestMateModel.team_spread)
 
 Calculates the team spread (Frobenius norm of distance matrix).
 
@@ -349,7 +349,7 @@ Return type:
 
 [TeamProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.TeamProperty "floodlight.core.property.TeamProperty")
 
-_`class`_ `floodlight.models.geometry.``NearestOpponentModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestOpponentModel "Link to this definition")
+_`class`_ `floodlight.models.geometry.``NearestOpponentModel`[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel)
 
 Computations for between-team distance metrics.
 
@@ -388,7 +388,7 @@ PlayerProperty(property=array([[1.41421356, 3.16227766],
 array([2.28824561, nan])
 ```
 
-`distance_to_nearest_opponent`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel.distance_to_nearest_opponent)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestOpponentModel.distance_to_nearest_opponent "Link to this definition")
+`distance_to_nearest_opponent`()[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel.distance_to_nearest_opponent)
 
 Calculates distance to nearest opponent for each player on both teams.
 
@@ -400,7 +400,7 @@ Return type:
 
 tuple\[[PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty"), [PlayerProperty](https://floodlight.readthedocs.io/en/latest/modules/core/property.html#floodlight.core.property.PlayerProperty "floodlight.core.property.PlayerProperty")\]
 
-`fit`(_`xy1`_, _`xy2`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel.fit)[](https://floodlight.readthedocs.io/en/latest/modules/models/geometry.html#floodlight.models.geometry.NearestOpponentModel.fit "Link to this definition")
+`fit`(_`xy1`_, _`xy2`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/models/geometry.html#NearestOpponentModel.fit)
 
 Fit the model to the given data and calculate pairwise distances.
 

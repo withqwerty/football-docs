@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/getting_started.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.363Z
+crawled_at: 2026-08-11T08:29:26.556Z
 ---
 Here’s everything you need to know to quickly get set up and start using floodlight!
 
-## Installation[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#installation "Link to this heading")
+## Installation
 
 The package can be installed via pip
 
@@ -20,11 +20,11 @@ and then imported into your local Python environment
 import floodlight
 ```
 
-## Loading Data[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#loading-data "Link to this heading")
+## Loading Data
 
 As this is a data analysis package, the obvious first step is to get some data.
 
-### Provider Data[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#provider-data "Link to this heading")
+### Provider Data
 
 If you have data files saved in a specific provider format, see if there is matching parser in the [io](https://floodlight.readthedocs.io/en/latest/modules/io/io.html) module. Parsing might work slightly different depending on the specific provider file types. But in essence, there is one submodule per supported provider, and one function per file type. In cases where parsing requires multiple files (e.g. when you have data containing position data and an attached metadata file), there is one function that does so.
 
@@ -61,7 +61,7 @@ events_home_ht1 = events_objects["HT1"]["Home"]
 events_away_ht1 = events_objects["HT1"]["Away"]
 ```
 
-### Sample Data[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#sample-data "Link to this heading")
+### Sample Data
 
 An alternative to proprietary provider data are public datasets. We provide classes to access some of these datasets in the [datasets](https://floodlight.readthedocs.io/en/latest/modules/io/datasets.html) submodule. We’ve also included a small dataset of synthetic match data for instructional and testing purposes. Load them by running:
 
@@ -95,7 +95,7 @@ pitch = dataset.get_pitch()
 
 Note that the sample data is already projected to the same pitch, so there are no separate objects for tracking data and events.
 
-## Data Manipulation[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#data-manipulation "Link to this heading")
+## Data Manipulation
 
 We proceed with the data queried from the ToyDataset, but if you’ve loaded provider data, the steps are actually the same.
 
@@ -138,7 +138,7 @@ print(possession_ht1.definitions)
 possession_ht1.slice(startframe=0, endframe=10, inplace=True)
 ```
 
-## Plotting[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#plotting "Link to this heading")
+## Plotting
 
 All plotting is based on the [matplotlib](https://matplotlib.org/) library, and also follows the matplotlib syntax. All low-level plotting functionality can be accessed via the [vis](https://floodlight.readthedocs.io/en/latest/modules/vis/vis.html) module, but some core objects have a `` `.plot()` ``\-method which is a convenience wrapper for plotting.
 
@@ -159,7 +159,7 @@ xy_ball_ht2.plot(t=0, ball=True, ax=ax)
 
 ![../_images/getting_started_sample_plot.png](https://floodlight.readthedocs.io/en/latest/_images/getting_started_sample_plot.png)
 
-## Example: Average Positions[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#example-average-positions "Link to this heading")
+## Example: Average Positions
 
 To put everything together, let’s look at a quick example where we calculate the average positions of the home team - depending on them having ball possession or not.
 
@@ -189,6 +189,6 @@ avg_out_of_pos.plot(t=0, ax=axs[1])
 
 ![../_images/getting_started_avg_positions.png](https://floodlight.readthedocs.io/en/latest/_images/getting_started_avg_positions.png)
 
-## Next Steps[](https://floodlight.readthedocs.io/en/latest/guides/getting_started.html#next-steps "Link to this heading")
+## Next Steps
 
 Once you are familiar with loading and handling core data structures, make sure to check out the module reference for advanced computations involving these object. For example, the [transforms](https://floodlight.readthedocs.io/en/latest/modules/transforms/transforms.html) module contains data transformation functions, whereas the [models](https://floodlight.readthedocs.io/en/latest/modules/models/models.html) module contains data models. The tutorials provided in the documentation are another starting point to learn more about data analysis with floodlight!

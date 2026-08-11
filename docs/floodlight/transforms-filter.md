@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.565Z
 ---
-`floodlight.transforms.filter.``butterworth_lowpass`(_`xy`_, _`order``=``3`_, _`Wn``=``1`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#butterworth_lowpass)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#floodlight.transforms.filter.butterworth_lowpass "Link to this definition")
+`floodlight.transforms.filter.``butterworth_lowpass`(_`xy`_, _`order``=``3`_, _`Wn``=``1`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#butterworth_lowpass)
 
 Applies a digital Butterworth lowpass-filter to an XY data object. [\[1\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id4)
 
@@ -93,7 +93,7 @@ Apply the filter with different specifications.
 
 References
 
-`floodlight.transforms.filter.``fir_lowpass`(_`xy`_, _`numtaps``=``21`_, _`cutoff``=``1`_, _`window``=``'hamming'`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#fir_lowpass)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#floodlight.transforms.filter.fir_lowpass "Link to this definition")
+`floodlight.transforms.filter.``fir_lowpass`(_`xy`_, _`numtaps``=``21`_, _`cutoff``=``1`_, _`window``=``'hamming'`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#fir_lowpass)
 
 Applies a FIR lowpass-filter to an XY data object.
 
@@ -170,7 +170,7 @@ Apply the filter with different specifications.
 
 ![../../_images/fir_adjusted_example.png](https://floodlight.readthedocs.io/en/latest/_images/fir_adjusted_example.png)
 
-`floodlight.transforms.filter.``kalman`(_`xy`_, _`process_noise``=``1.0`_, _`measurement_noise``=``0.04`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#kalman)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#floodlight.transforms.filter.kalman "Link to this definition")
+`floodlight.transforms.filter.``kalman`(_`xy`_, _`process_noise``=``1.0`_, _`measurement_noise``=``0.04`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#kalman)
 
 Applies a forward Kalman filter to an XY data object. [\[3\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id13)
 
@@ -247,7 +247,7 @@ Apply the filter with increased measurement noise for stronger smoothing.
 
 References
 
-`floodlight.transforms.filter.``savgol_lowpass`(_`xy`_, _`window_length``=``5`_, _`poly_order``=``3`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#savgol_lowpass)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#floodlight.transforms.filter.savgol_lowpass "Link to this definition")
+`floodlight.transforms.filter.``savgol_lowpass`(_`xy`_, _`window_length``=``5`_, _`poly_order``=``3`_, _`remove_short_seqs``=``False`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#savgol_lowpass)
 
 Applies a Savitzky-Golay lowpass-filter to an XY data object. [\[2\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id19)
 
@@ -336,7 +336,7 @@ Apply the filter with different specifications.
 
 References
 
-`floodlight.transforms.filter.``wiener`(_`xy`_, _`window_size``=``5`_, _`noise``=``None`_, _`remove_short_seqs``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#wiener)[](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#floodlight.transforms.filter.wiener "Link to this definition")
+`floodlight.transforms.filter.``wiener`(_`xy`_, _`window_size``=``5`_, _`noise``=``None`_, _`remove_short_seqs``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/transforms/filter.html#wiener)
 
 Applies a Wiener filter to an XY data object. [\[6\]](https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html#id23)
 

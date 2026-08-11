@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/vis/positions.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.369Z
+crawled_at: 2026-08-11T08:29:26.567Z
 ---
-`floodlight.vis.positions.``plot_positions`(_`xy`_, _`frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_positions)[](https://floodlight.readthedocs.io/en/latest/modules/vis/positions.html#floodlight.vis.positions.plot_positions "Link to this definition")
+`floodlight.vis.positions.``plot_positions`(_`xy`_, _`frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_positions)
 
 Scatter plots positions for a given frame of an XY object on a matplotlib.axes.
 
@@ -65,7 +65,7 @@ Examples
 
 ![../../_images/positions_example.png](https://floodlight.readthedocs.io/en/latest/_images/positions_example.png)
 
-`floodlight.vis.positions.``plot_trajectories`(_`xy`_, _`start_frame`_, _`end_frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_trajectories)[](https://floodlight.readthedocs.io/en/latest/modules/vis/positions.html#floodlight.vis.positions.plot_trajectories "Link to this definition")
+`floodlight.vis.positions.``plot_trajectories`(_`xy`_, _`start_frame`_, _`end_frame`_, _`ball`_, _`ax`_, _`**``kwargs`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/vis/positions.html#plot_trajectories)
 
 Draws the trajectories of an XY object from a given time interval on a matplotlib.axes.
 

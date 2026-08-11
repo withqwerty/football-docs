@@ -2,13 +2,13 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.363Z
+crawled_at: 2026-08-11T08:29:26.557Z
 ---
-## Tutorial: Data Analysis[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html#tutorial-data-analysis "Link to this heading")
+## Tutorial: Data Analysis
 
 In this tutorial we will have a look at how to analyze tracking data with the data models provided by floodlight. The goal is to load some sample data, do a quick pre-processing, calculate a set of performance metrics and print the results.
 
-## Setup[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html#setup "Link to this heading")
+## Setup
 
 Let’s start by getting some data that we can work with. The public EIGD dataset contains 25 samples of handball tracking data from the German Men’s Handball Bundesliga and fits our purpose. We load the dataset, query a single sample (the default sample) disregarding all but the home team data, and also get the corresponding pitch information.
 
@@ -23,7 +23,7 @@ pitch = dataset.get_pitch()
 
 The variable `` `home` `` that we get is a XY object and contains a five minute sample of tracking data with a total of 9000 frames for one team. This is the one we are going to analyze! The `` `pitch` `` variable is a Pitch object that contains information regarding the pitch specification and coordinate system our data live in.
 
-## Data Preparation[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html#data-preparation "Link to this heading")
+## Data Preparation
 
 Before we jump into the analysis, we will have to do some pre-processing. Tracking data can generally be of very varying quality and contain artefacts such as rapid jumps in player positions. Such jumps can be problematic, depending on the analysis. Although the EIGD data is of good general quality, we will perform a filtering step in applying a lowpass Butterworth filter to smooth the trajectories and eliminate major jumps. As we want to calculate physical performance metrics later on, this will prevent that our results contain super-human abilities due to measurement errors.
 
@@ -63,7 +63,7 @@ These lines look almost identical. The filter (with default parameter) is a very
 
 That almost looks like art, but anyhow, our data is now ready for processing!
 
-## Data Models[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html#data-models "Link to this heading")
+## Data Models
 
 Let’s try out some of the models that are part of the `` `floodlight.models` `` submodule. Each model is a separate class, so lets import them (and numpy, which we will need later on). To save our results, we also create a dictionary and add a list containing player “names”.
 
@@ -117,7 +117,7 @@ metrics["Avg. Centroid Dist. [m]"] = np.nanmean(centroid_distance, axis=0)
 
 That’s it, let’s check out the results!
 
-## Results[](https://floodlight.readthedocs.io/en/latest/guides/tutorial_analysis.html#results "Link to this heading")
+## Results
 
 We can use pandas to brush and display the results. So let’s create a DataFrame, round the values to three decimal places, and show the first ten players of the data frame.
 
@@ -132,114 +132,17 @@ print(metrics.head(10).to_string())
 
 Here’s the (formatted) result you should get:
 
-Name
-
-Total Dist. \[m\]
-
-Top Speed \[m/s\]
-
-Metabolic Work
-
-Avg. Centroid Dist. \[m\]
-
-P 0
-
-394.095
-
-6.941
-
-1669.19
-
-5.805
-
-P 1
-
-371.544
-
-5.948
-
-1536.22
-
-3.965
-
-P 2
-
-321.057
-
-6.413
-
-1461.03
-
-9.409
-
-P 3
-
-350.462
-
-7.067
-
-1488.61
-
-9.39
-
-P 4
-
-182.469
-
-6.406
-
-773.093
-
-4.92
-
-P 5
-
-371.928
-
-5.606
-
-1645.02
-
-3.412
-
-P 6
-
-211.308
-
-3.181
-
-746.941
-
-10.623
-
-P 7
-
-216.569
-
-6.058
-
-958.511
-
-4.584
-
-P 8
-
-0
-
-nan
-
-0
-
-nan
-
-P 9
-
-0
-
-nan
-
-0
-
-nan
+| Name | Total Dist. [m] | Top Speed [m/s] | Metabolic Work | Avg. Centroid Dist. [m] |
+| --- | --- | --- | --- | --- |
+| P 0 | 394.095 | 6.941 | 1669.19 | 5.805 |
+| P 1 | 371.544 | 5.948 | 1536.22 | 3.965 |
+| P 2 | 321.057 | 6.413 | 1461.03 | 9.409 |
+| P 3 | 350.462 | 7.067 | 1488.61 | 9.39 |
+| P 4 | 182.469 | 6.406 | 773.093 | 4.92 |
+| P 5 | 371.928 | 5.606 | 1645.02 | 3.412 |
+| P 6 | 211.308 | 3.181 | 746.941 | 10.623 |
+| P 7 | 216.569 | 6.058 | 958.511 | 4.584 |
+| P 8 | 0 | nan | 0 | nan |
+| P 9 | 0 | nan | 0 | nan |
 
 And that’s it! If you inspect the data a little closer, you’ll find there are some players where all values are either NaN or 0. Those are the substitutes that did not play in the short snippet we’ve investigated. Feel free to expand the code and loop over the entire EIGD dataset to compare performances between teams and samples!

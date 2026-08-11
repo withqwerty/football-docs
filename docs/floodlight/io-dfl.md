@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/dfl.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.560Z
 ---
-`floodlight.io.dfl.``read_event_data_xml`(_`filepath_events`_, _`filepath_mat_info`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_event_data_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/dfl.html#floodlight.io.dfl.read_event_data_xml "Link to this definition")
+`floodlight.io.dfl.``read_event_data_xml`(_`filepath_events`_, _`filepath_mat_info`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_event_data_xml)
 
 Parses a DFL Match Event XML file and extracts the event data as well as teamsheets.
 
@@ -39,7 +39,7 @@ Notes
 
 The DFL format of handling event data information involves an elaborate use of certain event attributes, which attach additional information to certain events. There also exist detailed definitions for these attributes. Parsing this information involves quite a bit of logic and is planned to be included in further releases. As of now, qualifier information is parsed as a string in the qualifier column of the returned DataFrame and might be transformed to a dict of the form: {attribute: value}.
 
-`floodlight.io.dfl.``read_pitch_from_mat_info_xml`(_`filepath_mat_info`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_pitch_from_mat_info_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/dfl.html#floodlight.io.dfl.read_pitch_from_mat_info_xml "Link to this definition")
+`floodlight.io.dfl.``read_pitch_from_mat_info_xml`(_`filepath_mat_info`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_pitch_from_mat_info_xml)
 
 Reads match_information XML file and returns the playing Pitch.
 
@@ -55,7 +55,7 @@ Return type:
 
 [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")
 
-`floodlight.io.dfl.``read_position_data_xml`(_`filepath_positions`_, _`filepath_mat_info`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_position_data_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/dfl.html#floodlight.io.dfl.read_position_data_xml "Link to this definition")
+`floodlight.io.dfl.``read_position_data_xml`(_`filepath_positions`_, _`filepath_mat_info`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_position_data_xml)
 
 Parse DFL files and extract position data, possession and ballstatus codes as well as pitch information and teamsheets.
 
@@ -90,7 +90,7 @@ Return type:
 
 Tuple\[Dict\[str, Dict\[str, [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html#floodlight.core.code.Code "floodlight.core.code.Code")\], Dict\[str, [Teamsheet](https://floodlight.readthedocs.io/en/latest/modules/core/teamsheet.html#floodlight.core.teamsheet.Teamsheet "floodlight.core.teamsheet.Teamsheet")\], [Pitch](https://floodlight.readthedocs.io/en/latest/modules/core/pitch.html#floodlight.core.pitch.Pitch "floodlight.core.pitch.Pitch")\]
 
-`floodlight.io.dfl.``read_teamsheets_from_mat_info_xml`(_`filepath_mat_info`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_teamsheets_from_mat_info_xml)[](https://floodlight.readthedocs.io/en/latest/modules/io/dfl.html#floodlight.io.dfl.read_teamsheets_from_mat_info_xml "Link to this definition")
+`floodlight.io.dfl.``read_teamsheets_from_mat_info_xml`(_`filepath_mat_info`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/dfl.html#read_teamsheets_from_mat_info_xml)
 
 Reads match_information XML file and returns two teamsheet objects for the home and the away team.
 

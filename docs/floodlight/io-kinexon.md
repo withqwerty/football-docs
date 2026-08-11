@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.560Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.kinexon.``create_links_from_meta_data`(_`pID_dict`_, _`identifier``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#create_links_from_meta_data)[](https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html#floodlight.io.kinexon.create_links_from_meta_data "Link to this definition")
+`floodlight.io.kinexon.``create_links_from_meta_data`(_`pID_dict`_, _`identifier``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#create_links_from_meta_data)
 
 Creates a dictionary from the pID_dict linking the identifier to the xID.
 
@@ -27,7 +27,7 @@ Return type:
 
 Dict\[str, Dict\[str, int\]\]
 
-`floodlight.io.kinexon.``get_column_names_from_csv`(_`filepath_data`_, _`delimiter``=``','`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#get_column_names_from_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html#floodlight.io.kinexon.get_column_names_from_csv "Link to this definition")
+`floodlight.io.kinexon.``get_column_names_from_csv`(_`filepath_data`_, _`delimiter``=``','`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#get_column_names_from_csv)
 
 Reads first line of a Kinexon.csv-file and extracts the column names.
 
@@ -46,7 +46,7 @@ Return type:
 
 List\[str\]
 
-`floodlight.io.kinexon.``get_meta_data`(_`filepath_data`_, _`delimiter``=``','`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#get_meta_data)[](https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html#floodlight.io.kinexon.get_meta_data "Link to this definition")
+`floodlight.io.kinexon.``get_meta_data`(_`filepath_data`_, _`delimiter``=``','`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#get_meta_data)
 
 Reads Kinexon’s position data file and extracts meta-data about groups, sensors, length and framerate.
 
@@ -72,7 +72,7 @@ Returns:
 -   **t_null** (_int_) – Timestamp of the first recorded frame
     
 
-`floodlight.io.kinexon.``read_position_data_csv`(_`filepath_data`_, _`delimiter``=``','`_, _`teamsheets``=``None`_, _`as_dict``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#read_position_data_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html#floodlight.io.kinexon.read_position_data_csv "Link to this definition")
+`floodlight.io.kinexon.``read_position_data_csv`(_`filepath_data`_, _`delimiter``=``','`_, _`teamsheets``=``None`_, _`as_dict``=``False`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#read_position_data_csv)
 
 Parses a Kinexon .csv file and extracts position data.
 
@@ -95,7 +95,7 @@ Return type:
 
 List\[[XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\] or Dict\[str, [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html#floodlight.core.xy.XY "floodlight.core.xy.XY")\]
 
-`floodlight.io.kinexon.``read_teamsheets_from_csv`(_`filepath_data`_, _`delimiter``=``','`_, _`as_dict``=``False`_, _`player_id``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#read_teamsheets_from_csv)[](https://floodlight.readthedocs.io/en/latest/modules/io/kinexon.html#floodlight.io.kinexon.read_teamsheets_from_csv "Link to this definition")
+`floodlight.io.kinexon.``read_teamsheets_from_csv`(_`filepath_data`_, _`delimiter``=``','`_, _`as_dict``=``False`_, _`player_id``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/kinexon.html#read_teamsheets_from_csv)
 
 Reads Kinexon .csv data and returns Teamsheet objects per group.
 

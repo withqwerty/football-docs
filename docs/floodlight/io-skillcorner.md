@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/skillcorner.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.561Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.skillcorner.``read_position_data_json`(_`file_path_structured_data`_, _`file_path_match_data`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/skillcorner.html#read_position_data_json)[](https://floodlight.readthedocs.io/en/latest/modules/io/skillcorner.html#floodlight.io.skillcorner.read_position_data_json "Link to this definition")
+`floodlight.io.skillcorner.``read_position_data_json`(_`file_path_structured_data`_, _`file_path_match_data`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/skillcorner.html#read_position_data_json)
 
 Parse and process position data and match data from the [SkillCorner Open Dataset](https://github.com/SkillCorner/opendata) from disk.
 

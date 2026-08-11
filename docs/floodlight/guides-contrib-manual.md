@@ -2,7 +2,7 @@
 source_url: https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.363Z
+crawled_at: 2026-08-11T08:29:26.556Z
 ---
 Do you consider contributing to our project? That’s great! We welcome all kinds of contributions - whether you discovered a bug, want to support the project by helping other users, code new features or just give some general feedback.
 
@@ -23,7 +23,7 @@ We’re firm believers of open source and want to create an inclusive environmen
 -   Some explanations for why this is so much more complicated than scripting.
     
 
-## Preliminaries[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#preliminaries "Link to this heading")
+## Preliminaries
 
 There are a few pre-requisites for using this guide:
 
@@ -36,7 +36,7 @@ Note
 
 This guide was designed and tested on Windows. If you use a different OS, the basics still apply, although the specific steps during setup might differ. We try to include sources for all these steps so that you can check for yourself if there are OS-dependent changes on how to proceed.
 
-## Developing[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#developing "Link to this heading")
+## Developing
 
 Let’s start and install our repository in _dev_\-mode for developing. This installation differs from _production_\-mode. The latter describes the ready-to-use version of the package as you would install it e.g. from PyPI. _Dev_\-mode, on the contrary, refers to the direct copy of the repository as you would find it on GitHub, including tools used for developing, testing, quality assurance and all (public) branches where new features are developed.
 
@@ -81,7 +81,7 @@ poetry install
 
 (e.g. in git bash)! Poetry will then create a `` `virtualenv` `` and install all necessary dependencies. This is basically everything you need to start contributing. However, we follow a number of standards to ensure code quality. Make sure you know and follow these conventions so that your code fits nicely into the existing codebase!
 
-## Standards[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#standards "Link to this heading")
+## Standards
 
 1.  Codestyle
     
@@ -102,13 +102,13 @@ poetry install
     >     
     
 
-## Workflows[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#workflows "Link to this heading")
+## Workflows
 
-### Local Workflows[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#local-workflows "Link to this heading")
+### Local Workflows
 
 Most of these conventions are enforced through the contributing workflow (fork - clone - edit - pull request) as well as automatically with GitHub Actions used for continuous integration purposes. However, you may want to ensure a local dev environment that actively facilitates these conventions. There are a number of tools you can use to do so:
 
-#### Pre-Commit Hooks[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#pre-commit-hooks "Link to this heading")
+#### Pre-Commit Hooks
 
 You can install pre-defined pre-commit hooks by running:
 
@@ -134,7 +134,7 @@ You need to start every command with poetry run if executables are not in your P
 -   check a commit message: cz check -m “my commit message”.
     
 
-#### IDEs[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#ides "Link to this heading")
+#### IDEs
 
 Additionally, if you use an IDE like PyCharm, you can set up your favorite tool to help you right during coding. For example:
 
@@ -147,7 +147,7 @@ Additionally, if you use an IDE like PyCharm, you can set up your favorite tool 
 4.  Setting > Tools > Python Integrated Tools: Set default tester and docstring format
     
 
-### Global Workflows[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#global-workflows "Link to this heading")
+### Global Workflows
 
 Once you have made your fork and clone of the original repository, there are three copies that are of interest:
 
@@ -232,11 +232,11 @@ on the respective branch.
 8.  Go to the [repository page](https://github.com/floodlight-sports/floodlight) and do a PR. Make sure you ask to merge your changes from origin:my_feat_branch into base:develop.
     
 
-## Testing[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#testing "Link to this heading")
+## Testing
 
 Next, let’s talk about testing. This project’s is a big fan of test-driven development and maintains an extensive test suite. If you want to contribute a new feature, thorough tests are expected to be included in your addition. This section discusses everything you need to know to write good tests!
 
-### Why testing code?[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#why-testing-code "Link to this heading")
+### Why testing code?
 
 -   The programmer has to focus on the requirements before writing code.
     
@@ -247,7 +247,7 @@ Next, let’s talk about testing. This project’s is a big fan of test-driven d
 -   Notice whether changes in one place might break the code in another place.
     
 
-### Rules of Thumb[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#rules-of-thumb "Link to this heading")
+### Rules of Thumb
 
 Tip
 
@@ -276,7 +276,7 @@ def test_method_name():
 -   Every unit test should follow the **Arrange-Act-Assert model** (see below).
     
 
-### Tests types[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#tests-types "Link to this heading")
+### Tests types
 
 Generally tests can be structured based on the complexity of code that they are testing.
 
@@ -286,7 +286,7 @@ Generally tests can be structured based on the complexity of code that they are 
 
 **System tests** operate on the highest layer and test whether completely integrated systems fulfill the specified requirements.
 
-### Testing layout[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#testing-layout "Link to this heading")
+### Testing layout
 
 To ensure that the structure of the testing suite remains clear the tests are stored in a separate `` `/test` `` folder. The structure below this folder is then simply a mirror image of the actual folder structure with the difference that the various modules have a `` `test_*.py` `` in front of their normal file name. Here is a shortened example of the described structure:
 
@@ -305,7 +305,7 @@ tests/
     test_utils/
 ```
 
-### Arrange-Act-Assert model[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#arrange-act-assert-model "Link to this heading")
+### Arrange-Act-Assert model
 
 Every unit test should follow the Arrange-Act-Assert model.
 
@@ -335,11 +335,11 @@ def test_square_zero():
         assert result == 0, "assert message that will be shown if the assert statement is false"
 ```
 
-### The Pytest Framework[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#the-pytest-framework "Link to this heading")
+### The Pytest Framework
 
 The pytest framework provides a feature-rich, plugin-based ecosystem that helps to easily write small as well as readable tests and it can also scale to support complex functional testing. To make sure that you can use the full functionality of pytest this section provides you some conventions and commands that are useful. If you want to get more into the whole framework you can find further information [here](https://docs.pytest.org/en/6.2.x/contents.html#toc). As described in the [general rules](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#general-rules) pytest follows a strict naming convention for files (`` `test_*.py` ``) and methods (`` `def` `test_*()` ``).
 
-### How to execute pytest[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#how-to-execute-pytest "Link to this heading")
+### How to execute pytest
 
 As part of the continuous integration pipeline build into the floodlight repository all the tests are going to be executed when making the pull request. Irrespective of this, tests should be carried out internally on a regular basis. In order to test files, classes or methods in the current directory and subdirectories there are some helpful [commands](https://docs.pytest.org/en/6.2.x/usage.html#calling-pytest-through-python-m-pytest) to execute from the terminal:
 
@@ -370,7 +370,7 @@ $ pytest <filename>.py::<method_name> # to run a specific test (<method_name>) w
 
 In order to understand the test report provided by pytest in detail this [link](https://docs.pytest.org/en/latest/how-to/output.html) is recommended.
 
-### Fixtures[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#fixtures "Link to this heading")
+### Fixtures
 
 Most of the tests depend on some sort of input. With [fixtures](https://docs.pytest.org/en/6.2.x/fixture.html) pytest provides a feature with which data, test doubles or some system state can be created. Fixtures are reusable and can be used for multiple tests. In order to create a fixture you have to build a function that returns the data or system state that is needed for your testing. To do that just decorate this function with `` `@pytest.fixture` ``. The function name can now get passed to a testing method as an argument. As the number of fixtures increases with the project, it makes sense to put them into a structure to keep track of them. Pytest provides a solution to keep everything structured ([Where to create fixtures?](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#where-to-create-fixtures)). You can basically store fixtures in the same files where you use them. However, it is also possible to store them in a separated `` `conftest.py` `` file on which every testing file in the same layer or in a subdirectory has access without any import. The following example should clarify how fixtures work:
 
@@ -404,11 +404,11 @@ def test_x_pos_int(example_xy_data_pos_int: np.ndarray) -> None:
 
 Fixtures are a quite powerful tool since they are modular and can also request other fixtures. In a nutshell they can be understood as minimal examples of e.g. data-level objects such as XY, Events, or Code. But compared to the normal objects, they are much clearer and are still able to test the full functionality of the methods. Of course, they look different depending on the method tested.
 
-#### When to create fixtures?[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#when-to-create-fixtures "Link to this heading")
+#### When to create fixtures?
 
 In case you are writing multiple tests that all make use of the same underlying test data, then it can be advantageous to create a fixture. Otherwise it is common to arrange the data inside your testing function.
 
-#### Where to create fixtures?[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#where-to-create-fixtures "Link to this heading")
+#### Where to create fixtures?
 
 With the pytest framework there are different possibilities where the fixtures can be implemented. Creating fixtures in different locations only serves to clarify the test environment, especially when working collaboratively in a team. The following options are common solutions:
 
@@ -421,7 +421,7 @@ With the pytest framework there are different possibilities where the fixtures c
 
 The `` `conftest.py` `` file just follows a naming convention of pytest and enables to share fixtures across multiple files. The fixtures implemented inside the `` `conftest.py` `` file can be accessed from testing files laying in the same folder layer or in a subdirectory without any import. For more detailed information (especially on option 3.) have a look on this [link](https://docs.pytest.org/en/6.2.x/fixture.html).
 
-### Marks[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#marks "Link to this heading")
+### Marks
 
 Marks can be used to categorize your tests. To do so you need to decorate the method with `` `@pytest.mark.<mark_name>` ``. When executing the `` `pytest` `-m` `<mark_name>` `` command (see [how to execute pytest](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#how-to-execute-pytest)) only methods decorated with `` `@pytest.mark.<mark_name>` `` will be selected for the testing. This can be advantageous if you have tests that are slower because they are for example accessing a database but you want to quickly run your test suite.
 
@@ -448,7 +448,7 @@ markers = [
 ]
 ```
 
-### Testing workflow[](https://floodlight.readthedocs.io/en/latest/guides/contrib_manual.html#testing-workflow "Link to this heading")
+### Testing workflow
 
 A helpful testing workflow could look something like this:
 

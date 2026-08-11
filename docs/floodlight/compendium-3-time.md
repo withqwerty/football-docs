@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/compendium/3_time.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.364Z
+crawled_at: 2026-08-11T08:29:26.558Z
 ---
 Sports data naturally capture phenomena unfolding through time. That’s not too big of a problem per se, but a few challenges arise managing the time dimension of the data. Plus, a lack of naming conventions leads to sometimes confusing references to parts of sports play (e.g. some call it half times, some periods). So we’ve decided to keep naming of things consistent. Let’s go through this top-down:
 
-## Observation-level[](https://floodlight.readthedocs.io/en/latest/compendium/3_time.html#observation-level "Link to this heading")
+## Observation-level
 
 Given all the data for a single observation (such as a match or practice session), we need to deal with the different parts of this event (such as halftimes or different exercises within the session). We call these different parts _segments_.
 
@@ -16,7 +16,7 @@ The key advantage of this separation is an sports-independent handling of the di
 
 In terms of indexing, there are a few naming conventions we use throughout the code. As an example, for matches that are organized in half times, we use `` `segments` `=` `["HT1",` `"HT2"]` ``. This list is extended with `` `["HT3",` `"HT4"]` `` if we go into overtime.
 
-## Data-level[](https://floodlight.readthedocs.io/en/latest/compendium/3_time.html#data-level "Link to this heading")
+## Data-level
 
 Let’s move on to the data-level handling of time. There’s a major distinction to be made here between _frame-based_ objects such as [XY](https://floodlight.readthedocs.io/en/latest/modules/core/xy.html) and [Code](https://floodlight.readthedocs.io/en/latest/modules/core/code.html) and _list-based_ objects such as [Events](https://floodlight.readthedocs.io/en/latest/modules/core/events.html).
 
@@ -26,7 +26,7 @@ List-based objects are collections of events that can happen at any time (and an
 
 Both categories are treated differently in the time dimension (see below), but there is one thing that unites them: **All time references are always relative to the respective segment** (with timestamps being the exception to the rule).
 
-### List-based[](https://floodlight.readthedocs.io/en/latest/compendium/3_time.html#list-based "Link to this heading")
+### List-based
 
 As events occur irregularly throughout a segment, each event needs to carry information as to when it took place. There are multiple ways to do it, for example by timestamps or the time on the scoreboard (e.g. ‘35:12’). Accordingly, you will find `` `{"timestamp",` `"minute",` `"second"}` `` in the list of protected columns. However, these are merely added for convenience, the single time-identifier we rely on is the `` `gameclock` ``, which measures the elapsed time since the segment started in seconds.
 
@@ -38,7 +38,7 @@ Tip
 
 We use the built-in `` `datetime` `` objects to handle timestamps, but only if they are _aware_, i.e. timezone information is provided. Some providers use local time-zones when coding these, others always use UTC. So _unaware_ timezones can quickly become a problem. For timezone handling, we use the _pytz_ package.
 
-### Frame-based[](https://floodlight.readthedocs.io/en/latest/compendium/3_time.html#frame-based "Link to this heading")
+### Frame-based
 
 Frame-based objects depend on a `` `framerate` ``, which is an attribute in the respective classes. The frame rate denotes the number of frames per second, and typically ranges from one up to a hundred for tracking data. It is important to know for every analysis that is time-sensitive. Each frame thus has a frame number, which can be used for indexing.
 
@@ -50,7 +50,7 @@ You can rely on (and need to take care of) frame-based objects spanning the enti
 
 You might argue that this is not very Pythonic, but we found that it leads to much leaner objects and let us use the full power of _numpy_, such as indexing or slicing! It’s rather straightforward in this format to manipulate xy or code data at once, and fast when vectorizing manipulations over the whole time dimension.
 
-## Handling[](https://floodlight.readthedocs.io/en/latest/compendium/3_time.html#handling "Link to this heading")
+## Handling
 
 Of course we try to support any usage of whatever time-information-identification that you prefer. For many purposes, it’s easier to use the scoreboard clock (e.g. for printing out stuff) or timestamps (e.g. for linking stuff). Internally, however, we rely on the `` `gameclock` `` as much as possible. This is due to the robustness reasons given above. But the real deal is the case of joint manipulation of frame-based and list-based objects!
 

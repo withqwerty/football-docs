@@ -2,9 +2,9 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/utils.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.368Z
+crawled_at: 2026-08-11T08:29:26.562Z
 ---
-`floodlight.io.utils.``download_from_url`(_`path`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/utils.html#download_from_url)[](https://floodlight.readthedocs.io/en/latest/modules/io/utils.html#floodlight.io.utils.download_from_url "Link to this definition")
+`floodlight.io.utils.``download_from_url`(_`path`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/utils.html#download_from_url)
 
 Downloads file from URL.
 
@@ -35,7 +35,7 @@ Return type:
 
 `` `None` ``
 
-`floodlight.io.utils.``get_and_convert`(_`dic`_, _`key`_, _`value_type`_, _`default``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/utils.html#get_and_convert)[](https://floodlight.readthedocs.io/en/latest/modules/io/utils.html#floodlight.io.utils.get_and_convert "Link to this definition")
+`floodlight.io.utils.``get_and_convert`(_`dic`_, _`key`_, _`value_type`_, _`default``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/utils.html#get_and_convert)
 
 Performs dictionary get and type conversion simultaneously.
 

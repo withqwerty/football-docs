@@ -2,11 +2,11 @@
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/statsbomb.html
 source_type: crawled
 upstream_version:
-crawled_at: 2026-07-13T16:20:22.366Z
+crawled_at: 2026-08-11T08:29:26.561Z
 ---
 [floodlight](https://floodlight.readthedocs.io/en/latest/index.html)
 
-`floodlight.io.statsbomb.``read_open_event_data_json`(_`filepath_events`_, _`filepath_match`_, _`filepath_threesixty``=``None`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsbomb.html#read_open_event_data_json)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsbomb.html#floodlight.io.statsbomb.read_open_event_data_json "Link to this definition")
+`floodlight.io.statsbomb.``read_open_event_data_json`(_`filepath_events`_, _`filepath_match`_, _`filepath_threesixty``=``None`_, _`teamsheet_home``=``None`_, _`teamsheet_away``=``None`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsbomb.html#read_open_event_data_json)
 
 Parses files for a single match from the StatsBomb open dataset and extracts the event data and teamsheets.
 
@@ -41,7 +41,7 @@ Notes
 
 StatsBomb’s open format of handling provides certain additional event attributes, which attach additional information to certain events. As of now, these information are parsed as a string in the `` `qualifier` `` column of the returned DataFrame and can be transformed to a dict of form `` `{attribute:` `value}` ``. This includes the information about the tracked position of (some) players and the visible area that is included in the StatsBomb360 data.
 
-`floodlight.io.statsbomb.``read_teamsheets_from_open_event_data_json`(_`filepath_events`_, _`filepath_match`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsbomb.html#read_teamsheets_from_open_event_data_json)[](https://floodlight.readthedocs.io/en/latest/modules/io/statsbomb.html#floodlight.io.statsbomb.read_teamsheets_from_open_event_data_json "Link to this definition")
+`floodlight.io.statsbomb.``read_teamsheets_from_open_event_data_json`(_`filepath_events`_, _`filepath_match`_)[`[source]`](https://floodlight.readthedocs.io/en/latest/_modules/floodlight/io/statsbomb.html#read_teamsheets_from_open_event_data_json)
 
 Reads open events and match files and returns Teamsheet objects for the home and the away team.
 
