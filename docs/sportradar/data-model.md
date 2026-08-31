@@ -2,7 +2,7 @@
 source_url: https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline
 source_type: api_docs
 upstream_version: Soccer Extended v4
-crawled_at: 2026-07-09
+crawled_at: 2026-08-31
 ---
 
 # Sportradar Soccer Data Model
@@ -74,6 +74,21 @@ Useful chart/story fields include:
 | `outcome` | event outcome, including on/off target, post, complete/incomplete, goal, saved |
 | `additional_outcome` | shot detail such as hit woodwork, goal, saved, or goal prevented |
 | `decision` / `description` | VAR decision state and outcome |
+
+## Lineup and availability fields
+
+These fields come from the Soccer v4 specification snapshot in
+`specs/sportradar/soccer-v4-openapi.yaml`, fetched on 2026-08-31.
+
+| Field | Where | Notes |
+|---|---|---|
+| `captain` | `player`, `lineup_player`, `base_lineup_player` | Boolean. Marks the captain in a lineup, so there is no need to infer it from armband events or squad metadata. |
+| `estimated_return_date` | `player`, `lineup_player`, `base_lineup_player` | Date-time. The spec describes it as the estimated return date for the active player status, sourced from SDS `PlayerStatus.endTime`. |
+| `estimated_return_date` | `missing_player` | Date-time. Estimated return date for a player listed as missing from the squad. |
+| `is_friendly` | `coverage_competition_properties` | Boolean. Flags a competition as friendly, alongside the other coverage properties. |
+
+Treat `estimated_return_date` as an estimate that moves, not a fixed fact. Store
+the value with its retrieval time if you chart injury availability over a season.
 
 ## Player Event Details
 

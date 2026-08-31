@@ -1,6 +1,6 @@
 ---
 source_type: curated
-source_url: https://github.com/statsbomb/open-data
+source_url: https://github.com/hudl/open-data
 upstream_version: null
 crawled_at: null
 ---
@@ -80,7 +80,7 @@ and player-mapping have no open-data equivalent.
 
 ## Open Data vs commercial parity
 
-The free Open Data repository (`github.com/statsbomb/open-data`) mirrors only a
+The free Open Data repository (`github.com/hudl/open-data`) mirrors only a
 subset of the commercial API:
 
 | Capability | Open Data | Commercial API |

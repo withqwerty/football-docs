@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/benchmarks/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.139Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.550Z
 ---
 Performance comparison between **fast-forward** (Rust core) and **kloppy** (pure Python) across all supported providers.
 

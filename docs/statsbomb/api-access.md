@@ -6,7 +6,12 @@ StatsBomb data can be accessed through three channels: the free open data reposi
 
 ## 1. Open Data (Free)
 
-**Repository**: [github.com/statsbomb/open-data](https://github.com/statsbomb/open-data)
+**Repository**: [github.com/hudl/open-data](https://github.com/hudl/open-data)
+
+The repository is published under the `hudl` organisation. The former
+`github.com/statsbomb/open-data` path still redirects to it, and raw file URLs
+resolve under either organisation name. Verified 2026-08-31; the default branch
+is `master`.
 
 StatsBomb makes select competition data freely available for research and analysis. The data is provided as JSON files that mirror the commercial API's output format.
 
@@ -77,18 +82,18 @@ data/
 - Must credit "StatsBomb" as data source in any published work
 - Must use the StatsBomb logo (available in their [Media Pack](https://statsbomb.com/media-pack/))
 - Register at [statsbomb.com/resource-centre](https://www.statsbomb.com/resource-centre/) to receive data updates
-- Subject to the [StatsBomb User Agreement](https://github.com/statsbomb/open-data/blob/master/doc/LICENSE.pdf)
+- Subject to the [StatsBomb User Agreement](https://github.com/hudl/open-data/blob/master/doc/LICENSE.pdf)
 
 ### Fetching Open Data Directly
 
 Raw JSON files can be fetched from GitHub:
 
 ```
-https://raw.githubusercontent.com/statsbomb/open-data/master/data/competitions.json
-https://raw.githubusercontent.com/statsbomb/open-data/master/data/matches/{comp_id}/{season_id}.json
-https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/{match_id}.json
-https://raw.githubusercontent.com/statsbomb/open-data/master/data/lineups/{match_id}.json
-https://raw.githubusercontent.com/statsbomb/open-data/master/data/three-sixty/{match_id}.json
+https://raw.githubusercontent.com/hudl/open-data/master/data/competitions.json
+https://raw.githubusercontent.com/hudl/open-data/master/data/matches/{comp_id}/{season_id}.json
+https://raw.githubusercontent.com/hudl/open-data/master/data/events/{match_id}.json
+https://raw.githubusercontent.com/hudl/open-data/master/data/lineups/{match_id}.json
+https://raw.githubusercontent.com/hudl/open-data/master/data/three-sixty/{match_id}.json
 ```
 
 ---

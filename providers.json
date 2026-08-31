@@ -20,9 +20,9 @@
       "licence_status": "Public open-data repository and public documentation; verify upstream licence before redistributing raw data.",
       "public_safety_notes": "Index public docs and public-safe event/data-model notes only.",
       "version": null,
-      "package": { "type": "github", "repo": "statsbomb/open-data" },
+      "package": { "type": "github", "repo": "hudl/open-data" },
       "sources": [
-        { "url": "https://github.com/statsbomb/open-data", "type": "github_docs" },
+        { "url": "https://github.com/hudl/open-data", "type": "github_docs", "note": "Formerly github.com/statsbomb/open-data; the old path redirects" },
         { "type": "curated", "note": "Cross-provider comparisons, coordinate conversion formulas" }
       ],
       "last_crawled": null
@@ -64,11 +64,41 @@
       "access_level": "public-api-docs",
       "licence_status": "Public documentation; API access depends on SportMonks plan and key.",
       "public_safety_notes": "Document public endpoint shapes and plan caveats only.",
-      "version": null,
+      "version": "v3",
       "package": null,
       "sources": [
         { "url": "https://docs.sportmonks.com/football", "type": "api_docs" },
         { "type": "curated", "note": "Event type mappings and field descriptions" }
+      ],
+      "exclude_categories": [
+        "ai-developer-hub",
+        "api-coach",
+        "api-quick-nav",
+        "chatgpt",
+        "claude-code",
+        "claude-desktop",
+        "cursor",
+        "cursor-rules",
+        "example-builds",
+        "example-prompts",
+        "github-copilot",
+        "llm-tools",
+        "machine-readable-docs",
+        "mcp-server-beta",
+        "most-important-docs-pages",
+        "players-teams-leagues",
+        "prompts",
+        "quick-start",
+        "quick-start-guide",
+        "resources",
+        "search",
+        "setup",
+        "sportmonks-ai-docs",
+        "squads",
+        "standings-seasons-top-scorers",
+        "tools",
+        "vibe-coding",
+        "windsurf"
       ],
       "last_crawled": null
     },
@@ -115,7 +145,7 @@
       "package": null,
       "sources": [
         { "url": "https://www.transferroom.com/api-docs", "type": "api_docs", "note": "Public API documentation page; embeds the current docs application" },
-        { "url": "https://v0-simple-api-documentation-templat.vercel.app/", "type": "api_docs", "note": "Embedded API documentation application with endpoint examples and field descriptions" },
+        { "url": "https://proud-island-049eed003.2.azurestaticapps.net/", "type": "api_docs", "note": "Embedded API documentation application the public docs page loads in an iframe; replaced a Vercel-hosted app that went offline in 2026" },
         { "type": "curated", "note": "Endpoint grouping, access-tier, data model, and identity-resolution guidance from the public docs" }
       ],
       "last_crawled": "2026-07-09"
@@ -217,11 +247,11 @@
       "aliases": ["skill-corner"],
       "access_level": "public-api-docs",
       "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads. Spec snapshot in specs/skillcorner/ comes from the public, unauthenticated https://skillcorner.com/api/docs/ - see specs/README.md. Endpoint claims are validated against it in CI.",
-      "version": "tracking v3 / physical v3 / dynamic events v2",
+      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads. Spec snapshot in specs/skillcorner/ comes from the public, unauthenticated https://www.skillcorner.com/apidocs.json - see specs/README.md. Endpoint claims are validated against it in CI.",
+      "version": "tracking v3 / physical v3 / dynamic events v3",
       "package": { "type": "pypi", "name": "skillcorner", "repo": "SkillCorner/skillcorner-toolkit" },
       "sources": [
-        { "url": "https://skillcorner.com/api/docs/", "type": "api_docs", "note": "Swagger/OpenAPI spec (specs/skillcorner/skillcorner_openapi.json)" },
+        { "url": "https://www.skillcorner.com/apidocs.json", "type": "openapi", "note": "Public unauthenticated OpenAPI 3.1 document, mirrored at specs/skillcorner/skillcorner_openapi.json; the HTML docs UI at skillcorner.com/api/docs/ now needs a customer login" },
         { "url": "https://skillcorner.crunch.help/en", "type": "api_docs", "note": "Glossary & metric definitions" },
         { "type": "curated", "note": "Identity-resolution guidance" }
       ],
@@ -279,7 +309,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation.",
       "public_safety_notes": "Use public plotting docs and examples only.",
-      "version": "1.7.1",
+      "version": "1.8.0",
       "package": { "type": "pypi", "name": "mplsoccer" },
       "sources": [
         { "url": "https://mplsoccer.readthedocs.io/en/latest/", "type": "readthedocs" },
@@ -294,7 +324,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
       "public_safety_notes": "Use public docs and open-data provider examples only.",
-      "version": "0.7.3",
+      "version": "0.8.1",
       "package": { "type": "pypi", "name": "databallpy" },
       "sources": [
         { "url": "https://databallpy.readthedocs.io/en/latest/", "type": "readthedocs" },
@@ -309,7 +339,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation.",
       "public_safety_notes": "Use public library docs and open examples only.",
-      "version": null,
+      "version": "1.2.0",
       "package": { "type": "pypi", "name": "floodlight" },
       "sources": [
         { "url": "https://floodlight.readthedocs.io/en/latest/", "type": "readthedocs" },
@@ -324,7 +354,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation (BSD-3-Clause); provider support depends on licensed input files.",
       "public_safety_notes": "Use public library docs and general provider-format guidance only.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "package": { "type": "pypi", "name": "fast-forward-football", "module": "fastforward" },
       "sources": [
         { "url": "https://fast-forward.readthedocs.io/en/latest/", "type": "readthedocs" },

@@ -2,7 +2,7 @@
 source_url: https://api.fmdb.pro/api/openapi
 source_type: crawled
 upstream_version: latest (full OpenAPI)
-crawled_at: 2026-07-09
+crawled_at: 2026-08-31
 ---
 
 # FMDB Pro Data Model
@@ -31,7 +31,7 @@ The `Players` response is the richest entity surface. Important first-level fiel
 | Identity | `id`, `faId`, `fmId`, `externalIds`, `name`, `firstName`, `secondName`, `commonName`, `fullName`, `kitName`, `nickName`, `dateOfBirth`, `latestDateOfBirth`, `yearOfBirth`, `sex`. |
 | Nationality and place | `country`, `nationalityInfo`, `secondCountry`, `thirdCountry`, `declaredNation`, `residentNation`, `cityOfBirth`, `regionOfBirth`. |
 | Club state | `basedClub`, `permanentClub`, `loanClub`, `clubCompetition`, `clubNation`, `contractedNation`, `inBasedClubFirstTeam`. |
-| Contracts | `permanentClubContractId`, `loanClubContractId`, `permanentClubContract`, `loanClubContract`, `clubContracts`, `nationContracts`. |
+| Contracts | `permanentClubContractId`, `loanClubContractId`, `permanentClubContract`, `loanClubContract`, `clubContracts`, `nationContracts`. The permanent and loan contract objects both carry `team` (nullable string) alongside `club`, `job`, `squadNumber`, `squadStatus`, `wage` and the date fields. |
 | Ability and roles | `currentAbility`, `recommendedCurrentAbility`, `potentialAbility`, `expectedPotentialAbility`, `position`, `positions`, `bestPosition`, `bestPositions`, `bestRole`. |
 | Attributes | `mentalTraits`, `mentalAttributes`, `physicalAttributes`, `technicalAttributes`, `goalkeeperAttributes`, plus percentile groups for each. |
 | Value and availability | `estimatedPlayerValues`, `availabilityIntelligence`, `injuries`, `unavailabilities`, `history`, `moves`, `retirements`. |
@@ -82,6 +82,10 @@ Nations include national-team and football-governance fields such as:
 - `nationalTeamStadium`, `captain`, `viceCaptain`, `kits`
 - `fifaCoefficient`, `fifaFullMember`, `reputation`, `youthRating`
 - `gameImportance`, `leagueStandard`, `seasonTypeId`
+- `fifaRank`, a nullable object described in the spec as "FIFA Rank information
+  where available", holding `fifaRank.position` (number, minimum 1),
+  `fifaRank.points` (number) and `fifaRank.updated` (date). `/api/nations`
+  accepts `fifaRank.position` and `fifaRank.points` as query filters.
 
 Club and nation competition endpoints expose competition identity, host/geography, colours, age limits, trophy and pitch flags, reputation, VAR/goal-line flags, squads/teams, rules, and GBE-related bands where applicable.
 

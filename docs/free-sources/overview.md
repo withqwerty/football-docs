@@ -31,7 +31,7 @@
 
 **Access**:
 ```bash
-git clone https://github.com/statsbomb/open-data.git
+git clone https://github.com/hudl/open-data.git
 ```
 
 Or via kloppy:

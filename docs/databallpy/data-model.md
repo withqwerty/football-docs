@@ -131,9 +131,12 @@ Extends `IndividualOnBallEvent`. Adds: `outcome_str`, `end_x`, `end_y`, `pass_ty
 
 Extends `IndividualOnBallEvent`. Adds: `duel_type` (offensive/defensive/unspecified), `with_opponent` (bool).
 
-### TackleEvent
+### TackleEvent (removed in 0.8.0)
 
-Extends `IndividualCloseToBallEvent`. No additional fields.
+`TackleEvent` extended `IndividualCloseToBallEvent` with no additional fields.
+Version 0.8.0 removed the class, so `databallpy.events` now exports
+`DribbleEvent`, `IndividualCloseToBallEvent`, `IndividualOnBallEvent`,
+`PassEvent` and `ShotEvent` only.
 
 ## Expected Threat (xT)
 

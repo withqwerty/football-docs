@@ -2,7 +2,7 @@
 source_url: https://www.transferroom.com/api-docs
 source_type: crawled
 upstream_version: null
-crawled_at: 2026-07-09
+crawled_at: 2026-08-31
 ---
 
 # TransferRoom API Access
@@ -12,24 +12,40 @@ crawled_at: 2026-07-09
 TransferRoom exposes a commercial club API for integrating transfer-market and recruitment data into internal club systems. The public documentation describes JSON endpoints for players, competitions, head coaches, teams, transfers, received pitches, requirements, and injury data.
 
 - Public docs page: `https://www.transferroom.com/api-docs`
-- Embedded docs app: `https://v0-simple-api-documentation-templat.vercel.app/`
+- Embedded docs app: `https://proud-island-049eed003.2.azurestaticapps.net/` (loaded in an iframe by the public docs page; it replaced a Vercel-hosted app that is now offline)
 - Contact/access page linked by the docs: `https://www.transferroom.com/features/club-api`
 - Production API host shown in examples: `https://apiprod.transferroom.com`
 - API namespace shown in examples: `/api/external/...`
 
 The docs page says the API is intended to let clubs "extract TransferRoom's unique transfer market data" in JSON format for integration into internal databases.
 
-## Access levels
+## Access packages
 
-Access is subscription-tier dependent and can also be bought standalone. The public docs describe three access groupings:
+The documentation splits buyers into two groups, each with its own packages. A
+2026 revision replaced the earlier "Lite API / Advanced API" naming, so code or
+notes written against those names refer to a model the docs no longer use.
 
-| Access level | Publicly documented data |
+**Market Place Subscribers — 2 tiers**
+
+| Tier | Publicly documented data |
 |---|---|
-| Lite API | Basic player identifiers, xTV (Expected Transfer Value), agency information, and player rating. |
-| Advanced API | All Lite features plus advanced player data, estimated salaries, contract information, GBE scores, head coach data, team data, transfer data, and pitches received on TransferRoom. |
-| Advanced Injury Data | Injury data across 50 leagues, injury records across 25 data points, historical data back to 2017, recurrence risk, player injury risk rating, and fatigue/workload style metrics. |
+| Core API | Advanced player data including estimated salaries, contract information and GBE scores; head coach data; team data; transfer history; pitches received on TransferRoom. |
+| Advanced Injury Data (AID) | Injury data covering 50 leagues, 25 data points per injury including type, duration, expected return date and recurrence rates, history back to 2017, and predictive metrics including recurrence risk, injury risk rating and fatigue rating. |
 
-Endpoint availability is tied to these access levels. For example, the public docs mark requirements and pitches as Advanced API endpoints, and injury endpoints as Advanced Injury Data endpoints.
+**3rd Party Subscribers — 6 packages**
+
+| Package | Publicly documented data |
+|---|---|
+| Global Football Database | Player identity, current and parent team, contract expiry, positions, height, career history; team ID, name, competition, division level; head coach identity, current team and role, career history, contract expiry. |
+| Performance Intelligence | Player TR rating and potential rating, playing style, GBE score and breakdown, percentage of available minutes, points added; team average starter rating, team rating and history. |
+| Transfer Intelligence | Player xTV, base value, book value, xTV change over 6 and 12 months and history, full transfer history since 2013; team total xTV, base and book value, transfer spend, predicted requirements. |
+| Financial Intelligence | Player estimated gross and net salary; team gross and net salary benchmarks and estimated taxation rates. |
+| Head Coach Intelligence | Head coach TR rating and rating change, tactical style, team rating impact, trust in youth, formation, rotation, and three-season average spend. |
+| Injury | Player injury risk rating and xAvailability, current workload, minutes played over 3, 6 and 12 months; per injury body part, type, dates, days out, surgery, recurrence, sources and statistical benchmarks. |
+
+Availability is documented per data point rather than per endpoint: each endpoint
+page carries a table mapping every response field to the packages that include
+it. Some fields, such as head coach `Suitability`, are marked club users only.
 
 ## Authentication
 
@@ -46,7 +62,8 @@ response = requests.post(auth_url)
 token = response.json()["token"]
 ```
 
-Subsequent requests send the token in the `Authorization` header:
+The docs state that bearer tokens expire after one month and must then be
+regenerated. Subsequent requests send the token in the `Authorization` header:
 
 ```python
 headers = {"Authorization": "Bearer " + token}

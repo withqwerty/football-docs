@@ -2,7 +2,7 @@
 
 ## Overview
 
-DataBallPy is a Python package for loading, synchronizing, and analyzing soccer event and tracking data. Developed by Alexander Oonk and Daan Grob, licensed under MIT. Current version: 0.7.3.
+DataBallPy is a Python package for loading, synchronizing, and analyzing soccer event and tracking data. Developed by Alexander Oonk and Daan Grob, licensed under MIT. Current version: 0.8.1.
 
 Its key distinguishing feature is **smart synchronization of tracking and event data** using the Needleman-Wunsch algorithm (borrowed from bioinformatics sequence alignment), which preserves event ordering during alignment. Naive cost-function approaches do not guarantee this.
 
@@ -25,12 +25,14 @@ Its key distinguishing feature is **smart synchronization of tracking and event 
 
 | Provider | `event_data_provider` | Precise Timestamps | Notes |
 |---|---|---|---|
-| Opta | `"opta"` | Yes | F24 (events) + F7 (metadata) XML files |
+| Opta | `"opta"` | Yes | F24 (events) + F7 (metadata) XML files. Since 0.8.0 the same parser also accepts Stats Perform's newer MA13 (events) + MA2 (metadata) XML pair; the format is detected from the XML root tag, so the `f24_loc`/`f7_loc` arguments take either pair. |
+| Stats Perform | `"statsperform"` | Yes | Alias of `"opta"`, behaving identically. |
 | Metrica | `"metrica"` | Yes | Has open data support |
 | Instat | `"instat"` | No | |
 | SciSports | `"scisports"` | No | No separate metadata file needed |
 | Sportec/DFL | `"dfl"` or `"sportec"` | Yes | |
 | StatsBomb | `"statsbomb"` | No | Requires event_match_loc + event_lineup_loc |
+| FIFA | `"fifa"` | | Listed as a supported `event_data_provider` by `get_game()`. |
 
 ### Kloppy Integration (v0.7.0+)
 
@@ -65,7 +67,7 @@ game = get_open_game(provider="sportec", game_id="J03WMX")
 - **Sync quality depends on data quality**: If ball_status is wrong, timestamps imprecise, or tracking data starts late, sync degrades.
 - **No Second Spectrum native parser**: Must use Kloppy bridge.
 - **Video export requires ffmpeg**: `save_tracking_video` needs ffmpeg installed.
-- **Deprecation in progress (v0.7.x to v0.8.0)**: `Match` class deprecated in favour of `Game`. Standalone feature functions deprecated in favour of methods on `TrackingData`.
+- **Deprecations completed in v0.8.0**: the `Match` class and the standalone feature functions (`add_velocity`, `add_acceleration`, `add_team_possession`, `get_covered_distance`, `get_pitch_control`, `get_approximate_voronoi`, `filter_tracking_data` and the rest) were removed. Use `Game` and the equivalent methods on `TrackingData`. Code written for 0.7.x that imports them from `databallpy.features` will not run on 0.8.x.
 - **Strict coordinate validation**: Pandera schema validation on load can reject data with positions slightly outside expected bounds.
 - **Performance**: Some features iterate frame-by-frame in Python (Voronoi, pressure), which can be slow for full-game tracking data at 25 Hz (~135,000 frames).
 - **Soccer only**: Despite the generic name, no support for other sports.

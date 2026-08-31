@@ -1,8 +1,8 @@
 ---
 source_type: crawled
-source_url: https://skillcorner.com/api/docs/
-upstream_version: SkillCorner API (Swagger 2.0)
-crawled_at: 2026-06-03
+source_url: https://www.skillcorner.com/apidocs.json
+upstream_version: SkillCorner API (OpenAPI 3.1)
+crawled_at: 2026-08-31
 ---
 
 # SkillCorner Identity Surfaces

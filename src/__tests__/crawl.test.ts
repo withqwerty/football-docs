@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { crawlLlmsTxt, htmlToMarkdown, slugify } from "../crawl.js";
+import { applyCategoryExclusions, crawlLlmsTxt, htmlToMarkdown, slugify } from "../crawl.js";
 
 describe("slugify", () => {
   it("lowercases and replaces spaces with hyphens", () => {
@@ -290,6 +290,31 @@ This is the only section with enough content to pass the threshold for indexing.
     expect(docs[0].category).toBe("reference");
   });
 
+  it("splits a large llms-full.txt on h1 only, keeping each page whole", () => {
+    const pages = Array.from(
+      { length: 12 },
+      (_, i) =>
+        `# Page ${i}\n\nIntroductory text for page ${i} that is comfortably over the fifty character minimum.\n\n## Parameters\n\nA subsection that belongs with its page rather than standing on its own.`
+    ).join("\n\n");
+
+    const docs = crawlLlmsTxt(pages, "https://example.com/llms-full.txt");
+
+    expect(docs.length).toBe(12);
+    expect(docs.map((d) => d.category)).not.toContain("parameters");
+    expect(docs[1].content).toContain("## Parameters");
+  });
+
+  it("ignores headings inside fenced code blocks", () => {
+    const content = `# Overview\n\nThis overview has enough content to be included in the final output for sure.\n\n\`\`\`bash\n# Not a heading, just a shell comment\ncurl https://example.com/v3/football\n\`\`\`\n\n## Real Section\n\nThis section has plenty of content to pass the fifty character minimum threshold.`;
+
+    const docs = crawlLlmsTxt(content, "https://example.com/llms.txt");
+
+    expect(docs.map((d) => d.category)).toEqual(["overview", "real-section"]);
+    expect(docs[0].content).toContain("curl https://example.com/v3/football");
+    // The fence survives intact rather than being cut in half by a split.
+    expect(docs[0].content.match(/```/g)?.length).toBe(2);
+  });
+
   it("drops sections shorter than 50 characters", () => {
     const content = `# Overview
 
@@ -308,5 +333,28 @@ This section has plenty of content to pass the fifty character minimum threshold
     expect(categories).toContain("overview");
     expect(categories).toContain("detailed-section");
     expect(categories).not.toContain("tiny");
+  });
+});
+
+describe("applyCategoryExclusions", () => {
+  const docs = [
+    { category: "get-all-fixtures" },
+    { category: "cursor-rules" },
+    { category: "error-codes" },
+    { category: "windsurf" },
+  ];
+
+  it("drops the categories a provider excludes", () => {
+    const kept = applyCategoryExclusions(docs, ["cursor-rules", "windsurf"]);
+    expect(kept.map((d) => d.category)).toEqual(["get-all-fixtures", "error-codes"]);
+  });
+
+  it("keeps everything when a provider excludes nothing", () => {
+    expect(applyCategoryExclusions(docs, undefined)).toEqual(docs);
+    expect(applyCategoryExclusions(docs, [])).toEqual(docs);
+  });
+
+  it("ignores an exclusion that matches no crawled category", () => {
+    expect(applyCategoryExclusions(docs, ["not-a-page"])).toEqual(docs);
   });
 });

@@ -345,13 +345,26 @@ function compareRowsForProvider(
     .all(matchQuery, normaliseProvider(provider), limit) as CompareRow[];
 }
 
+/**
+ * Upstream versions are whatever the provider calls its own release: a bare
+ * number ("0.3.0"), a version already carrying its prefix ("v3"), or a phrase
+ * ("Soccer v4 / Soccer Extended v4"). Only prefix the bare numbers, so a reader
+ * never sees "vv3" or "vSoccer v4".
+ */
+export function versionLabel(version: string | null): string {
+  const trimmed = version?.trim();
+  if (!trimmed) return "";
+  return /^\d/.test(trimmed) ? `v${trimmed}` : trimmed;
+}
+
 function sourceLabel(row: SearchRow): string {
   const crawledAt = row.crawled_at ? ` | crawled ${row.crawled_at}` : "";
   if (row.source_type === "curated") {
     return `**Source:** curated by football-docs contributors${crawledAt}`;
   }
+  const version = versionLabel(row.upstream_version);
   return `**Source:** ${row.source_type}${row.source_url ? ` (${row.source_url})` : ""}${
-    row.upstream_version ? ` | v${row.upstream_version}` : ""
+    version ? ` | ${version}` : ""
   }${crawledAt}`;
 }
 

@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/dataset/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.138Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.550Z
 ---
 The `TrackingDataset` is the central object returned by every provider's `load_tracking()` function. It contains all tracking data and metadata. The underlying type of each table (Polars, PySpark, or pyarrow) is determined by the `engine` kwarg passed to `load_tracking`.
 

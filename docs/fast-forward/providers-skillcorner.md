@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/skillcorner/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.143Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.553Z
 ---
 Load tracking data from **SkillCorner** format.
 
@@ -29,8 +29,8 @@ dataset = skillcorner.load_tracking(
 | `only_alive` | bool | `True` | Only include frames where ball is in play |
 | `include_empty_frames` | bool | `False` | Include frames with no detected players |
 | `include_game_id` | bool \| str | `True` | Add game_id column |
-| `include_ball_owning_player` | bool | `False` (0.2.0: `True`) | Add the `ball_owning_player_id` column |
-| `include_is_detected` | bool | `False` (0.2.0: `True`) | Add the `is_detected` column (long / long_ball only) |
+| `include_ball_owning_player` | bool | `True` | Add the `ball_owning_player_id` column |
+| `include_is_detected` | bool | `True` | Add the `is_detected` column (long / long_ball only) |
 | `engine` | str | `"polars"` | `"polars"`, `"pyspark"`, `"arrow"`, or `"arrow[spark]"` |
 
 All four engines are supported. For distributed compute (Spark, Ray, Dask), see [Distributed Compute](https://fast-forward.readthedocs.io/en/latest/concepts/distributed-compute/).
@@ -75,10 +75,6 @@ With `include_is_detected=True`, every player row gets a boolean flag:
 | `is_detected` | Bool | True = camera-detected, False = extrapolated |
 
 In long layout, the ball row's `is_detected` is null (the concept does not apply to the ball). The flag is only added for the `long` and `long_ball` layouts; `wide` is not supported.
-
-## Staged Rollout Notice
-
-`include_ball_owning_player` and `include_is_detected` currently default to `False` on 0.1.x. **In fast-forward 0.2.0 both defaults will flip to `True`**, adding new columns to the SkillCorner tracking DataFrame by default. To silence the `FutureWarning` and lock in your preferred behaviour, pass an explicit value (`True` or `False`) when calling `load_tracking`.
 
 ## Notes
 

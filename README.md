@@ -108,23 +108,23 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| fast-forward | 251 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
+| fast-forward | 250 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
 | StatsBomb | 235 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
-| Wyscout | 161 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
+| Wyscout | 163 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
-| SportMonks | 82 | event-types, data-model, api-access, charting-season-stories, identity-surfaces |
+| SportMonks | 565 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces |
 | databallpy | 63 | data-model, overview, usage |
-| mplsoccer | 64 | overview, pitch-types, visualizations |
+| mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 77 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces |
-| SkillCorner | 48 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
+| SkillCorner | 49 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
 | Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
 | Opta | 71 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
 | FMDB Pro | 35 | api-access, api-endpoints, data-model, identity-surfaces |
-| Sportradar | 29 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
+| Sportradar | 30 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 14 | api-access, api-endpoints |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
@@ -132,7 +132,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**1,808 searchable chunks** across 23 providers and tools.
+**2,295 searchable chunks** across 23 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
@@ -166,8 +166,10 @@ pnpm openapi:truth       # rebuild every spec-derived truth file
 
 The specs those derive from are snapshots of **publicly published, unauthenticated**
 vendor documentation. Source URLs, fetch dates and refresh instructions are in
-[`specs/README.md`](specs/README.md). Wyscout's three API versions merge into one
-truth file, because its docs legitimately span v2, v3 and v4.
+[`specs/README.md`](specs/README.md). Wyscout's v3 and v4 specifications merge into
+one truth file, because its docs span both. The v2 legacy specification is no
+longer mirrored: the docs describe v3 and v4, and no documented fact derives from
+the legacy surface.
 
 Each package gets its own pinned venv — co-installing them makes pip silently
 downgrade conflicting versions, which would produce truth that disagrees with the

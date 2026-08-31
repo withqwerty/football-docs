@@ -1,8 +1,8 @@
 ---
 source_url: https://apidocs.wyscout.com/
 source_type: crawled
-upstream_version: v3 2024-03-12 / v4 2024-05-09
-crawled_at: 2026-06-03
+upstream_version: v3 2026-07-03 / v4 2026-08-27
+crawled_at: 2026-08-31
 ---
 
 # Wyscout API Access
@@ -11,7 +11,7 @@ crawled_at: 2026-06-03
 
 Wyscout is a **commercial football data provider** owned by Hudl. Access requires a paid license — there is no free public tier of the REST API. The product documentation is published as an OpenAPI (Redoc) portal at [apidocs.wyscout.com](https://apidocs.wyscout.com/), and the data dictionary at [dataglossary.wyscout.com](https://dataglossary.wyscout.com/).
 
-This document is sourced from the live OpenAPI specs behind the docs portal (`assets/specs/prod/current.yml` = v3, `next.yml` = v4 preview, `legacy.yml` = v2). Endpoint inventories live in [api-endpoints.md](api-endpoints.md); the event payload in [data-model.md](data-model.md); the event taxonomy in [event-types.md](event-types.md).
+This document is sourced from the live OpenAPI specs behind the docs portal (`assets/specs/prod/current.yml` = v3, `next.yml` = v4 preview; `legacy.yml` = v2 is published upstream but not mirrored here). Endpoint inventories live in [api-endpoints.md](api-endpoints.md); the event payload in [data-model.md](data-model.md); the event taxonomy in [event-types.md](event-types.md).
 
 ## Authentication
 
@@ -48,6 +48,13 @@ data = r.json()
 | **v4** | `https://apirest.wyscout.com/v4` | `next` | **Preview** (beta of the next release) |
 | **v3** | `https://apirest.wyscout.com/v3` | `current` | **Current** (latest stable) |
 | v2 | `https://apirest.wyscout.com/v2` | `legacy` | Legacy (still running) |
+
+In the v3 specification dated 2026-07-03 and the v4 specification dated
+2026-08-27, the `servers` block gives a templated base path
+(`https://apirest.wyscout.com/{basePath}`) with the version as the default
+variable value, rather than a literal versioned URL. The effective URLs are
+unchanged. This repository mirrors the v3 and v4 specifications only; the v2 row
+records the version ladder that the documentation portal describes.
 
 Most existing integrations run on **v3**. **v4** is the preview track where new endpoints land first — notably broadcast tracking, physical data, and match attack directions (see [api-endpoints.md](api-endpoints.md)). Anyone who started building on Wyscout recently may have begun on v4.
 

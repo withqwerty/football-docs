@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/hawkeye/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.141Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.553Z
 ---
 Load tracking data from **HawkEye** per-minute file format.
 

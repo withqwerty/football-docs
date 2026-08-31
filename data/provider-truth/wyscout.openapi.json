@@ -4,23 +4,22 @@
   "source": {
     "specs": [
       {
-        "spec": "specs/wyscout/v2-legacy.yml",
-        "title": "Wyscout API (v2)",
-        "version": "2024-03-12T16:45:54Z"
-      },
-      {
         "spec": "specs/wyscout/v3-current.yml",
         "title": "Wyscout API (v3)",
-        "version": "2024-03-12T16:46:19Z"
+        "version": "2026-07-03T08:47:03Z"
       },
       {
         "spec": "specs/wyscout/v4-next.yml",
         "title": "Wyscout API (v4)",
-        "version": "2024-05-09T09:09:27Z"
+        "version": "2026-08-27T09:14:39Z"
       }
     ],
-    "generated_at": "2026-07-30"
+    "generated_at": "2026-08-31"
   },
+  "basePaths": [
+    "/v4",
+    "/{basePath}"
+  ],
   "paths": {
     "/areas": [
       "GET",
@@ -103,14 +102,6 @@
       "OPTIONS"
     ],
     "/players/{wyId}/fixtures": [
-      "GET",
-      "OPTIONS"
-    ],
-    "/players/{wyId}/injuries": [
-      "GET",
-      "OPTIONS"
-    ],
-    "/players/{wyId}/marketvalue": [
       "GET",
       "OPTIONS"
     ],
@@ -239,10 +230,6 @@
     "/videos/{matchId}/qualities": [
       "GET",
       "OPTIONS"
-    ],
-    "/videos/{matchId}/versions": [
-      "GET",
-      "OPTIONS"
     ]
   },
   "parameters": [
@@ -329,7 +316,6 @@
     "PlayerContractinfo",
     "PlayerFixtures",
     "PlayerInjuries",
-    "PlayerMarketvalue",
     "PlayerMatchAdvancedStats",
     "PlayerMatches",
     "PlayerTransfer",
@@ -363,24 +349,12 @@
     "UpdatedObjectsDeleted",
     "UpdatedObjectsUpdated",
     "Video",
-    "VideoOffset",
     "VideoOffsets",
-    "VideoQualities",
-    "VideoVersions"
+    "VideoQualities"
   ],
   "fields": [
     "1H",
-    "1t_end",
-    "1t_sec",
     "2H",
-    "2t_end",
-    "2t_sec",
-    "3t_end",
-    "3t_sec",
-    "4t_end",
-    "4t_sec",
-    "5t_end",
-    "5t_sec",
     "<formationSchema>",
     "<matchPeriod>",
     "<resourceId>",
@@ -500,10 +474,7 @@
     "endLocation",
     "endSec",
     "error",
-    "eventId",
     "eventIndex",
-    "eventName",
-    "eventSec",
     "events",
     "eventsNumber",
     "fetch",
@@ -512,8 +483,6 @@
     "fieldAerialDuelsWon",
     "filter",
     "filters",
-    "firstHalf",
-    "firstHalfExtraTime",
     "firstName",
     "firstTouch",
     "flank",
@@ -620,7 +589,6 @@
     "lossesMedium",
     "lossesTotal",
     "lq",
-    "marketValue",
     "match",
     "matchDraw",
     "matchId",
@@ -719,11 +687,9 @@
     "possessionPercent",
     "postShotXg",
     "ppda",
-    "preMatch",
     "pressingDuels",
     "pressingDuelsWon",
     "primary",
-    "privacy_level",
     "progressedWithBall",
     "progression",
     "progressivePasses",
@@ -771,8 +737,6 @@
     "seasons",
     "second",
     "secondAssists",
-    "secondHalf",
-    "secondHalfExtraTime",
     "secondary",
     "shirtNumber",
     "short",
@@ -800,7 +764,6 @@
     "smartPassesSuccessful",
     "sort",
     "sorts",
-    "sources",
     "squad",
     "staff",
     "start",
@@ -809,8 +772,6 @@
     "startSec",
     "status",
     "stoppedProgress",
-    "subEventId",
-    "subEventName",
     "substituteIn",
     "substituteOnBench",
     "substituteOut",
@@ -837,8 +798,6 @@
     "successfulTouchInBox",
     "successfulVerticalPasses",
     "tackles",
-    "tag",
-    "tags",
     "takeOn",
     "team",
     "teamAId",
@@ -871,13 +830,11 @@
     "transferId",
     "transitions",
     "type",
-    "type_label",
     "types",
     "url",
     "value",
     "values",
     "venue",
-    "version",
     "verticalPasses",
     "verticalPassesSuccessful",
     "veryLong",
@@ -945,18 +902,6 @@
       "E1",
       "E2",
       "P"
-    ],
-    "matchPeriodEnd": [
-      "1H",
-      "2H",
-      "E1",
-      "E2"
-    ],
-    "matchPeriodStart": [
-      "1H",
-      "2H",
-      "E1",
-      "E2"
     ],
     "period": [
       "ExtraFirstHalf",

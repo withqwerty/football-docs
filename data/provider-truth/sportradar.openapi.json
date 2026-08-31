@@ -9,7 +9,7 @@
         "version": "4.0.0"
       }
     ],
-    "generated_at": "2026-07-31"
+    "generated_at": "2026-08-31"
   },
   "basePaths": [
     "/soccer/production/v4",
@@ -457,6 +457,7 @@
     "dribbles_successful_percentage",
     "dribbles_unsuccessful",
     "end_date",
+    "estimated_return_date",
     "event",
     "event_id",
     "extended_play_by_play",
@@ -549,6 +550,7 @@
     "involvements_in_shots_off_target_goals_expected",
     "involvements_in_shots_on_target",
     "involvements_in_shots_on_target_goals_expected",
+    "is_friendly",
     "jersey",
     "jersey_number",
     "last_name",

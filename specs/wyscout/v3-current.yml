@@ -180,13 +180,16 @@ info:
     ![Version Support](assets/images/WyscoutVersionSupport.png)
   termsOfService: 'https://footballdata.wyscout.com/terms-and-conditions/'
   title: Wyscout API (v3)
-  version: '2024-03-12T16:46:19Z'
+  version: '2026-07-03T08:47:03Z'
   x-logo:
     altText: Wyscout logo
     href: /
     url: assets/images/wyscout_data.png
 servers:
-  - url: 'https://apirest.wyscout.com/v3'
+  - url: 'https://apirest.wyscout.com/{basePath}'
+    variables:
+      basePath:
+        default: v3
 paths:
   /areas:
     get:
@@ -1410,7 +1413,11 @@ paths:
                 type: string
       tags:
         - Matches
-      description: Retrieves information about a given match's formations
+      description: >-
+        Retrieves information about a given match's formations. This endpoint
+        returns the full unfiltered position timeline and is the recommended
+        source for complete position data, without the percentage thresholds and
+        caps applied in the advanced stats endpoints.
       summary: MatchFormations
     options:
       parameters:
@@ -11631,7 +11638,7 @@ components:
                       type: array
                     scheme:
                       description: >-
-                        <table><thead><tr><th>Scheme</th><th>p0</th><th>p1</th><th>p2</th><th>p3</th><th>p4</th><th>p5</th><th>p6</th><th>p7</th><th>p8</th><th>p9</th><th>p10</th></tr></thead><tbody><tr><td>4-4-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>ss</td><td>cf</td></tr><tr><td>4-4-1-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>amf</td><td>cf</td></tr><tr><td>4-3-2-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>amf</td><td>cf</td></tr><tr><td>4-2-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td></tr><tr><td>4-1-4-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td></tr><tr><td>4-1-3-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>ss</td><td>cf</td></tr><tr><td>4-3-1-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>ss</td><td>cf</td></tr><tr><td>4-3-3</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>4-5-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lw</td><td>cf</td></tr><tr><td>4-2-2-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>lamf</td><td>ss</td><td>cf</td></tr><tr><td>4-2-1-3</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>3-4-3</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>3-4-1-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>ss</td><td>cf</td></tr><tr><td>3-4-2-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>amf</td><td>cf</td></tr><tr><td>3-5-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lwb</td><td>ss</td><td>cf</td></tr><tr><td>3-5-1-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rw</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lw</td><td>amf</td><td>cf</td></tr><tr><td>5-3-2</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ss</td><td>cf</td></tr><tr><td>5-4-1</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td></tr><tr><td>4-3-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>4-4-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td><td>esp</td></tr><tr><td>4-3-1-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>4-2-2-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>4-1-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td><td>esp</td></tr><tr><td>4-2-1-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>3-4-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>3-4-1-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>3-5-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lwb</td><td>cf</td><td>esp</td></tr><tr><td>5-3-1</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>cf</td><td>esp</td></tr><tr><td>4-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>cf</td><td>esp</td><td>esp</td></tr><tr><td>4-4-0</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>esp</td><td>esp</td></tr><tr><td>4-2-2-0</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>amf</td><td>esp</td><td>esp</td></tr><tr><td>3-4-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>cf</td><td>esp</td><td>esp</td></tr><tr><td>5-3-0</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>esp</td><td>esp</td></tr><tr><td>3-3-3-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td></tr><tr><td>3-2-3-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>ss</td><td>cf</td></tr></tbody></table>
+                        <table><thead><tr><th>Scheme</th><th>p0</th><th>p1</th><th>p2</th><th>p3</th><th>p4</th><th>p5</th><th>p6</th><th>p7</th><th>p8</th><th>p9</th><th>p10</th></tr></thead><tbody><tr><td>4-4-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>ss</td><td>cf</td></tr><tr><td>4-4-1-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>amf</td><td>cf</td></tr><tr><td>4-3-2-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>amf</td><td>cf</td></tr><tr><td>4-2-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td></tr><tr><td>4-1-4-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td></tr><tr><td>4-1-3-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>ss</td><td>cf</td></tr><tr><td>4-3-1-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>ss</td><td>cf</td></tr><tr><td>4-3-3</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>4-5-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lw</td><td>cf</td></tr><tr><td>4-2-2-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>lamf</td><td>ss</td><td>cf</td></tr><tr><td>4-2-1-3</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>3-4-3</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>rwf</td><td>cf</td><td>lwf</td></tr><tr><td>3-4-1-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>ss</td><td>cf</td></tr><tr><td>3-4-2-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>amf</td><td>cf</td></tr><tr><td>3-5-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lwb</td><td>ss</td><td>cf</td></tr><tr><td>3-5-1-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rw</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lw</td><td>amf</td><td>cf</td></tr><tr><td>3-1-4-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>dmf</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>ss</td><td>cf</td></tr><tr><td>5-3-2</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ss</td><td>cf</td></tr><tr><td>5-4-1</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td></tr><tr><td>4-3-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>4-4-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>cf</td><td>esp</td></tr><tr><td>4-3-1-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>4-2-2-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>4-1-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>dmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td><td>esp</td></tr><tr><td>4-2-1-2</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>3-4-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>ss</td><td>cf</td><td>esp</td></tr><tr><td>3-4-1-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>amf</td><td>cf</td><td>esp</td></tr><tr><td>3-5-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>lwb</td><td>cf</td><td>esp</td></tr><tr><td>5-3-1</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>cf</td><td>esp</td></tr><tr><td>4-3-1</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>cf</td><td>esp</td><td>esp</td></tr><tr><td>4-4-0</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rw</td><td>rcmf</td><td>lcmf</td><td>lw</td><td>esp</td><td>esp</td></tr><tr><td>4-2-2-0</td><td>gk</td><td>rb</td><td>rcb</td><td>lcb</td><td>lb</td><td>rdmf</td><td>ldmf</td><td>amf</td><td>amf</td><td>esp</td><td>esp</td></tr><tr><td>3-4-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rwb</td><td>rcmf</td><td>lcmf</td><td>lwb</td><td>cf</td><td>esp</td><td>esp</td></tr><tr><td>5-3-0</td><td>gk</td><td>rb5</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>lb5</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>esp</td><td>esp</td></tr><tr><td>3-3-3-1</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rcmf3</td><td>dmf</td><td>lcmf3</td><td>ramf</td><td>amf</td><td>lamf</td><td>cf</td></tr><tr><td>3-2-3-2</td><td>gk</td><td>rcb3</td><td>cb</td><td>lcb3</td><td>rdmf</td><td>ldmf</td><td>ramf</td><td>amf</td><td>lamf</td><td>ss</td><td>cf</td></tr></tbody></table>
                       title: Scheme used
                       type: string
                     startSec:
@@ -13931,6 +13938,20 @@ components:
           title: Player unique id
           type: integer
         positions:
+          description: >-
+            The sum of position percentages may be less than 100%. This is by
+            design, due to three combined rules applied before the output is
+            returned:
+
+
+            1. **10% threshold filter** — any role or formation that accounts
+            for ≤10% of total playing time is silently dropped.
+
+            2. **Hard cap on number of entries** — only the top 3 roles per
+            player are returned, even if more qualify.
+
+            3. **Rounding loss** — role percentages use floor rounding, so small
+            decimal remainders are discarded.
           items:
             $ref: '#/components/schemas/PlayerAdvancedStatsPosition'
           title: 'List of positions, ordered by playtime’s percentage'
@@ -13956,6 +13977,9 @@ components:
       title: Player Advanced Stats
       type: object
     PlayerAdvancedStatsAverage:
+      description: >-
+        Values are null when the player has fewer than 45 minutes of play in the
+        selected timeframe.
       properties:
         accelerations:
           description: A run with the ball with a significant speed up
@@ -16470,6 +16494,20 @@ components:
           title: Player unique id
           type: integer
         positions:
+          description: >-
+            The sum of position percentages may be less than 100%. This is by
+            design, due to three combined rules applied before the output is
+            returned:
+
+
+            1. **10% threshold filter** — any role or formation that accounts
+            for ≤10% of total playing time is silently dropped.
+
+            2. **Hard cap on number of entries** — only the top 3 roles per
+            player are returned, even if more qualify.
+
+            3. **Rounding loss** — role percentages use floor rounding, so small
+            decimal remainders are discarded.
           items:
             $ref: '#/components/schemas/PlayerAdvancedStatsPosition'
           title: The position objects array
@@ -28900,6 +28938,9 @@ components:
       title: Team Advanced Stats
       type: object
     TeamAdvancedStatsAverage:
+      description: >-
+        Values are null when the team has fewer than 45 minutes of play in the
+        selected timeframe.
       properties:
         accelerations:
           description: A run with the ball with a significant speed up
