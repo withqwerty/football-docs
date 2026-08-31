@@ -36,7 +36,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `specs/` | Public vendor OpenAPI snapshots — see `specs/README.md` |
 | `data/docs.db` | SQLite FTS index (shipped with the package) |
 | `data/provider-truth/` | Generated ground truth for doc validation |
-| `providers.json` | Provider registry — doc sources, access level, crawl config |
+| `providers.json` | Provider registry — doc sources, access level, crawl config, `exclude_categories` |
 | `server.json` | MCP registry manifest |
 
 ## Commands
@@ -61,6 +61,14 @@ pnpm impect:truth                     # regenerate Impect open-data ground truth
 ```
 
 Node >= 20. Package manager is pnpm. Linter is Biome (not ESLint).
+
+## Corpus scope
+
+A vendor's docs site often carries pages that are not football data
+documentation — IDE and assistant setup guides, prompt catalogues, navigation
+indexes. STRATEGY.md keeps those out. List them in the provider's
+`exclude_categories` in `providers.json` rather than deleting the files after a
+crawl, so the next crawl does not put them back.
 
 ## Provenance
 

@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/api/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.139Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.551Z
 ---
 ## TrackingDataset
 
@@ -231,8 +231,8 @@ Parameters:
 | `only_alive` | `bool` | If True, only include frames where ball is in play (matches kloppy default) | `True` |
 | `include_empty_frames` | `bool` | If True, include frames with no detected players | `False` |
 | `include_game_id` | `bool or str` | If True, add game_id column to tracking_df, team_df, and player_df from metadata. If False, no game_id column is added. If str, use the provided string as the game_id value. | `True` |
-| `include_ball_owning_player` | `bool` | If True, attach a `ball_owning_player_id` column to the tracking DataFrame carrying the player UUID currently in possession on each frame (null when SkillCorner did not record one). Omitting the kwarg currently behaves as False but emits a `FutureWarning`; pass an explicit value to silence the warning. | `False (will become True in fastforward 0.2.0)` |
-| `include_is_detected` | `bool` | If True, attach an `is_detected` column to the tracking DataFrame (long / long_ball layouts) indicating whether each player position was camera-detected (True) or imputed/extrapolated (False). Ball rows in long layout receive null since the concept doesn't apply. Wide layout doesn't surface the flag yet; long or long_ball is recommended for detection-aware analyses. Omitting the kwarg currently behaves as False but emits a `FutureWarning`; pass an explicit value to silence the warning. | `False (will become True in fastforward 0.2.0)` |
+| `include_ball_owning_player` | `bool` | If True, attach a `ball_owning_player_id` column to the tracking DataFrame carrying the player UUID currently in possession on each frame (null when SkillCorner did not record one). Pass False to omit the column. | `True` |
+| `include_is_detected` | `bool` | If True, attach an `is_detected` column to the tracking DataFrame (long / long_ball layouts) indicating whether each player position was camera-detected (True) or imputed/extrapolated (False). Ball rows in long layout receive null since the concept doesn't apply. Wide layout doesn't surface the flag yet; long or long_ball is recommended for detection-aware analyses. Pass False to omit the column. | `True` |
 | `engine` | `('polars', 'pyspark', 'arrow', 'arrow[spark]')` | DataFrame engine to use: - "polars": Return Polars DataFrames (default) - "pyspark": Return PySpark DataFrames - "arrow": Return pyarrow.Tables with Polars-style Arrow types (string_view, duration[ms]). For Dask/Ray workers. - "arrow[spark]": Return pyarrow.Tables pre-normalized for Spark consumption (string, int64 ms). For Spark mapInArrow UDFs. | `"polars"` |
 | `spark_session` | `SparkSession` | PySpark SparkSession to use. If None and engine="pyspark", will get or create a session automatically. | `None` |
 
@@ -257,7 +257,7 @@ Parameters:
 | `orientation` | `str` | Coordinate orientation: - "static_home_away": Home attacks right (+x) entire match - "static_away_home": Away attacks right (+x) entire match - "home_away": Home attacks right 1st half, left 2nd half - "away_home": Away attacks right 1st half, left 2nd half - "attack_right": Attacking team always attacks right - "attack_left": Attacking team always attacks left | `"static_home_away"` |
 | `only_alive` | `bool` | If True, only include frames where ball is in play (matches kloppy default) | `True` |
 | `include_game_id` | `bool or str` | If True, add game_id column to tracking_df, team_df, and player_df from metadata. If False, no game_id column is added. If str, use the provided string as the game_id value. | `True` |
-| `include_officials` | `bool` | If True, include officials in player_df with team_id="officials" and position codes: REF (Main Referee), AREF (Assistant Referee), VAR (Video Assistant Referee), AVAR (Assistant VAR), 4TH (Fourth Official) | `False` |
+| `include_officials` | `bool` | If True, include officials in player_df with team_id="officials" and position codes: REF (Main Referee), AREF (Assistant Referee), VAR (Video Assistant Referee), AVAR (Assistant VAR), FOURTH (Fourth Official) | `False` |
 | `engine` | `('polars', 'pyspark', 'arrow', 'arrow[spark]')` | DataFrame engine to use: - "polars": Return Polars DataFrames (default) - "pyspark": Return PySpark DataFrames - "arrow": Return pyarrow.Tables with Polars-style Arrow types (string_view, duration[ms]). For Dask/Ray workers. - "arrow[spark]": Return pyarrow.Tables pre-normalized for Spark consumption (string, int64 ms). For Spark mapInArrow UDFs. | `"polars"` |
 | `spark_session` | `SparkSession` | PySpark SparkSession to use. If None and engine="pyspark", will get or create a session automatically. | `None` |
 
@@ -455,7 +455,7 @@ Parameters:
 | `orientation` | `str` | Coordinate orientation | `"static_home_away"` |
 | `only_alive` | `bool` | If True, only include frames where ball is in play | `True` |
 | `include_game_id` | `Union[bool, str]` | If True, add game_id column from metadata. If False, no game_id column is added. If str, use the provided string as the game_id value. | `True` |
-| `include_officials` | `bool` | If True, include match officials (referees) in the players DataFrame with team_id="officials" and appropriate position codes (REF, AREF, 4TH). | `False` |
+| `include_officials` | `bool` | If True, include match officials (referees) in the players DataFrame with team_id="officials" and appropriate position codes (REF, AREF, FOURTH). | `False` |
 | `engine` | `('polars', 'pyspark', 'arrow', 'arrow[spark]')` | DataFrame engine to use: - "polars": Return Polars DataFrames (default) - "pyspark": Return PySpark DataFrames - "arrow": Return pyarrow.Tables with Polars-style Arrow types (string_view, duration[ms]). For Dask/Ray workers. - "arrow[spark]": Return pyarrow.Tables pre-normalized for Spark consumption (string, int64 ms). For Spark mapInArrow UDFs. | `"polars"` |
 | `spark_session` | `SparkSession` | PySpark SparkSession to use. If None and engine="pyspark", will get or create a session automatically. | `None` |
 

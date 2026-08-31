@@ -2,6 +2,22 @@ import { describe, expect, it } from "vitest";
 import { chunkMarkdown, parseFrontmatter } from "../ingest.js";
 
 describe("parseFrontmatter", () => {
+  it("treats a literal null value as absent", () => {
+    const text = `---
+source_url: null
+source_type: curated
+upstream_version: null
+crawled_at: null
+---
+
+# Hello`;
+
+    const { frontmatter } = parseFrontmatter(text);
+    expect(frontmatter.source_url).toBeNull();
+    expect(frontmatter.upstream_version).toBeNull();
+    expect(frontmatter.crawled_at).toBeNull();
+  });
+
   it("returns defaults when no frontmatter present", () => {
     const { frontmatter, body } = parseFrontmatter("# Hello\n\nSome content");
     expect(frontmatter.source_type).toBe("curated");

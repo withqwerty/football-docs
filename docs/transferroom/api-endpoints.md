@@ -1,8 +1,8 @@
 ---
-source_url: https://v0-simple-api-documentation-templat.vercel.app/
+source_url: https://proud-island-049eed003.2.azurestaticapps.net/
 source_type: crawled
 upstream_version: null
-crawled_at: 2026-07-09
+crawled_at: 2026-08-31
 ---
 
 # TransferRoom API Endpoints
@@ -14,15 +14,19 @@ All endpoint examples use the base path `https://apiprod.transferroom.com/api/ex
 | Method | Path | Access | Description |
 |---|---|---|---|
 | `POST` | `/login` | API credentials | Returns a bearer token. |
-| `GET` | `/competitions` | Documented API access | Returns competitions and team membership. |
-| `GET` | `/players` | Lite API / Advanced API | Returns player identity, club, agency, value, rating, contract, GBE, and availability fields depending on access tier. |
-| `GET` | `/coaches` | Advanced API | Returns head coach identity, career, contract, agency, rating, tactical, and team-impact fields. |
-| `GET` | `/teams` | Advanced API | Returns team identity, competition, head coach, squad value, rating, and predicted requirement fields. |
-| `GET` | `/transfers` | Advanced API | Returns player transfer movements and value-at-date fields. |
-| `GET` | `/pitches` | Advanced API, club users only | Returns pitches and plus pitches received on TransferRoom. |
-| `GET` | `/requirements` | Advanced API | Returns club recruitment requirements posted on TransferRoom. |
-| `GET` | `/injuries/competitions` | Advanced Injury Data | Returns injury records by competition. |
-| `GET` | `/injuries/players` | Advanced Injury Data | Returns player injury and predictive availability data. |
+| `GET` | `/competitions` | Package-dependent | Returns domestic league competitions with team lists and ratings. |
+| `GET` | `/players` | Package-dependent | Returns players and player data. |
+| `GET` | `/coaches` | Package-dependent | Returns head coaches and their performance data. |
+| `GET` | `/teams` | Package-dependent | Returns team data and analytics. |
+| `GET` | `/transfers` | Package-dependent | Returns player transfer history data. |
+| `GET` | `/pitches` | Club users only | Returns inbound player pitches submitted to your club. |
+| `GET` | `/requirements` | Club users only | Returns your club's active transfer requirements. |
+| `GET` | `/injuries/competitions` | Injury packages | Returns injury history for all players in a competition. |
+| `GET` | `/injuries/players` | Injury packages | Returns injury risk and availability data per player. |
+
+"Package-dependent" is per data point, not per endpoint: the documentation gives
+each endpoint a data-availability table mapping every response field to the
+packages that carry it. See "Access packages" in [api-access.md](api-access.md).
 
 ## Authentication endpoint
 
@@ -54,8 +58,10 @@ Returns competition records. The public sample includes:
 | `Id` | TransferRoom competition ID. |
 | `CompetitionName` | Competition name. |
 | `Country` | Competition country. |
+| `CountryId` | Country ID. |
 | `DivisionLevel` | League/division level. |
 | `Teams` | Team IDs in the competition. |
+| `TransferWindows` | Transfer window dates for the competition. |
 | `AvgTeamRating` | Average team rating. |
 | `AvgStarterRating` | Average starter rating. |
 
@@ -67,29 +73,30 @@ Common query parameters:
 
 | Parameter | Type | Notes |
 |---|---|---|
-| `position` | integer | Starting point in list for pagination. |
-| `amount` | integer | Number of results to return. |
+| `position` | integer | Starting point in list for pagination. Default `0`. |
+| `amount` | integer | Number of results to return. Default `1000`, maximum `10000`. |
 | `competitionid` | integer | Filter by competition ID. Specify `-1` for free agents. |
-| `playerid` | integer | Filter by TransferRoom player ID where available. |
-| `myshortlist` | bit/string | Filter to players on your TransferRoom shortlists; docs show `true`. |
-| `mysquad` | bit/string | Filter to players in your team; docs show `true`. |
+| `playerid` | integer | Filter by TransferRoom player ID. |
+| `myshortlist` | bit | Filter to players on your TransferRoom shortlist; docs show `true`. Club users only. |
+| `mysquad` | bit | Filter to players in your team; docs show `true`. Club users only. |
 
 Sample response fields include:
 
-- `TR_ID`, `Name`, `BirthDate`
+- `TR_ID`, `Name`, `BirthDate`, `Height`
 - `ParentTeamId`, `CurrentTeamId`, `ParentTeam`, `CurrentTeam`, `TeamHistory`
-- `Country`, `CompetitionId`, `Competition`, `DivisionLevel`
-- `Nationality1`, `Nationality2`
+- `Country`, `CountryId`, `CompetitionId`, `Competition`, `DivisionLevel`
+- `ParentCountry`, `ParentCountryId`, `ParentCompetition`, `ParentCompetitionId`, `ParentDivisionLevel`
+- `Nationality1`, `Nationality1CountryId`, `Nationality2`, `Nationality2CountryId`
 - `FirstPosition`, `SecondPosition`, `PlayingStyle`, `PreferredFoot`
 - `ContractExpiry`
 - `Agency`, `AgencyVerified`
 - `Shortlisted`
 - `CurrentClubRecentMinsPerc`
 - `GBEScore`, `GBEResult`, `GBEIntAppPts`, `GBEDomMinsPts`, `GBEContMinsPts`, `GBELeaguePosPts`, `GBEContProgPts`, `GBELeagueStdPts`
+- `Rating`, `Potential`, `PointsAdded`
 - `xTV`, `xTVChange6mPerc`, `xTVChange12mPerc`, `xTVHistory`
-- `BaseValue`, `BaseValueHistory`
-- `EstimatedSalary`
-- `Rating`, `Potential`
+- `BaseValue`, `BaseValueHistory`, `BookValue`, `BookValueHistory`
+- `EstimatedSalary`, `EstimatedNetSalary`
 - `AvailableSale`, `AvailableAskingPrice`, `AvailableSellOn`, `AvailableLoan`, `AvailableMonthlyLoanFee`, `AvailableCurrency`
 
 ## Head coaches
@@ -100,10 +107,10 @@ Common query parameters:
 
 | Parameter | Type | Notes |
 |---|---|---|
-| `position` | integer | Starting point in list for pagination. |
-| `amount` | integer | Number of results to return. |
-| `competitionid` | integer | Filter by competition ID. Specify `-1` for free agents. |
-| `staffid` | integer | Filter by staff ID. |
+| `position` | integer | Starting point in list for pagination. Default `0`. |
+| `amount` | integer | Number of results to return. Default `1000`, maximum `10000`. |
+| `competitionid` | integer | Filter by competition ID. |
+| `coachid` | integer | Filter by coach ID. |
 
 Sample response fields include:
 
@@ -118,6 +125,9 @@ Sample response fields include:
 - `TacticalStyle`, `Suitability`, `TeamRatingImpact`
 - `TrustInYouth`, `PreferredFormation`, `SquadRotation`
 - `ThreeSeasonAvgSpend`
+- `Language`
+
+`Suitability` is documented as available to club users only.
 
 ## Teams
 
@@ -128,23 +138,25 @@ Documented query parameters:
 | Parameter | Type | Notes |
 |---|---|---|
 | `competitionid` | integer | **Required.** Filter by competition ID. |
-| `TeamId` | integer | Filter by team ID. |
+| `teamid` | integer | Filter by team ID. |
 
 Sample response fields include:
 
 - `TR_ID`
 - `Team`
-- `Country`
+- `Country`, `CountryId`
 - `CompetitionId`
 - `Competition`
 - `CompetitionDivisionLevel`
 - `HeadCoachID`
 - `TotalxTV`
-- `TotalBaseValue`
+- `TotalBaseValue`, `TotalBookValue`
 - `AverageStarterRating`
 - `TeamRating`
 - `TeamRatingHistory`
 - `PredictedRequirements`
+- `OneYearTransferSpend`, `ThreeYearTransferSpend`
+- `SalaryBenchmarks`
 
 ## Transfers
 
@@ -155,15 +167,17 @@ Documented query parameters:
 | Parameter | Type | Notes |
 |---|---|---|
 | `competitionid` | integer | **Required.** Filter by competition ID. |
-| `TeamId` | integer | Filter by team ID. |
-| `PlayerId` | integer | Filter by player ID. |
+| `teamid` | integer | Filter by team ID. |
+| `playerid` | integer | Filter by player ID. |
+| `UpdatedSince` | date | Return records updated since this date. |
 
 Sample response fields include:
 
 - `PlayerId`, `Player`
 - `FromTeamId`, `FromTeam`
 - `ToTeamId`, `ToTeam`
-- `Date`
+- `FromCompetitionId`, `ToCompetitionId`
+- `Date`, `EndDate`
 - `TransferType`
 - `TransferFee`
 - `xTVatDate`
@@ -173,17 +187,17 @@ Sample response fields include:
 
 `GET /pitches`
 
-The public docs describe this as a club-user endpoint that returns pitches and plus pitches received on TransferRoom.
+The public docs describe this as a club-user endpoint that returns inbound player pitches submitted to your club.
 
 Sample response fields include:
 
 - `PitchType`
 - `RequirementID`
 - `Player`, `PlayerId`
-- `HeadCoach`, `HeadCoachId`
+- `HeadCoach`, `StaffId`
 - `PitchDate`
 - `PitchedByTeam`, `PitchedByTeamID`
-- `PitchedByAgency`, `PitchedByAgencyID`
+- `PitchedByAgency`, `PitchedbyAgencyID`
 - `PitchCurrency`
 - `PitchTransferFee`
 - `PitchGrossAnnualSalary`
@@ -196,7 +210,7 @@ Sample response fields include:
 
 `GET /requirements`
 
-Returns recruitment requirements posted on TransferRoom.
+Returns your club's active transfer requirements. The docs mark it as club users only.
 
 Sample response fields include:
 
@@ -230,7 +244,7 @@ Sample response fields include:
 - `TR_ID`, `Name`
 - `TeamId`, `Team`
 - `CompetitionId`, `Competition`, `DivisionLevel`, `Country`
-- `Injury`, `BodyPart`, `InjuryType`
+- `Injury`, `BodyPart`, `BodyPartSide`, `InjuryType`
 - `StartDate`, `ReturnDate`, `DaysOut`, `MatchesMissed`, `ExpectedReturnDate`
 - `Training`, `SurgeryRequired`, `Recurrence`
 - `EventDescription`, `PrognosisDescription`
@@ -248,11 +262,12 @@ Query parameters:
 
 | Parameter | Type | Notes |
 |---|---|---|
-| `position` | integer | Starting point in list for pagination. |
-| `amount` | integer | Number of results to return. |
+| `position` | integer | Starting point in list for pagination. Default `0`. |
+| `amount` | integer | Number of results to return. Default `1000`, maximum `10000`. |
+| `competitionid` | integer | Filter by competition ID. |
 | `playerid` | integer | Filter by player ID. |
-| `myshortlist` | bit/string | Filter to players on your TransferRoom shortlists; docs show `true`. |
-| `mysquad` | bit/string | Filter to players in your team; docs show `true`. |
+| `myshortlist` | bit | Filter to players on your TransferRoom shortlists; docs show `true`. |
+| `mysquad` | bit | Filter to players in your team; docs show `true`. |
 
 Sample response fields include:
 

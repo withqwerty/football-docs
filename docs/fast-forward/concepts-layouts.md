@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/layouts/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.140Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.551Z
 ---
 fast-forward supports three DataFrame layouts that determine how tracking data is structured. Choose based on your analysis needs.
 

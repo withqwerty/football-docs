@@ -63,6 +63,24 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
+      id: "sportmonks-inplay-livescores-endpoint",
+      args: {
+        query: "SportMonks inplay livescores endpoint base URL",
+        provider: "sportmonks",
+        max_results: 3,
+      },
+      expected: ["https://api.sportmonks.com/v3/football/livescores/inplay"],
+    },
+    {
+      id: "sportmonks-fixtures-by-date-range",
+      args: {
+        query: "SportMonks fixtures date range between endpoint URL",
+        provider: "sportmonks",
+        max_results: 3,
+      },
+      expected: ["https://api.sportmonks.com/v3/football/fixtures/between/"],
+    },
+    {
       id: "statsbomb-shot-freeze-frame",
       args: { query: "StatsBomb shot freeze frame xG", provider: "statsbomb", max_results: 5 },
       expected: ["Shot", "xG", "freeze frame"],
@@ -1092,11 +1110,11 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**statsbomb** (235 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
-    expect(text).toContain("**wyscout** (161 chunks)");
+    expect(text).toContain("**wyscout** (163 chunks)");
     expect(text).toContain("api-endpoints (13)");
     expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (82 chunks)");
+    expect(text).toContain("**sportmonks** (565 chunks)");
     expect(text).toContain("charting-season-stories (7)");
     expect(text).toContain("**fmdb-pro** (35 chunks)");
     expect(text).toContain("aliases: fmdb");
@@ -1123,13 +1141,13 @@ describe("golden retrieval evals", () => {
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
     );
-    expect(text).toContain("**mplsoccer** (64 chunks)");
-    expect(text).toContain("visualizations (48)");
+    expect(text).toContain("**mplsoccer** (65 chunks)");
+    expect(text).toContain("visualizations (49)");
     expect(text).toContain("**kloppy** (126 chunks)");
     expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
-    expect(text).toContain("**sportradar** (29 chunks)");
+    expect(text).toContain("**sportradar** (30 chunks)");
     expect(text).toContain(
       "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
     );
@@ -1471,9 +1489,13 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("idEvent");
     expect(text).toContain("De-duplicate final-score actions");
     expect(text).toContain("## sportmonks");
-    expect(text).toContain("CURRENT");
+    // The polling endpoints a bot actually calls, from SportMonks' own docs.
+    expect(text).toContain("/livescores/inplay");
+    expect(text).toContain("/livescores/latest");
     expect(text).toContain("## sportradar");
-    expect(text).toContain("Live Schedules");
+    // Sportradar's live surface for a poller: the delta feed and push events.
+    expect(text).toContain("Live Timelines Delta");
+    expect(text).toContain("Push Events");
   });
 
   it("compares event-timeline game state with live-score providers", () => {

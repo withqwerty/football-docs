@@ -5,9 +5,9 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
 
-# Wyscout docs span v2, v3 and v4, so all three merge into one truth file.
+# Wyscout docs span v3 and v4, so both merge into one truth file.
 python3 scripts/gen_openapi_truth.py \
-  specs/wyscout/v2-legacy.yml specs/wyscout/v3-current.yml specs/wyscout/v4-next.yml \
+  specs/wyscout/v3-current.yml specs/wyscout/v4-next.yml \
   --provider wyscout
 python3 scripts/gen_openapi_truth.py specs/skillcorner/skillcorner_openapi.json --provider skillcorner
 python3 scripts/gen_openapi_truth.py specs/fmdb-pro/openapi.json --provider fmdb-pro

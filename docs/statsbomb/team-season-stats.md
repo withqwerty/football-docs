@@ -1,6 +1,6 @@
 ---
 source_type: curated
-source_url: https://github.com/statsbomb/open-data
+source_url: https://github.com/hudl/open-data
 upstream_version: "2.0.0"
 crawled_at: null
 ---

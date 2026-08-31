@@ -23,12 +23,12 @@ PINS=(
   "kloppy==3.19.0"
   "socceraction==1.5.3"
   "soccerdata==1.9.1"
-  "mplsoccer==1.7.1"
+  "mplsoccer==1.8.0"
   "floodlight==1.2.0"
-  "databallpy==0.7.3"
+  "databallpy==0.8.1"
   "skillcorner==3.2.0"
   "unravelsports==1.2.1"
-  "fast-forward-football==0.2.0"
+  "fast-forward-football==0.3.0"
 )
 
 # socceraction 1.5.3 imports `overload` from multimethod, removed in multimethod 2.

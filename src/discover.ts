@@ -34,6 +34,18 @@ export interface ProbeResult {
 }
 
 /**
+ * A site whose router answers every unknown path with its own shell returns the
+ * documentation page's HTML for /llms-full.txt, with a 200 and no redirect.
+ * TheSportsDB and FMDB Pro both do this. Crawling that as llms.txt writes a doc
+ * that is markup rather than documentation, so reject anything that opens like
+ * an HTML document.
+ */
+export function looksLikeHtml(content: string): boolean {
+  const head = content.trimStart().slice(0, 512).toLowerCase();
+  return head.startsWith("<!doctype") || head.startsWith("<html") || head.includes("<head");
+}
+
+/**
  * Probe a base URL for llms.txt variants.
  * Returns the URL and content of the best llms.txt found, or null.
  */
@@ -45,7 +57,7 @@ async function probeLlmsTxt(
   for (const filename of ["llms-full.txt", "llms.txt"]) {
     const url = `${root}/${filename}`;
     const content = await fetchText(url);
-    if (content && content.length > 100) {
+    if (content && content.length > 100 && !looksLikeHtml(content)) {
       return { url, content };
     }
   }

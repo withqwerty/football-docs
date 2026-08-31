@@ -1,8 +1,8 @@
 ---
-source_url: https://skillcorner.com/api/docs/
+source_url: https://www.skillcorner.com/apidocs.json
 source_type: crawled
-upstream_version: SkillCorner API (Swagger 2.0)
-crawled_at: 2026-06-03
+upstream_version: SkillCorner API (OpenAPI 3.1)
+crawled_at: 2026-08-31
 ---
 
 # SkillCorner Data Model
@@ -35,7 +35,20 @@ Payload shapes from the API. Field lists below are from the OpenAPI spec's inlin
 | `match_periods` | Period boundaries |
 | `players` / `referees` | Participants |
 | `ball` | Ball metadata |
-| `status` | Match/data status |
+| `status` | Match status. The spec enumerates `not_started`, `closed`, `cancelled`, `postponed`. |
+
+### Enumerated values
+
+The published specification enumerates these vocabularies. Match them exactly
+rather than guessing at casing or synonyms.
+
+| Where | Values |
+|---|---|
+| Match `status` | `not_started`, `closed`, `cancelled`, `postponed` |
+| Data-collection `status` | `not_available`, `postmatch`, `to_rerun` |
+| Data-collection `video_feed_type` | `broadcast`, `clean_feed`, `tactical`, `not_computed` |
+| Competition `age_group` | `U9` through `U23`, and `adult` |
+| Competition and player `gender` | `female`, `male` |
 
 ## Tracking (`GET /match/{match_id}/tracking/`)
 

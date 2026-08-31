@@ -15,6 +15,7 @@ import {
   loadProviderDocs,
   loadProviderTruth,
   normalisePath,
+  specEnumTokens,
   validateLiteralArguments,
   validateOpenApiDocs,
   validatePostmanDocs,
@@ -33,6 +34,13 @@ describe("provider docs are grounded in the real package", () => {
     const truth = loadProviderTruth(provider);
     const violations = validateProviderDocs(loadProviderDocs(provider), truth);
     expect(violations).toEqual([]);
+  });
+
+  it("counts a spec enum member as grounded for a provider that has both truths", () => {
+    // SkillCorner ships a pip client and publishes an OpenAPI document. U23 is a
+    // member of the spec's AgeGroupEnum and appears in no Python enum.
+    expect(specEnumTokens("skillcorner")).toContain("U23");
+    expect(specEnumTokens("kloppy")).toEqual([]);
   });
 
   it.each(providers)("%s docs pass only values the parameter accepts", (provider) => {

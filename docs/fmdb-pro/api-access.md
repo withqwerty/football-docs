@@ -2,7 +2,7 @@
 source_url: https://api.fmdb.pro/api/openapi
 source_type: crawled
 upstream_version: latest (full OpenAPI)
-crawled_at: 2026-07-09
+crawled_at: 2026-08-31
 ---
 
 # FMDB Pro API Access
@@ -117,4 +117,13 @@ The API supports exact-match filters by field name and a family of suffix operat
 | `<field>Between`, `<field>BetweenIncluded` | Range comparisons using `lower|upper`. |
 
 Nested fields use dot notation where listed by the full spec, for example `country.name`, `basedClub.id`, `externalIds.hudlWyscoutId`, or `gbe.status`.
+
+The operator table above comes from the specification overview, not from the
+parameter list. Until mid-2026 the spec also enumerated every field/operator
+combination as a separate OpenAPI parameter, which made `/api/players` alone
+declare over 11,000 query parameters. The 2026-08-31 snapshot lists only the base
+field names (919 parameters in total, 485 on `/api/players`). The operators
+themselves are unchanged — they are described in the spec's own overview
+section — but a client generated from the spec will no longer see them as
+declared parameters.
 

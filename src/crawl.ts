@@ -246,6 +246,15 @@ interface ProviderConfig {
     type: string;
     note?: string;
   }>;
+  /**
+   * Categories the crawler must not write for this provider. A vendor's docs
+   * site often carries pages that are not football data documentation - IDE and
+   * assistant setup guides, prompt catalogues, navigation indexes - and
+   * STRATEGY.md keeps those out of the corpus. Listing them here makes the
+   * exclusion reproducible instead of a deletion someone repeats after every
+   * crawl.
+   */
+  exclude_categories?: string[];
   last_crawled: string | null;
 }
 
@@ -296,6 +305,28 @@ export function htmlToMarkdown(html: string, url: string): string | null {
 // ── Crawl strategies ─────────────────────────────────────────────────
 
 /**
+ * A large llms-full.txt concatenates whole documentation pages under `#`
+ * headings. Splitting those on `##` as well shreds each page into fragments
+ * that lose the context they need to answer anything — a lone "Wrong: no token"
+ * error case, say. Once a file carries at least this many `#` headings, they are
+ * document boundaries on their own and `##` is left alone.
+ */
+const LLMS_H1_ONLY_THRESHOLD = 10;
+
+/**
+ * Drop the categories a provider's registry entry excludes. Kept separate from
+ * the crawl loop so the rule is testable without going near the network.
+ */
+export function applyCategoryExclusions<T extends { category: string }>(
+  docs: T[],
+  excluded: string[] | undefined
+): T[] {
+  if (!excluded?.length) return docs;
+  const skip = new Set(excluded);
+  return docs.filter((doc) => !skip.has(doc.category));
+}
+
+/**
  * Crawl an llms.txt or llms-full.txt file.
  * Already structured for LLM consumption — chunk by top-level heading.
  */
@@ -303,11 +334,34 @@ export function crawlLlmsTxt(content: string, sourceUrl: string): CrawledDoc[] {
   const sections: CrawledDoc[] = [];
   const lines = content.split("\n");
 
+  // Headings inside a fenced code block are sample code or comments, not
+  // structure: splitting on one cuts the fence in half and leaves both pieces
+  // malformed. Track the fences so those lines are skipped.
+  const isFence = (line: string) => /^ {0,3}(`{3,}|~{3,})/.test(line);
+  const headingAt = (line: string) => line.match(/^(#{1,2})\s+(.+)/);
+
+  let fenced = false;
+  let h1Count = 0;
+  for (const line of lines) {
+    if (isFence(line)) {
+      fenced = !fenced;
+      continue;
+    }
+    if (!fenced && headingAt(line)?.[1] === "#") h1Count += 1;
+  }
+  const maxHeadingLevel = h1Count >= LLMS_H1_ONLY_THRESHOLD ? 1 : 2;
+
   let currentTitle = "overview";
   let currentLines: string[] = [];
+  fenced = false;
 
   for (const line of lines) {
-    const headingMatch = line.match(/^(#{1,2})\s+(.+)/);
+    if (isFence(line)) fenced = !fenced;
+    const headingMatch = fenced ? null : headingAt(line);
+    if (headingMatch && headingMatch[1].length > maxHeadingLevel) {
+      currentLines.push(line);
+      continue;
+    }
     if (headingMatch && currentLines.length > 0) {
       const body = currentLines.join("\n").trim();
       if (body.length > 50) {
@@ -716,6 +770,13 @@ async function main() {
       console.log(`  → no content extracted`);
       continue;
     }
+
+    const kept = applyCategoryExclusions(docs, config.exclude_categories);
+    const skipped = docs.length - kept.length;
+    if (skipped > 0) {
+      console.log(`  skipped ${skipped} excluded categor${skipped === 1 ? "y" : "ies"}`);
+    }
+    docs = kept;
 
     for (const doc of docs) {
       writeCrawledDoc(name, doc, config.version);

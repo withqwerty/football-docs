@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { chooseBestSource, type ProbeResult } from "../discover.js";
+import { chooseBestSource, looksLikeHtml, type ProbeResult } from "../discover.js";
 
 function makeProbe(overrides: Partial<ProbeResult> = {}): ProbeResult {
   return {
@@ -136,5 +136,25 @@ describe("chooseBestSource", () => {
 
     const result = chooseBestSource(probes);
     expect(result!.url).toBe("https://alive.com");
+  });
+});
+
+describe("looksLikeHtml", () => {
+  it("rejects a documentation page served in place of llms-full.txt", () => {
+    // TheSportsDB and FMDB Pro both answer /llms-full.txt with their doc page.
+    expect(looksLikeHtml('<!DOCTYPE html>\n\n<html lang="en">\n<head>')).toBe(true);
+    expect(looksLikeHtml('<!doctype html>\n<html lang="en">\n  <head>')).toBe(true);
+    expect(looksLikeHtml('  \n<html>\n<body>hello</body>\n</html>')).toBe(true);
+  });
+
+  it("accepts a real llms.txt", () => {
+    expect(looksLikeHtml("# Welcome\n\nWelcome to Sportmonks! Explore our football documentation.")).toBe(
+      false
+    );
+  });
+
+  it("accepts markdown that mentions HTML later on", () => {
+    const markdown = `# Rendering\n\n${"Body text about the API. ".repeat(30)}\n\n<head> appears far below.`;
+    expect(looksLikeHtml(markdown)).toBe(false);
   });
 });

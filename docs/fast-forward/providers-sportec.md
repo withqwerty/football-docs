@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/sportec/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.143Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.554Z
 ---
 Load tracking data from **Sportec** XML format (used in the Bundesliga).
 
@@ -55,4 +55,4 @@ print(dataset.teams)
 ## Notes
 
 -   Sportec uses CDF-compatible coordinates natively (center origin, meters)
--   When `include_officials=True`, officials are included with `team_id="officials"` and position codes: `REF`, `AREF`, `VAR`, `AVAR`, `4TH`
+-   When `include_officials=True`, officials are included with `team_id="officials"` and position codes: `REF`, `AREF`, `VAR`, `AVAR`, `FOURTH`

@@ -1,8 +1,8 @@
 ---
-source_url: https://skillcorner.com/api/docs/
+source_url: https://www.skillcorner.com/apidocs.json
 source_type: crawled
-upstream_version: SkillCorner API (Swagger 2.0)
-crawled_at: 2026-06-03
+upstream_version: SkillCorner API (OpenAPI 3.1)
+crawled_at: 2026-08-31
 ---
 
 # SkillCorner API Endpoints

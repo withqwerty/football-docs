@@ -76,7 +76,9 @@ export function parseFrontmatter(text: string): { frontmatter: Frontmatter; body
       const [, key, value] = match;
       const cleaned = value.replace(/^["']|["']$/g, "").trim();
       if (key in fm) {
-        (fm as Record<string, string | null>)[key] = cleaned || null;
+        // `crawled_at: null` is YAML for absent, not for the four-letter string.
+        // Storing it verbatim puts "null" in front of readers in search results.
+        (fm as Record<string, string | null>)[key] = cleaned && cleaned !== "null" ? cleaned : null;
       }
     }
   }

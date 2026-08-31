@@ -1,8 +1,8 @@
 ---
-source_url: https://skillcorner.com/api/docs/
+source_url: https://www.skillcorner.com/apidocs.json
 source_type: crawled
-upstream_version: SkillCorner API (Swagger 2.0)
-crawled_at: 2026-06-03
+upstream_version: SkillCorner API (OpenAPI 3.1)
+crawled_at: 2026-08-31
 ---
 
 # SkillCorner API Access
@@ -57,7 +57,10 @@ Endpoints return `429 Too Many Requests` when exceeded; back off and retry. (No 
 
 ## Data versions
 
-SkillCorner versions its data products independently. Current versions seen in the spec: **tracking v3**, **physical v3**, **dynamic events v2**, **GI metrics v2**. The `/matches/` endpoint exposes `*_last_modified__gte` filters per product (e.g. `tracking_last_modified__gte`, `physical_v3_last_modified__gte`, `dynamic_events_v2_last_modified__gte`) for incremental sync.
+SkillCorner versions its data products independently. Versions in the 2026-08-31 spec: **tracking v3**, **physical v3** (with a `physical_v3_0_3` point release), **dynamic events v3**, **GI metrics v2**. The `/matches/` and `/matches/custom/` endpoints expose `*_last_modified__gte` filters per product for incremental sync — `tracking_last_modified__gte`, `physical_v3_last_modified__gte`, `physical_v3_0_3_last_modified__gte`, `dynamic_events_v2_last_modified__gte`, `dynamic_events_v3_last_modified__gte` — and match records carry the matching `*_check` and `*_last_modified` fields, including `dynamic_events_v3_check`.
+
+Dynamic events v2 filters remain in the spec alongside v3, so a sync job written
+against v2 keeps working; point new work at the v3 filters.
 
 ## Custom feeds
 

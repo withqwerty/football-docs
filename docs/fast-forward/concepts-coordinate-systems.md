@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/coordinate-systems/
 source_type: crawled
-upstream_version: 0.2.0
-crawled_at: 2026-08-11T09:09:50.140Z
+upstream_version: 0.3.0
+crawled_at: 2026-08-31T00:11:18.551Z
 ---
 fast-forward supports 14 named coordinate systems that map to 6 unique coordinate system definitions. Many providers use the same underlying system (CDF), just with different names.
 

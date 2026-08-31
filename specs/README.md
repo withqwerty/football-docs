@@ -11,25 +11,26 @@ anyone can re-fetch and diff.
 
 | File | Public source | Fetched | Last verified against live |
 |---|---|---|---|
-| `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-06-03 | 2026-07-30 |
-| `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-06-03 | 2026-07-30 |
-| `wyscout/v2-legacy.yml` | https://apidocs.wyscout.com/assets/specs/prod/legacy.yml | 2026-06-03 | 2026-07-30 |
-| `skillcorner/skillcorner_openapi.json` | https://skillcorner.com/api/docs/?format=openapi | 2026-06-03 | 2026-07-30 |
-| `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-07-09 | 2026-07-30 |
-| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-07-31 | 2026-07-31 |
+| `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
+| `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-08-31 | 2026-08-31 |
+| `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-08-31 | 2026-08-31 |
+| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-08-31 | 2026-08-31 |
 
-On 2026-07-30 each snapshot was re-fetched from the URL above and compared with
-the copy in this directory. All were **structurally identical** — same paths,
-same schemas — so the snapshots were left as they are rather than churned for a
-changed timestamp alone.
+On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
+directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
+snapshot was replaced and the derived truth regenerated.
+
+Wyscout's legacy v2 specification was previously mirrored here as
+`wyscout/v2-legacy.yml`. It has been dropped: the docs describe v3 and v4, and no
+documented fact is derived from the legacy surface.
 
 ## Refreshing
 
 ```bash
 curl -sL -o specs/wyscout/v3-current.yml https://apidocs.wyscout.com/assets/specs/prod/current.yml
 curl -sL -o specs/wyscout/v4-next.yml    https://apidocs.wyscout.com/assets/specs/prod/next.yml
-curl -sL -o specs/wyscout/v2-legacy.yml  https://apidocs.wyscout.com/assets/specs/prod/legacy.yml
-curl -sL -o specs/skillcorner/skillcorner_openapi.json "https://skillcorner.com/api/docs/?format=openapi"
+curl -sL -o specs/skillcorner/skillcorner_openapi.json https://www.skillcorner.com/apidocs.json
 curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
 curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
 ```
@@ -60,6 +61,22 @@ pnpm test
   remove it: `scripts/gen_openapi_truth.py` derives the facts the tests need
   (`data/provider-truth/<provider>.openapi.json`), so validation survives without
   keeping the file itself.
+
+## SkillCorner specification URL
+
+SkillCorner moved its specification. `https://skillcorner.com/api/docs/?format=openapi`
+returned it unauthenticated until at least 2026-07-30 and now 404s, and the
+documentation UI at `https://skillcorner.com/api/docs/` sits behind a customer
+login. The specification itself is still published openly, at
+`https://www.skillcorner.com/apidocs.json`, and that is the URL mirrored here.
+
+The format changed with the move: the old snapshot was Swagger 2.0 and the new
+one is OpenAPI 3.1, which carries component schemas and enumerated values the old
+document did not. The endpoint set is unchanged at 52 paths.
+
+Nothing from behind the login is mirrored here. Every file in this directory is a
+public, unauthenticated fetch, and that is the rule that makes mirroring
+defensible.
 
 ## Note on BeSoccer
 

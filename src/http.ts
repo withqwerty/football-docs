@@ -2,12 +2,34 @@
 
 const MAX_RESPONSE_BYTES = 10 * 1024 * 1024; // 10 MB
 
-/** Check if a URL returns a successful response. */
+/**
+ * Check if a URL returns a successful response.
+ *
+ * HEAD first, because it is cheap, then a one-byte ranged GET when HEAD fails.
+ * Some hosts serve a document happily on GET and answer HEAD with a 404 -
+ * api.fmdb.pro does exactly that for its OpenAPI document - and reporting those
+ * as missing sends a maintainer chasing a source that was never gone.
+ */
 export async function urlExists(url: string): Promise<{ ok: boolean; contentType?: string }> {
   try {
     const response = await fetch(url, {
       method: "HEAD",
       signal: AbortSignal.timeout(5000),
+    });
+    if (response.ok) {
+      return {
+        ok: true,
+        contentType: response.headers.get("content-type") ?? undefined,
+      };
+    }
+  } catch {
+    // Fall through to the GET probe below.
+  }
+
+  try {
+    const response = await fetch(url, {
+      headers: { Range: "bytes=0-0" },
+      signal: AbortSignal.timeout(10000),
     });
     return {
       ok: response.ok,

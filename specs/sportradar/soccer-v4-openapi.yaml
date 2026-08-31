@@ -1175,6 +1175,10 @@ components:
     base_lineup_player:
       additionalProperties: false
       properties:
+        captain:
+          type: boolean
+          xml:
+            attribute: true
         country_code:
           type: string
           xml:
@@ -1186,6 +1190,13 @@ components:
         date_of_birth:
           description: YYYY-MM-DD
           format: date
+          type: string
+          xml:
+            attribute: true
+        estimated_return_date:
+          description: Estimated return date for the active player status, sourced
+            from SDS PlayerStatus.endTime.
+          format: date-time
           type: string
           xml:
             attribute: true
@@ -2030,6 +2041,10 @@ components:
     coverage_competition_properties:
       properties:
         brackets:
+          type: boolean
+          xml:
+            attribute: true
+        is_friendly:
           type: boolean
           xml:
             attribute: true
@@ -3413,6 +3428,13 @@ components:
           type: string
           xml:
             attribute: true
+        estimated_return_date:
+          description: Estimated return date for the active player status, sourced
+            from SDS PlayerStatus.endTime.
+          format: date-time
+          type: string
+          xml:
+            attribute: true
         gender:
           $ref: '#/components/schemas/enum_gender'
         height:
@@ -3613,6 +3635,12 @@ components:
         x-sr-object-name: MergeMapping
     missing_player:
       properties:
+        estimated_return_date:
+          description: Estimated return date for the missing player
+          format: date-time
+          type: string
+          xml:
+            attribute: true
         id:
           type: string
           xml:
@@ -3730,6 +3758,10 @@ components:
     player:
       additionalProperties: false
       properties:
+        captain:
+          type: boolean
+          xml:
+            attribute: true
         country_code:
           type: string
           xml:
@@ -3741,6 +3773,13 @@ components:
         date_of_birth:
           description: YYYY-MM-DD
           format: date
+          type: string
+          xml:
+            attribute: true
+        estimated_return_date:
+          description: Estimated return date for the active player status, sourced
+            from SDS PlayerStatus.endTime.
+          format: date-time
           type: string
           xml:
             attribute: true
@@ -4374,7 +4413,15 @@ components:
               type: integer
               xml:
                 attribute: true
+            dribbles:
+              type: integer
+              xml:
+                attribute: true
             dribbles_completed:
+              type: integer
+              xml:
+                attribute: true
+            fouls:
               type: integer
               xml:
                 attribute: true
@@ -4384,6 +4431,10 @@ components:
               xml:
                 attribute: true
             free_kicks:
+              type: integer
+              xml:
+                attribute: true
+            goal_kicks:
               type: integer
               xml:
                 attribute: true
@@ -4416,6 +4467,10 @@ components:
               xml:
                 attribute: true
             goals_scored_second_half:
+              type: integer
+              xml:
+                attribute: true
+            injuries:
               type: integer
               xml:
                 attribute: true
@@ -4487,7 +4542,15 @@ components:
               type: integer
               xml:
                 attribute: true
+            shots_saved:
+              type: integer
+              xml:
+                attribute: true
             shots_total:
+              type: integer
+              xml:
+                attribute: true
+            substitutions:
               type: integer
               xml:
                 attribute: true
@@ -4500,6 +4563,10 @@ components:
               xml:
                 attribute: true
             tackles_unsuccessful:
+              type: integer
+              xml:
+                attribute: true
+            throw_ins:
               type: integer
               xml:
                 attribute: true
@@ -4880,6 +4947,10 @@ components:
                 attribute: true
             shots_faced:
               description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            shots_faced_total:
               type: integer
               xml:
                 attribute: true

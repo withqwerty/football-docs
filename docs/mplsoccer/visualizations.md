@@ -124,6 +124,33 @@ pitch.heatmap_positional(bin_statistic, ax=ax, cmap='coolwarm', edgecolors='#223
 pitch.label_heatmap(bin_statistic, ax=ax, str_format='{:.0f}')
 ```
 
+## Custom zones (1.8.0)
+
+`bin_statistic_positional` handles the fixed Juego de Posición grid. Version
+1.8.0 adds a zone API for any tiling of the pitch by rectangles, where zones may
+span several rows or columns as long as they tile the pitch with no gaps and no
+overlaps. Results are flat arrays with one value per zone.
+
+| Method | Purpose |
+|---|---|
+| `pitch.positional_zones(positional='full')` | Returns the Juego de Posición zone layout and zone names, as a starting point for a custom layout. |
+| `pitch.draw_zones(zones, names=None, ...)` | Draws a zone layout so you can build a custom tiling iteratively and check it. |
+| `pitch.mirror_zones(zones, names=None, axis='x', suffixes=None)` | Completes a layout by reflecting it about the middle of the pitch. |
+| `pitch.bin_statistic_zones(x, y, zones, values=None, statistic='count', ...)` | Aggregates points per zone. |
+| `pitch.heatmap_zones(stats, ax=None, ...)` | Plots the zone statistics as one `PatchCollection`. |
+| `pitch.bin_statistic_sonar_zones(x, y, angle, zones, angle_bins=10, ...)` | Aggregates angle segments per zone. |
+| `pitch.sonar_zones(stats_length, stats_color=None, ...)` | Plots a polar bar chart at the centre of each zone. |
+| `pitch.zone_statistic_from_binnumber` / `pitch.zone_sonar_from_binnumber` | Re-aggregates from an existing bin-number assignment, so a second statistic does not need a second pass. |
+
+`mplsoccer.soccer.formations` carries the formation model behind these: a
+`Formation` dataclass with `position_line4`, `position_line5`,
+`position_line4_with_ss` and `position_line5_with_ss` layouts, a `Position`
+dataclass whose fields include the provider position names (`statsbomb`, `opta`,
+`wyscout`) alongside pitch coordinates (`x`, `y`, `x_flip`, `y_flip`, `x_half`,
+`y_half`, `x_half_flip`, `y_half_flip`), and `STATSBOMB_POSITIONS`, a 25-entry
+mapping from StatsBomb position id to short code (for example `1` to `GK`,
+`2` to `RB`).
+
 ## Hexbin Plots
 
 ```python

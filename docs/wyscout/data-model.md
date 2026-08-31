@@ -1,8 +1,8 @@
 ---
 source_url: https://apidocs.wyscout.com/
 source_type: crawled
-upstream_version: v3 2024-03-12 / v4 2024-05-09
-crawled_at: 2026-06-03
+upstream_version: v3 2026-07-03 / v4 2026-08-27
+crawled_at: 2026-08-31
 ---
 
 # Wyscout Data Model
@@ -173,6 +173,36 @@ Aggregated metrics from the `advancedstats` endpoints (player, team, match). The
 Player/team advanced-stats endpoints require `compId` and accept `seasonId`, `roundId`, `matchDay`. Per-match variants live at `/players/{wyId}/matches/{matchWyId}/advancedstats` and `/teams/{wyId}/matches/{matchWyId}/advancedstats`.
 
 The match-level `GET /matches/{wyId}/advancedstats` returns a stats block keyed by `<teamId>` plus `totalTime`/`deadTime`. Use `GET /matches/{wyId}/advancedstats/players` for all players in one call.
+
+### Position percentages do not sum to 100%
+
+Player advanced stats carry a `positions` array, ordered by percentage of
+playing time. The spec states that the percentages may sum to less than 100%,
+by design, because three rules run before the response is returned:
+
+1. **10% threshold filter** — any role or formation accounting for ≤10% of total
+   playing time is dropped silently.
+2. **Hard cap on entries** — only the top 3 roles per player are returned, even
+   when more roles qualify.
+3. **Rounding loss** — role percentages use floor rounding, so decimal
+   remainders are discarded.
+
+Do not renormalise these percentages to 100% and do not treat a missing role as
+zero minutes. For a complete, unfiltered position timeline, use
+`GET /matches/{wyId}/formations` instead — the spec names it the recommended
+source for complete position data, without the thresholds and caps applied here.
+
+### Formations payload
+
+The formations endpoint documents the position slot mapping for each scheme
+(`p0`–`p10` per formation, for example `4-4-2` → `gk`, `rb`, `rcb`, `lcb`, `lb`,
+`rw`, `rcmf`, `lcmf`, `lw`, `ss`, `cf`). The v3 spec dated 2026-07-03 added the
+`3-1-4-2` scheme to that mapping.
+
+In v4, `matchPeriodStart` and `matchPeriodEnd` on a formation entry are nullable:
+the spec says they are null in some cases where the tagged video is no longer
+available for the match, for example after video retention removed it. Handle a
+null period rather than assuming `1H`/`2H`/`E1`/`E2`.
 
 ## v4-only payloads
 

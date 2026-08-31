@@ -1,8 +1,8 @@
 ---
 source_url: https://apidocs.wyscout.com/
 source_type: crawled
-upstream_version: v3 2024-03-12 / v4 2024-05-09
-crawled_at: 2026-06-03
+upstream_version: v3 2026-07-03 / v4 2026-08-27
+crawled_at: 2026-08-31
 ---
 
 # Wyscout Coordinate System

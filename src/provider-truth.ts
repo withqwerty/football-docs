@@ -79,7 +79,9 @@ const TOKEN_ALLOWLIST: Record<string, string[]> = {
   skillcorner: ["GET", "POST"],
   // Match-official position codes emitted when include_officials=True. They come
   // from the Rust core rather than a Python enum, so introspection cannot see them.
-  "fast-forward": ["REF", "AREF", "VAR", "AVAR"],
+  // FOURTH is the fourth official: the Rust core emits "4TH" and 0.3.0 relabels it
+  // via _OFFICIAL_POSITION_RELABEL in fastforward._dataset.
+  "fast-forward": ["REF", "AREF", "VAR", "AVAR", "FOURTH"],
   // A torchmetrics metric the training loop tracks, not an unravel symbol.
   unravelsports: ["AUROC"],
 };
@@ -293,6 +295,17 @@ export function extractEnumTokens(text: string): string[] {
   return [...out];
 }
 
+/**
+ * A provider can have both a package truth and a spec truth - SkillCorner ships
+ * a pip client and publishes an OpenAPI document. A doc citing a value the spec
+ * enumerates (`U23`, say) is grounded, even though the pip package never names
+ * it, so the spec's enum members count as known tokens here too.
+ */
+export function specEnumTokens(provider: string): string[] {
+  if (!listOpenApiProviders().includes(provider)) return [];
+  return Object.values(loadOpenApiTruth(provider).enums).flat();
+}
+
 export function validateProviderDocs(docs: DocFile[], truth: PythonPackageTruth): string[] {
   const violations: string[] = [];
   const pkg = truth.source.package;
@@ -309,6 +322,7 @@ export function validateProviderDocs(docs: DocFile[], truth: PythonPackageTruth)
   const knownTokens = new Set([
     ...Object.values(truth.enums).flat(),
     ...truth.symbols,
+    ...specEnumTokens(truth.provider),
     ...(TOKEN_ALLOWLIST[truth.provider] ?? []),
   ]);
 
