@@ -1,0 +1,1249 @@
+{
+  "provider": "espn",
+  "kind": "public-endpoint-observations",
+  "scope": "Dated response structure only; no official schema, completeness or stability guarantee.",
+  "observations": [
+    {
+      "name": "eng.1-completed",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817",
+      "observed_at": "2026-09-06T17:18:51.797033+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "events[].competitions[].competitors[].homeAway": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].score": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.displayName": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.id": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.uid": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].winner": [
+          "boolean"
+        ],
+        "events[].competitions[].date": [
+          "string"
+        ],
+        "events[].competitions[].id": [
+          "string"
+        ],
+        "events[].date": [
+          "string"
+        ],
+        "events[].id": [
+          "string"
+        ],
+        "events[].season.year": [
+          "number"
+        ],
+        "events[].status.type.completed": [
+          "boolean"
+        ],
+        "events[].status.type.detail": [
+          "string"
+        ],
+        "events[].status.type.name": [
+          "string"
+        ],
+        "events[].status.type.state": [
+          "string"
+        ],
+        "events[].uid": [
+          "string"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 3,
+      "event_dates": [
+        "2025-08-17T13:00Z",
+        "2025-08-17T15:30Z"
+      ],
+      "states": [
+        "post"
+      ]
+    },
+    {
+      "name": "eng.1-summary-completed",
+      "family": "summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=740603",
+      "observed_at": "2026-09-06T17:18:51.926741+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "article",
+        "boxscore",
+        "broadcasts",
+        "commentary",
+        "format",
+        "gameInfo",
+        "hasOdds",
+        "header",
+        "keyEvents",
+        "lastFiveGames",
+        "leaders",
+        "meta",
+        "news",
+        "odds",
+        "pickcenter",
+        "rosters",
+        "seasonseries",
+        "standings",
+        "videos",
+        "wallclockAvailable"
+      ],
+      "fields": {
+        "boxscore.teams[].statistics": [
+          "array"
+        ],
+        "boxscore.teams[].statistics[].displayValue": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].label": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].name": [
+          "string"
+        ],
+        "boxscore.teams[].team.id": [
+          "string"
+        ],
+        "commentary": [
+          "array"
+        ],
+        "commentary[].text": [
+          "string"
+        ],
+        "commentary[].time.displayValue": [
+          "string"
+        ],
+        "header.competitions[].date": [
+          "string"
+        ],
+        "header.competitions[].id": [
+          "string"
+        ],
+        "header.competitions[].status.type.completed": [
+          "boolean"
+        ],
+        "header.competitions[].status.type.state": [
+          "string"
+        ],
+        "header.id": [
+          "string"
+        ],
+        "keyEvents": [
+          "array"
+        ],
+        "keyEvents[].clock.displayValue": [
+          "string"
+        ],
+        "keyEvents[].id": [
+          "string"
+        ],
+        "keyEvents[].participants[].athlete.id": [
+          "string"
+        ],
+        "keyEvents[].scoringPlay": [
+          "boolean"
+        ],
+        "keyEvents[].team.id": [
+          "string"
+        ],
+        "keyEvents[].text": [
+          "string"
+        ],
+        "keyEvents[].type.id": [
+          "string"
+        ],
+        "keyEvents[].type.text": [
+          "string"
+        ],
+        "rosters": [
+          "array"
+        ],
+        "rosters[].formation": [
+          "string"
+        ],
+        "rosters[].homeAway": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.displayName": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.id": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.uid": [
+          "string"
+        ],
+        "rosters[].roster[].formationPlace": [
+          "string"
+        ],
+        "rosters[].roster[].jersey": [
+          "string"
+        ],
+        "rosters[].roster[].position.abbreviation": [
+          "string"
+        ],
+        "rosters[].roster[].starter": [
+          "boolean"
+        ],
+        "rosters[].roster[].stats[].displayValue": [
+          "string"
+        ],
+        "rosters[].roster[].stats[].name": [
+          "string"
+        ],
+        "rosters[].roster[].stats[].value": [
+          "number"
+        ],
+        "rosters[].roster[].subbedIn": [
+          "boolean"
+        ],
+        "rosters[].roster[].subbedOut": [
+          "boolean"
+        ],
+        "rosters[].team.id": [
+          "string"
+        ]
+      },
+      "states": [
+        "post"
+      ]
+    },
+    {
+      "name": "eng.1-scheduled",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20260912",
+      "observed_at": "2026-09-06T17:18:52.059665+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "events[].competitions[].competitors[].homeAway": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].score": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.displayName": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.id": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.uid": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].winner": [
+          "boolean"
+        ],
+        "events[].competitions[].date": [
+          "string"
+        ],
+        "events[].competitions[].id": [
+          "string"
+        ],
+        "events[].date": [
+          "string"
+        ],
+        "events[].id": [
+          "string"
+        ],
+        "events[].season.year": [
+          "number"
+        ],
+        "events[].status.type.completed": [
+          "boolean"
+        ],
+        "events[].status.type.detail": [
+          "string"
+        ],
+        "events[].status.type.name": [
+          "string"
+        ],
+        "events[].status.type.state": [
+          "string"
+        ],
+        "events[].uid": [
+          "string"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 7,
+      "event_dates": [
+        "2026-09-12T14:00Z",
+        "2026-09-12T16:30Z",
+        "2026-09-12T19:00Z"
+      ],
+      "states": [
+        "pre"
+      ]
+    },
+    {
+      "name": "eng.1-summary-scheduled",
+      "family": "summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879285",
+      "observed_at": "2026-09-06T17:18:52.222290+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "boxscore",
+        "broadcasts",
+        "format",
+        "gameInfo",
+        "hasOdds",
+        "header",
+        "lastFiveGames",
+        "leaders",
+        "meta",
+        "news",
+        "odds",
+        "pickcenter",
+        "rosters",
+        "seasonseries",
+        "standings",
+        "ticketsInfo",
+        "wallclockAvailable"
+      ],
+      "fields": {
+        "boxscore.teams[].statistics": [
+          "array"
+        ],
+        "boxscore.teams[].statistics[].displayValue": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].label": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].name": [
+          "string"
+        ],
+        "boxscore.teams[].team.id": [
+          "string"
+        ],
+        "header.competitions[].date": [
+          "string"
+        ],
+        "header.competitions[].id": [
+          "string"
+        ],
+        "header.competitions[].status.type.completed": [
+          "boolean"
+        ],
+        "header.competitions[].status.type.state": [
+          "string"
+        ],
+        "header.id": [
+          "string"
+        ],
+        "rosters": [
+          "array"
+        ],
+        "rosters[].homeAway": [
+          "string"
+        ],
+        "rosters[].team.id": [
+          "string"
+        ]
+      },
+      "states": [
+        "pre"
+      ]
+    },
+    {
+      "name": "eng.1-teams",
+      "family": "teams",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams",
+      "observed_at": "2026-09-06T17:18:52.373026+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "sports"
+      ],
+      "fields": {
+        "sports[].leagues[].id": [
+          "string"
+        ],
+        "sports[].leagues[].slug": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.abbreviation": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.displayName": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.id": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.logos[].href": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.slug": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.uid": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "eng.1-standings-2024",
+      "family": "standings",
+      "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings?season=2024",
+      "observed_at": "2026-09-06T17:18:52.550444+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "abbreviation",
+        "children",
+        "id",
+        "name",
+        "season",
+        "seasons",
+        "uid"
+      ],
+      "fields": {
+        "children[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].displayValue": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].type": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].value": [
+          "number"
+        ],
+        "children[].standings.entries[].team.displayName": [
+          "string"
+        ],
+        "children[].standings.entries[].team.id": [
+          "string"
+        ],
+        "season.displayName": [
+          "string"
+        ],
+        "season.year": [
+          "number"
+        ]
+      },
+      "season_year": 2024
+    },
+    {
+      "name": "eng.1-standings-2025",
+      "family": "standings",
+      "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings?season=2025",
+      "observed_at": "2026-09-06T17:18:52.644966+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "abbreviation",
+        "children",
+        "id",
+        "name",
+        "season",
+        "seasons",
+        "uid"
+      ],
+      "fields": {
+        "children[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].displayValue": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].type": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].value": [
+          "number"
+        ],
+        "children[].standings.entries[].team.displayName": [
+          "string"
+        ],
+        "children[].standings.entries[].team.id": [
+          "string"
+        ],
+        "season.displayName": [
+          "string"
+        ],
+        "season.year": [
+          "number"
+        ]
+      },
+      "season_year": 2025
+    },
+    {
+      "name": "esp.1-completed",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard?dates=20250817",
+      "observed_at": "2026-09-06T17:18:52.740682+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "events[].competitions[].competitors[].homeAway": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].score": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.displayName": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.id": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.uid": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].winner": [
+          "boolean"
+        ],
+        "events[].competitions[].date": [
+          "string"
+        ],
+        "events[].competitions[].id": [
+          "string"
+        ],
+        "events[].date": [
+          "string"
+        ],
+        "events[].id": [
+          "string"
+        ],
+        "events[].season.year": [
+          "number"
+        ],
+        "events[].status.type.completed": [
+          "boolean"
+        ],
+        "events[].status.type.detail": [
+          "string"
+        ],
+        "events[].status.type.name": [
+          "string"
+        ],
+        "events[].status.type.state": [
+          "string"
+        ],
+        "events[].uid": [
+          "string"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 3,
+      "event_dates": [
+        "2025-08-17T15:00Z",
+        "2025-08-17T17:30Z",
+        "2025-08-17T19:30Z"
+      ],
+      "states": [
+        "post"
+      ]
+    },
+    {
+      "name": "esp.1-summary-completed",
+      "family": "summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=748148",
+      "observed_at": "2026-09-06T17:18:52.880468+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "boxscore",
+        "broadcasts",
+        "commentary",
+        "format",
+        "gameInfo",
+        "hasOdds",
+        "header",
+        "keyEvents",
+        "lastFiveGames",
+        "leaders",
+        "meta",
+        "news",
+        "odds",
+        "pickcenter",
+        "rosters",
+        "seasonseries",
+        "standings",
+        "videos",
+        "wallclockAvailable"
+      ],
+      "fields": {
+        "boxscore.teams[].statistics": [
+          "array"
+        ],
+        "boxscore.teams[].statistics[].displayValue": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].label": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].name": [
+          "string"
+        ],
+        "boxscore.teams[].team.id": [
+          "string"
+        ],
+        "commentary": [
+          "array"
+        ],
+        "commentary[].text": [
+          "string"
+        ],
+        "commentary[].time.displayValue": [
+          "string"
+        ],
+        "header.competitions[].date": [
+          "string"
+        ],
+        "header.competitions[].id": [
+          "string"
+        ],
+        "header.competitions[].status.type.completed": [
+          "boolean"
+        ],
+        "header.competitions[].status.type.state": [
+          "string"
+        ],
+        "header.id": [
+          "string"
+        ],
+        "keyEvents": [
+          "array"
+        ],
+        "keyEvents[].clock.displayValue": [
+          "string"
+        ],
+        "keyEvents[].id": [
+          "string"
+        ],
+        "keyEvents[].participants[].athlete.id": [
+          "string"
+        ],
+        "keyEvents[].scoringPlay": [
+          "boolean"
+        ],
+        "keyEvents[].team.id": [
+          "string"
+        ],
+        "keyEvents[].text": [
+          "string"
+        ],
+        "keyEvents[].type.id": [
+          "string"
+        ],
+        "keyEvents[].type.text": [
+          "string"
+        ],
+        "rosters": [
+          "array"
+        ],
+        "rosters[].formation": [
+          "string"
+        ],
+        "rosters[].homeAway": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.displayName": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.id": [
+          "string"
+        ],
+        "rosters[].roster[].athlete.uid": [
+          "string"
+        ],
+        "rosters[].roster[].formationPlace": [
+          "string"
+        ],
+        "rosters[].roster[].jersey": [
+          "string"
+        ],
+        "rosters[].roster[].position.abbreviation": [
+          "string"
+        ],
+        "rosters[].roster[].starter": [
+          "boolean"
+        ],
+        "rosters[].roster[].stats[].displayValue": [
+          "string"
+        ],
+        "rosters[].roster[].stats[].name": [
+          "string"
+        ],
+        "rosters[].roster[].stats[].value": [
+          "number"
+        ],
+        "rosters[].roster[].subbedIn": [
+          "boolean"
+        ],
+        "rosters[].roster[].subbedOut": [
+          "boolean"
+        ],
+        "rosters[].team.id": [
+          "string"
+        ]
+      },
+      "states": [
+        "post"
+      ]
+    },
+    {
+      "name": "esp.1-scheduled",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard?dates=20260912",
+      "observed_at": "2026-09-06T17:18:53.002647+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "events[].competitions[].competitors[].homeAway": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].score": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.displayName": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.id": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.uid": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].winner": [
+          "boolean"
+        ],
+        "events[].competitions[].date": [
+          "string"
+        ],
+        "events[].competitions[].id": [
+          "string"
+        ],
+        "events[].date": [
+          "string"
+        ],
+        "events[].id": [
+          "string"
+        ],
+        "events[].season.year": [
+          "number"
+        ],
+        "events[].status.type.completed": [
+          "boolean"
+        ],
+        "events[].status.type.detail": [
+          "string"
+        ],
+        "events[].status.type.name": [
+          "string"
+        ],
+        "events[].status.type.state": [
+          "string"
+        ],
+        "events[].uid": [
+          "string"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 4,
+      "event_dates": [
+        "2026-09-12T12:00Z",
+        "2026-09-12T14:15Z",
+        "2026-09-12T16:30Z",
+        "2026-09-12T19:00Z"
+      ],
+      "states": [
+        "pre"
+      ]
+    },
+    {
+      "name": "esp.1-summary-scheduled",
+      "family": "summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=401882881",
+      "observed_at": "2026-09-06T17:18:53.157295+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "boxscore",
+        "broadcasts",
+        "format",
+        "gameInfo",
+        "hasOdds",
+        "header",
+        "lastFiveGames",
+        "leaders",
+        "meta",
+        "news",
+        "odds",
+        "pickcenter",
+        "rosters",
+        "seasonseries",
+        "standings",
+        "wallclockAvailable"
+      ],
+      "fields": {
+        "boxscore.teams[].statistics": [
+          "array"
+        ],
+        "boxscore.teams[].statistics[].displayValue": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].label": [
+          "string"
+        ],
+        "boxscore.teams[].statistics[].name": [
+          "string"
+        ],
+        "boxscore.teams[].team.id": [
+          "string"
+        ],
+        "header.competitions[].date": [
+          "string"
+        ],
+        "header.competitions[].id": [
+          "string"
+        ],
+        "header.competitions[].status.type.completed": [
+          "boolean"
+        ],
+        "header.competitions[].status.type.state": [
+          "string"
+        ],
+        "header.id": [
+          "string"
+        ],
+        "rosters": [
+          "array"
+        ],
+        "rosters[].homeAway": [
+          "string"
+        ],
+        "rosters[].team.id": [
+          "string"
+        ]
+      },
+      "states": [
+        "pre"
+      ]
+    },
+    {
+      "name": "esp.1-teams",
+      "family": "teams",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams",
+      "observed_at": "2026-09-06T17:18:53.264154+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "sports"
+      ],
+      "fields": {
+        "sports[].leagues[].id": [
+          "string"
+        ],
+        "sports[].leagues[].slug": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.abbreviation": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.displayName": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.id": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.logos[].href": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.slug": [
+          "string"
+        ],
+        "sports[].leagues[].teams[].team.uid": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "esp.1-standings-2024",
+      "family": "standings",
+      "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2024",
+      "observed_at": "2026-09-06T17:18:53.372994+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "abbreviation",
+        "children",
+        "id",
+        "name",
+        "season",
+        "seasons",
+        "uid"
+      ],
+      "fields": {
+        "children[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].displayValue": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].type": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].value": [
+          "number"
+        ],
+        "children[].standings.entries[].team.displayName": [
+          "string"
+        ],
+        "children[].standings.entries[].team.id": [
+          "string"
+        ],
+        "season.displayName": [
+          "string"
+        ],
+        "season.year": [
+          "number"
+        ]
+      },
+      "season_year": 2024
+    },
+    {
+      "name": "esp.1-standings-2025",
+      "family": "standings",
+      "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2025",
+      "observed_at": "2026-09-06T17:18:53.502122+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "abbreviation",
+        "children",
+        "id",
+        "name",
+        "season",
+        "seasons",
+        "uid"
+      ],
+      "fields": {
+        "children[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].displayValue": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].name": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].type": [
+          "string"
+        ],
+        "children[].standings.entries[].stats[].value": [
+          "number"
+        ],
+        "children[].standings.entries[].team.displayName": [
+          "string"
+        ],
+        "children[].standings.entries[].team.id": [
+          "string"
+        ],
+        "season.displayName": [
+          "string"
+        ],
+        "season.year": [
+          "number"
+        ]
+      },
+      "season_year": 2025
+    },
+    {
+      "name": "eng.1-date-range",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250816-20250817",
+      "observed_at": "2026-09-06T17:18:53.776279+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "events[].competitions[].competitors[].homeAway": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].score": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.displayName": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.id": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].team.uid": [
+          "string"
+        ],
+        "events[].competitions[].competitors[].winner": [
+          "boolean"
+        ],
+        "events[].competitions[].date": [
+          "string"
+        ],
+        "events[].competitions[].id": [
+          "string"
+        ],
+        "events[].date": [
+          "string"
+        ],
+        "events[].id": [
+          "string"
+        ],
+        "events[].season.year": [
+          "number"
+        ],
+        "events[].status.type.completed": [
+          "boolean"
+        ],
+        "events[].status.type.detail": [
+          "string"
+        ],
+        "events[].status.type.name": [
+          "string"
+        ],
+        "events[].status.type.state": [
+          "string"
+        ],
+        "events[].uid": [
+          "string"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 8,
+      "event_dates": [
+        "2025-08-16T11:30Z",
+        "2025-08-16T14:00Z",
+        "2025-08-16T16:30Z",
+        "2025-08-17T13:00Z",
+        "2025-08-17T15:30Z"
+      ],
+      "states": [
+        "post"
+      ]
+    },
+    {
+      "name": "eng.1-empty-date",
+      "family": "scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250701",
+      "observed_at": "2026-09-06T17:18:53.867122+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "events",
+        "leagues",
+        "provider"
+      ],
+      "fields": {
+        "events": [
+          "array"
+        ],
+        "leagues[].id": [
+          "string"
+        ],
+        "leagues[].name": [
+          "string"
+        ],
+        "leagues[].season.year": [
+          "number"
+        ],
+        "leagues[].slug": [
+          "string"
+        ]
+      },
+      "event_count": 0,
+      "event_dates": [],
+      "states": []
+    },
+    {
+      "name": "leagues-page-1",
+      "family": "leagues",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=5&page=1",
+      "observed_at": "2026-09-06T17:18:53.957900+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "count",
+        "items",
+        "pageCount",
+        "pageIndex",
+        "pageSize"
+      ],
+      "fields": {
+        "count": [
+          "number"
+        ],
+        "items[].$ref": [
+          "string"
+        ],
+        "pageCount": [
+          "number"
+        ],
+        "pageIndex": [
+          "number"
+        ],
+        "pageSize": [
+          "number"
+        ]
+      },
+      "pagination": {
+        "count": 218,
+        "pageIndex": 1,
+        "pageSize": 5,
+        "pageCount": 44
+      },
+      "league_refs": [
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.wwc?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.fa?lang=en&region=us"
+      ]
+    },
+    {
+      "name": "leagues-page-2",
+      "family": "leagues",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=5&page=2",
+      "observed_at": "2026-09-06T17:18:54.029418+00:00",
+      "http_status": 200,
+      "top_level_fields": [
+        "count",
+        "items",
+        "pageCount",
+        "pageIndex",
+        "pageSize"
+      ],
+      "fields": {
+        "count": [
+          "number"
+        ],
+        "items[].$ref": [
+          "string"
+        ],
+        "pageCount": [
+          "number"
+        ],
+        "pageIndex": [
+          "number"
+        ],
+        "pageSize": [
+          "number"
+        ]
+      },
+      "pagination": {
+        "count": 218,
+        "pageIndex": 2,
+        "pageSize": 5,
+        "pageCount": 44
+      },
+      "league_refs": [
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.league_cup?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.charity?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.super_cup?lang=en&region=us",
+        "http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.copa_del_rey?lang=en&region=us"
+      ]
+    }
+  ]
+}
