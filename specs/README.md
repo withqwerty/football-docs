@@ -96,6 +96,26 @@ curl -sL -o /tmp/besoccer.json \
 pnpm postman:truth /tmp/besoccer.json --provider besoccer --dispatch-param req --group-prefix EN
 ```
 
+## Note on Driblab
+
+Driblab publishes its API contract as a public Notion page rather than as a
+specification, and that page is **not** mirrored here either. Its response samples
+are real players, teams and seasons, and its download examples are presigned S3
+URLs carrying an AWS access key id — none of which is API documentation.
+`scripts/gen_notion_truth.py` reads the page through Notion's own public
+`loadPageChunk` endpoint and derives the request surface (59 operations across 58
+paths, parameter names, response field and metric names) into
+`data/provider-truth/driblab.notion.json`. It keeps key names and never a value,
+and the tests assert no sample data survives into it.
+
+Refresh with:
+
+```bash
+pnpm notion:truth \
+  "https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede" \
+  --provider driblab
+```
+
 ## Note on Impect
 
 Impect is deliberately absent. Its documentation is built solely from the public

@@ -1,0 +1,2232 @@
+{
+  "provider": "driblab",
+  "kind": "notion-guide",
+  "source": {
+    "page": "https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede",
+    "page_id": "65ce257f-83b5-451f-b798-96b01d41aede",
+    "title": "Driblab API 1.0 Guide [EN]",
+    "generated_at": "2026-09-09"
+  },
+  "basePaths": [],
+  "paths": {
+    "/coach/{id}": [
+      "GET"
+    ],
+    "/coach/{id}/history": [
+      "GET"
+    ],
+    "/competition-types": [
+      "GET"
+    ],
+    "/competition/available": [
+      "GET"
+    ],
+    "/competition/{id}": [
+      "GET"
+    ],
+    "/competition/{id}/seasons": [
+      "GET"
+    ],
+    "/competitions": [
+      "GET"
+    ],
+    "/countries": [
+      "GET"
+    ],
+    "/country/{id}": [
+      "GET"
+    ],
+    "/country/{id}/competitions": [
+      "GET"
+    ],
+    "/file-types/video": [
+      "GET"
+    ],
+    "/game": [
+      "POST"
+    ],
+    "/game-status": [
+      "GET"
+    ],
+    "/game/tracking/status": [
+      "GET"
+    ],
+    "/game/{id}": [
+      "GET"
+    ],
+    "/game/{id}/arrigo-metrics": [
+      "GET"
+    ],
+    "/game/{id}/lineup": [
+      "GET"
+    ],
+    "/game/{id}/physical-stats": [
+      "GET"
+    ],
+    "/game/{id}/player-arrigo-metrics": [
+      "GET"
+    ],
+    "/game/{id}/player-physical-stats": [
+      "GET"
+    ],
+    "/game/{id}/player-stats": [
+      "GET"
+    ],
+    "/game/{id}/stats": [
+      "GET"
+    ],
+    "/game/{id}/timeline": [
+      "GET"
+    ],
+    "/game/{id}/tracking": [
+      "GET"
+    ],
+    "/game/{id}/ts": [
+      "GET"
+    ],
+    "/game/{id}/video-type/{fileTypeId}/download-link": [
+      "GET"
+    ],
+    "/game/{id}/video-type/{fileTypeId}/stream-link": [
+      "GET"
+    ],
+    "/player-positions": [
+      "GET"
+    ],
+    "/player-transfers": [
+      "GET"
+    ],
+    "/player/{id}": [
+      "DELETE",
+      "GET"
+    ],
+    "/player/{id}/games": [
+      "GET"
+    ],
+    "/player/{id}/injuries": [
+      "GET"
+    ],
+    "/player/{id}/national-team": [
+      "GET"
+    ],
+    "/player/{id}/season/{seasonId}/physical-stats": [
+      "GET"
+    ],
+    "/player/{id}/season/{seasonId}/stats": [
+      "GET"
+    ],
+    "/player/{id}/season/{seasonId}/team/{teamId}/physical-stats": [
+      "GET"
+    ],
+    "/player/{id}/season/{seasonId}/team/{teamId}/stats": [
+      "GET"
+    ],
+    "/player/{id}/seasons": [
+      "GET"
+    ],
+    "/player/{id}/transfers": [
+      "GET"
+    ],
+    "/season/available": [
+      "GET"
+    ],
+    "/season/{id}": [
+      "GET"
+    ],
+    "/season/{id}/arrigo-metrics": [
+      "GET"
+    ],
+    "/season/{id}/coaches": [
+      "GET"
+    ],
+    "/season/{id}/games": [
+      "GET"
+    ],
+    "/season/{id}/league-table": [
+      "GET"
+    ],
+    "/season/{id}/matchday/{matchday}/games": [
+      "GET"
+    ],
+    "/season/{id}/players": [
+      "GET"
+    ],
+    "/season/{id}/players/stats": [
+      "GET"
+    ],
+    "/season/{id}/teams": [
+      "GET"
+    ],
+    "/season/{id}/teams/stats": [
+      "GET"
+    ],
+    "/team/{id}": [
+      "GET"
+    ],
+    "/team/{id}/game-stats": [
+      "GET"
+    ],
+    "/team/{id}/games": [
+      "GET"
+    ],
+    "/team/{id}/loans": [
+      "GET"
+    ],
+    "/team/{id}/roster": [
+      "GET"
+    ],
+    "/team/{id}/season/{seasonId}/player-stats": [
+      "GET"
+    ],
+    "/team/{id}/season/{seasonId}/stats": [
+      "GET"
+    ],
+    "/team/{id}/transfers": [
+      "GET"
+    ]
+  },
+  "parameters": [
+    "awayTeamId",
+    "fileTypeId",
+    "files",
+    "homeTeamId",
+    "id",
+    "matchDate",
+    "matchDay",
+    "matchGroupId",
+    "matchday",
+    "playerId",
+    "roundTypeId",
+    "seasonId",
+    "teamId"
+  ],
+  "fields": [
+    "String",
+    "academy",
+    "accelerations",
+    "accelerationsNumber",
+    "aerial",
+    "aerialEfficiency",
+    "aerialWins",
+    "aerialWinsPct",
+    "aerials",
+    "age",
+    "alias",
+    "alpha3code",
+    "assists",
+    "association",
+    "available",
+    "awayTeamId",
+    "away_team",
+    "ballProgression",
+    "ball_handing",
+    "ball_handling",
+    "bypassedByCarries",
+    "bypassedByPasses",
+    "bypassedByTotal",
+    "bypassedDefenders",
+    "bypassedDefendersByActions",
+    "bypassedDefendersByCarries",
+    "bypassedDefendersByPasses",
+    "bypassedDefendersCarries",
+    "bypassedDefendersTotal",
+    "bypassedPlayers",
+    "bypassedPlayersByActions",
+    "bypassedPlayersByCarries",
+    "bypassedPlayersByPasses",
+    "bypassedPlayersCarries",
+    "bypassedPlayersTotal",
+    "carries",
+    "carriesBypassingDefenders",
+    "catching",
+    "chancesCreated",
+    "chancesCreatedOP",
+    "claimAccuracy",
+    "clearances",
+    "coach",
+    "coach_during_debut",
+    "code",
+    "competition",
+    "competition_type",
+    "completedCrosses",
+    "contract",
+    "contract_option",
+    "country",
+    "crossEfficiency",
+    "crosses",
+    "crossing",
+    "current_matchday",
+    "current_season",
+    "current_team",
+    "date",
+    "date_from",
+    "date_to",
+    "days_lost",
+    "debut",
+    "debut_age",
+    "deepProgression",
+    "defending",
+    "description",
+    "directness",
+    "dispossessed",
+    "distance",
+    "division",
+    "dob",
+    "drawChance",
+    "dribblesAttempted",
+    "end_contract_date",
+    "end_date",
+    "end_position",
+    "expectedPoints",
+    "extremeAccelerationsNumber",
+    "fee",
+    "fileName",
+    "fileTypeId",
+    "filename",
+    "files",
+    "finishing",
+    "first_name",
+    "form",
+    "formation",
+    "fouls",
+    "foulsTaken",
+    "game",
+    "gameId",
+    "games",
+    "games_drawn",
+    "games_lost",
+    "games_played",
+    "games_won",
+    "goals",
+    "goalsConceded",
+    "goals_conceded",
+    "goals_scored",
+    "handPassing",
+    "headedGoals",
+    "headers",
+    "height",
+    "homeTeamId",
+    "home_team",
+    "hsrDistance",
+    "hsrQuantity",
+    "id",
+    "individualPressure",
+    "info",
+    "injury",
+    "interceptions",
+    "is_active",
+    "is_male",
+    "is_national_team",
+    "is_youth",
+    "jersey_num",
+    "joggingDistance",
+    "last_minute_played_first_half",
+    "last_minute_played_first_half_ot",
+    "last_minute_played_second_half",
+    "last_minute_played_second_half_ot",
+    "last_minute_played_seocond_half",
+    "last_name",
+    "link",
+    "loan_end_contract_date",
+    "loan_team",
+    "longBallPct",
+    "longBallSuccessful",
+    "longBallTotal",
+    "market_value",
+    "matchDate",
+    "matchDay",
+    "matchGroupId",
+    "match_date",
+    "match_day",
+    "maxAcceleration",
+    "maxSpeed",
+    "min",
+    "minute_from",
+    "minute_to",
+    "minutes_played",
+    "name",
+    "nationality",
+    "nonPenaltyGoals",
+    "nonPenaltyGoalsAgainst",
+    "npg_conceded",
+    "npg_scored",
+    "number_of_seasons",
+    "openPlayKeyPasses",
+    "openPlayPassesIntoOpponentBox",
+    "out_play",
+    "passes",
+    "passesBypassingDefenders",
+    "passesBypassingPlayers",
+    "passesFinalThirdTotal",
+    "passesOppHalf",
+    "passesPerLongBall",
+    "passesPerShots",
+    "passesSuccessful",
+    "passing",
+    "passingFinalThird",
+    "passingFinalThirdPct",
+    "passingPct",
+    "penaltiesTaken",
+    "penalty_shootout_score",
+    "period",
+    "player",
+    "players",
+    "points",
+    "position",
+    "possession",
+    "ppda",
+    "predictive",
+    "products",
+    "recoveries",
+    "redCards",
+    "red_cards",
+    "roundTypeId",
+    "runningDistance",
+    "runs",
+    "runsQuantity",
+    "savesInBox",
+    "savesInBoxPct",
+    "savesOutBox",
+    "savesOutOfBoxPct",
+    "savesPct",
+    "saving",
+    "score",
+    "scoringContribution",
+    "season",
+    "seasonId",
+    "season_text",
+    "second_from",
+    "second_nationality",
+    "second_position",
+    "second_to",
+    "secondary_nationality",
+    "secondary_position",
+    "seconds_played",
+    "shooting",
+    "shots",
+    "shotsAgainst",
+    "shotsOffTarget",
+    "shotsOnTarget",
+    "shotsOnTargetAgainst",
+    "shotsOnTargetInBoxAgainst",
+    "shotsOnTargetOutBoxAgainst",
+    "shotsPerGoal",
+    "shotsPerNpg",
+    "side",
+    "speed",
+    "sprintDistance",
+    "sprintsQuantity",
+    "start_date",
+    "starting_eleven",
+    "starting_position",
+    "stats",
+    "status",
+    "subbed_in",
+    "subbed_out",
+    "subjects",
+    "successfulDribbles",
+    "successfulDribblesPct",
+    "tackles",
+    "tacklesWasDribbled",
+    "team",
+    "teamName",
+    "team_from",
+    "team_to",
+    "throughBalls",
+    "timesBypassedByActions",
+    "timesBypassedByCarries",
+    "timesBypassedByPasses",
+    "totalDistance",
+    "total_games",
+    "total_games_counted",
+    "total_games_played",
+    "total_matchdays",
+    "touches",
+    "touchesInOpponentBox",
+    "ts_updated",
+    "turnovers",
+    "type",
+    "urls",
+    "uses_left",
+    "value",
+    "venue",
+    "walkingDistance",
+    "weight",
+    "winChance",
+    "xA",
+    "xAOpenPlay",
+    "xASetPiece",
+    "xAssists",
+    "xG",
+    "xGBuildup",
+    "xGBuildup5pass",
+    "xGChain",
+    "xGEfficiency",
+    "xGFacedOnTargetEfficiency",
+    "xGFacedOnTargetPerGoalReceived",
+    "xGOpenPlay",
+    "xGPerNpg",
+    "xGPerShot",
+    "xGPerShotAgainst",
+    "xGSetPiece",
+    "xP",
+    "year",
+    "yellowCards",
+    "yellow_cards"
+  ],
+  "operations": {
+    "DELETE /player/{id}": {
+      "name": "Player Delete",
+      "group": "Player",
+      "description": "Delete a player",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": []
+    },
+    "GET /coach/{id}": {
+      "name": "Coach Details",
+      "group": "Coach",
+      "description": "Details of a certain player",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "age",
+        "current_team",
+        "id",
+        "name"
+      ]
+    },
+    "GET /coach/{id}/history": {
+      "name": "Coach History",
+      "group": "Coach",
+      "description": "List of all clubs and seasons that a coach has belong to",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "coach",
+        "country",
+        "games_drawn",
+        "games_lost",
+        "games_played",
+        "games_won",
+        "id",
+        "name",
+        "points",
+        "season",
+        "team"
+      ]
+    },
+    "GET /competition-types": {
+      "name": "All Competition Types",
+      "group": "Competition Types",
+      "description": "List of all the competition types",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /competition/available": {
+      "name": "Competition Available",
+      "group": "Competitions",
+      "description": "All competition available.",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "competition_type",
+        "country",
+        "division",
+        "id",
+        "is_male",
+        "is_youth",
+        "name",
+        "number_of_seasons"
+      ]
+    },
+    "GET /competition/{id}": {
+      "name": "Competition Detail",
+      "group": "Competitions",
+      "description": "Detail of a single competition",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "competition_type",
+        "country",
+        "division",
+        "id",
+        "is_male",
+        "is_youth",
+        "name",
+        "number_of_seasons"
+      ]
+    },
+    "GET /competition/{id}/seasons": {
+      "name": "Competition Seasons",
+      "group": "Competitions",
+      "description": "List of all the competition seasons.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "alias",
+        "competition",
+        "current_matchday",
+        "end_date",
+        "id",
+        "is_active",
+        "name",
+        "start_date",
+        "total_games",
+        "total_games_counted",
+        "total_games_played",
+        "total_matchdays",
+        "year"
+      ]
+    },
+    "GET /competitions": {
+      "name": "All Competitions",
+      "group": "Competitions",
+      "description": "List of all the available competitions",
+      "paginated": true,
+      "parameters": [],
+      "fields": [
+        "competition_type",
+        "country",
+        "division",
+        "id",
+        "is_male",
+        "is_youth",
+        "name",
+        "number_of_seasons"
+      ]
+    },
+    "GET /countries": {
+      "name": "All Countries",
+      "group": "Countries",
+      "description": "List of all countries registered by Driblab",
+      "paginated": true,
+      "parameters": [],
+      "fields": [
+        "alpha3code",
+        "code",
+        "id",
+        "name"
+      ]
+    },
+    "GET /country/{id}": {
+      "name": "Country Detail",
+      "group": "Countries",
+      "description": "Detail of a single country",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "alpha3code",
+        "code",
+        "id",
+        "name"
+      ]
+    },
+    "GET /country/{id}/competitions": {
+      "name": "Country Competitions",
+      "group": "Countries",
+      "description": "List of all the country competitions registered by Driblab",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "competition_type",
+        "country",
+        "division",
+        "id",
+        "is_male",
+        "is_youth",
+        "name",
+        "number_of_seasons"
+      ]
+    },
+    "GET /file-types/video": {
+      "name": "Game File Types Video",
+      "group": "Game",
+      "description": "List all the file type for game video",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "fileTypeId",
+        "name"
+      ]
+    },
+    "GET /game-status": {
+      "name": "Game Status",
+      "group": "Game Status",
+      "description": "List of all possible Driblab game statuses",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /game/tracking/status": {
+      "name": "Tracking Status",
+      "group": "Game",
+      "description": "List of all possible Driblab tracking statuses",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /game/{id}": {
+      "name": "Game Details",
+      "group": "Game",
+      "description": "List of all details about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "formation",
+        "home_team",
+        "id",
+        "last_minute_played_first_half",
+        "last_minute_played_first_half_ot",
+        "last_minute_played_second_half",
+        "last_minute_played_second_half_ot",
+        "match_date",
+        "match_day",
+        "name",
+        "penalty_shootout_score",
+        "possession",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /game/{id}/arrigo-metrics": {
+      "name": "Game Team Arrigo Metrics",
+      "group": "Game",
+      "description": "List of team arrigo metrics about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "bypassedByCarries",
+        "bypassedByPasses",
+        "bypassedByTotal",
+        "bypassedDefenders",
+        "bypassedDefendersCarries",
+        "bypassedDefendersTotal",
+        "bypassedPlayers",
+        "bypassedPlayersCarries",
+        "bypassedPlayersTotal",
+        "carriesBypassingDefenders",
+        "id",
+        "name",
+        "out_play",
+        "passesBypassingDefenders",
+        "passesBypassingPlayers",
+        "season",
+        "stats",
+        "team"
+      ]
+    },
+    "GET /game/{id}/lineup": {
+      "name": "Game Lineups",
+      "group": "Game",
+      "description": "List of all positional and timing information about each player in the game Pagination",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "end_position",
+        "formation",
+        "home_team",
+        "id",
+        "jersey_num",
+        "minute_from",
+        "minute_to",
+        "minutes_played",
+        "name",
+        "players",
+        "second_from",
+        "second_to",
+        "seconds_played",
+        "side",
+        "starting_eleven",
+        "starting_position",
+        "subbed_in",
+        "subbed_out"
+      ]
+    },
+    "GET /game/{id}/physical-stats": {
+      "name": "Game Team Physical Stats",
+      "group": "Game",
+      "description": "List of team physical stats about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "accelerations",
+        "accelerationsNumber",
+        "distance",
+        "extremeAccelerationsNumber",
+        "hsrDistance",
+        "hsrQuantity",
+        "id",
+        "joggingDistance",
+        "maxAcceleration",
+        "maxSpeed",
+        "name",
+        "runningDistance",
+        "runs",
+        "runsQuantity",
+        "season",
+        "speed",
+        "sprintDistance",
+        "sprintsQuantity",
+        "stats",
+        "team",
+        "teamName",
+        "totalDistance",
+        "walkingDistance"
+      ]
+    },
+    "GET /game/{id}/player-arrigo-metrics": {
+      "name": "Game Player Arrigo Metrics",
+      "group": "Game",
+      "description": "List of all players arrigo metrics about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "bypassedByCarries",
+        "bypassedByPasses",
+        "bypassedByTotal",
+        "bypassedDefenders",
+        "bypassedDefendersCarries",
+        "bypassedDefendersTotal",
+        "bypassedPlayers",
+        "bypassedPlayersCarries",
+        "bypassedPlayersTotal",
+        "carriesBypassingDefenders",
+        "games_played",
+        "id",
+        "minutes_played",
+        "name",
+        "out_play",
+        "passesBypassingDefenders",
+        "passesBypassingPlayers",
+        "player",
+        "position",
+        "season",
+        "secondary_position",
+        "side",
+        "stats",
+        "team"
+      ]
+    },
+    "GET /game/{id}/player-physical-stats": {
+      "name": "Game Player Physical Stats",
+      "group": "Game",
+      "description": "List of all players physical stats about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "accelerations",
+        "accelerationsNumber",
+        "distance",
+        "extremeAccelerationsNumber",
+        "games_played",
+        "hsrDistance",
+        "hsrQuantity",
+        "id",
+        "joggingDistance",
+        "maxAcceleration",
+        "maxSpeed",
+        "minutes_played",
+        "name",
+        "player",
+        "position",
+        "runningDistance",
+        "runs",
+        "runsQuantity",
+        "season",
+        "secondary_position",
+        "side",
+        "speed",
+        "sprintDistance",
+        "sprintsQuantity",
+        "stats",
+        "team",
+        "teamName",
+        "totalDistance",
+        "walkingDistance"
+      ]
+    },
+    "GET /game/{id}/player-stats": {
+      "name": "Game Player Stats",
+      "group": "Game",
+      "description": "List of all players stats about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "aerial",
+        "aerialEfficiency",
+        "aerialWins",
+        "aerialWinsPct",
+        "aerials",
+        "assists",
+        "association",
+        "ballProgression",
+        "ball_handing",
+        "ball_handling",
+        "carries",
+        "catching",
+        "chancesCreated",
+        "chancesCreatedOP",
+        "claimAccuracy",
+        "clearances",
+        "completedCrosses",
+        "crossEfficiency",
+        "crosses",
+        "crossing",
+        "deepProgression",
+        "defending",
+        "dispossessed",
+        "dribblesAttempted",
+        "finishing",
+        "fouls",
+        "foulsTaken",
+        "goals",
+        "goalsConceded",
+        "handPassing",
+        "headedGoals",
+        "headers",
+        "id",
+        "individualPressure",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "longBallTotal",
+        "minutes_played",
+        "name",
+        "nonPenaltyGoals",
+        "nonPenaltyGoalsAgainst",
+        "openPlayKeyPasses",
+        "openPlayPassesIntoOpponentBox",
+        "passes",
+        "passesFinalThirdTotal",
+        "passesOppHalf",
+        "passesPerLongBall",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "penaltiesTaken",
+        "player",
+        "position",
+        "recoveries",
+        "redCards",
+        "savesInBox",
+        "savesInBoxPct",
+        "savesOutBox",
+        "savesOutOfBoxPct",
+        "savesPct",
+        "saving",
+        "scoringContribution",
+        "season",
+        "shooting",
+        "shots",
+        "shotsAgainst",
+        "shotsOffTarget",
+        "shotsOnTarget",
+        "shotsOnTargetAgainst",
+        "shotsOnTargetInBoxAgainst",
+        "shotsOnTargetOutBoxAgainst",
+        "shotsPerGoal",
+        "shotsPerNpg",
+        "stats",
+        "successfulDribbles",
+        "successfulDribblesPct",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "throughBalls",
+        "touches",
+        "touchesInOpponentBox",
+        "turnovers",
+        "xAssists",
+        "xG",
+        "xGBuildup",
+        "xGBuildup5pass",
+        "xGChain",
+        "xGEfficiency",
+        "xGFacedOnTargetEfficiency",
+        "xGFacedOnTargetPerGoalReceived",
+        "xGPerNpg",
+        "xGPerShot",
+        "xGPerShotAgainst",
+        "yellowCards"
+      ]
+    },
+    "GET /game/{id}/stats": {
+      "name": "Game Stats",
+      "group": "Game",
+      "description": "List of all stats about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "directness",
+        "drawChance",
+        "home_team",
+        "id",
+        "name",
+        "possession",
+        "ppda",
+        "winChance",
+        "xA",
+        "xAOpenPlay",
+        "xASetPiece",
+        "xG",
+        "xGOpenPlay",
+        "xGSetPiece",
+        "xP"
+      ]
+    },
+    "GET /game/{id}/timeline": {
+      "name": "Game Timeline",
+      "group": "Game",
+      "description": "List of main events about a certain match",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "home_team",
+        "id",
+        "info",
+        "min",
+        "name",
+        "period",
+        "subjects"
+      ]
+    },
+    "GET /game/{id}/tracking": {
+      "name": "Game Tracking",
+      "group": "Game",
+      "description": "Tracking file of a certain game",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "link"
+      ]
+    },
+    "GET /game/{id}/ts": {
+      "name": "Game Ts",
+      "group": "Game",
+      "description": "Get last time game was updated",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "id",
+        "name",
+        "status",
+        "ts_updated"
+      ]
+    },
+    "GET /game/{id}/video-type/{fileTypeId}/download-link": {
+      "name": "Link Download",
+      "group": "Game",
+      "description": "Get dowload link of certain file of game",
+      "paginated": false,
+      "parameters": [
+        "fileTypeId",
+        "id",
+        "playerId"
+      ],
+      "fields": [
+        "filename",
+        "id",
+        "link",
+        "name",
+        "uses_left"
+      ]
+    },
+    "GET /game/{id}/video-type/{fileTypeId}/stream-link": {
+      "name": "Link Stream",
+      "group": "Game",
+      "description": "Get stream link of certain file of game",
+      "paginated": false,
+      "parameters": [
+        "fileTypeId",
+        "id",
+        "playerId"
+      ],
+      "fields": [
+        "filename",
+        "id",
+        "link",
+        "name",
+        "uses_left"
+      ]
+    },
+    "GET /player-positions": {
+      "name": "Player Positions",
+      "group": "Player positions",
+      "description": "List of all player positions",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "description",
+        "id",
+        "name"
+      ]
+    },
+    "GET /player-transfers": {
+      "name": "Player Transfers Types",
+      "group": "Player Transfers Types",
+      "description": "List of all types of transfer types",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /player/{id}": {
+      "name": "Player Detail",
+      "group": "Player",
+      "description": "Details of a certain player.",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "academy",
+        "age",
+        "contract",
+        "contract_option",
+        "current_team",
+        "dob",
+        "end_contract_date",
+        "first_name",
+        "height",
+        "id",
+        "jersey_num",
+        "last_name",
+        "loan_end_contract_date",
+        "loan_team",
+        "market_value",
+        "name",
+        "nationality",
+        "position",
+        "second_nationality",
+        "secondary_nationality",
+        "secondary_position",
+        "side",
+        "weight"
+      ]
+    },
+    "GET /player/{id}/games": {
+      "name": "Player Games",
+      "group": "Player",
+      "description": "List of all games played by certain player",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "home_team",
+        "id",
+        "match_date",
+        "match_day",
+        "name",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /player/{id}/injuries": {
+      "name": "Player Injuries",
+      "group": "Player",
+      "description": "List of all injuries that certain player has suffered",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "date_from",
+        "date_to",
+        "days_lost",
+        "games_lost",
+        "home_team",
+        "id",
+        "injury",
+        "match_date",
+        "name",
+        "player",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /player/{id}/national-team": {
+      "name": "Player National Team",
+      "group": "Player",
+      "description": "List of all national teams certain players has played for, including youth national teams",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "coach_during_debut",
+        "country",
+        "debut",
+        "debut_age",
+        "games_played",
+        "goals",
+        "id",
+        "name",
+        "player",
+        "team"
+      ]
+    },
+    "GET /player/{id}/season/{seasonId}/physical-stats": {
+      "name": "Player Season Game Physical Stats",
+      "group": "Player",
+      "description": "List of all physical stats about a certain player by game",
+      "paginated": false,
+      "parameters": [
+        "id",
+        "seasonId"
+      ],
+      "fields": [
+        "accelerations",
+        "accelerationsNumber",
+        "distance",
+        "extremeAccelerationsNumber",
+        "game",
+        "games_played",
+        "hsrDistance",
+        "hsrQuantity",
+        "id",
+        "joggingDistance",
+        "maxAcceleration",
+        "maxSpeed",
+        "minutes_played",
+        "name",
+        "player",
+        "position",
+        "runningDistance",
+        "runs",
+        "runsQuantity",
+        "season",
+        "secondary_position",
+        "side",
+        "speed",
+        "sprintDistance",
+        "sprintsQuantity",
+        "stats",
+        "team",
+        "totalDistance",
+        "walkingDistance"
+      ]
+    },
+    "GET /player/{id}/season/{seasonId}/stats": {
+      "name": "Player  Season Game Stats",
+      "group": "Player",
+      "description": "List of all stats about a certain player by game",
+      "paginated": false,
+      "parameters": [
+        "id",
+        "seasonId"
+      ],
+      "fields": [
+        "aerial",
+        "association",
+        "ball_handing",
+        "defending",
+        "game",
+        "passing",
+        "player",
+        "saving",
+        "season",
+        "shooting",
+        "stats",
+        "team"
+      ]
+    },
+    "GET /player/{id}/season/{seasonId}/team/{teamId}/physical-stats": {
+      "name": "Player  Season Physical Stats",
+      "group": "Player",
+      "description": "List of all physical stats about a certain player",
+      "paginated": false,
+      "parameters": [
+        "id",
+        "seasonId",
+        "teamId"
+      ],
+      "fields": [
+        "accelerations",
+        "accelerationsNumber",
+        "distance",
+        "extremeAccelerationsNumber",
+        "games_played",
+        "hsrDistance",
+        "hsrQuantity",
+        "id",
+        "joggingDistance",
+        "maxAcceleration",
+        "maxSpeed",
+        "minutes_played",
+        "name",
+        "player",
+        "position",
+        "runningDistance",
+        "runs",
+        "runsQuantity",
+        "season",
+        "secondary_position",
+        "side",
+        "speed",
+        "sprintDistance",
+        "sprintsQuantity",
+        "stats",
+        "team",
+        "teamName",
+        "totalDistance",
+        "walkingDistance"
+      ]
+    },
+    "GET /player/{id}/season/{seasonId}/team/{teamId}/stats": {
+      "name": "Player  Season Team Stats",
+      "group": "Player",
+      "description": "List of all the transfers that certain player has been involved in",
+      "paginated": true,
+      "parameters": [
+        "id",
+        "seasonId",
+        "teamId"
+      ],
+      "fields": [
+        "aerial",
+        "association",
+        "ball_handing",
+        "clearances",
+        "defending",
+        "fouls",
+        "id",
+        "individualPressure",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "name",
+        "passesOppHalf",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "player",
+        "recoveries",
+        "redCards",
+        "saving",
+        "season",
+        "shooting",
+        "stats",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "yellowCards"
+      ]
+    },
+    "GET /player/{id}/seasons": {
+      "name": "Player Seasons",
+      "group": "Player",
+      "description": "List of all information of season that certain player has played in and their simple stats",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "assists",
+        "games_lost",
+        "games_played",
+        "goals",
+        "id",
+        "minutes_played",
+        "name",
+        "player",
+        "position",
+        "red_cards",
+        "season",
+        "second_position",
+        "secondary_position",
+        "side",
+        "team",
+        "yellow_cards"
+      ]
+    },
+    "GET /player/{id}/transfers": {
+      "name": "Player Transfers",
+      "group": "Player",
+      "description": "List of all the transfers that certain player has been involved in",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "date",
+        "fee",
+        "id",
+        "market_value",
+        "name",
+        "player",
+        "season_text",
+        "team_from",
+        "team_to",
+        "type"
+      ]
+    },
+    "GET /season/available": {
+      "name": "Season Available",
+      "group": "Season",
+      "description": "All season available.",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "alias",
+        "available",
+        "code",
+        "competition",
+        "current_matchday",
+        "end_date",
+        "id",
+        "is_active",
+        "name",
+        "products",
+        "start_date",
+        "total_games",
+        "total_games_counted",
+        "total_games_played",
+        "total_matchdays",
+        "year"
+      ]
+    },
+    "GET /season/{id}": {
+      "name": "Season Detail",
+      "group": "Season",
+      "description": "Detail of a single season.",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "alias",
+        "competition",
+        "current_matchday",
+        "end_date",
+        "id",
+        "is_active",
+        "name",
+        "start_date",
+        "total_games",
+        "total_games_counted",
+        "total_games_played",
+        "total_matchdays",
+        "year"
+      ]
+    },
+    "GET /season/{id}/arrigo-metrics": {
+      "name": "Season Arrigo Metric",
+      "group": "Season",
+      "description": "List of arrigo metrics for all the season players .",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "bypassedDefendersByActions",
+        "bypassedDefendersByCarries",
+        "bypassedDefendersByPasses",
+        "bypassedPlayersByActions",
+        "bypassedPlayersByCarries",
+        "bypassedPlayersByPasses",
+        "carriesBypassingDefenders",
+        "games_played",
+        "id",
+        "minutes_played",
+        "name",
+        "out_play",
+        "passesBypassingDefenders",
+        "passesBypassingPlayers",
+        "player",
+        "position",
+        "season",
+        "secondary_position",
+        "side",
+        "stats",
+        "team",
+        "timesBypassedByActions",
+        "timesBypassedByCarries",
+        "timesBypassedByPasses"
+      ]
+    },
+    "GET /season/{id}/coaches": {
+      "name": "Season Coaches",
+      "group": "Season",
+      "description": "List of all the season coaches.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "age",
+        "current_team",
+        "id",
+        "name"
+      ]
+    },
+    "GET /season/{id}/games": {
+      "name": "Season Games",
+      "group": "Season",
+      "description": "List of all the season games.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "formation",
+        "home_team",
+        "id",
+        "last_minute_played_first_half",
+        "last_minute_played_first_half_ot",
+        "last_minute_played_second_half",
+        "last_minute_played_second_half_ot",
+        "last_minute_played_seocond_half",
+        "match_date",
+        "match_day",
+        "name",
+        "penalty_shootout_score",
+        "possession",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /season/{id}/league-table": {
+      "name": "Season League Table",
+      "group": "Season",
+      "description": "List of the season league table.",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "form",
+        "games_drawn",
+        "games_lost",
+        "games_played",
+        "games_won",
+        "goals_conceded",
+        "goals_scored",
+        "id",
+        "name",
+        "npg_conceded",
+        "npg_scored",
+        "points",
+        "position",
+        "team"
+      ]
+    },
+    "GET /season/{id}/matchday/{matchday}/games": {
+      "name": "Season Games Matchday",
+      "group": "Season",
+      "description": "List of all the season games by matchday.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "formation",
+        "home_team",
+        "id",
+        "last_minute_played_first_half",
+        "last_minute_played_first_half_ot",
+        "last_minute_played_second_half",
+        "last_minute_played_second_half_ot",
+        "last_minute_played_seocond_half",
+        "match_date",
+        "match_day",
+        "name",
+        "penalty_shootout_score",
+        "possession",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /season/{id}/players": {
+      "name": "Season Player",
+      "group": "Season",
+      "description": "List of all the season players.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "academy",
+        "age",
+        "contract",
+        "contract_option",
+        "current_team",
+        "dob",
+        "end_contract_date",
+        "first_name",
+        "height",
+        "id",
+        "last_name",
+        "loan_end_contract_date",
+        "loan_team",
+        "market_value",
+        "name",
+        "nationality",
+        "position",
+        "second_nationality",
+        "secondary_nationality",
+        "secondary_position",
+        "side",
+        "weight"
+      ]
+    },
+    "GET /season/{id}/players/stats": {
+      "name": "Season Player Stats",
+      "group": "Season",
+      "description": "List of stats for all the season players .",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "aerial",
+        "aerialEfficiency",
+        "aerialWins",
+        "aerialWinsPct",
+        "assists",
+        "association",
+        "ballProgression",
+        "ball_handing",
+        "ball_handling",
+        "catching",
+        "chancesCreated",
+        "chancesCreatedOP",
+        "claimAccuracy",
+        "clearances",
+        "completedCrosses",
+        "crossEfficiency",
+        "crossing",
+        "deepProgression",
+        "defending",
+        "dispossessed",
+        "finishing",
+        "fouls",
+        "foulsTaken",
+        "goals",
+        "goalsConceded",
+        "handPassing",
+        "headedGoals",
+        "headers",
+        "id",
+        "individualPressure",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "name",
+        "nonPenaltyGoals",
+        "nonPenaltyGoalsAgainst",
+        "openPlayKeyPasses",
+        "openPlayPassesIntoOpponentBox",
+        "passes",
+        "passesOppHalf",
+        "passesPerLongBall",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "penaltiesTaken",
+        "player",
+        "recoveries",
+        "redCards",
+        "savesInBoxPct",
+        "savesOutOfBoxPct",
+        "savesPct",
+        "saving",
+        "scoringContribution",
+        "season",
+        "shooting",
+        "shots",
+        "shotsAgainst",
+        "shotsOffTarget",
+        "shotsOnTarget",
+        "shotsOnTargetAgainst",
+        "shotsPerGoal",
+        "shotsPerNpg",
+        "stats",
+        "successfulDribbles",
+        "successfulDribblesPct",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "throughBalls",
+        "touches",
+        "touchesInOpponentBox",
+        "xAssists",
+        "xG",
+        "xGBuildup",
+        "xGBuildup5pass",
+        "xGChain",
+        "xGEfficiency",
+        "xGFacedOnTargetEfficiency",
+        "xGFacedOnTargetPerGoalReceived",
+        "xGPerNpg",
+        "xGPerShot",
+        "xGPerShotAgainst",
+        "yellowCards"
+      ]
+    },
+    "GET /season/{id}/teams": {
+      "name": "Season Teams",
+      "group": "Season",
+      "description": "List of all the season teams.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "coach",
+        "country",
+        "current_season",
+        "id",
+        "is_national_team",
+        "market_value",
+        "name"
+      ]
+    },
+    "GET /season/{id}/teams/stats": {
+      "name": "Season Teams Stats",
+      "group": "Season",
+      "description": "List of stats for all the season teams .",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "aerial",
+        "aerialEfficiency",
+        "aerialWins",
+        "aerialWinsPct",
+        "assists",
+        "association",
+        "ball_handing",
+        "ball_handling",
+        "catching",
+        "chancesCreated",
+        "chancesCreatedOP",
+        "clearances",
+        "completedCrosses",
+        "crossEfficiency",
+        "crossing",
+        "deepProgression",
+        "defending",
+        "directness",
+        "dispossessed",
+        "expectedPoints",
+        "finishing",
+        "fouls",
+        "foulsTaken",
+        "goals",
+        "goalsConceded",
+        "handPassing",
+        "headedGoals",
+        "headers",
+        "id",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "name",
+        "nonPenaltyGoals",
+        "nonPenaltyGoalsAgainst",
+        "openPlayKeyPasses",
+        "openPlayPassesIntoOpponentBox",
+        "passesOppHalf",
+        "passesPerLongBall",
+        "passesPerShots",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "penaltiesTaken",
+        "points",
+        "possession",
+        "ppda",
+        "predictive",
+        "recoveries",
+        "savesInBoxPct",
+        "savesOutOfBoxPct",
+        "savesPct",
+        "saving",
+        "scoringContribution",
+        "season",
+        "shooting",
+        "shots",
+        "shotsAgainst",
+        "shotsOnTarget",
+        "shotsOnTargetAgainst",
+        "shotsPerGoal",
+        "shotsPerNpg",
+        "stats",
+        "successfulDribbles",
+        "successfulDribblesPct",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "throughBalls",
+        "touches",
+        "touchesInOpponentBox",
+        "xAssists",
+        "xG",
+        "xGChain",
+        "xGEfficiency",
+        "xGFacedOnTargetEfficiency",
+        "xGFacedOnTargetPerGoalReceived",
+        "xGPerNpg",
+        "xGPerShot",
+        "xGPerShotAgainst"
+      ]
+    },
+    "GET /team/{id}": {
+      "name": "Team Detail",
+      "group": "Team",
+      "description": "Detail of a single team.",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "coach",
+        "country",
+        "current_season",
+        "id",
+        "is_national_team",
+        "market_value",
+        "name"
+      ]
+    },
+    "GET /team/{id}/game-stats": {
+      "name": "Team Game Stats",
+      "group": "Team",
+      "description": "List of the game stats of given team.",
+      "paginated": false,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "game",
+        "games",
+        "id",
+        "name",
+        "season",
+        "stats",
+        "team",
+        "value"
+      ]
+    },
+    "GET /team/{id}/games": {
+      "name": "Team Games",
+      "group": "Team",
+      "description": "List of all the team games.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "away_team",
+        "coach",
+        "formation",
+        "home_team",
+        "id",
+        "last_minute_played_first_half",
+        "last_minute_played_first_half_ot",
+        "last_minute_played_second_half",
+        "last_minute_played_second_half_ot",
+        "last_minute_played_seocond_half",
+        "match_date",
+        "match_day",
+        "name",
+        "penalty_shootout_score",
+        "possession",
+        "score",
+        "season",
+        "status",
+        "venue"
+      ]
+    },
+    "GET /team/{id}/loans": {
+      "name": "Team Loans",
+      "group": "Team",
+      "description": "List of all the team loans",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "academy",
+        "age",
+        "contract",
+        "contract_option",
+        "current_team",
+        "dob",
+        "end_contract_date",
+        "first_name",
+        "height",
+        "id",
+        "last_name",
+        "loan_end_contract_date",
+        "loan_team",
+        "market_value",
+        "name",
+        "nationality",
+        "position",
+        "second_nationality",
+        "secondary_nationality",
+        "secondary_position",
+        "side",
+        "weight"
+      ]
+    },
+    "GET /team/{id}/roster": {
+      "name": "Team Roster",
+      "group": "Team",
+      "description": "List of all the team players.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "String",
+        "academy",
+        "age",
+        "contract",
+        "contract_option",
+        "current_team",
+        "dob",
+        "end_contract_date",
+        "first_name",
+        "height",
+        "id",
+        "last_name",
+        "loan_end_contract_date",
+        "loan_team",
+        "market_value",
+        "name",
+        "nationality",
+        "position",
+        "second_nationality",
+        "secondary_nationality",
+        "secondary_position",
+        "side",
+        "weight"
+      ]
+    },
+    "GET /team/{id}/season/{seasonId}/player-stats": {
+      "name": "Team Season Player Stats",
+      "group": "Team",
+      "description": "List of all the players season stats .",
+      "paginated": true,
+      "parameters": [
+        "id",
+        "seasonId"
+      ],
+      "fields": [
+        "aerial",
+        "aerialEfficiency",
+        "aerialWins",
+        "aerialWinsPct",
+        "assists",
+        "association",
+        "ballProgression",
+        "ball_handing",
+        "ball_handling",
+        "catching",
+        "chancesCreated",
+        "chancesCreatedOP",
+        "claimAccuracy",
+        "clearances",
+        "completedCrosses",
+        "crossEfficiency",
+        "crossing",
+        "deepProgression",
+        "defending",
+        "dispossessed",
+        "finishing",
+        "fouls",
+        "foulsTaken",
+        "goals",
+        "goalsConceded",
+        "handPassing",
+        "headedGoals",
+        "headers",
+        "id",
+        "individualPressure",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "name",
+        "nonPenaltyGoals",
+        "nonPenaltyGoalsAgainst",
+        "openPlayKeyPasses",
+        "openPlayPassesIntoOpponentBox",
+        "passesOppHalf",
+        "passesPerLongBall",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "penaltiesTaken",
+        "player",
+        "recoveries",
+        "redCards",
+        "savesInBoxPct",
+        "savesOutOfBoxPct",
+        "savesPct",
+        "saving",
+        "scoringContribution",
+        "season",
+        "shooting",
+        "shots",
+        "shotsAgainst",
+        "shotsOffTarget",
+        "shotsOnTarget",
+        "shotsOnTargetAgainst",
+        "shotsPerGoal",
+        "shotsPerNpg",
+        "stats",
+        "successfulDribbles",
+        "successfulDribblesPct",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "throughBalls",
+        "touches",
+        "touchesInOpponentBox",
+        "xAssists",
+        "xG",
+        "xGBuildup",
+        "xGBuildup5pass",
+        "xGChain",
+        "xGEfficiency",
+        "xGFacedOnTargetEfficiency",
+        "xGFacedOnTargetPerGoalReceived",
+        "xGPerNpg",
+        "xGPerShot",
+        "xGPerShotAgainst",
+        "yellowCards"
+      ]
+    },
+    "GET /team/{id}/season/{seasonId}/stats": {
+      "name": "Team Season Stats",
+      "group": "Team",
+      "description": "List of all the team season stats.",
+      "paginated": false,
+      "parameters": [
+        "id",
+        "seasonId"
+      ],
+      "fields": [
+        "aerial",
+        "aerialEfficiency",
+        "aerialWins",
+        "aerialWinsPct",
+        "assists",
+        "association",
+        "ball_handing",
+        "ball_handling",
+        "catching",
+        "chancesCreated",
+        "chancesCreatedOP",
+        "clearances",
+        "completedCrosses",
+        "crossEfficiency",
+        "crossing",
+        "deepProgression",
+        "defending",
+        "directness",
+        "dispossessed",
+        "expectedPoints",
+        "finishing",
+        "fouls",
+        "foulsTaken",
+        "goals",
+        "handPassing",
+        "headedGoals",
+        "headers",
+        "id",
+        "interceptions",
+        "longBallPct",
+        "longBallSuccessful",
+        "name",
+        "nonPenaltyGoals",
+        "nonPenaltyGoalsAgainst",
+        "openPlayKeyPasses",
+        "openPlayPassesIntoOpponentBox",
+        "passesOppHalf",
+        "passesPerLongBall",
+        "passesPerShots",
+        "passesSuccessful",
+        "passing",
+        "passingFinalThird",
+        "passingFinalThirdPct",
+        "passingPct",
+        "penaltiesTaken",
+        "points",
+        "possession",
+        "ppda",
+        "predictive",
+        "recoveries",
+        "savesInBoxPct",
+        "savesOutOfBoxPct",
+        "savesPct",
+        "saving",
+        "scoringContribution",
+        "season",
+        "shooting",
+        "shots",
+        "shotsAgainst",
+        "shotsOnTarget",
+        "shotsOnTargetAgainst",
+        "shotsPerGoal",
+        "shotsPerNpg",
+        "stats",
+        "successfulDribbles",
+        "successfulDribblesPct",
+        "tackles",
+        "tacklesWasDribbled",
+        "team",
+        "throughBalls",
+        "touches",
+        "touchesInOpponentBox",
+        "xAssists",
+        "xG",
+        "xGChain",
+        "xGEfficiency",
+        "xGFacedOnTargetEfficiency",
+        "xGFacedOnTargetPerGoalReceived",
+        "xGPerNpg",
+        "xGPerShot",
+        "xGPerShotAgainst"
+      ]
+    },
+    "GET /team/{id}/transfers": {
+      "name": "Team Transfers",
+      "group": "Team",
+      "description": "List of all the team transfers.",
+      "paginated": true,
+      "parameters": [
+        "id"
+      ],
+      "fields": [
+        "date",
+        "fee",
+        "id",
+        "market_value",
+        "name",
+        "player",
+        "season_text",
+        "team_from",
+        "team_to",
+        "type"
+      ]
+    },
+    "POST /game": {
+      "name": "Game Upload",
+      "group": "Game",
+      "description": "Request game creation",
+      "paginated": false,
+      "parameters": [
+        "awayTeamId",
+        "files",
+        "homeTeamId",
+        "matchDate",
+        "matchDay",
+        "matchGroupId",
+        "roundTypeId",
+        "seasonId"
+      ],
+      "fields": [
+        "awayTeamId",
+        "fileName",
+        "fileTypeId",
+        "files",
+        "gameId",
+        "homeTeamId",
+        "link",
+        "matchDate",
+        "matchDay",
+        "matchGroupId",
+        "roundTypeId",
+        "seasonId",
+        "urls"
+      ]
+    }
+  }
+}

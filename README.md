@@ -127,12 +127,13 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Sportradar | 30 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 14 | api-access, api-endpoints |
+| Driblab | 27 | api-access, api-endpoints, data-model |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
 | FotMob | 3 | identity-surfaces |
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**2,295 searchable chunks** across 23 providers and tools.
+**2,322 searchable chunks** across 24 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
@@ -155,6 +156,7 @@ trusting them.
 | kloppy, socceraction, soccerdata, mplsoccer, floodlight, databallpy, skillcorner, fast-forward, unravelsports | The installed package itself — enum members, importable symbols, class constants, `Literal` parameter vocabularies | `src/__tests__/provider-truth.test.ts` |
 | Wyscout, SkillCorner, FMDB Pro, Sportradar | The vendor's own publicly published OpenAPI spec — endpoint paths and methods | `src/__tests__/provider-truth.test.ts` |
 | BeSoccer | The vendor's published Postman collection — request vocabulary and parameters | `src/__tests__/provider-truth.test.ts` |
+| Driblab | The vendor's published API guide — endpoint paths, methods, parameter and field names | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
 
 Truth files live in `data/provider-truth/` and are generated, not hand-written:

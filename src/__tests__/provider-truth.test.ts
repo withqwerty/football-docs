@@ -7,9 +7,11 @@ import {
   extractEnumTokens,
   extractImportedSymbols,
   extractLiteralArguments,
+  listNotionProviders,
   listOpenApiProviders,
   listPostmanProviders,
   listTruthProviders,
+  loadNotionTruth,
   loadOpenApiTruth,
   loadPostmanTruth,
   loadProviderDocs,
@@ -295,5 +297,83 @@ describe("single-endpoint provider docs are grounded in the published collection
     const raw = JSON.stringify(loadPostmanTruth("besoccer"));
     expect(raw).not.toContain("league_logos");
     expect(raw.length).toBeLessThan(200_000);
+  });
+});
+
+describe("provider docs are grounded in the vendor's published guide", () => {
+  const notionProviders = listNotionProviders();
+
+  it("has guide truth files to validate against", () => {
+    expect(notionProviders.length).toBeGreaterThan(0);
+  });
+
+  it.each(notionProviders)("%s docs cite only endpoints the guide documents", (provider) => {
+    const truth = loadNotionTruth(provider);
+    expect(validateOpenApiDocs(loadProviderDocs(provider), truth)).toEqual([]);
+  });
+
+  it.each(notionProviders)("%s docs actually cite endpoints, so the check is not vacuous", (provider) => {
+    expect(countDocumentedEndpoints(loadProviderDocs(provider))).toBeGreaterThan(0);
+  });
+
+  it.each(notionProviders)("%s truth records the guide it came from", (provider) => {
+    const truth = loadNotionTruth(provider);
+    expect(truth.source.page_id).toBeTruthy();
+    expect(truth.source.title).toBeTruthy();
+    expect(Object.keys(truth.paths).length).toBeGreaterThan(0);
+    expect(truth.fields.length).toBeGreaterThan(0);
+  });
+
+  it("flags an endpoint the guide does not document", () => {
+    const truth = loadNotionTruth("driblab");
+    const violations = validateOpenApiDocs(
+      [{ file: "fake.md", text: "Call `GET /player/{id}/not-a-real-endpoint`." }],
+      truth,
+    );
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toContain("not-a-real-endpoint");
+  });
+
+  it("keeps the season and team stats spellings apart", () => {
+    // Driblab pluralises season-scoped stats and hyphenates team-scoped ones:
+    // /season/{id}/players/stats but /team/{id}/season/{seasonId}/player-stats.
+    // Either spelling looks like a typo for the other, and neither route exists
+    // on the other resource.
+    const truth = loadNotionTruth("driblab");
+    expect(
+      validateOpenApiDocs([{ file: "ok.md", text: "`GET /season/{id}/players/stats`" }], truth),
+    ).toEqual([]);
+    expect(
+      validateOpenApiDocs([{ file: "bad.md", text: "`GET /season/{id}/player-stats`" }], truth),
+    ).toHaveLength(1);
+    expect(
+      validateOpenApiDocs(
+        [{ file: "ok.md", text: "`GET /team/{id}/season/{seasonId}/player-stats`" }],
+        truth,
+      ),
+    ).toEqual([]);
+    expect(
+      validateOpenApiDocs(
+        [{ file: "bad.md", text: "`GET /team/{id}/season/{seasonId}/players/stats`" }],
+        truth,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("holds the write endpoints the guide documents", () => {
+    // The API is not read-only, and a doc set that only ever says GET would hide
+    // that a read token may also be able to delete a player.
+    const truth = loadNotionTruth("driblab");
+    expect(truth.paths["/game"]).toContain("POST");
+    expect(truth.paths["/player/{id}"]).toContain("DELETE");
+  });
+
+  it("does not retain values from the guide's response samples", () => {
+    // The samples carry real players, teams and seasons, and presigned S3 URLs
+    // complete with an AWS access key id. The truth file keeps key names only.
+    const raw = JSON.stringify(loadNotionTruth("driblab"));
+    for (const leak of ["Oblak", "Atletico", "amazonaws", "AKIA", "La Liga"]) {
+      expect(raw).not.toContain(leak);
+    }
   });
 });

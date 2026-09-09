@@ -116,7 +116,16 @@ const ENDPOINT_ALLOWLIST: Record<string, string[]> = {
   wyscout: [],
   skillcorner: [],
   "fmdb-pro": [],
+  driblab: [],
 };
+
+/**
+ * The endpoint check needs only a provider name and a path->methods map, so it
+ * works for any truth kind that carries one - an OpenAPI spec, or a vendor guide
+ * the endpoints were derived from.
+ */
+export type EndpointTruth = Pick<OpenApiTruth, "provider" | "paths"> &
+  Partial<Pick<OpenApiTruth, "basePaths">>;
 
 /**
  * Compare endpoints on shape, not on parameter naming. Docs and specs often use
@@ -200,7 +209,7 @@ export function listOpenApiProviders(): string[] {
 }
 
 /** Check that every endpoint a doc set cites exists in the vendor's own spec. */
-export function validateOpenApiDocs(docs: DocFile[], truth: OpenApiTruth): string[] {
+export function validateOpenApiDocs(docs: DocFile[], truth: EndpointTruth): string[] {
   const violations: string[] = [];
 
   const bases = truth.basePaths ?? [];
@@ -250,6 +259,46 @@ export function validateOpenApiDocs(docs: DocFile[], truth: OpenApiTruth): strin
   }
 
   return violations;
+}
+
+/**
+ * Some vendors publish their API contract as a Notion page rather than as a
+ * specification. scripts/gen_notion_truth.py derives the same facts the endpoint
+ * check needs - paths, methods, parameter and field names - without mirroring the
+ * page, whose response samples carry the vendor's own match data.
+ */
+export interface NotionTruth {
+  provider: string;
+  kind: string;
+  source: { page: string; page_id: string; title: string; generated_at: string };
+  basePaths: string[];
+  paths: Record<string, string[]>;
+  parameters: string[];
+  fields: string[];
+  operations: Record<
+    string,
+    {
+      name: string;
+      group: string;
+      description: string;
+      paginated: boolean;
+      parameters: string[];
+      fields: string[];
+    }
+  >;
+}
+
+export function loadNotionTruth(provider: string): NotionTruth {
+  return JSON.parse(
+    readFileSync(resolve(TRUTH_DIR, `${provider}.notion.json`), "utf-8"),
+  ) as NotionTruth;
+}
+
+export function listNotionProviders(): string[] {
+  return readdirSync(TRUTH_DIR)
+    .filter((f) => f.endsWith(".notion.json"))
+    .map((f) => f.replace(/\.notion\.json$/, ""))
+    .sort();
 }
 
 export function loadProviderTruth(provider: string): PythonPackageTruth {
