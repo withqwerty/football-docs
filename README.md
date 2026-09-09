@@ -213,6 +213,53 @@ npm run ingest -- --provider kloppy     # re-ingest one provider (incremental)
 
 Each crawled doc carries provenance metadata (source URL, source type, upstream version, crawl timestamp) that is surfaced in search results, so agents can distinguish between curated content and upstream documentation.
 
+### Cutting a release
+
+**Pushing the tag is the release.** `.github/workflows/release.yml` runs on any
+`v*` tag and does the rest: it re-runs the full check suite, creates the GitHub
+Release, and publishes to npm.
+
+```bash
+# 1. Bump the version in package.json and server.json (three fields in total).
+#    Land it on main through a pull request, as `chore: release vX.Y.Z`.
+#
+# 2. Tag the merge commit and push the tag.
+git tag -a v0.11.0 -m "v0.11.0"
+git push origin v0.11.0
+```
+
+Release notes come from the body of the `chore: release vX.Y.Z` commit, so write
+that message as the release notes you want readers to see. The workflow reads it
+from the second parent when the tag sits on a merge commit, strips the commit
+trailers, and falls back to GitHub's generated notes if the body is empty.
+
+Three properties worth knowing, because each one exists to stop a specific
+failure:
+
+- **The tag must match `package.json`.** A mismatch fails the job before
+  anything is created or published, so a version can never ship under another
+  version's name.
+- **The full suite runs again.** A tag can be pushed to any commit, including
+  one that never went through a pull request, so the release path cannot assume
+  CI already passed on that tree.
+- **Re-running is safe.** An existing Release is left alone and an
+  already-published version is skipped, so a failed job can simply be re-run.
+
+Publishing to npm needs an `NPM_TOKEN` repository secret holding a **granular
+access token** with read and write on `football-docs`. An automation token
+satisfies the account's publish 2FA; an interactive `npm login` does not, which
+is why `npm publish` from a laptop stops for a one-time password. Without the
+secret the workflow still cuts the GitHub Release, then warns in the job summary
+that npm was skipped rather than failing silently.
+
+Publishes from CI carry [npm provenance](https://docs.npmjs.com/generating-provenance-statements),
+so the tarball on npm is attested to this repository and this workflow run.
+
+Note that `prepublishOnly` runs `pnpm build && pnpm ingest`, which rebuilds
+`data/docs.db`. Publishing by hand therefore leaves that file dirty in the
+working tree; the content is unchanged, only SQLite's page layout differs, so
+`git checkout data/docs.db` clears it.
+
 ## License
 
 MIT
