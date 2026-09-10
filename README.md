@@ -245,15 +245,41 @@ failure:
 - **Re-running is safe.** An existing Release is left alone and an
   already-published version is skipped, so a failed job can simply be re-run.
 
-Publishing to npm needs an `NPM_TOKEN` repository secret holding a **granular
-access token** with read and write on `football-docs`. An automation token
-satisfies the account's publish 2FA; an interactive `npm login` does not, which
-is why `npm publish` from a laptop stops for a one-time password. Without the
-secret the workflow still cuts the GitHub Release, then warns in the job summary
-that npm was skipped rather than failing silently.
+**There is no npm token in this repository.** Publishing uses npm
+[trusted publishing](https://docs.npmjs.com/trusted-publishers): the registry
+authenticates the workflow itself over OIDC, against a trust configuration on the
+package that names this repository and this workflow file. Publishing rights are
+bound to `release.yml` rather than to a secret that would work from anywhere it
+leaked to, and there is nothing to rotate.
 
-Publishes from CI carry [npm provenance](https://docs.npmjs.com/generating-provenance-statements),
-so the tarball on npm is attested to this repository and this workflow run.
+That trust was configured once, with the npm CLI:
+
+```bash
+npm trust github football-docs \
+  --repo withqwerty/football-docs \
+  --file release.yml \
+  --allow-publish
+```
+
+`npm trust list football-docs` shows it; `npm trust revoke` removes it. **Renaming
+`release.yml`, or publishing from a different workflow, breaks the match** — by
+design. Re-point it with `npm trust github ... --file <new-name>` if the file
+ever moves.
+
+Trusted publishing generates [provenance](https://docs.npmjs.com/generating-provenance-statements)
+automatically, so the tarball on npm is attested to this repository and this
+workflow run without the workflow asking for it.
+
+Two consequences worth knowing:
+
+- **The release job runs on Node 24.** Trusted publishing needs npm >= 11.5.1 and
+  Node 22 still ships npm 10. The whole job uses one Node version, because
+  switching mid-job would leave `better-sqlite3`'s native binding built for the
+  wrong ABI and `pnpm ingest` would fail on it. Node 24 is in the CI matrix for
+  the same reason: a release must not be the first time the suite meets it.
+- **The release job does not cache dependencies.** This is the tree that gets
+  published, so it is resolved fresh from the lockfile rather than rehydrated
+  from a cache that earlier runs could have poisoned.
 
 Note that `prepublishOnly` runs `pnpm build && pnpm ingest`, which rebuilds
 `data/docs.db`. Publishing by hand therefore leaves that file dirty in the

@@ -10,8 +10,9 @@ on:
       - 'v*'
 
 # Only the release job writes, and only to this repository's releases. The
-# id-token grant is what lets npm attach a provenance attestation to the
-# published tarball; it signs nothing else.
+# id-token grant is what npm's trusted publishing authenticates against: the
+# registry checks the OIDC claim naming this repository and this workflow file,
+# so there is no npm token anywhere in this repository.
 permissions:
   contents: read
 
@@ -32,11 +33,31 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: pnpm
+          # Trusted publishing needs npm >= 11.5.1, and Node 22 still ships npm
+          # 10. Node 24 ships 11.19. The whole job runs on one version because
+          # switching mid-job would leave better-sqlite3's native binding built
+          # for the wrong ABI, and `pnpm ingest` below would fail on it.
+          node-version: 24
           registry-url: https://registry.npmjs.org
+          # Deliberately no dependency cache. npm's own guidance is not to cache
+          # in a release build: this is the tree that gets published, so it is
+          # resolved fresh from the lockfile rather than rehydrated from a cache
+          # that earlier runs could have poisoned.
 
       - run: pnpm install --frozen-lockfile
+
+      # Fail loudly if a future runner image ships an older npm than trusted
+      # publishing needs, rather than falling back to token auth that does not
+      # exist here.
+      - name: npm must be new enough for trusted publishing
+        run: |
+          NEED=11.5.1
+          GOT="$(npm --version)"
+          if [ "$(printf '%s\n%s\n' "$NEED" "$GOT" | sort -V | head -1)" != "$NEED" ]; then
+            echo "::error::npm ${GOT} is too old for trusted publishing, need >= ${NEED}"
+            exit 1
+          fi
+          echo "npm ${GOT}"
 
       # A tag that disagrees with package.json publishes one version under
       # another version's name, and nothing downstream would notice. Fail here,
@@ -104,49 +125,22 @@ jobs:
             gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file /tmp/notes.md
           fi
 
-      # Publishing needs an npm granular automation token in the NPM_TOKEN
-      # secret. An automation token satisfies the account's publish 2FA, which
-      # an interactive login does not - `npm publish` from a laptop stops for a
-      # one-time password.
-      - name: Is npm publishing configured
-        id: npm
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -n "$NPM_TOKEN" ]; then
-            echo "configured=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-          fi
-
+      # No token. npm's trusted publishing authenticates this workflow to the
+      # registry over OIDC, and the trust configuration on the package names
+      # this repository and this file - so publishing rights are bound to this
+      # workflow rather than to a secret that works from anywhere it leaks to.
+      #
+      # Provenance is generated automatically under trusted publishing, so
+      # --provenance is not passed. Renaming this file, or publishing from
+      # another workflow, breaks the trust match by design: re-point it with
+      # `npm trust github football-docs --file <new-name> --allow-publish`.
+      #
       # Already-published is not a failure. Re-running a release job, or tagging
       # a version someone published by hand, should leave npm as it is.
       - name: Publish to npm
-        if: steps.npm.outputs.configured == 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [ "$(npm view "${pkg_name}@${version}" version 2>/dev/null || true)" = "${version}" ]; then
             echo "::notice::${pkg_name}@${version} is already on npm, skipping publish"
             exit 0
           fi
-          npm publish --provenance --access public
-
-      # A silent skip is the wrong failure mode for a publish step: the tag and
-      # the Release would both look healthy while npm stayed a version behind.
-      - name: Say why npm was skipped
-        if: steps.npm.outputs.configured != 'true'
-        run: |
-          echo "::warning::NPM_TOKEN is not set, so v${version} was released on GitHub but not published to npm."
-          {
-            echo "### npm publish skipped"
-            echo
-            echo "\`NPM_TOKEN\` is not set on this repository, so **v${version} is not on npm**."
-            echo
-            echo "Publish it by hand with \`npm publish --otp=<code>\`, or add the secret:"
-            echo
-            echo "1. Create a **granular access token** at <https://www.npmjs.com/settings/~/tokens> with read and write on \`football-docs\`."
-            echo "2. \`gh secret set NPM_TOKEN\` in this repository."
-            echo
-            echo "An automation token satisfies the publish 2FA requirement; an interactive login does not."
-          } >> "$GITHUB_STEP_SUMMARY"
+          npm publish
