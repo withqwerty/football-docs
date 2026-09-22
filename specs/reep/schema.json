@@ -1,0 +1,237 @@
+{
+  "files": {
+    "csv/aliases.csv.gz": {
+      "columns": [
+        "reep_id",
+        "alias",
+        "kind",
+        "rank",
+        "language"
+      ],
+      "note": "Public canonical alias surface; provenance and valid-time stay private. language (WIT-1853) is empty unless the underlying claim carries one \u2014 never inferred from nationality/country.",
+      "schema": "schemas/aliases.schema.json"
+    },
+    "csv/bridges.csv.gz": {
+      "columns": [
+        "provider",
+        "namespace",
+        "external_id",
+        "reep_id",
+        "rung"
+      ],
+      "note": "Namespace-scoped provider bridge table; evidence remains private. rung (WIT-2667) is the one thing about that evidence the register does publish: which KIND of agreement attached this id \u2014 name and nationality, name and date of birth, a dated footprint, the provider's own published cross-reference, an operator's verification, or a third-party mapping table (crosswalk, the weakest). It lets a consumer choose which rungs to trust rather than taking the table whole. An EMPTY cell means the register records no rung for that bridge \u2014 it is never a guess, and never a claim that the bridge is weak: the register's own mint path attaches bridges without an attach rule, so most rows are empty today. Appended at the end of the column list, so a consumer reading the first four columns positionally is unaffected.",
+      "schema": "schemas/bridges.schema.json"
+    },
+    "csv/coaches.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label",
+        "gender",
+        "country"
+      ],
+      "note": "Type-specific public identity file for coaches. Adds gender/country disambiguators (WIT-2293); empty when the entity carries no such claim.",
+      "schema": "schemas/coaches.schema.json"
+    },
+    "csv/competitions.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label",
+        "gender",
+        "country"
+      ],
+      "note": "Type-specific public identity file for competitions. Adds gender/country disambiguators (WIT-2293); empty when the entity carries no such claim.",
+      "schema": "schemas/competitions.schema.json"
+    },
+    "csv/coverage.csv.gz": {
+      "columns": [
+        "section",
+        "key",
+        "value"
+      ],
+      "note": "Manifest-derived release coverage summary.",
+      "schema": "schemas/coverage.schema.json"
+    },
+    "csv/entities.csv.gz": {
+      "columns": [
+        "reep_id",
+        "entity_type",
+        "status",
+        "label",
+        "gender",
+        "country",
+        "corroboration_grade",
+        "corroboration_count",
+        "source_tier_band"
+      ],
+      "note": "Thin public identity index; type-specific details live in per-type files. gender/country (WIT-2293) disambiguate same-label entities that a bare label cannot break (e.g. the two 'Parma' teams, men's and women's, byte-identical before this column existed); empty when the entity carries no such claim. corroboration_grade/corroboration_count/source_tier_band (WIT-2292) are the mint-tier independence-bucket headline already carried on open_census's entities.csv.gz \u2014 the same arithmetic, so a bare bridge_count never reads as more independent corroboration than it is.",
+      "schema": "schemas/entities.schema.json"
+    },
+    "csv/matches.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label",
+        "home_score",
+        "away_score",
+        "result_form",
+        "shootout_home",
+        "shootout_away",
+        "score_basis",
+        "home_id",
+        "away_id",
+        "played_on",
+        "leg",
+        "aggregate_of",
+        "match_state"
+      ],
+      "note": "Type-specific public identity file for matches, extended with the published scoreline (WIT-2628). home_score/away_score are the score AFTER PLAY (90 or 120 minutes); shootout kicks never enter them and live in shootout_home/shootout_away instead. result_form says how the result was reached and score_basis how the published score was established. An empty cell means the register holds no value; it never means zero. A redirected row carries empty score cells \u2014 the score belongs to the surviving identity, and duplicating it would double-count. home_id/away_id name the two sides and played_on the match date; a side id is emitted only when that team is itself published by this cut, so a consumer never reads an id it cannot resolve. leg (1 or 2) and aggregate_of carry the two-legged tie (WIT-2666): aggregate_of names the OTHER leg's reep_id, or the tie key opta-aggregate:<uuid> while that partner is unminted, so a consumer may read a key rather than an id there. Both cells are empty on a single-leg match. A consumer that wants an aggregate sums the two legs' after-play scores; the register publishes no aggregate score and no tie winner, and replays remain stage-grain structure reachable through relationships.csv.gz. match_state (WIT-2653) says whether the match happened \u2014 scheduled, played, postponed, cancelled, awarded or abandoned \u2014 which an empty score cannot: a fixture still to come, a played match whose score the register never resolved, a cancellation and a withheld award all read as the same empty cells without it. It never replaces result_form: the state says whether the match happened, the form how the result was reached. An EMPTY cell means the register holds no state claim for that match, which is what every release cut before the spine minted one reads back as.",
+      "schema": "schemas/matches.schema.json"
+    },
+    "csv/observed_clubs.csv.gz": {
+      "columns": [
+        "reep_id",
+        "entity_type",
+        "observed_clubs",
+        "first_observed_season",
+        "last_observed_season",
+        "basis"
+      ],
+      "note": "WIT-2291: per-person OBSERVED-CLUBS summary for players and coaches \u2014 an aggregate over the register's own match-coverage, never the underlying club-membership edges (the register mints no person->club edge at all). observed_clubs counts DISTINCT teams this person appears for in appearances.csv/coach_appearances.csv; first_observed_season/last_observed_season are the calendar years of the earliest/latest season reachable from a mapped appearance (empty when no appearance maps to a season). A row exists only for a player/coach with >=1 observed appearance; absence means unobserved, never zero. `basis` is a fixed caveat string on every row: the count is our lineup COVERAGE, not a career history.",
+      "schema": "schemas/observed_clubs.schema.json"
+    },
+    "csv/overlay_aliases.csv.gz": {
+      "columns": [
+        "reep_id",
+        "name",
+        "language",
+        "name_source",
+        "confidence",
+        "link_confidence",
+        "dob_check",
+        "qid",
+        "source",
+        "source_tier"
+      ],
+      "note": "Wikidata-originated overlay convenience names; source=wikidata and source_tier=wikidata-originated. Never canonical aliases or bridge evidence.",
+      "schema": "schemas/overlay_aliases.schema.json"
+    },
+    "csv/overlay_links.csv.gz": {
+      "columns": [
+        "reep_id",
+        "qid",
+        "confidence",
+        "dob_check",
+        "entity_type",
+        "inherited_count",
+        "inherited"
+      ],
+      "note": "Wikidata-originated overlay links: a QID per resolved entity plus low-confidence inherited external-ID hints from the Wikidata corpus. `inherited` is a JSON array of {provider,property,external_id,rank,source,source_tier,confidence}. Never canonical or matching evidence.",
+      "schema": "schemas/overlay_links.schema.json"
+    },
+    "csv/overlay_xids.csv.gz": {
+      "columns": [
+        "reep_id",
+        "provider",
+        "property",
+        "external_id",
+        "rank",
+        "confidence",
+        "dob_check",
+        "qid"
+      ],
+      "note": "Wikidata-originated discovery-id annex (WIT-1974): each already-gated overlay link's OTHER external ids RELAYED \u2014 never asserted \u2014 at the anchoring link's own confidence (the 0.80-0.85 band). Never a bridge, a mint input, or corroboration evidence; provenance (`via`, the corpus anchor arm) and the write timestamp stay behind the wall. public_bridge_v1 only \u2014 omitted from every open_census tier, the same provider-id-crosswalk carve-out as bridges.csv.gz and overlay_links.csv.gz.",
+      "schema": "schemas/overlay_xids.schema.json"
+    },
+    "csv/players.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label",
+        "gender",
+        "country"
+      ],
+      "note": "Type-specific public identity file for players. Adds gender/country disambiguators (WIT-2293); empty when the entity carries no such claim.",
+      "schema": "schemas/players.schema.json"
+    },
+    "csv/redirects.csv.gz": {
+      "columns": [
+        "from_id",
+        "to_id",
+        "reason"
+      ],
+      "note": "Identity redirect ledger flattened by the internal export, plus the de-corroboration tombstones (WIT-2435). reason=merged carries a live to_id (the survivor); reason=de_corroborated carries an EMPTY to_id \u2014 the id was emitted by the prior published release and this cut no longer admits it, because its corroboration fell below the wall. A published id must stay resolvable, and a single-bucket entity must never read as a corroborated register member; the tombstone says where the id went without presenting it as census content. Column order is stable, so a consumer reading from_id/to_id positionally is unaffected.",
+      "schema": "schemas/redirects.schema.json"
+    },
+    "csv/referees.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label"
+      ],
+      "note": "Type-specific public identity file for referees.",
+      "schema": "schemas/referees.schema.json"
+    },
+    "csv/relationships.csv.gz": {
+      "columns": [
+        "from_id",
+        "to_id",
+        "kind"
+      ],
+      "note": "Public structural relationships without evidence payloads.",
+      "schema": "schemas/relationships.schema.json"
+    },
+    "csv/seasons.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label"
+      ],
+      "note": "Type-specific public identity file for seasons.",
+      "schema": "schemas/seasons.schema.json"
+    },
+    "csv/stages.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label"
+      ],
+      "note": "Type-specific public identity file for stages.",
+      "schema": "schemas/stages.schema.json"
+    },
+    "csv/teams.csv.gz": {
+      "columns": [
+        "reep_id",
+        "status",
+        "label",
+        "gender",
+        "country"
+      ],
+      "note": "Type-specific public identity file for teams. Adds gender/country disambiguators (WIT-2293); empty when the entity carries no such claim.",
+      "schema": "schemas/teams.schema.json"
+    }
+  },
+  "json_schema_dialect": "https://json-schema.org/draft/2020-12/schema",
+  "redaction": {
+    "decision_k_v3": "complete bridge snapshots publish only after the field, provider-posture and accepted-risk gates pass",
+    "excluded": [
+      "canonical_dob",
+      "created_at",
+      "dob",
+      "evidence",
+      "meta",
+      "mint_salt",
+      "provider_path",
+      "recorded_at",
+      "source_path",
+      "store_path",
+      "valid_from",
+      "valid_to"
+    ],
+    "policy": "deny-by-default bridge-register v1",
+    "redistribution_policy": "docs/runbooks/provider-redistribution-policy.md",
+    "wikidata_overlay": "overlay_aliases, overlay_links and overlay_xids are wikidata-originated overlay only; never canonical"
+  },
+  "schema_version": "bridge-register-v1"
+}

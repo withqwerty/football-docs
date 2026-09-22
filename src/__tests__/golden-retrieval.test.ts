@@ -1629,15 +1629,15 @@ describe("golden retrieval evals", () => {
     const result = await resolveEntity(
       { name: "Arsenal", type: "team" },
       {
-        baseUrl: "https://reep.example.test",
+        env: { REEP_API_KEY: "wrong", REEP_API_URL: "https://reep.example.test/api/v1" },
         fetchImpl: async () => new Response("Unauthorized", { status: 401, statusText: "Unauthorized" }),
       },
     );
     const text = result.content[0].text;
 
     expect(result.isError).toBe(true);
-    expect(text).toContain("Reep API authentication failed");
-    expect(text).toContain("Entity resolution is optional");
-    expect(text).toContain("Docs search tools still work");
+    expect(text).toContain("The Reep API refused the key");
+    expect(text).toContain("getintouch+nutmeg@withqwerty.com");
+    expect(text).toContain("REEP_DUCKDB_PATH");
   });
 });

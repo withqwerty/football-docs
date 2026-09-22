@@ -12,3 +12,4 @@ python3 scripts/gen_openapi_truth.py \
 python3 scripts/gen_openapi_truth.py specs/skillcorner/skillcorner_openapi.json --provider skillcorner
 python3 scripts/gen_openapi_truth.py specs/fmdb-pro/openapi.json --provider fmdb-pro
 python3 scripts/gen_openapi_truth.py specs/sportradar/soccer-v4-openapi.yaml --provider sportradar
+python3 scripts/gen_openapi_truth.py specs/reep/openapi.yaml --provider reep

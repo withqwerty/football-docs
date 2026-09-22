@@ -16,6 +16,9 @@ anyone can re-fetch and diff.
 | `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-08-31 | 2026-08-31 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-08-31 | 2026-08-31 |
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-08-31 | 2026-08-31 |
+| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-22 | 2026-09-22 |
+| `reep/release.json` | https://data.reep.football/releases/20260915T203651Z/release.json (via `latest.json`) | 2026-09-22 | 2026-09-22 |
+| `reep/schema.json` | https://data.reep.football/releases/20260915T203651Z/schema.json | 2026-09-22 | 2026-09-22 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -33,6 +36,7 @@ curl -sL -o specs/wyscout/v4-next.yml    https://apidocs.wyscout.com/assets/spec
 curl -sL -o specs/skillcorner/skillcorner_openapi.json https://www.skillcorner.com/apidocs.json
 curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
 curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
+curl -sL -o specs/reep/openapi.yaml https://reep.football/openapi.yaml
 ```
 
 The Sportradar spec is the one the public Swagger UI at
@@ -121,3 +125,28 @@ pnpm notion:truth \
 Impect is deliberately absent. Its documentation is built solely from the public
 [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository, and no
 Impect API specification is kept in this repository.
+
+## Reep
+
+Reep is checked against three snapshots: the API spec (`reep/openapi.yaml`, used by
+the provider-truth tests) and one release's manifest and column schema
+(`reep/release.json`, `reep/schema.json`, used by `src/__tests__/reep.test.ts`). A new
+release is cut weekly, so the manifest snapshot is expected to age; what matters is
+whether anything the docs state has changed.
+
+To refresh:
+
+1. Run `python3 scripts/check_reep_live.py`. It checks every stable download link
+   and every reep.football link in `docs/reep/`, and lists what differs from the
+   snapshots. Exit 1 means a broken link, 2 means drift, 0 means current.
+2. For each drift line, reread the doc section it names and update `docs/reep/`.
+3. Run `python3 scripts/check_reep_live.py --update` to replace the snapshots.
+4. If the spec changed, run `bash scripts/gen_all_openapi_truth.sh`.
+5. Update the dates in the table above and `crawled_at` in the changed docs, run
+   `pnpm test`, then rebuild the index.
+
+Two things no script checks: the key policy and limits on https://reep.football/api,
+and the namespace table in `docs/reep/identity-and-ids.md`. Reread the API page, and
+compare the namespace table with `SELECT DISTINCT provider, namespace FROM bridges`
+on the current DuckDB file.
+

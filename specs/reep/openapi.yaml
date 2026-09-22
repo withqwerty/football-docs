@@ -1,0 +1,1142 @@
+openapi: 3.1.0
+info:
+  title: Reep Next API
+  version: v1.0.0
+  x-api-schema: public-bridge-register-v2
+  x-changes-index-schema: 2
+  description: |
+    The Reep Next API resolves football identity across providers. It reads from
+    generated, versioned release artefacts — never the private register database —
+    so every response is anchored to a published release stamp.
+
+    ## What it does
+    - **Resolve** a provider's own ID (Transfermarkt, Opta, Wyscout, …) to a stable
+      Reep ID, and vice versa.
+    - **Expand** an entity with typed aliases, sourced attributes, provider bridges,
+      a lower-confidence Wikidata overlay, and a grouped relationship summary.
+
+    ## Authentication
+    Pass a manually issued partner key as `Authorization: Bearer <key>`.
+    Public bulk access is through stamped releases at
+    <https://reep.football/downloads>; preview API access is described at
+    <https://reep.football/partners>.
+    Metadata endpoints (`/meta`, `/providers`, `/provider-notices/summary`) do not
+    consume quota; entity and resolve calls cost one lookup each.
+
+    ## Identifiers
+    A Reep ID matches `^r[a-z][0-9a-f]{14}$` (e.g. `rl0173c34b3874f2`). IDs are
+    append-mostly and never reused. A merged entity leaves a redirect: requesting a
+    redirected ID returns HTTP 200 for its canonical survivor, with `requested_id`
+    and `redirected_to` in the body so clients can persist the new ID. Removed
+    entities leave a tombstone. See <https://reep.football/id-policy>.
+
+    ## Namespaces
+    `/api/v1` is the customer launch namespace. `/api/next` is the staging namespace
+    with an identical contract.
+  contact:
+    name: Reep
+    url: https://reep.football
+    email: getintouch@withqwerty.com
+  license:
+    name: Open Reep data — CC0 for Reep-held rights; see release terms
+    url: https://reep.football/downloads
+
+servers:
+  - url: https://reep.football/api/v1
+    description: Customer launch namespace
+  - url: https://reep.football/api/next
+    description: Staging namespace (identical contract)
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Metadata
+    description: Release metadata and provider rollups. No quota cost.
+  - name: Resolve
+    description: Provider ID to Reep ID resolution.
+  - name: Entities
+    description: Entity detail and expansions by Reep ID.
+  - name: Search
+    description: Bounded discovery by canonical label and safe aliases.
+  - name: Notices
+    description: >
+      Provider-scoped notice feed. A data provider's own key (Unkey
+      `meta.provider`) unlocks the notices held about that provider's data, with
+      acknowledge/seen tracking. No quota cost.
+
+paths:
+  /:
+    get:
+      tags: [Metadata]
+      summary: API index
+      description: Lists the available endpoints and the release the API is serving.
+      security: []
+      responses:
+        "200":
+          description: Index and endpoint list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name: { type: string }
+                  version: { type: string }
+                  namespace: { type: string, enum: [v1, next] }
+                  release: { $ref: "#/components/schemas/ReleaseSummary" }
+                  endpoints:
+                    type: object
+                    additionalProperties: { type: string }
+        "503": { $ref: "#/components/responses/IndexMissing" }
+
+  /meta:
+    get:
+      tags: [Metadata]
+      summary: Release metadata
+      description: |
+        The serving release's stamp, tier, schema, and row counts. No quota cost.
+
+        `counts` reports the served release's own population — the bridge register
+        the API resolves against. This is a different projection from the public
+        entity headline shown on <https://reep.football> (and in the downloadable
+        open census), which is filtered for public redistribution and so can carry
+        a slightly different total. Use `counts` for what the API can resolve; use
+        the site headline for the public census figure.
+      responses:
+        "200":
+          description: Release metadata and register counts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api_version: { type: string }
+                  namespace: { type: string, enum: [v1, next] }
+                  api_schema: { type: string, example: public-bridge-register-v2 }
+                  index_generated_at: { type: string, format: date-time }
+                  release: { $ref: "#/components/schemas/ReleaseSummary" }
+                  counts:
+                    type: object
+                    additionalProperties: { type: integer }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /providers:
+    get:
+      tags: [Metadata]
+      summary: Providers and roles
+      description: |
+        Provider bridge/overlay counts and roles. A `canonical_bridge` provider is a
+        normal public ID link; `bridge_only` providers are useful for interoperability
+        but are not mint-tier corroboration; `overlay_only` (Wikidata) is convenience
+        data, never a canonical bridge. No quota cost.
+      responses:
+        "200":
+          description: Provider rollup.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: array
+                    items: { $ref: "#/components/schemas/ProviderRollup" }
+                  provider_roles:
+                    type: object
+                    additionalProperties: { type: string }
+                  count: { type: integer }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /changes:
+    get:
+      tags: [Changes]
+      summary: What changed in a release window
+      description: |
+        Walk the published release chain for entity-added, entity-status-change,
+        provider-bridge, and any later-added event type. Backed by static shards
+        built from each release's own changelog — never the live register — so
+        results are anchored to specific release stamps.
+
+        The window is named with `from`/`to` (release stamps; `to` defaults to
+        the latest release). `since=X` is sugar for `from=X`. With no `from`
+        (bare `/changes`, or `to` alone), the window is just the ONE named `to`
+        release — so bare `/changes` returns just the latest release's own
+        events. `from` equal to `to` (e.g. `since=<latest>`) is a valid request
+        that returns an empty page. See `GET /changes/releases` for the list of
+        stamps a request may name.
+
+        Results are paginated with `limit`/`cursor`; `cursor` is opaque and MUST
+        be passed back verbatim alongside the same `from`/`to`/`type`/`provider`
+        — it encodes a position in that specific walk. `?provider=<p>` narrows to
+        `provider_updated` events that added or removed an id for that provider,
+        dropping every other type (and overriding a conflicting `type=`) — this
+        is a pre-sharded page read, not a scan. No quota cost. Responses carry an
+        `ETag`; a matching `If-None-Match` answers 304 without touching a single
+        event shard. The server reads changes-index schema 2, whose static
+        shards declare a page size for each event type; callers should follow
+        the opaque cursor instead of deriving shard offsets themselves.
+      parameters:
+        - name: from
+          in: query
+          required: false
+          description: A prior release stamp from `/changes/releases`. Omit for just the `to` release's own events.
+          schema: { type: string, example: "20260826T221009Z" }
+        - name: since
+          in: query
+          required: false
+          description: Sugar for `from` (kept for readability at the call site — `since=X` behaves exactly like `from=X`).
+          schema: { type: string, example: "20260826T221009Z" }
+        - name: to
+          in: query
+          required: false
+          description: The newer end of the window. Defaults to the latest release.
+          schema: { type: string, example: "20260902T081253Z" }
+        - name: type
+          in: query
+          required: false
+          description: Restrict to one event type. Default walks entity_added, entity_status_changed, provider_updated first, then any other type the register has since added. Ignored when `provider` is set.
+          schema: { type: string, example: entity_added }
+        - name: provider
+          in: query
+          required: false
+          description: Restrict to provider_updated events touching this provider (added or removed an id for it). Forces type=provider_updated.
+          schema: { type: string, example: opta }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 1000, default: 500 }
+        - name: cursor
+          in: query
+          required: false
+          description: Opaque continuation token from a previous response's `next_cursor`.
+          schema: { type: string }
+      responses:
+        "200":
+          description: Changes across the walked release window.
+          headers:
+            ETag:
+              schema: { type: string }
+              description: Derived from the active changes-index schema/generation and request window/pagination state, never fetched shard content — poll with `If-None-Match` for a free 304.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  since: { type: [string, "null"], description: "Echoes `from` (or the `since` alias, if that's what was passed)." }
+                  from: { type: [string, "null"] }
+                  to: { type: string }
+                  until: { type: string, description: "The latest release this response was walked up to (always the current latest)." }
+                  chain:
+                    type: array
+                    items: { type: string }
+                    description: Release stamps actually walked, oldest to newest.
+                  releases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        stamp: { type: string }
+                        counts: { type: object, additionalProperties: { type: integer } }
+                    description: Per-release event-type counts for the releases actually walked.
+                  counts:
+                    type: object
+                    additionalProperties: { type: integer }
+                    description: Per-type event totals summed across the whole walked chain (not filtered by `type`/`provider`).
+                  type: { type: [string, "null"] }
+                  provider: { type: [string, "null"] }
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      required: [type, reep_id]
+                      properties:
+                        type: { type: string, enum: [entity_added, entity_status_changed, provider_updated, entity_removed, label_updated, redirect_changed, fixture_updated, score_updated] }
+                        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                      additionalProperties: true
+                  matched:
+                    type: integer
+                    description: How many events the caller's filters can page through over the walked window (per-provider via the pre-sharded provider counts, per-type, or the total). `counts` stays the window's full per-type breakdown.
+                  next_cursor: { type: [string, "null"] }
+        "304":
+          description: Unchanged since the `If-None-Match` ETag — no body.
+        "400":
+          description: Unknown `type`/`provider`, an unknown `from`/`to`/`since` stamp, an inverted range, or a stale/malformed `cursor`. A cursor from an older changes-index schema or generation is stale; restart the walk without it.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "500":
+          description: The sharded release chain has a gap (a walked release's recorded `prior` does not match the previous release) — never served silently.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
+
+  /changes/releases:
+    get:
+      tags: [Changes]
+      summary: The sharded release chain
+      description: |
+        The full list of release stamps `/changes` and `/changes/summary` can
+        name in `from`/`to`/`since` — how a consumer learns valid values (also
+        referenced from those endpoints' 400 responses). Newest first. No quota
+        cost.
+      responses:
+        "200":
+          description: The sharded chain, newest first.
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  latest: { type: string }
+                  releases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        stamp: { type: string }
+                        prior: { type: [string, "null"] }
+                        generated_at: { type: string }
+                        counts: { type: object, additionalProperties: { type: integer } }
+        "304": { description: "Unchanged since the If-None-Match ETag — no body." }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
+
+  /changes/summary:
+    get:
+      tags: [Changes]
+      summary: Change counts for a release window
+      description: |
+        The same `from`/`to`/`since` window as `GET /changes`, but counts only
+        — no events. The cheap "is there anything new for me" poll; pair with
+        `If-None-Match` for a free 304 when nothing changed. No quota cost.
+      parameters:
+        - name: from
+          in: query
+          required: false
+          schema: { type: string }
+        - name: since
+          in: query
+          required: false
+          description: Sugar for `from`.
+          schema: { type: string }
+        - name: to
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "200":
+          description: Summed and per-release change counts across the window.
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  since: { type: [string, "null"] }
+                  from: { type: [string, "null"] }
+                  to: { type: string }
+                  until: { type: string }
+                  chain: { type: array, items: { type: string } }
+                  releases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        stamp: { type: string }
+                        counts: { type: object, additionalProperties: { type: integer } }
+                  counts: { type: object, additionalProperties: { type: integer } }
+        "304": { description: "Unchanged since the If-None-Match ETag — no body." }
+        "400":
+          description: An unknown from/to/since stamp, or an inverted range.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "500":
+          description: The sharded release chain has a gap.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
+
+  /search:
+    get:
+      tags: [Search]
+      summary: Search entities by name or alias
+      description: |
+        Search canonical labels, canonical aliases and labelled public overlay
+        aliases. The static index keeps at most 500 candidates per normalised
+        token, so this is bounded discovery rather than an exhaustive database
+        scan. Costs one lookup. Relevance is the default ordering; bridge count
+        is a coverage-based ordering, not a claim of real-world popularity.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Name query containing 3 or more normalised characters and at most 5 tokens.
+          schema: { type: string, minLength: 3, example: salah }
+        - name: type
+          in: query
+          required: false
+          description: Restrict results to one entity type.
+          schema: { $ref: "#/components/schemas/EntityType" }
+        - name: sort
+          in: query
+          required: false
+          schema: { type: string, enum: [relevance, bridges], default: relevance }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 20, default: 20 }
+      responses:
+        "200":
+          description: Bounded search results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  normalised_query: { type: string }
+                  sort: { type: string, enum: [relevance, bridges] }
+                  type: { type: [string, "null"] }
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      required: [reep_id, entity_type, label, bridge_count, relevance]
+                      properties:
+                        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                        entity_type: { $ref: "#/components/schemas/EntityType" }
+                        label: { type: string }
+                        bridge_count: { type: integer }
+                        relevance: { type: integer }
+                  count: { type: integer }
+                  limit: { type: integer }
+                  bounded: { type: boolean, const: true }
+                  max_candidates_per_token: { type: integer }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "402": { $ref: "#/components/responses/QuotaExceeded" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { $ref: "#/components/responses/IndexMissing" }
+
+  /provider-notices/summary:
+    get:
+      tags: [Metadata]
+      summary: Provider-notice summary
+      description: Redacted aggregate counts of provider notices (no titles, refs or payloads). No quota cost.
+      responses:
+        "200":
+          description: Aggregate provider-notice counts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: object
+                    additionalProperties: true
+                  redaction:
+                    type: object
+                    additionalProperties: { type: boolean }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "503":
+          description: The provider-notice summary artefact has not been generated.
+
+  /notices:
+    get:
+      tags: [Notices]
+      summary: Your provider's own notice feed
+      description: |
+        Return the authenticated provider's own batch of provider-notifiable
+        notices — score outliers, upstream duplicates, wrong-score quirks reep-next
+        holds about that provider's data. Requires a provider-scoped key (Unkey
+        `meta.provider = <slug>`); a key without provider scope is HTTP 403. The
+        feed carries provider-notifiable findings only (internal register
+        housekeeping is never exposed). Fetching the feed marks the delivered
+        findings `seen`. No quota cost. Paginated with `limit`/`offset`.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Max findings to return (1–100, default 25).
+          schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+        - name: offset
+          in: query
+          required: false
+          description: Number of findings to skip (default 0).
+          schema: { type: integer, minimum: 0, default: 0 }
+      responses:
+        "200":
+          description: The provider's notice batch (empty when there are no active notices).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provider: { type: string }
+                  batch_id: { type: [integer, "null"] }
+                  generated_at: { type: [string, "null"] }
+                  findings:
+                    type: array
+                    items: { $ref: "#/components/schemas/ProviderNoticeFinding" }
+                  count: { type: integer }
+                  total: { type: integer }
+                  limit: { type: integer }
+                  offset: { type: integer }
+                  next_offset: { type: [integer, "null"] }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/NoticeScopeRequired" }
+
+  /notices/ack:
+    post:
+      tags: [Notices]
+      summary: Acknowledge provider notices
+      description: |
+        Record acknowledgement of notices for the authenticated provider. Supply a
+        `batch_id` to acknowledge the whole delivered batch, or `finding_ids` to
+        acknowledge a subset. Every id must belong to your own current feed — a key
+        can never acknowledge another provider's notices. Requires a provider-scoped
+        key. Acknowledgement state is stored site-side and later reconciled into the
+        register's notice ledger. No quota cost.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                batch_id:
+                  type: integer
+                  description: Acknowledge every finding in this (your current) batch.
+                finding_ids:
+                  type: array
+                  items: { type: string }
+                  description: Acknowledge these specific findings.
+                actor:
+                  type: string
+                  description: Optional identifier of who acknowledged.
+                note:
+                  type: string
+                  description: Optional free-text note stored with the acknowledgement.
+      responses:
+        "200":
+          description: Acknowledgement recorded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provider: { type: string }
+                  batch_id: { type: [integer, "null"] }
+                  acknowledged: { type: integer }
+                  finding_ids:
+                    type: array
+                    items: { type: string }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/NoticeScopeRequired" }
+        "503":
+          description: Provider-notice ack storage is not configured for this deployment.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /resolve/{provider}/{external_id}:
+    get:
+      tags: [Resolve]
+      summary: Resolve a provider ID to a Reep entity
+      description: |
+        Look up a provider's own external ID and return the matching Reep entity or
+        entities. Costs one lookup. If a single provider ID maps to more than one
+        entity, the response is HTTP 409 with all candidates.
+
+        Every valid Register key resolves against the complete provider set in
+        the stamped public snapshot. An empty `200`
+        (`{ "results": [], "count": 0 }`) means there is genuinely no mapping.
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          description: Provider key, e.g. `transfermarkt`, `opta`, `wyscout`.
+          schema: { type: string }
+        - name: external_id
+          in: path
+          required: true
+          description: The provider's own external ID (URL-encoded).
+          schema: { type: string }
+        - name: namespace
+          in: query
+          required: false
+          description: Provider namespace when the provider partitions IDs (e.g. `spieler`, `verein`).
+          schema: { type: string, default: "" }
+        - name: type
+          in: query
+          required: false
+          description: Restrict results to one entity type.
+          schema: { $ref: "#/components/schemas/EntityType" }
+        - $ref: "#/components/parameters/Include"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: >
+            Zero or one resolved entity. Also returned (empty) when the key is
+            not licensed for the provider — see the endpoint description.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items: { $ref: "#/components/schemas/Entity" }
+                  count: { type: integer }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "402": { $ref: "#/components/responses/QuotaExceeded" }
+        "409":
+          description: The provider ID is ambiguous — it maps to more than one entity.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Error"
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items: { $ref: "#/components/schemas/Entity" }
+                      count: { type: integer }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /batch:
+    post:
+      tags: [Entities]
+      summary: Bulk entity/resolve lookups
+      description: |
+        Run up to 100 entity lookups, or up to 20 resolve lookups, in one
+        request, all sharing a single `include` set. Each item is resolved
+        through the same code path as its single endpoint, and every item gets
+        its own `{status, body}` result envelope — so one miss (404) or bad ID
+        (400) never fails the whole batch.
+
+        The two item types have different limits because a `resolve` item
+        loads a whole provider-bucket shard (fanned out over every provider ID
+        that hashes into the same bucket) rather than one record; a mixed
+        batch enforces both caps independently.
+
+        Billing mirrors the single endpoints: the batch decrements one lookup per
+        entity/resolve item (structurally invalid items cost nothing). The plan's
+        per-second rate limiter counts the batch as a single request.
+
+        A batch of 101+ requests, more than 20 resolve items, an empty
+        `requests[]`, a malformed body, or an invalid shared `include` is
+        rejected with HTTP 400 (`batch_too_large` / `resolve_batch_too_large`
+        naming the limit) and consumes no quota.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BatchRequest" }
+      responses:
+        "200":
+          description: Per-item results, in request order.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items: { $ref: "#/components/schemas/BatchResult" }
+                  count: { type: integer }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "402": { $ref: "#/components/responses/QuotaExceeded" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /entities/{reep_id}:
+    get:
+      tags: [Entities]
+      summary: Entity detail
+      description: |
+        Fetch one entity by Reep ID, optionally expanded. A redirected ID resolves to
+        its canonical survivor: HTTP 200 with `requested_id` and `redirected_to` set.
+        Costs one lookup.
+      parameters:
+        - $ref: "#/components/parameters/ReepId"
+        - $ref: "#/components/parameters/Include"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The entity envelope.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Entity" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "402": { $ref: "#/components/responses/QuotaExceeded" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /entities/{reep_id}/bridges:
+    get:
+      tags: [Entities]
+      summary: Provider bridges for one entity
+      parameters:
+        - $ref: "#/components/parameters/ReepId"
+      responses:
+        "200":
+          description: The entity's provider bridges.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  bridges:
+                    type: array
+                    items: { $ref: "#/components/schemas/Bridge" }
+                  count: { type: integer }
+                  requested_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /entities/{reep_id}/overlay:
+    get:
+      tags: [Entities]
+      summary: Wikidata overlay for one entity
+      description: The lower-confidence Wikidata overlay (QID, inherited IDs, aliases). Never a canonical bridge.
+      parameters:
+        - $ref: "#/components/parameters/ReepId"
+      responses:
+        "200":
+          description: The entity's overlay.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  overlay: { $ref: "#/components/schemas/Overlay" }
+                  count: { type: integer }
+                  requested_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /entities/{reep_id}/relationships:
+    get:
+      tags: [Entities]
+      summary: Relationship summary for one entity
+      description: >-
+        A grouped, cardinality-summarised view of the entity's STRUCTURAL relationships:
+        competition, season, stage and match, plus which teams participate in which
+        competition-seasons. Player, coach and referee entities are identity records —
+        they carry bridges, names and aliases, and return an empty list here by design.
+        Squad membership, career history and appearance data are private matching
+        evidence and are not published in the open bridge register.
+      parameters:
+        - $ref: "#/components/parameters/ReepId"
+        - name: family
+          in: query
+          required: false
+          description: Restrict to a single relationship family.
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          description: Maximum relationship families to return (1–100).
+          schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+      responses:
+        "200":
+          description: The entity's grouped relationships.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  relationships:
+                    type: array
+                    items: { $ref: "#/components/schemas/RelationshipSummary" }
+                  requested_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        A Reep API key, passed as `Authorization: Bearer <key>`.
+
+        Register keys differ operationally in quotas and rate limits, but every
+        valid key reads the same complete provider crosswalk from the stamped
+        public snapshot. Legacy `meta.allowedProviders`, `meta.allowedCountries`
+        and `meta.allowedCompetitions` values are ignored; they are not data
+        entitlements.
+
+        **Provider keys — private notice scope.**
+        A data provider's own key carries `meta.provider = <provider slug>`.
+        This identity unlocks `/notices` and `/notices/ack` only for notices Reep
+        holds about that provider's data. It never filters ordinary Register
+        lookups. A key without `meta.provider` gets `403` on those endpoints.
+
+  parameters:
+    ReepId:
+      name: reep_id
+      in: path
+      required: true
+      description: A Reep entity ID, matching `^r[a-z][0-9a-f]{14}$`.
+      schema: { $ref: "#/components/schemas/ReepIdValue" }
+    Include:
+      name: include
+      in: query
+      required: false
+      description: |
+        Comma-separated expansions to fold into the entity envelope. Use
+        `include=overlay` for Wikidata (not `wikidata`).
+      schema:
+        type: string
+        example: aliases,bridges,overlay
+      x-allowed-values: [aliases, attributes, bridges, relationships, overlay]
+    Lang:
+      name: lang
+      in: query
+      required: false
+      description: When `include=aliases`, filter aliases to one language tag (e.g. `en`, `es`).
+      schema: { type: string }
+
+  responses:
+    ChangesIndexUnavailable:
+      description: The changes shards are missing, or changes-index schema 2 is unsupported by this deployment.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    IndexMissing:
+      description: The API index artefact has not been generated for this deployment.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Missing, invalid, or revoked API key.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    BadRequest:
+      description: Malformed request (bad ID, unknown provider, unknown include or entity type).
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFound:
+      description: No entity for this ID.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    QuotaExceeded:
+      description: Monthly lookup quota exhausted.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    RateLimited:
+      description: Plan rate limit hit.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NoticeScopeRequired:
+      description: The key is not provider-scoped (no `meta.provider`), so it cannot access provider notices.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    ReepIdValue:
+      type: string
+      pattern: "^r[a-z][0-9a-f]{14}$"
+      example: rl0173c34b3874f2
+    EntityType:
+      type: string
+      enum: [coach, competition, match, player, referee, season, stage, team]
+    ProviderNoticeFinding:
+      type: object
+      description: One provider-notifiable notice, plus its site-side ack/seen state.
+      properties:
+        finding_id: { type: string }
+        provider: { type: string }
+        kind: { type: string, example: score_outlier }
+        title: { type: string }
+        provider_ref: { type: [string, "null"] }
+        source: { type: object, additionalProperties: true }
+        observed: { type: [string, "null"] }
+        expected: { type: [string, "null"] }
+        severity: { type: string, example: medium }
+        suggested_action: { type: [string, "null"] }
+        payload: { type: object, additionalProperties: true }
+        payload_hash: { type: string }
+        first_seen_at: { type: [string, "null"] }
+        last_seen_at: { type: [string, "null"] }
+        seen: { type: boolean }
+        seen_at: { type: [string, "null"] }
+        acknowledged: { type: boolean }
+        acknowledged_at: { type: [string, "null"] }
+    ReleaseSummary:
+      type: object
+      properties:
+        schema_version: { type: string }
+        generated_at: { type: string, format: date-time }
+        stamp: { type: string, example: "20260704T095840Z" }
+        tier: { type: string, enum: [public_bridge_v1, open_census] }
+        publishable: { type: boolean }
+        index_generated_at: { type: string, format: date-time }
+    Entity:
+      type: object
+      description: |
+        The entity envelope. Base identity is always present; `aliases`, `names`,
+        `attributes`, `bridges`, `relationships` and `overlay` appear only when
+        requested via `include`. `requested_id`/`redirected_to` appear only when a
+        redirected ID was requested. `match` appears on match entities, carrying
+        the published scoreline.
+      required: [reep_id, entity_type, name_en, lifecycle_state]
+      properties:
+        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+        entity_type: { $ref: "#/components/schemas/EntityType" }
+        name_en: { type: string }
+        lifecycle_state: { type: string, example: active }
+        canonical_reep_id:
+          oneOf:
+            - { $ref: "#/components/schemas/ReepIdValue" }
+            - { type: "null" }
+        aliases:
+          type: array
+          items: { $ref: "#/components/schemas/CanonicalAlias" }
+        names:
+          type: array
+          description: Plain alias-name convenience derived from `aliases`.
+          items: { type: string }
+        attributes:
+          type: object
+          description: Sourced identity facts; each value is an array of provider-sourced strings.
+          additionalProperties:
+            type: array
+            items: { type: string }
+        bridges:
+          type: array
+          items: { $ref: "#/components/schemas/Bridge" }
+        relationships:
+          type: array
+          items: { $ref: "#/components/schemas/RelationshipSummary" }
+        overlay: { $ref: "#/components/schemas/Overlay" }
+        match: { $ref: "#/components/schemas/MatchScoreline" }
+        requested_id: { $ref: "#/components/schemas/ReepIdValue" }
+        redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
+    MatchScoreline:
+      type: object
+      description: |
+        The published scoreline of a match entity, as `matches.csv.gz` carries
+        it (Reep Register Format v1 §5.1.1). Every key is always present. A null
+        means the register holds no value for that cell: it never means zero,
+        and never means `unknown`. `home_score`/`away_score` are the score after
+        play (90 or 120 minutes) and never include shootout kicks, which live in
+        `shootout_home`/`shootout_away`. A side id is populated only when that
+        team is itself published by the release serving this response.
+      required:
+        - home_score
+        - away_score
+        - result_form
+        - shootout_home
+        - shootout_away
+        - score_basis
+        - home_id
+        - away_id
+        - played_on
+      properties:
+        home_score:
+          oneOf: [{ type: integer }, { type: "null" }]
+        away_score:
+          oneOf: [{ type: integer }, { type: "null" }]
+        result_form:
+          oneOf:
+            - { type: string, enum: [regular, extra_time, penalties, golden_goal, awarded, abandoned, unknown] }
+            - { type: "null" }
+          description: How the result was reached.
+        shootout_home:
+          oneOf: [{ type: integer }, { type: "null" }]
+        shootout_away:
+          oneOf: [{ type: integer }, { type: "null" }]
+        score_basis:
+          oneOf:
+            - { type: string, enum: [corroborated, single_source, operator_ruling] }
+            - { type: "null" }
+          description: How the published score was established. Describes the score, never the entity identity.
+        home_id:
+          oneOf: [{ $ref: "#/components/schemas/ReepIdValue" }, { type: "null" }]
+        away_id:
+          oneOf: [{ $ref: "#/components/schemas/ReepIdValue" }, { type: "null" }]
+        played_on:
+          oneOf: [{ type: string, format: date }, { type: "null" }]
+    CanonicalAlias:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        language:
+          oneOf: [{ type: string }, { type: "null" }]
+          description: >
+            BCP-47/ISO language tag for this alias name. Currently always null:
+            the served export carries the column but not yet the per-alias
+            language corpus, so `?lang=` matches nothing today. Populated when the
+            register export emits per-alias language.
+        type:
+          oneOf: [{ type: string }, { type: "null" }]
+          description: Alias kind from the register (e.g. full, short, secondary).
+        rank:
+          oneOf: [{ type: number }, { type: "null" }]
+          description: Register-assigned display rank (1 = primary); aliases are returned rank-ordered, unranked last.
+    Bridge:
+      type: object
+      required: [provider, external_id, entity_type]
+      properties:
+        provider: { type: string, example: transfermarkt }
+        namespace: { type: string, example: spieler }
+        external_id: { type: string }
+        entity_type: { $ref: "#/components/schemas/EntityType" }
+        role:
+          type: string
+          enum: [canonical_bridge, bridge_only, overlay_only]
+    Overlay:
+      type: object
+      description: Optional lower-confidence overlay layer. Present only when overlay data exists.
+      properties:
+        wikidata: { $ref: "#/components/schemas/WikidataOverlay" }
+    WikidataOverlay:
+      type: object
+      properties:
+        source: { type: string, enum: [wikidata] }
+        source_tier: { type: string, enum: [wikidata-originated] }
+        qid: { type: string, pattern: "^Q[1-9][0-9]*$", example: Q615 }
+        link_confidence:
+          oneOf: [{ type: number }, { type: "null" }]
+        dob_check:
+          oneOf: [{ type: string }, { type: "null" }]
+        ids:
+          type: array
+          items: { $ref: "#/components/schemas/WikidataId" }
+        aliases:
+          type: array
+          items: { $ref: "#/components/schemas/WikidataAlias" }
+    WikidataId:
+      type: object
+      required: [provider, property, external_id, confidence]
+      properties:
+        provider: { type: string }
+        property: { type: string, example: P1825 }
+        external_id: { type: string }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+    WikidataAlias:
+      type: object
+      required: [name, source]
+      properties:
+        name: { type: string }
+        language:
+          oneOf: [{ type: string }, { type: "null" }]
+        source: { type: string, enum: [wikidata] }
+        confidence:
+          oneOf: [{ type: number }, { type: "null" }]
+    RelationshipSummary:
+      type: object
+      properties:
+        family: { type: string, example: participates_in }
+        count: { type: integer }
+        roles:
+          type: object
+          additionalProperties: { type: integer }
+        source_providers:
+          type: array
+          items: { type: string }
+        expansion:
+          type: string
+          enum: [summary_only, summary_only_high_cardinality]
+    ProviderRollup:
+      type: object
+      properties:
+        name: { type: string }
+        bridge_count: { type: integer }
+        overlay_count: { type: integer }
+        entity_types:
+          type: object
+          additionalProperties: { type: integer }
+        role:
+          type: string
+          enum: [canonical_bridge, bridge_only, overlay_only]
+    BatchRequest:
+      type: object
+      required: [requests]
+      description: |
+        A bulk lookup request; up to 100 items sharing one include set. Of
+        those, at most 20 may be `type: resolve` (entity items keep the full
+        100) — each resolve item loads a whole provider-bucket shard rather
+        than one record.
+      properties:
+        requests:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items: { $ref: "#/components/schemas/BatchItem" }
+        include:
+          description: |
+            Shared expansions applied to every item, as an array (or comma string).
+            Same values as the single-endpoint `include` query parameter.
+          oneOf:
+            - { type: array, items: { type: string } }
+            - { type: string }
+          example: [aliases, bridges]
+        lang:
+          type: string
+          description: Shared language filter for `include=aliases` (e.g. `en`).
+    BatchItem:
+      type: object
+      required: [type]
+      description: |
+        One lookup. `type: entity` requires `id` (a Reep ID). `type: resolve`
+        requires `provider` and `external_id`, with optional `namespace` and an
+        `entity_type` filter.
+      properties:
+        type: { type: string, enum: [entity, resolve] }
+        id:
+          type: string
+          description: For `entity` items, the Reep ID to fetch (also accepted as the external ID on a `resolve` item).
+        provider: { type: string, example: transfermarkt }
+        external_id: { type: string }
+        namespace: { type: string, default: "" }
+        entity_type: { $ref: "#/components/schemas/EntityType" }
+    BatchResult:
+      type: object
+      required: [status, body]
+      description: One item's outcome — the HTTP status it would have returned on its own, plus that response body.
+      properties:
+        status: { type: integer, example: 200 }
+        body:
+          description: The item's response body (an Entity/resolve envelope on success, or an Error object).
+          oneOf:
+            - { $ref: "#/components/schemas/Entity" }
+            - { $ref: "#/components/schemas/Error" }
+            - { type: object, additionalProperties: true }
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string, example: not_found }
+        message: { type: string }
+        detail: { type: string }

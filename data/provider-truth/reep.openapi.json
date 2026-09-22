@@ -1,0 +1,231 @@
+{
+  "provider": "reep",
+  "kind": "openapi",
+  "source": {
+    "specs": [
+      {
+        "spec": "specs/reep/openapi.yaml",
+        "title": "Reep Next API",
+        "version": "v1.0.0"
+      }
+    ],
+    "generated_at": "2026-09-22"
+  },
+  "basePaths": [
+    "/api/next",
+    "/api/v1"
+  ],
+  "paths": {
+    "/": [
+      "GET"
+    ],
+    "/batch": [
+      "POST"
+    ],
+    "/changes": [
+      "GET"
+    ],
+    "/changes/releases": [
+      "GET"
+    ],
+    "/changes/summary": [
+      "GET"
+    ],
+    "/entities/{reep_id}": [
+      "GET"
+    ],
+    "/entities/{reep_id}/bridges": [
+      "GET"
+    ],
+    "/entities/{reep_id}/overlay": [
+      "GET"
+    ],
+    "/entities/{reep_id}/relationships": [
+      "GET"
+    ],
+    "/meta": [
+      "GET"
+    ],
+    "/notices": [
+      "GET"
+    ],
+    "/notices/ack": [
+      "POST"
+    ],
+    "/provider-notices/summary": [
+      "GET"
+    ],
+    "/providers": [
+      "GET"
+    ],
+    "/resolve/{provider}/{external_id}": [
+      "GET"
+    ],
+    "/search": [
+      "GET"
+    ]
+  },
+  "parameters": [
+    "cursor",
+    "external_id",
+    "family",
+    "from",
+    "include",
+    "lang",
+    "limit",
+    "namespace",
+    "offset",
+    "provider",
+    "q",
+    "reep_id",
+    "since",
+    "sort",
+    "to",
+    "type"
+  ],
+  "schemas": [
+    "BatchItem",
+    "BatchRequest",
+    "BatchResult",
+    "Bridge",
+    "CanonicalAlias",
+    "Entity",
+    "EntityType",
+    "Error",
+    "MatchScoreline",
+    "Overlay",
+    "ProviderNoticeFinding",
+    "ProviderRollup",
+    "ReepIdValue",
+    "RelationshipSummary",
+    "ReleaseSummary",
+    "WikidataAlias",
+    "WikidataId",
+    "WikidataOverlay"
+  ],
+  "fields": [
+    "acknowledged",
+    "acknowledged_at",
+    "aliases",
+    "attributes",
+    "away_id",
+    "away_score",
+    "body",
+    "bridge_count",
+    "bridges",
+    "canonical_reep_id",
+    "confidence",
+    "count",
+    "detail",
+    "dob_check",
+    "entity_type",
+    "entity_types",
+    "error",
+    "expansion",
+    "expected",
+    "external_id",
+    "family",
+    "finding_id",
+    "first_seen_at",
+    "generated_at",
+    "home_id",
+    "home_score",
+    "id",
+    "ids",
+    "include",
+    "index_generated_at",
+    "kind",
+    "lang",
+    "language",
+    "last_seen_at",
+    "lifecycle_state",
+    "link_confidence",
+    "match",
+    "message",
+    "name",
+    "name_en",
+    "names",
+    "namespace",
+    "observed",
+    "overlay",
+    "overlay_count",
+    "payload",
+    "payload_hash",
+    "played_on",
+    "property",
+    "provider",
+    "provider_ref",
+    "publishable",
+    "qid",
+    "rank",
+    "redirected_to",
+    "reep_id",
+    "relationships",
+    "requested_id",
+    "requests",
+    "result_form",
+    "role",
+    "roles",
+    "schema_version",
+    "score_basis",
+    "seen",
+    "seen_at",
+    "severity",
+    "shootout_away",
+    "shootout_home",
+    "source",
+    "source_providers",
+    "source_tier",
+    "stamp",
+    "status",
+    "suggested_action",
+    "tier",
+    "title",
+    "type",
+    "wikidata"
+  ],
+  "enums": {
+    "EntityType": [
+      "coach",
+      "competition",
+      "match",
+      "player",
+      "referee",
+      "season",
+      "stage",
+      "team"
+    ],
+    "expansion": [
+      "summary_only",
+      "summary_only_high_cardinality"
+    ],
+    "oneOf": [
+      "abandoned",
+      "awarded",
+      "extra_time",
+      "golden_goal",
+      "penalties",
+      "regular",
+      "unknown"
+    ],
+    "role": [
+      "bridge_only",
+      "canonical_bridge",
+      "overlay_only"
+    ],
+    "source": [
+      "wikidata"
+    ],
+    "source_tier": [
+      "wikidata-originated"
+    ],
+    "tier": [
+      "open_census",
+      "public_bridge_v1"
+    ],
+    "type": [
+      "entity",
+      "resolve"
+    ]
+  }
+}

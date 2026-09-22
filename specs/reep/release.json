@@ -1,0 +1,394 @@
+{
+  "files": {
+    "LICENSE.txt": {
+      "bytes": 6555,
+      "sha256": "2fb5e423d614313817097977094bac11ac8996498e210175c9470f96b272d55a",
+      "object_key": "releases/20260915T203651Z/LICENSE.txt",
+      "url": "https://data.reep.football/releases/20260915T203651Z/LICENSE.txt",
+      "role": "metadata"
+    },
+    "changelog.json.gz": {
+      "bytes": 49071163,
+      "sha256": "01c8af9711691b1a249f8ecf2491560c0db829067bdce0168287d05b762fc271",
+      "object_key": "releases/20260915T203651Z/changelog.json.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/changelog.json.gz",
+      "role": "metadata"
+    },
+    "checksums.txt": {
+      "bytes": 3723,
+      "sha256": "fc47561e6cbb74dd75f011c6ca7557340bf08a1ed0f53f9ca6d9d448f6f5bf5a",
+      "object_key": "releases/20260915T203651Z/checksums.txt",
+      "url": "https://data.reep.football/releases/20260915T203651Z/checksums.txt",
+      "role": "metadata"
+    },
+    "coverage_delta.json": {
+      "bytes": 4291,
+      "sha256": "8fed4b1dd9eed0419dbc3ad1fded4324de5d11fc02002dcc70df106dc22b6799",
+      "object_key": "releases/20260915T203651Z/coverage_delta.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/coverage_delta.json",
+      "role": "metadata"
+    },
+    "csv/aliases.csv.gz": {
+      "bytes": 9735647,
+      "rows": 673575,
+      "sha256": "a874157c9f420a6b24406a60b1f0f3e5de159bea99c253d58c3e92a219ea8b34",
+      "object_key": "releases/20260915T203651Z/csv/aliases.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/aliases.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/bridges.csv.gz": {
+      "bytes": 124941157,
+      "rows": 7529751,
+      "sha256": "64f241d57547e4cd2ef8b32e6c306666a4b436efcf87a051c83e638b6b992d25",
+      "object_key": "releases/20260915T203651Z/csv/bridges.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/bridges.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/coaches.csv.gz": {
+      "bytes": 592773,
+      "rows": 30613,
+      "sha256": "7c4a65bf88fa782d0f32d7991ea668198be8945cb34d3bed5e058975ba4ff960",
+      "object_key": "releases/20260915T203651Z/csv/coaches.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/coaches.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/competitions.csv.gz": {
+      "bytes": 25940,
+      "rows": 1430,
+      "sha256": "0271f58e1e4efb572cda65642694e1ea64f6a861fc1df97c97a365683bc1eeba",
+      "object_key": "releases/20260915T203651Z/csv/competitions.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/competitions.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/coverage.csv.gz": {
+      "bytes": 773,
+      "rows": 64,
+      "sha256": "bf0ca6b9e5eff8e233ce15534af59b4bce5f4bd1ead4f6328e547f044c8d42ac",
+      "object_key": "releases/20260915T203651Z/csv/coverage.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/coverage.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/entities.csv.gz": {
+      "bytes": 47581441,
+      "rows": 1975839,
+      "sha256": "f7f125949a92f2f81475d3d44b4d381e61870fe57ff7031fea28fe39fba581da",
+      "object_key": "releases/20260915T203651Z/csv/entities.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/entities.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/matches.csv.gz": {
+      "bytes": 69485234,
+      "rows": 1417588,
+      "sha256": "ed6841df30162edbb4c73b0852cb9efab17875d2d9a7b5e30c770845d9e5b503",
+      "object_key": "releases/20260915T203651Z/csv/matches.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/matches.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/observed_clubs.csv.gz": {
+      "bytes": 1708262,
+      "rows": 158859,
+      "sha256": "30efdbc12d085660e631eb94f13ba00a1c9309c8f740c2bfc44c9ffdbecd9d2c",
+      "object_key": "releases/20260915T203651Z/csv/observed_clubs.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/observed_clubs.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/overlay_aliases.csv.gz": {
+      "bytes": 11963809,
+      "rows": 583271,
+      "sha256": "3b73fdd10a093c30ccfcf48e3a97c62b675c64b3ba9c034b0f65e11a95fe8f83",
+      "object_key": "releases/20260915T203651Z/csv/overlay_aliases.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/overlay_aliases.csv.gz",
+      "role": "overlay"
+    },
+    "csv/overlay_links.csv.gz": {
+      "bytes": 2101314,
+      "rows": 152868,
+      "sha256": "3d3a4bebbbb0e11378145252aeed2ae49a53380db86e100749b549f634122f41",
+      "object_key": "releases/20260915T203651Z/csv/overlay_links.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/overlay_links.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/overlay_xids.csv.gz": {
+      "bytes": 10465660,
+      "rows": 967373,
+      "sha256": "dcacf1b29af449670af9481987fc03cff587355922dc6c559d035e4e68795a19",
+      "object_key": "releases/20260915T203651Z/csv/overlay_xids.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/overlay_xids.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/players.csv.gz": {
+      "bytes": 8729087,
+      "rows": 432124,
+      "sha256": "93ab7b75eb58b9f060bb8573360732ce0643ef434b3e48f4ac40b704b3d14717",
+      "object_key": "releases/20260915T203651Z/csv/players.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/players.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/redirects.csv.gz": {
+      "bytes": 33648,
+      "rows": 1755,
+      "sha256": "cca83cc787f3f8b48869450f5ce6eb56ddfaf9c3b4d636d809f6867607b838df",
+      "object_key": "releases/20260915T203651Z/csv/redirects.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/redirects.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/referees.csv.gz": {
+      "bytes": 632664,
+      "rows": 32158,
+      "sha256": "cc8e046bd9d2a7978ee051ce03d728f042177630ed36d38ad88ee1716628c274",
+      "object_key": "releases/20260915T203651Z/csv/referees.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/referees.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/relationships.csv.gz": {
+      "bytes": 29391071,
+      "rows": 1974881,
+      "sha256": "ea2743f36561863c398c5929b0981d173a95f9962813d074af553488da262536",
+      "object_key": "releases/20260915T203651Z/csv/relationships.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/relationships.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/seasons.csv.gz": {
+      "bytes": 92052,
+      "rows": 8013,
+      "sha256": "ff169833d7a3281547b8d7a0aedd9f7acb9548d49d8dee067e344299b58dd78f",
+      "object_key": "releases/20260915T203651Z/csv/seasons.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/seasons.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/stages.csv.gz": {
+      "bytes": 288824,
+      "rows": 26186,
+      "sha256": "f996bebe7c07b240ac2e57e0a482493e485fe910ce30ae1dacaecad588a36bf0",
+      "object_key": "releases/20260915T203651Z/csv/stages.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/stages.csv.gz",
+      "role": "canonical_csv"
+    },
+    "csv/teams.csv.gz": {
+      "bytes": 559568,
+      "rows": 27727,
+      "sha256": "b6f462d9463441dffbdeaeb69d79ab6b706dafe226c9e5aa2f1c2b580c95ac89",
+      "object_key": "releases/20260915T203651Z/csv/teams.csv.gz",
+      "url": "https://data.reep.football/releases/20260915T203651Z/csv/teams.csv.gz",
+      "role": "canonical_csv"
+    },
+    "duckdb/reep-register-v1.duckdb": {
+      "bytes": 679227392,
+      "sha256": "08682f90be5068789b2ae037696889c8e648fd58d128315cd1a79db9333b8ace",
+      "object_key": "releases/20260915T203651Z/duckdb/reep-register-v1.duckdb",
+      "url": "https://data.reep.football/releases/20260915T203651Z/duckdb/reep-register-v1.duckdb",
+      "role": "convenience"
+    },
+    "schema.json": {
+      "bytes": 11625,
+      "sha256": "665d346a5ad36eee5fa939901423f29a1ec4ee7149718d73051d0fcab5796374",
+      "object_key": "releases/20260915T203651Z/schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schema.json",
+      "role": "metadata"
+    },
+    "schemas/aliases.schema.json": {
+      "bytes": 1400,
+      "sha256": "79795e442bb4919046661448299e2bfc79b5fa693666a54a35884baf26cd093a",
+      "object_key": "releases/20260915T203651Z/schemas/aliases.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/aliases.schema.json",
+      "role": "metadata"
+    },
+    "schemas/bridges.schema.json": {
+      "bytes": 2864,
+      "sha256": "0fed6a2d7cb7ec6d745ad1ee88d31191e2dc7246b4126df471b772815682fa0a",
+      "object_key": "releases/20260915T203651Z/schemas/bridges.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/bridges.schema.json",
+      "role": "metadata"
+    },
+    "schemas/coaches.schema.json": {
+      "bytes": 1796,
+      "sha256": "1bfe844c45d4fc52aabce6b8f055952d251f5deab2827d7a49f9d78c6232aa49",
+      "object_key": "releases/20260915T203651Z/schemas/coaches.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/coaches.schema.json",
+      "role": "metadata"
+    },
+    "schemas/competitions.schema.json": {
+      "bytes": 1811,
+      "sha256": "edcda1076e81dc1af71af92b1858f4cdf463a4ea79fe427d5cc56d1eba0bda1c",
+      "object_key": "releases/20260915T203651Z/schemas/competitions.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/competitions.schema.json",
+      "role": "metadata"
+    },
+    "schemas/coverage.schema.json": {
+      "bytes": 715,
+      "sha256": "b9d79543ad068e5cc33b733cd7da554003fde8c45945ddd1a1ac552c9ed77322",
+      "object_key": "releases/20260915T203651Z/schemas/coverage.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/coverage.schema.json",
+      "role": "metadata"
+    },
+    "schemas/entities.schema.json": {
+      "bytes": 3308,
+      "sha256": "1aa4c18b54150d4098327470c90d631d5bfc62ad9694e7b76c43f45998860b76",
+      "object_key": "releases/20260915T203651Z/schemas/entities.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/entities.schema.json",
+      "role": "metadata"
+    },
+    "schemas/matches.schema.json": {
+      "bytes": 7608,
+      "sha256": "86bcc91dca27939a1b7f90080b5e58893e96b3317ddbbf6d1195e105cd7ecb10",
+      "object_key": "releases/20260915T203651Z/schemas/matches.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/matches.schema.json",
+      "role": "metadata"
+    },
+    "schemas/observed_clubs.schema.json": {
+      "bytes": 3096,
+      "sha256": "9154e7060790ff86c12daf64deae365f5612f9f70d474a411ff8e3999dbde264",
+      "object_key": "releases/20260915T203651Z/schemas/observed_clubs.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/observed_clubs.schema.json",
+      "role": "metadata"
+    },
+    "schemas/overlay_aliases.schema.json": {
+      "bytes": 2235,
+      "sha256": "9037b13f85056b8a3426e66ece0f7efc55b03b69921586232dadae9792275eeb",
+      "object_key": "releases/20260915T203651Z/schemas/overlay_aliases.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/overlay_aliases.schema.json",
+      "role": "metadata"
+    },
+    "schemas/overlay_links.schema.json": {
+      "bytes": 2036,
+      "sha256": "74b90a2f9b13d3136dbb5f4d6d71f4b94c77c82dff867e453add9f83ae68caae",
+      "object_key": "releases/20260915T203651Z/schemas/overlay_links.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/overlay_links.schema.json",
+      "role": "metadata"
+    },
+    "schemas/overlay_xids.schema.json": {
+      "bytes": 2487,
+      "sha256": "e41b8d49ffdbc0fa93e78d87d942eb48d0f77ad5fea5189663ad324013ff5d87",
+      "object_key": "releases/20260915T203651Z/schemas/overlay_xids.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/overlay_xids.schema.json",
+      "role": "metadata"
+    },
+    "schemas/players.schema.json": {
+      "bytes": 1796,
+      "sha256": "e815eff888fad1b5901e473acf2f9b98f658e91fd77f2b145d20a009a03d64be",
+      "object_key": "releases/20260915T203651Z/schemas/players.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/players.schema.json",
+      "role": "metadata"
+    },
+    "schemas/redirects.schema.json": {
+      "bytes": 2203,
+      "sha256": "c80268a0aa03b7824096ee44aeb490bc4231d0b1108b9678614fdeea7f168acf",
+      "object_key": "releases/20260915T203651Z/schemas/redirects.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/redirects.schema.json",
+      "role": "metadata"
+    },
+    "schemas/referees.schema.json": {
+      "bytes": 997,
+      "sha256": "b79450e91a23b3baecebe63b5db5debcbdcb98b94314e6377275f576b85fb876",
+      "object_key": "releases/20260915T203651Z/schemas/referees.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/referees.schema.json",
+      "role": "metadata"
+    },
+    "schemas/relationships.schema.json": {
+      "bytes": 915,
+      "sha256": "ceec818b795799f9dbdaa24c77ee4e72efab8df333c9952c829ec811e8517885",
+      "object_key": "releases/20260915T203651Z/schemas/relationships.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/relationships.schema.json",
+      "role": "metadata"
+    },
+    "schemas/seasons.schema.json": {
+      "bytes": 994,
+      "sha256": "8fbbea55b99c9f5fe457a739186fec5eb16a2b5ed4d3e3092406ba434ca53245",
+      "object_key": "releases/20260915T203651Z/schemas/seasons.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/seasons.schema.json",
+      "role": "metadata"
+    },
+    "schemas/stages.schema.json": {
+      "bytes": 991,
+      "sha256": "f5bdae942c6b2654a14e2993fc11108304fad12edbe326ecc604a3ce87f8595d",
+      "object_key": "releases/20260915T203651Z/schemas/stages.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/stages.schema.json",
+      "role": "metadata"
+    },
+    "schemas/teams.schema.json": {
+      "bytes": 1790,
+      "sha256": "5502d292c64fb2a0d8351010c6427aefc0543efca225da251bd75b6a30c26779",
+      "object_key": "releases/20260915T203651Z/schemas/teams.schema.json",
+      "url": "https://data.reep.football/releases/20260915T203651Z/schemas/teams.schema.json",
+      "role": "metadata"
+    }
+  },
+  "generated_at": "2026-09-15T20:47:31+00:00",
+  "licence": {
+    "file": "LICENSE.txt",
+    "name": "Creative Commons CC0 1.0 Universal",
+    "spdx": "CC0-1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  "manifest_version": 1,
+  "projection_mode": "public_bridge_v1",
+  "publishable": true,
+  "publishable_note": "Decision K v3: complete bridge snapshot passed freshness, wall, field and evidence gates",
+  "redaction": {
+    "appearances": "excluded",
+    "dob": "excluded",
+    "evidence": "excluded",
+    "local_paths": "excluded",
+    "policy": "deny-by-default bridge-register v1",
+    "scorelines": "published (PM-07/PM-09): matches.csv.gz carries the after-play score, the result form and the shootout",
+    "wikidata_overlay": "overlay_aliases and overlay_links are wikidata-originated overlay only"
+  },
+  "redistribution_policy": {
+    "decision": "Decision K v3",
+    "policy_doc": "docs/runbooks/provider-redistribution-policy.md",
+    "reason": "field wall, provider posture and accepted-risk evidence must all pass",
+    "status": "publishable"
+  },
+  "release_artefacts": {
+    "accepted_risk_record": {
+      "sha256": "a5466519f1bf1790df2a4480ba825df0b046e4d2582030cb8f53bc95ca712dea"
+    },
+    "challenge_response_plan": {
+      "sha256": "2f4163a07780fbcf4fdd210679520d06125423dc915eb4cb4946a443d656c8a5"
+    },
+    "database_right_evidence": {
+      "sha256": "b3967d9042288a4e4fd93efdd650bf9653d2eb03bd42b6e7d5d7706054e83716"
+    },
+    "provider_rights_matrix": {
+      "sha256": "08e5031bf516a20b10b6fb7a8ade96ce29c55334d7af55196698c3468d15dd0a"
+    }
+  },
+  "row_counts": {
+    "csv/aliases.csv.gz": 673575,
+    "csv/bridges.csv.gz": 7529751,
+    "csv/coaches.csv.gz": 30613,
+    "csv/competitions.csv.gz": 1430,
+    "csv/coverage.csv.gz": 64,
+    "csv/entities.csv.gz": 1975839,
+    "csv/matches.csv.gz": 1417588,
+    "csv/observed_clubs.csv.gz": 158859,
+    "csv/overlay_aliases.csv.gz": 583271,
+    "csv/overlay_links.csv.gz": 152868,
+    "csv/overlay_xids.csv.gz": 967373,
+    "csv/players.csv.gz": 432124,
+    "csv/redirects.csv.gz": 1755,
+    "csv/referees.csv.gz": 32158,
+    "csv/relationships.csv.gz": 1974881,
+    "csv/seasons.csv.gz": 8013,
+    "csv/stages.csv.gz": 26186,
+    "csv/teams.csv.gz": 27727
+  },
+  "schema_version": "bridge-register-v1",
+  "source_release": {
+    "manifest_sha256": "57b9d59e87e5333fc19d922df40bc049b4145737dc725053ce1c49adc7e040e6",
+    "manifest_version": 1,
+    "stamp": "20260915T203651Z"
+  },
+  "stamp": "20260915T203651Z",
+  "tier": "public_bridge_v1",
+  "publication": {
+    "host": "cloudflare-r2",
+    "storage_class": "Standard",
+    "object_prefix": "releases/20260915T203651Z",
+    "release_key": "releases/20260915T203651Z/release.json",
+    "release_url": "https://data.reep.football/releases/20260915T203651Z/release.json",
+    "latest_key": "releases/latest.json",
+    "latest_url": "https://data.reep.football/releases/latest.json",
+    "url_base": "https://data.reep.football"
+  }
+}

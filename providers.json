@@ -213,6 +213,22 @@
       ],
       "last_crawled": "2026-07-09"
     },
+    "reep": {
+      "description": "Open football identity register: stable Reep IDs for players, coaches, referees, teams, competitions, seasons, stages and matches, with a crosswalk of provider IDs. Free CC0 download (DuckDB, CSV) and a keyed API",
+      "display_name": "Reep",
+      "aliases": ["reep-football", "reep.football"],
+      "access_level": "open-data",
+      "licence_status": "Releases are CC0 1.0, provider-ID bridges included. The download needs no key. API keys are issued by hand on request (getintouch+nutmeg@withqwerty.com); there is no self-service sign-up.",
+      "public_safety_notes": "Document the current register only (reep.football, /api/v1). Spec snapshot in specs/reep/ comes from the public, unauthenticated https://reep.football/openapi.yaml - see specs/README.md. Endpoint claims are validated against it in CI. Do not hard-code release counts; they change weekly.",
+      "version": "v1",
+      "package": null,
+      "sources": [
+        { "url": "https://reep.football/openapi.yaml", "type": "curated", "note": "Public unauthenticated OpenAPI document for /api/v1, mirrored at specs/reep/openapi.yaml; endpoint docs are validated against it" },
+        { "url": "https://reep.football/get-started", "type": "curated", "note": "Download vs API, DuckDB crosswalk queries, namespaces" },
+        { "url": "https://reep.football/id-policy", "type": "curated", "note": "Reep ID stability: redirects and tombstones" }
+      ],
+      "last_crawled": "2026-09-22"
+    },
     "soccerdonna": {
       "description": "Public women's football entity pages, match reports, competition pages, player profiles, and staff profiles",
       "display_name": "Soccerdonna",

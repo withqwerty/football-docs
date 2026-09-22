@@ -18,6 +18,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import Database from "better-sqlite3";
 import { z } from "zod";
+import { ENTITY_TYPES } from "./reep.js";
 import {
   compareProviders,
   getProviderDocs,
@@ -218,19 +219,35 @@ export function createFootballDocsServer(): McpServer {
 
   server.tool(
     "resolve_entity",
-    "Resolve a football entity (player, team, or coach) to get cross-provider IDs. Use when you need to map between Transfermarkt, FBref, Sofascore, Opta, and other provider IDs, or when you need to look up a player/team/coach by name.",
+    [
+      "Map a football entity (player, coach, referee, team, competition, season, stage or match) to its IDs at every provider",
+      "through the Reep register: Opta, Transfermarkt, Wyscout, SkillCorner, StatsBomb, FotMob, API-Football and more.",
+      "Look up by provider + id (pass namespace too, e.g. transfermarkt 'spieler', opta 'person'), by reep_id, or by name.",
+      "Sources, in order: a local copy of the free register (REEP_DUCKDB_PATH), then the Reep API (REEP_API_KEY; keys are",
+      "issued by hand on request, never self-service). With neither set, it returns setup steps and a DuckDB query.",
+      "Keeping the local file current: Reep releases weekly. Every local answer ends with the file's release stamp checked",
+      "against https://data.reep.football/releases/latest.json. If it says the file is out of date, tell the user and offer",
+      "to run the curl command it gives, which downloads https://reep.football/downloads/duckdb over the same path; the",
+      "next call uses the new file without a restart. Before bulk matching, make sure the file is current.",
+    ].join(" "),
     {
-      name: z
-        .string()
-        .optional()
-        .describe("Entity name to search for (e.g. 'Cole Palmer', 'Arsenal'). Fuzzy match on name and aliases."),
       provider: z
         .string()
         .optional()
-        .describe("Source provider for ID resolution (e.g. 'transfermarkt', 'fbref', 'sofascore', 'opta', 'soccerway')"),
-      id: z.string().optional().describe("ID from the source provider to resolve to all other IDs"),
-      qid: z.string().optional().describe("Wikidata QID for direct lookup (e.g. 'Q99760796')"),
-      type: z.enum(["player", "team", "coach"]).optional().describe("Filter results by entity type"),
+        .describe("Provider key for an ID lookup, e.g. 'transfermarkt', 'opta', 'wyscout', 'skillcorner', 'fotmob'"),
+      id: z.string().optional().describe("The provider's own ID, used with provider"),
+      namespace: z
+        .string()
+        .optional()
+        .describe(
+          "The provider's namespace for that ID, e.g. 'spieler' or 'verein' for Transfermarkt, 'person' or 'team' for Opta, 'player' for Wyscout. Recommended: some providers reuse numbers across entity types.",
+        ),
+      reep_id: z.string().optional().describe("A Reep ID (e.g. 'rp1b829f1d3468c4') to list every provider ID for"),
+      name: z
+        .string()
+        .optional()
+        .describe("Name to search, at least 3 characters (e.g. 'Declan Rice'). A name match is a shortlist, not an answer."),
+      type: z.enum(ENTITY_TYPES).optional().describe("Restrict results to one entity type"),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     async (args) => resolveEntity(args),

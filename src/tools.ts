@@ -3,6 +3,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type Database from "better-sqlite3";
 
+export { type ResolveEntityArgs, resolveEntity } from "./reep.js";
+
 export const TOOL_NAMES = [
   "search_docs",
   "resolve_provider_id",
@@ -50,14 +52,6 @@ export type RequestUpdateArgs = {
   provider: string;
   reason: string;
   suggested_urls?: string[];
-};
-
-export type ResolveEntityArgs = {
-  name?: string;
-  provider?: string;
-  id?: string;
-  qid?: string;
-  type?: "player" | "team" | "coach";
 };
 
 type SearchRow = {
@@ -737,79 +731,4 @@ export function requestUpdate(
         : ""
     }\n\nThis local request will be reviewed by maintainers. For community visibility, also open the matching GitHub issue: ${requestIssueUrl(args)}`,
   );
-}
-
-export async function resolveEntity(
-  args: ResolveEntityArgs,
-  options: { baseUrl?: string; fetchImpl?: typeof fetch } = {},
-): Promise<ToolResponse> {
-  const baseUrl = options.baseUrl ?? "https://reep-api.rahulkeerthi2-95d.workers.dev";
-  const fetchImpl = options.fetchImpl ?? fetch;
-  let url: string;
-
-  if (args.qid) {
-    url = `${baseUrl}/lookup?qid=${encodeURIComponent(args.qid)}`;
-  } else if (args.provider && args.id) {
-    url = `${baseUrl}/resolve?provider=${encodeURIComponent(args.provider)}&id=${encodeURIComponent(args.id)}`;
-  } else if (args.name) {
-    url = `${baseUrl}/search?name=${encodeURIComponent(args.name)}&limit=10`;
-    if (args.type) url += `&type=${encodeURIComponent(args.type)}`;
-  } else {
-    return textResult(
-      "Provide at least one of: name, qid, or provider+id. Examples:\n- name: 'Cole Palmer'\n- provider: 'transfermarkt', id: '568177'\n- qid: 'Q99760796'",
-      true,
-    );
-  }
-
-  try {
-    const response = await fetchImpl(url);
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) {
-        return textResult(
-          `Reep API authentication failed (${response.status} ${response.statusText}). Entity resolution is optional and needs a Reep API credential/configured endpoint before provider ID lookup can work. Docs search tools still work without Reep access.`,
-          true,
-        );
-      }
-
-      return textResult(`Reep API error: ${response.status} ${response.statusText}`, true);
-    }
-
-    const data = (await response.json()) as { results: Array<Record<string, unknown>>; count?: number };
-    if (!data.results?.length) {
-      return textResult("No entities found matching the query.");
-    }
-
-    const formatted = data.results
-      .map((entity) => {
-        const ids = entity.external_ids as Record<string, string> | undefined;
-        const idLines = ids
-          ? Object.entries(ids)
-              .map(([provider, id]) => `  ${provider}: ${id}`)
-              .join("\n")
-          : "  (none)";
-
-        const bio = [
-          entity.date_of_birth && `DOB: ${entity.date_of_birth}`,
-          entity.nationality && `Nationality: ${entity.nationality}`,
-          entity.position && `Position: ${entity.position}`,
-          entity.height_cm && `Height: ${entity.height_cm}cm`,
-          entity.country && `Country: ${entity.country}`,
-          entity.stadium && `Stadium: ${entity.stadium}`,
-        ]
-          .filter(Boolean)
-          .join(" | ");
-
-        return `### ${entity.name_en} (${entity.type})\nWikidata: ${entity.qid}${
-          entity.aliases_en ? `\nAliases: ${entity.aliases_en}` : ""
-        }${bio ? `\n${bio}` : ""}\nProvider IDs:\n${idLines}`;
-      })
-      .join("\n\n");
-
-    return textResult(`Found ${data.results.length} result(s):\n\n${formatted}`);
-  } catch (error) {
-    return textResult(
-      `Failed to reach Reep API: ${error instanceof Error ? error.message : String(error)}`,
-      true,
-    );
-  }
 }

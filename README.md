@@ -90,7 +90,7 @@ Add to `claude_desktop_config.json`:
 | `list_providers` | List all indexed providers and their doc coverage. |
 | `compare_providers` | Compare how different providers handle the same concept. |
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
-| `resolve_entity` | Resolve players, teams, or coaches to cross-provider IDs via the Reep API. |
+| `resolve_entity` | Map a player, coach, referee, team, competition, season, stage or match to its IDs at every provider through the [Reep register](https://reep.football). Uses a local copy of the free register (`REEP_DUCKDB_PATH`), else the Reep API (`REEP_API_KEY`; keys are issued by hand on request to getintouch+nutmeg@withqwerty.com, with no self-service sign-up), else returns setup steps and a DuckDB query. See [Reep through football-docs](docs/reep/overview.md#using-reep-through-football-docs). |
 
 Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` searches `soccerdata`; `ESPN`, `ESPN FC`, and `espn-soccer` search `espn`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
@@ -129,12 +129,13 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | BeSoccer | 14 | api-access, api-endpoints |
 | Driblab | 30 | api-access, api-endpoints, data-model |
 | ESPN | 20 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
+| Reep | 26 | overview, identity-and-ids, download-duckdb-csv, api |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
 | FotMob | 3 | identity-surfaces |
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**2,345 searchable chunks** across 25 providers and tools.
+**2,371 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
@@ -165,6 +166,7 @@ trusting them.
 | BeSoccer | The vendor's published Postman collection — request vocabulary and parameters | `src/__tests__/provider-truth.test.ts` |
 | Driblab | The vendor's published API guide — endpoint paths and methods. Field and group names are not in CI: the guide disagrees with the live API on them, so the docs follow the live API, checked by hand on 2026-09-22 | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
+| Reep | The public OpenAPI spec (endpoint paths and methods), and one release's manifest and column schema (CSV table list, columns used in the SQL examples, licence and exclusions) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
 
 ESPN has a separate observation check in `src/__tests__/espn.test.ts`. It validates
 documented endpoint paths, field-table names and types, and source URLs against
@@ -173,6 +175,10 @@ published specification. CI reads them offline and does not contact ESPN.
 Refresh manually with `python3 scripts/observe_espn.py --scheduled-date YYYYMMDD`,
 choosing a future fixture date and using permitted access. The script stores no
 raw responses. Review the diff, update the docs and dates, then rebuild the index.
+
+Reep's snapshots age weekly, as a new release is cut each week. Run
+`python3 scripts/check_reep_live.py` to check every download link and list what
+has changed since the snapshots; the refresh steps are in [specs/README.md](specs/README.md#reep).
 
 Truth files live in `data/provider-truth/` and are generated, not hand-written:
 
