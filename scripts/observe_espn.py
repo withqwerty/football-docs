@@ -10,6 +10,7 @@ import argparse
 import datetime as dt
 import json
 from pathlib import Path
+import time
 import urllib.request
 
 
@@ -17,6 +18,8 @@ SITE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
 TABLES = "https://site.api.espn.com/apis/v2/sports/soccer"
 CORE = "https://sports.core.api.espn.com/v2/sports/soccer/leagues"
 OUTPUT = Path(__file__).resolve().parents[1] / "data" / "espn-observations.json"
+# Seconds between requests. ESPN publishes no rate limit, so stay well clear of one.
+PAUSE = 1.0
 
 # Select the integration fields the docs cover. A requested path is recorded
 # only if it actually occurs; these lists do not assert that fields exist.
@@ -119,6 +122,7 @@ def main():
 
     def observe(name, family, url):
         # No keys, cookies, credentials, retries, or response-body persistence.
+        time.sleep(PAUSE)
         request = urllib.request.Request(url, headers={"Accept": "application/json"})
         with urllib.request.urlopen(request, timeout=30) as response:
             payload = json.load(response)
@@ -160,7 +164,10 @@ def main():
         finished = observe(
             f"{league}-completed", "scoreboard", f"{SITE}/{league}/scoreboard?dates=20250817"
         )
-        event = finished["events"][0]["id"]
+        completed = [e for e in finished.get("events", []) if e["status"]["type"]["state"] == "post"]
+        if not completed:
+            raise SystemExit(f"{league}: no completed match on 20250817; pick another date")
+        event = completed[0]["id"]
         observe(f"{league}-summary-completed", "summary", f"{SITE}/{league}/summary?event={event}")
         scheduled = observe(
             f"{league}-scheduled", "scoreboard",

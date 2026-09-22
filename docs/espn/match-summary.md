@@ -7,9 +7,9 @@ crawled_at: 2026-09-06
 
 # ESPN soccer match summary
 
-Curated observations checked on 2026-09-06. Two completed and two scheduled
-summaries were sampled across eng.1 and esp.1. Field presence varies by match
-state; this is not an official API schema or a guarantee of competition coverage.
+Observed on 2026-09-06 from two completed and two scheduled summaries across
+eng.1 and esp.1. ESPN publishes no schema for this endpoint. Which sections appear
+depends on the match state.
 
 ## From scoreboard event ID to match details
 
@@ -31,9 +31,8 @@ Sources: [scoreboard](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1
 
 ## Team statistics and match state
 
-The checked ESPN summaries exposed team statistics under boxscore. The entries
-carry names and display values; select by the returned name rather than an array
-offset. Formatted display values should not be assumed to be plain numbers.
+Team statistics sit under boxscore. Select each statistic by its name, not its
+array position. displayValue is formatted text, not always a plain number.
 
 | JSON path | Observed type | Use |
 |---|---|---|
@@ -42,20 +41,19 @@ offset. Formatted display values should not be assumed to be plain numbers.
 | `boxscore.teams[].statistics[].label` | string | Display label |
 | `boxscore.teams[].statistics[].displayValue` | string | Formatted value |
 
-The sampled scheduled summaries also contained team statistics. Their presence
-alone does not establish that a match has started or that values describe that
-match. Check the header's match state and establish the statistic's context before
-using it. This corpus does not assign a model, unit, or definition to unverified
-statistic names, including expected-goals metrics.
+Scheduled summaries also contain team statistics, so their presence does not mean
+the match has started or that the values describe it. Check the header's match
+state first. ESPN does not define its statistic names (including any expected-goals
+figures), and neither does this corpus.
 
 Sources: [completed summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=740603),
 [scheduled summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879285).
 
 ## Lineups, formations, and player IDs
 
-The completed ESPN soccer summaries contained rosters with player entries and
-formation labels. In the sampled scheduled summaries, roster team records existed
-without populated player entries. A team record alone is not a confirmed lineup.
+Completed summaries contain rosters with players and a formation. Scheduled
+summaries had roster team records with no players, so a team record alone is
+not a confirmed lineup.
 
 | JSON path | Observed type | Use |
 |---|---|---|
@@ -74,9 +72,8 @@ without populated player entries. A team record alone is not a confirmed lineup.
 | `rosters[].roster[].stats[].value` | number | Numeric statistic value |
 | `rosters[].roster[].stats[].displayValue` | string | Display representation |
 
-Keep missing player statistics distinct from zero. The samples do not establish
-when confirmed lineups become available or an exhaustive position vocabulary.
-They also do not establish a standalone player statistics endpoint.
+Keep a missing player statistic distinct from zero. When lineups first appear
+before kick-off was not tested.
 
 Sources: [completed lineup](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=740603),
 [scheduled summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879285),
@@ -84,9 +81,9 @@ Sources: [completed lineup](https://site.api.espn.com/apis/site/v2/sports/soccer
 
 ## Key events and commentary availability
 
-The completed ESPN soccer summaries had keyEvents and commentary arrays, with
-the fields below. No top-level plays field occurred in any of the four sampled
-summaries. Do not borrow a play-by-play schema from a different ESPN sport.
+Completed summaries have keyEvents and commentary arrays. No top-level plays field
+appeared in any sampled summary, so do not reuse the play-by-play shape from other
+ESPN sports.
 
 | JSON path | Observed type | Use |
 |---|---|---|
@@ -101,10 +98,9 @@ summaries. Do not borrow a play-by-play schema from a different ESPN sport.
 | `commentary[].text` | string | Commentary text |
 | `commentary[].time.displayValue` | string | Display time |
 
-These arrays were absent from the sampled scheduled summaries. Preserve missing
-sections as unavailable. The observations do not establish a complete event feed,
-event ordering guarantees, coordinate conventions, or live-update latency.
-Commentary text is not reproduced in this corpus.
+Scheduled summaries have neither array. keyEvents lists key moments; whether it
+is a complete event feed was not tested. Commentary text is not reproduced in
+this corpus.
 
 Sources: [completed summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=740603),
 [scheduled summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879285).

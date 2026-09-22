@@ -7,10 +7,10 @@ crawled_at: 2026-09-06
 
 # ESPN soccer access
 
-These are curated observations of ESPN-hosted soccer JSON endpoints, checked on
-2026-09-06. No current official soccer API reference or published schema was
-identified. Path components such as v2 are observed URL components, not a
-documented compatibility promise. Coverage below is limited to the tested requests.
+Curated observations of ESPN's soccer JSON endpoints, checked on 2026-09-06.
+ESPN publishes no API reference or schema for them and promises no stability;
+the v2 in the paths is not a versioning commitment. Everything in these docs is
+what the tested requests returned.
 
 For the soccerdata Python reader, request provider soccerdata and search for
 sd.ESPN. Its [reader documentation](../soccerdata/data-sources.md) remains indexed
@@ -18,10 +18,9 @@ separately. The ESPN provider key now retrieves these direct endpoint notes.
 
 ## Authentication and access status
 
-The checked ESPN soccer requests returned HTTP 200 JSON without an API key,
-authorization header, login, or cookies. This is an observation of those requests,
-not a guarantee of future access or an official developer service. No supported
-rate limit, polling interval, SLA, or bulk-download entitlement was established.
+The requests returned HTTP 200 JSON without an API key, authorization header,
+login or cookies. That is not a guarantee of future access or an official developer
+service, and ESPN publishes no rate limit or service level.
 
 Public reachability does not establish permission to reuse data. Disney's
 [US terms of use](https://disneytermsofuse.com/english/), which include ESPN,
@@ -49,20 +48,17 @@ use the same path prefix as scoreboard, summary, and teams.
 | `GET /apis/v2/sports/soccer/{league}/standings` | site.api.espn.com | League tables selected by season |
 | `GET /v2/sports/soccer/leagues` | sports.core.api.espn.com | Paginated league resource references |
 
-Examples are the requests recorded in the dated source checks, not an exhaustive
-endpoint catalogue. See [scoreboard.md](scoreboard.md),
+These are the tested requests, not a full catalogue. See [scoreboard.md](scoreboard.md),
 [match-summary.md](match-summary.md), [teams-and-standings.md](teams-and-standings.md),
 and [identity-and-coverage.md](identity-and-coverage.md) for verified parameters.
 
 ## Handling change and missing data
 
-For an integration with the necessary permissions, check HTTP status and JSON
-shape before parsing. Treat missing sections, empty arrays, and unknown status
-values explicitly. Do not convert unavailable statistics into zero observations.
-Use bounded requests and backoff on failures; these are integration recommendations,
-not ESPN-published retry or polling rules. A denied request is not evidence that
-the requested match or team does not exist.
+Check the HTTP status and the JSON shape before parsing. Handle missing sections,
+empty arrays and unknown status values explicitly, and never turn a missing
+statistic into a zero. Pace requests and back off on failures (our recommendation;
+ESPN publishes no rules). A denied request does not mean the match or team does
+not exist.
 
-The checked sources establish no stable contract or rate-limit policy. Stop on
-access denial rather than attempting to bypass it. An application that needs
-guaranteed availability must establish that separately with its data supplier.
+Stop on access denial rather than trying to bypass it. An application that needs
+guaranteed availability needs a licensed data supplier.

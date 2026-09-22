@@ -7,23 +7,21 @@ crawled_at: 2026-09-06
 
 # ESPN soccer fixtures and scores
 
-Observed on 2026-09-06 for eng.1 and esp.1. These are public-endpoint observations,
-not an official schema. The examples cover completed and scheduled matches;
-in-progress match behavior was not sampled.
+Observed on 2026-09-06 for eng.1 and esp.1. ESPN publishes no schema for these
+endpoints, so everything here is what the sampled responses contained. The samples
+cover completed and scheduled matches, not in-progress ones.
 
 ## Fixtures by date and historical results
 
 On host site.api.espn.com, use the observed request
 `GET /apis/site/v2/sports/soccer/{league}/scoreboard` with a dates query parameter.
-The checked single-day form was dates=20250817. For eng.1, the checked range
-dates=20250816-20250817 returned event dates on both days. This verifies that
-specific range, not arbitrary historical depth or a maximum range size.
+The single-day form is dates=20250817. A range also works: for eng.1,
+dates=20250816-20250817 returned events on both days. Historical depth and the
+maximum range size were not tested.
 
-The scheduled date dates=20260912 returned future fixtures when checked on
-2026-09-06. Scheduling can change, so retain the returned timestamp and refresh
-within the permissions of the integration. The tested timestamps ended in Z;
-convert them for local display instead of discarding their time-zone information.
-These samples do not establish how every time zone interacts with the date filter.
+A future date (dates=20260912, requested on 2026-09-06) returns scheduled
+fixtures. Kick-off times change, so refresh them. Timestamps are UTC (they end
+in Z); convert them for display rather than dropping the zone.
 
 Sources: [completed day](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817),
 [date range](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250816-20250817),
@@ -32,9 +30,8 @@ Sources: [completed day](https://site.api.espn.com/apis/site/v2/sports/soccer/en
 
 ## Event IDs, teams, and scores
 
-The ESPN scoreboard fields below occurred in the checked eng.1 and esp.1 responses.
-The [] notation means an array element, not literal property-name characters.
-Types describe observations and do not imply that fields are required.
+The [] notation means an array element. Types are as observed; a listed field is
+not guaranteed to be present.
 
 | JSON path | Observed type | Use |
 |---|---|---|
@@ -57,9 +54,9 @@ the league slug used in the URL. Source:
 
 ## Scheduled, completed, and empty scoreboards
 
-The checked ESPN soccer events used state values pre for scheduled matches and
-post for completed matches. These two values are not an exhaustive enum. Unknown
-states must remain distinguishable from completed results.
+Scheduled matches had state pre and completed matches post. In-progress matches
+were not sampled and may use another value, so treat any state other than post
+as not completed.
 
 | JSON path | Observed type | Use |
 |---|---|---|
@@ -68,11 +65,9 @@ states must remain distinguishable from completed results.
 | `events[].status.type.name` | string | Status identifier; no full vocabulary established |
 | `events[].status.type.detail` | string | Display detail |
 
-The eng.1 request for dates=20250701 returned HTTP 200 with an empty events array.
-Handle this as an empty result for that request, without inferring either an
-authentication failure or the absence of football matches everywhere. These
-samples do not establish postponement, cancellation, extra-time, shootout, or
-live-update semantics.
+A date with no matches (eng.1, dates=20250701) returns HTTP 200 with an empty
+events array, not an error. Postponements, cancellations, extra time, shootouts
+and live updates were not sampled.
 
 Sources: [scheduled fixtures](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20260912),
 [completed fixtures](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817),
