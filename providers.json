@@ -12,6 +12,22 @@
     "To add a new provider: add an entry here, then run: npm run crawl -- --provider <name>"
   ],
   "providers": {
+    "espn": {
+      "description": "Curated observations of ESPN soccer JSON endpoints for fixtures, match summaries, teams, standings, and league discovery",
+      "display_name": "ESPN",
+      "aliases": ["espn-soccer", "espn-fc"],
+      "access_level": "public-web",
+      "licence_status": "Publicly reachable endpoints are not an open-data licence or a supported developer API. Disney terms restrict automated extraction and commercial use without permission; verify applicable rights.",
+      "public_safety_notes": "Original, dated structural observations only. Do not reproduce match payloads, commentary, articles, or images. Endpoint availability and schema are not guaranteed. Verification evidence contains selected field paths and types, not raw responses.",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817", "type": "curated", "note": "ESPN-hosted soccer responses checked on 2026-09-06; eng.1 and esp.1 only. Manual structural verification, not an automatic documentation crawl." },
+        { "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=5&page=1", "type": "curated", "note": "League resource references and pagination; listing does not establish per-league endpoint coverage." },
+        { "url": "https://disneytermsofuse.com/english/", "type": "curated", "note": "US terms covering ESPN; other applicable terms and permissions must also be checked." }
+      ],
+      "last_crawled": "2026-09-06"
+    },
     "statsbomb": {
       "description": "Event data provider with free open-data repository",
       "display_name": "StatsBomb",
@@ -305,7 +321,7 @@
     "soccerdata": {
       "description": "Python library for scraping football data from popular websites",
       "display_name": "soccerdata",
-      "aliases": ["soccer-data", "sofascore", "sofa-score", "espn"],
+      "aliases": ["soccer-data", "sofascore", "sofa-score"],
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; upstream site terms vary.",
       "public_safety_notes": "Describe supported public sources and avoid private scraper state.",

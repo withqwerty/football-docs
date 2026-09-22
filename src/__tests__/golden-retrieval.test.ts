@@ -469,14 +469,14 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
-      id: "espn-soccerdata-alias",
+      id: "espn-soccerdata-reader",
       args: {
         query: "ESPN public API match summary schedule team scores lineups",
-        provider: "ESPN",
+        provider: "soccerdata",
         max_results: 5,
       },
       expectedProvider: "soccerdata",
-      expected: ["ESPN (soccerdata)", "**Provider:** soccerdata", "sd.ESPN", "read_matchsheet"],
+      expected: ["**Provider:** soccerdata", "sd.ESPN", "read_matchsheet"],
     },
     {
       id: "metrica-databallpy-alias",
@@ -1136,7 +1136,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("event-types (6)");
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (40 chunks)");
-    expect(text).toContain("aliases: soccer-data, sofascore, sofa-score, espn");
+    expect(text).toContain("aliases: soccer-data, sofascore, sofa-score");
+    expect(text).toContain("**espn** (20 chunks)");
+    expect(text).toContain("aliases: espn-soccer, espn-fc");
     expect(text).toContain("**databallpy** (63 chunks)");
     expect(text).toContain(
       "aliases: data-ball-py, databall-py, metrica, metrica-sports, metricasports, sportec, dfl, sportec-dfl, open-dfl, tracab",
@@ -1368,7 +1370,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("request_update");
   });
 
-  it("routes narrow public match surface adapters to soccerdata docs", () => {
+  it("compares ESPN endpoint notes with the soccerdata Sofascore reader", () => {
     const result = compareProviders(db, {
       topic: "public API match summary schedule team scores lineups",
       providers: ["Sofascore", "ESPN"],
@@ -1376,10 +1378,11 @@ describe("golden retrieval evals", () => {
     const text = result.content[0].text;
 
     expect(result.isError).toBeUndefined();
-    expect(text).toContain("across 1 provider(s)");
+    expect(text).toContain("across 2 provider(s)");
     expect(text).toContain("## soccerdata");
     expect(text).toContain("Sofascore (sd.Sofascore)");
-    expect(text).toContain("ESPN (sd.ESPN)");
+    expect(text).toContain("## espn");
+    expect(text).toContain("site.api.espn.com");
     expect(text).not.toContain("No matching docs found for requested provider(s): sofascore");
     expect(text).not.toContain("No matching docs found for requested provider(s): espn");
   });
