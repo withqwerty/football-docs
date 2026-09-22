@@ -67,7 +67,7 @@
     "@types/turndown": "^5.0.6",
     "tsx": "^4.23.12",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "files": [
     "dist/",
