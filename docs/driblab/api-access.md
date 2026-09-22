@@ -60,6 +60,20 @@ logic keyed on 405 as a routing bug will misreport it.
 403 is worth handling separately from 401: entitlement is per resource, so a
 valid token can read some competitions and not others.
 
+**A 403 can also mean the route does not exist.** Checked on 2026-09-22: a
+request to a path the API does not define, such as a stats path with the wrong
+spelling, returns `403` with an AWS API Gateway message about the
+`Authorization` header ("Invalid key=value pair (missing equal-sign)"), not a
+`404`. It reads like an authentication or entitlement failure but is a routing
+one. When a new path returns 403 on a token that works elsewhere, check the path
+spelling before the entitlement.
+
+**409 is not in the guide's table.** On 2026-09-22 some requests with a valid
+token returned `409` with no body, for example a player's season physical stats
+and `GET /team/{id}/game-stats`. The guide does not document 409, so its meaning
+is not stated; treat it as "no data available for this request" only after
+confirming with Driblab.
+
 ## Rate limits
 
 | Window | Limit |

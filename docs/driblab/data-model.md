@@ -40,6 +40,13 @@ stats   { <group>: { <metric>: <number> } }
 `minutes_played` and `games_played` ride along on the `player` object in stats
 responses, so per-90 normalisation needs no second call.
 
+**Game-level player rows are flat.** In live responses (checked 2026-09-22),
+`GET /game/{id}/player-stats` does not nest `player`, `team` and `season`
+objects. Each row carries flat camelCase keys instead: `playerId`, `playerName`,
+`playerPosition`, `teamId`, `teamName`, `seasonId`, `seasonName`,
+`minutesPlayed`, and `stats`. A parser written for the season-level rows will not
+find `player.id` here.
+
 The guide does not state how any metric is normalised. Judging by the names and
 the sample values, the counting metrics (`shots`, `passes`, `tackles`) look like
 totals, while `*Pct`, `*Efficiency`, `catching`, `handPassing`, `shooting` and
@@ -48,61 +55,162 @@ comparing players — do not assume per-90.
 
 ## Technical stat groups
 
-Seven groups for players; teams add an eighth, `predictive`.
+**The live API does not match the guide here.** The guide's field tables list
+seven player groups in snake_case (`shooting`, `passing`, `association`,
+`defending`, `ball_handling`, `aerial`, `saving`) plus `predictive` for teams.
+Live responses, checked on 2026-09-22 against `GET /season/{id}/players/stats`,
+`GET /player/{id}/season/{seasonId}/stats`, `GET /game/{id}/player-stats`,
+`GET /season/{id}/teams/stats` and `GET /team/{id}/season/{seasonId}/stats`,
+differ in three ways:
 
-**`shooting`** — `xG`, `xGPerShot`, `xGPerNpg`, `xGEfficiency`, `shots`,
-`shotsOnTarget`, `shotsOffTarget`, `shotsPerNpg`, `goals`, `nonPenaltyGoals`,
-`headers`, `headedGoals`, `shooting`, `finishing`
+1. **Player endpoints use PascalCase group names; team endpoints use
+   snake_case.** The same group is `BallHandling` in a player row and
+   `ball_handling` in a team row. Key a parser on the endpoint family, not on one
+   convention.
+2. **There are twelve groups, not seven.** Both families add `Carries`,
+   `Crosses`, `Turnovers` and `SequenceInvolvement`. Player rows also carry
+   `Score`; team rows carry `predictive` instead.
+3. **The metric lists are longer and partly different.** Some metrics the guide
+   places in one group sit in another: `deepProgression` is in `Carries`,
+   `dispossessed` in `Turnovers`, and the crossing metrics in `Crosses` rather
+   than `Association`.
 
-**`passing`** — `passes`, `passesSuccessful`, `passingPct`, `longBallTotal`,
-`longBallSuccessful`, `longBallPct`, `passingFinalThird`,
-`passingFinalThirdPct`, `passesFinalThirdTotal`, `passesOppHalf`
+Metric names inside a group are camelCase in both families.
 
-**`association`** — `xAssists`, `assists`, `xGChain`, `xGBuildup`,
-`xGBuildup5pass`, `chancesCreated`, `chancesCreatedOP`, `openPlayKeyPasses`,
-`openPlayPassesIntoOpponentBox`, `ballProgression`, `throughBalls`, `crossing`,
-`completedCrosses`, `crossEfficiency`, `passesPerLongBall`, `scoringContribution`
+### Player stat groups (live)
 
-**`defending`** — `tackles`, `tacklesWasDribbled`, `interceptions`, `clearances`,
-`recoveries`, `individualPressure`, `fouls`, `yellowCards`, `redCards`
+The same twelve groups and metric sets appear at season level and at game level.
 
-**`ball_handling`** — `touches`, `touchesInOpponentBox`, `dribblesAttempted`,
-`successfulDribbles`, `successfulDribblesPct`, `deepProgression`,
-`dispossessed`, `foulsTaken`, `penaltiesTaken`
+**`Shooting`** — `avgShotDistance`, `finishing`, `finishingxGOT`, `goals`,
+`goalsOutBox`, `headedGoals`, `headerPerCross`, `headerPerShot`, `headers`,
+`nonPenaltyGoals`, `offsidesCaught`, `shooting`, `shootingOutBox`, `shots`,
+`shotsOffTarget`, `shotsOnTarget`, `shotsOutBox`, `shotsPerNpg`, `xG`,
+`xGBuildupInTeam`, `xGEfficiency`, `xGOPInTeam`, `xGOnTarget`, `xGPerNpg`,
+`xGPerShot`, `xGSetPiece`
 
-**`aerial`** — `aerials`, `aerialWins`, `aerialWinsPct`, `aerialEfficiency`
+**`Passing`** — `averagePassDistance`, `cutbacks`, `deepPasses`, `longBallPct`,
+`longBallReceived`, `longBallSuccessful`, `longBallTotal`,
+`oPPassesIntoOppBoxPct`, `passes`, `passesFinalThirdTotal`,
+`passesFinalThirdTotalPct`, `passesForwardPct`, `passesOPIntoBoxInTeam`,
+`passesOppHalf`, `passesPerLongBall`, `passesReceivedFinalThird`,
+`passesSuccessful`, `passingFinalThird`, `passingFinalThirdPct`,
+`passingOppHalfPct`, `passingOwnHalfPct`, `passingPct`,
+`passingSuccessForwardPct`, `progressivePassesAccurate`,
+`progressivePassesTotalPct`
 
-**`saving`** (goalkeepers) — `shotsAgainst`, `shotsOnTargetAgainst`,
-`shotsOnTargetInBoxAgainst`, `shotsOnTargetOutBoxAgainst`, `savesPct`,
-`savesInBox`, `savesInBoxPct`, `savesOutBox`, `savesOutOfBoxPct`,
-`goalsConceded`, `nonPenaltyGoalsAgainst`, `shotsPerGoal`, `xGPerShotAgainst`,
-`xGFacedOnTargetEfficiency`, `xGFacedOnTargetPerGoalReceived`, `catching`,
-`claimAccuracy`, `handPassing`
+**`Association`** — `assists`, `ballProgression`, `ballProgressionDribbling`,
+`ballProgressionFinalThird`, `ballProgressionOppHalfInTeam`,
+`ballProgressionPassing`, `chancesCreated`, `chancesCreatedOP`,
+`entriesOppBox`, `openPlayKeyPasses`,
+`openPlayPassesIntoOpponentBoxSuccessful`, `progressivePassesReceived`,
+`progressivePassesReceivedFinalThird`, `progressivePassesReceivedIntoBox`,
+`progressivePassesReceivedOppHalf`, `scoringContribution`, `throughBalls`,
+`touchesPerShot`, `xACrosses`, `xAssists`, `xAssistsOpenPlay`,
+`xAssistsSetPiece`, `xGBuildup`, `xGBuildup5pass`, `xGBuildupFinalThird`,
+`xGChain`, `xGChainFinalThird`, `xT`, `xTDribbling`, `xTOpenPlay`,
+`xTPassing`, `xTPassing100Passes`
 
-**`predictive`** (teams only) — `expectedPoints`
+**`Defending`** — `aggressiveActions`, `blockedCrosses`, `blockedShots`,
+`breadth`, `clearances`, `defensiveActions`, `defensiveDistance`,
+`defensiveDuelsPct`, `duelsDefTotal`, `duelsLost`, `duelsPct`, `duelsTotal`,
+`fouls`, `foulsOwnHalfPct`, `highDefensiveActionPct`, `individualPressure`,
+`individualPressureOppHalf`, `interceptions`, `quickRecoveries`,
+`quickRecoveriesPct`, `recoveries`, `recoveriesOppHalf`, `redCards`,
+`tacklesAttempted`, `tacklesSuccessful`, `tacklesWasDribbled`,
+`tacklesWasDribbledFinalThird`, `tacklesWasDribbledFirstThird`,
+`tacklesWasDribbledFouls`, `tacklesWasDribbledSecondThird`, `yellowCards`
 
-Goalkeepers carry all groups, not only `saving`; the outfield groups are simply
+**`BallHandling`** — `badActionsOwnHalf`, `ballRetention`,
+`ballRetentionOppHalf`, `dribblesAttempted`, `dribblesFinalThird`,
+`dribblesFinalThirdPct`, `dribblesOppHalf`, `dribblesOppHalfPct`,
+`dribblesOwnHalf`, `dribblesOwnHalfPct`, `dribblesWonFinalThird`,
+`dribblesWonOppHalf`, `dribblesWonOwnHalf`, `foulsTaken`, `penaltiesTaken`,
+`successfulDribbles`, `successfulDribblesPct`, `touches`,
+`touchesInOpponentBox`, `touchesOppBoxInTeam`
+
+**`Carries`** — `assistEndingCarries`, `averageCarriesProgress`,
+`avgCarriesDistance`, `carries`, `chanceEndingCarries`, `deepProgression`,
+`deepProgressionFinalThird`, `goalEndingCarries`, `progressiveRuns`,
+`shotEndingCarries`
+
+**`Aerial`** — `aerialDefensive`, `aerialDefensivePct`, `aerialEfficiency`,
+`aerialOffensive`, `aerialOffensivePct`, `aerialWins`, `aerialWinsPct`,
+`aerialWonDefensive`, `aerialWonOffensive`, `aerials`, `aerialsPctOppBox`,
+`aerialsPctOwnBox`, `aerialsTotalOppHalf`, `aerialsWonOppBox`,
+`aerialsWonOppHalfPct`, `aerialsWonOwnBox`
+
+**`Crosses`** — `completedCrosses`, `completedCrossesOP`, `crossEfficiency`,
+`crosses`, `crosses6yardBox`, `crossing`, `crossingOP`
+
+**`Turnovers`** — `dispossessed`, `goalEndingHighTurnovers`, `highTurnovers`,
+`shotEndingHighTurnovers`
+
+**`SequenceInvolvement`** — `goalEndingSequence`, `shotEndingSequence`
+
+**`Saving`** (goalkeepers) — `catching`, `claimAccuracy`, `goalsConceded`,
+`handPassing`, `savesInBox`, `savesInBoxPct`, `savesOutBox`,
+`savesOutOfBoxPct`, `savesPct`, `shotsPerGoal`, `xGFacedOnTargetEfficiency`,
+`xGFacedOnTargetPerGoalReceived`, `xGSavedPerXGFacedOnTarget`
+
+**`Score`** — `score`
+
+Goalkeepers carry all groups, not only `Saving`; the outfield groups are simply
 mostly zero.
 
-**An undocumented ninth group.** The response samples for
-`GET /game/{id}/player-stats` carry a `crosses` group — `crossing`,
-`completedCrosses`, `crossEfficiency` — that the guide's own field table for that
-endpoint does not list. The same three metrics also sit inside `association` on
-the season-level endpoints. Handle an unexpected group rather than keying off the
-documented list.
+### Team stat groups (live)
 
-**A naming trap.** The guide's field tables spell the ball-handling group
-`ball_handing`, while every response sample uses `ball_handling`. Read the key as
-`ball_handling` and treat `ball_handing` as a typo in the documentation. The same
-kind of slip appears on the player resource: the field table says
-`second_nationality`, the sample says `secondary_nationality`.
+Team rows carry `season`, `team` and `stats`. The group names are snake_case and
+most groups are short.
 
-Metric names inside a group are **camelCase**; group names and top-level resource
-fields are **snake_case**. Both conventions live in the same object.
+**`shooting`** — `goals`, `headedGoals`, `nonPenaltyGoals`, `shots`,
+`shotsOnTarget`, `xG`, `xGPerNpg`, `xGPerShot`, `xGSetPiece`
+
+**`association`** — `assists`, `ballProgressionFinalThird`, `directness`,
+`entriesOppBox`, `lengthPerPossession`, `numPossession10Passes`,
+`openPlayPassesIntoOpponentBoxSuccessful`, `passesPerPossession`,
+`passesPerShots`, `possession`, `ppda`, `rivalPossession`, `xAssists`,
+`xGChain`, `xT`, `xTOpenPlay`
+
+**`defending`** — `aggressiveActions`, `defensiveDistance`, `fouls`,
+`highDefensiveActionPct`, `highDefensiveDistance`, `highRecoveries`,
+`recoveriesOppHalf`, `tacklesWasDribbled`
+
+**`saving`** — `goalsConceded`, `nonPenaltyGoalsAgainst`, `savesInBox`,
+`savesOutBox`, `shotsAgainst`, `shotsOnTargetAgainst`,
+`shotsOnTargetInBoxAgainst`, `shotsOnTargetOutBoxAgainst`, `xGAgainst`,
+`xGPerNpgAgainst`, `xGPerShotAgainst`, `xGSetPieceAgainst`
+
+**`passing`** — `averagePassDistance`, `passesPerLongBall`, `passingFinalThird`
+
+**`predictive`** — `expectedPoints`, `points`
+
+**`ball_handling`** — `penaltiesTaken`, `touchesInOpponentBox`
+
+**`turnovers`** — `highTurnovers`, `shotEndingHighTurnovers`
+
+**`aerial`** — `aerialDefensivePct`, `aerialWonOffensive`
+
+**`crosses`** — `crossingPerXG`
+
+**`sequence_involvement`** — `speedSequence`
+
+**`carries`** — `deepProgression`
+
+### Naming traps in the guide
+
+The guide's field tables spell the ball-handling group `ball_handing`. Live team
+responses use `ball_handling` and live player responses use `BallHandling`; the
+`ball_handing` spelling appears in neither. The same kind of slip appears on the
+player resource: the field table says `second_nationality`, and live responses
+say `secondary_nationality`.
 
 ## Physical stat groups
 
-Four groups, from `/physical-stats` and `/player-physical-stats`:
+Four groups, from `/physical-stats` and `/player-physical-stats`, as the guide
+documents them. These could not be checked against live responses: on
+2026-09-22 the physical endpoints returned no rows or a 409 for the seasons
+tried, so the casing and metric lists below are the guide's, not observed.
+Given the technical groups, expect them to differ.
 
 - **`distance`** — `totalDistance`, `walkingDistance`, `joggingDistance`,
   `runningDistance`, `hsrDistance`, `sprintDistance`
@@ -121,9 +229,24 @@ inference, not a documented fact — confirm against your own data.
 
 ## Arrigo metrics
 
-Driblab's own metric family, in a single group, `out_play`. The guide gives the
-metric names but defines none of them, so the readings below come from the names
-and from the sample values, not from Driblab.
+Driblab's own metric family. The guide documents a single group, `out_play`.
+Live responses from `GET /season/{id}/arrigo-metrics` (checked 2026-09-22)
+carry **eight** groups, and several names mix an underscore and a space in the
+same key, so quote them exactly:
+
+| Group | Metrics |
+|---|---|
+| `out_play` | the bypassing metrics below, plus `bypassedDefendersPerCarry`, `bypassedDefendersPerPass`, `bypassedPlayersPerCarry`, `bypassedPlayersPerPass`, `carriesBypassingPlayers` |
+| `line_breaking passes` | `lineBreakingPasses`, `lineBreakingPassesM`, `lineBreakingPassesMD`, `lineBreakingPassesPerPass`, `lineBreakingThroughBalls`, `linesBrokenByPasses`, `linesBrokenPerPass`, `passesPerLineBreakingPass` |
+| `line_breaking carries` | `carriesPerLineBreakingCarry`, `lineBreakingCarries`, `lineBreakingCarriesD`, `lineBreakingCarriesM`, `lineBreakingCarriesMD`, `lineBreakingCarriesPerCarry`, `linesBrokenByCarries`, `linesBrokenPerCarry` |
+| `line_breaking actions` | `lineBreakingActions`, `lineBreakingActionsD`, `lineBreakingActionsM`, `lineBreakingActionsMD`, `linesBrokenByActions` |
+| `off_ball runs` | `offBallRuns`, `offBallRunsComingShort`, `offBallRunsCrossReceiver`, `offBallRunsOverlap`, `offBallRunsRunAhead`, `offBallRunsRunBehind`, `offBallRunsSupport`, `offBallRunsUnderlap` |
+| `on_ball pressure` | `lightOnBallPressuresPct`, `strongOnBallPressuresPct`, `successfulLightOnBallPressures`, `successfulStrongOnBallPressures`, `totalLightOnBallPressures`, `totalStrongOnBallPressures` |
+| `pass_under pressure` | `passingUnderLightPressure`, `passingUnderStrongPressure`, `successfulPassesUnderLightPressure`, `successfulPassesUnderStrongPressure`, `totalPassesUnderLightPressure`, `totalPassesUnderStrongPressure` |
+| `ball_received` | `passReceiptsInSpace`, `passReceiptsInSpaceCompleted` |
+
+The guide defines none of these metrics, so the readings below for `out_play`
+come from the names and from the guide's sample values, not from Driblab.
 
 Actions performed: `passesBypassingPlayers`, `passesBypassingDefenders`,
 `carriesBypassingDefenders`, `bypassedPlayersByPasses`,
@@ -174,7 +297,9 @@ qualifiers.
 **Lineup** (`GET /game/{id}/lineup`) — positional and timing information per
 player.
 
-**One endpoint breaks the shape.** `GET /team/{id}/game-stats` returns `stats` as
+**One endpoint breaks the shape, according to the guide.** (Not observed live:
+on 2026-09-22 this endpoint returned `409` for the team tried.)
+`GET /team/{id}/game-stats` returns `stats` as
 a **flat array of `{name, value}` pairs**, not the nested group object every other
 stats endpoint uses, and it uses its own metric names: `passing`, `crossing`,
 `crossesCompleted`, `aerials`, `aerialsWon`, `aerialsPct`, `passingFinalThird`,

@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 23 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 24 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -127,13 +127,13 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Sportradar | 30 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 14 | api-access, api-endpoints |
-| Driblab | 27 | api-access, api-endpoints, data-model |
+| Driblab | 30 | api-access, api-endpoints, data-model |
 | TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
 | FotMob | 3 | identity-surfaces |
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**2,322 searchable chunks** across 24 providers and tools.
+**2,325 searchable chunks** across 24 providers and tools.
 
 > **Impect** documentation is built solely from the public
 > [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a

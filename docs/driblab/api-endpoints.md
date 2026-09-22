@@ -68,6 +68,9 @@ own ID, not a year attribute on a competition.
 endpoint is `GET /season/{id}/players/stats`; the team equivalent is
 `GET /team/{id}/season/{seasonId}/player-stats`. The two differ in both the
 hyphen and the plural, and neither spelling works on the other resource.
+Checked against the live API on 2026-09-22: the swapped spelling fails with a
+`403`, not a `404` (see [api-access.md](api-access.md)), so the error looks like
+an entitlement problem rather than a typo.
 
 ## Team
 
