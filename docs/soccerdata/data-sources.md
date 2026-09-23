@@ -69,7 +69,7 @@ Source: whoscored.com (Opta event data). Selenium-based, requires Chrome/Chromiu
 
 ## ClubElo (sd.ClubElo)
 
-Source: clubelo.com. HTTP-based CSV API. Does not filter by league (global data). Elo scores available from 1939 (provisional before 1960).
+Source: clubelo.com. Note that the ClubElo CSV API moved behind authentication in September 2026 (registration is not open yet), so this reader no longer returns data. See the ClubElo section of `free-sources/overview.md`. HTTP-based CSV API. Does not filter by league (global data). Elo scores available from 1939 (provisional before 1960).
 
 **Methods**:
 

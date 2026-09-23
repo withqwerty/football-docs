@@ -51,8 +51,13 @@ def understat_inline_json(body):
     return re.search(rb"var shotsData\s*=\s*JSON\.parse\(", body) is not None
 
 
-def clubelo_csv(body):
-    return body.decode("utf-8", "replace").startswith("Rank,Club,Country,Level,Elo,From,To")
+def clubelo_chart(fields):
+    def check(body):
+        match = re.search(rb"var vegaJson = (\{.*?\});\s*\n", body, re.S)
+        rows = next(iter(json.loads(match.group(1))["datasets"].values()))
+        return bool(rows) and fields <= set(rows[0])
+
+    return check
 
 
 def football_data_csv(body):
@@ -86,17 +91,17 @@ CHECKS = [
     ),
     (
         "overview.md#clubelo",
-        "club history is CSV with the documented header",
-        "http://api.clubelo.com/Liverpool",
+        "ranking page embeds the top-50 chart dataset",
+        "https://clubelo.com/",
         None,
-        clubelo_csv,
+        clubelo_chart({"Name", "Elo", "Golo", "Level", "Federation"}),
     ),
     (
         "overview.md#clubelo",
-        "all clubs on a date is CSV with the documented header",
-        "http://api.clubelo.com/2024-12-01",
+        "club page embeds the rating history chart dataset",
+        "https://clubelo.com/Bayern",
         None,
-        clubelo_csv,
+        clubelo_chart({"Date", "Elo", "Golo"}),
     ),
     (
         "overview.md#football-datacouk",
@@ -128,7 +133,7 @@ def main():
         status, body = fetch(url, headers)
         try:
             ok = status == 200 and check(body)
-        except (ValueError, IndexError, KeyError):
+        except (AttributeError, ValueError, IndexError, KeyError, StopIteration):
             ok = False
         print(f"  {'ok ' if ok else 'BAD'} {status} {url}")
         if not ok:

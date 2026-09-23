@@ -119,7 +119,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 77 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces |
 | SkillCorner | 49 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
-| Free sources | 62 | overview, fbref, understat, contextual-story-joins, xg-timelines |
+| Free sources | 57 | overview, fbref, understat, contextual-story-joins, xg-timelines |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
 | Opta | 71 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
@@ -135,7 +135,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 3 | identity-surfaces |
 | Transfermarkt | 3 | identity-surfaces |
 
-**2,371 searchable chunks** across 26 providers and tools.
+**2,366 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API

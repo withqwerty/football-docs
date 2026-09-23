@@ -31,6 +31,10 @@ away_elo = ClubElo(away_team, fixture_date)
 elo_diff = home_elo - away_elo
 ```
 
+The ClubElo CSV API moved behind authentication in September 2026, so a
+lookup by date now needs API access, or ratings taken from the club pages (about
+four years of history). See the ClubElo section of `overview.md`.
+
 ClubElo names are not guaranteed to match provider team labels. Keep the alias
 map in project code, and treat promoted, renamed, and abbreviated clubs as normal
 data-quality cases.

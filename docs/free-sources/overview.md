@@ -7,7 +7,7 @@
 | StatsBomb Open Data | Event-level (full) | GitHub download / API | Select matches (World Cups, specific leagues/seasons) | None |
 | FBref | Results, basic stats (no advanced metrics since Jan 2026) | Web scrape / soccerdata | 100+ competitions | Strict (3s between requests) |
 | Understat | xG, shot-level | Web scrape / soccerdata | Top 5 European leagues | Moderate |
-| ClubElo | Historical Elo ratings | HTTP API | All top European leagues, 1946-present | Generous |
+| ClubElo | Elo ratings | Web pages (API now behind auth) | All top European leagues, public pages from ~2022 | Unknown |
 | football-data.co.uk | Match results + odds | CSV download | 25+ leagues, 20+ seasons | None |
 | engsoccerdata | Historical league results | R package / GitHub data | England 1888+, Spain 1928+, other leagues | None |
 | Transfermarkt | Market values, transfers, injuries | Web scrape | All professional leagues | Strict |
@@ -81,31 +81,36 @@ many leagues. Advanced metrics covered 2017/18 to January 2026 only.
 
 ## ClubElo
 
-**What it provides**: Historical Elo ratings for European football clubs, updated daily during the season. The Elo model adjusts for home advantage, goal difference, and competition level.
+**What it provides**: Elo ratings for European football clubs, updated after each match. The Elo model adjusts for home advantage, goal difference, and competition level.
 
-**Coverage**: Most European leagues from 1946 to present. Updated daily during the season.
+> **The public CSV API is gone (checked 23 September 2026).** `api.clubelo.com`,
+> which served `http://api.clubelo.com/{club_name}` and
+> `http://api.clubelo.com/{YYYY-MM-DD}` as CSV, now returns 502. The API has moved
+> behind authentication, and registration is not open yet. Anything that uses the
+> old endpoints, including the `soccerdata` ClubElo reader, no longer works.
 
-**Access**: Simple HTTP API returning CSV.
+**Access**: The website only. The pages are rendered on the server, with the data in the HTML. Each chart is a Vega-Lite spec assigned to a `vegaJson` variable in the page, with its rows under `datasets`.
 
-**API endpoints**:
+| Page | Chart dataset fields | Range |
+|---|---|---|
+| `https://clubelo.com/` | `Name`, `Elo`, `Golo`, `Level`, `Federation`, `FedURL`, `TLC` (top 50 clubs) | Current |
+| `https://clubelo.com/{club}` (e.g. `/Bayern`, `/Liverpool`) | `Date`, `Elo`, `Golo`, `segment_id` (one row per match) | About four years (from late 2022) |
+
+The pages also carry HTML tables of recent and upcoming matches, with Elo win probabilities and rating changes per game. Club slugs are the site's own (`AstonVilla`, `AustriaWien`); take them from the links on the ranking page.
+
+```python
+import json, re, requests
+
+def clubelo_history(club):
+    """Rows from the rating chart on a ClubElo club page."""
+    html = requests.get(f"https://clubelo.com/{club}", timeout=30).text
+    spec = json.loads(re.search(r"var vegaJson = (\{.*?\});\s*\n", html, re.S).group(1))
+    return next(iter(spec["datasets"].values()))
+
+rows = clubelo_history("Bayern")   # [{"Date": "2022-09-30T00:00:00", "Elo": ..., "Golo": ..., "segment_id": 0}, ...]
 ```
-# Single club history
-http://api.clubelo.com/{club_name}
-# Example: http://api.clubelo.com/Liverpool
 
-# All clubs on a specific date
-http://api.clubelo.com/{YYYY-MM-DD}
-# Example: http://api.clubelo.com/2024-12-01
-
-# All clubs in a country on a date
-http://api.clubelo.com/{YYYY-MM-DD}/{country_code}
-```
-
-**Response format** (CSV):
-```
-Rank,Club,Country,Level,Elo,From,To
-1,Liverpool,ENG,1,2050,2024-11-30,2024-12-07
-```
+**Coverage**: Ratings run from 1946 to the present, but the public pages expose only the recent chart window. The full history was available through the old API.
 
 **Project use**: For run-in, fixture-difficulty, and season-story surfaces,
 ClubElo is useful as a lightweight strength prior. Join by a maintained club
@@ -230,7 +235,7 @@ it in public analysis.
 | Aggregated stats | Via events | Yes | Yes | No | Basic | No | No | Yes |
 | xG | Yes | Yes (Opta) | Yes (own model) | No | No | No | No | No |
 | Coordinates | Yes | No | Shot coords | No | No | No | No | Yes |
-| Historical depth | Limited | 2017+ detailed | 2014+ | 1946+ | 1993+ | 1888+ England | 2004+ | ~2010+ |
+| Historical depth | Limited | 2017+ detailed | 2014+ | ~2022+ public (1946+ via API) | 1993+ | 1888+ England | 2004+ | ~2010+ |
 | League coverage | Select | Top 5+ | Top 5 | Europe | 25+ | England + selected global leagues | Global | Top 5+ |
 | Commercial use | No | No | Unclear | Yes | Yes | Non-commercial attribution expected | No | No |
-| API available | GitHub | No | No | Yes (CSV) | CSV download | R/GitHub data | No | No |
+| API available | GitHub | No | No | Behind auth | CSV download | R/GitHub data | No | No |
