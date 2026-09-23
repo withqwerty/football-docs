@@ -3,6 +3,7 @@ name: New provider
 about: Request or offer to add docs for a provider we don't cover yet
 title: "New provider: [PROVIDER NAME]"
 labels: new-provider, help wanted
+type: Feature
 ---
 
 ## Provider
@@ -10,6 +11,8 @@ labels: new-provider, help wanted
 **Name:**
 **Website:**
 **API docs (if available):**
+
+We assess every request against [INCLUSION.md](https://github.com/withqwerty/football-docs/blob/main/INCLUSION.md).
 
 ## What data does it offer?
 
@@ -37,9 +40,22 @@ labels: new-provider, help wanted
 **Licence or upstream status notes:**
 **Public-safety notes:** what can be indexed safely, and what should stay out?
 
+## Evidence for inclusion
+
+Which route applies? See [INCLUSION.md](https://github.com/withqwerty/football-docs/blob/main/INCLUSION.md#evidence). Give links.
+
+- [ ] Established use:
+- [ ] Unique coverage:
+- [ ] Demand:
+
+## Affiliation
+
+- [ ] I work for, own or maintain this provider
+- [ ] No affiliation
+
 ## Are you offering to write the docs?
 
-- [ ] Yes, I'll create a PR (see [CONTRIBUTING.md](../CONTRIBUTING.md) for how)
+- [ ] Yes, I'll create a PR (see [CONTRIBUTING.md](https://github.com/withqwerty/football-docs/blob/main/CONTRIBUTING.md) for how)
 - [ ] No, just requesting that someone else adds this
 
 ## Documentation sources (for crawling)

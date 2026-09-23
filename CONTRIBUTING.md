@@ -157,6 +157,8 @@ Open a Pull Request on GitHub. In the PR description, include:
 
 Use this when you want to document a provider we don't cover at all yet.
 
+Check [INCLUSION.md](INCLUSION.md) first. It explains what is in scope, the evidence a new provider needs, and what the docs may and may not say. If you work for or maintain the provider, say so in the issue and the PR.
+
 ### Step 1: Create the directory
 
 ```bash

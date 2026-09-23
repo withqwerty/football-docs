@@ -37,6 +37,10 @@ from stale model memory.
 - Unreviewed dumps from private projects. Generalise the football-data lesson or
   keep it out.
 
+[INCLUSION.md](INCLUSION.md) sets out how new providers are assessed: what is in
+scope, the evidence a request needs, what docs may say, and what we are and are
+not responsible for.
+
 ## How we work
 
 - Prefer source transparency over volume. Every useful result should carry
