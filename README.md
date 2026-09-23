@@ -180,6 +180,12 @@ Reep's snapshots age weekly, as a new release is cut each week. Run
 `python3 scripts/check_reep_live.py` to check every download link and list what
 has changed since the snapshots; the refresh steps are in [specs/README.md](specs/README.md#reep).
 
+Free sources have no spec, and they tend to fail quietly: a page still answers
+200 after the data has gone. Run `python3 scripts/check_free_sources_live.py` to
+request each access path documented in `docs/free-sources/` and check that the
+response still carries the data the doc describes. When a doc's access recipe
+changes, change its check in the same commit.
+
 Truth files live in `data/provider-truth/` and are generated, not hand-written:
 
 ```bash

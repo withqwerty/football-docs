@@ -3,6 +3,7 @@ name: Flag outdated docs
 about: Let us know when a provider's docs are stale or a new version has been released
 title: "Outdated: [PROVIDER NAME] v[VERSION]"
 labels: outdated, recrawl
+type: Bug
 ---
 
 ## Provider
