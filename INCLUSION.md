@@ -17,7 +17,8 @@ it, including requests from the provider itself.
 Out of scope:
 
 - General software libraries that are not specific to football data.
-- Products whose main output is tips, picks or betting advice.
+- Anything directly about betting or heavily oriented to it: betting tools and
+  apps, tipsters, odds feeds and odds archives. See [Betting](#betting).
 - Wrappers that only repackage a provider we already index and add no data or
   IDs of their own. We document the upstream provider instead.
 
@@ -88,16 +89,34 @@ Docs are reference material for agents. They document facts:
 - access tiers, authentication and rate limits
 - coverage, and what is not available
 
-Odds, predictions, projections and other model outputs are data like any other.
+Model outputs such as xG, expected points and season projections are data.
 Document them as fields and endpoints, and name the model that produces them.
-The SportMonks `odds` and `predictions` includes follow this pattern.
 
 Docs do not include:
 
 - accuracy or performance claims, for example "calibrated" or "beats the market"
-- betting guidance of any kind
+- betting content (see below)
 - marketing copy or comparisons that favour the provider
 - prices, except for access tiers, dated with the date they were checked
+
+## Betting
+
+Many data providers also sell odds or betting products. We index their football
+data and leave the betting side out:
+
+- no docs, sections or endpoints about odds, bookmakers, betting markets, tips
+  or value bets
+- no providers, tools or datasets that are mainly about betting
+
+Incidental mentions inside a verbatim upstream page can stay, for example an
+`odds` entry in a list of includes. Removing them would break the page's
+provenance.
+
+Stats that describe the match or model football are fine, even when betting
+sites use them: the rate at which both teams score, matches over a goal
+threshold, corners per match, expected points, season projections. Use neutral
+names and no market framing. Match-outcome probabilities presented as betting
+prices stay out.
 
 ## Scraping
 
