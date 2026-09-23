@@ -53,6 +53,16 @@ Which route applies? See [INCLUSION.md](https://github.com/withqwerty/football-d
 - [ ] I work for, own or maintain this provider
 - [ ] No affiliation
 
+## Where does the data come from?
+
+See [data provenance](https://github.com/withqwerty/football-docs/blob/main/INCLUSION.md#data-provenance). Name the sources where you can.
+
+- [ ] First-party (collected by the provider):
+- [ ] Licensed from:
+- [ ] Aggregated from public sources:
+- [ ] Derived (models or metrics) from:
+- [ ] Not publicly documented
+
 ## Are you offering to write the docs?
 
 - [ ] Yes, I'll create a PR (see [CONTRIBUTING.md](https://github.com/withqwerty/football-docs/blob/main/CONTRIBUTING.md) for how)

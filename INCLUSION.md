@@ -48,6 +48,37 @@ Vendors and maintainers are welcome to request and write docs for their own
 product. State the affiliation in the issue and in the pull request. The docs
 get the same review as any other, with a specific check for neutrality.
 
+## Data provenance
+
+A provider states where its data comes from. Use one or more of these:
+
+| Category | Meaning |
+|---|---|
+| First-party | Collected by the provider itself, for example its own scouts, loggers or tracking systems. |
+| Licensed | Licensed from a named upstream source, for example a league or another data provider. |
+| Aggregated | Collected from public sources such as websites, feeds or public datasets. |
+| Derived | Models or metrics built on one of the above. Name the input source. |
+
+Each provider's `api-access.md` has a short "Data sources" section that records
+this, so an agent can tell a user before they build on the data.
+
+We do not index a product whose main offer is resale or relicensing of
+third-party data when it does not disclose the source, or does not appear to
+have the right to redistribute it. Free libraries and wrappers that fetch public
+data for the user are different, because they sell nothing. soccerdata and the
+free-sources docs are examples.
+
+We check that the source is disclosed. We do not audit contracts or verify
+rights.
+
+### Exemption for well-known providers
+
+Established commercial providers whose collection or licensing is widely known
+do not need to disclose their sources to be included. Examples are Opta,
+StatsBomb, Wyscout, Sportradar and SportMonks. Their "Data sources" section
+records what is publicly known, or says "not publicly documented". A maintainer
+decides whether a provider is well known, and gives reasons in the issue.
+
 ## What the docs may say
 
 Docs are reference material for agents. They document facts:
@@ -86,6 +117,8 @@ repo do not add ways around authentication, paywalls or explicit blocks.
 - The quality, accuracy or uptime of a provider's data or API.
 - Whether a user's access complies with the provider's terms. Users check the
   terms of each provider they use.
+- Whether a provider has the right to the data it sells. We check that sources
+  are disclosed, not that the rights behind them are sound.
 - Pricing or commercial terms.
 - Endorsement. Inclusion means a provider meets this policy. It is not a
   recommendation.
