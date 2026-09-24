@@ -13,8 +13,8 @@ anyone can re-fetch and diff.
 |---|---|---|---|
 | `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
-| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-08-31 | 2026-08-31 |
-| `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-08-31 | 2026-08-31 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-09-24 | 2026-09-24 |
+| `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-09-24 | 2026-09-24 |
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-09-24 | 2026-09-24 |
 | `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-09-24 | 2026-09-24 |
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-22 | 2026-09-22 |

@@ -9,7 +9,7 @@
         "version": ""
       }
     ],
-    "generated_at": "2026-08-31"
+    "generated_at": "2026-09-24"
   },
   "basePaths": [
     "/api"
@@ -208,8 +208,10 @@
     "match_id",
     "metrics_gi_ip_off_ball_runs_v2_last_modified__gte",
     "metrics_gi_ip_passes_v2_last_modified__gte",
+    "metrics_gi_ip_passes_v3_last_modified__gte",
     "metrics_gi_ip_passing_options_v2_last_modified__gte",
     "metrics_gi_ip_player_possession_v2_last_modified__gte",
+    "metrics_gi_ip_player_possession_v3_last_modified__gte",
     "metrics_gi_oop_on_ball_engagements_v2_last_modified__gte",
     "offset",
     "order_by",

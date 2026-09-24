@@ -98,7 +98,7 @@ ls docs/sportmonks/
 You need something for the AI to work from. This could be:
 
 - An official docs URL (e.g., `https://docs.sportmonks.com/football/`)
-- A GitHub repo with specs (e.g., `https://github.com/statsbomb/open-data`)
+- A GitHub repo with specs (e.g., `https://github.com/hudl/open-data`)
 - An API response you've captured
 - A blog post or tutorial that documents the data format
 - A PDF specification document

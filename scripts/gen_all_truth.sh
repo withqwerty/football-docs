@@ -23,7 +23,7 @@ PINS=(
   "kloppy==3.19.0"
   "socceraction==1.5.3"
   "soccerdata==1.9.1"
-  "mplsoccer==1.8.0"
+  "mplsoccer==1.8.1"
   "floodlight==1.2.0"
   "databallpy==0.8.1"
   "skillcorner==3.2.0"

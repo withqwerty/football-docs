@@ -22,6 +22,7 @@ import importlib
 import inspect
 import json
 import pkgutil
+import re
 import typing
 from pathlib import Path
 
@@ -148,7 +149,10 @@ def scrub_local_paths(text: str) -> str:
     Some packages default a path argument to the working directory, so a raw
     signature bakes in whoever generated the file. That would churn the diff for
     every contributor and leak local directory layout into a public repo.
+    A sentinel default also renders with its memory address (`<object object at
+    0x100e47330>`), which differs on every run, so the address is dropped too.
     """
+    text = re.sub(r" at 0x[0-9a-f]+>", ">", text)
     return text.replace(str(Path.cwd()), "<cwd>").replace(str(REPO), "<repo>")
 
 

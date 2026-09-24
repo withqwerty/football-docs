@@ -3,8 +3,8 @@
   "kind": "python-package",
   "source": {
     "package": "mplsoccer",
-    "version": "1.8.0",
-    "generated_at": "2026-08-31"
+    "version": "1.8.1",
+    "generated_at": "2026-09-24"
   },
   "modules": {
     "mplsoccer": [
@@ -956,7 +956,7 @@
     "mplsoccer.soccer.dimensions.uefa_dims": "uefa_dims()",
     "mplsoccer.soccer.dimensions.wyscout_dims": "wyscout_dims()",
     "mplsoccer.soccer.formations.dataclass": "dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)",
-    "mplsoccer.soccer.formations.field": "field(*, default=<dataclasses._MISSING_TYPE object at 0x1085d8490>, default_factory=<dataclasses._MISSING_TYPE object at 0x1085d8490>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1085d8490>)",
+    "mplsoccer.soccer.formations.field": "field(*, default=<dataclasses._MISSING_TYPE object>, default_factory=<dataclasses._MISSING_TYPE object>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object>)",
     "mplsoccer.soccer.heatmap.bin_statistic_positional": "bin_statistic_positional(x, y, values=None, dim=None, positional='full', statistic='count', normalize=False)",
     "mplsoccer.soccer.heatmap.bin_statistic_zones": "bin_statistic_zones(x, y, zones, dim=None, values=None, statistic='count', normalize=False, standardized=False, names=None, edge_tol=None)",
     "mplsoccer.soccer.heatmap.heatmap_positional": "heatmap_positional(stats, ax=None, vertical=False, **kwargs)",
@@ -977,7 +977,7 @@
     "mplsoccer.utils.inset_image": "inset_image(x, y, image, width=None, height=None, vertical=False, ax=None, **kwargs)",
     "mplsoccer.utils.set_labels": "set_labels(ax, label_value, label_axis)",
     "mplsoccer.utils.set_visible": "set_visible(ax, spine_bottom=False, spine_top=False, spine_left=False, spine_right=False, grid=False, tick=False, label=False)",
-    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object at 0x100e47330>, *, cafile=None, capath=None, cadefault=False, context=None)",
+    "mplsoccer.utils.urlopen": "urlopen(url, data=None, timeout=<object object>, *, cafile=None, capath=None, cadefault=False, context=None)",
     "mplsoccer.utils.validate_ax": "validate_ax(ax)",
     "mplsoccer.validate_ax": "validate_ax(ax)"
   }
