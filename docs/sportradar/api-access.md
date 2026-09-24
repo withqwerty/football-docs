@@ -20,6 +20,12 @@ current soccer product is v4, with two closely related surfaces:
 Responses can be requested as JSON or XML. Data availability depends on
 competition coverage tier and the customer's subscription package.
 
+The endpoint reference in this index is Sportradar's Soccer Extended v4 reference
+(`soccer-extended-*` categories). Soccer v4 serves the same feeds under the
+`/soccer/` base in place of `/soccer-extended/`, with the extended statistics,
+coordinates and Extended-only feeds (extended summary and timeline, insights,
+momentum, seasonal competitor extended statistics) left out.
+
 ## Authentication
 
 Requests use Sportradar API credentials configured in the customer's account.

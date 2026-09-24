@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { applyCategoryExclusions, crawlLlmsTxt, htmlToMarkdown, slugify } from "../crawl.js";
+import {
+  applyCategoryExclusions,
+  cleanLlmsPage,
+  crawlLlmsIndexes,
+  crawlLlmsTxt,
+  dedupeSharedSections,
+  dropSections,
+  htmlToMarkdown,
+  llmsPageCategory,
+  parseLlmsIndex,
+  slugify,
+  splitOversizedSections,
+} from "../crawl.js";
 
 describe("slugify", () => {
   it("lowercases and replaces spaces with hyphens", () => {
@@ -356,5 +368,146 @@ describe("applyCategoryExclusions", () => {
 
   it("ignores an exclusion that matches no crawled category", () => {
     expect(applyCategoryExclusions(docs, ["not-a-page"])).toEqual(docs);
+  });
+});
+
+describe("llms.txt indexes", () => {
+  const index = [
+    "# Soccer",
+    "- [Guide index](https://docs.example.com/soccer/docs/llms.txt): full index",
+    "- [Overview](https://docs.example.com/soccer/docs/soccer-overview.md)",
+    "- [Timeline](https://docs.example.com/soccer/reference/soccer-timeline.md#top): feed",
+    "- [Elsewhere](https://evil.example.org/steal.md)",
+  ].join("\n");
+
+  it("separates page links from nested indexes and ignores other hosts", () => {
+    expect(parseLlmsIndex(index, "https://docs.example.com/soccer/llms.txt")).toEqual({
+      pages: [
+        "https://docs.example.com/soccer/docs/soccer-overview.md",
+        "https://docs.example.com/soccer/reference/soccer-timeline.md",
+      ],
+      indexes: ["https://docs.example.com/soccer/docs/llms.txt"],
+    });
+  });
+
+  it("names a page by its last path segment", () => {
+    expect(llmsPageCategory("https://docs.example.com/soccer/reference/soccer-extended-faq.md")).toBe(
+      "soccer-extended-faq",
+    );
+  });
+
+  it("follows nested indexes and never fetches an excluded page", async () => {
+    const pages: Record<string, string> = {
+      "https://docs.example.com/llms.txt": "- [Section](https://docs.example.com/section/llms.txt)",
+      "https://docs.example.com/section/llms.txt": [
+        "- [Kept](https://docs.example.com/section/kept.md)",
+        "- [Odds](https://docs.example.com/section/odds-feed.md)",
+      ].join("\n"),
+      "https://docs.example.com/section/kept.md": `# Kept\n\n## Data Points\n\n${"A real paragraph. ".repeat(10)}`,
+    };
+    const fetched: string[] = [];
+    const fetcher = async (url: string) => {
+      fetched.push(url);
+      return pages[url] ?? null;
+    };
+    const docs = await crawlLlmsIndexes(["https://docs.example.com/llms.txt"], ["odds-feed"], fetcher, 0);
+    expect(docs.map((d) => d.category)).toEqual(["kept"]);
+    expect(docs[0].source_url).toBe("https://docs.example.com/section/kept");
+    expect(docs[0].source_type).toBe("llms_txt");
+    expect(fetched).not.toContain("https://docs.example.com/section/odds-feed.md");
+  });
+});
+
+describe("cleanLlmsPage", () => {
+  it("drops the frontmatter, the index pointer and the appended OpenAPI definition", () => {
+    const page = [
+      "---",
+      "updatedAt: 2026-07-28",
+      "---",
+      "",
+      "Fetch the complete documentation index at: https://docs.example.com/llms.txt.",
+      "",
+      "# Timeline",
+      "",
+      "Real content.",
+      "",
+      "# OpenAPI definition",
+      "",
+      "```json",
+      '{"openapi": "3.0.0"}',
+      "```",
+    ].join("\n");
+    const cleaned = cleanLlmsPage(page);
+    expect(cleaned).toContain("Real content.");
+    expect(cleaned).not.toContain("updatedAt");
+    expect(cleaned).not.toContain("Fetch the complete documentation index");
+    expect(cleaned).not.toContain("OpenAPI definition");
+  });
+
+  it("turns accordion titles into headings, so each data-point table is its own section", () => {
+    const cleaned = cleanLlmsPage('<Accordion title="Venue" icon="x">\n\n| a | b |\n\n</Accordion>');
+    expect(cleaned).toContain("### Venue");
+    expect(cleaned).not.toContain("<Accordion");
+  });
+
+  it("unwraps HTML lists to bullets", () => {
+    expect(cleanLlmsPage('<ul class="x">\n  <li data-term="a">Clock Played</li>\n</ul>')).toContain("- Clock Played");
+  });
+
+  it("cuts a long example payload and says how much was dropped", () => {
+    const cleaned = cleanLlmsPage(`\`\`\`json\n${"x".repeat(10000)}\n\`\`\``);
+    expect(cleaned.length).toBeLessThan(4000);
+    expect(cleaned).toContain("example cut here");
+    expect(cleaned.trimEnd().endsWith("```")).toBe(true);
+  });
+
+  it("omits an SVG diagram but keeps the text of other HTML blocks", () => {
+    const cleaned = cleanLlmsPage(
+      "<HTMLBlock>{`<div><svg><text>MAP</text></svg></div>`}</HTMLBlock>\n\n<HTMLBlock>{`<table><tr><td>https://api.example.com/x.json</td></tr></table>`}</HTMLBlock>",
+    );
+    expect(cleaned).toContain("Diagram omitted");
+    expect(cleaned).not.toContain("<svg");
+    expect(cleaned).toContain("https://api.example.com/x.json");
+  });
+});
+
+describe("splitOversizedSections", () => {
+  it("splits a long section at paragraph breaks and repeats its heading", () => {
+    const text = `## Big\n\n${Array.from({ length: 6 }, (_, i) => `Paragraph ${i} ${"z".repeat(50)}`).join("\n\n")}`;
+    const split = splitOversizedSections(text, 150);
+    expect(split.match(/^## Big \(continued\)$/gm)?.length).toBeGreaterThan(0);
+    for (const section of split.split(/(?=^## )/m)) expect(section.length).toBeLessThan(300);
+  });
+
+  it("never splits inside a code fence", () => {
+    const fence = ["```", "line one", "", "line two", "", "line three", "```"].join("\n");
+    const split = splitOversizedSections(`## Code\n\n${fence}`, 20);
+    const inside = split.slice(split.indexOf("```"), split.lastIndexOf("```"));
+    expect(inside).not.toContain("(continued)");
+  });
+});
+
+describe("dedupeSharedSections", () => {
+  it("keeps the first copy of a repeated table and names it on later pages", () => {
+    const table = `### Venue\n\n${"| `id` | venue | String | id |\n".repeat(10)}`;
+    const docs = dedupeSharedSections([
+      { category: "first", content: `# First\n\n${table}` },
+      { category: "second", content: `# Second\n\n${table}` },
+    ]);
+    expect(docs[0].content).toContain("### Venue");
+    expect(docs[1].content).not.toContain("### Venue");
+    expect(docs[1].content).toContain("Venue (`first`)");
+  });
+});
+
+describe("dropSections", () => {
+  it("drops a listed section with everything nested under it", () => {
+    const text = ["## Keep", "a", "## Probabilities", "b", "### Markets", "c", "## After", "d"].join("\n");
+    expect(dropSections(text, ["probabilities"])).toBe(["## Keep", "a", "## After", "d"].join("\n"));
+  });
+
+  it("drops only the listed subsection when it is a ### heading", () => {
+    const text = ["## IDs", "a", "### Odds", "b", "### Mapping", "c"].join("\n");
+    expect(dropSections(text, ["Odds"])).toBe(["## IDs", "a", "### Mapping", "c"].join("\n"));
   });
 });

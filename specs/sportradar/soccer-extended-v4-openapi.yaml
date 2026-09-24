@@ -1,17 +1,17 @@
 openapi: 3.0.0
 info:
-  title: Soccer v4
+  title: Soccer Extended v4
   contact:
     name: Sportradar
     url: ""
     email: support@sportradar.com
   version: 4.0.0
-  x-sr-package: soccer
+  x-sr-package: soccer-extended
   x-sr-version: v4
 servers:
-- url: https://api.sportradar.com/soccer/trial/v4
+- url: https://api.sportradar.com/soccer-extended/trial/v4
   description: Trial Environment
-- url: https://api.sportradar.com/soccer/production/v4
+- url: https://api.sportradar.com/soccer-extended/production/v4
   description: Production Environment
 paths:
   /{locale}/competitions:
@@ -174,6 +174,22 @@ paths:
       - mappings
       - merge
       x-sr-name: competitor_merge_mappings
+  /{locale}/fifa_rankings:
+    get:
+      description: |
+        Get the FIFA world rankings including rank, team, total points, previous points and position movement.
+      operationId: getFifaRankings
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      responses:
+        "200":
+          $ref: '#/components/responses/fifa_rankings'
+      security:
+      - ApiKeyAuth: []
+      summary: FIFA world rankings
+      tags:
+      - rankings
+      x-sr-name: fifa_rankings
   /{locale}/players/{urn_player}/profile:
     get:
       description: |
@@ -431,6 +447,27 @@ paths:
       - seasons
       - competitors
       x-sr-name: season_competitors
+  /{locale}/seasons/{urn_season}/competitors/{urn_competitor}/extended_statistics:
+    get:
+      description: |
+        List competitor and player season extended statistics for a given season
+        Only available for Soccer Extended package.
+      operationId: getSeasonCompetitorExtendedStatistics
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      - $ref: '#/components/parameters/urn_season'
+      - $ref: '#/components/parameters/urn_competitor'
+      responses:
+        "200":
+          $ref: '#/components/responses/season_competitor_extended_statistics'
+      security:
+      - ApiKeyAuth: []
+      summary: list competitor and player season extended statistics for a given season
+      tags:
+      - seasons
+      - competitors
+      - statistics
+      x-sr-name: season_competitor_extended_statistics
   /{locale}/seasons/{urn_season}/competitors/{urn_competitor}/statistics:
     get:
       description: |
@@ -759,6 +796,40 @@ paths:
       tags:
       - seasons_disabled
       x-sr-name: seasons_disabled
+  /{locale}/sport_events/{urn_sport_event}/extended_summary:
+    get:
+      description: |
+        Show a extended summary for one sport event, including results. Only available for extended package
+      operationId: getSportEventExtendedSummary
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      - $ref: '#/components/parameters/urn_sport_event'
+      responses:
+        "200":
+          $ref: '#/components/responses/sport_event_extended_summary'
+      security:
+      - ApiKeyAuth: []
+      summary: Only available in extended package
+      tags:
+      - extended
+      x-sr-name: sport_event_extended_summary
+  /{locale}/sport_events/{urn_sport_event}/extended_timeline:
+    get:
+      description: "Show a summary and extended_timeline for one sport event, including
+        results. \nonly available for extended package\n"
+      operationId: getSportEventExtendedTimeline
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      - $ref: '#/components/parameters/urn_sport_event'
+      responses:
+        "200":
+          $ref: '#/components/responses/sport_event_extended_timeline'
+      security:
+      - ApiKeyAuth: []
+      summary: Only available in extended package
+      tags:
+      - extended
+      x-sr-name: sport_event_extended_timeline
   /{locale}/sport_events/{urn_sport_event}/fun_facts:
     get:
       description: |
@@ -776,6 +847,23 @@ paths:
       tags:
       - sport_events
       x-sr-name: sport_event_fun_facts
+  /{locale}/sport_events/{urn_sport_event}/insights:
+    get:
+      description: |
+        Show insights for sport event.
+      operationId: getSportEventInsights
+      parameters:
+      - $ref: '#/components/parameters/urn_sport_event'
+      - $ref: '#/components/parameters/locale'
+      responses:
+        "200":
+          $ref: '#/components/responses/sport_event_insights'
+      security:
+      - ApiKeyAuth: []
+      summary: insights for sport event
+      tags:
+      - sport_events
+      x-sr-name: sport_event_insights
   /{locale}/sport_events/{urn_sport_event}/league_timeline:
     get:
       description: |
@@ -2900,6 +2988,58 @@ components:
       type: object
       xml:
         name: fact
+    fifa_ranking:
+      additionalProperties: false
+      properties:
+        competitor_rankings:
+          items:
+            $ref: '#/components/schemas/fifa_ranking_competitor'
+          type: array
+          xml:
+            name: competitor_rankings
+            wrapped: true
+        gender:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+      type: object
+      xml:
+        name: ranking
+    fifa_ranking_competitor:
+      additionalProperties: false
+      properties:
+        competitor:
+          $ref: '#/components/schemas/competitor'
+        last_updated:
+          format: date-time
+          type: string
+          xml:
+            attribute: true
+        movement:
+          type: integer
+          xml:
+            attribute: true
+        points:
+          format: float
+          type: number
+          xml:
+            attribute: true
+        previous_points:
+          format: float
+          type: number
+          xml:
+            attribute: true
+        rank:
+          type: integer
+          xml:
+            attribute: true
+      type: object
+      xml:
+        name: competitor_ranking
     form_standing_competitor:
       additionalProperties: false
       properties:
@@ -3166,6 +3306,61 @@ components:
       type: object
       xml:
         name: info
+    insight:
+      additionalProperties: false
+      properties:
+        markets:
+          items:
+            $ref: '#/components/schemas/insight_market'
+          type: array
+          xml:
+            name: markets
+            wrapped: true
+            x-sr-object-name: InsightMarkets
+        related_ids:
+          items:
+            $ref: '#/components/schemas/related_id'
+          type: array
+          xml:
+            name: related_ids
+            wrapped: true
+            x-sr-object-name: InsightRelatedIds
+        relevancy:
+          format: float
+          type: number
+          xml:
+            attribute: true
+        text:
+          example: Its a goal kick for the away team in Manchester.
+          type: string
+          xml:
+            attribute: true
+        type:
+          example: prematch
+          type: string
+          xml:
+            attribute: true
+      type: object
+      x-sr-object-name: Insight
+      xml:
+        name: insight
+    insight_market:
+      additionalProperties: false
+      properties:
+        id:
+          example: sr:market:1
+          type: string
+          xml:
+            attribute: true
+        outcome_id:
+          example: sr:outcome:1
+          type: string
+          xml:
+            attribute: true
+      type: object
+      x-sr-object-name: InsightMarket
+      xml:
+        name: market
     internal_mapping:
       properties:
         id:
@@ -4016,6 +4211,24 @@ components:
       x-sr-object-name: SportEventConditionsReferee
       xml:
         name: referee
+    related_id:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+      required:
+      - id
+      - name
+      type: object
+      xml:
+        name: related_id
+        x-sr-object-name: RelatedId
     schedule:
       additionalProperties: false
       properties:
@@ -4318,6 +4531,865 @@ components:
       xml:
         name: competitor
         x-sr-object-name: SeasonCompetitor
+    season_competitor_extended_statistics:
+      properties:
+        abbreviation:
+          type: string
+          xml:
+            attribute: true
+        country:
+          type: string
+          xml:
+            attribute: true
+        country_code:
+          type: string
+          xml:
+            attribute: true
+        gender:
+          type: string
+          xml:
+            attribute: true
+        id:
+          description: Competitor URN (sr:competitor:x)
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+        players:
+          items:
+            $ref: '#/components/schemas/season_player_extended_statistics'
+          type: array
+          xml:
+            name: players
+            wrapped: true
+            x-sr-object-name: SeasonCompetitorExtendedStatisticsPlayerStatistics
+        statistics:
+          properties:
+            assists:
+              type: integer
+              xml:
+                attribute: true
+            ball_possession:
+              format: double
+              type: number
+              xml:
+                attribute: true
+            cards_given:
+              type: integer
+              xml:
+                attribute: true
+            chances_created:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            clean_sheets:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            clearances:
+              type: integer
+              xml:
+                attribute: true
+            corner_kicks:
+              type: integer
+              xml:
+                attribute: true
+            crosses_claimed:
+              type: integer
+              xml:
+                attribute: true
+            crosses_excluding_corners:
+              type: integer
+              xml:
+                attribute: true
+            crosses_successful:
+              type: integer
+              xml:
+                attribute: true
+            crosses_successful_excluding_corners:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            crosses_total:
+              type: integer
+              xml:
+                attribute: true
+            crosses_unsuccessful:
+              type: integer
+              xml:
+                attribute: true
+            defensive_blocks:
+              type: integer
+              xml:
+                attribute: true
+            diving_saves:
+              type: integer
+              xml:
+                attribute: true
+            dribbles:
+              type: integer
+              xml:
+                attribute: true
+            dribbles_completed:
+              type: integer
+              xml:
+                attribute: true
+            dribbles_successful_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            dribbles_unsuccessful:
+              type: integer
+              xml:
+                attribute: true
+            fouls:
+              type: integer
+              xml:
+                attribute: true
+            fouls_suffered_final_third:
+              type: integer
+              xml:
+                attribute: true
+            free_kicks:
+              type: integer
+              xml:
+                attribute: true
+            free_kicks_scored:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goal_kicks:
+              type: integer
+              xml:
+                attribute: true
+            goals:
+              type: integer
+              xml:
+                attribute: true
+            goals_conceded:
+              type: integer
+              xml:
+                attribute: true
+            goals_conceded_first_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_conceded_second_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_counter_attack:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_excluding_penalties:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_expected:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_expected_created:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_from_header:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_left_footed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_open_play:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_outside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_per_minute:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_right_footed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_scored_first_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_scored_second_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_set_piece:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            injuries:
+              type: integer
+              xml:
+                attribute: true
+            interceptions:
+              type: integer
+              xml:
+                attribute: true
+            interceptions_defensive_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_final_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_middle_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_opposition_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_own_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            long_passes_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            long_passes_total:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            long_passes_unsuccessful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            loss_of_possession:
+              type: integer
+              xml:
+                attribute: true
+            matches_played:
+              type: integer
+              xml:
+                attribute: true
+            offsides:
+              type: integer
+              xml:
+                attribute: true
+            own_goals:
+              type: integer
+              xml:
+                attribute: true
+            passes_backward_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_forward_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_in_final_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_in_final_third_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_into_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_opponent_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_opponent_half_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_own_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_own_half_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            passes_successful:
+              type: integer
+              xml:
+                attribute: true
+            passes_successful_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            passes_total:
+              type: integer
+              xml:
+                attribute: true
+            passes_unsuccessful:
+              type: integer
+              xml:
+                attribute: true
+            penalties:
+              type: integer
+              xml:
+                attribute: true
+            penalties_conceded:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            penalties_faced:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            penalties_missed:
+              type: integer
+              xml:
+                attribute: true
+            penalties_saved:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            penalties_scored:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_defensive_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_final_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_middle_third:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_opponent_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_own_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            red_cards:
+              type: integer
+              xml:
+                attribute: true
+            saves_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_outside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            saves_top_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_top_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            saves_top_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_faced:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_missed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_saved:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_scored:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_blocked:
+              type: integer
+              xml:
+                attribute: true
+            shots_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_counter_attack:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_direct_free_kicks:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_excluding_blocks:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_faced:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_off_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_on_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_woodwork:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_hit_woodwork:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_on_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_on_target_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_inside_box_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed_off_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed_on_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_high:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target:
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target_outside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target:
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_inside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_outside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_on_target_top_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_top_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_top_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_open_play:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_center:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_left:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_on_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_on_target_percentage:
+              description: extended statistics only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_outside_box_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_right:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed_off_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed_on_target:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_saved:
+              type: integer
+              xml:
+                attribute: true
+            shots_set_piece:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            shots_total:
+              type: integer
+              xml:
+                attribute: true
+            substitutions:
+              type: integer
+              xml:
+                attribute: true
+            tackles_defensive_third_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_final_third_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_middle_third_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_opponent_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_opponent_half_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_own_half:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_own_half_successful:
+              description: extended statistics only
+              type: integer
+              xml:
+                attribute: true
+            tackles_successful:
+              type: integer
+              xml:
+                attribute: true
+            tackles_total:
+              type: integer
+              xml:
+                attribute: true
+            tackles_unsuccessful:
+              type: integer
+              xml:
+                attribute: true
+            throw_ins:
+              type: integer
+              xml:
+                attribute: true
+            was_fouled:
+              type: integer
+              xml:
+                attribute: true
+            yellow_cards:
+              type: integer
+              xml:
+                attribute: true
+            yellow_red_cards:
+              type: integer
+              xml:
+                attribute: true
+          type: object
+          xml:
+            name: statistics
+            x-sr-object-name: SeasonCompetitorExtendedStatisticsStatistics
+      type: object
+      xml:
+        name: competitor
+        x-sr-object-name: SeasonCompetitorExtendedSeasonStatistics
     season_competitor_players:
       additionalProperties: false
       properties:
@@ -4799,6 +5871,925 @@ components:
       xml:
         name: player
         x-sr-object-name: SeasonPlayer
+    season_player_extended_statistics:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+        starter:
+          type: boolean
+          xml:
+            attribute: true
+        statistics:
+          properties:
+            assists:
+              type: integer
+              xml:
+                attribute: true
+            braces:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            cards_given:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            chances_created:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            clean_sheets:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            clearances:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            corner_kicks:
+              type: integer
+              xml:
+                attribute: true
+            crosses_claimed:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            crosses_excluding_corners:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            crosses_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            crosses_successful_excluding_corners:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            crosses_total:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            crosses_unsuccessful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            defensive_blocks:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            diving_saves:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            dribbles:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            dribbles_completed:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            dribbles_completed_percentage:
+              description: extended package (DFC) only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            dribbles_successful_percentage:
+              description: extended package (DFC) only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            dribbles_unsuccessful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            fouls_committed:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            fouls_suffered_final_third:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            four_goals_or_more:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            free_kicks:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            free_kicks_scored:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goal_involvements:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goal_kicks:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            goals_by_head:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            goals_by_penalty:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            goals_conceded:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            goals_counter_attack:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_excluding_penalties:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_expected:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_expected_created:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_left_footed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_lower_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_open_play:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_outside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_per_minute:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            goals_right_footed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_scored:
+              type: integer
+              xml:
+                attribute: true
+            goals_set_piece:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            goals_top_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            grade:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            hat_tricks:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            injuries:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            interceptions:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_defensive_third:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_final_third:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_middle_third:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_opposition_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            interceptions_own_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            involvements_in_shots_off_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            involvements_in_shots_off_target_goals_expected:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            involvements_in_shots_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            involvements_in_shots_on_target_goals_expected:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            long_passes_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            long_passes_total:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            long_passes_unsuccessful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            loss_of_possession:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            matches_played:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            minutes_per_goal:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            minutes_played:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            offsides:
+              type: integer
+              xml:
+                attribute: true
+            own_goals:
+              type: integer
+              xml:
+                attribute: true
+            passes_backward_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_forward_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_in_final_third:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_in_final_third_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_into_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_opponent_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_opponent_half_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_own_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_own_half_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            passes_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            passes_successful_percentage:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            passes_total:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            passes_unsuccessful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            penalties:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            penalties_conceded:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            penalties_faced:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            penalties_missed:
+              type: integer
+              xml:
+                attribute: true
+            penalties_saved:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_defensive_third:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_final_third:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_middle_third:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_opponent_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            possessions_regained_in_own_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            red_cards:
+              type: integer
+              xml:
+                attribute: true
+            saves_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_lower_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_outside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_percentage:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            saves_top_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_top_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            saves_top_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_faced:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_missed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_saved:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shootout_penalties_scored:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_blocked:
+              type: integer
+              xml:
+                attribute: true
+            shots_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_counter_attack:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_direct_free_kicks:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_excluding_blocks:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_faced_saved:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            shots_faced_total:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_off_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_headed_woodwork:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_hit_woodwork:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_inside_box_on_target_percentage:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_inside_box_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed_off_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_left_footed_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_high:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_missed_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target:
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_off_target_outside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target:
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_inside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_lower_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_outside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_percentage:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_on_target_top_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_top_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_on_target_top_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_open_play:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_center:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_left:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_outside_box_on_target_percentage:
+              description: extended only
+              format: double
+              type: number
+              xml:
+                attribute: true
+            shots_outside_box_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_right:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed_off_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_right_footed_on_target:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_set_piece:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            shots_total:
+              type: integer
+              xml:
+                attribute: true
+            substituted_in:
+              type: integer
+              xml:
+                attribute: true
+            substituted_out:
+              type: integer
+              xml:
+                attribute: true
+            tackles_defensive_third_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            tackles_final_third_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            tackles_middle_third_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            tackles_opponent_half:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            tackles_opponent_half_successful:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            tackles_own_half:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            tackles_own_half_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            tackles_successful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            tackles_total:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            tackles_unsuccessful:
+              description: extended only
+              type: integer
+              xml:
+                attribute: true
+            throw_ins:
+              type: integer
+              xml:
+                attribute: true
+            was_fouled:
+              description: extended package (DFC) only
+              type: integer
+              xml:
+                attribute: true
+            yellow_cards:
+              type: integer
+              xml:
+                attribute: true
+            yellow_red_cards:
+              type: integer
+              xml:
+                attribute: true
+          type: object
+          xml:
+            name: statistics
+            x-sr-object-name: SeasonCompetitorsExtendedStatisticsPlayerStatistic
+      type: object
+      xml:
+        name: player
+        x-sr-object-name: SeasonCompetitorsExtendedStatisticsPlayer
     season_player_statistics:
       additionalProperties: false
       properties:
@@ -12332,6 +14323,36 @@ components:
               name: competitor_versus_summaries
               x-sr-object-name: CompetitorVersusSummariesEndpoint
       description: OK
+    fifa_rankings:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+              rankings:
+                items:
+                  $ref: '#/components/schemas/fifa_ranking'
+                type: array
+            type: object
+        application/xml:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              rankings:
+                $ref: '#/components/schemas/fifa_ranking'
+            type: object
+            xml:
+              name: fifa_rankings
+              wrapped: true
+              x-sr-object-name: FifaRankingsEndpoint
+      description: OK
     player_mappings:
       content:
         application/json:
@@ -12759,6 +14780,37 @@ components:
             xml:
               name: season_stages_groups_cup_rounds
               x-sr-object-name: SeasonBracketsEndpoint
+      description: OK
+    season_competitor_extended_statistics:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              competitor:
+                $ref: '#/components/schemas/season_competitor_extended_statistics'
+              generated_at:
+                format: date-time
+                type: string
+              season:
+                $ref: '#/components/schemas/season_extended'
+            type: object
+        application/xml:
+          schema:
+            properties:
+              competitor:
+                $ref: '#/components/schemas/season_competitor_extended_statistics'
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              season:
+                $ref: '#/components/schemas/season_extended'
+            type: object
+            xml:
+              name: season_competitor_extended_statistics
+              x-sr-object-name: SeasonExtendedStatisticsEndpoint
       description: OK
     season_competitor_players:
       content:
@@ -13462,6 +15514,95 @@ components:
               wrapped: true
               x-sr-object-name: SeasonsDisabledEndpoint
       description: OK
+    sport_event_extended_summary:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+              sport_event:
+                $ref: '#/components/schemas/sport_event'
+              sport_event_status:
+                $ref: '#/components/schemas/sport_event_status'
+              statistics:
+                $ref: '#/components/schemas/sport_event_statistics'
+            required:
+            - sport_event
+            - sport_event_status
+            type: object
+            xml:
+              name: summary
+        application/xml:
+          schema:
+            additionalProperties: false
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              sport_event:
+                $ref: '#/components/schemas/sport_event'
+              sport_event_status:
+                $ref: '#/components/schemas/sport_event_status'
+              statistics:
+                $ref: '#/components/schemas/sport_event_statistics'
+            required:
+            - sport_event
+            - sport_event_status
+            type: object
+            xml:
+              name: sport_event_extended_summary
+              x-sr-object-name: SportEventExtendedSummaryEndpoint
+      description: OK
+    sport_event_extended_timeline:
+      content:
+        application/json:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+              sport_event:
+                $ref: '#/components/schemas/sport_event'
+              sport_event_status:
+                $ref: '#/components/schemas/sport_event_status'
+              timeline:
+                items:
+                  $ref: '#/components/schemas/generic_event'
+                type: array
+                xml:
+                  name: timeline
+                  wrapped: true
+            type: object
+        application/xml:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              sport_event:
+                $ref: '#/components/schemas/sport_event'
+              sport_event_status:
+                $ref: '#/components/schemas/sport_event_status'
+              timeline:
+                items:
+                  $ref: '#/components/schemas/generic_event'
+                type: array
+                xml:
+                  name: timeline
+                  wrapped: true
+            type: object
+            xml:
+              name: sport_event_extended_timeline
+              wrapped: true
+              x-sr-object-name: SportEventExtendedTimelineEndpoint
+      description: OK
     sport_event_fun_facts:
       content:
         application/json:
@@ -13490,6 +15631,44 @@ components:
               name: sport_event_fun_facts
               wrapped: true
               x-sr-object-name: SportEventFunFacts
+      description: OK
+    sport_event_insights:
+      content:
+        application/json:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+              insights:
+                items:
+                  $ref: '#/components/schemas/insight'
+                type: array
+                xml:
+                  name: insights
+                  wrapped: true
+            type: object
+        application/xml:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              insights:
+                items:
+                  $ref: '#/components/schemas/insight'
+                type: array
+                xml:
+                  name: insights
+                  wrapped: true
+                  x-sr-object-name: Insights
+            type: object
+            xml:
+              name: sport_event_insights
+              wrapped: true
+              x-sr-object-name: SportEventExtendedInsightsEndpoint
       description: OK
     sport_event_league_timeline:
       content:
@@ -14228,4 +16407,4 @@ security:
 - ApiKeyAuth: []
 externalDocs:
   description: Sportradar Developer Portal
-  url: https://docs.sportradar.com/soccer/reference/soccer-overview
+  url: https://docs.sportradar.com/soccer/reference/soccer-extended-overview

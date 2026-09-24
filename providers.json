@@ -128,13 +128,30 @@
       "version": "Soccer v4 / Soccer Extended v4",
       "package": null,
       "sources": [
-        { "url": "https://developer.sportradar.com/soccer/docs/soccer-ig-api-basics", "type": "api_docs", "note": "Soccer v4 integration guide, coverage tiers, auth, API style, languages" },
-        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-overview", "type": "api_docs", "note": "Soccer Extended v4 endpoint map and integration links" },
-        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-summary", "type": "api_docs", "note": "Sport Event Extended Summary reference" },
-        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline", "type": "api_docs", "note": "Sport Event Extended Timeline fields and coordinates" },
-        { "type": "curated", "note": "Project-oriented retrieval notes for charting, live match stories, IDs, probabilities, and official MCP usage" }
+        { "url": "https://developer.sportradar.com/soccer/docs/soccer-ig-api-basics", "type": "curated", "note": "Soccer v4 integration guide, coverage tiers, auth, API style, languages" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-overview", "type": "curated", "note": "Soccer Extended v4 endpoint map and integration links" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-summary", "type": "curated", "note": "Sport Event Extended Summary reference" },
+        { "url": "https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline", "type": "curated", "note": "Sport Event Extended Timeline fields and coordinates" },
+        { "type": "curated", "note": "Project-oriented retrieval notes for charting, live match stories, IDs and official MCP usage" }
       ],
-      "last_crawled": "2026-07-09"
+      "llms_indexes": [
+        "https://developer.sportradar.com/soccer/docs/llms.txt",
+        "https://developer.sportradar.com/soccer/reference/soccer-extended/llms.txt"
+      ],
+      "exclude_categories": [
+        "soccer-extended-change-log",
+        "soccer-extended-change-log-archive",
+        "soccer-extended-statistics-summary",
+        "soccer-extended-probabilities-feeds",
+        "soccer-extended-live-probabilities",
+        "soccer-extended-season-probabilities",
+        "soccer-extended-season-outright-probabilities",
+        "soccer-extended-sport-event-probabilities",
+        "soccer-extended-sport-event-upcoming-probabilities",
+        "soccer-extended-timeline-probabilities"
+      ],
+      "exclude_sections": ["Probabilities", "Odds"],
+      "last_crawled": "2026-09-24"
     },
     "transfermarkt": {
       "description": "Public football entity pages for players, teams, competitions, matches, transfers, and market values",

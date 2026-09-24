@@ -76,17 +76,3 @@ or season-specific endpoints.
 | Live Timelines Delta | ten-second live delta with scoring and timeline changes |
 | Push Events | real-time event updates for live matches |
 | Push Statistics | real-time team and player match-level statistics |
-
-## Probabilities
-
-Probability endpoints are part of an additional Soccer Extended probabilities
-plan. They cover pre-match, live, timeline, season, and outright probabilities.
-
-| Feed | Purpose |
-|---|---|
-| Live Probabilities | live match probability state |
-| Sport Event Probabilities | pre-match and live probabilities for a match |
-| Timeline Probabilities | probability changes through the match timeline |
-| Season Probabilities | home/draw/away probabilities for all matches in a season |
-| Season Outright Probabilities | outright probabilities for season competitors |
-

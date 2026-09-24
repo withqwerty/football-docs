@@ -296,6 +296,30 @@ function searchRows(
   return db.prepare(sql).all(...params) as SearchRow[];
 }
 
+/**
+ * The strict query needs every term to match, so it finds the most specific
+ * chunks but can find very few. Keep its matches first, then fill the remaining
+ * slots from the relaxed query, skipping chunks already listed. Returning only
+ * the strict matches let one chunk that happened to contain every term crowd
+ * out the rest of the answer.
+ */
+function topUpRows<T extends { provider: string; category: string; title: string; content: string }>(
+  strict: T[],
+  relaxed: T[],
+  limit: number,
+): T[] {
+  const key = (row: T) => `${row.provider}\u0000${row.category}\u0000${row.title}\u0000${row.content}`;
+  const seen = new Set(strict.map(key));
+  const rows = [...strict];
+  for (const row of relaxed) {
+    if (rows.length >= limit) break;
+    if (seen.has(key(row))) continue;
+    seen.add(key(row));
+    rows.push(row);
+  }
+  return rows;
+}
+
 function compareRows(
   db: Database.Database,
   matchQuery: string,
@@ -543,8 +567,8 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
 
   let rows = searchRows(db, strictQuery, provider, limit);
 
-  if (rows.length === 0 && fallbackQuery !== strictQuery) {
-    rows = searchRows(db, fallbackQuery, provider, limit);
+  if (rows.length < limit && fallbackQuery !== strictQuery) {
+    rows = topUpRows(rows, searchRows(db, fallbackQuery, provider, limit), limit);
   }
 
   if (rows.length === 0) {
@@ -614,8 +638,8 @@ export function compareProviders(
     rows = requestedProviders.flatMap((provider) => {
       if (!providerSet.has(provider)) return [];
       const strictRows = compareRowsForProvider(db, strictQuery, provider, 3);
-      if (strictRows.length > 0 || fallbackQuery === strictQuery) return strictRows;
-      return compareRowsForProvider(db, fallbackQuery, provider, 3);
+      if (strictRows.length >= 3 || fallbackQuery === strictQuery) return strictRows;
+      return topUpRows(strictRows, compareRowsForProvider(db, fallbackQuery, provider, 3), 3);
     });
   } else {
     rows = compareRows(db, strictQuery, args.providers);
