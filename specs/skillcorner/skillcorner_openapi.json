@@ -3538,7 +3538,7 @@
         "/match/{match_id}/custom/physical/": {
             "get": {
                 "operationId": "match_custom_physical_retrieve",
-                "description": "Returns physical data with human-readable column names. Use response_format=csv (default for this endpoint) for CSV, or response_format=json for a JSON records array.",
+                "description": "Returns physical data with human-readable column names. Use response_format=csv (default for this endpoint) for CSV, or response_format=json for a JSON records array, whose field names are the snake_case ones /api/physical/ serves.",
                 "parameters": [
                     {
                         "in": "path",
@@ -4997,12 +4997,30 @@
                     },
                     {
                         "in": "query",
+                        "name": "metrics_gi_ip_passes_v3_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where metrics gi ip passes v3 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
                         "name": "metrics_gi_ip_player_possession_v2_last_modified__gte",
                         "schema": {
                             "type": "string",
                             "format": "date-time"
                         },
                         "description": "Filter matches where metrics gi ip player possession v2 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "metrics_gi_ip_player_possession_v3_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where metrics gi ip player possession v3 data was last modified on or after this date."
                     },
                     {
                         "in": "query",
@@ -5318,12 +5336,30 @@
                     },
                     {
                         "in": "query",
+                        "name": "metrics_gi_ip_passes_v3_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where metrics gi ip passes v3 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
                         "name": "metrics_gi_ip_player_possession_v2_last_modified__gte",
                         "schema": {
                             "type": "string",
                             "format": "date-time"
                         },
                         "description": "Filter matches where metrics gi ip player possession v2 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "metrics_gi_ip_player_possession_v3_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where metrics gi ip player possession v3 data was last modified on or after this date."
                     },
                     {
                         "in": "query",
@@ -8473,6 +8509,7 @@
         "/players/": {
             "get": {
                 "operationId": "players_list",
+                "description": "Strip the staff-only player attributes from the payload, and hide their filters.",
                 "parameters": [
                     {
                         "in": "query",
@@ -8583,6 +8620,7 @@
         "/players/{player_id}/": {
             "get": {
                 "operationId": "players_retrieve",
+                "description": "Strip the staff-only player attributes from the payload, and hide their filters.",
                 "parameters": [
                     {
                         "in": "path",

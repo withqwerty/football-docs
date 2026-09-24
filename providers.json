@@ -373,7 +373,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation.",
       "public_safety_notes": "Use public plotting docs and examples only.",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "package": { "type": "pypi", "name": "mplsoccer" },
       "sources": [
         { "url": "https://mplsoccer.readthedocs.io/en/latest/", "type": "readthedocs" },

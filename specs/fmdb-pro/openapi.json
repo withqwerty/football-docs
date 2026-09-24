@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "description": "# Overview\n\nWe've included as much technical information about the FMDB Pro API as we can. \n If you have any questions though, please contact us.\n\n## API Authentication\n\nAll API Requests are authenticated by an API Key.\n\nTo do this, each HTTP request must include a parameter named `x-api-key` in the `HEADER` of any request which includes the API Key string.\n\nTo receive an API Key, please contact the FMDB Pro team.\n\n## API Versions\n\nFor all data requests, you can set a version by adding a parameter named `x-api-version` in the `HEADER` of any request.\n\nOmitting this from the header will return the latest version.\n\n# Data Requests\n\nThe FMDB Pro API provides a robust and flexible query mechanism that allows you to filter, sort, and paginate the data returned.\n\n## Pagination\n\nRequests can be paginated by either pages or using continuation tokens using a combination of the following;\n\n| Parameter | Default | Description | Example |\n|----------|----------|----------|----------|\n|`pageSize` | `20` | Specifies the number of records to return per request. Max 500. | `GET /api/<endpoint>?pageSize=10` |\n|`page` | `1` | Specifies which number page of data to return. This parameter cannot be used in conjunction with `continuation` and `continuationToken` parameters. | `GET /api/<endpoint>?page=2` |\n| or |\n|`continuation` | `false` | This parameter activates the \"pagination by cursor\" functionality, that has better performance when retrieving larger datasets. When set to `true` the meta object in the response will contain a `continuationToken` that can be used to retrieve the next page at a significantly faster speed. If the `continuationToken` field is `null` it means that there’s no more pages to fetch. | `GET /api/<endpoint>?continuation=true` |\n|`continuationToken` | `null` | Specifies the token to retrieve the next page of a continuous call. This parameter must be used with `continuation=true` and cannot be used in conjunction with `page`. | `GET /api/<endpoint>?continuation=true&continuationToken=XXXXXXXXXXXXXXXXXXXX` |\n\nIt is recommended that you use `continuation` and `continuationToken` for larger API requests.\n\nTechnical Note: The continuation tokens do not work with the `pageSize` parameter. It will return an optimal amount of data per request depending on the dataset queried. e.g. The larger `players` endpoint dataset will return fewer results than the `clubs` endpoint due to the amount of data in each response but will be at a reliable and stable response time.\n\n## Sorting\n\nRequests can be sorted on single or multiple fields by using comma seperated field names. e.g. `?sortOrder=name,age&sortBy=ASC,DESC` would sort by `name` ascending and then `age` descending.\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`sortBy` | Which field to sort the data on. Can have multiple comma seperated values. | `GET /api/<endpoint>?sortBy=name` |\n|`sortOrder` | Sort order direction. Can have multiple comma seperated values. Defaults to `ASC` | `GET /api/<endpoint>?sortBy=name&sortOrder=DESC` |\n\n\n\nNote: Sorting cannot be used with `continuation` and `continuationToken`.\n\n## Shaping\n\nYou can shape the response by optionally including or excluding fields and objects.\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`includeFields` | Include only these fields in the response. The usage is limited to the first-level fields of the object requested; it is not possible to reshape nested objects. The parameter accepts a comma separated list of fields. | `GET /api/<endpoint>?includeFields=id,name,age` |\n|`excludeFields` | Exclude these fields from the response. The usage is limited to the first-level fields of the object requested; it is not possible to reshape nested objects. The parameter accepts a comma separated list of fields. | `GET /api/<endpoint>?excludeFields=nationality,secondNationality` |\n\n\n\n## Filters\n\nAll fields can be searched by their name for an exact match;\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>` | Filters the data based on whether the field's value matches the specified value. | `GET /api/<endpoint>?name=John` |\n\nYou can also search for `null` values using:\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>Null` | Filters the data based on whether the field's value is NULL. | `GET /api/<endpoint>?nameNull=true` |\n\nEvery filter condition can be negated with the `Not` keyword. i.e. `<field>Not` and `<field>NotNull`\n\nExample: `GET /api/<endpoint>?nameNotIn=John,Mike&country.nameNot=Italy&ageNotBetween=20|30`\n\n\n\n### String Filters\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>In` | Filters the data based on whether the field's value is in a list of specified values. This filter is case sensitive. | `GET /api/<endpoint>?nameIn=John,Charlie` |\n|`<field>StartsWith` | Filters the data based on whether the field's value begin with a specified value. This filter is case insensitive. | `GET /api/<endpoint>?nameStartsWith=Joh` |\n|`<field>EndsWith` | Filters the data based on whether the field's value ends with a specified value. This filter is case insensitive | `GET /api/<endpoint>?nameEndsWith=ohn` |\n|`<field>Regex` | Filters the data based on whether the field's value matches a custom PERL Regular Expression. | `GET /api/<endpoint>?nameRegex=/m{1,4}uel/i` |\n|`<field>Contains` | Filters the data based on whether the field's value contains a specified substring. This filter is case insensitive. | `GET /api/<endpoint>?nameContains=harli` |\n\n\n\n### Numeric and Date Filters\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>MinorThan` | Filters the data based on whether the field's value is less/fewer than the specified value. (Alias of `<field>Before`.) | `GET /api/<endpoint>?ageMinorThan=30` |\n|`<field>MinorEqualThan` | Filters the data based on whether the field's value is less/fewer than or equal to the specified value (Alias of `<field>BeforeIncluded`.) | `GET /api/<endpoint>?ageMinorEqualThan=30` |\n|`<field>MajorThan` | Filters the data based on whether the field's value is greater than the specified value. (Alias of `<field>After`.) | `GET /api/<endpoint>?ageMajorThan=20` |\n|`<field>MajorEqualThan` | Filters the data based on whether the field's value is greater than or equal to the specified value. (Alias of `<field>AfterIncluded`.) | `GET /api/<endpoint>?ageMajorEqualThan=20` |\n|`<field>Between` | Filters the data based on whether the field's value is between two specified values, extremes not included. | <code>GET /api/<endpoint>?ageBetween=20&#124;30</code> |\n|`<field>BetweenIncluded` | Filters the data based on whether the field's value is between two specified values, extremes included. | <code>GET /api/<endpoint>?ageBetweenIncluded=20&#124;30</code> |\n\n",
+    "description": "# Overview\n\nWe've included as much technical information about the FMDB Pro API as we can. \n If you have any questions though, please contact us.\n\n## API Authentication\n\nAll API Requests are authenticated by an API Key.\n\nTo do this, each HTTP request must include a parameter named `x-api-key` in the `HEADER` of any request which includes the API Key string.\n\nTo receive an API Key, please contact the FMDB Pro team.\n\n## API Versions\n\nFor all data requests, you can set a version by adding a parameter named `x-api-version` in the `HEADER` of any request.\n\nOmitting this from the header will return the latest version.\n\n# Data Requests\n\nThe FMDB Pro API provides a robust and flexible query mechanism that allows you to filter, sort, and paginate the data returned.\n\n## Pagination\n\nRequests can be paginated by either pages or using continuation tokens using a combination of the following;\n\n| Parameter | Default | Description | Example |\n|----------|----------|----------|----------|\n|`pageSize` | `20` | Specifies the number of records to return per request. Max 500. | `GET /api/<endpoint>?pageSize=10` |\n|`page` | `1` | Specifies which number page of data to return. This parameter cannot be used in conjunction with `continuation` and `continuationToken` parameters. | `GET /api/<endpoint>?page=2` |\n| or |\n|`continuation` | `false` | This parameter activates the \"pagination by cursor\" functionality, that has better performance when retrieving larger datasets. When set to `true` the meta object in the response will contain a `continuationToken` that can be used to retrieve the next page at a significantly faster speed. If the `continuationToken` field is `null` it means that there's no more pages to fetch. | `GET /api/<endpoint>?continuation=true` |\n|`continuationToken` | `null` | Specifies the token to retrieve the next page of a continuous call. This parameter must be used with `continuation=true` and cannot be used in conjunction with `page`. | `GET /api/<endpoint>?continuation=true&continuationToken=XXXXXXXXXXXXXXXXXXXX` |\n\nIt is recommended that you use `continuation` and `continuationToken` for larger API requests.\n\nTechnical Note: The continuation tokens do not work with the `pageSize` parameter. It will return an optimal amount of data per request depending on the dataset queried. e.g. The larger `players` endpoint dataset will return fewer results than the `clubs` endpoint due to the amount of data in each response but will be at a reliable and stable response time.\n\n## Sorting\n\nRequests can be sorted on single or multiple fields by using comma seperated field names. e.g. `?sortOrder=name,age&sortBy=ASC,DESC` would sort by `name` ascending and then `age` descending.\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`sortBy` | Which field to sort the data on. Can have multiple comma seperated values. | `GET /api/<endpoint>?sortBy=name` |\n|`sortOrder` | Sort order direction. Can have multiple comma seperated values. Defaults to `ASC` | `GET /api/<endpoint>?sortBy=name&sortOrder=DESC` |\n\n\n\nNote: Sorting cannot be used with `continuation` and `continuationToken`.\n\n## Shaping\n\nYou can shape the response by optionally including or excluding fields and objects.\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`includeFields` | Include only these fields in the response. The usage is limited to the first-level fields of the object requested; it is not possible to reshape nested objects. The parameter accepts a comma separated list of fields. | `GET /api/<endpoint>?includeFields=id,name,age` |\n|`excludeFields` | Exclude these fields from the response. The usage is limited to the first-level fields of the object requested; it is not possible to reshape nested objects. The parameter accepts a comma separated list of fields. | `GET /api/<endpoint>?excludeFields=nationality,secondNationality` |\n\n\n\n## Filters\n\nAll fields can be searched by their name for an exact match;\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>` | Filters the data based on whether the field's value matches the specified value. | `GET /api/<endpoint>?name=John` |\n\nYou can also search for `null` values using:\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>Null` | Filters the data based on whether the field's value is NULL. | `GET /api/<endpoint>?nameNull=true` |\n\nEvery filter condition can be negated with the `Not` keyword. i.e. `<field>Not` and `<field>NotNull`\n\nExample: `GET /api/<endpoint>?nameNotIn=John,Mike&country.nameNot=Italy&ageNotBetween=20|30`\n\n\n\n### String Filters\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>In` | Filters the data based on whether the field's value is in a list of specified values. This filter is case sensitive. | `GET /api/<endpoint>?nameIn=John,Charlie` |\n|`<field>StartsWith` | Filters the data based on whether the field's value begin with a specified value. This filter is case insensitive. | `GET /api/<endpoint>?nameStartsWith=Joh` |\n|`<field>EndsWith` | Filters the data based on whether the field's value ends with a specified value. This filter is case insensitive | `GET /api/<endpoint>?nameEndsWith=ohn` |\n|`<field>Regex` | Filters the data based on whether the field's value matches a custom PERL Regular Expression. | `GET /api/<endpoint>?nameRegex=/m{1,4}uel/i` |\n|`<field>Contains` | Filters the data based on whether the field's value contains a specified substring. This filter is case insensitive. | `GET /api/<endpoint>?nameContains=harli` |\n\n\n\n### Numeric and Date Filters\n\n| Parameter | Description | Example |\n|----------|----------|----------|\n|`<field>MinorThan` | Filters the data based on whether the field's value is less/fewer than the specified value. (Alias of `<field>Before`.) | `GET /api/<endpoint>?ageMinorThan=30` |\n|`<field>MinorEqualThan` | Filters the data based on whether the field's value is less/fewer than or equal to the specified value (Alias of `<field>BeforeIncluded`.) | `GET /api/<endpoint>?ageMinorEqualThan=30` |\n|`<field>MajorThan` | Filters the data based on whether the field's value is greater than the specified value. (Alias of `<field>After`.) | `GET /api/<endpoint>?ageMajorThan=20` |\n|`<field>MajorEqualThan` | Filters the data based on whether the field's value is greater than or equal to the specified value. (Alias of `<field>AfterIncluded`.) | `GET /api/<endpoint>?ageMajorEqualThan=20` |\n|`<field>Between` | Filters the data based on whether the field's value is between two specified values, extremes not included. | <code>GET /api/<endpoint>?ageBetween=20&#124;30</code> |\n|`<field>BetweenIncluded` | Filters the data based on whether the field's value is between two specified values, extremes included. | <code>GET /api/<endpoint>?ageBetweenIncluded=20&#124;30</code> |\n\n",
     "title": "FMDB Pro API",
     "contact": {
       "name": "FMDB Product Owner",
@@ -1995,28 +1995,19 @@
             "$ref": "#/components/parameters/QueryPreferredTacticsDefendingFreeKicks"
           },
           {
-            "$ref": "#/components/parameters/QueryPermanentClubContractDateFrom"
-          },
-          {
-            "$ref": "#/components/parameters/QueryPermanentClubContractDateEnded"
-          },
-          {
-            "$ref": "#/components/parameters/QueryPermanentClubContractDateTo"
-          },
-          {
-            "$ref": "#/components/parameters/QueryLoanClubContractDateFrom"
-          },
-          {
-            "$ref": "#/components/parameters/QueryLoanClubContractDateEnded"
-          },
-          {
-            "$ref": "#/components/parameters/QueryLoanClubContractDateTo"
-          },
-          {
             "$ref": "#/components/parameters/QueryGbeStatus"
           },
           {
+            "$ref": "#/components/parameters/QueryGbeExemptionReason"
+          },
+          {
             "$ref": "#/components/parameters/QueryGbeDetailStatus"
+          },
+          {
+            "$ref": "#/components/parameters/QueryGbeDetailExemptionReason"
+          },
+          {
+            "$ref": "#/components/parameters/QueryGbeDetailExemptNation"
           },
           {
             "$ref": "#/components/parameters/QueryGbeDetailQualification"
@@ -2052,6 +2043,12 @@
             "$ref": "#/components/parameters/QueryGbeHeadCoachStatusStatus"
           },
           {
+            "$ref": "#/components/parameters/QueryGbeHeadCoachStatusExemptionReason"
+          },
+          {
+            "$ref": "#/components/parameters/QueryGbeHeadCoachStatusExemptNation"
+          },
+          {
             "$ref": "#/components/parameters/QueryGbeHeadCoachStatusQualification"
           },
           {
@@ -2083,6 +2080,12 @@
           },
           {
             "$ref": "#/components/parameters/QueryGbeAssistantCoachStatusStatus"
+          },
+          {
+            "$ref": "#/components/parameters/QueryGbeAssistantCoachStatusExemptionReason"
+          },
+          {
+            "$ref": "#/components/parameters/QueryGbeAssistantCoachStatusExemptNation"
           },
           {
             "$ref": "#/components/parameters/QueryGbeAssistantCoachStatusQualification"
@@ -2338,6 +2341,9 @@
             "$ref": "#/components/parameters/QueryExcludeFieldsPlayers"
           },
           {
+            "$ref": "#/components/parameters/QueryNamePlayers"
+          },
+          {
             "$ref": "#/components/parameters/QueryFirstName"
           },
           {
@@ -2438,6 +2444,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryPreferredFoot"
+          },
+          {
+            "$ref": "#/components/parameters/QueryCurrentSquadNumber"
           },
           {
             "$ref": "#/components/parameters/QueryHeight"
@@ -2774,12 +2783,6 @@
           },
           {
             "$ref": "#/components/parameters/QueryAvailabilityIntelligenceAppearanceAvailabilityOverallRate"
-          },
-          {
-            "$ref": "#/components/parameters/QueryEstimatedPlayerValuesCurrentAbilityValue"
-          },
-          {
-            "$ref": "#/components/parameters/QueryEstimatedPlayerValuesPotentialAbilityValue"
           },
           {
             "$ref": "#/components/parameters/QueryPermanentClubContractDateFrom"
@@ -6456,6 +6459,20 @@
           }
         }
       },
+      "ResponseHudlWyscoutId": {
+        "type": "number",
+        "nullable": true
+      },
+      "ResponseExternalIds": {
+        "description": "An object detailing the club/team IDs that will enable connection to other source providers.",
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "hudlWyscoutId": {
+            "$ref": "#/components/schemas/ResponseHudlWyscoutId"
+          }
+        }
+      },
       "ResponseNameThreeLetter": {
         "type": "string",
         "nullable": true,
@@ -7272,6 +7289,16 @@
               "type": "boolean",
               "nullable": true
             }
+          }
+        }
+      },
+      "ResponseExternalIdsClubsCompetitions": {
+        "description": "An object detailing the competition IDs that will enable connection to other source providers.",
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "hudlWyscoutId": {
+            "$ref": "#/components/schemas/ResponseHudlWyscoutId"
           }
         }
       },
@@ -8711,7 +8738,7 @@
         "default": "nation"
       },
       "ResponseResidentNation": {
-        "description": "The nation in which the person would be living if not employed by a football club (and if it is different to the person’s actual first nationality).",
+        "description": "The nation in which the person would be living if not employed by a football club (and if it is different to the person's actual first nationality).",
         "type": "object",
         "nullable": true,
         "properties": {
@@ -8750,14 +8777,6 @@
             "$ref": "#/components/schemas/ResponseTypePersonsBasedClub"
           }
         }
-      },
-      "ResponsePermanentClubContractId": {
-        "type": "string",
-        "nullable": true
-      },
-      "ResponseLoanClubContractId": {
-        "type": "string",
-        "nullable": true
       },
       "ResponseNamePersonsPermanentClub": {
         "type": "string",
@@ -9043,6 +9062,130 @@
       "ResponseCurrentJob": {
         "type": "string",
         "nullable": true
+      },
+      "ResponseAmount": {
+        "type": "number",
+        "nullable": true,
+        "format": "decimal"
+      },
+      "ResponseCurrency": {
+        "type": "string",
+        "nullable": true
+      },
+      "ResponseCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "ResponseAmountGbp": {
+        "type": "number",
+        "nullable": true,
+        "format": "decimal"
+      },
+      "ResponseAmountEur": {
+        "type": "number",
+        "nullable": true,
+        "format": "decimal"
+      },
+      "ResponseAmountUsd": {
+        "type": "number",
+        "nullable": true,
+        "format": "decimal"
+      },
+      "ResponseConversionRate": {
+        "type": "number",
+        "nullable": true,
+        "format": "decimal"
+      },
+      "ResponseRateFromDifferentYear": {
+        "type": "number",
+        "nullable": true
+      },
+      "ResponseCurrentWage": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
+      },
+      "ResponseCurrentWageMin": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
+      },
+      "ResponseCurrentWageMax": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
       },
       "ResponseAttacking": {
         "type": "number",
@@ -9837,7 +9980,7 @@
         "maximum": 20
       },
       "ResponseMentalTraits": {
-        "description": "The mental traits table indicates the person’s mental characteristics (for both players and non-players) and are based on a scale from 1-20, where 1 means the lowest in a competitive league anywhere in the world ever, and 20 means the highest in a competitive league anywhere in the world ever.",
+        "description": "The mental traits table indicates the person's mental characteristics (for both players and non-players) and are based on a scale from 1-20, where 1 means the lowest in a competitive league anywhere in the world ever, and 20 means the highest in a competitive league anywhere in the world ever.",
         "type": "object",
         "nullable": true,
         "properties": {
@@ -9871,7 +10014,7 @@
         }
       },
       "ResponseNationContracts": {
-        "description": "Denotes the key information related to the person’s nation contract, if they are employed by a national team.",
+        "description": "Denotes the key information related to the person's nation contract, if they are employed by a national team.",
         "type": "array",
         "nullable": true,
         "items": {
@@ -9898,6 +10041,10 @@
                 }
               }
             },
+            "job": {
+              "type": "string",
+              "nullable": true
+            },
             "joined": {
               "type": "string",
               "nullable": true,
@@ -9912,16 +10059,12 @@
               "type": "number",
               "nullable": true,
               "format": "decimal"
-            },
-            "job": {
-              "type": "string",
-              "nullable": true
             }
           }
         }
       },
       "ResponseRetirements": {
-        "description": "Details a person’s retirement details (either in the past or future) from a range of roles or playing types (e.g. playing/non-playing, professional/semi-professional etc.).",
+        "description": "Details a person's retirement details (either in the past or future) from a range of roles or playing types (e.g. playing/non-playing, professional/semi-professional etc.).",
         "type": "array",
         "nullable": true,
         "items": {
@@ -10275,7 +10418,7 @@
         }
       },
       "ResponseHistory": {
-        "description": "Denotes a player’s playing history (appearances/goals) throughout their career.",
+        "description": "Denotes a player's playing history (appearances/goals) throughout their career.",
         "type": "array",
         "nullable": true,
         "items": {
@@ -10341,16 +10484,12 @@
         }
       },
       "ResponseMoves": {
-        "description": "Details the person’s career transfers to date.",
+        "description": "Details the person's career transfers to date.",
         "type": "array",
         "nullable": true,
         "items": {
           "type": "object",
           "properties": {
-            "id": {
-              "type": "string",
-              "nullable": false
-            },
             "fromClub": {
               "title": "From Club",
               "description": "The team the person moved (or is moving) from.",
@@ -10697,10 +10836,6 @@
           }
         }
       },
-      "ResponseIdPersonsPermanentClubContract": {
-        "type": "string",
-        "nullable": false
-      },
       "ResponseNamePersonsPermanentClubContractClub": {
         "type": "string",
         "nullable": true
@@ -10735,10 +10870,6 @@
         "nullable": true
       },
       "ResponseTeam": {
-        "type": "string",
-        "nullable": true
-      },
-      "ResponsePersonMoveId": {
         "type": "string",
         "nullable": true
       },
@@ -10820,43 +10951,6 @@
         "type": "boolean",
         "nullable": true
       },
-      "ResponseAmount": {
-        "type": "number",
-        "nullable": true,
-        "format": "decimal"
-      },
-      "ResponseCurrency": {
-        "type": "string",
-        "nullable": true
-      },
-      "ResponseCode": {
-        "type": "string",
-        "nullable": true
-      },
-      "ResponseAmountGbp": {
-        "type": "number",
-        "nullable": true,
-        "format": "decimal"
-      },
-      "ResponseAmountEur": {
-        "type": "number",
-        "nullable": true,
-        "format": "decimal"
-      },
-      "ResponseAmountUsd": {
-        "type": "number",
-        "nullable": true,
-        "format": "decimal"
-      },
-      "ResponseConversionRate": {
-        "type": "number",
-        "nullable": true,
-        "format": "decimal"
-      },
-      "ResponseRateFromDifferentYear": {
-        "type": "number",
-        "nullable": true
-      },
       "ResponseWage": {
         "type": "object",
         "properties": {
@@ -10886,17 +10980,127 @@
           }
         }
       },
-      "ResponseWagePercentage": {
-        "type": "number",
-        "nullable": true,
-        "minimum": 0,
-        "maximum": 2000
+      "ResponseWageMin": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
+      },
+      "ResponseWageMax": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
       },
       "ResponseBuyOption": {
         "type": "boolean",
         "nullable": true
       },
       "ResponseBuyAmount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
+      },
+      "ResponseBuyAmountMin": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/ResponseAmount"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/ResponseCurrency"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ResponseCode"
+          },
+          "amountGBP": {
+            "$ref": "#/components/schemas/ResponseAmountGbp"
+          },
+          "amountEUR": {
+            "$ref": "#/components/schemas/ResponseAmountEur"
+          },
+          "amountUSD": {
+            "$ref": "#/components/schemas/ResponseAmountUsd"
+          },
+          "conversionRate": {
+            "$ref": "#/components/schemas/ResponseConversionRate"
+          },
+          "rateFromDifferentYear": {
+            "$ref": "#/components/schemas/ResponseRateFromDifferentYear"
+          }
+        }
+      },
+      "ResponseBuyAmountMax": {
         "type": "object",
         "properties": {
           "amount": {
@@ -11082,11 +11286,11 @@
               "type": "number",
               "nullable": true
             },
-            "levelId": {
+            "level": {
               "type": "string",
               "nullable": true
             },
-            "loanOrFutureId": {
+            "loanOrFuture": {
               "type": "string",
               "nullable": true
             },
@@ -11116,7 +11320,7 @@
               "type": "string",
               "nullable": true
             },
-            "stageId": {
+            "stage": {
               "type": "string",
               "nullable": true
             }
@@ -11128,9 +11332,6 @@
         "type": "object",
         "nullable": true,
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ResponseIdPersonsPermanentClubContract"
-          },
           "club": {
             "$ref": "#/components/schemas/ResponseClub"
           },
@@ -11142,9 +11343,6 @@
           },
           "team": {
             "$ref": "#/components/schemas/ResponseTeam"
-          },
-          "personMoveId": {
-            "$ref": "#/components/schemas/ResponsePersonMoveId"
           },
           "unknownClubType": {
             "$ref": "#/components/schemas/ResponseUnknownClubType"
@@ -11200,14 +11398,23 @@
           "wage": {
             "$ref": "#/components/schemas/ResponseWage"
           },
-          "wagePercentage": {
-            "$ref": "#/components/schemas/ResponseWagePercentage"
+          "wageMin": {
+            "$ref": "#/components/schemas/ResponseWageMin"
+          },
+          "wageMax": {
+            "$ref": "#/components/schemas/ResponseWageMax"
           },
           "buyOption": {
             "$ref": "#/components/schemas/ResponseBuyOption"
           },
           "buyAmount": {
             "$ref": "#/components/schemas/ResponseBuyAmount"
+          },
+          "buyAmountMin": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMin"
+          },
+          "buyAmountMax": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMax"
           },
           "canBeRecalled": {
             "$ref": "#/components/schemas/ResponseCanBeRecalled"
@@ -11222,10 +11429,6 @@
             "$ref": "#/components/schemas/ResponseClauses"
           }
         }
-      },
-      "ResponseIdPersonsLoanClubContract": {
-        "type": "string",
-        "nullable": false
       },
       "ResponseNamePersonsLoanClubContractClub": {
         "type": "string",
@@ -11282,13 +11485,10 @@
         }
       },
       "ResponseLoanClubContract": {
-        "description": "Loan Contract",
+        "description": "Loan Club Contract",
         "type": "object",
         "nullable": true,
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ResponseIdPersonsLoanClubContract"
-          },
           "club": {
             "$ref": "#/components/schemas/ResponseClubPersonsLoanClubContract"
           },
@@ -11300,9 +11500,6 @@
           },
           "team": {
             "$ref": "#/components/schemas/ResponseTeam"
-          },
-          "personMoveId": {
-            "$ref": "#/components/schemas/ResponsePersonMoveId"
           },
           "unknownClubType": {
             "$ref": "#/components/schemas/ResponseUnknownClubType"
@@ -11358,14 +11555,23 @@
           "wage": {
             "$ref": "#/components/schemas/ResponseWage"
           },
-          "wagePercentage": {
-            "$ref": "#/components/schemas/ResponseWagePercentage"
+          "wageMin": {
+            "$ref": "#/components/schemas/ResponseWageMin"
+          },
+          "wageMax": {
+            "$ref": "#/components/schemas/ResponseWageMax"
           },
           "buyOption": {
             "$ref": "#/components/schemas/ResponseBuyOption"
           },
           "buyAmount": {
             "$ref": "#/components/schemas/ResponseBuyAmount"
+          },
+          "buyAmountMin": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMin"
+          },
+          "buyAmountMax": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMax"
           },
           "canBeRecalled": {
             "$ref": "#/components/schemas/ResponseCanBeRecalled"
@@ -11382,16 +11588,12 @@
         }
       },
       "ResponseClubContracts": {
-        "description": "Denotes the key information related to a person’s historic contracts.",
+        "description": "The Club Contract table shows the key information related to the person's historic contracts.",
         "type": "array",
         "nullable": true,
         "items": {
           "type": "object",
           "properties": {
-            "id": {
-              "type": "string",
-              "nullable": false
-            },
             "club": {
               "title": "Club",
               "description": "The club the person is contracted to.",
@@ -11422,10 +11624,6 @@
               "nullable": true
             },
             "team": {
-              "type": "string",
-              "nullable": true
-            },
-            "personMoveId": {
               "type": "string",
               "nullable": true
             },
@@ -11549,17 +11747,179 @@
                 }
               }
             },
-            "wagePercentage": {
-              "type": "number",
-              "nullable": true,
-              "minimum": 0,
-              "maximum": 2000
+            "wageMin": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "wageMax": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
             },
             "buyOption": {
               "type": "boolean",
               "nullable": true
             },
             "buyAmount": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "buyAmountMin": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "buyAmountMax": {
               "type": "object",
               "properties": {
                 "amount": {
@@ -11755,11 +12115,11 @@
                     "type": "number",
                     "nullable": true
                   },
-                  "levelId": {
+                  "level": {
                     "type": "string",
                     "nullable": true
                   },
-                  "loanOrFutureId": {
+                  "loanOrFuture": {
                     "type": "string",
                     "nullable": true
                   },
@@ -11789,7 +12149,7 @@
                     "type": "string",
                     "nullable": true
                   },
-                  "stageId": {
+                  "stage": {
                     "type": "string",
                     "nullable": true
                   }
@@ -11800,6 +12160,14 @@
         }
       },
       "ResponseStatus": {
+        "type": "string",
+        "nullable": true
+      },
+      "ResponseExemptionReason": {
+        "type": "string",
+        "nullable": true
+      },
+      "ResponseExemptNation": {
         "type": "string",
         "nullable": true
       },
@@ -11922,6 +12290,12 @@
           "status": {
             "$ref": "#/components/schemas/ResponseStatus"
           },
+          "exemptionReason": {
+            "$ref": "#/components/schemas/ResponseExemptionReason"
+          },
+          "exemptNation": {
+            "$ref": "#/components/schemas/ResponseExemptNation"
+          },
           "qualification": {
             "$ref": "#/components/schemas/ResponseQualification"
           },
@@ -12007,6 +12381,12 @@
         "properties": {
           "status": {
             "$ref": "#/components/schemas/ResponseStatus"
+          },
+          "exemptionReason": {
+            "$ref": "#/components/schemas/ResponseExemptionReason"
+          },
+          "exemptNation": {
+            "$ref": "#/components/schemas/ResponseExemptNation"
           },
           "qualification": {
             "$ref": "#/components/schemas/ResponseQualification"
@@ -12094,6 +12474,12 @@
           "status": {
             "$ref": "#/components/schemas/ResponseStatus"
           },
+          "exemptionReason": {
+            "$ref": "#/components/schemas/ResponseExemptionReason"
+          },
+          "exemptNation": {
+            "$ref": "#/components/schemas/ResponseExemptNation"
+          },
           "qualification": {
             "$ref": "#/components/schemas/ResponseQualification"
           },
@@ -12127,6 +12513,9 @@
         "properties": {
           "status": {
             "$ref": "#/components/schemas/ResponseStatus"
+          },
+          "exemptionReason": {
+            "$ref": "#/components/schemas/ResponseExemptionReason"
           },
           "detail": {
             "$ref": "#/components/schemas/ResponseDetail"
@@ -12182,8 +12571,6 @@
                     "residentNation.name",
                     "basedClub.id",
                     "basedClub.name",
-                    "permanentClubContractId",
-                    "loanClubContractId",
                     "permanentClub.id",
                     "permanentClub.name",
                     "clubCompetitionTier",
@@ -12224,6 +12611,30 @@
                     "lastPlayingHistoryYear",
                     "nickName",
                     "currentJob",
+                    "currentWage.amount",
+                    "currentWage.currency",
+                    "currentWage.code",
+                    "currentWage.amountGBP",
+                    "currentWage.amountEUR",
+                    "currentWage.amountUSD",
+                    "currentWage.conversionRate",
+                    "currentWage.rateFromDifferentYear",
+                    "currentWageMin.amount",
+                    "currentWageMin.currency",
+                    "currentWageMin.code",
+                    "currentWageMin.amountGBP",
+                    "currentWageMin.amountEUR",
+                    "currentWageMin.amountUSD",
+                    "currentWageMin.conversionRate",
+                    "currentWageMin.rateFromDifferentYear",
+                    "currentWageMax.amount",
+                    "currentWageMax.currency",
+                    "currentWageMax.code",
+                    "currentWageMax.amountGBP",
+                    "currentWageMax.amountEUR",
+                    "currentWageMax.amountUSD",
+                    "currentWageMax.conversionRate",
+                    "currentWageMax.rateFromDifferentYear",
                     "tactics.attacking",
                     "tactics.attackingDescription",
                     "tactics.depth",
@@ -12376,7 +12787,6 @@
                     "history.job",
                     "history.dateJoined",
                     "history.dateDeparted",
-                    "moves.id",
                     "moves.fromClub.id",
                     "moves.fromClub.name",
                     "moves.toClub.id",
@@ -12423,13 +12833,11 @@
                     "daysAtLocationCountry.stint",
                     "daysAtLocationCountry.days",
                     "daysAtLocationCountry.wasYouth",
-                    "permanentClubContract.id",
                     "permanentClubContract.club.id",
                     "permanentClubContract.club.name",
                     "permanentClubContract.job",
                     "permanentClubContract.secondJob",
                     "permanentClubContract.team",
-                    "permanentClubContract.personMoveId",
                     "permanentClubContract.unknownClubType",
                     "permanentClubContract.type",
                     "permanentClubContract.dateFrom",
@@ -12455,7 +12863,22 @@
                     "permanentClubContract.wage.amountUSD",
                     "permanentClubContract.wage.conversionRate",
                     "permanentClubContract.wage.rateFromDifferentYear",
-                    "permanentClubContract.wagePercentage",
+                    "permanentClubContract.wageMin.amount",
+                    "permanentClubContract.wageMin.currency",
+                    "permanentClubContract.wageMin.code",
+                    "permanentClubContract.wageMin.amountGBP",
+                    "permanentClubContract.wageMin.amountEUR",
+                    "permanentClubContract.wageMin.amountUSD",
+                    "permanentClubContract.wageMin.conversionRate",
+                    "permanentClubContract.wageMin.rateFromDifferentYear",
+                    "permanentClubContract.wageMax.amount",
+                    "permanentClubContract.wageMax.currency",
+                    "permanentClubContract.wageMax.code",
+                    "permanentClubContract.wageMax.amountGBP",
+                    "permanentClubContract.wageMax.amountEUR",
+                    "permanentClubContract.wageMax.amountUSD",
+                    "permanentClubContract.wageMax.conversionRate",
+                    "permanentClubContract.wageMax.rateFromDifferentYear",
                     "permanentClubContract.buyOption",
                     "permanentClubContract.buyAmount.amount",
                     "permanentClubContract.buyAmount.currency",
@@ -12465,6 +12888,22 @@
                     "permanentClubContract.buyAmount.amountUSD",
                     "permanentClubContract.buyAmount.conversionRate",
                     "permanentClubContract.buyAmount.rateFromDifferentYear",
+                    "permanentClubContract.buyAmountMin.amount",
+                    "permanentClubContract.buyAmountMin.currency",
+                    "permanentClubContract.buyAmountMin.code",
+                    "permanentClubContract.buyAmountMin.amountGBP",
+                    "permanentClubContract.buyAmountMin.amountEUR",
+                    "permanentClubContract.buyAmountMin.amountUSD",
+                    "permanentClubContract.buyAmountMin.conversionRate",
+                    "permanentClubContract.buyAmountMin.rateFromDifferentYear",
+                    "permanentClubContract.buyAmountMax.amount",
+                    "permanentClubContract.buyAmountMax.currency",
+                    "permanentClubContract.buyAmountMax.code",
+                    "permanentClubContract.buyAmountMax.amountGBP",
+                    "permanentClubContract.buyAmountMax.amountEUR",
+                    "permanentClubContract.buyAmountMax.amountUSD",
+                    "permanentClubContract.buyAmountMax.conversionRate",
+                    "permanentClubContract.buyAmountMax.rateFromDifferentYear",
                     "permanentClubContract.canBeRecalled",
                     "permanentClubContract.contractNation.id",
                     "permanentClubContract.contractNation.name",
@@ -12486,22 +12925,20 @@
                     "permanentClubContract.clauses.clubCompetition.id",
                     "permanentClubContract.clauses.clubCompetition.name",
                     "permanentClubContract.clauses.number",
-                    "permanentClubContract.clauses.levelId",
-                    "permanentClubContract.clauses.loanOrFutureId",
+                    "permanentClubContract.clauses.level",
+                    "permanentClubContract.clauses.loanOrFuture",
                     "permanentClubContract.clauses.order",
                     "permanentClubContract.clauses.dateFrom",
                     "permanentClubContract.clauses.dateTo",
                     "permanentClubContract.clauses.timePeriodId",
                     "permanentClubContract.clauses.clause",
                     "permanentClubContract.clauses.personComp",
-                    "permanentClubContract.clauses.stageId",
-                    "loanClubContract.id",
+                    "permanentClubContract.clauses.stage",
                     "loanClubContract.club.id",
                     "loanClubContract.club.name",
                     "loanClubContract.job",
                     "loanClubContract.secondJob",
                     "loanClubContract.team",
-                    "loanClubContract.personMoveId",
                     "loanClubContract.unknownClubType",
                     "loanClubContract.type",
                     "loanClubContract.dateFrom",
@@ -12527,7 +12964,22 @@
                     "loanClubContract.wage.amountUSD",
                     "loanClubContract.wage.conversionRate",
                     "loanClubContract.wage.rateFromDifferentYear",
-                    "loanClubContract.wagePercentage",
+                    "loanClubContract.wageMin.amount",
+                    "loanClubContract.wageMin.currency",
+                    "loanClubContract.wageMin.code",
+                    "loanClubContract.wageMin.amountGBP",
+                    "loanClubContract.wageMin.amountEUR",
+                    "loanClubContract.wageMin.amountUSD",
+                    "loanClubContract.wageMin.conversionRate",
+                    "loanClubContract.wageMin.rateFromDifferentYear",
+                    "loanClubContract.wageMax.amount",
+                    "loanClubContract.wageMax.currency",
+                    "loanClubContract.wageMax.code",
+                    "loanClubContract.wageMax.amountGBP",
+                    "loanClubContract.wageMax.amountEUR",
+                    "loanClubContract.wageMax.amountUSD",
+                    "loanClubContract.wageMax.conversionRate",
+                    "loanClubContract.wageMax.rateFromDifferentYear",
                     "loanClubContract.buyOption",
                     "loanClubContract.buyAmount.amount",
                     "loanClubContract.buyAmount.currency",
@@ -12537,6 +12989,22 @@
                     "loanClubContract.buyAmount.amountUSD",
                     "loanClubContract.buyAmount.conversionRate",
                     "loanClubContract.buyAmount.rateFromDifferentYear",
+                    "loanClubContract.buyAmountMin.amount",
+                    "loanClubContract.buyAmountMin.currency",
+                    "loanClubContract.buyAmountMin.code",
+                    "loanClubContract.buyAmountMin.amountGBP",
+                    "loanClubContract.buyAmountMin.amountEUR",
+                    "loanClubContract.buyAmountMin.amountUSD",
+                    "loanClubContract.buyAmountMin.conversionRate",
+                    "loanClubContract.buyAmountMin.rateFromDifferentYear",
+                    "loanClubContract.buyAmountMax.amount",
+                    "loanClubContract.buyAmountMax.currency",
+                    "loanClubContract.buyAmountMax.code",
+                    "loanClubContract.buyAmountMax.amountGBP",
+                    "loanClubContract.buyAmountMax.amountEUR",
+                    "loanClubContract.buyAmountMax.amountUSD",
+                    "loanClubContract.buyAmountMax.conversionRate",
+                    "loanClubContract.buyAmountMax.rateFromDifferentYear",
                     "loanClubContract.canBeRecalled",
                     "loanClubContract.contractNation.id",
                     "loanClubContract.contractNation.name",
@@ -12558,22 +13026,20 @@
                     "loanClubContract.clauses.clubCompetition.id",
                     "loanClubContract.clauses.clubCompetition.name",
                     "loanClubContract.clauses.number",
-                    "loanClubContract.clauses.levelId",
-                    "loanClubContract.clauses.loanOrFutureId",
+                    "loanClubContract.clauses.level",
+                    "loanClubContract.clauses.loanOrFuture",
                     "loanClubContract.clauses.order",
                     "loanClubContract.clauses.dateFrom",
                     "loanClubContract.clauses.dateTo",
                     "loanClubContract.clauses.timePeriodId",
                     "loanClubContract.clauses.clause",
                     "loanClubContract.clauses.personComp",
-                    "loanClubContract.clauses.stageId",
-                    "clubContracts.id",
+                    "loanClubContract.clauses.stage",
                     "clubContracts.club.id",
                     "clubContracts.club.name",
                     "clubContracts.job",
                     "clubContracts.secondJob",
                     "clubContracts.team",
-                    "clubContracts.personMoveId",
                     "clubContracts.unknownClubType",
                     "clubContracts.type",
                     "clubContracts.dateFrom",
@@ -12599,7 +13065,22 @@
                     "clubContracts.wage.amountUSD",
                     "clubContracts.wage.conversionRate",
                     "clubContracts.wage.rateFromDifferentYear",
-                    "clubContracts.wagePercentage",
+                    "clubContracts.wageMin.amount",
+                    "clubContracts.wageMin.currency",
+                    "clubContracts.wageMin.code",
+                    "clubContracts.wageMin.amountGBP",
+                    "clubContracts.wageMin.amountEUR",
+                    "clubContracts.wageMin.amountUSD",
+                    "clubContracts.wageMin.conversionRate",
+                    "clubContracts.wageMin.rateFromDifferentYear",
+                    "clubContracts.wageMax.amount",
+                    "clubContracts.wageMax.currency",
+                    "clubContracts.wageMax.code",
+                    "clubContracts.wageMax.amountGBP",
+                    "clubContracts.wageMax.amountEUR",
+                    "clubContracts.wageMax.amountUSD",
+                    "clubContracts.wageMax.conversionRate",
+                    "clubContracts.wageMax.rateFromDifferentYear",
                     "clubContracts.buyOption",
                     "clubContracts.buyAmount.amount",
                     "clubContracts.buyAmount.currency",
@@ -12609,6 +13090,22 @@
                     "clubContracts.buyAmount.amountUSD",
                     "clubContracts.buyAmount.conversionRate",
                     "clubContracts.buyAmount.rateFromDifferentYear",
+                    "clubContracts.buyAmountMin.amount",
+                    "clubContracts.buyAmountMin.currency",
+                    "clubContracts.buyAmountMin.code",
+                    "clubContracts.buyAmountMin.amountGBP",
+                    "clubContracts.buyAmountMin.amountEUR",
+                    "clubContracts.buyAmountMin.amountUSD",
+                    "clubContracts.buyAmountMin.conversionRate",
+                    "clubContracts.buyAmountMin.rateFromDifferentYear",
+                    "clubContracts.buyAmountMax.amount",
+                    "clubContracts.buyAmountMax.currency",
+                    "clubContracts.buyAmountMax.code",
+                    "clubContracts.buyAmountMax.amountGBP",
+                    "clubContracts.buyAmountMax.amountEUR",
+                    "clubContracts.buyAmountMax.amountUSD",
+                    "clubContracts.buyAmountMax.conversionRate",
+                    "clubContracts.buyAmountMax.rateFromDifferentYear",
                     "clubContracts.canBeRecalled",
                     "clubContracts.contractNation.id",
                     "clubContracts.contractNation.name",
@@ -12630,17 +13127,20 @@
                     "clubContracts.clauses.clubCompetition.id",
                     "clubContracts.clauses.clubCompetition.name",
                     "clubContracts.clauses.number",
-                    "clubContracts.clauses.levelId",
-                    "clubContracts.clauses.loanOrFutureId",
+                    "clubContracts.clauses.level",
+                    "clubContracts.clauses.loanOrFuture",
                     "clubContracts.clauses.order",
                     "clubContracts.clauses.dateFrom",
                     "clubContracts.clauses.dateTo",
                     "clubContracts.clauses.timePeriodId",
                     "clubContracts.clauses.clause",
                     "clubContracts.clauses.personComp",
-                    "clubContracts.clauses.stageId",
+                    "clubContracts.clauses.stage",
                     "gbe.status",
+                    "gbe.exemptionReason",
                     "gbe.detail.status",
+                    "gbe.detail.exemptionReason",
+                    "gbe.detail.exemptNation",
                     "gbe.detail.qualification",
                     "gbe.detail.currentJob",
                     "gbe.detail.cumulativeDays",
@@ -12664,6 +13164,8 @@
                     "gbe.detail.qualifyingHistory.months",
                     "gbe.detail.qualifyingHistory.qualifies",
                     "gbe.headCoachStatus.status",
+                    "gbe.headCoachStatus.exemptionReason",
+                    "gbe.headCoachStatus.exemptNation",
                     "gbe.headCoachStatus.qualification",
                     "gbe.headCoachStatus.currentJob",
                     "gbe.headCoachStatus.cumulativeDays",
@@ -12685,6 +13187,8 @@
                     "gbe.headCoachStatus.qualifyingHistory.months",
                     "gbe.headCoachStatus.qualifyingHistory.qualifies",
                     "gbe.assistantCoachStatus.status",
+                    "gbe.assistantCoachStatus.exemptionReason",
+                    "gbe.assistantCoachStatus.exemptNation",
                     "gbe.assistantCoachStatus.qualification",
                     "gbe.assistantCoachStatus.currentJob",
                     "gbe.assistantCoachStatus.cumulativeDays",
@@ -12984,7 +13488,7 @@
         "default": "nation"
       },
       "ResponseResidentNationPlayers": {
-        "description": "The nation in which the person would be living if not employed by a football club (and if it is different to the person’s actual first nationality).",
+        "description": "The nation in which the person would be living if not employed by a football club (and if it is different to the person's actual first nationality).",
         "type": "object",
         "nullable": true,
         "properties": {
@@ -13213,6 +13717,12 @@
         "type": "string",
         "nullable": true
       },
+      "ResponseCurrentSquadNumber": {
+        "type": "number",
+        "nullable": true,
+        "minimum": 1,
+        "maximum": 99
+      },
       "ResponseFavouriteSquadNumber": {
         "type": "number",
         "nullable": true,
@@ -13435,7 +13945,7 @@
         "nullable": true
       },
       "ResponseMentalTraitsPlayers": {
-        "description": "The mental traits table indicates the person’s mental characteristics (for both players and non-players).",
+        "description": "The mental traits table indicates the person's mental characteristics (for both players and non-players).",
         "type": "object",
         "nullable": true,
         "properties": {
@@ -13469,7 +13979,7 @@
         }
       },
       "ResponseReputationPlayers": {
-        "description": "The Reputation table details the player’s reputation scores within their current nation, home nation and a global scale.",
+        "description": "The Reputation table details the player's reputation scores within their current nation, home nation and a global scale.",
         "type": "object",
         "nullable": true,
         "properties": {
@@ -14788,10 +15298,6 @@
           }
         }
       },
-      "ResponseIdPlayersPermanentClubContract": {
-        "type": "string",
-        "nullable": false
-      },
       "ResponseNamePlayersPermanentClubContractClub": {
         "type": "string",
         "nullable": true
@@ -14846,19 +15352,178 @@
           }
         }
       },
+      "ResponseClausesPlayersPermanentClubContract": {
+        "description": "Clauses",
+        "type": "array",
+        "nullable": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "clauseCategory": {
+              "type": "string",
+              "nullable": true
+            },
+            "cash": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "percentage": {
+              "type": "number",
+              "nullable": true
+            },
+            "contractedClub": {
+              "title": "Club",
+              "description": "Club",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "otherClub": {
+              "title": "Other Club",
+              "description": "Other Club",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "clubCompetition": {
+              "title": "Club Competition",
+              "description": "Club Competition",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "clubsCompetition"
+                }
+              }
+            },
+            "number": {
+              "type": "number",
+              "nullable": true
+            },
+            "level": {
+              "type": "string",
+              "nullable": true
+            },
+            "loanOrFuture": {
+              "type": "string",
+              "nullable": true
+            },
+            "order": {
+              "type": "number",
+              "nullable": true
+            },
+            "dateFrom": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "dateTo": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "timePeriod": {
+              "type": "string",
+              "nullable": true
+            },
+            "clause": {
+              "type": "string",
+              "nullable": true
+            },
+            "personComp": {
+              "type": "string",
+              "nullable": true
+            },
+            "stage": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
       "ResponsePermanentClubContractPlayers": {
         "description": "Club Contract",
         "type": "object",
         "nullable": true,
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ResponseIdPlayersPermanentClubContract"
-          },
           "club": {
             "$ref": "#/components/schemas/ResponseClubPlayersPermanentClubContract"
-          },
-          "personMoveId": {
-            "$ref": "#/components/schemas/ResponsePersonMoveId"
           },
           "unknownClubType": {
             "$ref": "#/components/schemas/ResponseUnknownClubType"
@@ -14920,14 +15585,23 @@
           "wage": {
             "$ref": "#/components/schemas/ResponseWage"
           },
-          "wagePercentage": {
-            "$ref": "#/components/schemas/ResponseWagePercentage"
+          "wageMin": {
+            "$ref": "#/components/schemas/ResponseWageMin"
+          },
+          "wageMax": {
+            "$ref": "#/components/schemas/ResponseWageMax"
           },
           "buyOption": {
             "$ref": "#/components/schemas/ResponseBuyOption"
           },
           "buyAmount": {
             "$ref": "#/components/schemas/ResponseBuyAmount"
+          },
+          "buyAmountMin": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMin"
+          },
+          "buyAmountMax": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMax"
           },
           "canBeRecalled": {
             "$ref": "#/components/schemas/ResponseCanBeRecalled"
@@ -14939,13 +15613,9 @@
             "$ref": "#/components/schemas/ResponseIsLoan"
           },
           "clauses": {
-            "$ref": "#/components/schemas/ResponseClauses"
+            "$ref": "#/components/schemas/ResponseClausesPlayersPermanentClubContract"
           }
         }
-      },
-      "ResponseIdPlayersLoanClubContract": {
-        "type": "string",
-        "nullable": false
       },
       "ResponseNamePlayersLoanClubContractClub": {
         "type": "string",
@@ -15001,19 +15671,178 @@
           }
         }
       },
+      "ResponseClausesPlayersLoanClubContract": {
+        "description": "Clauses",
+        "type": "array",
+        "nullable": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "clauseCategory": {
+              "type": "string",
+              "nullable": true
+            },
+            "cash": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "percentage": {
+              "type": "number",
+              "nullable": true
+            },
+            "contractedClub": {
+              "title": "Club",
+              "description": "Club",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "otherClub": {
+              "title": "Other Club",
+              "description": "Other Club",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "clubCompetition": {
+              "title": "Club Competition",
+              "description": "Club Competition",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "clubsCompetition"
+                }
+              }
+            },
+            "number": {
+              "type": "number",
+              "nullable": true
+            },
+            "level": {
+              "type": "string",
+              "nullable": true
+            },
+            "loanOrFuture": {
+              "type": "string",
+              "nullable": true
+            },
+            "order": {
+              "type": "number",
+              "nullable": true
+            },
+            "dateFrom": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "dateTo": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "timePeriod": {
+              "type": "string",
+              "nullable": true
+            },
+            "clause": {
+              "type": "string",
+              "nullable": true
+            },
+            "personComp": {
+              "type": "string",
+              "nullable": true
+            },
+            "stage": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
       "ResponseLoanClubContractPlayers": {
-        "description": "Loan Contract",
+        "description": "Loan Club Contract",
         "type": "object",
         "nullable": true,
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ResponseIdPlayersLoanClubContract"
-          },
           "club": {
             "$ref": "#/components/schemas/ResponseClubPlayersLoanClubContract"
-          },
-          "personMoveId": {
-            "$ref": "#/components/schemas/ResponsePersonMoveId"
           },
           "unknownClubType": {
             "$ref": "#/components/schemas/ResponseUnknownClubType"
@@ -15075,14 +15904,23 @@
           "wage": {
             "$ref": "#/components/schemas/ResponseWage"
           },
-          "wagePercentage": {
-            "$ref": "#/components/schemas/ResponseWagePercentage"
+          "wageMin": {
+            "$ref": "#/components/schemas/ResponseWageMin"
+          },
+          "wageMax": {
+            "$ref": "#/components/schemas/ResponseWageMax"
           },
           "buyOption": {
             "$ref": "#/components/schemas/ResponseBuyOption"
           },
           "buyAmount": {
             "$ref": "#/components/schemas/ResponseBuyAmount"
+          },
+          "buyAmountMin": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMin"
+          },
+          "buyAmountMax": {
+            "$ref": "#/components/schemas/ResponseBuyAmountMax"
           },
           "canBeRecalled": {
             "$ref": "#/components/schemas/ResponseCanBeRecalled"
@@ -15094,7 +15932,7 @@
             "$ref": "#/components/schemas/ResponseIsLoan"
           },
           "clauses": {
-            "$ref": "#/components/schemas/ResponseClauses"
+            "$ref": "#/components/schemas/ResponseClausesPlayersLoanClubContract"
           }
         }
       },
@@ -15105,10 +15943,6 @@
         "items": {
           "type": "object",
           "properties": {
-            "id": {
-              "type": "string",
-              "nullable": false
-            },
             "club": {
               "title": "Club",
               "description": "The club the person is contracted to.",
@@ -15129,10 +15963,6 @@
                   "default": "club"
                 }
               }
-            },
-            "personMoveId": {
-              "type": "string",
-              "nullable": true
             },
             "unknownClubType": {
               "type": "string",
@@ -15262,17 +16092,179 @@
                 }
               }
             },
-            "wagePercentage": {
-              "type": "number",
-              "nullable": true,
-              "minimum": 0,
-              "maximum": 2000
+            "wageMin": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "wageMax": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
             },
             "buyOption": {
               "type": "boolean",
               "nullable": true
             },
             "buyAmount": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "buyAmountMin": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "buyAmountMax": {
               "type": "object",
               "properties": {
                 "amount": {
@@ -15468,11 +16460,11 @@
                     "type": "number",
                     "nullable": true
                   },
-                  "levelId": {
+                  "level": {
                     "type": "string",
                     "nullable": true
                   },
-                  "loanOrFutureId": {
+                  "loanOrFuture": {
                     "type": "string",
                     "nullable": true
                   },
@@ -15490,7 +16482,7 @@
                     "nullable": true,
                     "format": "date"
                   },
-                  "timePeriodId": {
+                  "timePeriod": {
                     "type": "string",
                     "nullable": true
                   },
@@ -15502,12 +16494,239 @@
                     "type": "string",
                     "nullable": true
                   },
-                  "stageId": {
+                  "stage": {
                     "type": "string",
                     "nullable": true
                   }
                 }
               }
+            }
+          }
+        }
+      },
+      "ResponseNationContractsPlayers": {
+        "description": "Denotes the key information related to the person’s nation contract, if they are employed by a national team.",
+        "type": "array",
+        "nullable": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "nation": {
+              "title": "Nation",
+              "description": "The national team the person is contracted to work for in a backroom role.",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "nation"
+                }
+              }
+            },
+            "joined": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "expires": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "yearsLeft": {
+              "type": "number",
+              "nullable": true,
+              "format": "decimal"
+            },
+            "job": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "ResponseMovesPlayers": {
+        "description": "Details the person’s career transfers to date.",
+        "type": "array",
+        "nullable": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "fromClub": {
+              "title": "From Club",
+              "description": "The team the person moved (or is moving) from.",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "toClub": {
+              "title": "To Club",
+              "description": "The team the person moved (or is moving) to.",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "club"
+                }
+              }
+            },
+            "fromNation": {
+              "title": "From National Team",
+              "description": "The national team the person moved (or is moving) from.",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "nation"
+                }
+              }
+            },
+            "toNation": {
+              "title": "To National Team",
+              "description": "The national team the person moved (or is moving) to.",
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "default": "nation"
+                }
+              }
+            },
+            "date": {
+              "type": "string",
+              "nullable": true,
+              "format": "date"
+            },
+            "dateIsEstimate": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "isPre": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "fee": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "currency": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "amountGBP": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountEUR": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "amountUSD": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "nullable": true,
+                  "format": "decimal"
+                },
+                "rateFromDifferentYear": {
+                  "type": "number",
+                  "nullable": true
+                }
+              }
+            },
+            "feeIsEstimate": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "includedPlayerExchange": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "draftAllocations": {
+              "type": "number",
+              "nullable": true,
+              "minimum": 1,
+              "maximum": 4
+            },
+            "draftType": {
+              "type": "string",
+              "nullable": true
+            },
+            "tribunalFee": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "internationalSlots": {
+              "type": "number",
+              "nullable": true,
+              "minimum": 1,
+              "maximum": 4
             }
           }
         }
@@ -15598,10 +16817,6 @@
         "items": {
           "type": "object",
           "properties": {
-            "id": {
-              "type": "string",
-              "nullable": true
-            },
             "nation": {
               "title": "Nation",
               "description": "The nation the player represented.",
@@ -15879,11 +17094,7 @@
           }
         }
       },
-      "ResponseHudlWyscoutId": {
-        "type": "number",
-        "nullable": true
-      },
-      "ResponseExternalIds": {
+      "ResponseExternalIdsPlayers": {
         "description": "An object detailing the player IDs that will enable connection to other source providers.",
         "type": "object",
         "nullable": true,
@@ -18635,10 +19846,6 @@
           }
         }
       },
-      "ResponseExemptionReason": {
-        "type": "string",
-        "nullable": true
-      },
       "ResponseQualified": {
         "type": "boolean",
         "nullable": true
@@ -19304,8 +20511,6 @@
                     "basedClub.id",
                     "basedClub.name",
                     "inBasedClubFirstTeam",
-                    "permanentClubContractId",
-                    "loanClubContractId",
                     "permanentClub.id",
                     "permanentClub.name",
                     "loanClub.id",
@@ -19339,6 +20544,7 @@
                     "leftFootDescription",
                     "rightFootDescription",
                     "preferredFoot",
+                    "currentSquadNumber",
                     "favouriteSquadNumber",
                     "height",
                     "debutDate",
@@ -19367,6 +20573,30 @@
                     "expectedPotentialAbility",
                     "nickName",
                     "homegrownStatus",
+                    "currentWage.amount",
+                    "currentWage.currency",
+                    "currentWage.code",
+                    "currentWage.amountGBP",
+                    "currentWage.amountEUR",
+                    "currentWage.amountUSD",
+                    "currentWage.conversionRate",
+                    "currentWage.rateFromDifferentYear",
+                    "currentWageMin.amount",
+                    "currentWageMin.currency",
+                    "currentWageMin.code",
+                    "currentWageMin.amountGBP",
+                    "currentWageMin.amountEUR",
+                    "currentWageMin.amountUSD",
+                    "currentWageMin.conversionRate",
+                    "currentWageMin.rateFromDifferentYear",
+                    "currentWageMax.amount",
+                    "currentWageMax.currency",
+                    "currentWageMax.code",
+                    "currentWageMax.amountGBP",
+                    "currentWageMax.amountEUR",
+                    "currentWageMax.amountUSD",
+                    "currentWageMax.conversionRate",
+                    "currentWageMax.rateFromDifferentYear",
                     "mentalTraits.adaptability",
                     "mentalTraits.ambition",
                     "mentalTraits.determination",
@@ -19564,10 +20794,8 @@
                     "estimatedPlayerValues.askingPriceMax.rateFromDifferentYear",
                     "estimatedPlayerValues.currentAbilityValue",
                     "estimatedPlayerValues.potentialAbilityValue",
-                    "permanentClubContract.id",
                     "permanentClubContract.club.id",
                     "permanentClubContract.club.name",
-                    "permanentClubContract.personMoveId",
                     "permanentClubContract.unknownClubType",
                     "permanentClubContract.type",
                     "permanentClubContract.dateFrom",
@@ -19595,7 +20823,22 @@
                     "permanentClubContract.wage.amountUSD",
                     "permanentClubContract.wage.conversionRate",
                     "permanentClubContract.wage.rateFromDifferentYear",
-                    "permanentClubContract.wagePercentage",
+                    "permanentClubContract.wageMin.amount",
+                    "permanentClubContract.wageMin.currency",
+                    "permanentClubContract.wageMin.code",
+                    "permanentClubContract.wageMin.amountGBP",
+                    "permanentClubContract.wageMin.amountEUR",
+                    "permanentClubContract.wageMin.amountUSD",
+                    "permanentClubContract.wageMin.conversionRate",
+                    "permanentClubContract.wageMin.rateFromDifferentYear",
+                    "permanentClubContract.wageMax.amount",
+                    "permanentClubContract.wageMax.currency",
+                    "permanentClubContract.wageMax.code",
+                    "permanentClubContract.wageMax.amountGBP",
+                    "permanentClubContract.wageMax.amountEUR",
+                    "permanentClubContract.wageMax.amountUSD",
+                    "permanentClubContract.wageMax.conversionRate",
+                    "permanentClubContract.wageMax.rateFromDifferentYear",
                     "permanentClubContract.buyOption",
                     "permanentClubContract.buyAmount.amount",
                     "permanentClubContract.buyAmount.currency",
@@ -19605,6 +20848,22 @@
                     "permanentClubContract.buyAmount.amountUSD",
                     "permanentClubContract.buyAmount.conversionRate",
                     "permanentClubContract.buyAmount.rateFromDifferentYear",
+                    "permanentClubContract.buyAmountMin.amount",
+                    "permanentClubContract.buyAmountMin.currency",
+                    "permanentClubContract.buyAmountMin.code",
+                    "permanentClubContract.buyAmountMin.amountGBP",
+                    "permanentClubContract.buyAmountMin.amountEUR",
+                    "permanentClubContract.buyAmountMin.amountUSD",
+                    "permanentClubContract.buyAmountMin.conversionRate",
+                    "permanentClubContract.buyAmountMin.rateFromDifferentYear",
+                    "permanentClubContract.buyAmountMax.amount",
+                    "permanentClubContract.buyAmountMax.currency",
+                    "permanentClubContract.buyAmountMax.code",
+                    "permanentClubContract.buyAmountMax.amountGBP",
+                    "permanentClubContract.buyAmountMax.amountEUR",
+                    "permanentClubContract.buyAmountMax.amountUSD",
+                    "permanentClubContract.buyAmountMax.conversionRate",
+                    "permanentClubContract.buyAmountMax.rateFromDifferentYear",
                     "permanentClubContract.canBeRecalled",
                     "permanentClubContract.contractNation.id",
                     "permanentClubContract.contractNation.name",
@@ -19626,19 +20885,17 @@
                     "permanentClubContract.clauses.clubCompetition.id",
                     "permanentClubContract.clauses.clubCompetition.name",
                     "permanentClubContract.clauses.number",
-                    "permanentClubContract.clauses.levelId",
-                    "permanentClubContract.clauses.loanOrFutureId",
+                    "permanentClubContract.clauses.level",
+                    "permanentClubContract.clauses.loanOrFuture",
                     "permanentClubContract.clauses.order",
                     "permanentClubContract.clauses.dateFrom",
                     "permanentClubContract.clauses.dateTo",
-                    "permanentClubContract.clauses.timePeriodId",
+                    "permanentClubContract.clauses.timePeriod",
                     "permanentClubContract.clauses.clause",
                     "permanentClubContract.clauses.personComp",
-                    "permanentClubContract.clauses.stageId",
-                    "loanClubContract.id",
+                    "permanentClubContract.clauses.stage",
                     "loanClubContract.club.id",
                     "loanClubContract.club.name",
-                    "loanClubContract.personMoveId",
                     "loanClubContract.unknownClubType",
                     "loanClubContract.type",
                     "loanClubContract.dateFrom",
@@ -19666,7 +20923,22 @@
                     "loanClubContract.wage.amountUSD",
                     "loanClubContract.wage.conversionRate",
                     "loanClubContract.wage.rateFromDifferentYear",
-                    "loanClubContract.wagePercentage",
+                    "loanClubContract.wageMin.amount",
+                    "loanClubContract.wageMin.currency",
+                    "loanClubContract.wageMin.code",
+                    "loanClubContract.wageMin.amountGBP",
+                    "loanClubContract.wageMin.amountEUR",
+                    "loanClubContract.wageMin.amountUSD",
+                    "loanClubContract.wageMin.conversionRate",
+                    "loanClubContract.wageMin.rateFromDifferentYear",
+                    "loanClubContract.wageMax.amount",
+                    "loanClubContract.wageMax.currency",
+                    "loanClubContract.wageMax.code",
+                    "loanClubContract.wageMax.amountGBP",
+                    "loanClubContract.wageMax.amountEUR",
+                    "loanClubContract.wageMax.amountUSD",
+                    "loanClubContract.wageMax.conversionRate",
+                    "loanClubContract.wageMax.rateFromDifferentYear",
                     "loanClubContract.buyOption",
                     "loanClubContract.buyAmount.amount",
                     "loanClubContract.buyAmount.currency",
@@ -19676,6 +20948,22 @@
                     "loanClubContract.buyAmount.amountUSD",
                     "loanClubContract.buyAmount.conversionRate",
                     "loanClubContract.buyAmount.rateFromDifferentYear",
+                    "loanClubContract.buyAmountMin.amount",
+                    "loanClubContract.buyAmountMin.currency",
+                    "loanClubContract.buyAmountMin.code",
+                    "loanClubContract.buyAmountMin.amountGBP",
+                    "loanClubContract.buyAmountMin.amountEUR",
+                    "loanClubContract.buyAmountMin.amountUSD",
+                    "loanClubContract.buyAmountMin.conversionRate",
+                    "loanClubContract.buyAmountMin.rateFromDifferentYear",
+                    "loanClubContract.buyAmountMax.amount",
+                    "loanClubContract.buyAmountMax.currency",
+                    "loanClubContract.buyAmountMax.code",
+                    "loanClubContract.buyAmountMax.amountGBP",
+                    "loanClubContract.buyAmountMax.amountEUR",
+                    "loanClubContract.buyAmountMax.amountUSD",
+                    "loanClubContract.buyAmountMax.conversionRate",
+                    "loanClubContract.buyAmountMax.rateFromDifferentYear",
                     "loanClubContract.canBeRecalled",
                     "loanClubContract.contractNation.id",
                     "loanClubContract.contractNation.name",
@@ -19697,19 +20985,17 @@
                     "loanClubContract.clauses.clubCompetition.id",
                     "loanClubContract.clauses.clubCompetition.name",
                     "loanClubContract.clauses.number",
-                    "loanClubContract.clauses.levelId",
-                    "loanClubContract.clauses.loanOrFutureId",
+                    "loanClubContract.clauses.level",
+                    "loanClubContract.clauses.loanOrFuture",
                     "loanClubContract.clauses.order",
                     "loanClubContract.clauses.dateFrom",
                     "loanClubContract.clauses.dateTo",
-                    "loanClubContract.clauses.timePeriodId",
+                    "loanClubContract.clauses.timePeriod",
                     "loanClubContract.clauses.clause",
                     "loanClubContract.clauses.personComp",
-                    "loanClubContract.clauses.stageId",
-                    "clubContracts.id",
+                    "loanClubContract.clauses.stage",
                     "clubContracts.club.id",
                     "clubContracts.club.name",
-                    "clubContracts.personMoveId",
                     "clubContracts.unknownClubType",
                     "clubContracts.type",
                     "clubContracts.dateFrom",
@@ -19737,7 +21023,22 @@
                     "clubContracts.wage.amountUSD",
                     "clubContracts.wage.conversionRate",
                     "clubContracts.wage.rateFromDifferentYear",
-                    "clubContracts.wagePercentage",
+                    "clubContracts.wageMin.amount",
+                    "clubContracts.wageMin.currency",
+                    "clubContracts.wageMin.code",
+                    "clubContracts.wageMin.amountGBP",
+                    "clubContracts.wageMin.amountEUR",
+                    "clubContracts.wageMin.amountUSD",
+                    "clubContracts.wageMin.conversionRate",
+                    "clubContracts.wageMin.rateFromDifferentYear",
+                    "clubContracts.wageMax.amount",
+                    "clubContracts.wageMax.currency",
+                    "clubContracts.wageMax.code",
+                    "clubContracts.wageMax.amountGBP",
+                    "clubContracts.wageMax.amountEUR",
+                    "clubContracts.wageMax.amountUSD",
+                    "clubContracts.wageMax.conversionRate",
+                    "clubContracts.wageMax.rateFromDifferentYear",
                     "clubContracts.buyOption",
                     "clubContracts.buyAmount.amount",
                     "clubContracts.buyAmount.currency",
@@ -19747,6 +21048,22 @@
                     "clubContracts.buyAmount.amountUSD",
                     "clubContracts.buyAmount.conversionRate",
                     "clubContracts.buyAmount.rateFromDifferentYear",
+                    "clubContracts.buyAmountMin.amount",
+                    "clubContracts.buyAmountMin.currency",
+                    "clubContracts.buyAmountMin.code",
+                    "clubContracts.buyAmountMin.amountGBP",
+                    "clubContracts.buyAmountMin.amountEUR",
+                    "clubContracts.buyAmountMin.amountUSD",
+                    "clubContracts.buyAmountMin.conversionRate",
+                    "clubContracts.buyAmountMin.rateFromDifferentYear",
+                    "clubContracts.buyAmountMax.amount",
+                    "clubContracts.buyAmountMax.currency",
+                    "clubContracts.buyAmountMax.code",
+                    "clubContracts.buyAmountMax.amountGBP",
+                    "clubContracts.buyAmountMax.amountEUR",
+                    "clubContracts.buyAmountMax.amountUSD",
+                    "clubContracts.buyAmountMax.conversionRate",
+                    "clubContracts.buyAmountMax.rateFromDifferentYear",
                     "clubContracts.canBeRecalled",
                     "clubContracts.contractNation.id",
                     "clubContracts.contractNation.name",
@@ -19768,15 +21085,15 @@
                     "clubContracts.clauses.clubCompetition.id",
                     "clubContracts.clauses.clubCompetition.name",
                     "clubContracts.clauses.number",
-                    "clubContracts.clauses.levelId",
-                    "clubContracts.clauses.loanOrFutureId",
+                    "clubContracts.clauses.level",
+                    "clubContracts.clauses.loanOrFuture",
                     "clubContracts.clauses.order",
                     "clubContracts.clauses.dateFrom",
                     "clubContracts.clauses.dateTo",
-                    "clubContracts.clauses.timePeriodId",
+                    "clubContracts.clauses.timePeriod",
                     "clubContracts.clauses.clause",
                     "clubContracts.clauses.personComp",
-                    "clubContracts.clauses.stageId",
+                    "clubContracts.clauses.stage",
                     "nationContracts.nation.id",
                     "nationContracts.nation.name",
                     "nationContracts.joined",
@@ -19795,7 +21112,6 @@
                     "personAchievements.date",
                     "personAchievements.year",
                     "personAchievements.job",
-                    "moves.id",
                     "moves.fromClub.id",
                     "moves.fromClub.name",
                     "moves.toClub.id",
@@ -19845,7 +21161,6 @@
                     "history.goals",
                     "history.wasLoan",
                     "history.wasYouthPlayer",
-                    "nationInternational.id",
                     "nationInternational.nation.id",
                     "nationInternational.nation.name",
                     "nationInternational.appearances",
@@ -21043,6 +22358,9 @@
                       },
                       "mls": {
                         "$ref": "#/components/schemas/ResponseMls"
+                      },
+                      "externalIds": {
+                        "$ref": "#/components/schemas/ResponseExternalIds"
                       }
                     }
                   }
@@ -21190,6 +22508,9 @@
                       },
                       "competitionRules": {
                         "$ref": "#/components/schemas/ResponseCompetitionRules"
+                      },
+                      "externalIds": {
+                        "$ref": "#/components/schemas/ResponseExternalIdsClubsCompetitions"
                       }
                     }
                   }
@@ -21346,6 +22667,9 @@
                       },
                       "country": {
                         "$ref": "#/components/schemas/ResponseCountryCoverage"
+                      },
+                      "updated": {
+                        "$ref": "#/components/schemas/ResponseUpdated"
                       },
                       "counts": {
                         "$ref": "#/components/schemas/ResponseCounts"
@@ -22038,12 +23362,6 @@
                       "basedClub": {
                         "$ref": "#/components/schemas/ResponseBasedClub"
                       },
-                      "permanentClubContractId": {
-                        "$ref": "#/components/schemas/ResponsePermanentClubContractId"
-                      },
-                      "loanClubContractId": {
-                        "$ref": "#/components/schemas/ResponseLoanClubContractId"
-                      },
                       "permanentClub": {
                         "$ref": "#/components/schemas/ResponsePermanentClub"
                       },
@@ -22139,6 +23457,15 @@
                       },
                       "currentJob": {
                         "$ref": "#/components/schemas/ResponseCurrentJob"
+                      },
+                      "currentWage": {
+                        "$ref": "#/components/schemas/ResponseCurrentWage"
+                      },
+                      "currentWageMin": {
+                        "$ref": "#/components/schemas/ResponseCurrentWageMin"
+                      },
+                      "currentWageMax": {
+                        "$ref": "#/components/schemas/ResponseCurrentWageMax"
                       },
                       "tactics": {
                         "$ref": "#/components/schemas/ResponseTactics"
@@ -22395,12 +23722,6 @@
                       "inBasedClubFirstTeam": {
                         "$ref": "#/components/schemas/ResponseInBasedClubFirstTeam"
                       },
-                      "permanentClubContractId": {
-                        "$ref": "#/components/schemas/ResponsePermanentClubContractId"
-                      },
-                      "loanClubContractId": {
-                        "$ref": "#/components/schemas/ResponseLoanClubContractId"
-                      },
                       "permanentClub": {
                         "$ref": "#/components/schemas/ResponsePermanentClubPlayers"
                       },
@@ -22482,6 +23803,9 @@
                       "preferredFoot": {
                         "$ref": "#/components/schemas/ResponsePreferredFoot"
                       },
+                      "currentSquadNumber": {
+                        "$ref": "#/components/schemas/ResponseCurrentSquadNumber"
+                      },
                       "favouriteSquadNumber": {
                         "$ref": "#/components/schemas/ResponseFavouriteSquadNumber"
                       },
@@ -22545,6 +23869,15 @@
                       "homegrownStatus": {
                         "$ref": "#/components/schemas/ResponseHomegrownStatus"
                       },
+                      "currentWage": {
+                        "$ref": "#/components/schemas/ResponseCurrentWage"
+                      },
+                      "currentWageMin": {
+                        "$ref": "#/components/schemas/ResponseCurrentWageMin"
+                      },
+                      "currentWageMax": {
+                        "$ref": "#/components/schemas/ResponseCurrentWageMax"
+                      },
                       "mentalTraits": {
                         "$ref": "#/components/schemas/ResponseMentalTraitsPlayers"
                       },
@@ -22585,13 +23918,13 @@
                         "$ref": "#/components/schemas/ResponseClubContractsPlayers"
                       },
                       "nationContracts": {
-                        "$ref": "#/components/schemas/ResponseNationContracts"
+                        "$ref": "#/components/schemas/ResponseNationContractsPlayers"
                       },
                       "personAchievements": {
                         "$ref": "#/components/schemas/ResponsePersonAchievements"
                       },
                       "moves": {
-                        "$ref": "#/components/schemas/ResponseMoves"
+                        "$ref": "#/components/schemas/ResponseMovesPlayers"
                       },
                       "unavailabilities": {
                         "$ref": "#/components/schemas/ResponseUnavailabilities"
@@ -22621,7 +23954,7 @@
                         "$ref": "#/components/schemas/ResponseRetirementsPlayers"
                       },
                       "externalIds": {
-                        "$ref": "#/components/schemas/ResponseExternalIds"
+                        "$ref": "#/components/schemas/ResponseExternalIdsPlayers"
                       },
                       "playerAttributesPercentiles": {
                         "$ref": "#/components/schemas/ResponsePlayerAttributesPercentiles"
@@ -22965,7 +24298,7 @@
         "schema": {
           "type": "boolean"
         },
-        "description": "This parameter activates the “pagination by cursor” functionality, that has better performance when retrieving large datasets. When set to `true` the meta object in the response will contain a `continuationToken` field that can be used to retrieve the next page at a significantly faster speed. If the `continuationToken` field is `null` it means that there’s no more pages to fetch."
+        "description": "This parameter activates the “pagination by cursor” functionality, that has better performance when retrieving large datasets. When set to `true` the meta object in the response will contain a `continuationToken` field that can be used to retrieve the next page at a significantly faster speed. If the `continuationToken` field is `null` it means that there's no more pages to fetch."
       },
       "QueryContinuationToken": {
         "name": "continuationToken",
@@ -23133,7 +24466,26 @@
               "stadiumAttendanceAverage",
               "stadiumAttendanceMax",
               "stadiumAttendanceMin",
-              "trainingFacilitiesDescription"
+              "trainingFacilitiesDescription",
+              "ambitions",
+              "affiliations",
+              "contractClauses",
+              "playerPartnerships",
+              "regionalDivision",
+              "rivals",
+              "finances",
+              "income",
+              "FFP",
+              "teams",
+              "wageHistory",
+              "clubCompPersonAllocations",
+              "clubCompGeneralAllocationMoney",
+              "targetAllocationMoney",
+              "youth",
+              "kits",
+              "currentKit",
+              "mls",
+              "externalIds"
             ]
           }
         }
@@ -23199,7 +24551,26 @@
               "stadiumAttendanceAverage",
               "stadiumAttendanceMax",
               "stadiumAttendanceMin",
-              "trainingFacilitiesDescription"
+              "trainingFacilitiesDescription",
+              "ambitions",
+              "affiliations",
+              "contractClauses",
+              "playerPartnerships",
+              "regionalDivision",
+              "rivals",
+              "finances",
+              "income",
+              "FFP",
+              "teams",
+              "wageHistory",
+              "clubCompPersonAllocations",
+              "clubCompGeneralAllocationMoney",
+              "targetAllocationMoney",
+              "youth",
+              "kits",
+              "currentKit",
+              "mls",
+              "externalIds"
             ]
           }
         }
@@ -23884,7 +25255,17 @@
               "parentClubCompetition",
               "registeredClubs",
               "playerCount",
-              "backroomStaffCount"
+              "backroomStaffCount",
+              "pitch",
+              "goalLine",
+              "var",
+              "datesAndGames",
+              "contractClauses",
+              "competitionHistory",
+              "internationalSlots",
+              "internationalTradeSlots",
+              "competitionRules",
+              "externalIds"
             ]
           }
         }
@@ -23928,7 +25309,17 @@
               "parentClubCompetition",
               "registeredClubs",
               "playerCount",
-              "backroomStaffCount"
+              "backroomStaffCount",
+              "pitch",
+              "goalLine",
+              "var",
+              "datesAndGames",
+              "contractClauses",
+              "competitionHistory",
+              "internationalSlots",
+              "internationalTradeSlots",
+              "competitionRules",
+              "externalIds"
             ]
           }
         }
@@ -24525,7 +25916,10 @@
               "nameThreeLetter",
               "adjective",
               "population",
-              "continentName"
+              "continentName",
+              "foreignRules",
+              "taxRules",
+              "agreements"
             ]
           }
         }
@@ -24547,7 +25941,10 @@
               "nameThreeLetter",
               "adjective",
               "population",
-              "continentName"
+              "continentName",
+              "foreignRules",
+              "taxRules",
+              "agreements"
             ]
           }
         }
@@ -24618,7 +26015,10 @@
               "id",
               "gameType",
               "nation",
-              "country"
+              "country",
+              "counts",
+              "clubCompetitions",
+              "freeAgents"
             ]
           }
         }
@@ -24637,7 +26037,10 @@
               "id",
               "gameType",
               "nation",
-              "country"
+              "country",
+              "counts",
+              "clubCompetitions",
+              "freeAgents"
             ]
           }
         }
@@ -25056,7 +26459,10 @@
               "type",
               "typeId",
               "dateOfBirth",
-              "lastChange"
+              "lastChange",
+              "values",
+              "trends",
+              "currentTrend"
             ]
           }
         }
@@ -25076,7 +26482,10 @@
               "type",
               "typeId",
               "dateOfBirth",
-              "lastChange"
+              "lastChange",
+              "values",
+              "trends",
+              "currentTrend"
             ]
           }
         }
@@ -25146,7 +26555,8 @@
               "gameType",
               "name",
               "fromDate",
-              "toDate"
+              "toDate",
+              "players"
             ]
           }
         }
@@ -25167,7 +26577,8 @@
               "gameType",
               "name",
               "fromDate",
-              "toDate"
+              "toDate",
+              "players"
             ]
           }
         }
@@ -25305,7 +26716,9 @@
               "viceCaptain",
               "country",
               "nationalTeamStadium",
-              "siblingNation"
+              "siblingNation",
+              "fifaRank",
+              "kits"
             ]
           }
         }
@@ -25355,7 +26768,9 @@
               "viceCaptain",
               "country",
               "nationalTeamStadium",
-              "siblingNation"
+              "siblingNation",
+              "fifaRank",
+              "kits"
             ]
           }
         }
@@ -25699,7 +27114,10 @@
               "isAllSeater",
               "lowestOfficialCategory",
               "continent",
-              "hostCountry"
+              "hostCountry",
+              "pitch",
+              "goalLine",
+              "var"
             ]
           }
         }
@@ -25734,7 +27152,10 @@
               "isAllSeater",
               "lowestOfficialCategory",
               "continent",
-              "hostCountry"
+              "hostCountry",
+              "pitch",
+              "goalLine",
+              "var"
             ]
           }
         }
@@ -25879,7 +27300,8 @@
               "runningLine",
               "timekeeping",
               "hairColour",
-              "updated"
+              "updated",
+              "clubCompetitions"
             ]
           }
         }
@@ -25921,7 +27343,8 @@
               "runningLine",
               "timekeeping",
               "hairColour",
-              "updated"
+              "updated",
+              "clubCompetitions"
             ]
           }
         }
@@ -26263,14 +27686,11 @@
             "preferredTactics.attackingNumbers",
             "preferredTactics.defensiveNumbers",
             "preferredTactics.defendingFreeKicks",
-            "permanentClubContract.dateFrom",
-            "permanentClubContract.dateEnded",
-            "permanentClubContract.dateTo",
-            "loanClubContract.dateFrom",
-            "loanClubContract.dateEnded",
-            "loanClubContract.dateTo",
             "gbe.status",
+            "gbe.exemptionReason",
             "gbe.detail.status",
+            "gbe.detail.exemptionReason",
+            "gbe.detail.exemptNation",
             "gbe.detail.qualification",
             "gbe.detail.currentJob",
             "gbe.detail.cumulativeDays",
@@ -26282,6 +27702,8 @@
             "gbe.detail.criteria.hasQualifyingExperience",
             "gbe.detail.criteria.experienceMethod",
             "gbe.headCoachStatus.status",
+            "gbe.headCoachStatus.exemptionReason",
+            "gbe.headCoachStatus.exemptNation",
             "gbe.headCoachStatus.qualification",
             "gbe.headCoachStatus.currentJob",
             "gbe.headCoachStatus.cumulativeDays",
@@ -26293,6 +27715,8 @@
             "gbe.headCoachStatus.criteria.hasQualifyingExperience",
             "gbe.headCoachStatus.criteria.experienceMethod",
             "gbe.assistantCoachStatus.status",
+            "gbe.assistantCoachStatus.exemptionReason",
+            "gbe.assistantCoachStatus.exemptNation",
             "gbe.assistantCoachStatus.qualification",
             "gbe.assistantCoachStatus.currentJob",
             "gbe.assistantCoachStatus.cumulativeDays",
@@ -26352,7 +27776,34 @@
               "lastNonPlayingClub",
               "lastPlayingHistoryYear",
               "nickName",
-              "currentJob"
+              "currentJob",
+              "tactics",
+              "coaching",
+              "management",
+              "knowledge",
+              "chairperson",
+              "medical",
+              "dataAnalyst",
+              "mentalTraits",
+              "nationContracts",
+              "retirements",
+              "personAchievements",
+              "unavailabilities",
+              "languages",
+              "preferredRolesInPossession",
+              "preferredRolesOutOfPossession",
+              "tendencies",
+              "tacticalTendencies",
+              "history",
+              "moves",
+              "preferredFormations",
+              "preferredTactics",
+              "daysAtLocationClub",
+              "daysAtLocationCountry",
+              "permanentClubContract",
+              "loanClubContract",
+              "clubContracts",
+              "gbe"
             ]
           }
         }
@@ -26402,7 +27853,34 @@
               "lastNonPlayingClub",
               "lastPlayingHistoryYear",
               "nickName",
-              "currentJob"
+              "currentJob",
+              "tactics",
+              "coaching",
+              "management",
+              "knowledge",
+              "chairperson",
+              "medical",
+              "dataAnalyst",
+              "mentalTraits",
+              "nationContracts",
+              "retirements",
+              "personAchievements",
+              "unavailabilities",
+              "languages",
+              "preferredRolesInPossession",
+              "preferredRolesOutOfPossession",
+              "tendencies",
+              "tacticalTendencies",
+              "history",
+              "moves",
+              "preferredFormations",
+              "preferredTactics",
+              "daysAtLocationClub",
+              "daysAtLocationCountry",
+              "permanentClubContract",
+              "loanClubContract",
+              "clubContracts",
+              "gbe"
             ]
           }
         }
@@ -27149,60 +28627,6 @@
         },
         "description": "Filters the list based on whether the `preferredTactics.defendingFreeKicks` field value matches the specified value."
       },
-      "QueryPermanentClubContractDateFrom": {
-        "name": "permanentClubContract.dateFrom",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `permanentClubContract.dateFrom` field value matches the specified value."
-      },
-      "QueryPermanentClubContractDateEnded": {
-        "name": "permanentClubContract.dateEnded",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `permanentClubContract.dateEnded` field value matches the specified value."
-      },
-      "QueryPermanentClubContractDateTo": {
-        "name": "permanentClubContract.dateTo",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `permanentClubContract.dateTo` field value matches the specified value."
-      },
-      "QueryLoanClubContractDateFrom": {
-        "name": "loanClubContract.dateFrom",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `loanClubContract.dateFrom` field value matches the specified value."
-      },
-      "QueryLoanClubContractDateEnded": {
-        "name": "loanClubContract.dateEnded",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `loanClubContract.dateEnded` field value matches the specified value."
-      },
-      "QueryLoanClubContractDateTo": {
-        "name": "loanClubContract.dateTo",
-        "in": "query",
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Filters the list based on whether the `loanClubContract.dateTo` field value matches the specified value."
-      },
       "QueryGbeStatus": {
         "name": "gbe.status",
         "in": "query",
@@ -27211,6 +28635,14 @@
         },
         "description": "Filters the list based on whether the `gbe.status` field value matches the specified value."
       },
+      "QueryGbeExemptionReason": {
+        "name": "gbe.exemptionReason",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.exemptionReason` field value matches the specified value."
+      },
       "QueryGbeDetailStatus": {
         "name": "gbe.detail.status",
         "in": "query",
@@ -27218,6 +28650,22 @@
           "type": "string"
         },
         "description": "Filters the list based on whether the `gbe.detail.status` field value matches the specified value."
+      },
+      "QueryGbeDetailExemptionReason": {
+        "name": "gbe.detail.exemptionReason",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.detail.exemptionReason` field value matches the specified value."
+      },
+      "QueryGbeDetailExemptNation": {
+        "name": "gbe.detail.exemptNation",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.detail.exemptNation` field value matches the specified value."
       },
       "QueryGbeDetailQualification": {
         "name": "gbe.detail.qualification",
@@ -27307,6 +28755,22 @@
         },
         "description": "Filters the list based on whether the `gbe.headCoachStatus.status` field value matches the specified value."
       },
+      "QueryGbeHeadCoachStatusExemptionReason": {
+        "name": "gbe.headCoachStatus.exemptionReason",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.headCoachStatus.exemptionReason` field value matches the specified value."
+      },
+      "QueryGbeHeadCoachStatusExemptNation": {
+        "name": "gbe.headCoachStatus.exemptNation",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.headCoachStatus.exemptNation` field value matches the specified value."
+      },
       "QueryGbeHeadCoachStatusQualification": {
         "name": "gbe.headCoachStatus.qualification",
         "in": "query",
@@ -27394,6 +28858,22 @@
           "type": "string"
         },
         "description": "Filters the list based on whether the `gbe.assistantCoachStatus.status` field value matches the specified value."
+      },
+      "QueryGbeAssistantCoachStatusExemptionReason": {
+        "name": "gbe.assistantCoachStatus.exemptionReason",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.assistantCoachStatus.exemptionReason` field value matches the specified value."
+      },
+      "QueryGbeAssistantCoachStatusExemptNation": {
+        "name": "gbe.assistantCoachStatus.exemptNation",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `gbe.assistantCoachStatus.exemptNation` field value matches the specified value."
       },
       "QueryGbeAssistantCoachStatusQualification": {
         "name": "gbe.assistantCoachStatus.qualification",
@@ -27527,7 +29007,8 @@
               "goals",
               "assists",
               "yellowCards",
-              "redCards"
+              "redCards",
+              "matches"
             ]
           }
         }
@@ -27558,7 +29039,8 @@
               "goals",
               "assists",
               "yellowCards",
-              "redCards"
+              "redCards",
+              "matches"
             ]
           }
         }
@@ -27691,6 +29173,7 @@
         "schema": {
           "type": "string",
           "enum": [
+            "name",
             "firstName",
             "secondName",
             "fullName",
@@ -27725,6 +29208,7 @@
             "leftFootDescription",
             "rightFootDescription",
             "preferredFoot",
+            "currentSquadNumber",
             "height",
             "debutCompetition.id",
             "debutCompetition.name",
@@ -27837,8 +29321,6 @@
             "availabilityIntelligence.appearanceAvailability.overall.totalMatches",
             "availabilityIntelligence.appearanceAvailability.overall.perSeason",
             "availabilityIntelligence.appearanceAvailability.overall.rate",
-            "estimatedPlayerValues.currentAbilityValue",
-            "estimatedPlayerValues.potentialAbilityValue",
             "permanentClubContract.dateFrom",
             "permanentClubContract.dateEnded",
             "permanentClubContract.dateTo",
@@ -28182,6 +29664,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "name",
               "firstName",
               "secondName",
               "fullName",
@@ -28208,11 +29691,47 @@
               "leftFootDescription",
               "rightFootDescription",
               "preferredFoot",
+              "currentSquadNumber",
               "height",
               "debutCompetition",
               "bestPosition",
               "bestRole",
-              "homegrownStatus"
+              "homegrownStatus",
+              "mentalTraits",
+              "reputation",
+              "mentalAttributes",
+              "physicalAttributes",
+              "technicalAttributes",
+              "goalkeeperAttributes",
+              "positions",
+              "bestPositions",
+              "availabilityIntelligence",
+              "estimatedPlayerValues",
+              "permanentClubContract",
+              "loanClubContract",
+              "clubContracts",
+              "nationContracts",
+              "personAchievements",
+              "moves",
+              "unavailabilities",
+              "languages",
+              "preferredMoves",
+              "history",
+              "nationInternational",
+              "injuries",
+              "daysAtLocationClub",
+              "daysAtLocationCountry",
+              "retirements",
+              "externalIds",
+              "playerAttributesPercentiles",
+              "technicalAttributesPercentiles",
+              "mentalAttributesPercentiles",
+              "physicalAttributesPercentiles",
+              "goalkeeperAttributesPercentiles",
+              "mentalTraitsPercentiles",
+              "gbe",
+              "tags",
+              "clubCompetitionExperience"
             ]
           }
         }
@@ -28228,6 +29747,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "name",
               "firstName",
               "secondName",
               "fullName",
@@ -28254,14 +29774,58 @@
               "leftFootDescription",
               "rightFootDescription",
               "preferredFoot",
+              "currentSquadNumber",
               "height",
               "debutCompetition",
               "bestPosition",
               "bestRole",
-              "homegrownStatus"
+              "homegrownStatus",
+              "mentalTraits",
+              "reputation",
+              "mentalAttributes",
+              "physicalAttributes",
+              "technicalAttributes",
+              "goalkeeperAttributes",
+              "positions",
+              "bestPositions",
+              "availabilityIntelligence",
+              "estimatedPlayerValues",
+              "permanentClubContract",
+              "loanClubContract",
+              "clubContracts",
+              "nationContracts",
+              "personAchievements",
+              "moves",
+              "unavailabilities",
+              "languages",
+              "preferredMoves",
+              "history",
+              "nationInternational",
+              "injuries",
+              "daysAtLocationClub",
+              "daysAtLocationCountry",
+              "retirements",
+              "externalIds",
+              "playerAttributesPercentiles",
+              "technicalAttributesPercentiles",
+              "mentalAttributesPercentiles",
+              "physicalAttributesPercentiles",
+              "goalkeeperAttributesPercentiles",
+              "mentalTraitsPercentiles",
+              "gbe",
+              "tags",
+              "clubCompetitionExperience"
             ]
           }
         }
+      },
+      "QueryNamePlayers": {
+        "name": "name",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `name` field value matches the specified value."
       },
       "QueryInBasedClubFirstTeam": {
         "name": "inBasedClubFirstTeam",
@@ -28314,6 +29878,16 @@
           "type": "string"
         },
         "description": "Filters the list based on whether the `preferredFoot` field value matches the specified value."
+      },
+      "QueryCurrentSquadNumber": {
+        "name": "currentSquadNumber",
+        "in": "query",
+        "schema": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 99
+        },
+        "description": "Filters the list based on whether the `currentSquadNumber` field value matches the specified value."
       },
       "QueryHeight": {
         "name": "height",
@@ -29343,21 +30917,59 @@
         },
         "description": "Filters the list based on whether the `availabilityIntelligence.appearanceAvailability.overall.rate` field value matches the specified value."
       },
-      "QueryEstimatedPlayerValuesCurrentAbilityValue": {
-        "name": "estimatedPlayerValues.currentAbilityValue",
+      "QueryPermanentClubContractDateFrom": {
+        "name": "permanentClubContract.dateFrom",
         "in": "query",
         "schema": {
-          "type": "number"
+          "type": "string",
+          "format": "date"
         },
-        "description": "Filters the list based on whether the `estimatedPlayerValues.currentAbilityValue` field value matches the specified value."
+        "description": "Filters the list based on whether the `permanentClubContract.dateFrom` field value matches the specified value."
       },
-      "QueryEstimatedPlayerValuesPotentialAbilityValue": {
-        "name": "estimatedPlayerValues.potentialAbilityValue",
+      "QueryPermanentClubContractDateEnded": {
+        "name": "permanentClubContract.dateEnded",
         "in": "query",
         "schema": {
-          "type": "number"
+          "type": "string",
+          "format": "date"
         },
-        "description": "Filters the list based on whether the `estimatedPlayerValues.potentialAbilityValue` field value matches the specified value."
+        "description": "Filters the list based on whether the `permanentClubContract.dateEnded` field value matches the specified value."
+      },
+      "QueryPermanentClubContractDateTo": {
+        "name": "permanentClubContract.dateTo",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Filters the list based on whether the `permanentClubContract.dateTo` field value matches the specified value."
+      },
+      "QueryLoanClubContractDateFrom": {
+        "name": "loanClubContract.dateFrom",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Filters the list based on whether the `loanClubContract.dateFrom` field value matches the specified value."
+      },
+      "QueryLoanClubContractDateEnded": {
+        "name": "loanClubContract.dateEnded",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Filters the list based on whether the `loanClubContract.dateEnded` field value matches the specified value."
+      },
+      "QueryLoanClubContractDateTo": {
+        "name": "loanClubContract.dateTo",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Filters the list based on whether the `loanClubContract.dateTo` field value matches the specified value."
       },
       "QueryPlayerAttributesPercentilesCurrentAbilityAbsolute": {
         "name": "playerAttributesPercentiles.currentAbilityAbsolute",
@@ -31908,14 +33520,6 @@
           "maximum": 100
         },
         "description": "Filters the list based on whether the `goalkeeperAttributesPercentiles.throwingByLeagueRole` field value matches the specified value."
-      },
-      "QueryGbeExemptionReason": {
-        "name": "gbe.exemptionReason",
-        "in": "query",
-        "schema": {
-          "type": "string"
-        },
-        "description": "Filters the list based on whether the `gbe.exemptionReason` field value matches the specified value."
       },
       "QueryGbeQualified": {
         "name": "gbe.qualified",
