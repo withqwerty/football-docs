@@ -257,6 +257,22 @@
       ],
       "last_crawled": null
     },
+    "footystats": {
+      "description": "Commercial football statistics API: leagues, seasons, matches, team, player, manager and referee season stats, league tables, lineups and goal details",
+      "display_name": "FootyStats",
+      "aliases": ["footy-stats", "footystats-api", "football-data-api"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation; data needs a paid subscription (the 'example' key covers Premier League 2018/19 only). API terms allow use in websites and apps but prohibit resale or redistribution of the data.",
+      "public_safety_notes": "Curated notes from live responses on a paid key, checked 2026-09-24. Field tables with example values only; no keys and no raw response dumps. Odds fields, *_potential pre-match percentages, h2h betting_stats and generated preview text are left out per INCLUSION.md.",
+      "version": null,
+      "package": null,
+      "sources": [
+        { "url": "https://footystats.org/api/documentations/", "type": "api_docs", "note": "Official per-endpoint documentation pages" },
+        { "url": "https://footystats.org/api/tutorials", "type": "api_docs", "note": "Example key, pagination and pricing statement" },
+        { "type": "curated", "note": "Field names, types, nullability and error responses verified against live responses (Thai League and AFC competitions) on 2026-09-24" }
+      ],
+      "last_crawled": "2026-09-24"
+    },
     "fmdb-pro": {
       "description": "Sports Interactive commercial football database API for clubs, players, people, competitions, geography, values, appearances, and GBE-related fields",
       "display_name": "FMDB Pro",
