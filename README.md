@@ -124,7 +124,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
 | Opta | 73 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces, data-provenance |
 | FMDB Pro | 37 | api-access, api-endpoints, data-model, identity-surfaces, data-provenance |
-| Sportradar | 32 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
+| Sportradar | 480 | integration guide (API basics, coverage tiers, ID handling, match status, update frequencies, push, historical data), Soccer Extended v4 endpoint reference with data-point tables, FAQ, plus curated api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
 | Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
@@ -135,7 +135,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,407 searchable chunks** across 26 providers and tools.
+**2,855 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
@@ -229,6 +229,8 @@ Contributions are welcome from everyone. There are three ways to help:
 ### Crawl pipeline
 
 Provider doc sources are tracked in `providers.json`. The crawl pipeline discovers the best doc source (llms.txt > ReadTheDocs > GitHub README) and writes markdown with provenance frontmatter.
+
+Two registry fields narrow a crawl. `llms_indexes` lists llms.txt files that link to pages rather than contain them; the crawler follows those links (and nested indexes) to each page's markdown copy instead of running discovery. Sportradar uses it for its integration guide and Soccer Extended reference. `exclude_categories` skips whole pages, and `exclude_sections` drops named `##`/`###` sections from pages that are otherwise kept, for content INCLUSION.md keeps out, such as odds. Pages crawled through an index are not byte-for-byte copies: the crawler drops the OpenAPI definition ReadMe appends and SVG diagrams, cuts example payloads over 3 KB with a note, replaces a data-point table repeated from an earlier page with a line naming that page, and marks a split long section "(continued)". It adds no other text.
 
 ```bash
 npm run discover                        # probe sources without crawling

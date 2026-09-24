@@ -722,6 +722,27 @@ paths:
       tags:
       - seasons
       x-sr-name: season_transfers
+  /{locale}/seasons/{urn_season}/venues:
+    get:
+      description: |
+        Get a list of venues used in a season
+      operationId: getSeasonVenues
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      - $ref: '#/components/parameters/urn_season'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/season_competitor_limit'
+      - $ref: '#/components/parameters/start'
+      responses:
+        "200":
+          $ref: '#/components/responses/season_venues'
+      security:
+      - ApiKeyAuth: []
+      summary: get a list of venues in a season
+      tags:
+      - seasons
+      - venues
+      x-sr-name: season_venues
   /{locale}/seasons_disabled:
     get:
       description: |
@@ -2278,6 +2299,7 @@ components:
       - head
       - upper_body
       - lower_body
+      - chest
       - other
       type: string
       xml:
@@ -4273,6 +4295,10 @@ components:
           type: string
           xml:
             attribute: true
+        long_name:
+          type: string
+          xml:
+            attribute: true
         name:
           type: string
           xml:
@@ -5087,6 +5113,60 @@ components:
       xml:
         name: group
         x-sr-object-name: SeasonStageGroup
+    season_venue:
+      additionalProperties: false
+      properties:
+        capacity:
+          type: integer
+          xml:
+            attribute: true
+        city_id:
+          description: City URN (sr:city:x)
+          type: string
+          xml:
+            attribute: true
+        city_name:
+          type: string
+          xml:
+            attribute: true
+        country_code:
+          description: ISO 3361-1 A3 Country Code
+          type: string
+          xml:
+            attribute: true
+        country_name:
+          type: string
+          xml:
+            attribute: true
+        id:
+          description: Venue URN (sr:venue:x)
+          type: string
+          xml:
+            attribute: true
+        long_name:
+          type: string
+          xml:
+            attribute: true
+        map_coordinates:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+        timezone:
+          description: Australia/Melbourne
+          type: string
+          xml:
+            attribute: true
+      required:
+      - id
+      - name
+      type: object
+      xml:
+        name: venue
+        x-sr-object-name: SeasonVenue
     simple_season_stage_group:
       additionalProperties: false
       properties:
@@ -13279,6 +13359,49 @@ components:
               wrapped: true
               x-sr-object-name: SeasonTransfers
       description: OK
+    season_venues:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+              season_venues:
+                items:
+                  $ref: '#/components/schemas/season_venue'
+                type: array
+            type: object
+        application/xml:
+          schema:
+            properties:
+              generated_at:
+                format: date-time
+                type: string
+                xml:
+                  attribute: true
+              items:
+                $ref: '#/components/schemas/season_venue'
+            type: object
+            xml:
+              name: season_venues
+              wrapped: true
+              x-sr-object-name: SeasonVenuesEndpoint
+      description: OK
+      headers:
+        X-Max-Results:
+          description: Total number of venues in requested season.
+          schema:
+            type: integer
+        X-Offset:
+          description: Number of venues skipped before collecting current result set.
+          schema:
+            type: integer
+        X-Result:
+          description: Number of venues returned for current request.
+          schema:
+            type: integer
     seasons:
       content:
         application/json:

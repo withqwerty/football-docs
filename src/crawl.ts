@@ -8,6 +8,14 @@
  * paraphrase, summarise, or interpret. The content in the output files should
  * be directly traceable to the source URL.
  *
+ * One exception, for pages reached through an llms.txt index (llms_indexes):
+ * the crawler removes markup and bulk, and marks each removal in the text.
+ * It drops the OpenAPI definition ReadMe appends and SVG diagrams, cuts long
+ * example payloads with a note, replaces a data-point table repeated from an
+ * earlier page with a line naming that page, and repeats a heading with
+ * "(continued)" where it splits a long section. Every sentence that remains is
+ * the source's own.
+ *
  * Usage:
  *   npm run crawl                         # crawl all providers with sources
  *   npm run crawl -- --provider kloppy    # crawl one provider
@@ -255,6 +263,19 @@ interface ProviderConfig {
    * crawl.
    */
   exclude_categories?: string[];
+  /**
+   * llms.txt files that index pages rather than contain them: each line links
+   * to a page's markdown copy, or to a further index. When set, the crawler
+   * follows these instead of running discovery, so the registry says exactly
+   * which sections of a large docs site are in the corpus.
+   */
+  llms_indexes?: string[];
+  /**
+   * Headings (`##` or `###`) whose sections the crawler drops from pages it
+   * keeps, with everything nested under them - for a section on a topic that
+   * INCLUSION.md keeps out, inside a page that is otherwise in scope.
+   */
+  exclude_sections?: string[];
   last_crawled: string | null;
 }
 
@@ -399,6 +420,222 @@ export function crawlLlmsTxt(content: string, sourceUrl: string): CrawledDoc[] {
   }
 
   return sections;
+}
+
+// ── llms.txt indexes ────────────────────────────────────────────────
+
+/** Most pages a single llms.txt index crawl will fetch. */
+const LLMS_INDEX_MAX_PAGES = 200;
+
+/** A code fence longer than this is cut, with a note of how much was dropped. */
+const MAX_FENCE_CHARS = 3000;
+
+/** A section longer than this is split, so no chunk swamps an agent's context. */
+const MAX_SECTION_CHARS = 30000;
+
+/** A repeated section shorter than this is left in place; it costs little. */
+const MIN_SHARED_SECTION_CHARS = 300;
+
+/**
+ * Read the links out of an llms.txt index. Page links point at a page's
+ * markdown copy (`.md`); index links point at a further `llms.txt`. Links to
+ * another host are ignored, so an index cannot send the crawl off-site.
+ */
+export function parseLlmsIndex(content: string, indexUrl: string): { pages: string[]; indexes: string[] } {
+  const host = new URL(indexUrl).hostname;
+  const pages: string[] = [];
+  const indexes: string[] = [];
+  for (const match of content.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)) {
+    let url: URL;
+    try {
+      url = new URL(match[1]);
+    } catch {
+      continue;
+    }
+    if (url.hostname !== host) continue;
+    url.hash = "";
+    if (url.pathname.endsWith("/llms.txt")) indexes.push(url.href);
+    else if (url.pathname.endsWith(".md")) pages.push(url.href);
+  }
+  return { pages: [...new Set(pages)], indexes: [...new Set(indexes)] };
+}
+
+/** The category a page is stored under: the last path segment, without `.md`. */
+export function llmsPageCategory(pageUrl: string): string {
+  const segment = new URL(pageUrl).pathname.split("/").pop() ?? "";
+  return slugify(segment.replace(/\.md$/, ""));
+}
+
+/**
+ * Turn a ReadMe-hosted page's markdown copy into plain markdown.
+ *
+ * ReadMe appends the endpoint's full OpenAPI definition to every reference page;
+ * the spec is mirrored separately (specs/), so everything from that heading on is
+ * dropped. Accordions become `###` headings, because their titles are where one
+ * data-point table ends and the next begins. Other MDX components and list markup
+ * are unwrapped to their text. Long example payloads are cut to their opening.
+ */
+export function cleanLlmsPage(text: string): string {
+  let out = text.replace(/^---\n[\s\S]*?\n---\n/, "");
+  out = out.split(/\n# OpenAPI definition\b/)[0];
+  out = out.replace(/^Fetch the complete documentation index.*\n/m, "");
+  out = out.replace(/<HTMLBlock>\{`([\s\S]*?)`\}<\/HTMLBlock>/g, (_m, html: string) =>
+    html.includes("<svg")
+      ? "_(Diagram omitted: see the source page.)_"
+      : html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+  );
+  out = out.replace(/<Accordion\b[^>]*\btitle="([^"]+)"[^>]*>/g, (_m, title: string) => `### ${title}`);
+  out = out.replace(/<li\b[^>]*>([\s\S]*?)<\/li>/g, (_m, item: string) => `- ${item.replace(/<[^>]+>/g, "").trim()}`);
+  out = out.replace(
+    /<\/?(?:AccordionGroup|Accordion|Callout|Tabs|Tab|Cards|Card|Columns|Column|Anchor|Image|Embed|Recipe|Glossary|div|ul|ol|span)\b[^>]*>/g,
+    ""
+  );
+  out = out.replace(/\n[ \t]+- /g, "\n- ");
+  out = out.replace(/```(\w*)\n[\s\S]*?\n```/g, (fence, lang: string) => {
+    if (fence.length <= MAX_FENCE_CHARS) return fence;
+    const kept = fence.slice(lang.length + 4, MAX_FENCE_CHARS).trimEnd();
+    const kb = Math.round(fence.length / 1024);
+    return `\`\`\`${lang}\n${kept}\n... (example cut here; ${kb} KB in the source page)\n\`\`\``;
+  });
+  return `${out.replace(/\n{3,}/g, "\n\n").trim()}\n`;
+}
+
+/**
+ * Split any `##`/`###` section longer than `max` at paragraph breaks, repeating
+ * its heading with "(continued)" so each piece is still a searchable section.
+ */
+export function splitOversizedSections(text: string, max = MAX_SECTION_CHARS): string {
+  const sections = text.split(/(?=^#{2,3} )/m);
+  return sections
+    .map((section) => {
+      if (section.length <= max) return section;
+      const heading = section.match(/^(#{2,3}) (.+)\n/);
+      const level = heading?.[1] ?? "###";
+      const title = heading?.[2] ?? "Section";
+      const pieces: string[] = [];
+      let current = "";
+      for (const paragraph of section.split(/\n\n/)) {
+        const insideFence = (current.match(/^```/gm)?.length ?? 0) % 2 === 1;
+        if (current && !insideFence && current.length + paragraph.length > max) {
+          pieces.push(current);
+          current = `${level} ${title} (continued)\n\n`;
+        }
+        current += `${paragraph}\n\n`;
+      }
+      pieces.push(current);
+      return pieces.join("");
+    })
+    .join("");
+}
+
+/**
+ * Reference pages repeat the same data-point tables (the competition, the
+ * season, the venue) on every endpoint that returns them. Keep the first copy
+ * of each `###` section and replace later identical copies with one line per
+ * page naming where the table is.
+ */
+export function dedupeSharedSections<T extends { category: string; content: string }>(docs: T[]): T[] {
+  const firstSeen = new Map<string, string>();
+  return docs.map((doc) => {
+    const kept: string[] = [];
+    const shared: string[] = [];
+    for (const section of doc.content.split(/(?=^#{2,3} )/m)) {
+      const heading = section.match(/^### (.+)\n/);
+      if (heading) {
+        const body = section.slice(heading[0].length).replace(/\s+/g, " ").trim();
+        const key = `${heading[1]}\u0000${body}`;
+        const owner = firstSeen.get(key);
+        if (body.length >= MIN_SHARED_SECTION_CHARS && owner && owner !== doc.category) {
+          shared.push(`${heading[1]} (\`${owner}\`)`);
+          continue;
+        }
+        if (!owner) firstSeen.set(key, doc.category);
+      }
+      kept.push(section);
+    }
+    let content = kept.join("").trimEnd();
+    if (shared.length > 0) {
+      content += `\n\nAlso returns these data points, documented on the page named in brackets: ${shared.join(", ")}.`;
+    }
+    return { ...doc, content: `${content}\n` };
+  });
+}
+
+/**
+ * Drop each `##`/`###` section whose heading is listed, with any deeper
+ * sections nested under it. Headings match case-insensitively.
+ */
+export function dropSections(text: string, headings: string[] | undefined): string {
+  if (!headings?.length) return text;
+  const drop = new Set(headings.map((h) => h.trim().toLowerCase()));
+  const kept: string[] = [];
+  let droppingLevel = 0;
+  let fenced = false;
+  for (const line of text.split("\n")) {
+    if (/^ {0,3}(`{3,}|~{3,})/.test(line)) fenced = !fenced;
+    const heading = fenced ? null : line.match(/^(#{2,3}) (.+?)\s*$/);
+    if (heading) {
+      const level = heading[1].length;
+      if (droppingLevel && level <= droppingLevel) droppingLevel = 0;
+      if (!droppingLevel && drop.has(heading[2].toLowerCase())) droppingLevel = level;
+    }
+    if (!droppingLevel) kept.push(line);
+  }
+  return kept.join("\n");
+}
+
+/**
+ * Crawl the pages listed by one or more llms.txt indexes, following nested
+ * indexes. Excluded categories are skipped before they are fetched, and
+ * excluded sections are dropped from the pages that are kept.
+ */
+export async function crawlLlmsIndexes(
+  indexUrls: string[],
+  excluded: string[] | undefined,
+  fetcher: (url: string) => Promise<string | null> = fetchText,
+  pauseMs = 250,
+  excludedSections?: string[]
+): Promise<CrawledDoc[]> {
+  const skip = new Set(excluded ?? []);
+  const pageUrls: string[] = [];
+  const queue = [...indexUrls];
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const indexUrl = queue.shift() as string;
+    if (visited.has(indexUrl)) continue;
+    visited.add(indexUrl);
+    const content = await fetcher(indexUrl);
+    if (!content) continue;
+    const { pages, indexes } = parseLlmsIndex(content, indexUrl);
+    pageUrls.push(...pages);
+    queue.push(...indexes);
+  }
+
+  const docs: CrawledDoc[] = [];
+  const categories = new Set<string>();
+  for (const pageUrl of [...new Set(pageUrls)]) {
+    if (docs.length >= LLMS_INDEX_MAX_PAGES) break;
+    const category = llmsPageCategory(pageUrl);
+    if (!category || skip.has(category) || categories.has(category)) continue;
+    if (pauseMs > 0) await new Promise((done) => setTimeout(done, pauseMs));
+    const markdown = await fetcher(pageUrl);
+    if (!markdown) continue;
+    const content = dropSections(cleanLlmsPage(markdown), excludedSections);
+    if (content.length < 100) continue;
+    categories.add(category);
+    docs.push({
+      category,
+      content,
+      source_url: pageUrl.replace(/\.md$/, ""),
+      source_type: "llms_txt",
+    });
+  }
+
+  return dedupeSharedSections(docs).map((doc) => ({
+    ...doc,
+    content: splitOversizedSections(doc.content),
+  }));
 }
 
 /**
@@ -719,6 +956,25 @@ async function main() {
 
   for (const [name, config] of Object.entries(targets)) {
     if (!config) continue;
+
+    if (config.llms_indexes?.length) {
+      console.log(`\n${name}: following ${config.llms_indexes.length} llms.txt index(es)`);
+      for (const url of config.llms_indexes) console.log(`  ${url}`);
+      if (discoverOnly) continue;
+      const docs = await crawlLlmsIndexes(
+        config.llms_indexes,
+        config.exclude_categories,
+        fetchText,
+        250,
+        config.exclude_sections
+      );
+      for (const doc of docs) {
+        writeCrawledDoc(name, doc, config.version);
+        console.log(`  wrote ${name}/${doc.category}.md (${doc.content.length} chars) [${doc.source_type}]`);
+      }
+      console.log(`  → ${docs.length} doc(s) written`);
+      continue;
+    }
 
     const sources: ProviderSource[] = config.sources
       .filter((s): s is { url: string; type: string; note?: string } => !!s.url)

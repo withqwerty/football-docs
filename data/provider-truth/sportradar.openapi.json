@@ -7,11 +7,18 @@
         "spec": "specs/sportradar/soccer-v4-openapi.yaml",
         "title": "Soccer v4",
         "version": "4.0.0"
+      },
+      {
+        "spec": "specs/sportradar/soccer-extended-v4-openapi.yaml",
+        "title": "Soccer Extended v4",
+        "version": "4.0.0"
       }
     ],
-    "generated_at": "2026-08-31"
+    "generated_at": "2026-09-24"
   },
   "basePaths": [
+    "/soccer-extended/production/v4",
+    "/soccer-extended/trial/v4",
     "/soccer/production/v4",
     "/soccer/trial/v4"
   ],
@@ -47,6 +54,9 @@
       "GET"
     ],
     "/{locale}/competitors/{urn_competitor}/versus/{urn_competitor2}/summaries": [
+      "GET"
+    ],
+    "/{locale}/fifa_rankings": [
       "GET"
     ],
     "/{locale}/players/mappings": [
@@ -89,6 +99,9 @@
       "GET"
     ],
     "/{locale}/seasons/{urn_season}/competitors": [
+      "GET"
+    ],
+    "/{locale}/seasons/{urn_season}/competitors/{urn_competitor}/extended_statistics": [
       "GET"
     ],
     "/{locale}/seasons/{urn_season}/competitors/{urn_competitor}/statistics": [
@@ -139,6 +152,9 @@
     "/{locale}/seasons/{urn_season}/transfers": [
       "GET"
     ],
+    "/{locale}/seasons/{urn_season}/venues": [
+      "GET"
+    ],
     "/{locale}/seasons_disabled": [
       "GET"
     ],
@@ -151,7 +167,16 @@
     "/{locale}/sport_events/updated": [
       "GET"
     ],
+    "/{locale}/sport_events/{urn_sport_event}/extended_summary": [
+      "GET"
+    ],
+    "/{locale}/sport_events/{urn_sport_event}/extended_timeline": [
+      "GET"
+    ],
     "/{locale}/sport_events/{urn_sport_event}/fun_facts": [
+      "GET"
+    ],
+    "/{locale}/sport_events/{urn_sport_event}/insights": [
       "GET"
     ],
     "/{locale}/sport_events/{urn_sport_event}/league_timeline": [
@@ -261,10 +286,14 @@
     "enum_weather_pitch_conditions",
     "event_player",
     "fact",
+    "fifa_ranking",
+    "fifa_ranking_competitor",
     "form_standing_competitor",
     "formation",
     "generic_event",
     "info",
+    "insight",
+    "insight_market",
     "internal_mapping",
     "jersey",
     "leader",
@@ -289,6 +318,7 @@
     "probability_market_two_three_way",
     "probability_outcome_two_three_way",
     "referee",
+    "related_id",
     "schedule",
     "season",
     "season_brackets_cup_round",
@@ -297,16 +327,19 @@
     "season_brackets_group",
     "season_brackets_stage",
     "season_competitor",
+    "season_competitor_extended_statistics",
     "season_competitor_players",
     "season_competitor_statistics",
     "season_extended",
     "season_form_standing",
     "season_form_standing_group",
     "season_player",
+    "season_player_extended_statistics",
     "season_player_statistics",
     "season_schedules",
     "season_stage",
     "season_stage_group",
+    "season_venue",
     "simple_season_stage_group",
     "simple_sport_event_status",
     "simple_team_mapping",
@@ -408,6 +441,7 @@
     "competitor",
     "competitor_id",
     "competitor_over_under_statistics",
+    "competitor_rankings",
     "competitors",
     "confirmed",
     "corner_kicks",
@@ -563,6 +597,7 @@
     "linked_cup_rounds",
     "live",
     "loaned_to_competitor_id",
+    "long_name",
     "long_passes_successful",
     "long_passes_total",
     "long_passes_unsuccessful",
@@ -586,6 +621,7 @@
     "minutes_played",
     "missing_players",
     "momentums",
+    "movement",
     "multiple_competitors",
     "name",
     "nationality",
@@ -598,6 +634,7 @@
     "other_season_id",
     "other_sport_event_id",
     "outcome",
+    "outcome_id",
     "outcomes",
     "over",
     "overall_conditions",
@@ -653,6 +690,7 @@
     "possessions_regained_in_opponent_half",
     "possessions_regained_in_own_half",
     "preferred_foot",
+    "previous_points",
     "probabilities",
     "probability",
     "qualification",
@@ -663,6 +701,8 @@
     "reduced_capacity",
     "reduced_capacity_max",
     "referees",
+    "related_ids",
+    "relevancy",
     "remaining_time",
     "remaining_time_in_period",
     "replaced_by",
@@ -877,6 +917,7 @@
       "saved"
     ],
     "enum_body_type": [
+      "chest",
       "head",
       "left_foot",
       "lower_body",

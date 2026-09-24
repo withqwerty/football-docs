@@ -15,7 +15,8 @@ anyone can re-fetch and diff.
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
 | `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-08-31 | 2026-08-31 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-08-31 | 2026-08-31 |
-| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-08-31 | 2026-08-31 |
+| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-09-24 | 2026-09-24 |
+| `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-09-24 | 2026-09-24 |
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-22 | 2026-09-22 |
 | `reep/release.json` | https://data.reep.football/releases/20260915T203651Z/release.json (via `latest.json`) | 2026-09-22 | 2026-09-22 |
 | `reep/schema.json` | https://data.reep.football/releases/20260915T203651Z/schema.json | 2026-09-22 | 2026-09-22 |
@@ -36,14 +37,17 @@ curl -sL -o specs/wyscout/v4-next.yml    https://apidocs.wyscout.com/assets/spec
 curl -sL -o specs/skillcorner/skillcorner_openapi.json https://www.skillcorner.com/apidocs.json
 curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
 curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
+curl -sL -o specs/sportradar/soccer-extended-v4-openapi.yaml https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml
 curl -sL -o specs/reep/openapi.yaml https://reep.football/openapi.yaml
 ```
 
-The Sportradar spec is the one the public Swagger UI at
-`https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html` loads; it is
-served unauthenticated from the trial host and describes Soccer v4 only. Sportradar's
-Soccer Extended, Probabilities and Push feeds are separate APIs with their own specs
-and are not covered here.
+The Sportradar specs are the ones the public Swagger UIs at
+`https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html` and
+`https://api.sportradar.com/soccer-extended/trial/v4/openapi/swagger/index.html` load;
+both are served unauthenticated from the trial host, and they merge into one truth
+file. The Probabilities spec
+(`https://api.sportradar.com/soccer-probabilities/trial/v4/openapi/openapi.yaml`) is
+left out on purpose: INCLUSION.md keeps betting content out of the index.
 
 Then regenerate the derived truth and re-run the tests:
 

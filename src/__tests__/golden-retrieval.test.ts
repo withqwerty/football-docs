@@ -1076,7 +1076,9 @@ describe("golden retrieval evals", () => {
       args: {
         query:
           "cumulative xG timeline shot flow score strip halftime guide full time guide goal markers sparse shots Understat Opta StatsBomb shot xG source model provider labels",
-        max_results: 12,
+        // 15, not 12: the Sportradar reference pages shifted term weights enough to
+        // move one xg-timelines section to 15th, with no new page above it.
+        max_results: 15,
       },
       expectedProvider: "free-sources",
       expected: [
@@ -1089,6 +1091,20 @@ describe("golden retrieval evals", () => {
         "Render the lines as steps",
         "do not increment score",
       ],
+    },
+    {
+      id: "sportradar-live-polling-feeds",
+      args: { query: "Sportradar live polling Live Timelines Delta Push Events", provider: "sportradar", max_results: 3 },
+      expected: ["Live Timelines Delta", "Push Events"],
+    },
+    {
+      id: "sportradar-extended-timeline-reference",
+      args: {
+        query: "Sportradar extended timeline pass coordinates destination_x",
+        provider: "sportradar",
+        max_results: 5,
+      },
+      expected: ["soccer-extended-sport-event-extended-timeline", "destination_x"],
     },
     {
       id: "statsbomb-data-provenance",
@@ -1166,7 +1182,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
-    expect(text).toContain("**sportradar** (32 chunks)");
+    expect(text).toContain("**sportradar** (480 chunks)");
     expect(text).toContain(
       "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
     );
@@ -1513,9 +1529,9 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("/livescores/inplay");
     expect(text).toContain("/livescores/latest");
     expect(text).toContain("## sportradar");
-    // Sportradar's live surface for a poller: the delta feed and push events.
-    expect(text).toContain("Live Timelines Delta");
-    expect(text).toContain("Push Events");
+    // Sportradar's reference pages answer "event status" with the status table;
+    // the polling feeds themselves are checked by sportradar-live-polling-feeds.
+    expect(text).toContain("Sport Event Status");
   });
 
   it("compares event-timeline game state with live-score providers", () => {
