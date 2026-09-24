@@ -1090,6 +1090,23 @@ describe("golden retrieval evals", () => {
         "do not increment score",
       ],
     },
+    {
+      id: "statsbomb-data-provenance",
+      args: { query: "where does StatsBomb get its data collected", max_results: 5 },
+      expectedProvider: "statsbomb",
+      expected: ["StatsBomb data sources", "**Category:** first-party", "expert collectors"],
+    },
+    {
+      id: "thesportsdb-data-provenance",
+      args: { query: "TheSportsDB data sources crowd-sourced", provider: "thesportsdb", max_results: 3 },
+      expected: ["TheSportsDB data sources", "crowd-sourced"],
+    },
+    {
+      id: "football-data-co-uk-data-provenance",
+      args: { query: "where does football-data.co.uk get its results", max_results: 5 },
+      expectedProvider: "free-sources",
+      expected: ["football-data.co.uk data sources", "XScores"],
+    },
   ])("answers $id from sourced docs", ({ args, expected, expectedProvider }) => {
     const result = searchDocs(db, args);
     const text = result.content[0].text;
@@ -1107,27 +1124,27 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
-    expect(text).toContain("**statsbomb** (235 chunks)");
+    expect(text).toContain("**statsbomb** (237 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
-    expect(text).toContain("**wyscout** (163 chunks)");
+    expect(text).toContain("**wyscout** (165 chunks)");
     expect(text).toContain("api-endpoints (13)");
     expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (565 chunks)");
+    expect(text).toContain("**sportmonks** (567 chunks)");
     expect(text).toContain("charting-season-stories (7)");
-    expect(text).toContain("**fmdb-pro** (35 chunks)");
+    expect(text).toContain("**fmdb-pro** (37 chunks)");
     expect(text).toContain("aliases: fmdb");
-    expect(text).toContain("**transferroom** (43 chunks)");
+    expect(text).toContain("**transferroom** (45 chunks)");
     expect(text).toContain("charting-availability (5)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (57 chunks)");
+    expect(text).toContain("**free-sources** (65 chunks)");
     expect(text).toContain("contextual-story-joins (8)");
     expect(text).toContain("xg-timelines (8)");
     expect(text).toContain(
       "aliases: fbref, football-reference, understat, clubelo, club-elo, football-data, football-data-uk, football-data-co-uk, engsoccerdata",
     );
-    expect(text).toContain("**opta** (71 chunks)");
+    expect(text).toContain("**opta** (73 chunks)");
     expect(text).toContain("charting-game-state (9)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("charting-passmaps (6)");
@@ -1137,7 +1154,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: statsperform, stats-perform, opta-f24, whoscored, who-scored");
     expect(text).toContain("**soccerdata** (40 chunks)");
     expect(text).toContain("aliases: soccer-data, sofascore, sofa-score");
-    expect(text).toContain("**espn** (20 chunks)");
+    expect(text).toContain("**espn** (21 chunks)");
     expect(text).toContain("aliases: espn-soccer, espn-fc");
     expect(text).toContain("**databallpy** (63 chunks)");
     expect(text).toContain(
@@ -1149,11 +1166,11 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
-    expect(text).toContain("**sportradar** (30 chunks)");
+    expect(text).toContain("**sportradar** (32 chunks)");
     expect(text).toContain(
       "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
     );
-    expect(text).toContain("**thesportsdb** (18 chunks)");
+    expect(text).toContain("**thesportsdb** (20 chunks)");
     expect(text).toContain("aliases: tsdb, the-sports-db, the-sportsdb, sportsdb");
     expect(text).toContain("api-endpoints");
   });

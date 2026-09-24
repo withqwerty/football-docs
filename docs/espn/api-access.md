@@ -62,3 +62,11 @@ not exist.
 
 Stop on access denial rather than trying to bypass it. An application that needs
 guaranteed availability needs a licensed data supplier.
+
+## ESPN data sources
+
+**Category:** not publicly documented.
+
+ESPN does not document where the data behind its public soccer endpoints comes
+from. Some ESPN editorial articles credit individual statistics to Opta, but
+that does not establish the source of the endpoint data. Checked 2026-09-24.

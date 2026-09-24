@@ -60,8 +60,12 @@ A provider states where its data comes from. Use one or more of these:
 | Aggregated | Collected from public sources such as websites, feeds or public datasets. |
 | Derived | Models or metrics built on one of the above. Name the input source. |
 
-Each provider's `api-access.md` has a short "Data sources" section that records
-this, so an agent can tell a user before they build on the data.
+Each provider records this in a short `data-provenance.md` in its docs folder,
+or in a "Data sources" section of its `api-access.md`, so an agent can tell a
+user before they build on the data. Use a separate file when the provider's
+other docs are crawled, so that the crawled pages stay verbatim. Open-source
+tooling that holds no data of its own, such as kloppy or mplsoccer, does not
+need one.
 
 We do not index a product whose main offer is resale or relicensing of
 third-party data when it does not disclose the source, or does not appear to
@@ -76,8 +80,8 @@ rights.
 
 Established commercial providers whose collection or licensing is widely known
 do not need to disclose their sources to be included. Examples are Opta,
-StatsBomb, Wyscout, Sportradar and SportMonks. Their "Data sources" section
-records what is publicly known, or says "not publicly documented". A maintainer
+StatsBomb, Wyscout, Sportradar and SportMonks. Their provenance notes record
+what is publicly known, or say "not publicly documented". A maintainer
 decides whether a provider is well known, and gives reasons in the issue.
 
 ## What the docs may say

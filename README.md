@@ -109,33 +109,33 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Provider | Chunks | Categories |
 |----------|--------|------------|
 | fast-forward | 250 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
-| StatsBomb | 235 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces |
+| StatsBomb | 237 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
-| Wyscout | 163 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces |
+| Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
-| SportMonks | 565 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces |
+| SportMonks | 567 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
-| Impect | 77 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces |
-| SkillCorner | 49 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces |
-| Free sources | 57 | overview, fbref, understat, contextual-story-joins, xg-timelines |
+| Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
+| SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| Free sources | 65 | overview, fbref, understat, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
-| TransferRoom | 43 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces |
-| Opta | 71 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces |
-| FMDB Pro | 35 | api-access, api-endpoints, data-model, identity-surfaces |
-| Sportradar | 30 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes |
+| TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
+| Opta | 73 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces, data-provenance |
+| FMDB Pro | 37 | api-access, api-endpoints, data-model, identity-surfaces, data-provenance |
+| Sportradar | 32 | api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
-| BeSoccer | 14 | api-access, api-endpoints |
-| Driblab | 30 | api-access, api-endpoints, data-model |
-| ESPN | 20 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
-| Reep | 26 | overview, identity-and-ids, download-duckdb-csv, api |
-| TheSportsDB | 18 | api-access, api-endpoints, livescore, identity-surfaces |
-| FotMob | 3 | identity-surfaces |
-| Soccerdonna | 3 | identity-surfaces |
-| Transfermarkt | 3 | identity-surfaces |
+| BeSoccer | 16 | api-access, api-endpoints, data-provenance |
+| Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
+| ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
+| Reep | 28 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
+| TheSportsDB | 20 | api-access, api-endpoints, livescore, identity-surfaces, data-provenance |
+| FotMob | 5 | identity-surfaces, data-provenance |
+| Soccerdonna | 5 | identity-surfaces, data-provenance |
+| Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,366 searchable chunks** across 26 providers and tools.
+**2,407 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
