@@ -13,7 +13,11 @@ One report from the checks that otherwise live in separate places:
 2. Spec snapshots. Every file listed in specs/README.md is fetched again from its
    public URL and compared with the copy in specs/. Reep's snapshots are left to
    check_reep_live.py, which knows how its release stamps work.
-3. Live checks. scripts/check_free_sources_live.py and scripts/check_reep_live.py.
+3. Derived truth. BeSoccer (a Postman collection) and Driblab (a Notion page)
+   publish no spec to mirror, so their truth files are regenerated from the
+   public source and compared with the committed ones, ignoring the `source`
+   block. The committed files are restored afterwards, byte for byte.
+4. Live checks. scripts/check_free_sources_live.py and scripts/check_reep_live.py.
 
 A finding is a list of things to review, not an error in itself: bump the pin,
 refresh the snapshot or fix the doc, then run the tests.
@@ -26,6 +30,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -114,6 +119,56 @@ def check_specs():
     return findings
 
 
+BESOCCER_COLLECTION = "https://documenter.gw.postman.com/api/collections/6414020/2s93JwM1t4"
+DRIBLAB_PAGE = "https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede"
+
+
+def compare_regenerated(label, truth_file, command):
+    """Run a truth generator, compare its output with the committed file, restore it."""
+    path = ROOT / "data" / "provider-truth" / truth_file
+    committed = path.read_bytes()
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, cwd=ROOT)
+        if result.returncode != 0:
+            detail = (result.stderr or result.stdout).strip().splitlines()[-1:]
+            print(f"  ??? {label}: generator failed ({' '.join(detail)})")
+            return [f"{label}: truth generator failed, check the source layout"]
+        fresh = json.loads(path.read_text())
+    finally:
+        path.write_bytes(committed)
+    old = json.loads(committed)
+    changed = sorted(k for k in set(old) | set(fresh) if k != "source" and old.get(k) != fresh.get(k))
+    print(f"  {'NEW' if changed else 'ok '} {label}" + (f": {', '.join(changed)} changed" if changed else ""))
+    if changed:
+        return [f"{label}: {', '.join(changed)} changed upstream (regenerate {truth_file}, then fix the docs)"]
+    return []
+
+
+def check_derived_truth():
+    print("\nDerived truth")
+    findings = []
+    with tempfile.TemporaryDirectory() as tmp:
+        collection = Path(tmp) / "besoccer.json"
+        try:
+            collection.write_bytes(fetch(BESOCCER_COLLECTION))
+        except Exception as error:  # noqa: BLE001
+            print(f"  ??? besoccer: could not fetch the collection ({error})")
+            findings.append(f"besoccer: collection fetch failed ({error})")
+        else:
+            findings += compare_regenerated(
+                "besoccer",
+                "besoccer.postman.json",
+                [sys.executable, "scripts/gen_postman_truth.py", str(collection), "--provider", "besoccer",
+                 "--dispatch-param", "req", "--group-prefix", "EN"],
+            )
+    findings += compare_regenerated(
+        "driblab",
+        "driblab.notion.json",
+        [sys.executable, "scripts/gen_notion_truth.py", DRIBLAB_PAGE, "--provider", "driblab"],
+    )
+    return findings
+
+
 def run_live_check(script):
     print(f"\n{script}")
     result = subprocess.run([sys.executable, str(ROOT / "scripts" / script)], capture_output=True, text=True)
@@ -123,7 +178,7 @@ def run_live_check(script):
 
 
 def main():
-    findings = check_packages() + check_specs()
+    findings = check_packages() + check_specs() + check_derived_truth()
     findings += run_live_check("check_free_sources_live.py")
     findings += run_live_check("check_reep_live.py")
     if findings:
