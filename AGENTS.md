@@ -36,7 +36,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `specs/` | Public vendor OpenAPI snapshots — see `specs/README.md` |
 | `data/docs.db` | SQLite FTS index (shipped with the package) |
 | `data/provider-truth/` | Generated ground truth for doc validation |
-| `providers.json` | Provider registry — doc sources, access level, crawl config, `exclude_categories` |
+| `providers.json` | Provider registry — doc sources, access level, crawl config, `exclude_categories`, `llms_indexes`, `exclude_sections` |
 | `server.json` | MCP registry manifest |
 
 ## Commands
@@ -58,6 +58,7 @@ pnpm ingest -- --provider kloppy      # incremental re-ingest
 pnpm provider:truth                   # regenerate package ground truth (python3.11)
 pnpm openapi:truth                    # regenerate spec-derived ground truth
 pnpm impect:truth                     # regenerate Impect open-data ground truth
+pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
 ```
 
 Node >= 20. Package manager is pnpm. Linter is Biome (not ESLint).
