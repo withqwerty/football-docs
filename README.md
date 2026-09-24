@@ -182,7 +182,8 @@ has changed since the snapshots; the refresh steps are in [specs/README.md](spec
 
 `pnpm check:upstream` runs every upstream check in one report: pinned package
 versions against PyPI, npm and GitHub, each spec snapshot against its public URL,
-and the free-source and Reep live checks below. It runs by hand, never in CI, and
+BeSoccer's and Driblab's truth regenerated from their Postman collection and Notion
+page, and the free-source and Reep live checks below. It runs by hand, never in CI, and
 lists what to review.
 
 Free sources have no spec, and they tend to fail quietly: a page still answers
