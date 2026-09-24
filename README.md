@@ -254,6 +254,11 @@ Each crawled doc carries provenance metadata (source URL, source type, upstream 
 `v*` tag and does the rest: it re-runs the full check suite, creates the GitHub
 Release, and publishes to npm.
 
+Before a release, run `pnpm check:upstream` (see "Documentation validation"). It
+reports any provider whose package, spec or live access path has moved since the
+docs were written, so a release does not ship docs that are already stale. Fix or
+note what it lists; a known, tracked failure (an open issue) need not block.
+
 ```bash
 # 1. Bump the version in package.json and server.json (three fields in total).
 #    Land it on main through a pull request, as `chore: release vX.Y.Z`.
