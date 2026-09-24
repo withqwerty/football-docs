@@ -17,4 +17,4 @@ or say where its scores, events and other statistics come from.
 
 Source: [FotMob statement on physical metrics](https://www.fotmob.com/en/topnews/22634-statement-physical-metrics-feature-outage):
 "after purchasing the official data and spending the summer building this
-feature". Checked 2026-09-24.
+feature" and "This affects all score providers, not just FotMob." Checked 2026-09-24.

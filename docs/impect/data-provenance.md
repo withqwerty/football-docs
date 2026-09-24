@@ -12,8 +12,7 @@ crawled_at: 2026-09-24
 **Category:** first-party.
 
 Impect, now part of Catapult, collects all of its data in-house, with its own
-collection team in the Philippines. Its metrics, such as packing, are computed
-from that data.
+collection team in the Philippines.
 
 The other docs in this folder are grounded in Impect's public open-data
 repository, github.com/ImpectAPI/open-data.

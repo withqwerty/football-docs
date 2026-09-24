@@ -12,7 +12,7 @@ crawled_at: 2026-09-24
 **Category:** aggregated (crowd-sourced).
 
 TheSportsDB is a crowd-sourced database: its users contribute and edit the
-data. Check important fields against another source.
+data.
 
 Source: [TheSportsDB](https://www.thesportsdb.com/): "An open, crowd-sourced
 database with a free sports API." Checked 2026-09-24.

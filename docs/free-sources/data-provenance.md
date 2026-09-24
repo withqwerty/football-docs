@@ -1,6 +1,6 @@
 ---
 source_type: curated
-source_url: https://football-data.co.uk/notes.txt
+source_url: null
 upstream_version: null
 crawled_at: 2026-09-24
 ---
