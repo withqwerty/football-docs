@@ -437,6 +437,21 @@
         { "type": "curated", "note": "Overview and access patterns for free data sources" }
       ],
       "last_crawled": null
+    },
+    "football-charts": {
+      "description": "Free JSON API and MCP server for 93 football leagues incl. lower divisions and women's leagues: results with half-time scores, first-goal minutes, fixtures, tables, goal-timing bins, team match-statistic averages and Dixon-Coles season projections",
+      "display_name": "Football Charts",
+      "aliases": ["footballcharts", "football-charts-com", "footballcharts-mcp"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API docs; keyless and free-key tiers cover the current and previous season, full history is a paid tier. Attribution required. Data sources disclosed in api-access.md.",
+      "public_safety_notes": "Football data only: the odds archive, betting-derived table fields and the prediction ledger are deliberately excluded. Written by the provider's maintainer (affiliation disclosed).",
+      "version": "v1",
+      "package": { "type": "npm", "name": "footballcharts-mcp" },
+      "sources": [
+        { "url": "https://www.football-charts.com/developers", "type": "curated", "note": "Hand-written by the provider's maintainer; endpoints and fields verified against live API responses on 2026-09-24" },
+        { "url": "https://footballcharts-backend.onrender.com/api/v1/", "type": "curated", "note": "Self-describing API index: auth, tiers, endpoint list" }
+      ],
+      "last_crawled": "2026-09-24"
     }
   }
 }
