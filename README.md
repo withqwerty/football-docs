@@ -131,11 +131,12 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
 | Reep | 28 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
 | TheSportsDB | 20 | api-access, api-endpoints, livescore, identity-surfaces, data-provenance |
+| Football Charts | 32 | api-access (incl. data sources), data-model, identity-surfaces |
 | FotMob | 5 | identity-surfaces, data-provenance |
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,407 searchable chunks** across 26 providers and tools.
+**2,439 searchable chunks** across 27 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
