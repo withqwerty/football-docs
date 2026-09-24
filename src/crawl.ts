@@ -8,6 +8,14 @@
  * paraphrase, summarise, or interpret. The content in the output files should
  * be directly traceable to the source URL.
  *
+ * One exception, for pages reached through an llms.txt index (llms_indexes):
+ * the crawler removes markup and bulk, and marks each removal in the text.
+ * It drops the OpenAPI definition ReadMe appends and SVG diagrams, cuts long
+ * example payloads with a note, replaces a data-point table repeated from an
+ * earlier page with a line naming that page, and repeats a heading with
+ * "(continued)" where it splits a long section. Every sentence that remains is
+ * the source's own.
+ *
  * Usage:
  *   npm run crawl                         # crawl all providers with sources
  *   npm run crawl -- --provider kloppy    # crawl one provider

@@ -524,8 +524,8 @@ export function getProviderDocs(
   const fallbackQuery = args.topic ? relaxedFtsQuery(args.topic) : undefined;
   let rows = providerDocsRows(db, provider, strictQuery, category, limit);
 
-  if (rows.length === 0 && fallbackQuery && fallbackQuery !== strictQuery) {
-    rows = providerDocsRows(db, provider, fallbackQuery, category, limit);
+  if (rows.length < limit && fallbackQuery && fallbackQuery !== strictQuery) {
+    rows = topUpRows(rows, providerDocsRows(db, provider, fallbackQuery, category, limit), limit);
   }
 
   if (rows.length === 0) {

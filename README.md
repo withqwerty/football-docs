@@ -230,7 +230,7 @@ Contributions are welcome from everyone. There are three ways to help:
 
 Provider doc sources are tracked in `providers.json`. The crawl pipeline discovers the best doc source (llms.txt > ReadTheDocs > GitHub README) and writes markdown with provenance frontmatter.
 
-Two registry fields narrow a crawl. `llms_indexes` lists llms.txt files that link to pages rather than contain them; the crawler follows those links (and nested indexes) to each page's markdown copy instead of running discovery. Sportradar uses it for its integration guide and Soccer Extended reference. `exclude_categories` skips whole pages, and `exclude_sections` drops named `##`/`###` sections from pages that are otherwise kept, for content INCLUSION.md keeps out, such as odds.
+Two registry fields narrow a crawl. `llms_indexes` lists llms.txt files that link to pages rather than contain them; the crawler follows those links (and nested indexes) to each page's markdown copy instead of running discovery. Sportradar uses it for its integration guide and Soccer Extended reference. `exclude_categories` skips whole pages, and `exclude_sections` drops named `##`/`###` sections from pages that are otherwise kept, for content INCLUSION.md keeps out, such as odds. Pages crawled through an index are not byte-for-byte copies: the crawler drops the OpenAPI definition ReadMe appends and SVG diagrams, cuts example payloads over 3 KB with a note, replaces a data-point table repeated from an earlier page with a line naming that page, and marks a split long section "(continued)". It adds no other text.
 
 ```bash
 npm run discover                        # probe sources without crawling
