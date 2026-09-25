@@ -81,8 +81,8 @@ Per-team per-season, both `for` and `against`:
 | `scored` / `missed` | Goals scored / conceded |
 | `xpts` | Expected points |
 | `npxGD` | Non-penalty xG difference |
-| `ppda_att` / `ppda_def` | PPDA components (pressing intensity) |
-| `oppda_att` / `oppda_def` | Opponent PPDA components |
+| `ppda.att` / `ppda.def` | PPDA components (pressing intensity) |
+| `ppda_allowed.att` / `ppda_allowed.def` | Opponent PPDA components |
 
 ## Access methods
 
@@ -98,57 +98,69 @@ player_stats = understat.read_player_season_stats()
 
 **Direct HTTP:**
 
-Understat serves data as JSONP embedded in HTML pages. Parse with regex or use the soccerdata wrapper.
+Understat pages now return a shell without the former embedded JSONP blobs. Fetch the
+AJAX endpoints instead. The `X-Requested-With` header is required; the browser headers
+below also make the request shape explicit. `requests` handles the compressed response.
+
+The season in a league or team path is the start year: `2026` means the 2026/27
+campaign.
 
 ```python
-import requests, re, json, codecs
+import requests
 
-def get_understat_data(url, var_name):
-    """Extract embedded JSON data from Understat page."""
-    html = requests.get(url).text
-    match = re.search(rf"var {var_name}\s*=\s*JSON\.parse\('(.+?)'\)", html)
-    if not match:
-        raise ValueError(f"Could not find {var_name} in page")
-    raw = match.group(1)
-    decoded = codecs.decode(raw, 'unicode_escape')
-    return json.loads(decoded)
+BASE = "https://understat.com/"
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+    "X-Requested-With": "XMLHttpRequest",
+    "Referer": BASE,
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+}
 
-# Match shots
-shots = get_understat_data("https://understat.com/match/12345", "shotsData")
-home_shots = shots["h"]
-away_shots = shots["a"]
+def get_understat_data(path):
+    response = requests.get(
+        f"{BASE}{path.lstrip('/')}", headers=HEADERS, timeout=30
+    )
+    response.raise_for_status()
+    return response.json()
 
-# Player shots
-player_shots = get_understat_data("https://understat.com/player/1250", "shotsData")
+# League data: teams, players and match dates
+league = get_understat_data("getLeagueData/Serie_A/2026")
 
-# Team match-by-match
-team_data = get_understat_data("https://understat.com/team/Liverpool/2024", "datesData")
+# Team match-by-match data and season statistics
+team = get_understat_data("getTeamData/AC_Milan/2025")
+
+# Match shots and rosters
+match = get_understat_data("getMatchData/12345")
+home_shots = match["shots"]["h"]
+away_shots = match["shots"]["a"]
+
+# Player profile, aggregates and shots
+player = get_understat_data("getPlayerData/1250")
+player_shots = player["shots"]
 ```
 
-### URL Patterns
+### URL Patterns and API Paths
 
-```
-# League:  https://understat.com/league/{league}/{season}
-#          league: EPL, La_Liga, Bundesliga, Serie_A, Ligue_1, RFPL
-#          season: start year (2024 for 2024/25)
-# Player:  https://understat.com/player/{player_id}
-# Team:    https://understat.com/team/{team_name}/{season}
-# Match:   https://understat.com/match/{match_id}
-```
+Use the page URL for a browser view and the corresponding API path for data access.
+Team names use Understat's slug (for example, `AC_Milan`).
 
-### Embedded Data Variables
-
-| Page | Variable | Content |
+| Page | Page URL | API path |
 |---|---|---|
-| League | `datesData` | Match-level team stats by date |
-| League | `teamsData` | Team aggregated stats |
-| League | `playersData` | Player aggregated stats |
-| Match | `shotsData` | Shot-level data (`h` and `a` keys) |
-| Match | `rostersData` | Player match stats |
-| Player | `shotsData` | All shots for that player |
-| Player | `groupsData` | Stats grouped by season/situation |
-| Team | `datesData` | Match-by-match team stats |
-| Team | `statisticsData` | Season aggregated stats |
+| League | `https://understat.com/league/{league}/{season}` | `getLeagueData/{league}/{season}` |
+| Player | `https://understat.com/player/{player_id}` | `getPlayerData/{player_id}` |
+| Team | `https://understat.com/team/{team_name}/{season}` | `getTeamData/{team_name}/{season}` |
+| Match | `https://understat.com/match/{match_id}` | `getMatchData/{match_id}` |
+
+`league` is one of `EPL`, `La_Liga`, `Bundesliga`, `Serie_A`, `Ligue_1` or `RFPL`.
+
+### API Response Keys
+
+| API path | Response keys |
+|---|---|
+| `getLeagueData/{league}/{season}` | `teams` (dict keyed by team ID, each with `id`, `title` and `history`), `players` (list), `dates` (list) |
+| `getTeamData/{team}/{season}` | `dates`, `players`, `statistics` (`situation`, `formation`, `gameState`, `timing`, `shotZone`, `attackSpeed`, `result`) |
+| `getMatchData/{match_id}` | `shots` (`h` and `a`), `rosters` (`h` and `a`), `tmpl` |
+| `getPlayerData/{player_id}` | `player`, `matches`, `groups`, `positionsList`, `minMaxPlayerStats`, `shots`, `lastMatch` |
 
 ## Coordinate System
 

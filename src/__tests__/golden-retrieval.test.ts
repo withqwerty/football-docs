@@ -1154,7 +1154,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("**transferroom** (45 chunks)");
     expect(text).toContain("charting-availability (5)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (65 chunks)");
+    expect(text).toContain("**free-sources** (60 chunks)");
     expect(text).toContain("contextual-story-joins (8)");
     expect(text).toContain("xg-timelines (8)");
     expect(text).toContain(
