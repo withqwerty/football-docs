@@ -403,6 +403,7 @@ Copy this into your PR description:
 - [ ] Code examples tested (or marked as untested)
 - [ ] No API keys or credentials included
 - [ ] `npm run ingest` runs successfully and shows expected chunk counts
+- [ ] Changed a free-source access recipe? Its check in `scripts/check_free_sources_live.py` is updated and passes
 - [ ] Each ## section makes sense if read independently (no "as mentioned above")
 
 ## Anything uncertain

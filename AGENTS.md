@@ -111,6 +111,11 @@ ID fields and access shape.
   so treat it as published.
 - `data/docs.db` ships with the npm package (see `files` in `package.json`) —
   rebuilding it with `pnpm ingest` changes what end users get on the next publish.
+  The tests check chunk counts, not chunk text, so a wrong index can still pass CI.
+  When a PR changes `data/docs.db`, rebuild it yourself and compare the rows.
+- When a doc in `docs/free-sources/` changes how to fetch the data, change its check
+  in `scripts/check_free_sources_live.py` in the same commit and run the script.
+  CI does not run it; `pnpm check:upstream` does, before a release.
 - `better-sqlite3` is in `onlyBuiltDependencies` — if install fails, check the native
   build toolchain.
 - Each Python ground-truth package needs its own venv; co-installing makes pip
