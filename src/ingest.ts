@@ -48,7 +48,10 @@ interface DocChunk {
 }
 
 /** Parse optional YAML frontmatter from a markdown file. */
-export function parseFrontmatter(text: string): { frontmatter: Frontmatter; body: string } {
+export function parseFrontmatter(raw: string): { frontmatter: Frontmatter; body: string } {
+  // A Windows checkout reads docs with CRLF endings. Left in, the \r stops the
+  // frontmatter matching and ends up inside every chunk in the shipped index.
+  const text = raw.replace(/\r\n?/g, "\n");
   const defaults: Frontmatter = {
     source_url: null,
     source_type: "curated",

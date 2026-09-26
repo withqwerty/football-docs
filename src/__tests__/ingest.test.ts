@@ -164,6 +164,28 @@ Content for section B is long enough to pass the threshold.`;
     }
   });
 
+  it("indexes a CRLF file exactly as its LF original", () => {
+    const text = `---
+source_url: https://example.com
+crawled_at: 2026-09-24
+---
+
+## Section A
+
+Content for section A is long enough to pass the threshold.
+
+## Section B
+
+Content for section B is long enough to pass the threshold.`;
+
+    const crlf = chunkMarkdown(text.replace(/\n/g, "\r\n"), "prov", "cat");
+    expect(crlf).toEqual(chunkMarkdown(text, "prov", "cat"));
+    expect(crlf[0].crawled_at).toBe("2026-09-24");
+    for (const chunk of crlf) {
+      expect(chunk.content).not.toContain("\r");
+    }
+  });
+
   it("defaults to curated when no frontmatter", () => {
     const text = "## Section\n\nContent that is long enough to be indexed by the chunker.";
     const chunks = chunkMarkdown(text, "prov", "cat");
