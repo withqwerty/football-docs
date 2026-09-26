@@ -69,12 +69,17 @@ Per-player per-season:
 | `xGChain` | xG chain (total xG of possessions player was involved in) |
 | `xGBuildup` | xG buildup (xG chain minus shots and key passes) |
 
-### Team Aggregated Stats
+### Team Match Stats
 
-Per-team per-season, both `for` and `against`:
+One entry per team per league match, in `teams[<team_id>].history` from
+`getLeagueData`. Each entry holds the team's values and its opponent's, not a
+season total; sum the entries to get season figures.
 
 | Field | Description |
 |---|---|
+| `date` / `h_a` | Kickoff time and venue (`h` home, `a` away) |
+| `result` | `w`, `d` or `l` |
+| `wins` / `draws` / `loses` / `pts` | This match only (`1`/`0` flags and points), not a running total |
 | `xG` / `xGA` | Expected goals for / against |
 | `npxG` / `npxGA` | Non-penalty xG for / against |
 | `deep` / `deep_allowed` | Deep completions (passes within 20m of goal) |
