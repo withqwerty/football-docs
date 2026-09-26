@@ -18,6 +18,7 @@ Exit status: 1 if any check fails, 0 if all pass.
 Standard library only. No keys are used.
 """
 
+import gzip
 import json
 import re
 import sys
@@ -35,7 +36,11 @@ def fetch(url, headers=None):
     request = urllib.request.Request(url, headers={**HEADERS, **(headers or {})})
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
-            return response.status, response.read()
+            body = response.read()
+            # Understat gzips its responses even when the request does not ask for it.
+            if response.headers.get("Content-Encoding") == "gzip":
+                body = gzip.decompress(body)
+            return response.status, body
     except urllib.error.HTTPError as error:
         return error.code, b""
     except (urllib.error.URLError, TimeoutError) as error:
@@ -47,8 +52,9 @@ def statsbomb_open_data(body):
     return bool(competitions) and "competition_id" in competitions[0]
 
 
-def understat_inline_json(body):
-    return re.search(rb"var shotsData\s*=\s*JSON\.parse\(", body) is not None
+def understat_match_shots(body):
+    shots = json.loads(body)["shots"]
+    return {"h", "a"} <= set(shots) and bool(shots["h"] or shots["a"])
 
 
 def clubelo_chart(fields):
@@ -84,10 +90,10 @@ CHECKS = [
     ),
     (
         "understat.md#access-methods",
-        "match page embeds shotsData as JSON.parse",
-        "https://understat.com/match/28000",
-        None,
-        understat_inline_json,
+        "getMatchData returns home and away shots",
+        "https://understat.com/getMatchData/28000",
+        {"X-Requested-With": "XMLHttpRequest"},
+        understat_match_shots,
     ),
     (
         "overview.md#clubelo",
