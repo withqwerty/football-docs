@@ -31,9 +31,8 @@ available, the separate expected-goals endpoint:
 | Continuous provider xG and xGOT | `matchexpectedgoals/{token}?fx={matchId}` | Use qualifiers `321` (`expectedGoals`) and `322` (`expectedGoalsOnTarget`) from this endpoint when present. |
 | Lineups and player labels | `matchstats/{token}?fx={matchId}` | Join by `playerId`; use `matchName`, position, and lineup fields for display. |
 
-Do not assume qualifier `213` supplies usable xG in the public Opta Analyst-style
-`matchevent` feed. It is defined in some F24 references, but this feed tier commonly
-populates xG as qualifier `321` on `matchexpectedgoals` instead.
+Do not read qualifier `213` as xG: it is the pass or clearance angle. The public
+Opta Analyst-style feed supplies xG as qualifier `321` on `matchexpectedgoals`.
 
 ## Provider-first xG service recipe
 
@@ -90,8 +89,8 @@ Implementation notes:
 | qualifier `82` | blocked shot |
 | qualifier `102` | `GoalMouthY`, horizontal endpoint across the goal mouth |
 | qualifier `103` | `GoalMouthZ`, vertical endpoint / height |
-| qualifier `146` | blocked/save X coordinate |
-| qualifier `147` | blocked/save Y coordinate |
+| qualifier `146` | X coordinate where the shot was blocked |
+| qualifier `147` | Y coordinate where the shot was blocked |
 
 When deriving a shot result, handle qualifier `82` before treating typeId `15` as
 a normal saved shot. Some serializers classify a shot as blocked from the qualifier
@@ -224,8 +223,8 @@ proxy, but label the result as a proxy rather than xG:
 | `18` | out-of-box centre |
 | `66`, `67`, `68`, `69` | out-of-box wide/deep zones |
 | `19`, `70`, `71` | thirty-five-plus / long-range zones |
-| `76` | big chance; usually exclude from low-xG placement-skill cuts |
-| `9`, `108` | penalty; exclude or analyse separately |
+| `214` | big chance; usually exclude from low-xG placement-skill cuts |
+| `9` | penalty; exclude or analyse separately |
 
 For a robust first pass, join continuous xG from `matchexpectedgoals` where possible.
 If you only have `matchevent`, a low-xG proxy can exclude small-box, big-chance, and
