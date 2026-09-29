@@ -91,7 +91,8 @@ many leagues. Advanced metrics covered 2017/18 to January 2026 only.
 >
 > On 29 September 2026 the site showed a Login link (`/login/`). The login page,
 > the club pages and the country pages all returned 503/504 hosting errors that
-> day, so registration could not be rechecked. The ranking page still answered.
+> day. Registration for the authenticated API was still closed on that date.
+> The ranking page still answered.
 
 **Access**: The website only. The pages are rendered on the server, with the data in the HTML. Each chart is a Vega-Lite spec assigned to a `vegaJson` variable in the page, with its rows under `datasets`. The spec can hold more than one dataset, and some are empty (on 29 September 2026 the ranking page's first dataset had no rows), so take the dataset that has rows rather than the first one.
 
