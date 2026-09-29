@@ -73,38 +73,76 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
-    # Only this job can write, and it runs no project code: it downloads the
-    # built files and calls gh.
+    # Only this job can write or sign, and it runs no project code: it downloads
+    # the built files and calls openssl, jq and gh. The signing key lives in the
+    # data-publish environment, whose deployment policy allows only main, so a
+    # workflow run from any other branch cannot sign.
+    environment: data-publish
     permissions:
       contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
       TAG: data-latest
+      # Must match a key in src/data-signing.ts (a test checks this).
+      DATA_SIGNING_PUBLIC_KEY: 1FjljvdILY3mrvrUeK4FqO8KbyYL4iDbTO0nIoNJuO8=
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: data-release
           path: data-release
 
+      - name: Sign the manifest
+        env:
+          DATA_SIGNING_KEY: ${{ secrets.DATA_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          cd data-release
+          PAYLOAD="$(ls manifest-v*.json)"
+          SIGNED="${PAYLOAD%.json}-signed.json"
+          FILE="$(jq -r .file "$PAYLOAD")"
+
+          # The manifest must describe the file next to it.
+          [ "$(sha256sum "$FILE" | cut -d' ' -f1)" = "$(jq -r .sha256 "$PAYLOAD")" ] || { echo "::error::${FILE} does not match the manifest's sha256"; exit 1; }
+          [ "$(stat -c %s "$FILE")" = "$(jq -r .size "$PAYLOAD")" ] || { echo "::error::${FILE} does not match the manifest's size"; exit 1; }
+
+          umask 077
+          KEY="$RUNNER_TEMP/signing-key.pem"
+          printf '%s\n' "$DATA_SIGNING_KEY" > "$KEY"
+          openssl pkeyutl -sign -rawin -inkey "$KEY" -in "$PAYLOAD" -out signature.bin
+          rm -f "$KEY"
+
+          # Verify with the public key servers ship, so a wrong or damaged secret
+          # fails here instead of publishing a manifest no server accepts.
+          { printf '302a300506032b6570032100' | xxd -r -p; printf '%s' "$DATA_SIGNING_PUBLIC_KEY" | base64 -d; } > public.der
+          openssl pkey -pubin -inform DER -in public.der -out public.pem
+          openssl pkeyutl -verify -rawin -pubin -inkey public.pem -in "$PAYLOAD" -sigfile signature.bin
+
+          KEY_ID="$(printf '%s' "$DATA_SIGNING_PUBLIC_KEY" | base64 -d | sha256sum | cut -c1-16)"
+          jq -n --rawfile payload "$PAYLOAD" --arg signature "$(base64 -w0 signature.bin)" --arg key_id "$KEY_ID" \
+            '{payload: $payload, signature: $signature, key_id: $key_id}' > "$SIGNED"
+          rm -f signature.bin public.der public.pem
+          echo "Signed ${PAYLOAD} with key ${KEY_ID}."
+
       - name: Publish to the data-latest release
         run: |
           set -euo pipefail
           cd data-release
-          MANIFEST="$(ls manifest-v*.json)"
-          FILE="$(jq -r .file "$MANIFEST")"
-          STAMP="$(jq -r .data_stamp "$MANIFEST")"
+          PAYLOAD="$(ls manifest-v*.json | grep -v -- '-signed.json$')"
+          SIGNED="${PAYLOAD%.json}-signed.json"
+          FILE="$(jq -r .file "$PAYLOAD")"
+          STAMP="$(jq -r .data_stamp "$PAYLOAD")"
 
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" --prerelease --latest=false --target "$GITHUB_SHA" \
               --title "Docs index (rolling)" \
-              --notes "Docs index builds published by .github/workflows/data.yml. Installed football-docs servers read ${MANIFEST} from here once a day. Not a package release."
+              --notes "Docs index builds published by .github/workflows/data.yml. Installed football-docs servers read the signed ${SIGNED} from here once a day. Not a package release."
           fi
 
           # Never move the manifest backwards: a manual run on an older ref, or a
           # delayed run, must not replace a newer published build.
-          if gh release download "$TAG" --pattern "$MANIFEST" --output current-manifest.json 2>/dev/null; then
-            CURRENT="$(jq -r .data_stamp current-manifest.json)"
+          if gh release download "$TAG" --pattern "$SIGNED" --output current-signed.json 2>/dev/null; then
+            CURRENT="$(jq -r .payload current-signed.json | jq -r .data_stamp)"
             if [ "$(date -d "$CURRENT" +%s)" -ge "$(date -d "$STAMP" +%s)" ]; then
               echo "::notice::data-latest already has ${CURRENT}; not publishing ${STAMP}."
               exit 0
@@ -116,7 +154,13 @@ jobs:
             gh release upload "$TAG" "$FILE"
           fi
           # The manifest goes last, so it never names a file that is not there.
-          gh release upload "$TAG" "$MANIFEST" --clobber
+          gh release upload "$TAG" "$SIGNED" --clobber
+
+          # Servers read only the signed manifest. Remove the unsigned one that
+          # 0.13.0 read, so nothing unsigned is ever served from here.
+          if grep -qx "$PAYLOAD" <<<"$ASSETS"; then
+            gh release delete-asset "$TAG" "$PAYLOAD" --yes
+          fi
 
           # Keep the new file and the one before it; a client that read the old
           # manifest just before this run can still download what it names.
@@ -124,4 +168,4 @@ jobs:
             | grep -E '^docs-[0-9]+\.db$' | sort -t- -k2 -n -r | tail -n +3 \
             | while read -r OLD; do gh release delete-asset "$TAG" "$OLD" --yes; done
 
-          echo "Published ${FILE} (${STAMP})."
+          echo "Published ${FILE} (${STAMP}) with ${SIGNED}."
