@@ -101,8 +101,11 @@ version. Once a day at most, the server checks the
 [`data-latest`](https://github.com/withqwerty/football-docs/releases/tag/data-latest)
 release of this repository for a newer index built from `main`:
 
-- It reads a small manifest (`manifest-v1.json`) and, only when that names a
-  newer build, downloads the index (about 6 MB).
+- It reads a small signed manifest (`manifest-v1-signed.json`) and, only when that
+  names a newer build, downloads the index (about 6 MB).
+- It accepts the manifest only if its ed25519 signature verifies against a public
+  key shipped in the package (`src/data-signing.ts`). The manifest carries the
+  index's size and SHA-256, so the signature covers the index too.
 - It checks the download's size and SHA-256, its SQLite integrity, its exact
   schema and its metadata before using it, and keeps the one it had on any failure.
 - It stores downloads in `$XDG_DATA_HOME/football-docs/data/` (by default
@@ -294,6 +297,21 @@ about a day, including servers that have been running for days (they check again
 every six hours, at most once a day). Merging a doc PR is therefore also shipping it; there is no later step at
 which to stop it. To undo a bad doc change, revert it on `main`, which publishes a
 newer build.
+
+**What the signature guarantees.** The publish job signs the manifest with a key
+held only in the `data-publish` environment, whose deployment policy allows only
+`main`. A manifest that verifies was therefore produced by `data.yml` running on
+`main`. Replacing release assets by hand, or from a workflow on another branch,
+cannot produce one. It does **not** mean anyone reviewed the change: `main`
+accepts a PR with no approvals, so anyone who can merge to `main` can still ship
+data. Requiring approvals on `main`, or required reviewers on the `data-publish`
+environment (which makes every doc publish wait for a person), would close that
+too.
+
+**Rotating the key:** generate a new ed25519 pair, add its public key to
+`TRUSTED_KEYS` in `src/data-signing.ts`, release, then replace the
+`DATA_SIGNING_KEY` environment secret and `DATA_SIGNING_PUBLIC_KEY` in `data.yml`.
+Drop the old key in a later release. A lost private key is handled the same way.
 
 The index carries its own metadata (`meta` table, `src/data-format.ts`): a schema
 version, the oldest server version that can read it, the build stamp and the

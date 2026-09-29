@@ -27,6 +27,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/data-format.ts` | Index schema, `meta` table, validation, `DATA_SCHEMA_VERSION` and `MIN_SERVER_VERSION` |
 | `src/data-source.ts` | Chooses the index to open: bundled, downloaded or pinned |
 | `src/data-update.ts` | Daily background check for a newer index on the `data-latest` release |
+| `src/data-signing.ts` | Trusted ed25519 keys and manifest signature checks |
 | `src/crawl.ts` | Crawl pipeline (llms.txt > ReadTheDocs > GitHub README discovery) |
 | `src/ingest.ts` | Rebuilds `data/docs.db` FTS index from `docs/` markdown |
 | `src/discover.ts` | Source probing without crawling |
@@ -115,6 +116,8 @@ ID fields and access shape.
 - **Merging a change to `docs/` or `providers.json` ships it.** `data.yml` publishes
   the rebuilt index to the `data-latest` release, and installed servers use it
   within about a day, with no npm release. Treat a doc PR's merge as its release.
+  The manifest is signed with a key only `main` can use; servers never read an
+  unsigned one. Never print, commit or move the `DATA_SIGNING_KEY` secret.
 - `data/docs.db` ships with the npm package (see `files` in `package.json`) —
   rebuilding it with `pnpm ingest` changes what end users get on the next publish.
   Commit it rebuilt: a test checks that its `meta.providers_json` matches

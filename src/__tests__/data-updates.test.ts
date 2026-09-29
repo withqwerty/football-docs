@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, generateKeyPairSync, type KeyObject, sign } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -13,6 +13,7 @@ import {
   validateDatabase,
   writeMeta,
 } from "../data-format.js";
+import { keyIdFor, TRUSTED_KEYS, type TrustedKey, verifySignedManifest } from "../data-signing.js";
 import { cachedFileName, cleanDataDir, dataModeFor, IndexChooser, selectDatabase } from "../data-source.js";
 import { checkForUpdate, MANIFEST_NAME } from "../data-update.js";
 import { listProviders, resolveProviderId } from "../tools.js";
@@ -60,6 +61,59 @@ function buildDb(path: string, options: BuildOptions): string {
 }
 
 const ms = (iso: string) => Date.parse(iso);
+
+function testKey(): { privateKey: KeyObject; trusted: TrustedKey } {
+  const { privateKey, publicKey } = generateKeyPairSync("ed25519");
+  const raw = (publicKey.export({ format: "der", type: "spki" }) as Buffer).subarray(-32).toString("base64");
+  return { privateKey, trusted: { id: keyIdFor(raw), publicKey: raw } };
+}
+
+function signEnvelope(payload: string, key: { privateKey: KeyObject; trusted: TrustedKey }) {
+  return {
+    payload,
+    signature: sign(null, Buffer.from(payload, "utf-8"), key.privateKey).toString("base64"),
+    key_id: key.trusted.id,
+  };
+}
+
+describe("manifest signatures", () => {
+  const key = testKey();
+
+  it("returns the exact payload of a validly signed manifest", () => {
+    const payload = '{"file": "docs-1.db"}\n';
+    expect(verifySignedManifest(signEnvelope(payload, key), [key.trusted])).toBe(payload);
+  });
+
+  it("rejects a changed payload", () => {
+    const signed = signEnvelope('{"size":1}', key);
+    expect(() => verifySignedManifest({ ...signed, payload: '{"size":2}' }, [key.trusted])).toThrow(/does not verify/);
+  });
+
+  it("rejects a signature from another key under a trusted key id", () => {
+    const other = testKey();
+    const forged = { ...signEnvelope("{}", other), key_id: key.trusted.id };
+    expect(() => verifySignedManifest(forged, [key.trusted])).toThrow(/does not verify/);
+  });
+
+  it("rejects an unknown key id and a malformed envelope", () => {
+    expect(() => verifySignedManifest(signEnvelope("{}", testKey()), [key.trusted])).toThrow(/unknown key/);
+    expect(() => verifySignedManifest({ payload: "{}" }, [key.trusted])).toThrow(/malformed/);
+  });
+
+  it("signs in CI with a key the package trusts", () => {
+    const workflow = readFileSync(resolve(ROOT, ".github", "workflows", "data.yml"), "utf-8");
+    const match = /DATA_SIGNING_PUBLIC_KEY: (\S+)/.exec(workflow);
+    expect(TRUSTED_KEYS.map((trusted) => trusted.publicKey)).toContain(match?.[1]);
+  });
+
+  it("ships trusted keys whose ids match their public keys", () => {
+    expect(TRUSTED_KEYS.length).toBeGreaterThan(0);
+    for (const trusted of TRUSTED_KEYS) {
+      expect(Buffer.from(trusted.publicKey, "base64")).toHaveLength(32);
+      expect(keyIdFor(trusted.publicKey)).toBe(trusted.id);
+    }
+  });
+});
 
 describe("data format", () => {
   it("compares versions numerically", () => {
@@ -265,13 +319,22 @@ describe("checking for updates", () => {
   let requests: string[];
   let logs: string[];
 
+  const signer = testKey();
+  const trustedKeys = [signer.trusted];
+  let envelope: (() => unknown) | undefined;
+
   const fakeFetch = (overrides: { manifestStatus?: number; body?: Buffer; throwOn?: string } = {}) =>
     (async (input: string | URL | Request) => {
       const url = String(input);
       requests.push(url);
       if (overrides.throwOn && url.endsWith(overrides.throwOn)) throw new TypeError("fetch failed");
       if (url.endsWith(MANIFEST_NAME)) {
-        return new Response(JSON.stringify(manifest), { status: overrides.manifestStatus ?? 200 });
+        const body = envelope ? envelope() : signEnvelope(JSON.stringify(manifest), signer);
+        return new Response(JSON.stringify(body), { status: overrides.manifestStatus ?? 200 });
+      }
+      if (url.endsWith(".json")) {
+        // The unsigned manifest older servers read: never requested by this server.
+        return new Response(JSON.stringify(manifest), { status: 200 });
       }
       return new Response(overrides.body ?? file, { status: 200 });
     }) as typeof fetch;
@@ -286,6 +349,7 @@ describe("checking for updates", () => {
       fetch: fakeFetch(overrides),
       now: () => ms("2026-09-29T12:00:00Z"),
       log: (message) => logs.push(message),
+      trustedKeys,
       ...extra,
     });
 
@@ -304,6 +368,7 @@ describe("checking for updates", () => {
     };
     requests = [];
     logs = [];
+    envelope = undefined;
   });
 
   const installed = () => readdirSync(dataDir).filter((name) => name.startsWith("docs-"));
@@ -388,6 +453,36 @@ describe("checking for updates", () => {
     const result = await run();
     expect(result).toMatchObject({ outcome: "rejected", detail });
     expect(requests).toHaveLength(1);
+  });
+
+  it("rejects a manifest signed with a key the server does not trust, and downloads nothing", async () => {
+    const stranger = testKey();
+    envelope = () => signEnvelope(JSON.stringify(manifest), stranger);
+    const result = await run();
+    expect(result).toMatchObject({ outcome: "rejected" });
+    expect(result.detail).toContain("unknown key");
+    expect(requests).toHaveLength(1);
+    expect(checked()).toBe(true);
+  });
+
+  it("rejects a manifest whose payload was changed after signing", async () => {
+    const signed = signEnvelope(JSON.stringify(manifest), signer);
+    envelope = () => ({ ...signed, payload: JSON.stringify({ ...manifest, sha256: "0".repeat(64) }) });
+    const result = await run();
+    expect(result.detail).toContain("does not verify");
+    expect(requests).toHaveLength(1);
+  });
+
+  it("never falls back to the unsigned manifest when the signed one is missing", async () => {
+    const result = await run({ manifestStatus: 404 });
+    expect(result.outcome).toBe("not-published");
+    expect(requests).toEqual([`${BASE}${MANIFEST_NAME}`]);
+    expect(installed()).toEqual([]);
+  });
+
+  it("uses the shipped keys by default, so a test-signed manifest is rejected", async () => {
+    const result = await run({}, { trustedKeys: undefined });
+    expect(result.detail).toContain("unknown key");
   });
 
   it("refuses a non-HTTPS base URL", async () => {

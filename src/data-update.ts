@@ -17,10 +17,16 @@ import { open } from "node:fs/promises";
 import { join } from "node:path";
 import { z } from "zod";
 import { compareVersions, DATA_SCHEMA_VERSION, validateDatabase } from "./data-format.js";
+import { SignatureError, TRUSTED_KEYS, type TrustedKey, verifySignedManifest } from "./data-signing.js";
 import { cachedFileName } from "./data-source.js";
 
 export const DEFAULT_DATA_BASE_URL = "https://github.com/withqwerty/football-docs/releases/download/data-latest/";
-export const MANIFEST_NAME = `manifest-v${DATA_SCHEMA_VERSION}.json`;
+/**
+ * The signed manifest servers read. Its payload is the manifest-v<schema>.json
+ * that data.yml builds; the unsigned file is not published, and a server never
+ * falls back to it, so deleting the signed file cannot downgrade the check.
+ */
+export const MANIFEST_NAME = `manifest-v${DATA_SCHEMA_VERSION}-signed.json`;
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const MANIFEST_TIMEOUT_MS = 10_000;
@@ -59,6 +65,8 @@ export interface UpdateOptions {
   now?: () => number;
   signal?: AbortSignal;
   maxBytes?: number;
+  /** Keys that may sign manifests; defaults to the keys shipped in the package. */
+  trustedKeys?: readonly TrustedKey[];
   log?: (message: string) => void;
 }
 
@@ -113,7 +121,12 @@ function requireHttps(url: string): void {
 class NotPublished extends Error {}
 class Rejected extends Error {}
 
-async function fetchManifest(fetchImpl: typeof fetch, url: string, parent?: AbortSignal): Promise<Manifest> {
+async function fetchManifest(
+  fetchImpl: typeof fetch,
+  url: string,
+  keys: readonly TrustedKey[],
+  parent?: AbortSignal,
+): Promise<Manifest> {
   requireHttps(url);
   const timeout = timeoutSignal(MANIFEST_TIMEOUT_MS, parent);
   try {
@@ -121,7 +134,9 @@ async function fetchManifest(fetchImpl: typeof fetch, url: string, parent?: Abor
     if (response.url) requireHttps(response.url);
     if (response.status === 404) throw new NotPublished(`no ${MANIFEST_NAME} published`);
     if (!response.ok) throw new Error(`manifest request returned HTTP ${response.status}`);
-    return manifestSchema.parse(await response.json());
+    // Verify the signature over the exact signed text before parsing any of it.
+    const payload = verifySignedManifest(await response.json(), keys);
+    return manifestSchema.parse(JSON.parse(payload));
   } finally {
     timeout.done();
   }
@@ -200,7 +215,12 @@ export async function checkForUpdate(options: UpdateOptions): Promise<UpdateResu
 
   let manifest: Manifest;
   try {
-    manifest = await fetchManifest(fetchImpl, new URL(MANIFEST_NAME, base).toString(), options.signal);
+    manifest = await fetchManifest(
+      fetchImpl,
+      new URL(MANIFEST_NAME, base).toString(),
+      options.trustedKeys ?? TRUSTED_KEYS,
+      options.signal,
+    );
   } catch (error) {
     if (error instanceof NotPublished) {
       recordCheck(options.dataDir, now());
@@ -208,7 +228,12 @@ export async function checkForUpdate(options: UpdateOptions): Promise<UpdateResu
     }
     const detail = error instanceof Error ? error.message : String(error);
     // A malformed manifest is a completed check; a network failure is not.
-    if (error instanceof z.ZodError) {
+    if (error instanceof SignatureError) {
+      recordCheck(options.dataDir, now());
+      log(`football-docs: data manifest rejected: ${detail}`);
+      return { outcome: "rejected", detail };
+    }
+    if (error instanceof z.ZodError || error instanceof SyntaxError) {
       recordCheck(options.dataDir, now());
       log(`football-docs: data manifest rejected: ${detail}`);
       return { outcome: "rejected", detail: "malformed manifest" };
