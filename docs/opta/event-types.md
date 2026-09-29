@@ -1,6 +1,9 @@
 # Opta Event Types (F24 Specification)
 
 Opta's event stream uses numeric `typeId` values on each event. Source: F24 Appendix 1.
+The IDs and names are checked against Stats Perform's event type table for the
+MA36 feed (August 2025), and against the Opta type lists in socceraction 1.5.3
+(`socceraction.data.opta.loader`) and kloppy 3.19 (`statsperform` deserializer).
 
 ## Event Type Reference
 
@@ -24,16 +27,18 @@ Opta's event stream uses numeric `typeId` values on each event. Source: F24 Appe
 | 17 | Card | ~4 | always 1 | Yellow/second yellow/red via qualifiers |
 | 18 | Player off | ~9 | always 1 | Substituted off |
 | 19 | Player on | ~1 | always 1 | Substituted on |
-| 27 | Start delay | ~3 | always 1 | Kick-off / restart |
-| 28 | End delay | ~3 | always 1 | Period end |
-| 30 | End | ~6 | always 1 | Match end event |
-| 32 | Ball recovery | ~4 | always 1 | Gathering loose ball |
+| 20 | Player retired | — | — | Player leaves the pitch |
+| 21 | Player returns | — | — | Player comes back on after leaving the pitch |
+| 27 | Start delay | ~3 | always 1 | Play stops for a delay. With qualifier 364, a VAR review |
+| 28 | End delay | ~3 | always 1 | The delay ends and play restarts |
+| 30 | End | ~6 | always 1 | End of a period. kloppy reads the period end time from it |
+| 32 | Start | — | — | Start of a period. kloppy reads the period start time from it |
 | 34 | Team set up | ~2 | always 1 | Formation/lineup event |
-| 37 | Half end | ~2 | always 1 | Half-time |
-| 40 | Blocked pass | ~4 | always 1 | Player blocks opponent pass |
-| 41 | Player retired | ~1 | always 1 | Player leaves match |
-| 42 | Player returns | <1 | always 1 | Player returns (injury) |
-| 43 | Formation change | varies | always 1 | In-game formation change |
+| 37 | Collection end | — | — | |
+| 40 | Formation change | — | — | In-game formation change |
+| 41 | Punch | — | — | GK punches the ball |
+| 42 | Good skill | — | — | |
+| 43 | Deleted event | — | — | Opta removed this event. Drop it before analysis; kloppy does |
 | 44 | Aerial | ~60 | 0=lost, 1=won | Aerial duel |
 | 45 | Challenge | ~15 | always 0 | Unsuccessful tackle attempt |
 | 49 | Ball recovery | ~80 | always 1 | Player gathers loose ball |
@@ -45,8 +50,10 @@ Opta's event stream uses numeric `typeId` values on each event. Source: F24 Appe
 | 59 | Keeper sweeper | ~5 | always 1 | GK comes off line to clear/claim |
 | 61 | Ball touch | ~3 | always 1 | Bad touch / loss of control |
 | 67 | 50/50 | ~2 | 0=lost, 1=won | Two players contest loose ball |
-| 74 | Blocked pass | ~10 | always 1 | Alternative blocked pass type |
+| 74 | Blocked pass | ~10 | always 1 | Player blocks an opponent's pass |
 | 83 | Attempted tackle | ~15 | always 0 | Unsuccessful tackle |
+
+A dash means the per-match average or outcome has not been checked for that type.
 
 ## Shot Events
 
@@ -82,7 +89,7 @@ PPDA, pass maps, dead-time, or game-state timelines.
 | `duplicate_events` | event id or scoped fingerprint | De-duplicate exact repeats before state machines; keep a duplicate count in `quality_flags`. |
 | `paired_events` | typeId `4` fouls, typeId `5` outs, duel events, `relatedEventId` where available | Validate expected pairs or links, but do not fabricate the missing side. |
 | `scoreline_consistency` | typeId `16` goals, qualifier `8`, qualifier `28`, final score | Reconstruct valid goals and compare with the final score. Flag mismatches rather than forcing the event stream to agree. |
-| `lineup_state` | typeIds `18`, `19`, `34`, `43`, qualifiers `130`, `131`, `145` | Check that substitutions and formation changes do not create impossible on-pitch player states. |
+| `lineup_state` | typeIds `18`, `19`, `20`, `21`, `34`, `40`, qualifiers `130`, `131`, `145` | Check that substitutions and formation changes do not create impossible on-pitch player states. |
 | `coordinate_bounds` | event `x`/`y`, pass end qualifiers `140`/`141`, goal-mouth qualifiers `102`/`103` | Validate against the field-specific coordinate scale before calculating derived metrics. |
 | `raw_vs_corrected` | raw event row plus validation output | Store validation flags and any corrected interpretation separately from raw provider facts. |
 

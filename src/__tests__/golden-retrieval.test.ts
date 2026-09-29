@@ -113,6 +113,24 @@ describe("golden retrieval evals", () => {
       expected: ["364", "typeId 27 + Q364", "typeId 28 + Q364"],
     },
     {
+      // These six rows once carried the names of other types. The IDs match
+      // socceraction's and kloppy's Opta type lists.
+      id: "opta-period-and-admin-event-types",
+      args: {
+        query: "Opta event typeId start collection end formation change punch good skill deleted event",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: [
+        "| 32 | Start |",
+        "| 37 | Collection end |",
+        "| 40 | Formation change |",
+        "| 41 | Punch |",
+        "| 42 | Good skill |",
+        "| 43 | Deleted event |",
+      ],
+    },
+    {
       id: "opta-penalty-qualifier-variants",
       args: {
         query: "Opta penalty qualifier 9 108 penalty shot foul awarded",
