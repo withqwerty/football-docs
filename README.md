@@ -290,7 +290,8 @@ A merge to `main` that touches `docs/` or `providers.json` runs
 `.github/workflows/data.yml`, which rebuilds the index, runs the tests against it,
 checks that the **published** server can use it (`scripts/check-data-compat.mjs`),
 and publishes it to the `data-latest` release. Installed servers pick it up within
-a day. Merging a doc PR is therefore also shipping it; there is no later step at
+about a day, including servers that have been running for days (they check again
+every six hours, at most once a day). Merging a doc PR is therefore also shipping it; there is no later step at
 which to stop it. To undo a bad doc change, revert it on `main`, which publishes a
 newer build.
 
