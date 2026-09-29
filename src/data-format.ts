@@ -168,12 +168,22 @@ export function writeMeta(db: Database.Database, input: MetaInput): void {
 
 type SchemaRow = { type: string; name: string; tbl_name: string; sql: string | null };
 
+/** FTS5's internal tables. Their SQL is written by SQLite, not by us. */
+const FTS_SHADOW_TABLE = /^docs_fts_(data|idx|content|docsize|config)$/;
+
+/**
+ * The schema as comparable rows. The objects SCHEMA_SQL defines are compared
+ * exactly; the FTS5 shadow tables by name and type only, because users' installs
+ * may build a different SQLite whose FTS5 writes their SQL differently.
+ */
 function schemaRows(db: Database.Database): SchemaRow[] {
   return (
     db
       .prepare("SELECT type, name, tbl_name, sql FROM sqlite_master ORDER BY type, name")
       .all() as SchemaRow[]
-  ).filter((row) => row.name !== "sqlite_sequence");
+  )
+    .filter((row) => row.name !== "sqlite_sequence")
+    .map((row) => (FTS_SHADOW_TABLE.test(row.name) ? { ...row, sql: null } : row));
 }
 
 let referenceSchema: string | undefined;

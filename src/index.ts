@@ -19,13 +19,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import Database from "better-sqlite3";
 import { z } from "zod";
 import { hardenConnection } from "./data-format.js";
-import {
-  cleanDataDir,
-  type DataSelection,
-  dataModeFor,
-  defaultDataDir,
-  selectDatabase,
-} from "./data-source.js";
+import { cleanDataDir, dataModeFor, defaultDataDir, IndexChooser } from "./data-source.js";
 import { checkForUpdate } from "./data-update.js";
 import { ENTITY_TYPES } from "./reep.js";
 import {
@@ -61,27 +55,21 @@ function logToStderr(message: string): void {
   process.stderr.write(`${message}\n`);
 }
 
-let activeSelection: DataSelection | undefined;
+const chooser = new IndexChooser({
+  bundledPath: BUNDLED_DB_PATH,
+  dataDir: DATA_DIR,
+  serverVersion: PKG_VERSION,
+  mode: DATA_MODE,
+  pinnedPath: process.env.FOOTBALL_DOCS_DB_PATH?.trim() || undefined,
+  log: logToStderr,
+});
 
-function currentSelection(): DataSelection {
-  activeSelection ??= selectDatabase({
-    bundledPath: BUNDLED_DB_PATH,
-    dataDir: DATA_DIR,
-    serverVersion: PKG_VERSION,
-    mode: DATA_MODE,
-    pinnedPath: process.env.FOOTBALL_DOCS_DB_PATH?.trim() || undefined,
-    log: logToStderr,
-  });
-  return activeSelection;
+function currentSelection() {
+  return chooser.current();
 }
 
 export function openDb(): Database.Database {
-  let path = currentSelection().path;
-  if (!existsSync(path)) {
-    // Another process may have cleaned up the file this one chose; choose again.
-    activeSelection = undefined;
-    path = currentSelection().path;
-  }
+  const path = currentSelection().path;
   if (!existsSync(path)) {
     throw new Error(
       `Docs database not found at ${path}. Run 'npm run ingest' first to build the index.`,
@@ -304,25 +292,35 @@ async function updateDataInBackground(signal: AbortSignal): Promise<void> {
   if (DATA_MODE !== "auto" || process.env.FOOTBALL_DOCS_DB_PATH) return;
   const selection = currentSelection();
   cleanDataDir(DATA_DIR, selection.meta?.stampMs ?? null);
-  const result = await checkForUpdate({
+  // A file this installs is picked up by the chooser on the next tool call.
+  await checkForUpdate({
     dataDir: DATA_DIR,
     serverVersion: PKG_VERSION,
     currentStampMs: selection.meta?.stampMs ?? null,
     signal,
     log: logToStderr,
   });
-  if (result.outcome === "installed") activeSelection = undefined;
 }
+
+/** Servers can run for days; check again periodically. state.json still limits it to once a day. */
+const RECHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 export async function main() {
   const transport = new StdioServerTransport();
   await createFootballDocsServer().connect(transport);
 
   const updates = new AbortController();
-  process.stdin.once("close", () => updates.abort());
-  updateDataInBackground(updates.signal).catch((error) => {
-    logToStderr(`football-docs: docs update check failed: ${error instanceof Error ? error.message : String(error)}`);
+  const runCheck = () =>
+    updateDataInBackground(updates.signal).catch((error) => {
+      logToStderr(`football-docs: docs update check failed: ${error instanceof Error ? error.message : String(error)}`);
+    });
+  const timer = setInterval(runCheck, RECHECK_INTERVAL_MS);
+  timer.unref();
+  process.stdin.once("close", () => {
+    clearInterval(timer);
+    updates.abort();
   });
+  void runCheck();
 }
 
 const isDirectRun = process.argv[1]

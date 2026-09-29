@@ -13,7 +13,7 @@ import {
   validateDatabase,
   writeMeta,
 } from "../data-format.js";
-import { cachedFileName, cleanDataDir, dataModeFor, selectDatabase } from "../data-source.js";
+import { cachedFileName, cleanDataDir, dataModeFor, IndexChooser, selectDatabase } from "../data-source.js";
 import { checkForUpdate, MANIFEST_NAME } from "../data-update.js";
 import { listProviders, resolveProviderId } from "../tools.js";
 
@@ -198,6 +198,32 @@ describe("choosing the index", () => {
     expect(choose({ pinnedPath: pinned })).toMatchObject({ path: pinned, source: "pinned" });
     const bad = buildDb(join(dir, "pinned-bad.db"), { stamp: "2026-09-01T00:00:00Z", schemaVersion: "9" });
     expect(() => choose({ pinnedPath: bad })).toThrow(/cannot be used/);
+  });
+
+  it("picks up a newer file added after the first choice, as another server's download", () => {
+    const chooser = new IndexChooser({ bundledPath: bundled, dataDir, serverVersion: SERVER, mode: "auto" });
+    expect(chooser.current().source).toBe("bundled");
+    const newer = cache("2026-09-25T00:00:00Z");
+    expect(chooser.current().path).toBe(newer);
+    const newest = cache("2026-09-27T00:00:00Z");
+    expect(chooser.current().path).toBe(newest);
+  });
+
+  it("chooses again when the chosen file disappears", () => {
+    const older = cache("2026-09-25T00:00:00Z");
+    const newer = cache("2026-09-27T00:00:00Z");
+    const chooser = new IndexChooser({ bundledPath: bundled, dataDir, serverVersion: SERVER, mode: "auto" });
+    expect(chooser.current().path).toBe(newer);
+    rmSync(newer);
+    expect(chooser.current().path).toBe(older);
+  });
+
+  it("does not validate an unusable newer file on every call", () => {
+    const chooser = new IndexChooser({ bundledPath: bundled, dataDir, serverVersion: SERVER, mode: "auto" });
+    cache("2026-09-28T00:00:00Z", { schemaVersion: "2" });
+    const first = chooser.current();
+    expect(first.source).toBe("bundled");
+    expect(chooser.current()).toBe(first);
   });
 
   it("defaults to bundled mode in a git checkout and auto mode in an installed package", () => {

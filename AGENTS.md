@@ -114,7 +114,7 @@ ID fields and access shape.
   so treat it as published.
 - **Merging a change to `docs/` or `providers.json` ships it.** `data.yml` publishes
   the rebuilt index to the `data-latest` release, and installed servers use it
-  within a day, with no npm release. Treat a doc PR's merge as its release.
+  within about a day, with no npm release. Treat a doc PR's merge as its release.
 - `data/docs.db` ships with the npm package (see `files` in `package.json`) —
   rebuilding it with `pnpm ingest` changes what end users get on the next publish.
   Commit it rebuilt: a test checks that its `meta.providers_json` matches

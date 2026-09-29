@@ -106,6 +106,40 @@ export function selectDatabase(options: DataSourceOptions): DataSelection {
   return bundledSelection;
 }
 
+/** The newest stamp among downloaded files, or null. Cheap: one directory listing. */
+export function newestCachedStamp(dataDir: string): number | null {
+  const [newest] = cachedFiles(dataDir);
+  return newest ? newest.stampMs : null;
+}
+
+/**
+ * Holds the chosen index for a long-running server and chooses again when
+ * needed: when the chosen file has gone (another process cleaned it up), or when
+ * a newer downloaded file appears. The server may run for days, and another
+ * server process sharing the data directory may be the one that downloads the
+ * newer file, so this checks the directory on each call rather than waiting for
+ * its own update check.
+ */
+export class IndexChooser {
+  private selection: DataSelection | undefined;
+  private newestSeen = Number.NEGATIVE_INFINITY;
+
+  constructor(private readonly options: DataSourceOptions) {}
+
+  current(): DataSelection {
+    if (this.options.mode === "auto" && !this.options.pinnedPath) {
+      const newest = newestCachedStamp(this.options.dataDir);
+      if (newest !== null && newest > this.newestSeen) {
+        this.newestSeen = newest;
+        this.selection = undefined;
+      }
+    }
+    if (this.selection && !existsSync(this.selection.path)) this.selection = undefined;
+    this.selection ??= selectDatabase(this.options);
+    return this.selection;
+  }
+}
+
 function removeWithSideFiles(path: string): void {
   for (const suffix of SIDE_FILES) {
     rmSync(`${path}${suffix}`, { force: true });
