@@ -2,7 +2,7 @@
 source_url: https://reep.football/id-policy
 source_type: curated
 upstream_version: null
-crawled_at: 2026-09-22
+crawled_at: 2026-09-29
 ---
 
 # Reep IDs, bridges and redirects
@@ -45,20 +45,23 @@ overlap, for instance). A wrong namespace matches nothing, silently.
 | `skillcorner` | `player` | `team` | `match`, `competition`, `competition_edition` |
 | `opta` | `person` | `team` | `match`, `competition`, `season`, `stage` |
 | `wyscout` | `player` | `team` | `match`, `competition`, `season`, `round`, `coach` |
-| `transfermarkt` | `spieler` | `verein` | `spiel`, `wettbewerb`, `saison`, `trainer`, `schiedsrichter` |
+| `transfermarkt` | `spieler` | `verein` | `spiel`, `wettbewerb`, `saison`, `trainer`, `schiedsrichter`, `match`, `season`, `stage` |
 | `statsbomb` | `offline_player` | `offline_team` | — |
 | `sportmonks` | `player` | `team` | — |
-| `fotmob` | `person` | `team` | — |
+| `fotmob` | `person` | `team` | `match`, `competition`, `league_instance`, `league_season`, `stage` |
 | `api_football` | `player` | `team` | `match`, `competition`, `season`, `coach` |
 
 The full list is `SELECT DISTINCT provider, namespace FROM bridges` in the
 download. External IDs are text: cast
 numeric columns before joining. Opta carries both its 25-character IDs
-(`person`, `team`) and numeric forms (`person_numeric`, `team_numeric`).
+(`person`, `team`) and numeric forms (`person_numeric`, `team_numeric`,
+`competition_numeric`). The namespaces above were checked against the 2026-09-26
+release.
 
 A few entities hold two IDs from one provider, for example after the provider
 reissued an ID. Aggregate with `string_agg` rather than `max` so that neither is
-dropped. Source: [get-started guide](https://reep.football/get-started).
+dropped. Since the 2026-09-26 release, `upstream_status` marks the retired one of
+such a pair (see the download doc). Source: [get-started guide](https://reep.football/get-started).
 
 ## Provider roles
 

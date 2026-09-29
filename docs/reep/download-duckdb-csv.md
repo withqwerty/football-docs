@@ -1,8 +1,8 @@
 ---
-source_url: https://reep.football/downloads
+source_url: https://reep.football/data/
 source_type: curated
 upstream_version: null
-crawled_at: 2026-09-22
+crawled_at: 2026-09-29
 ---
 
 # Reep download: DuckDB and CSV
@@ -29,7 +29,9 @@ Tables available as CSV: `bridges`, `entities`, `relationships`, `matches`,
 `stages`, `observed_clubs`, `redirects`, `coverage`, and the Wikidata overlay
 tables `overlay_xids`, `overlay_aliases` and `overlay_links`.
 
-Source: [downloads](https://reep.football/downloads).
+Source: [downloads](https://reep.football/data/). The old page address,
+https://reep.football/downloads, redirects there; the `/downloads/duckdb` and
+`/downloads/csv/<table>` links above still work.
 
 ## Keeping a local copy current
 
@@ -50,13 +52,32 @@ before any bulk matching job.
 
 | Table | Columns | What it is |
 |---|---|---|
-| `bridges` | `provider, namespace, external_id, reep_id, rung` | The crosswalk: one row per provider ID. `rung` says how the bridge was corroborated. |
+| `bridges` | `provider, namespace, external_id, reep_id, rung, upstream_status` | The crosswalk: one row per provider ID. `rung` says how the bridge was corroborated; `upstream_status` says whether the provider still uses the ID. |
 | `entities` | `reep_id, entity_type, status, label, gender, country, …` | One row per identity. |
 | `aliases` | `reep_id, alias, kind, rank, language` | Alternate and historical names. |
 | `redirects` | `from_id, to_id, reason` | IDs retired by a merge, pointing at the survivor. |
 
 The DuckDB file is self-describing: `SHOW TABLES;` and `DESCRIBE bridges;`.
 Source: [get-started guide](https://reep.football/get-started).
+
+### Live and retired provider IDs
+
+`upstream_status` was added to `bridges` in the 2026-09-26 release, at the end of
+the column list, so code that reads the first five columns by position is
+unaffected. It is empty for an ID the provider still uses. In that release:
+
+| Value | Rows | Meaning |
+|---|---|---|
+| empty | 7,932,209 | live provider ID |
+| `retired` | 330 | the provider retired this ID in favour of another; the same Reep ID also has a live bridge to that provider |
+| `removed` | 210 | the provider's own list no longer includes the ID (all SkillCorner in this release) |
+
+Reep's published schema note describes the empty and `retired` values. Look up
+by any ID, retired ones included, so that old stored IDs still resolve. When you
+map *to* a provider, keep only live rows, or a retired ID can come back next to
+the live one. The examples below do this with
+`coalesce(b.upstream_status, '') = ''`, which works whether the empty value
+arrives as NULL or as an empty string.
 
 ## Map one provider's ID to another's
 
@@ -71,6 +92,7 @@ JOIN entities e USING (reep_id)
 LEFT JOIN bridges b
        ON b.reep_id = e.reep_id
       AND b.provider = 'skillcorner' AND b.namespace = 'player'
+      AND coalesce(b.upstream_status, '') = ''
 WHERE a.provider = 'wyscout' AND a.namespace = 'player'
   AND a.external_id = '379209';
 -- → rp1b829f1d3468c4 · Declan Rice · skillcorner 12174
@@ -94,6 +116,7 @@ LEFT JOIN entities e USING (reep_id)
 LEFT JOIN bridges b
        ON b.reep_id = e.reep_id
       AND (b.provider, b.namespace) IN (('skillcorner', 'player'), ('opta', 'person'))
+      AND coalesce(b.upstream_status, '') = ''
 GROUP BY ALL;
 ```
 
@@ -111,6 +134,7 @@ COPY (
     SELECT b.reep_id, e.label, b.provider || '_' || b.namespace AS id_column, b.external_id
     FROM bridges b JOIN entities e USING (reep_id)
     WHERE e.entity_type = 'team'
+      AND coalesce(b.upstream_status, '') = ''
   )
   ON id_column USING string_agg(DISTINCT external_id, '|')
   GROUP BY reep_id, label

@@ -18,7 +18,7 @@ info:
     ## Authentication
     Pass a manually issued partner key as `Authorization: Bearer <key>`.
     Public bulk access is through stamped releases at
-    <https://reep.football/downloads>; preview API access is described at
+    <https://reep.football/data/>; preview API access is described at
     <https://reep.football/partners>.
     Metadata endpoints (`/meta`, `/providers`, `/provider-notices/summary`) do not
     consume quota; entity and resolve calls cost one lookup each.
@@ -39,7 +39,7 @@ info:
     email: getintouch@withqwerty.com
   license:
     name: Open Reep data — CC0 for Reep-held rights; see release terms
-    url: https://reep.football/downloads
+    url: https://reep.football/data/
 
 servers:
   - url: https://reep.football/api/v1

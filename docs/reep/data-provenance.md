@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://reep.football/coverage
 upstream_version: null
-crawled_at: 2026-09-24
+crawled_at: 2026-09-29
 ---
 
 # Reep data provenance
@@ -25,4 +25,4 @@ The public release is dedicated to the public domain under CC0 1.0. CC0 covers
 only rights Reep holds and grants no rights in third-party source material.
 
 Sources: [coverage](https://reep.football/coverage),
-[downloads and licence](https://reep.football/downloads). Checked 2026-09-24.
+[downloads and licence](https://reep.football/data/). Checked 2026-09-29.

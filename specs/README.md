@@ -17,9 +17,9 @@ anyone can re-fetch and diff.
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-09-24 | 2026-09-24 |
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-09-29 | 2026-09-29 |
 | `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-09-29 | 2026-09-29 |
-| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-22 | 2026-09-22 |
-| `reep/release.json` | https://data.reep.football/releases/20260915T203651Z/release.json (via `latest.json`) | 2026-09-22 | 2026-09-22 |
-| `reep/schema.json` | https://data.reep.football/releases/20260915T203651Z/schema.json | 2026-09-22 | 2026-09-22 |
+| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-29 | 2026-09-29 |
+| `reep/release.json` | https://data.reep.football/releases/20260926T145536Z/release.json (via `latest.json`) | 2026-09-29 | 2026-09-29 |
+| `reep/schema.json` | https://data.reep.football/releases/20260926T145536Z/schema.json | 2026-09-29 | 2026-09-29 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every

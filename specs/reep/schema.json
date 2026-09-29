@@ -17,9 +17,10 @@
         "namespace",
         "external_id",
         "reep_id",
-        "rung"
+        "rung",
+        "upstream_status"
       ],
-      "note": "Namespace-scoped provider bridge table; evidence remains private. rung (WIT-2667) is the one thing about that evidence the register does publish: which KIND of agreement attached this id \u2014 name and nationality, name and date of birth, a dated footprint, the provider's own published cross-reference, an operator's verification, or a third-party mapping table (crosswalk, the weakest). It lets a consumer choose which rungs to trust rather than taking the table whole. An EMPTY cell means the register records no rung for that bridge \u2014 it is never a guess, and never a claim that the bridge is weak: the register's own mint path attaches bridges without an attach rule, so most rows are empty today. Appended at the end of the column list, so a consumer reading the first four columns positionally is unaffected.",
+      "note": "Namespace-scoped provider bridge table; evidence remains private. rung (WIT-2667) is the one thing about that evidence the register does publish: which KIND of agreement attached this id \u2014 name and nationality, name and date of birth, a dated footprint, the provider's own published cross-reference, an operator's verification, or a third-party mapping table (crosswalk, the weakest). It lets a consumer choose which rungs to trust rather than taking the table whole. An EMPTY cell means the register records no rung for that bridge \u2014 it is never a guess, and never a claim that the bridge is weak: the register's own mint path attaches bridges without an attach rule, so most rows are empty today. upstream_status (WIT-2735) is EMPTY for a live id, or 'retired' where an operator `rule-same --retired` ruling records that the provider itself retired that id in favour of a surviving one \u2014 never inferred from mirror absence, which is unfetched, not retired, by rule. A retired row always has a kept partner: the same reep_id also carries another live bridge to the same provider (invariant B2). Appended at the end of the column list, so a consumer reading the first four (or five) columns positionally is unaffected.",
       "schema": "schemas/bridges.schema.json"
     },
     "csv/coaches.csv.gz": {
@@ -161,7 +162,7 @@
         "to_id",
         "reason"
       ],
-      "note": "Identity redirect ledger flattened by the internal export, plus the de-corroboration tombstones (WIT-2435). reason=merged carries a live to_id (the survivor); reason=de_corroborated carries an EMPTY to_id \u2014 the id was emitted by the prior published release and this cut no longer admits it, because its corroboration fell below the wall. A published id must stay resolvable, and a single-bucket entity must never read as a corroborated register member; the tombstone says where the id went without presenting it as census content. Column order is stable, so a consumer reading from_id/to_id positionally is unaffected.",
+      "note": "Identity redirect ledger flattened by the internal export, plus the de-corroboration tombstones (WIT-2435). reason=merged carries a live to_id (the survivor); reason=de_corroborated carries an EMPTY to_id \u2014 the id was emitted by the prior published release and this cut no longer admits it, because its corroboration fell below the wall; reason=withheld carries an EMPTY to_id too \u2014 a live, corroborated id a publication rule (named teams, season horizon) keeps out of this cut. A published id must stay resolvable, and a single-bucket entity must never read as a corroborated register member; the tombstone says where the id went without presenting it as census content. Column order is stable, so a consumer reading from_id/to_id positionally is unaffected.",
       "schema": "schemas/redirects.schema.json"
     },
     "csv/referees.csv.gz": {
