@@ -2,7 +2,7 @@
 source_url: https://reep.football/get-started
 source_type: curated
 upstream_version: null
-crawled_at: 2026-09-22
+crawled_at: 2026-09-29
 ---
 
 # Reep register overview
@@ -81,7 +81,7 @@ provider bridges, names and aliases, but no career history, squad membership or
 appearance data. Published relationships are structural only: competition,
 season, stage and match, and which teams take part in which competition-seasons.
 
-Sources: [downloads and licence](https://reep.football/downloads),
+Sources: [downloads and licence](https://reep.football/data/),
 [API reference](https://reep.football/docs).
 
 ## Releases and corrections
