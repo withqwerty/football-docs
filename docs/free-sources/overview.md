@@ -88,12 +88,16 @@ many leagues. Advanced metrics covered 2017/18 to January 2026 only.
 > `http://api.clubelo.com/{YYYY-MM-DD}` as CSV, now returns 502. The API has moved
 > behind authentication, and registration is not open yet. Anything that uses the
 > old endpoints, including the `soccerdata` ClubElo reader, no longer works.
+>
+> On 29 September 2026 the site showed a Login link (`/login/`). The login page,
+> the club pages and the country pages all returned 503/504 hosting errors that
+> day, so registration could not be rechecked. The ranking page still answered.
 
-**Access**: The website only. The pages are rendered on the server, with the data in the HTML. Each chart is a Vega-Lite spec assigned to a `vegaJson` variable in the page, with its rows under `datasets`.
+**Access**: The website only. The pages are rendered on the server, with the data in the HTML. Each chart is a Vega-Lite spec assigned to a `vegaJson` variable in the page, with its rows under `datasets`. The spec can hold more than one dataset, and some are empty (on 29 September 2026 the ranking page's first dataset had no rows), so take the dataset that has rows rather than the first one.
 
 | Page | Chart dataset fields | Range |
 |---|---|---|
-| `https://clubelo.com/` | `Name`, `Elo`, `Golo`, `Level`, `Federation`, `FedURL`, `TLC` (top 50 clubs) | Current |
+| `https://clubelo.com/` | `Name`, `Elo`, `Golo`, `Level`, `Federation`, `FedURL`, `TLC`, plus chart styling fields (top 50 clubs) | Current |
 | `https://clubelo.com/{club}` (e.g. `/Bayern`, `/Liverpool`) | `Date`, `Elo`, `Golo`, `segment_id` (one row per match) | About four years (from late 2022) |
 
 The pages also carry HTML tables of recent and upcoming matches, with Elo win probabilities and rating changes per game. Club slugs are the site's own (`AstonVilla`, `AustriaWien`); take them from the links on the ranking page.
@@ -105,7 +109,7 @@ def clubelo_history(club):
     """Rows from the rating chart on a ClubElo club page."""
     html = requests.get(f"https://clubelo.com/{club}", timeout=30).text
     spec = json.loads(re.search(r"var vegaJson = (\{.*?\});\s*\n", html, re.S).group(1))
-    return next(iter(spec["datasets"].values()))
+    return next(rows for rows in spec["datasets"].values() if rows)
 
 rows = clubelo_history("Bayern")   # [{"Date": "2022-09-30T00:00:00", "Elo": ..., "Golo": ..., "segment_id": 0}, ...]
 ```
