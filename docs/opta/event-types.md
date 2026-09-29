@@ -1,7 +1,8 @@
 # Opta Event Types (F24 Specification)
 
 Opta's event stream uses numeric `typeId` values on each event. Source: F24 Appendix 1.
-The IDs and names are checked against the Opta type lists in socceraction 1.5.3
+The IDs and names are checked against Stats Perform's event type table for the
+MA36 feed (August 2025), and against the Opta type lists in socceraction 1.5.3
 (`socceraction.data.opta.loader`) and kloppy 3.19 (`statsperform` deserializer).
 
 ## Event Type Reference
@@ -33,9 +34,8 @@ The IDs and names are checked against the Opta type lists in socceraction 1.5.3
 | 30 | End | ~6 | always 1 | End of a period. kloppy reads the period end time from it |
 | 32 | Start | — | — | Start of a period. kloppy reads the period start time from it |
 | 34 | Team set up | ~2 | always 1 | Formation/lineup event |
-| 35 | Player changed position | — | — | |
 | 37 | Collection end | — | — | |
-| 40 | Formation change | — | — | In-game formation change. Player position changes are typeId 35 |
+| 40 | Formation change | — | — | In-game formation change |
 | 41 | Punch | — | — | GK punches the ball |
 | 42 | Good skill | — | — | |
 | 43 | Deleted event | — | — | Opta removed this event. Drop it before analysis; kloppy does |
