@@ -1219,7 +1219,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");
-    expect(text).toContain("**sportradar** (480 chunks)");
+    expect(text).toContain("**sportradar** (481 chunks)");
     expect(text).toContain(
       "aliases: sport-radar, sportradar-api, soccer-extended, sportradar-soccer",
     );

@@ -37,6 +37,20 @@ Important checks:
 - whether probabilities are part of the subscription;
 - whether live timelines and push feeds are supported for the competition.
 
+## Stage phase and phase_type
+
+A season's stages carry `phase`, a coarse stage name such as `regular season`.
+Several distinct stages share the same `phase` value: Apertura, Clausura and a
+group stage can all arrive as `regular season`.
+
+The OpenAPI specs (Soccer v4 and Soccer Extended v4, checked 2026-09-29) add
+`phase_type` to the stage object. It is an enumerated, more granular stage type,
+for example `apertura`, `clausura`, `group_stage`, `knockout_stage` or
+`regular_season`. `phase` is unchanged for backward compatibility. Use `type`
+plus `phase_type` as the key for a stage within a season, and fall back to
+`phase` when `phase_type` is absent. The prose endpoint pages do not list
+`phase_type` yet.
+
 ## Coordinates
 
 Timeline event coordinates use a 0-100 pitch frame.

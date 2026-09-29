@@ -2758,6 +2758,64 @@ components:
       xml:
         attribute: true
         name: PhaseEnum
+    enum_phase_type:
+      description: |
+        Canonical, granular stage type. More specific than `phase`, which is kept unchanged for backward compatibility: `phase_type` disambiguates stages that would otherwise collapse to the same `phase` value (for example `apertura`, `clausura` and `group_stage`, which are all served as `regular season` in `phase`). Together with `type`, `phase_type` forms a stable, meaningful key that is unique across the stages of a season.
+      enum:
+      - 1st_part_of_season_1st_leg
+      - 2nd_part_of_season_2nd_leg
+      - 3rd_round
+      - apertura
+      - champions_round
+      - clausura
+      - conference
+      - division
+      - final_eight
+      - final_four
+      - final_phase
+      - final_round
+      - final_stage
+      - grand_final
+      - grand_finals
+      - group_phase_1
+      - group_phase_2
+      - group_stage
+      - knockout_stage
+      - main_round_1
+      - main_round_2
+      - none
+      - placement_matches
+      - placement_matches_13_to_16
+      - placement_matches_5_to_8
+      - placement_matches_9_to_12
+      - placement_matches_9_to_16
+      - playoffs
+      - playout
+      - pre-season
+      - preliminary_round
+      - president_cup
+      - promotion_playoffs
+      - promotion_round
+      - qualification
+      - qualification_playoffs
+      - qualification_to_allsvenskan
+      - regular_season
+      - relegation_playoffs
+      - relegation_promotion
+      - relegation_promotion_round
+      - relegation_round
+      - stage_1
+      - stage_1_no_stats
+      - stage_1_playoff
+      - stage_2
+      - stage_2_no_stats
+      - stage_2_placement_matches
+      - stage_3
+      - uefa_europa_league_playoffs
+      type: string
+      xml:
+        attribute: true
+        name: PhaseTypeEnum
     enum_player_role_type:
       enum:
       - player
@@ -7045,6 +7103,8 @@ components:
             attribute: true
         phase:
           $ref: '#/components/schemas/enum_phase'
+        phase_type:
+          $ref: '#/components/schemas/enum_phase_type'
         start_date:
           format: date
           type: string
