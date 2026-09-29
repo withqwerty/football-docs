@@ -8509,7 +8509,7 @@
         "/players/": {
             "get": {
                 "operationId": "players_list",
-                "description": "Strip the staff-only player attributes from the payload, and hide their filters.",
+                "description": "Serve the staff-only player attributes to staff, and hide their filters from everyone else.",
                 "parameters": [
                     {
                         "in": "query",
@@ -8620,7 +8620,7 @@
         "/players/{player_id}/": {
             "get": {
                 "operationId": "players_retrieve",
-                "description": "Strip the staff-only player attributes from the payload, and hide their filters.",
+                "description": "Serve the staff-only player attributes to staff, and hide their filters from everyone else.",
                 "parameters": [
                     {
                         "in": "path",

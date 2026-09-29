@@ -124,7 +124,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
 | Opta | 73 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces, data-provenance |
 | FMDB Pro | 37 | api-access, api-endpoints, data-model, identity-surfaces, data-provenance |
-| Sportradar | 480 | integration guide (API basics, coverage tiers, ID handling, match status, update frequencies, push, historical data), Soccer Extended v4 endpoint reference with data-point tables, FAQ, plus curated api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
+| Sportradar | 481 | integration guide (API basics, coverage tiers, ID handling, match status, update frequencies, push, historical data), Soccer Extended v4 endpoint reference with data-point tables, FAQ, plus curated api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
 | Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
@@ -135,7 +135,7 @@ Provider filters use the indexed provider keys shown by `list_providers`, but co
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,850 searchable chunks** across 26 providers and tools.
+**2,851 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
