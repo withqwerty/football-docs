@@ -10,7 +10,7 @@ specific match minute.
 | Field or qualifier | Meaning |
 |---|---|
 | typeId `16` | goal event |
-| qualifier `8` | disallowed goal; exclude from scoreline reconstruction |
+| qualifier `8` | goal disallowed; Stats Perform lists it on the pass (typeId `2`) that led to the disallowed goal, not on goal events |
 | qualifier `28` | own goal; credit the opposing team, not the event `contestantId` |
 | event `contestantId` / `teamId` | team attached to the event |
 | `timeMin` + `timeSec` | event clock in the Opta feed |
@@ -24,7 +24,9 @@ Recommended scoreline reconstruction:
 
 1. Select goal events: Opta typeId `16`, or `isGoal === true` in a WhoScored-shaped
    event model.
-2. Drop any goal carrying qualifier `8` (`goalDisallowed`).
+2. As a guard, drop any goal event that carries qualifier `8` (`goalDisallowed`).
+   Stats Perform's MA36 table lists Q8 only on the pass (typeId `2`) that led to a
+   disallowed goal, so in a clean feed this step removes nothing.
 3. If qualifier `28` (`ownGoal`) is present, add the goal to the opponent's
    score; otherwise add it to the event team.
 4. Sort goals by period and clock/expanded minute.

@@ -28,9 +28,10 @@ describe("golden retrieval evals", () => {
 
   it.each([
     {
-      id: "opta-qualifier-76",
-      args: { query: "Opta qualifier 76", provider: "opta", max_results: 3 },
-      expected: ["76", "bigChance", "Big chance"],
+      // Big chance is qualifier 214 in Stats Perform's MA36 table; 76 is "Low Left".
+      id: "opta-big-chance-qualifier-214",
+      args: { query: "Opta big chance qualifier", provider: "opta", max_results: 3 },
+      expected: ["| 214 | bigChance |"],
     },
     {
       id: "fmdb-pro-players-endpoint",
@@ -110,7 +111,7 @@ describe("golden retrieval evals", () => {
         provider: "opta",
         max_results: 5,
       },
-      expected: ["364", "typeId 27 + Q364", "typeId 28 + Q364"],
+      expected: ["| 364 | VARDelay |", "start delay event (typeId 27)"],
     },
     {
       // These six rows once carried the names of other types. The IDs match
@@ -131,22 +132,40 @@ describe("golden retrieval evals", () => {
       ],
     },
     {
-      id: "opta-penalty-qualifier-variants",
+      // These rows once carried the meanings of other qualifiers. The IDs match
+      // Stats Perform's MA36 qualifier table.
+      id: "opta-shot-qualifier-ids",
       args: {
-        query: "Opta penalty qualifier 9 108 penalty shot foul awarded",
+        query: "Opta shot qualifiers right foot left foot other body part volley first touch big chance blocked",
         provider: "opta",
         max_results: 5,
       },
-      expected: ["9", "108", "Penalty"],
+      expected: [
+        "| 20 | rightFoot |",
+        "| 21 | otherBodyPart |",
+        "| 108 | volley |",
+        "| 328 | firstTouch |",
+        "| 214 | bigChance |",
+        "| 146 | blockedX |",
+      ],
+    },
+    {
+      id: "opta-penalty-qualifier-variants",
+      args: {
+        query: "Opta penalty qualifier 9 penalty shot foul awarded",
+        provider: "opta",
+        max_results: 5,
+      },
+      expected: ["| 9 | penalty |", "typeId 4"],
     },
     {
       id: "opta-own-goal-qualifier-variants",
       args: {
-        query: "Opta own goal qualifier 28 280 OWN_GOAL shot distance attribution",
+        query: "Opta own goal qualifier 28 280 shot distance attribution",
         provider: "opta",
         max_results: 5,
       },
-      expected: ["28", "280", "OWN_GOAL", "reattribute"],
+      expected: ["| 28 | ownGoal |", "reattribute", "It is not an own-goal flag; use Q28."],
     },
     {
       id: "opta-open-play-cross-story-qualifiers",
@@ -1523,7 +1542,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("across 3 provider(s)");
     expect(text).toContain("## opta");
     expect(text).toContain("Shot placement data surfaces");
-    expect(text).toContain("Do not assume qualifier `213`");
+    expect(text).toContain("Do not read qualifier `213` as xG");
     expect(text).toContain("## statsbomb");
     expect(text).toContain("Post-Shot xG");
     expect(text).toContain("## sportradar");

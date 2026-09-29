@@ -11,7 +11,7 @@ rates, or delivery-to-shot sequence charts from Opta/WhoScored-shaped event data
 | Corner delivery event | `matchevent/{token}?fx={matchId}` pass events with qualifier `6` (`cornerTaken`) | Treat typeId `1` + Q6 as the delivery, not typeId `6` (`Corner awarded`). |
 | Delivery endpoint | qualifiers `140` (`passEndX`) and `141` (`passEndY`) | Fall back to provider `endX`/`endY` fields only when the qualifier values are absent and the export defines those fields. |
 | Corner-sourced shots | shot events typeIds `13`, `14`, `15`, `16` with qualifier `25` (`fromCorner`) | Use this for shot/result counts; it does not identify the delivery by itself. |
-| Body part | qualifiers `15`, `20`/`56`, `72`, `22` | `20` can mean right foot in shot exports but an involved-player field elsewhere, so read it in the shot-event context only. |
+| Body part | qualifiers `15` head, `20` right foot, `72` left foot, `21` other body part | `22` is regular (open) play, not a body part, and `56` is a pitch-zone qualifier. |
 | Direct corner / Olimpico | qualifier `263` where present | Keep direct corners separate from normal delivery-to-shot sequences because timestamp order can look like a near-zero-second shot. |
 
 For xG or xGOT, join the shot row to `matchexpectedgoals/{token}?fx={matchId}`
@@ -28,7 +28,7 @@ Opta/WhoScored-style event stream.
 | Need | Opta surface | Implementation note |
 |---|---|---|
 | Throw-in delivery | `matchevent/{token}?fx={matchId}` pass events with qualifier `107` (`throwIn`) | Treat the throw as a pass-like restart. Filter to attacking-third or box-targeted throws before calling them dangerous set pieces. |
-| Long-throw flag | qualifier `160` where present | Use this when the feed exposes it; otherwise state the geometric proxy used, such as throw origin and endpoint into the box. |
+| Throw-in set-piece flag | qualifier `160` where present | Q160 marks a shot or pass that came from a throw-in set piece. It does not measure throw length, so a long-throw cut still needs a geometric rule, such as throw origin and endpoint into the box. |
 | Delivery endpoint | qualifiers `140` (`passEndX`) and `141` (`passEndY`) | Fall back to event `endX`/`endY` only when the export defines those fields. |
 | Throw-sourced shot | shot typeIds `13`, `14`, `15`, `16` after the throw | Link by related event when present, otherwise by same-team time proximity in the same period. |
 | Shot quality | `matchexpectedgoals` qualifiers `321`/`322` joined to shot rows | Keep xG per throw, shots per throw, and goals per throw as separate denominators. |
@@ -36,8 +36,9 @@ Opta/WhoScored-style event stream.
 Implementation notes:
 
 - Do not treat every qualifier `107` throw-in as a long throw. Define the entry
-  rule explicitly: qualifier `160`, endpoint into the penalty area, origin in
-  the final third, or another named proxy.
+  rule explicitly: endpoint into the penalty area, origin in the final third, or
+  another named proxy. Qualifier `160` only says the action came from a throw-in
+  set piece.
 - Long throws often create first contacts, flick-ons, blocks, and second balls.
   Preserve the link method as `direct` when a related event points to the throw,
   and `inferred` or `second_phase` when the shot is linked by time window.
@@ -96,7 +97,7 @@ Useful public chart fields:
 | delivery zone | Q140/Q141 after mirroring |
 | short-corner flag | `end_x < 83` or a separately coded short-corner action |
 | shot outcome | shot typeId plus goal/post/saved/miss/block handling |
-| body-part split | Q15 head, Q20/Q56 right foot, Q72 left foot, Q22 other |
+| body-part split | Q15 head, Q20 right foot, Q72 left foot, Q21 other |
 | phase | direct related-event link versus inferred time-window link |
 | xG / xGOT | Q321/Q322 from `matchexpectedgoals` when joined |
 

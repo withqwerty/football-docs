@@ -72,6 +72,9 @@ Shot events are types 13 (miss), 14 (post), 15 (attempt saved), and 16 (goal). A
 |-------|---------|
 | 1 | First half |
 | 2 | Second half |
+| 3 | Extra time, first half |
+| 4 | Extra time, second half |
+| 5 | Penalty shoot-out |
 | 14 | Post-match / full-time |
 | 16 | Pre-match |
 

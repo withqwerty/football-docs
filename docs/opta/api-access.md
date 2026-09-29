@@ -56,5 +56,5 @@ The public Opta Analyst website (theanalyst.com) uses a static feed key that pro
 - This is an unofficial access path via theanalyst.com's frontend key
 - No SLA or guaranteed uptime
 - Token could be rotated at any time
-- Some F24 qualifiers documented in the spec are not populated (e.g. q213 xG on matchevent)
+- xG is not on `matchevent`; use q321 from `matchexpectedgoals` (q213 is the pass angle, not xG)
 - Data redistribution likely prohibited under Stats Perform terms

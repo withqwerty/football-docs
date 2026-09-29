@@ -8,7 +8,7 @@ match-stats rows, and squad metadata.
 | Need | Best Opta surface | Notes |
 |---|---|---|
 | Kickoff team setup | `matchevent/{token}?fx={matchId}` typeId `34` | Team set-up event. Qualifiers `30`, `44`, `59`, `130`, `131`, and sometimes `194` describe the player list, positions, shirt numbers, formation, and captain. |
-| Formation changes | `matchevent/{token}?fx={matchId}` typeId `40` plus typeId `35` | Use formation-change and player-position events for in-game shape changes. |
+| Formation changes | `matchevent/{token}?fx={matchId}` typeId `40` | Formation-change event. It carries the same set-up qualifiers as typeId `34` (`30`, `44`, `59`, `130`, `131`, `194`), so read the new shape from it. |
 | Player on/off timing | typeId `18` and typeId `19`, or `matchstats` substitution fields | Use the explicit substitution event or substitution row. Do not derive minutes from starter/bench status alone. |
 | Player labels and squad context | `squads/{token}?tmcl={seasonId}` plus `matchstats/{token}?fx={matchId}` | Join by Opta player ID for display labels, positions, and match-day rows. |
 | Pass-map or shot-map roles | `matchstats` player rows | `formationPlace` gives the starting XI slot for many match-stats exports. |
