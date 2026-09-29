@@ -24,13 +24,16 @@ regenerated on each release and this file is not kept in lockstep with it.
 |------|---------|
 | `src/index.ts` | MCP server entry (stdio transport) |
 | `src/tools.ts` | Tool implementations |
+| `src/data-format.ts` | Index schema, `meta` table, validation, `DATA_SCHEMA_VERSION` and `MIN_SERVER_VERSION` |
+| `src/data-source.ts` | Chooses the index to open: bundled, downloaded or pinned |
+| `src/data-update.ts` | Daily background check for a newer index on the `data-latest` release |
 | `src/crawl.ts` | Crawl pipeline (llms.txt > ReadTheDocs > GitHub README discovery) |
 | `src/ingest.ts` | Rebuilds `data/docs.db` FTS index from `docs/` markdown |
 | `src/discover.ts` | Source probing without crawling |
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
 | `src/__tests__/` | Vitest tests |
-| `scripts/` | Ground-truth generators (Python) |
+| `scripts/` | Ground-truth generators (Python), live checks, and the data-release scripts (`write-data-manifest.mjs`, `check-data-compat.mjs`) |
 | `bin/serve.js` | npm bin entry — launches compiled `dist/index.js` |
 | `docs/<provider>/` | Markdown per provider, with provenance frontmatter |
 | `specs/` | Public vendor OpenAPI snapshots — see `specs/README.md` |
@@ -109,8 +112,16 @@ ID fields and access shape.
 
 - `CLAUDE.md` and `.context/` are gitignored. `AGENTS.md` is **not** — it is public,
   so treat it as published.
+- **Merging a change to `docs/` or `providers.json` ships it.** `data.yml` publishes
+  the rebuilt index to the `data-latest` release, and installed servers use it
+  within about a day, with no npm release. Treat a doc PR's merge as its release.
 - `data/docs.db` ships with the npm package (see `files` in `package.json`) —
   rebuilding it with `pnpm ingest` changes what end users get on the next publish.
+  Commit it rebuilt: a test checks that its `meta.providers_json` matches
+  `providers.json`.
+- Changing `SCHEMA_SQL` needs `DATA_SCHEMA_VERSION` raised; data that needs new
+  server code needs `MIN_SERVER_VERSION` raised. Both need an npm release before
+  the data can reach anyone. See README "How doc changes reach users".
   The tests check chunk counts, not chunk text, so a wrong index can still pass CI.
   When a PR changes `data/docs.db`, rebuild it yourself and compare the rows.
 - When a doc in `docs/free-sources/` changes how to fetch the data, change its check

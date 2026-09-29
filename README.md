@@ -94,6 +94,42 @@ Add to `claude_desktop_config.json`:
 
 Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` searches `soccerdata`; `ESPN`, `ESPN FC`, and `espn-soccer` search `espn`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
+## How the index stays current
+
+The package ships a docs index, but doc fixes do not wait for a new package
+version. Once a day at most, the server checks the
+[`data-latest`](https://github.com/withqwerty/football-docs/releases/tag/data-latest)
+release of this repository for a newer index built from `main`:
+
+- It reads a small manifest (`manifest-v1.json`) and, only when that names a
+  newer build, downloads the index (about 6 MB).
+- It checks the download's size and SHA-256, its SQLite integrity, its exact
+  schema and its metadata before using it, and keeps the one it had on any failure.
+- It stores downloads in `$XDG_DATA_HOME/football-docs/data/` (by default
+  `~/.local/share/football-docs/data/`). The next tool call uses the new file; no
+  restart is needed.
+- It runs in the background after start-up and never delays a tool call.
+  `list_providers` ends with the build time of the index in use and whether it is
+  bundled or downloaded.
+
+Privacy: the check is one HTTPS request a day to GitHub, plus the download when
+there is one. No search queries or other usage data are sent.
+
+Settings, as environment variables in the server's MCP configuration:
+
+- `FOOTBALL_DOCS_DATA=bundled`: use only the index inside the package. No network,
+  no downloads.
+- `FOOTBALL_DOCS_DATA=auto`: the default for an installed package. Check daily and
+  use the newest valid index.
+- `FOOTBALL_DOCS_DB_PATH=<file>`: use exactly this index file.
+- `FOOTBALL_DOCS_DATA_BASE_URL=<url>`: read the manifest and index from a mirror
+  (HTTPS only).
+
+Offline, or behind a proxy that Node's built-in `fetch` does not use, the check
+fails quietly and the server keeps the index it has. Under CI (`CI` set) the check
+does not run. A server running from a git checkout defaults to `bundled`, so
+development and tests always use the working tree's docs.
+
 ## Example queries
 
 - "What is Opta qualifier 76?" (big chance)
@@ -247,6 +283,32 @@ npm run ingest -- --provider kloppy     # re-ingest one provider (incremental)
 ```
 
 Each crawled doc carries provenance metadata (source URL, source type, upstream version, crawl timestamp) that is surfaced in search results, so agents can distinguish between curated content and upstream documentation.
+
+### How doc changes reach users
+
+A merge to `main` that touches `docs/` or `providers.json` runs
+`.github/workflows/data.yml`, which rebuilds the index, runs the tests against it,
+checks that the **published** server can use it (`scripts/check-data-compat.mjs`),
+and publishes it to the `data-latest` release. Installed servers pick it up within
+about a day, including servers that have been running for days (they check again
+every six hours, at most once a day). Merging a doc PR is therefore also shipping it; there is no later step at
+which to stop it. To undo a bad doc change, revert it on `main`, which publishes a
+newer build.
+
+The index carries its own metadata (`meta` table, `src/data-format.ts`): a schema
+version, the oldest server version that can read it, the build stamp and the
+provider registry. Two rules follow:
+
+- **Changing the schema** (`SCHEMA_SQL`) needs `DATA_SCHEMA_VERSION` raised and an
+  npm release. Servers read only `manifest-v<their schema>.json`, so older servers
+  keep their last compatible data rather than breaking.
+- **Data that relies on new server code** (for example a new `providers.json` field
+  the tools must read) needs `MIN_SERVER_VERSION` raised, and that server released
+  first. Until then the compatibility check fails, and no installed server would
+  accept the build anyway.
+
+Code changes, including changes to `src/ingest.ts`, still ship only through a
+release.
 
 ### Cutting a release
 
