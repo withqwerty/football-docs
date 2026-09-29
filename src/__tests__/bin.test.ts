@@ -1,10 +1,20 @@
 import { execFileSync, spawn } from "node:child_process";
-import { dirname, resolve } from "node:path";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
+
+// The spawned server must test this checkout's index: no downloads, and no cache
+// from the developer's own data directory.
+const SERVER_ENV = {
+  ...process.env,
+  FOOTBALL_DOCS_DATA: "bundled",
+  XDG_DATA_HOME: mkdtempSync(join(tmpdir(), "football-docs-bin-")),
+};
 
 type JsonRpcResponse = {
   jsonrpc: "2.0";
@@ -75,6 +85,7 @@ describe("npm bin entrypoint", () => {
   it("starts the MCP server and answers initialize", async () => {
     const child = spawn("node", ["bin/serve.js"], {
       cwd: ROOT,
+      env: SERVER_ENV,
       stdio: ["pipe", "pipe", "pipe"],
     });
 
@@ -124,6 +135,7 @@ describe("npm bin entrypoint", () => {
   it("exposes current provider guidance in the MCP tool schema", async () => {
     const child = spawn("node", ["bin/serve.js"], {
       cwd: ROOT,
+      env: SERVER_ENV,
       stdio: ["pipe", "pipe", "pipe"],
     });
 
@@ -202,6 +214,7 @@ describe("npm bin entrypoint", () => {
   it("answers search_docs over the stdio tools/call transport", async () => {
     const child = spawn("node", ["bin/serve.js"], {
       cwd: ROOT,
+      env: SERVER_ENV,
       stdio: ["pipe", "pipe", "pipe"],
     });
 
@@ -271,6 +284,7 @@ describe("npm bin entrypoint", () => {
   it("answers Context7-style provider tools over the stdio tools/call transport", async () => {
     const child = spawn("node", ["bin/serve.js"], {
       cwd: ROOT,
+      env: SERVER_ENV,
       stdio: ["pipe", "pipe", "pipe"],
     });
 
@@ -365,6 +379,7 @@ describe("npm bin entrypoint", () => {
   it("answers compare_providers over the stdio tools/call transport with aliases", async () => {
     const child = spawn("node", ["bin/serve.js"], {
       cwd: ROOT,
+      env: SERVER_ENV,
       stdio: ["pipe", "pipe", "pipe"],
     });
 

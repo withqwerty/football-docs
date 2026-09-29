@@ -32,6 +32,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run check
+      # Rebuild the index first, so the tests read this branch's docs and
+      # providers.json rather than whatever data/docs.db was committed with.
+      - run: pnpm run ingest
       - run: pnpm test
       - run: pnpm run build
-      - run: pnpm run ingest

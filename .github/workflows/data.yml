@@ -1,0 +1,127 @@
+name: Publish data
+
+# Builds the docs index from main and publishes it to the rolling data-latest
+# release, where installed servers look for it once a day (src/data-update.ts).
+# A doc change therefore reaches users without an npm release. Code changes
+# still ship through release.yml.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "providers.json"
+  workflow_dispatch:
+
+# Runs publish one at a time. A superseded pending run may be dropped; the run
+# after it publishes the newer state anyway.
+concurrency:
+  group: data-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The build runs project code and dependency scripts; keep the token
+          # out of .git/config so nothing it runs can push.
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+
+      - name: Build the index
+        run: |
+          echo "DATA_STAMP=$(git log -1 --format=%cI)" >> "$GITHUB_ENV"
+          DATA_STAMP="$(git log -1 --format=%cI)" pnpm run ingest
+
+      # The tests run against the file that is about to be published.
+      - run: pnpm test
+
+      - name: Prepare the release files
+        run: node scripts/write-data-manifest.mjs data-release
+
+      # Installed servers run the published release, not main. Check that it
+      # can use this file before any of them sees it.
+      - name: Check the published server can use this data
+        run: |
+          set -euo pipefail
+          PUBLISHED_DIR="$RUNNER_TEMP/published"
+          npm install --prefix "$PUBLISHED_DIR" --no-save football-docs@latest >/dev/null
+          PUBLISHED="$(node -p "require('$PUBLISHED_DIR/node_modules/football-docs/package.json').version")"
+          NEEDS="$(jq -r .min_server_version data-release/manifest-v*.json)"
+          if [ "$(printf '%s\n%s\n' "$NEEDS" "$PUBLISHED" | sort -V | head -n1)" != "$NEEDS" ]; then
+            echo "::notice::Published server ${PUBLISHED} is older than ${NEEDS}; no installed server can read this data yet, so the compatibility check is skipped."
+          else
+            node scripts/check-data-compat.mjs "$PUBLISHED_DIR/node_modules/football-docs/bin/serve.js" data-release/docs-*.db
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-release
+          path: data-release/
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    # Only this job can write, and it runs no project code: it downloads the
+    # built files and calls gh.
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      TAG: data-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: data-release
+          path: data-release
+
+      - name: Publish to the data-latest release
+        run: |
+          set -euo pipefail
+          cd data-release
+          MANIFEST="$(ls manifest-v*.json)"
+          FILE="$(jq -r .file "$MANIFEST")"
+          STAMP="$(jq -r .data_stamp "$MANIFEST")"
+
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --prerelease --latest=false --target "$GITHUB_SHA" \
+              --title "Docs index (rolling)" \
+              --notes "Docs index builds published by .github/workflows/data.yml. Installed football-docs servers read ${MANIFEST} from here once a day. Not a package release."
+          fi
+
+          # Never move the manifest backwards: a manual run on an older ref, or a
+          # delayed run, must not replace a newer published build.
+          if gh release download "$TAG" --pattern "$MANIFEST" --output current-manifest.json 2>/dev/null; then
+            CURRENT="$(jq -r .data_stamp current-manifest.json)"
+            if [ "$(date -d "$CURRENT" +%s)" -ge "$(date -d "$STAMP" +%s)" ]; then
+              echo "::notice::data-latest already has ${CURRENT}; not publishing ${STAMP}."
+              exit 0
+            fi
+          fi
+
+          ASSETS="$(gh release view "$TAG" --json assets --jq '.assets[].name')"
+          if ! grep -qx "$FILE" <<<"$ASSETS"; then
+            gh release upload "$TAG" "$FILE"
+          fi
+          # The manifest goes last, so it never names a file that is not there.
+          gh release upload "$TAG" "$MANIFEST" --clobber
+
+          # Keep the new file and the one before it; a client that read the old
+          # manifest just before this run can still download what it names.
+          gh release view "$TAG" --json assets --jq '.assets[].name' \
+            | grep -E '^docs-[0-9]+\.db$' | sort -t- -k2 -n -r | tail -n +3 \
+            | while read -r OLD; do gh release delete-asset "$TAG" "$OLD" --yes; done
+
+          echo "Published ${FILE} (${STAMP})."

@@ -76,10 +76,17 @@ jobs:
       # The same gates CI runs. A tag can be pushed to any commit, including one
       # that never went through a pull request, so the release path cannot
       # assume CI already passed on this tree.
+      # The bundled index carries the tagged commit's time as its data stamp, so
+      # installed servers can compare it with downloaded builds. Set for the whole
+      # job: npm publish runs prepublishOnly, which ingests again, and both builds
+      # must carry the same stamp.
+      - name: Data stamp
+        run: echo "DATA_STAMP=$(git log -1 --format=%cI)" >> "$GITHUB_ENV"
+
       - run: pnpm run check
+      - run: pnpm run ingest
       - run: pnpm test
       - run: pnpm run build
-      - run: pnpm run ingest
 
       # Release notes are hand-written in the `chore: release vX.Y.Z` commit
       # body, which is richer than anything generated from a commit list. The

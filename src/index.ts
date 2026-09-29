@@ -18,6 +18,15 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import Database from "better-sqlite3";
 import { z } from "zod";
+import { hardenConnection } from "./data-format.js";
+import {
+  cleanDataDir,
+  type DataSelection,
+  dataModeFor,
+  defaultDataDir,
+  selectDatabase,
+} from "./data-source.js";
+import { checkForUpdate } from "./data-update.js";
 import { ENTITY_TYPES } from "./reep.js";
 import {
   compareProviders,
@@ -32,7 +41,8 @@ import {
 export { sanitiseFtsQuery } from "./tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DB_PATH = resolve(__dirname, "..", "data", "docs.db");
+const PACKAGE_ROOT = resolve(__dirname, "..");
+const BUNDLED_DB_PATH = resolve(PACKAGE_ROOT, "data", "docs.db");
 const PKG_VERSION = (
   JSON.parse(readFileSync(resolve(__dirname, "..", "package.json"), "utf-8")) as { version: string }
 ).version;
@@ -43,13 +53,42 @@ const QUEUE_DB_DIR = resolve(
 );
 const QUEUE_DB_PATH = resolve(QUEUE_DB_DIR, "requests.db");
 
+const DATA_DIR = defaultDataDir();
+const DATA_MODE = dataModeFor(process.env, PACKAGE_ROOT);
+
+function logToStderr(message: string): void {
+  // stdout is the MCP channel; anything else written there corrupts it.
+  process.stderr.write(`${message}\n`);
+}
+
+let activeSelection: DataSelection | undefined;
+
+function currentSelection(): DataSelection {
+  activeSelection ??= selectDatabase({
+    bundledPath: BUNDLED_DB_PATH,
+    dataDir: DATA_DIR,
+    serverVersion: PKG_VERSION,
+    mode: DATA_MODE,
+    pinnedPath: process.env.FOOTBALL_DOCS_DB_PATH?.trim() || undefined,
+    log: logToStderr,
+  });
+  return activeSelection;
+}
+
 export function openDb(): Database.Database {
-  if (!existsSync(DB_PATH)) {
+  let path = currentSelection().path;
+  if (!existsSync(path)) {
+    // Another process may have cleaned up the file this one chose; choose again.
+    activeSelection = undefined;
+    path = currentSelection().path;
+  }
+  if (!existsSync(path)) {
     throw new Error(
-      `Docs database not found at ${DB_PATH}. Run 'npm run ingest' first to build the index.`,
+      `Docs database not found at ${path}. Run 'npm run ingest' first to build the index.`,
     );
   }
-  const db = new Database(DB_PATH, { readonly: true });
+  const db = new Database(path, { readonly: true });
+  hardenConnection(db);
 
   const columns = db.pragma("table_info(docs)") as Array<{ name: string }>;
   const hasProvenance = columns.some((column) => column.name === "source_type");
@@ -167,7 +206,7 @@ export function createFootballDocsServer(): McpServer {
     "List all indexed football data providers, their document count, and coverage categories. Use to understand what documentation is available. Call this first to see what providers are indexed before searching.",
     {},
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async () => withDocsDb((db) => listProviders(db)),
+    async () => withDocsDb((db) => listProviders(db, { source: currentSelection().source })),
   );
 
   server.tool(
@@ -256,9 +295,34 @@ export function createFootballDocsServer(): McpServer {
   return server;
 }
 
+/**
+ * Look for a newer docs index in the background. Runs after the transport is
+ * connected and never delays a tool call; a new file is picked up by the next
+ * call to openDb.
+ */
+async function updateDataInBackground(signal: AbortSignal): Promise<void> {
+  if (DATA_MODE !== "auto" || process.env.FOOTBALL_DOCS_DB_PATH) return;
+  const selection = currentSelection();
+  cleanDataDir(DATA_DIR, selection.meta?.stampMs ?? null);
+  const result = await checkForUpdate({
+    dataDir: DATA_DIR,
+    serverVersion: PKG_VERSION,
+    currentStampMs: selection.meta?.stampMs ?? null,
+    signal,
+    log: logToStderr,
+  });
+  if (result.outcome === "installed") activeSelection = undefined;
+}
+
 export async function main() {
   const transport = new StdioServerTransport();
   await createFootballDocsServer().connect(transport);
+
+  const updates = new AbortController();
+  process.stdin.once("close", () => updates.abort());
+  updateDataInBackground(updates.signal).catch((error) => {
+    logToStderr(`football-docs: docs update check failed: ${error instanceof Error ? error.message : String(error)}`);
+  });
 }
 
 const isDirectRun = process.argv[1]

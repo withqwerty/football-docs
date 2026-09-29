@@ -19,15 +19,18 @@
  *   npm run ingest -- --provider opta # ingest one provider
  */
 
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
+import { SCHEMA_SQL, writeMeta } from "./data-format.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = resolve(__dirname, "..", "docs");
 const DB_DIR = resolve(__dirname, "..", "data");
 const DB_PATH = resolve(DB_DIR, "docs.db");
+const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
 
 interface Frontmatter {
   source_url: string | null;
@@ -162,38 +165,37 @@ function ingestProvider(db: Database.Database, provider: string): number {
   return totalChunks;
 }
 
-export const SCHEMA_SQL = `
-  CREATE TABLE IF NOT EXISTS docs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    provider TEXT NOT NULL,
-    category TEXT NOT NULL,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    source_url TEXT,
-    source_type TEXT NOT NULL DEFAULT 'curated',
-    upstream_version TEXT,
-    crawled_at TEXT
-  );
-
-  CREATE VIRTUAL TABLE IF NOT EXISTS docs_fts USING fts5(
-    provider,
-    category,
-    title,
-    content,
-    content='docs',
-    content_rowid='id',
-    tokenize='porter unicode61'
-  );
-
-  CREATE TRIGGER IF NOT EXISTS docs_ai AFTER INSERT ON docs BEGIN
-    INSERT INTO docs_fts(rowid, provider, category, title, content)
-    VALUES (new.id, new.provider, new.category, new.title, new.content);
-  END;
-`;
+export { SCHEMA_SQL };
 
 /** Ensure tables exist without dropping existing data. */
 function ensureSchema(db: Database.Database): void {
   db.exec(SCHEMA_SQL);
+}
+
+function git(args: string[]): string | null {
+  try {
+    return execFileSync("git", args, { cwd: resolve(__dirname, ".."), encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * When the data was built, for comparing a bundled index with a downloaded one.
+ * CI sets DATA_STAMP; otherwise the source commit's time stands in, so two builds
+ * of the same commit agree.
+ */
+function dataStamp(): string {
+  return process.env.DATA_STAMP || git(["log", "-1", "--format=%cI"]) || new Date().toISOString();
+}
+
+/** Record the format, the stamp and the provider registry the chunks were built with. */
+function recordMeta(db: Database.Database): void {
+  writeMeta(db, {
+    dataStamp: dataStamp(),
+    commit: process.env.GITHUB_SHA || git(["rev-parse", "HEAD"]),
+    providersJson: readFileSync(PROVIDERS_PATH, "utf-8"),
+  });
 }
 
 /** Drop everything and recreate from scratch. */
@@ -201,6 +203,7 @@ function rebuildSchema(db: Database.Database): void {
   db.exec(`
     DROP TABLE IF EXISTS docs_fts;
     DROP TABLE IF EXISTS docs;
+    DROP TABLE IF EXISTS meta;
   `);
   db.exec(SCHEMA_SQL);
 }
@@ -247,6 +250,8 @@ function main() {
     if (!existsSync(DOCS_DIR)) {
       console.log(`No docs directory at ${DOCS_DIR}`);
       console.log("Create docs/{provider}/*.md files first.");
+      recordMeta(db);
+      db.pragma("journal_mode = DELETE");
       db.close();
       return;
     }
@@ -269,6 +274,11 @@ function main() {
     console.log(`\nDone: ${total} chunks from ${providers.length} providers`);
   }
 
+  recordMeta(db);
+  // A shipped or downloaded file must not be in WAL mode: opening it read-only
+  // would try to create -wal/-shm files next to it, which fails in a read-only
+  // install and leaves side files behind in the cache.
+  db.pragma("journal_mode = DELETE");
   db.close();
 }
 

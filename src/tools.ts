@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type Database from "better-sqlite3";
+import { type ProviderRegistryEntry, type ProvidersFile, providersFileSchema, readMeta } from "./data-format.js";
 
 export { type ResolveEntityArgs, resolveEntity } from "./reep.js";
 
@@ -76,25 +77,15 @@ type CompareRow = {
 
 const QUERY_STOP_WORDS = new Set(["and", "or", "not", "near"]);
 
-type ProviderRegistryEntry = {
-  description: string;
-  display_name: string;
-  aliases: string[];
-  access_level: string;
-  licence_status: string;
-  public_safety_notes: string;
-  version: string | null;
-  sources: Array<{ url?: string; type: string; note?: string }>;
-  last_crawled: string | null;
-};
-
-type ProvidersFile = {
-  providers: Record<string, ProviderRegistryEntry>;
-};
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
-const PROVIDER_REGISTRY = JSON.parse(readFileSync(PROVIDERS_PATH, "utf-8")) as ProvidersFile;
+
+/** The provider registry plus the alias maps derived from it. */
+type Registry = {
+  providers: ProvidersFile["providers"];
+  aliases: Record<string, string>;
+  displayAliases: Record<string, string[]>;
+};
 
 function slugProvider(provider: string): string {
   return provider
@@ -105,29 +96,62 @@ function slugProvider(provider: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function buildProviderAliases(): Record<string, string> {
+function buildRegistry(file: ProvidersFile): Registry {
   const aliases: Record<string, string> = {};
-  for (const [provider, metadata] of Object.entries(PROVIDER_REGISTRY.providers)) {
+  for (const [provider, metadata] of Object.entries(file.providers)) {
     aliases[slugProvider(provider)] = provider;
     aliases[slugProvider(metadata.display_name)] = provider;
     for (const alias of metadata.aliases) {
       aliases[slugProvider(alias)] = provider;
     }
   }
-  return aliases;
+
+  const displayAliases: Record<string, string[]> = {};
+  for (const [alias, provider] of Object.entries(aliases)) {
+    if (alias === provider) continue;
+    const list = displayAliases[provider] ?? [];
+    list.push(alias);
+    displayAliases[provider] = list;
+  }
+
+  return { providers: file.providers, aliases, displayAliases };
 }
 
-const PROVIDER_ALIASES: Record<string, string> = buildProviderAliases();
-const DISPLAY_PROVIDER_ALIASES: Record<string, string[]> = Object.entries(PROVIDER_ALIASES).reduce(
-  (aliasesByProvider, [alias, provider]) => {
-    if (alias === provider) return aliasesByProvider;
-    const aliases = aliasesByProvider[provider] ?? [];
-    aliases.push(alias);
-    aliasesByProvider[provider] = aliases;
-    return aliasesByProvider;
-  },
-  {} as Record<string, string[]>,
-);
+let packagedRegistry: Registry | undefined;
+const registryCache = new Map<string, Registry>();
+
+/**
+ * The registry the data was built with. A downloaded index can add or change
+ * providers, so the registry comes from the database's meta table. Databases
+ * without one (older releases, and the in-memory databases tests build) fall
+ * back to the packaged providers.json.
+ */
+function registryFor(db: Database.Database): Registry {
+  const stamp = dataStampValue(db);
+  if (stamp === null) {
+    packagedRegistry ??= buildRegistry(
+      providersFileSchema.parse(JSON.parse(readFileSync(PROVIDERS_PATH, "utf-8"))),
+    );
+    return packagedRegistry;
+  }
+  const key = `${db.name}\u0000${stamp}`;
+  let registry = registryCache.get(key);
+  if (!registry) {
+    const meta = readMeta(db);
+    if (!meta) throw new Error("docs database meta table disappeared while reading it");
+    registry = buildRegistry(meta.providers);
+    registryCache.set(key, registry);
+  }
+  return registry;
+}
+
+/** The raw data_stamp, or null for a database without a meta table. */
+function dataStampValue(db: Database.Database): string | null {
+  const hasMeta = db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'meta'").get();
+  if (!hasMeta) return null;
+  const row = db.prepare("SELECT value FROM meta WHERE key = 'data_stamp'").get() as { value: string } | undefined;
+  return row?.value ?? null;
+}
 
 function textResult(text: string, isError = false): ToolResponse {
   return {
@@ -167,9 +191,9 @@ function relaxedFtsQuery(query: string): string {
   return tokens.map(quoteFtsToken).join(" OR ");
 }
 
-function normaliseProvider(provider: string): string {
+function normaliseProvider(registry: Registry, provider: string): string {
   const slug = slugProvider(provider);
-  return PROVIDER_ALIASES[slug] ?? slug;
+  return registry.aliases[slug] ?? slug;
 }
 
 function providerFilterLabel(original: string | undefined, normalised: string | undefined): string {
@@ -205,12 +229,12 @@ function editDistance(a: string, b: string): number {
   return previous[b.length];
 }
 
-function providerSuggestions(provider: string, providerSet: Set<string>): string[] {
+function providerSuggestions(registry: Registry, provider: string, providerSet: Set<string>): string[] {
   const candidates = new Map<string, string>();
   for (const indexedProvider of providerSet) {
     candidates.set(indexedProvider, indexedProvider);
   }
-  for (const [alias, indexedProvider] of Object.entries(PROVIDER_ALIASES)) {
+  for (const [alias, indexedProvider] of Object.entries(registry.aliases)) {
     if (providerSet.has(indexedProvider)) {
       candidates.set(alias, indexedProvider);
     }
@@ -230,8 +254,13 @@ function providerSuggestions(provider: string, providerSet: Set<string>): string
     .slice(0, 3);
 }
 
-function unknownProviderMessage(original: string, provider: string, providerSet: Set<string>): string {
-  const suggestions = providerSuggestions(provider, providerSet);
+function unknownProviderMessage(
+  registry: Registry,
+  original: string,
+  provider: string,
+  providerSet: Set<string>,
+): string {
+  const suggestions = providerSuggestions(registry, provider, providerSet);
   const suggestionText = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
   return `Provider "${providerFilterLabel(original, provider)}" is not indexed.${suggestionText} Call list_providers for available provider keys, or use request_update to suggest adding it.`;
 }
@@ -287,7 +316,7 @@ function searchRows(
 
   if (provider) {
     sql += " AND d.provider = ?";
-    params.push(normaliseProvider(provider));
+    params.push(provider);
   }
 
   sql += " ORDER BY rank LIMIT ?";
@@ -322,6 +351,7 @@ function topUpRows<T extends { provider: string; category: string; title: string
 
 function compareRows(
   db: Database.Database,
+  registry: Registry,
   matchQuery: string,
   providers: string[] | undefined,
 ): CompareRow[] {
@@ -337,7 +367,7 @@ function compareRows(
   if (providers && providers.length > 0) {
     const placeholders = providers.map(() => "?").join(", ");
     sql += ` AND d.provider IN (${placeholders})`;
-    params.push(...providers.map(normaliseProvider));
+    params.push(...providers.map((provider) => normaliseProvider(registry, provider)));
   }
 
   sql += " ORDER BY d.provider, rank LIMIT 30";
@@ -360,7 +390,7 @@ function compareRowsForProvider(
        ORDER BY rank
        LIMIT ?`,
     )
-    .all(matchQuery, normaliseProvider(provider), limit) as CompareRow[];
+    .all(matchQuery, provider, limit) as CompareRow[];
 }
 
 /**
@@ -386,8 +416,8 @@ function sourceLabel(row: SearchRow): string {
   }${crawledAt}`;
 }
 
-function providerMetadata(provider: string): ProviderRegistryEntry | undefined {
-  return PROVIDER_REGISTRY.providers[provider];
+function providerMetadata(registry: Registry, provider: string): ProviderRegistryEntry | undefined {
+  return registry.providers[provider];
 }
 
 function providerCoverage(db: Database.Database, provider: string): {
@@ -413,10 +443,11 @@ function providerCoverage(db: Database.Database, provider: string): {
 
 function formatProviderResolution(
   db: Database.Database,
+  registry: Registry,
   provider: string,
   originalQuery: string,
 ): string {
-  const metadata = providerMetadata(provider);
+  const metadata = providerMetadata(registry, provider);
   const coverage = providerCoverage(db, provider);
   const aliasText = metadata?.aliases.length ? metadata.aliases.join(", ") : "none";
   const sourceText = metadata?.sources
@@ -485,15 +516,20 @@ export function resolveProviderId(
   db: Database.Database,
   args: ResolveProviderIdArgs,
 ): ToolResponse {
-  const provider = normaliseProvider(args.query);
-  const registryProviders = new Set(Object.keys(PROVIDER_REGISTRY.providers));
+  const registry = registryFor(db);
+  const provider = normaliseProvider(registry, args.query);
+  const registryProviders = new Set(Object.keys(registry.providers));
   const indexedProviderSet = indexedProviders(db);
 
   if (registryProviders.has(provider)) {
-    return textResult(formatProviderResolution(db, provider, args.query));
+    return textResult(formatProviderResolution(db, registry, provider, args.query));
   }
 
-  const suggestions = providerSuggestions(provider, new Set([...registryProviders, ...indexedProviderSet]));
+  const suggestions = providerSuggestions(
+    registry,
+    provider,
+    new Set([...registryProviders, ...indexedProviderSet]),
+  );
   const suggestionText = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
   return textResult(
     `Provider "${args.query}" is not registered.${suggestionText} Use request_update to suggest adding it, or open a GitHub issue with the new-provider template.`,
@@ -505,17 +541,18 @@ export function getProviderDocs(
   db: Database.Database,
   args: GetProviderDocsArgs,
 ): ToolResponse {
-  const provider = normaliseProvider(args.provider);
+  const registry = registryFor(db);
+  const provider = normaliseProvider(registry, args.provider);
   const providerSet = indexedProviders(db);
   if (!providerSet.has(provider)) {
-    const registryProviders = new Set(Object.keys(PROVIDER_REGISTRY.providers));
+    const registryProviders = new Set(Object.keys(registry.providers));
     if (registryProviders.has(provider)) {
       return textResult(
         `Provider "${providerFilterLabel(args.provider, provider)}" is registered but has no indexed docs yet. Use request_update to ask maintainers to crawl or curate it.`,
         true,
       );
     }
-    return textResult(unknownProviderMessage(args.provider, provider, providerSet), true);
+    return textResult(unknownProviderMessage(registry, args.provider, provider, providerSet), true);
   }
 
   const limit = normaliseLimit(args.max_results, 10, 50);
@@ -536,7 +573,7 @@ export function getProviderDocs(
     );
   }
 
-  const metadata = providerMetadata(provider);
+  const metadata = providerMetadata(registry, provider);
   const docs = rows
     .map((row, index) => {
       return `## [${index + 1}] ${row.title}\n**Provider:** ${row.provider} | **Category:** ${
@@ -556,12 +593,13 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
   const limit = normaliseLimit(args.max_results, 10, 50);
   const strictQuery = sanitiseFtsQuery(args.query);
   const fallbackQuery = relaxedFtsQuery(args.query);
-  const provider = args.provider ? normaliseProvider(args.provider) : undefined;
+  const registry = registryFor(db);
+  const provider = args.provider ? normaliseProvider(registry, args.provider) : undefined;
 
   if (args.provider && provider) {
     const providerSet = indexedProviders(db);
     if (!providerSet.has(provider)) {
-      return textResult(unknownProviderMessage(args.provider, provider, providerSet), true);
+      return textResult(unknownProviderMessage(registry, args.provider, provider, providerSet), true);
     }
   }
 
@@ -594,7 +632,22 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
   );
 }
 
-export function listProviders(db: Database.Database): ToolResponse {
+/** Where the open index came from, for the freshness line in list_providers. */
+export type DataSourceLabel = "bundled" | "downloaded" | "pinned";
+
+function dataLine(db: Database.Database, source: DataSourceLabel | undefined): string {
+  const stamp = dataStampValue(db);
+  if (!stamp) return "Data: built before data stamps were recorded.";
+  const commit = (db.prepare("SELECT value FROM meta WHERE key = 'commit'").get() as { value: string } | undefined)
+    ?.value;
+  return `Data: built ${stamp}${commit ? ` from commit ${commit.slice(0, 7)}` : ""}${source ? ` (${source})` : ""}.`;
+}
+
+export function listProviders(
+  db: Database.Database,
+  options: { source?: DataSourceLabel } = {},
+): ToolResponse {
+  const registry = registryFor(db);
   const rows = db
     .prepare(
       `SELECT provider, category, COUNT(*) as chunks
@@ -614,13 +667,13 @@ export function listProviders(db: Database.Database): ToolResponse {
 
   const lines = [...byProvider.entries()]
     .map(([provider, info]) => {
-      const aliases = DISPLAY_PROVIDER_ALIASES[provider];
+      const aliases = registry.displayAliases[provider];
       const aliasText = aliases?.length ? ` | aliases: ${aliases.join(", ")}` : "";
       return `**${provider}** (${info.total} chunks): ${info.categories.join(", ")}${aliasText}`;
     })
     .join("\n");
 
-  return textResult(`Indexed providers:\n\n${lines}`);
+  return textResult(`Indexed providers:\n\n${lines}\n\n${dataLine(db, options.source)}`);
 }
 
 export function compareProviders(
@@ -631,10 +684,11 @@ export function compareProviders(
   const fallbackQuery = relaxedFtsQuery(args.topic);
   let rows: CompareRow[];
   let requestedProviders: string[] = [];
+  const registry = registryFor(db);
   const providerSet = indexedProviders(db);
 
   if (args.providers?.length) {
-    requestedProviders = [...new Set(args.providers.map(normaliseProvider))];
+    requestedProviders = [...new Set(args.providers.map((provider) => normaliseProvider(registry, provider)))];
     rows = requestedProviders.flatMap((provider) => {
       if (!providerSet.has(provider)) return [];
       const strictRows = compareRowsForProvider(db, strictQuery, provider, 3);
@@ -642,10 +696,10 @@ export function compareProviders(
       return topUpRows(strictRows, compareRowsForProvider(db, fallbackQuery, provider, 3), 3);
     });
   } else {
-    rows = compareRows(db, strictQuery, args.providers);
+    rows = compareRows(db, registry, strictQuery, args.providers);
 
     if (rows.length === 0 && fallbackQuery !== strictQuery) {
-      rows = compareRows(db, fallbackQuery, args.providers);
+      rows = compareRows(db, registry, fallbackQuery, args.providers);
     }
   }
 
@@ -655,7 +709,7 @@ export function compareProviders(
       const providerNote = missingProviders.length
         ? ` Requested provider(s) not indexed: ${missingProviders.join(", ")}.${missingProviders
             .map((provider) => {
-              const suggestions = providerSuggestions(provider, providerSet);
+              const suggestions = providerSuggestions(registry, provider, providerSet);
               return suggestions.length ? ` ${provider}: did you mean ${suggestions.join(", ")}?` : "";
             })
             .join("")}`
@@ -683,7 +737,7 @@ export function compareProviders(
     ? `\n\nNo matching docs found for requested provider(s): ${missingProviders.join(", ")}.${missingProviders
         .map((provider) => {
           if (providerSet.has(provider)) return "";
-          const suggestions = providerSuggestions(provider, providerSet);
+          const suggestions = providerSuggestions(registry, provider, providerSet);
           return suggestions.length ? ` ${provider}: did you mean ${suggestions.join(", ")}?` : "";
         })
         .join("")}`
