@@ -60,7 +60,8 @@ def understat_match_shots(body):
 def clubelo_chart(fields):
     def check(body):
         match = re.search(rb"var vegaJson = (\{.*?\});\s*\n", body, re.S)
-        rows = next(iter(json.loads(match.group(1))["datasets"].values()))
+        # The spec can carry empty datasets next to the one with the rows.
+        rows = next(rows for rows in json.loads(match.group(1))["datasets"].values() if rows)
         return bool(rows) and fields <= set(rows[0])
 
     return check
