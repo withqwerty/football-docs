@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 24 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), plus the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 30 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more), and the APIs of wearable and sports-science vendors (STATSports, Firstbeat, Hawkin Dynamics, VALD). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -95,7 +95,7 @@ Add to `claude_desktop_config.json`:
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
 | `resolve_entity` | Map a player, coach, referee, team, competition, season, stage or match to its IDs at every provider through the [Reep register](https://reep.football). Uses a local copy of the free register (`REEP_DUCKDB_PATH`), else the Reep API (`REEP_API_KEY`; keys are issued by hand on request to getintouch+nutmeg@withqwerty.com, with no self-service sign-up), else returns setup steps and a DuckDB query. See [Reep through football-docs](docs/reep/overview.md#using-reep-through-football-docs). |
 
-Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` searches `soccerdata`; `ESPN`, `ESPN FC`, and `espn-soccer` search `espn`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
+Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` searches `soccerdata`; `ESPN`, `ESPN FC`, and `espn-soccer` search `espn`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `Sonra` / `Apex` search `statsports`; `Hawkin` searches `hawkin-dynamics`; `ForceDecks` / `NordBord` / `ForceFrame` search `vald`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
 ## How the index stays current
 
@@ -176,8 +176,18 @@ development and tests always use the working tree's docs.
 | FotMob | 5 | identity-surfaces, data-provenance |
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
+| STATSports | 70 | api-access, api-endpoints, data-model, drill-kpi-metrics (all 319 DrillKpiV7 fields), identity-surfaces, data-provenance |
+| Firstbeat | 79 | api-access, api-endpoints, data-model, variables (100 scalars, 17 time series), identity-surfaces, data-provenance |
+| Hawkin Dynamics | 67 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
+| VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 
-**2,860 searchable chunks** across 26 providers and tools.
+**3,394 searchable chunks** across 30 providers and tools.
+
+STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
+Their APIs return a customer's own athlete data, which includes personal and health
+data. The docs describe the API surface only: endpoints, field names, types and
+units as each vendor's public spec or reference page states them. They contain no
+athlete data, and none of these vendors' IDs join to a football data provider's IDs.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
@@ -212,6 +222,7 @@ trusting them.
 | Opta | Stats Perform's F24 appendices, which have no machine-readable form. `data/opta-truth.json` holds each ID the docs use, with its label, checked by hand. The test also rejects the wrong meanings earlier docs gave some IDs (`WRONG_MEANINGS` in `src/opta-truth.ts`) | `src/__tests__/opta-truth.test.ts` |
 | SportMonks | Type and state IDs as SportMonks publishes them on its definitions pages and in the types spreadsheet linked from its Types page (`data/sportmonks-types-truth.json`, fetched 2026-09-30). Not the full list: the complete one needs an API key | `src/__tests__/sportmonks-truth.test.ts` |
 | Reep | The public OpenAPI spec (endpoint paths and methods), and one release's manifest and column schema (CSV table list, columns used in the SQL examples, licence and exclusions) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
+| STATSports, Firstbeat, Hawkin Dynamics, VALD | Each vendor's public OpenAPI spec (STATSports v5 to v7, Firstbeat's `openapi.json`, the document inline on Hawkin's API reference page, VALD's eight product specs) — endpoint paths and methods, and every field name in the docs' schema tables. The STATSports `DrillKpiV7` table and the Hawkin metric tables must list the spec's and `metrics.json`'s entries in full. Firstbeat's variable list has no machine-readable source and is copied by hand from its public variables page | `src/__tests__/provider-truth.test.ts`, `src/__tests__/wearable-vendors.test.ts` |
 
 ESPN has a separate observation check in `src/__tests__/espn.test.ts`. It validates
 documented endpoint paths, field-table names and types, and source URLs against

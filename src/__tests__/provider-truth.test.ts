@@ -169,7 +169,16 @@ describe("provider docs are grounded in the vendor's OpenAPI spec", () => {
    * Schedules") rather than citing paths, so its coverage here is thin by nature -
    * the spec earns its place through field and enum accuracy more than endpoints.
    */
-  const PATH_CITING = ["wyscout", "skillcorner", "fmdb-pro", "sportradar"];
+  const PATH_CITING = [
+    "wyscout",
+    "skillcorner",
+    "fmdb-pro",
+    "sportradar",
+    "statsports",
+    "firstbeat",
+    "hawkin-dynamics",
+    "vald",
+  ];
 
   it.each(PATH_CITING)("%s docs actually cite endpoints, so the check is not vacuous", (provider) => {
     expect(countDocumentedEndpoints(loadProviderDocs(provider))).toBeGreaterThan(0);
