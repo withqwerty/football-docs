@@ -23,6 +23,7 @@ anyone can re-fetch and diff.
 | `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
+| `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -46,6 +47,7 @@ for v in 5 6 7; do
   curl -sL -o specs/statsports/thirdpartyapi-v$v.json \
     https://statsportsproseries.com/thirdpartyapi/swagger/v$v/swagger.json
 done
+curl -sL -o specs/firstbeat/openapi.json https://apidocs.firstbeat.com/assets/api-specification/openapi.json
 ```
 
 Check the STATSports files after a refresh: every path should start `/api/thirdPartyData/`
@@ -68,8 +70,8 @@ pnpm test
 
 ## Wearable and sports-science vendors
 
-STATSports sells measuring devices. Its API
-returns a customer's own athlete data. The specifications describe that data: field
+STATSports and Firstbeat sell measuring devices. Their APIs
+return a customer's own athlete data. The specifications describe that data: field
 names, types, units where stated, and endpoint paths. None of the files holds
 athlete data. Several fields they describe are personal or health data (dates of
 birth, sex, body weight, heart rate); the docs list those as fields only.
@@ -94,6 +96,14 @@ If a refresh brings back a prefixed copy, fetch again.
 The spec's `info.license` is named "Privacy Policy" and links to
 `https://statsports.com/apex-pro-series-privacy-policy/`, which returned 404 on
 2026-09-30. No other terms for the specification were found.
+
+### Firstbeat
+
+The page https://apidocs.firstbeat.com/api-specification/ embeds a static Redoc
+page, `/assets/api-specification/api-spec-static.html`. The OpenAPI file mirrored
+here is published beside it, at `/assets/api-specification/openapi.json`. The
+variable list the docs use (names, units, descriptions) is on
+https://apidocs.firstbeat.com/variables/ and is not part of the specification.
 
 ## What these are and are not
 
