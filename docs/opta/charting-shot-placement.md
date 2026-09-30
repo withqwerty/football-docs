@@ -112,8 +112,8 @@ building late-game, close-game, or "mattered" filters.
 | `mattered` | shot taken while the goal difference was within one and the final margin was within one | Narrative filter for chances that could plausibly change the result |
 
 Use the goal-timeline reconstruction in [charting-game-state.md](charting-game-state.md):
-drop disallowed goals with qualifier `8`, credit own goals with qualifier `28` to
-the opposing team, and sort by period-aware clock or `expandedMinute`. Count only
+count typeId `16` goals (a goal that VAR rules out becomes typeId `84` and is not
+counted), credit own goals with qualifier `28` to the opposing team, and sort by period-aware clock or `expandedMinute`. Count only
 goals before the shot; a goal event at the same clock should not retroactively
 change the shot's pre-shot state unless the provider explicitly links them.
 
@@ -139,26 +139,28 @@ set-piece exclusions or strata.
 | `9` | penalty |
 | `26` | free-kick shot |
 | `107` | throw-in |
-| `124` | goal kick in some JSON exports |
+| `124` | goal kick |
 
 For placement-skill charts, filter to qualifiers `72` or `20` for left/right-foot
-shots, exclude qualifier `15`/`3` headed actions, and either exclude or separately
+shots, exclude qualifier `15` headed shots, and either exclude or separately
 stratify penalties, corners, direct free kicks, and other set-piece contexts.
 
 ## Goal-mouth scaling
 
 Goal-mouth coordinates are on the Opta goal-mouth scale, not pitch `x`/`y`.
-For physical distances, a common football-analytics convention is:
+F24 Appendix 12 puts the inside of the goal frame at `45.2 <= GoalMouthY <= 54.8`
+and `0 <= GoalMouthZ <= 38`. Shots that hit a post have `GoalMouthY` of about
+44.2-45.2 or 54.8-55.8, and shots that hit the bar have `GoalMouthZ` of about 38-42.
+For physical distances, scale the inner frame to a 7.32 m by 2.44 m goal:
 
 | Quantity | Formula or value |
 |---|---|
-| Left post | `GoalMouthY ~= 44.62` |
-| Right post | `GoalMouthY ~= 55.38` |
-| Crossbar | `GoalMouthZ ~= 37` |
-| Y scale | `7.32m / (55.38 - 44.62) ~= 0.68m` per Y unit |
-| Z scale | `2.44m / 37 ~= 0.066m` per Z unit |
-| Post distance | `min(abs(gmy - 44.62), abs(gmy - 55.38)) * 0.68` |
-| Frame distance | Euclidean distance outside the `[44.62, 55.38] x [0, 37]` goal frame |
+| Post (inner edge) | `GoalMouthY = 45.2` and `GoalMouthY = 54.8` |
+| Crossbar (lower edge) | `GoalMouthZ = 38` |
+| Y scale | `7.32m / (54.8 - 45.2) ~= 0.76m` per Y unit |
+| Z scale | `2.44m / 38 ~= 0.064m` per Z unit |
+| Post distance | `min(abs(gmy - 45.2), abs(gmy - 54.8)) * 0.76` |
+| Frame distance | Euclidean distance outside the `[45.2, 54.8] x [0, 38]` goal frame |
 
 Use post distance for "how close to the corners" and frame distance for miss quality.
 Do not calculate these metrics unless both qualifiers `102` and `103` are present.

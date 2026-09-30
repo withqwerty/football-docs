@@ -16,12 +16,12 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import Database from "better-sqlite3";
 import { z } from "zod";
 import { hardenConnection } from "./data-format.js";
 import { cleanDataDir, dataModeFor, defaultDataDir, IndexChooser } from "./data-source.js";
 import { checkForUpdate } from "./data-update.js";
 import { ENTITY_TYPES } from "./reep.js";
+import { type Database, openDatabase } from "./sqlite.js";
 import {
   compareProviders,
   getProviderDocs,
@@ -68,17 +68,17 @@ function currentSelection() {
   return chooser.current();
 }
 
-export function openDb(): Database.Database {
+export function openDb(): Database {
   const path = currentSelection().path;
   if (!existsSync(path)) {
     throw new Error(
       `Docs database not found at ${path}. Run 'npm run ingest' first to build the index.`,
     );
   }
-  const db = new Database(path, { readonly: true });
+  const db = openDatabase(path, { readonly: true });
   hardenConnection(db);
 
-  const columns = db.pragma("table_info(docs)") as Array<{ name: string }>;
+  const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
   const hasProvenance = columns.some((column) => column.name === "source_type");
   if (!hasProvenance) {
     db.close();
@@ -90,10 +90,10 @@ export function openDb(): Database.Database {
   return db;
 }
 
-export function openQueueDb(): Database.Database {
+export function openQueueDb(): Database {
   mkdirSync(QUEUE_DB_DIR, { recursive: true });
-  const db = new Database(QUEUE_DB_PATH);
-  db.pragma("journal_mode = WAL");
+  const db = openDatabase(QUEUE_DB_PATH);
+  db.exec("PRAGMA journal_mode = WAL");
   db.exec(`
     CREATE TABLE IF NOT EXISTS requests (
       id TEXT PRIMARY KEY,
@@ -108,7 +108,7 @@ export function openQueueDb(): Database.Database {
   return db;
 }
 
-function withDocsDb<T>(handler: (db: Database.Database) => T): T {
+function withDocsDb<T>(handler: (db: Database) => T): T {
   const db = openDb();
   try {
     return handler(db);
@@ -117,7 +117,7 @@ function withDocsDb<T>(handler: (db: Database.Database) => T): T {
   }
 }
 
-function withQueueDb<T>(handler: (db: Database.Database) => T): T {
+function withQueueDb<T>(handler: (db: Database) => T): T {
   const db = openQueueDb();
   try {
     return handler(db);
@@ -134,7 +134,7 @@ export function createFootballDocsServer(): McpServer {
 
   server.tool(
     "search_docs",
-    "Search football data provider documentation. Use for finding event types, qualifier IDs, API endpoints, coordinate systems, data models, and cross-provider mappings. Returns the most relevant documentation chunks.",
+    "Search football data provider documentation. Use for finding event types, qualifier IDs, API endpoints, coordinate systems, data models, and cross-provider mappings. Returns the most relevant documentation chunks. Results that do not contain every query term are marked \"partial\", and the reply names any query term that no indexed doc mentions: if the question is about that term, it is not indexed.",
     {
       query: z.string().describe(
         "Search query. Examples: 'Opta goal qualifier', 'StatsBomb shot event type', 'coordinate system differences', 'xG qualifier ID', 'SportMonks fixture endpoint', 'FMDB Pro players endpoint'",

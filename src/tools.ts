@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type Database from "better-sqlite3";
 import { type ProviderRegistryEntry, type ProvidersFile, providersFileSchema, readMeta } from "./data-format.js";
+import type { Database } from "./sqlite.js";
 
 export { type ResolveEntityArgs, resolveEntity } from "./reep.js";
 
@@ -77,6 +77,17 @@ type CompareRow = {
 
 const QUERY_STOP_WORDS = new Set(["and", "or", "not", "near"]);
 
+/**
+ * Question words that carry no topic. The strict query leaves them out, so
+ * "What is Opta qualifier 214?" needs "opta", "qualifier" and "214" in one chunk,
+ * not "what" and "is" as well.
+ */
+const QUESTION_WORDS = new Set([
+  "a", "an", "the", "is", "are", "was", "were", "be", "do", "does", "did", "what", "which", "who",
+  "when", "where", "why", "how", "of", "in", "on", "at", "to", "for", "from", "by", "with", "about",
+  "it", "its", "this", "that", "i", "we", "you", "my", "our", "your", "can", "should", "there",
+]);
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
 
@@ -126,7 +137,7 @@ const registryCache = new Map<string, Registry>();
  * without one (older releases, and the in-memory databases tests build) fall
  * back to the packaged providers.json.
  */
-function registryFor(db: Database.Database): Registry {
+function registryFor(db: Database): Registry {
   const stamp = dataStampValue(db);
   if (stamp === null) {
     packagedRegistry ??= buildRegistry(
@@ -134,7 +145,12 @@ function registryFor(db: Database.Database): Registry {
     );
     return packagedRegistry;
   }
-  const key = `${db.name}\u0000${stamp}`;
+  // Two files can share a stamp (a pinned copy of a downloaded index, or test
+  // fixtures), so the stored registry is part of the key.
+  const providersJson = db.prepare("SELECT value FROM meta WHERE key = 'providers_json'").get() as
+    | { value: string }
+    | undefined;
+  const key = `${stamp}\u0000${providersJson?.value ?? ""}`;
   let registry = registryCache.get(key);
   if (!registry) {
     const meta = readMeta(db);
@@ -146,7 +162,7 @@ function registryFor(db: Database.Database): Registry {
 }
 
 /** The raw data_stamp, or null for a database without a meta table. */
-function dataStampValue(db: Database.Database): string | null {
+function dataStampValue(db: Database): string | null {
   const hasMeta = db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'meta'").get();
   if (!hasMeta) return null;
   const row = db.prepare("SELECT value FROM meta WHERE key = 'data_stamp'").get() as { value: string } | undefined;
@@ -177,12 +193,13 @@ function quoteFtsToken(token: string): string {
  *
  * User questions are usually natural language, not exact doc phrases. Joining
  * searchable tokens with AND keeps results precise while still allowing queries
- * like "Opta qualifier 76" to match docs that contain those tokens separately.
+ * like "Opta qualifier 214" to match docs that contain those tokens separately.
  */
 export function sanitiseFtsQuery(query: string): string {
   const tokens = extractFtsTokens(query);
   if (tokens.length === 0) return '""';
-  return tokens.map(quoteFtsToken).join(" AND ");
+  const topicTokens = tokens.filter((token) => !QUESTION_WORDS.has(token));
+  return (topicTokens.length ? topicTokens : tokens).map(quoteFtsToken).join(" AND ");
 }
 
 function relaxedFtsQuery(query: string): string {
@@ -202,7 +219,7 @@ function providerFilterLabel(original: string | undefined, normalised: string | 
   return trimmed === normalised ? normalised : `${trimmed} (${normalised})`;
 }
 
-function indexedProviders(db: Database.Database): Set<string> {
+function indexedProviders(db: Database): Set<string> {
   const rows = db.prepare("SELECT DISTINCT provider FROM docs ORDER BY provider").all() as Array<{
     provider: string;
   }>;
@@ -298,7 +315,7 @@ function normaliseLimit(value: number | undefined, defaultValue: number, maxValu
 }
 
 function searchRows(
-  db: Database.Database,
+  db: Database,
   matchQuery: string,
   provider: string | undefined,
   limit: number,
@@ -349,8 +366,48 @@ function topUpRows<T extends { provider: string; category: string; title: string
   return rows;
 }
 
+/**
+ * Query terms that no indexed chunk contains, within the provider filter when
+ * one is set. A search that falls back to partial matches can otherwise return
+ * a confident-looking list for something the index does not cover at all.
+ */
+function unindexedTerms(db: Database, query: string, provider: string | undefined): string[] {
+  const statement = provider
+    ? db.prepare(
+        "SELECT 1 FROM docs_fts JOIN docs d ON d.id = docs_fts.rowid WHERE docs_fts MATCH ? AND d.provider = ? LIMIT 1",
+      )
+    : db.prepare("SELECT 1 FROM docs_fts WHERE docs_fts MATCH ? LIMIT 1");
+  return extractFtsTokens(query).filter((token) => {
+    const params = provider ? [quoteFtsToken(token), provider] : [quoteFtsToken(token)];
+    return statement.get(...params) === undefined;
+  });
+}
+
+function unindexedTermsNote(terms: string[]): string {
+  if (terms.length === 0) return "";
+  const list = terms.map((term) => `"${term}"`).join(", ");
+  return ` No indexed doc mentions ${list}. If the question is about ${terms.length === 1 ? "that" : "those"}, it is not indexed.`;
+}
+
+/**
+ * Explain which results match every query term. The relaxed query fills the
+ * list with chunks that match any one term, and without a label an agent reads
+ * those as an answer.
+ */
+function partialMatchNote(strictCount: number, total: number, missingTerms: string[]): string {
+  if (strictCount === 0) {
+    return `No indexed doc matches every term, so these are partial matches. Check that they answer the question before relying on them.${unindexedTermsNote(
+      missingTerms,
+    )}\n\n`;
+  }
+  if (strictCount < total) {
+    return `Results 1-${strictCount} match every term. Results ${strictCount + 1}-${total} match only some terms.\n\n`;
+  }
+  return "";
+}
+
 function compareRows(
-  db: Database.Database,
+  db: Database,
   registry: Registry,
   matchQuery: string,
   providers: string[] | undefined,
@@ -375,7 +432,7 @@ function compareRows(
 }
 
 function compareRowsForProvider(
-  db: Database.Database,
+  db: Database,
   matchQuery: string,
   provider: string,
   limit: number,
@@ -420,7 +477,7 @@ function providerMetadata(registry: Registry, provider: string): ProviderRegistr
   return registry.providers[provider];
 }
 
-function providerCoverage(db: Database.Database, provider: string): {
+function providerCoverage(db: Database, provider: string): {
   indexed: boolean;
   total: number;
   categories: string[];
@@ -442,7 +499,7 @@ function providerCoverage(db: Database.Database, provider: string): {
 }
 
 function formatProviderResolution(
-  db: Database.Database,
+  db: Database,
   registry: Registry,
   provider: string,
   originalQuery: string,
@@ -470,7 +527,7 @@ function formatProviderResolution(
 }
 
 function providerDocsRows(
-  db: Database.Database,
+  db: Database,
   provider: string,
   matchQuery: string | undefined,
   category: string | undefined,
@@ -513,7 +570,7 @@ function providerDocsRows(
 }
 
 export function resolveProviderId(
-  db: Database.Database,
+  db: Database,
   args: ResolveProviderIdArgs,
 ): ToolResponse {
   const registry = registryFor(db);
@@ -538,7 +595,7 @@ export function resolveProviderId(
 }
 
 export function getProviderDocs(
-  db: Database.Database,
+  db: Database,
   args: GetProviderDocsArgs,
 ): ToolResponse {
   const registry = registryFor(db);
@@ -589,7 +646,7 @@ export function getProviderDocs(
   );
 }
 
-export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolResponse {
+export function searchDocs(db: Database, args: SearchDocsArgs): ToolResponse {
   const limit = normaliseLimit(args.max_results, 10, 50);
   const strictQuery = sanitiseFtsQuery(args.query);
   const fallbackQuery = relaxedFtsQuery(args.query);
@@ -603,39 +660,46 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
     }
   }
 
-  let rows = searchRows(db, strictQuery, provider, limit);
+  const strictRows = searchRows(db, strictQuery, provider, limit);
+  let rows = strictRows;
 
   if (rows.length < limit && fallbackQuery !== strictQuery) {
     rows = topUpRows(rows, searchRows(db, fallbackQuery, provider, limit), limit);
   }
 
+  // Every term appears somewhere when the strict query matched, so only look
+  // for missing terms when it did not.
+  const missingTerms = strictRows.length === 0 ? unindexedTerms(db, args.query, provider) : [];
+  const providerLabel = providerFilterLabel(args.provider, provider);
+
   if (rows.length === 0) {
-    const providerLabel = providerFilterLabel(args.provider, provider);
     return textResult(
-      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}. Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
+      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}.${unindexedTermsNote(
+        missingTerms,
+      )} Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
     );
   }
 
   const results = rows
     .map((row, index) => {
+      const match = index < strictRows.length ? "" : " | **Match:** partial";
       return `## [${index + 1}] ${row.title}\n**Provider:** ${row.provider} | **Category:** ${
         row.category
-      } | ${sourceLabel(row)}\n\n${row.content}`;
+      } | ${sourceLabel(row)}${match}\n\n${row.content}`;
     })
     .join("\n\n---\n\n");
 
-  const providerLabel = providerFilterLabel(args.provider, provider);
   return textResult(
     `Found ${rows.length} result(s) for "${args.query}"${
       providerLabel ? ` in ${providerLabel}` : ""
-    }:\n\n${results}`,
+    }:\n\n${partialMatchNote(strictRows.length, rows.length, missingTerms)}${results}`,
   );
 }
 
 /** Where the open index came from, for the freshness line in list_providers. */
 export type DataSourceLabel = "bundled" | "downloaded" | "pinned";
 
-function dataLine(db: Database.Database, source: DataSourceLabel | undefined): string {
+function dataLine(db: Database, source: DataSourceLabel | undefined): string {
   const stamp = dataStampValue(db);
   if (!stamp) return "Data: built before data stamps were recorded.";
   const commit = (db.prepare("SELECT value FROM meta WHERE key = 'commit'").get() as { value: string } | undefined)
@@ -644,7 +708,7 @@ function dataLine(db: Database.Database, source: DataSourceLabel | undefined): s
 }
 
 export function listProviders(
-  db: Database.Database,
+  db: Database,
   options: { source?: DataSourceLabel } = {},
 ): ToolResponse {
   const registry = registryFor(db);
@@ -677,7 +741,7 @@ export function listProviders(
 }
 
 export function compareProviders(
-  db: Database.Database,
+  db: Database,
   args: CompareProvidersArgs,
 ): ToolResponse {
   const strictQuery = sanitiseFtsQuery(args.topic);
@@ -749,7 +813,7 @@ export function compareProviders(
 }
 
 export function requestUpdate(
-  db: Database.Database,
+  db: Database,
   args: RequestUpdateArgs,
   options: { now?: Date; requestId?: string } = {},
 ): ToolResponse {

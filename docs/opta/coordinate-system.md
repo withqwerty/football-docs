@@ -35,11 +35,18 @@ When qualifier 28 (Own Goal) is present on a type 16 goal event, the coordinates
 
 ## Converting Between Systems
 
-To convert Opta to StatsBomb coordinates:
+To convert Opta to StatsBomb coordinates, flip the y axis as well as scaling it:
+Opta's y = 0 is the right touchline (bottom), and StatsBomb's y = 0 is the top.
 ```
 statsbomb_x = opta_x * 1.2
-statsbomb_y = opta_y * 0.8
+statsbomb_y = (100 - opta_y) * 0.8
 ```
+
+This linear scaling is approximate. Opta's 0-100 pitch is not drawn to scale
+(the penalty spot is at x = 11.5), so pitch markings do not line up exactly:
+mplsoccer 1.8.1's `Standardizer(pitch_from="opta", pitch_to="statsbomb")` maps
+Opta (11.5, 50) to StatsBomb (12, 40), not (13.8, 40). Use mplsoccer's
+`Standardizer` or kloppy's `.transform()` when positions near the boxes matter.
 
 To convert Opta to Wyscout:
 ```

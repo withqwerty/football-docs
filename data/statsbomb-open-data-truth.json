@@ -1,0 +1,319 @@
+{
+  "source": {
+    "repo": "https://github.com/statsbomb/open-data",
+    "commit": "4b73468fc5b0f1950f9f66fada70ad3a4f9327cb",
+    "generated_at": "2026-09-30T15:26:34.303Z",
+    "matches": 181,
+    "events": 634786
+  },
+  "fields": {
+    "50_50.outcome": {
+      "1": "Lost",
+      "2": "Success To Opposition",
+      "3": "Success To Team",
+      "4": "Won"
+    },
+    "bad_behaviour.card": {
+      "5": "Red Card",
+      "6": "Second Yellow",
+      "7": "Yellow Card"
+    },
+    "ball_receipt.outcome": {
+      "9": "Incomplete"
+    },
+    "clearance.body_part": {
+      "37": "Head",
+      "38": "Left Foot",
+      "40": "Right Foot",
+      "70": "Other"
+    },
+    "dribble.outcome": {
+      "8": "Complete",
+      "9": "Incomplete"
+    },
+    "duel.outcome": {
+      "4": "Won",
+      "13": "Lost In Play",
+      "14": "Lost Out",
+      "16": "Success In Play",
+      "17": "Success Out"
+    },
+    "duel.type": {
+      "10": "Aerial Lost",
+      "11": "Tackle"
+    },
+    "foul_committed.card": {
+      "5": "Red Card",
+      "6": "Second Yellow",
+      "7": "Yellow Card"
+    },
+    "foul_committed.type": {
+      "19": "6 Seconds",
+      "20": "Backpass Pick",
+      "21": "Dangerous Play",
+      "22": "Dive",
+      "23": "Foul Out",
+      "24": "Handball"
+    },
+    "goalkeeper.body_part": {
+      "35": "Both Hands",
+      "36": "Chest",
+      "37": "Head",
+      "38": "Left Foot",
+      "39": "Left Hand",
+      "40": "Right Foot",
+      "41": "Right Hand"
+    },
+    "goalkeeper.outcome": {
+      "1": "Lost",
+      "4": "Won",
+      "13": "Lost In Play",
+      "14": "Lost Out",
+      "15": "Success",
+      "16": "Success In Play",
+      "47": "Claim",
+      "48": "Clear",
+      "49": "Collected Twice",
+      "50": "Fail",
+      "52": "In Play Danger",
+      "53": "In Play Safe",
+      "55": "No Touch",
+      "56": "Saved Twice",
+      "58": "Touched In",
+      "59": "Touched Out",
+      "117": "Punched out"
+    },
+    "goalkeeper.position": {
+      "42": "Moving",
+      "43": "Prone",
+      "44": "Set"
+    },
+    "goalkeeper.technique": {
+      "45": "Diving",
+      "46": "Standing"
+    },
+    "goalkeeper.type": {
+      "25": "Collected",
+      "26": "Goal Conceded",
+      "27": "Keeper Sweeper",
+      "28": "Penalty Conceded",
+      "29": "Penalty Saved",
+      "30": "Punch",
+      "31": "Save",
+      "32": "Shot Faced",
+      "33": "Shot Saved",
+      "34": "Smother",
+      "109": "Penalty Saved to Post",
+      "113": "Shot Saved Off Target",
+      "114": "Shot Saved to Post"
+    },
+    "interception.outcome": {
+      "4": "Won",
+      "13": "Lost In Play",
+      "14": "Lost Out",
+      "16": "Success In Play",
+      "17": "Success Out"
+    },
+    "pass.body_part": {
+      "37": "Head",
+      "38": "Left Foot",
+      "40": "Right Foot",
+      "68": "Drop Kick",
+      "69": "Keeper Arm",
+      "70": "Other",
+      "106": "No Touch"
+    },
+    "pass.height": {
+      "1": "Ground Pass",
+      "2": "Low Pass",
+      "3": "High Pass"
+    },
+    "pass.outcome": {
+      "9": "Incomplete",
+      "74": "Injury Clearance",
+      "75": "Out",
+      "76": "Pass Offside",
+      "77": "Unknown"
+    },
+    "pass.technique": {
+      "104": "Inswinging",
+      "105": "Outswinging",
+      "107": "Straight",
+      "108": "Through Ball"
+    },
+    "pass.type": {
+      "61": "Corner",
+      "62": "Free Kick",
+      "63": "Goal Kick",
+      "64": "Interception",
+      "65": "Kick Off",
+      "66": "Recovery",
+      "67": "Throw-in"
+    },
+    "play_pattern": {
+      "1": "Regular Play",
+      "2": "From Corner",
+      "3": "From Free Kick",
+      "4": "From Throw In",
+      "5": "Other",
+      "6": "From Counter",
+      "7": "From Goal Kick",
+      "8": "From Keeper",
+      "9": "From Kick Off"
+    },
+    "position": {
+      "0": "Substitute",
+      "1": "Goalkeeper",
+      "2": "Right Back",
+      "3": "Right Center Back",
+      "4": "Center Back",
+      "5": "Left Center Back",
+      "6": "Left Back",
+      "7": "Right Wing Back",
+      "8": "Left Wing Back",
+      "9": "Right Defensive Midfield",
+      "10": "Center Defensive Midfield",
+      "11": "Left Defensive Midfield",
+      "12": "Right Midfield",
+      "13": "Right Center Midfield",
+      "14": "Center Midfield",
+      "15": "Left Center Midfield",
+      "16": "Left Midfield",
+      "17": "Right Wing",
+      "18": "Right Attacking Midfield",
+      "19": "Center Attacking Midfield",
+      "20": "Left Attacking Midfield",
+      "21": "Left Wing",
+      "22": "Right Center Forward",
+      "23": "Center Forward",
+      "24": "Left Center Forward",
+      "25": "Secondary Striker"
+    },
+    "shot.body_part": {
+      "37": "Head",
+      "38": "Left Foot",
+      "40": "Right Foot",
+      "70": "Other"
+    },
+    "shot.freeze_frame.position": {
+      "1": "Goalkeeper",
+      "2": "Right Back",
+      "3": "Right Center Back",
+      "4": "Center Back",
+      "5": "Left Center Back",
+      "6": "Left Back",
+      "7": "Right Wing Back",
+      "8": "Left Wing Back",
+      "9": "Right Defensive Midfield",
+      "10": "Center Defensive Midfield",
+      "11": "Left Defensive Midfield",
+      "12": "Right Midfield",
+      "13": "Right Center Midfield",
+      "14": "Center Midfield",
+      "15": "Left Center Midfield",
+      "16": "Left Midfield",
+      "17": "Right Wing",
+      "18": "Right Attacking Midfield",
+      "19": "Center Attacking Midfield",
+      "20": "Left Attacking Midfield",
+      "21": "Left Wing",
+      "22": "Right Center Forward",
+      "23": "Center Forward",
+      "24": "Left Center Forward",
+      "25": "Secondary Striker"
+    },
+    "shot.outcome": {
+      "96": "Blocked",
+      "97": "Goal",
+      "98": "Off T",
+      "99": "Post",
+      "100": "Saved",
+      "101": "Wayward",
+      "115": "Saved Off Target",
+      "116": "Saved to Post"
+    },
+    "shot.technique": {
+      "89": "Backheel",
+      "90": "Diving Header",
+      "91": "Half Volley",
+      "92": "Lob",
+      "93": "Normal",
+      "94": "Overhead Kick",
+      "95": "Volley"
+    },
+    "shot.type": {
+      "61": "Corner",
+      "62": "Free Kick",
+      "87": "Open Play",
+      "88": "Penalty"
+    },
+    "substitution.outcome": {
+      "102": "Injury",
+      "103": "Tactical"
+    },
+    "tactics.lineup.position": {
+      "1": "Goalkeeper",
+      "2": "Right Back",
+      "3": "Right Center Back",
+      "4": "Center Back",
+      "5": "Left Center Back",
+      "6": "Left Back",
+      "7": "Right Wing Back",
+      "8": "Left Wing Back",
+      "9": "Right Defensive Midfield",
+      "10": "Center Defensive Midfield",
+      "11": "Left Defensive Midfield",
+      "12": "Right Midfield",
+      "13": "Right Center Midfield",
+      "14": "Center Midfield",
+      "15": "Left Center Midfield",
+      "16": "Left Midfield",
+      "17": "Right Wing",
+      "18": "Right Attacking Midfield",
+      "19": "Center Attacking Midfield",
+      "20": "Left Attacking Midfield",
+      "21": "Left Wing",
+      "22": "Right Center Forward",
+      "23": "Center Forward",
+      "24": "Left Center Forward",
+      "25": "Secondary Striker"
+    },
+    "type": {
+      "2": "Ball Recovery",
+      "3": "Dispossessed",
+      "4": "Duel",
+      "5": "Camera On",
+      "6": "Block",
+      "8": "Offside",
+      "9": "Clearance",
+      "10": "Interception",
+      "14": "Dribble",
+      "16": "Shot",
+      "17": "Pressure",
+      "18": "Half Start",
+      "19": "Substitution",
+      "20": "Own Goal Against",
+      "21": "Foul Won",
+      "22": "Foul Committed",
+      "23": "Goal Keeper",
+      "24": "Bad Behaviour",
+      "25": "Own Goal For",
+      "26": "Player On",
+      "27": "Player Off",
+      "28": "Shield",
+      "29": "Camera off",
+      "30": "Pass",
+      "33": "50/50",
+      "34": "Half End",
+      "35": "Starting XI",
+      "36": "Tactical Shift",
+      "37": "Error",
+      "38": "Miscontrol",
+      "39": "Dribbled Past",
+      "40": "Injury Stoppage",
+      "41": "Referee Ball-Drop",
+      "42": "Ball Receipt*",
+      "43": "Carry"
+    }
+  }
+}

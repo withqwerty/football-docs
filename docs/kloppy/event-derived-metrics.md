@@ -209,8 +209,8 @@ Implementation notes:
 - Use a stable xT grid or model version and expose the threshold used for
   colours such as "threatening pass" (`xT > 0.02`, `xT > 0.05`, etc.).
 - Shot body-part and play-kind logic is provider-specific. Opta body-part
-  qualifiers include `72` left foot, `20` right foot, `15`/`3` head, and `21`
-  other; set-piece qualifiers such as `6` corner, `9` penalty, and `26`
+  qualifiers include `72` left foot, `20` right foot, `15` head, and `21`
+  other (`3` is a headed pass, not a shot); set-piece qualifiers such as `6` corner, `9` penalty, and `26`
   free-kick shot should be mapped before grouping.
 
 For public APIs, include both row-level actions and aggregate totals. This lets a

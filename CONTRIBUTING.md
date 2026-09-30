@@ -58,7 +58,7 @@ ls docs/
 
 Open the file in your AI tool and tell it what to change. Be specific about your source:
 
-> The Opta qualifiers doc at `docs/opta/qualifiers.md` is missing qualifier ID 468 (expectedGoalsNonPenalty). Add it to the xG Qualifiers section. Source: I verified this exists by checking actual Opta match event data.
+> The Opta qualifiers doc at `docs/opta/qualifiers.md` is missing qualifier ID 326 (Shot Pressure). Add it to the Shot Qualifiers section. Source: Appendix 2 of Stats Perform's F24 appendices, https://documentation.statsperform.com/docs/data/opta-push/assets/Appendix/FootballFeedSpec/f24-appendices.htm
 
 Or:
 
@@ -73,7 +73,7 @@ Open the file and check the AI's output is correct. Did it put the entry in the 
 ```bash
 npm run ingest    # Rebuild the search index (should show the updated chunk count)
 git add .
-git commit -m "docs: add missing qualifier 468 to Opta qualifiers"
+git commit -m "docs: add missing qualifier 326 to Opta qualifiers"
 git push origin your-branch-name
 ```
 

@@ -1,17 +1,17 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { type Database, openDatabase } from "../sqlite.js";
 import { searchDocs } from "../tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "..", "data", "docs.db");
 
 describe("data-engineering retrieval", () => {
-  let db: Database.Database;
+  let db: Database;
 
   beforeAll(() => {
-    db = new Database(DB_PATH, { readonly: true });
+    db = openDatabase(DB_PATH, { readonly: true });
   });
 
   afterAll(() => {

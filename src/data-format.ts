@@ -7,8 +7,8 @@
  * validation all live here.
  */
 
-import Database from "better-sqlite3";
 import { z } from "zod";
+import { type Database, openDatabase, pragmaValue, transaction } from "./sqlite.js";
 
 /** Bump when the table layout changes. Servers only use data with their own version. */
 export const DATA_SCHEMA_VERSION = 1;
@@ -105,7 +105,7 @@ export function compareVersions(a: string, b: string): number {
   return 0;
 }
 
-function hasMetaTable(db: Database.Database): boolean {
+function hasMetaTable(db: Database): boolean {
   return Boolean(
     db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'meta'").get(),
   );
@@ -115,7 +115,7 @@ function hasMetaTable(db: Database.Database): boolean {
  * Read and check the meta table. Returns null when the file predates the table
  * (older releases, and the in-memory databases some tests build).
  */
-export function readMeta(db: Database.Database): DataMeta | null {
+export function readMeta(db: Database): DataMeta | null {
   if (!hasMetaTable(db)) return null;
   const rows = db.prepare("SELECT key, value FROM meta").all() as Array<{ key: string; value: string }>;
   const values = new Map(rows.map((row) => [row.key, row.value]));
@@ -154,16 +154,16 @@ export interface MetaInput {
 }
 
 /** Replace the meta table's contents. Used by ingest. */
-export function writeMeta(db: Database.Database, input: MetaInput): void {
+export function writeMeta(db: Database, input: MetaInput): void {
   const insert = db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)");
-  db.transaction(() => {
+  transaction(db, () => {
     db.prepare("DELETE FROM meta").run();
     insert.run("schema_version", String(DATA_SCHEMA_VERSION));
     insert.run("min_server_version", MIN_SERVER_VERSION);
     insert.run("data_stamp", new Date(input.dataStamp).toISOString());
     if (input.commit) insert.run("commit", input.commit);
     insert.run("providers_json", input.providersJson);
-  })();
+  });
 }
 
 type SchemaRow = { type: string; name: string; tbl_name: string; sql: string | null };
@@ -176,7 +176,7 @@ const FTS_SHADOW_TABLE = /^docs_fts_(data|idx|content|docsize|config)$/;
  * exactly; the FTS5 shadow tables by name and type only, because users' installs
  * may build a different SQLite whose FTS5 writes their SQL differently.
  */
-function schemaRows(db: Database.Database): SchemaRow[] {
+function schemaRows(db: Database): SchemaRow[] {
   return (
     db
       .prepare("SELECT type, name, tbl_name, sql FROM sqlite_master ORDER BY type, name")
@@ -191,7 +191,7 @@ let referenceSchema: string | undefined;
 /** The exact sqlite_master rows a database built from SCHEMA_SQL has. */
 function expectedSchema(): string {
   if (!referenceSchema) {
-    const reference = new Database(":memory:");
+    const reference = openDatabase(":memory:");
     reference.exec(SCHEMA_SQL);
     referenceSchema = JSON.stringify(schemaRows(reference));
     reference.close();
@@ -200,9 +200,9 @@ function expectedSchema(): string {
 }
 
 /** Settings for any docs database this process opens, bundled or downloaded. */
-export function hardenConnection(db: Database.Database): void {
-  db.pragma("trusted_schema = OFF");
-  db.pragma("cell_size_check = ON");
+export function hardenConnection(db: Database): void {
+  db.exec("PRAGMA trusted_schema = OFF");
+  db.exec("PRAGMA cell_size_check = ON");
 }
 
 export type ValidationResult =
@@ -220,13 +220,13 @@ export function validateDatabase(
   serverVersion: string,
   options: { integrity?: boolean } = {},
 ): ValidationResult {
-  let db: Database.Database | undefined;
+  let db: Database | undefined;
   try {
-    db = new Database(path, { readonly: true, fileMustExist: true });
+    db = openDatabase(path, { readonly: true });
     hardenConnection(db);
 
     if (options.integrity) {
-      const check = db.pragma("quick_check", { simple: true });
+      const check = pragmaValue(db, "quick_check");
       if (check !== "ok") return { ok: false, reason: `integrity check failed (${String(check)})` };
     }
     if (JSON.stringify(schemaRows(db)) !== expectedSchema()) {

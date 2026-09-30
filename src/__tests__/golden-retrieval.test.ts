@@ -1,8 +1,8 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { SCHEMA_SQL } from "../ingest.js";
+import { type Database, openDatabase } from "../sqlite.js";
 import {
   compareProviders,
   getProviderDocs,
@@ -16,10 +16,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = resolve(__dirname, "..", "..", "data", "docs.db");
 
 describe("golden retrieval evals", () => {
-  let db: Database.Database;
+  let db: Database;
 
   beforeAll(() => {
-    db = new Database(DB_PATH, { readonly: true });
+    db = openDatabase(DB_PATH, { readonly: true });
   });
 
   afterAll(() => {
@@ -1177,14 +1177,14 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
-    expect(text).toContain("**statsbomb** (237 chunks)");
+    expect(text).toContain("**statsbomb** (244 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
     expect(text).toContain("**wyscout** (165 chunks)");
     expect(text).toContain("api-endpoints (13)");
     expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (567 chunks)");
+    expect(text).toContain("**sportmonks** (568 chunks)");
     expect(text).toContain("charting-season-stories (7)");
     expect(text).toContain("**fmdb-pro** (37 chunks)");
     expect(text).toContain("aliases: fmdb");
@@ -1271,7 +1271,7 @@ describe("golden retrieval evals", () => {
     // path against a throwaway in-memory db instead of relying on some
     // real provider staying uncrawled forever (that's what broke this test
     // when floodlight — its previous example — got crawled).
-    const emptyDb = new Database(":memory:");
+    const emptyDb = openDatabase(":memory:");
     emptyDb.exec(SCHEMA_SQL);
 
     const result = resolveProviderId(emptyDb, { query: "floodlight" });
@@ -1287,9 +1287,9 @@ describe("golden retrieval evals", () => {
   it.each([
     {
       provider: "Opta F24",
-      topic: "qualifier 76 big chance",
+      topic: "qualifier 214 big chance",
       expectedProvider: "opta",
-      expected: ["Big chance", "**Source:** curated"],
+      expected: ["| 214 | bigChance |", "**Source:** curated"],
     },
     {
       provider: "StatsBomb Open Data",

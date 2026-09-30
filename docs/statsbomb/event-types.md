@@ -9,7 +9,7 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 2 | Ball Recovery | Player regains possession from a loose ball |
 | 3 | Dispossessed | Player loses the ball through opponent action (not a failed dribble) |
 | 4 | Duel | Contested situation between two players (aerial or ground) |
-| 5 | Camera On* | Signals the stop of the camera capturing gameplay for a replay/video cut (deprecated; superseded by `off_camera`) |
+| 5 | Camera On* | Camera coverage resumes after a break, for example a replay (deprecated; superseded by `off_camera`) |
 | 6 | Block | Player blocks a shot, pass, or cross |
 | 8 | Offside | Player caught in an offside position |
 | 9 | Clearance | Defensive action to remove the ball from a dangerous area |
@@ -28,6 +28,7 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 26 | Player On | Player enters the pitch (substitution on) |
 | 27 | Player Off | Player leaves the pitch (substitution off) |
 | 28 | Shield | Player shields the ball from an opponent |
+| 29 | Camera off | Camera coverage stops, for example for a replay (deprecated with Camera On; superseded by `off_camera`) |
 | 30 | Pass | Any pass between players, including crosses, through balls, etc. |
 | 33 | 50/50 | Contested loose ball between two players |
 | 34 | Half End | Marks the end of each half/period |
@@ -283,6 +284,27 @@ Note: Regular open-play passes have no `type` field.
 
 A successful pass has **no** `outcome` field. The absence of `outcome` means the pass was completed.
 
+### Pass Techniques
+
+| ID | Name |
+|----|------|
+| 104 | Inswinging |
+| 105 | Outswinging |
+| 107 | Straight |
+| 108 | Through Ball |
+
+### Pass Body Parts
+
+| ID | Name |
+|----|------|
+| 37 | Head |
+| 38 | Left Foot |
+| 40 | Right Foot |
+| 68 | Drop Kick |
+| 69 | Keeper Arm |
+| 70 | Other |
+| 106 | No Touch |
+
 ---
 
 ## Carry (type_id: 43)
@@ -346,6 +368,22 @@ A contest between two players.
 
 ---
 
+## 50/50 (type_id: 33)
+
+### 50/50 Outcomes
+
+| ID | Name |
+|----|------|
+| 1 | Lost |
+| 2 | Success To Opposition |
+| 3 | Success To Team |
+| 4 | Won |
+
+The Open Data Events v4.0.0 specification gives these outcomes the IDs 108, 109,
+147 and 148. The open data uses 1-4, as above.
+
+---
+
 ## Pressure (type_id: 17)
 
 Defensive pressure applied to a player on the ball. Pressure events have `location` and `duration` but no nested object -- they are simple positional records.
@@ -396,10 +434,19 @@ The `goalkeeper` object contains keeper-specific action details.
 | 45 | Diving |
 | 46 | Standing |
 
+### Goalkeeper Positions
+
+| ID | Name |
+|----|------|
+| 42 | Moving |
+| 43 | Prone |
+| 44 | Set |
+
 ### Goalkeeper Outcomes
 
 | ID | Name |
 |----|------|
+| 1 | Lost |
 | 4 | Won |
 | 13 | Lost In Play |
 | 14 | Lost Out |
@@ -418,6 +465,9 @@ The `goalkeeper` object contains keeper-specific action details.
 | 58 | Touched In |
 | 59 | Touched Out |
 | 117 | Punched Out |
+
+The v4 events specification deprecates Lost (1), but older matches in the open
+data still carry it.
 
 ---
 
@@ -474,13 +524,28 @@ The `goalkeeper` object contains keeper-specific action details.
 | `penalty` | boolean | Whether the foul resulted in a penalty |
 | `counterpress` | boolean | Whether the foul was committed during a counterpress |
 
+### Foul Types
+
+| ID | Name |
+|----|------|
+| 19 | 6 Seconds |
+| 20 | Backpass Pick |
+| 21 | Dangerous Play |
+| 22 | Dive |
+| 23 | Foul Out |
+| 24 | Handball |
+
 ### Card Types
 
 | ID | Name |
 |----|------|
-| 5 | Yellow Card |
+| 5 | Red Card |
 | 6 | Second Yellow |
-| 7 | Red Card |
+| 7 | Yellow Card |
+
+The same IDs apply to `bad_behaviour.card`. The Open Data Events v4.0.0
+specification lists 5 as Yellow Card and 7 as Red Card. The open data itself,
+and kloppy's StatsBomb parser, use 5 = Red Card and 7 = Yellow Card.
 
 ---
 
@@ -496,6 +561,15 @@ The `goalkeeper` object contains keeper-specific action details.
 | `right_foot` | boolean | Whether the clearance was with right foot |
 | `left_foot` | boolean | Whether the clearance was with left foot |
 | `other` | boolean | Whether cleared with another body part |
+
+### Clearance Body Parts
+
+| ID | Name |
+|----|------|
+| 37 | Head |
+| 38 | Left Foot |
+| 40 | Right Foot |
+| 70 | Other |
 
 ---
 
@@ -552,6 +626,7 @@ StatsBomb uses a fixed set of position IDs across all events:
 
 | ID | Name |
 |----|------|
+| 0 | Substitute |
 | 1 | Goalkeeper |
 | 2 | Right Back |
 | 3 | Right Center Back |
@@ -574,6 +649,10 @@ StatsBomb uses a fixed set of position IDs across all events:
 | 20 | Left Attacking Midfield |
 | 21 | Left Wing |
 | 22 | Right Center Forward |
-| 23 | Center Forward (Striker) |
+| 23 | Center Forward |
 | 24 | Left Center Forward |
 | 25 | Secondary Striker |
+
+Position 0 (Substitute) appears in the `position` field of some events in the
+open data. Starting XI lineups and shot freeze frames use 1-25 only. The events specification
+abbreviates 23 as ST (Striker); the data names it Center Forward.

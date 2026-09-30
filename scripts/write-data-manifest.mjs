@@ -12,12 +12,12 @@
 import { createHash } from "node:crypto";
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
 const outDir = resolve(process.argv[2] ?? "data-release");
 const source = resolve("data", "docs.db");
 
-const db = new Database(source, { readonly: true });
+const db = new DatabaseSync(source, { readOnly: true });
 const meta = Object.fromEntries(
   db.prepare("SELECT key, value FROM meta WHERE key != 'providers_json'").all().map((row) => [row.key, row.value]),
 );

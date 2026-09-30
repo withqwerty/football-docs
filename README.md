@@ -29,6 +29,9 @@ MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard fo
 
 ## Quick start
 
+The server needs Node.js 22.13 or newer. It uses Node's built-in SQLite, so no
+native module is compiled at install time.
+
 ### Claude Code
 
 ```bash
@@ -84,7 +87,7 @@ Add to `claude_desktop_config.json`:
 
 | Tool | Description |
 |------|-------------|
-| `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version). |
+| `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version), mark partial matches, and name query terms that no indexed doc mentions. |
 | `resolve_provider_id` | Resolve provider names and aliases to canonical indexed provider keys before searching. |
 | `get_provider_docs` | Retrieve docs for a resolved provider, optionally filtered by topic or category. |
 | `list_providers` | List all indexed providers and their doc coverage. |
@@ -135,7 +138,7 @@ development and tests always use the working tree's docs.
 
 ## Example queries
 
-- "What is Opta qualifier 76?" (big chance)
+- "What is Opta qualifier 214?" (big chance)
 - "How does StatsBomb represent shot events?"
 - "Compare Opta and Wyscout coordinate systems"
 - "What player ID fields does Transfermarkt expose?"
@@ -148,12 +151,12 @@ development and tests always use the working tree's docs.
 | Provider | Chunks | Categories |
 |----------|--------|------------|
 | fast-forward | 250 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
-| StatsBomb | 237 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
+| StatsBomb | 244 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
-| SportMonks | 567 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
+| SportMonks | 568 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
@@ -174,7 +177,7 @@ development and tests always use the working tree's docs.
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,852 searchable chunks** across 26 providers and tools.
+**2,860 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
@@ -205,6 +208,9 @@ trusting them.
 | BeSoccer | The vendor's published Postman collection — request vocabulary and parameters | `src/__tests__/provider-truth.test.ts` |
 | Driblab | The vendor's published API guide — endpoint paths and methods. Field and group names are not in CI: the guide disagrees with the live API on them, so the docs follow the live API, checked by hand on 2026-09-22 | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
+| StatsBomb | ID and name pairs observed in a sample of the public [open data](https://github.com/statsbomb/open-data) (three matches per competition-season, at a pinned commit). IDs the sample lacks must be listed in both the Open Data Events specification and kloppy's parser. Regenerate with `pnpm statsbomb:truth` | `src/__tests__/statsbomb-truth.test.ts` |
+| Opta | Stats Perform's F24 appendices, which have no machine-readable form. `data/opta-truth.json` holds each ID the docs use, with its label, checked by hand. The test also rejects the wrong meanings earlier docs gave some IDs (`WRONG_MEANINGS` in `src/opta-truth.ts`) | `src/__tests__/opta-truth.test.ts` |
+| SportMonks | Type and state IDs as SportMonks publishes them on its definitions pages and in the types spreadsheet linked from its Types page (`data/sportmonks-types-truth.json`, fetched 2026-09-30). Not the full list: the complete one needs an API key | `src/__tests__/sportmonks-truth.test.ts` |
 | Reep | The public OpenAPI spec (endpoint paths and methods), and one release's manifest and column schema (CSV table list, columns used in the SQL examples, licence and exclusions) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
 
 ESPN has a separate observation check in `src/__tests__/espn.test.ts`. It validates
@@ -393,10 +399,8 @@ workflow run without the workflow asking for it.
 Two consequences worth knowing:
 
 - **The release job runs on Node 24.** Trusted publishing needs npm >= 11.5.1 and
-  Node 22 still ships npm 10. The whole job uses one Node version, because
-  switching mid-job would leave `better-sqlite3`'s native binding built for the
-  wrong ABI and `pnpm ingest` would fail on it. Node 24 is in the CI matrix for
-  the same reason: a release must not be the first time the suite meets it.
+  Node 22 still ships npm 10. Node 24 is in the CI matrix so that a release is
+  not the first time the suite meets it.
 - **The release job does not cache dependencies.** This is the tree that gets
   published, so it is resolved fresh from the lockfile rather than rehydrated
   from a cache that earlier runs could have poisoned.

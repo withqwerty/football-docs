@@ -1,8 +1,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { type Database, openDatabase } from "../sqlite.js";
 import { TOOL_NAMES } from "../tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -33,11 +33,11 @@ function markdownFiles(dir: string): string[] {
 }
 
 describe("corpus and public contract", () => {
-  let db: Database.Database;
+  let db: Database;
   let counts: Map<string, number>;
 
   beforeAll(() => {
-    db = new Database(DB_PATH, { readonly: true });
+    db = openDatabase(DB_PATH, { readonly: true });
     const rows = db
       .prepare("SELECT provider, COUNT(*) as chunks FROM docs GROUP BY provider ORDER BY provider")
       .all() as Array<{ provider: string; chunks: number }>;

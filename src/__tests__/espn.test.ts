@@ -1,10 +1,10 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { parseFrontmatter } from "../ingest.js";
 import { extractDocumentedEndpoints } from "../provider-truth.js";
+import { type Database, openDatabase } from "../sqlite.js";
 import { getProviderDocs, listProviders, resolveProviderId, searchDocs } from "../tools.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -137,8 +137,8 @@ describe("ESPN docs match dated public-endpoint observations", () => {
 });
 
 describe("ESPN retrieval", () => {
-  let db: Database.Database;
-  beforeAll(() => { db = new Database(resolve(ROOT, "data/docs.db"), { readonly: true }); });
+  let db: Database;
+  beforeAll(() => { db = openDatabase(resolve(ROOT, "data/docs.db"), { readonly: true }); });
   afterAll(() => { db.close(); });
 
   it.each(["ESPN", "espn-soccer", "ESPN FC"])("resolves %s to the indexed provider", (query) => {

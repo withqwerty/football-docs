@@ -1,19 +1,19 @@
 import { existsSync, rmSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { chunkMarkdown, SCHEMA_SQL } from "../ingest.js";
+import { type Database, openDatabase } from "../sqlite.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TEST_DB_PATH = resolve(__dirname, "..", "..", "data", "test.db");
 
 describe("ingest → search integration", () => {
-  let db: Database.Database;
+  let db: Database;
 
   beforeAll(() => {
-    db = new Database(TEST_DB_PATH);
-    db.pragma("journal_mode = WAL");
+    db = openDatabase(TEST_DB_PATH);
+    db.exec("PRAGMA journal_mode = WAL");
     db.exec("DROP TABLE IF EXISTS docs_fts; DROP TABLE IF EXISTS docs;");
     db.exec(SCHEMA_SQL);
   });
@@ -108,7 +108,7 @@ The x-axis runs left to right, y-axis bottom to top.`;
   });
 
   it("schema check detects missing source_type column", () => {
-    const oldDb = new Database(":memory:");
+    const oldDb = openDatabase(":memory:");
     oldDb.exec(`
       CREATE TABLE docs (
         id INTEGER PRIMARY KEY,
@@ -116,7 +116,7 @@ The x-axis runs left to right, y-axis bottom to top.`;
       );
     `);
 
-    const columns = oldDb.pragma("table_info(docs)") as Array<{ name: string }>;
+    const columns = oldDb.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
     const hasProvenance = columns.some((c) => c.name === "source_type");
     expect(hasProvenance).toBe(false);
     oldDb.close();

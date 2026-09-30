@@ -33,6 +33,9 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/discover.ts` | Source probing without crawling |
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
+| `src/statsbomb-truth.ts` | Validates StatsBomb ID tables against a sample of the open data |
+| `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/opta-truth.json` |
+| `src/sportmonks-truth.ts` | Holds SportMonks ID tables to its published definitions |
 | `src/__tests__/` | Vitest tests |
 | `scripts/` | Ground-truth generators (Python), live checks, and the data-release scripts (`write-data-manifest.mjs`, `check-data-compat.mjs`) |
 | `bin/serve.js` | npm bin entry — launches compiled `dist/index.js` |
@@ -62,10 +65,11 @@ pnpm ingest -- --provider kloppy      # incremental re-ingest
 pnpm provider:truth                   # regenerate package ground truth (python3.11)
 pnpm openapi:truth                    # regenerate spec-derived ground truth
 pnpm impect:truth                     # regenerate Impect open-data ground truth
+pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
 ```
 
-Node >= 20. Package manager is pnpm. Linter is Biome (not ESLint).
+Node >= 22.13 (the index uses the built-in `node:sqlite`). Package manager is pnpm. Linter is Biome (not ESLint).
 
 ## Corpus scope
 
@@ -130,7 +134,8 @@ ID fields and access shape.
 - When a doc in `docs/free-sources/` changes how to fetch the data, change its check
   in `scripts/check_free_sources_live.py` in the same commit and run the script.
   CI does not run it; `pnpm check:upstream` does, before a release.
-- `better-sqlite3` is in `onlyBuiltDependencies` — if install fails, check the native
-  build toolchain.
+- SQLite access goes through `src/sqlite.ts`, which wraps Node's built-in
+  `node:sqlite`. Do not add a native SQLite addon back: `npx` shares one cache
+  between Node versions, and an addon built for one Node ABI fails under another.
 - Each Python ground-truth package needs its own venv; co-installing makes pip
   silently downgrade conflicting versions.
