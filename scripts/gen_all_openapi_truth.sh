@@ -22,3 +22,10 @@ python3 scripts/gen_openapi_truth.py \
   --provider statsports
 python3 scripts/gen_openapi_truth.py specs/firstbeat/openapi.json --provider firstbeat
 python3 scripts/gen_openapi_truth.py specs/hawkin-dynamics/openapi.json --provider hawkin-dynamics
+# VALD publishes one specification per product API, each on its own host.
+python3 scripts/gen_openapi_truth.py \
+  specs/vald/externaltenants.json specs/vald/externalprofile.json \
+  specs/vald/extforcedecks.json specs/vald/externalnordbord.json \
+  specs/vald/externalforceframe.json specs/vald/extsmartspeed.json \
+  specs/vald/extdynamo.json specs/vald/externalhumantrakv2.json \
+  --provider vald

@@ -26,6 +26,14 @@ anyone can re-fetch and diff.
 | `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
 | `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-09-30 | 2026-09-30 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
+| `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalnordbord.json` | https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extsmartspeed.json` | https://prd-euw-api-extsmartspeed.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extdynamo.json` | https://prd-euw-api-extdynamo.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalhumantrakv2.json` | https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json | 2026-09-30 | 2026-09-30 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -52,6 +60,11 @@ done
 curl -sL -o specs/firstbeat/openapi.json https://apidocs.firstbeat.com/assets/api-specification/openapi.json
 node scripts/extract_hawkin_openapi.mjs --out specs/hawkin-dynamics/openapi.json
 curl -sL -o specs/hawkin-dynamics/metrics.json https://connect.hawkindynamics.com/assets/metrics.json
+for s in externaltenants:v1 externalprofile:v1 extforcedecks:v2019q3 externalnordbord:v1 \
+         externalforceframe:v1 extsmartspeed:v1 extdynamo:v1 externalhumantrakv2:v2; do
+  curl -sL -o specs/vald/${s%%:*}.json \
+    https://prd-euw-api-${s%%:*}.valdperformance.com/swagger/${s##*:}/swagger.json
+done
 ```
 
 Check the STATSports files after a refresh: every path should start `/api/thirdPartyData/`
@@ -74,7 +87,7 @@ pnpm test
 
 ## Wearable and sports-science vendors
 
-STATSports, Firstbeat and Hawkin Dynamics sell measuring devices. Their APIs
+STATSports, Firstbeat, Hawkin Dynamics and VALD sell measuring devices. Their APIs
 return a customer's own athlete data. The specifications describe that data: field
 names, types, units where stated, and endpoint paths. None of the files holds
 athlete data. Several fields they describe are personal or health data (dates of
@@ -123,6 +136,18 @@ The page leaves five of them out: two have no `testTypeName` ("intentionally
 excluded from the docs until the data is corrected", per the page script), and
 Clean, Snatch and Overhead Lift are "excluded by product decision". The docs follow
 the page and do not tabulate those five.
+
+### VALD
+
+VALD publishes one specification per product API, on hosts of the form
+`https://prd-<region>-api-<service>.valdperformance.com`. The `euw` copies are
+mirrored. On 2026-09-30 all eight were also fetched from the `use` and `aue` hosts
+and compared: they differ only in `operationId` values. VALD's server generates
+each `operationId` as a new random GUID on every request, so
+`scripts/check_upstream.py` ignores `operationId` when it compares.
+
+The VALD help centre (`support.vald.com`) returns a bot challenge to
+non-browser clients. Nothing from it is mirrored or quoted, and it is not crawled.
 
 ## What these are and are not
 

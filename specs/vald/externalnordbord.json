@@ -1,0 +1,2410 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Vald.Api.ExternalNordbord.V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "dd8ad8d1-9cb7-4469-a1a3-844b2ec74c89",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "6cea5c35-7ace-4c1b-97fb-8afbc6dde306",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "43674c23-659b-49ce-a04c-a45c3e1be553",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "a00742d4-cd55-40f7-b8e3-261c5085d704",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}/nordbordtrace": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves a Nordbord force trace.",
+        "operationId": "93d02f58-e9f2-4dee-9926-db3e00a2f063",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestForceTraceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves a Nordbord test summary.",
+        "operationId": "70dafb52-4bf1-4745-a01c-a7a6a880bbe8",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestSummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves a collection of pageable Nordbord test summaries.",
+        "operationId": "3e3ce4fb-5ef6-485e-beb2-a84ff7133586",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TestFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TestToUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "AthleteId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetPagedTestSummariesResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/tests/v2": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves a collection of Nordbord test summaries by modified date.",
+        "operationId": "c4149fd2-3463-460d-bba1-b2b1bd6858f9",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestSummariesByModifiedDateResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}/metrics": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves additional metrics for a Nordbord test summary.",
+        "operationId": "c935c5a1-6ec6-44d8-9378-79722b9204ec",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/training/programs/current": {
+      "get": {
+        "tags": [
+          "TrainingPrograms"
+        ],
+        "summary": "Retrieves a list of Nordbord training programs or a single program.",
+        "operationId": "9eeafcef-eb66-4305-9ffe-5debb797b812",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingProgramResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/eccentric": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord eccentric training sessions",
+        "operationId": "a7269596-3fd2-40b0-894a-e7c232854d50",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/eccentric/exercises": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord eccentric training exercise sessions",
+        "operationId": "ca6075f8-0356-4c7a-8e47-7ef9106ca854",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricExercisesResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/eccentric/exercises/repetitions": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord eccentric training exercise repetition sessions",
+        "operationId": "9de0e140-2b58-45cd-b6c9-3c0ec7d04581",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricExerciseRepetitionsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/isometric": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord isometric training sessions",
+        "operationId": "15c9818b-985f-4c14-b77b-d40ebdd3b7a7",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/isometric/exercises": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord isometric training exercise sessions",
+        "operationId": "8433fee7-6f3b-4dda-8a48-f1f43351de06",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricExercisesResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/training/sessions/isometric/exercises/repetitions": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of Nordbord isometric training exercise sessions",
+        "operationId": "30bd4cb4-2ad4-4d50-aff8-11a9d4753df9",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricExerciseRepetitionsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Microsoft.AspNetCore.Mvc.ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Diagnostics.DiagnosticsResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Diagnostics.DiagnosticsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "leftMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxTorquePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxTorquePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgTorquePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgTorquePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leftAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rightAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.ForceTrace": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "leftForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightForce": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetPagedTestSummariesResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestSummaryResponse"
+            },
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestForceTraceResponse": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "forces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.ForceTrace"
+            },
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestSummariesByModifiedDateResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.TestSummary"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.GetTestSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modifiedUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "leftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTorque": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftCalibration": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTorque": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightCalibration": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Tests.Responses.TestSummary": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "leftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTorque": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftCalibration": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTorque": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightCalibration": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.EccentricPrescriptionType": {
+        "enum": [
+          "Repetitions",
+          "TotalImpulse"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.EccentricThresholdType": {
+        "enum": [
+          "Manual",
+          "PersonalBest"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingProgramResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "addedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "programInstanceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "instanceAddedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramExercise"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricExerciseRepetitionsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "repetitionDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "repNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exceededTrainingThreshold": {
+            "type": "boolean"
+          },
+          "enteredTargetZone": {
+            "type": "boolean"
+          },
+          "leftImpulseInTargetZoneNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseInTargetZoneNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTimeInTargetZoneSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTimeInTargetZoneSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "durationInTargetZoneSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseAboveThresholdNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseAboveThresholdNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTimeAboveThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTimeAboveThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "durationAboveThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseBelowThresholdNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseBelowThresholdNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTimeBelowThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTimeBelowThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "durationBelowThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseBeforePeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseBeforePeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseAfterPeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseAfterPeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "repDurationSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeToPeakSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftPeakForceNewtons": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightPeakForceNewtons": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseEntireRepNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseEntireRepNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseAboveThresholdBeforePeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseAboveThresholdBeforePeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftImpulseAboveThresholdAfterPeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightImpulseAboveThresholdAfterPeakNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "leftTimeToPeakSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rightTimeToPeakSeconds": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricExercisesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programInstanceExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "exerciseDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "baseExerciseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "totalRepsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRepsAboveThreshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRepsInTargetZone": {
+            "type": "number",
+            "format": "double"
+          },
+          "eccentricPrescriptionType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.EccentricPrescriptionType"
+          },
+          "prescribedEccentricRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "prescribedEccentricTotalImpulseNewtonSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalImpulseInTargetZoneNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalDurationInTargetZoneSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalImpulseInTargetZoneAsymmetryPercentage": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalImpulseAboveThresholdNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalDurationAboveThresholdSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalImpulseAboveThresholdAsymmetryPercentage": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsEccentricResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "programInstanceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricExerciseRepetitionsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "repetitionDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "repNumber": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricExercisesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programInstanceExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exerciseDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "baseExerciseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.GetTrainingSessionsIsometricResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "programInstanceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.LateralityType": {
+        "enum": [
+          "Left",
+          "Right",
+          "Bilateral",
+          "UnilateralAlternating"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramEccentricConfiguration": {
+        "required": [
+          "id",
+          "programInstanceExerciseId",
+          "targetZoneAsymmetryLowerLimit",
+          "targetZoneAsymmetryUpperLimit",
+          "targetZoneLowerValue",
+          "thresholdType",
+          "thresholdValue",
+          "thresholdValueUnit"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programInstanceExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thresholdType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.EccentricThresholdType"
+          },
+          "thresholdValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "thresholdValueUnit": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ThresholdUnitType"
+          },
+          "targetZoneLowerValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "targetZoneUpperValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "targetZoneAsymmetryLowerLimit": {
+            "type": "number",
+            "format": "double"
+          },
+          "targetZoneAsymmetryUpperLimit": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramExercise": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "restTimeSeconds": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "trainingType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.TrainingType"
+          },
+          "baseExerciseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "eccentricPrescriptionType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.EccentricPrescriptionType"
+          },
+          "eccentricRepetitions": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "eccentricTotalImpulse": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isometricConfiguration": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramIsometricConfiguration"
+          },
+          "eccentricConfiguration": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramEccentricConfiguration"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ProgramIsometricConfiguration": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programInstanceExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "trainingZone": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.TrainingZoneType"
+          },
+          "forceGoal": {
+            "type": "number",
+            "format": "double"
+          },
+          "tolerance": {
+            "type": "number",
+            "format": "double"
+          },
+          "contractionTimeSeconds": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalNordbord.V1.Features.Training.Responses.LateralityType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.ThresholdUnitType": {
+        "enum": [
+          "Percentage",
+          "Newton"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.TrainingType": {
+        "enum": [
+          "Isometric",
+          "Eccentric"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalNordbord.V1.Features.Training.Responses.TrainingZoneType": {
+        "enum": [
+          "Manual",
+          "Max",
+          "Average"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Diagnostics"
+    },
+    {
+      "name": "Tests"
+    },
+    {
+      "name": "TrainingPrograms"
+    },
+    {
+      "name": "TrainingSessions"
+    }
+  ]
+}
