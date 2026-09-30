@@ -1177,7 +1177,7 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
-    expect(text).toContain("**statsbomb** (237 chunks)");
+    expect(text).toContain("**statsbomb** (244 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
     expect(text).toContain("**wyscout** (165 chunks)");
