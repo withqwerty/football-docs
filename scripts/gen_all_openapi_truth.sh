@@ -21,3 +21,4 @@ python3 scripts/gen_openapi_truth.py \
   specs/statsports/thirdpartyapi-v7.json \
   --provider statsports
 python3 scripts/gen_openapi_truth.py specs/firstbeat/openapi.json --provider firstbeat
+python3 scripts/gen_openapi_truth.py specs/hawkin-dynamics/openapi.json --provider hawkin-dynamics

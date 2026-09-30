@@ -24,6 +24,8 @@ anyone can re-fetch and diff.
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
 | `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
+| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-09-30 | 2026-09-30 |
+| `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -48,6 +50,8 @@ for v in 5 6 7; do
     https://statsportsproseries.com/thirdpartyapi/swagger/v$v/swagger.json
 done
 curl -sL -o specs/firstbeat/openapi.json https://apidocs.firstbeat.com/assets/api-specification/openapi.json
+node scripts/extract_hawkin_openapi.mjs --out specs/hawkin-dynamics/openapi.json
+curl -sL -o specs/hawkin-dynamics/metrics.json https://connect.hawkindynamics.com/assets/metrics.json
 ```
 
 Check the STATSports files after a refresh: every path should start `/api/thirdPartyData/`
@@ -70,7 +74,7 @@ pnpm test
 
 ## Wearable and sports-science vendors
 
-STATSports and Firstbeat sell measuring devices. Their APIs
+STATSports, Firstbeat and Hawkin Dynamics sell measuring devices. Their APIs
 return a customer's own athlete data. The specifications describe that data: field
 names, types, units where stated, and endpoint paths. None of the files holds
 athlete data. Several fields they describe are personal or health data (dates of
@@ -104,6 +108,21 @@ page, `/assets/api-specification/api-spec-static.html`. The OpenAPI file mirrore
 here is published beside it, at `/assets/api-specification/openapi.json`. The
 variable list the docs use (names, units, descriptions) is on
 https://apidocs.firstbeat.com/variables/ and is not part of the specification.
+
+### Hawkin Dynamics
+
+Hawkin publishes no specification file. The reference page
+https://connect.hawkindynamics.com/api carries the OpenAPI document inline, as a
+`const spec = {...};` literal, and its "Download JSON" button saves
+`JSON.stringify(spec, null, 2)`. `scripts/extract_hawkin_openapi.mjs` produces the
+same document without a browser: it evaluates only that literal, in an empty `vm`
+context. `/openapi.json` on the same host returned 404 on 2026-09-30.
+
+`metrics.json` is the file the page's Metrics tab loads. It lists 18 test types.
+The page leaves five of them out: two have no `testTypeName` ("intentionally
+excluded from the docs until the data is corrected", per the page script), and
+Clean, Snatch and Overhead Lift are "excluded by product decision". The docs follow
+the page and do not tabulate those five.
 
 ## What these are and are not
 
