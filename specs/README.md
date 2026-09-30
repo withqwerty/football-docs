@@ -20,6 +20,9 @@ anyone can re-fetch and diff.
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-29 | 2026-09-29 |
 | `reep/release.json` | https://data.reep.football/releases/20260926T145536Z/release.json (via `latest.json`) | 2026-09-29 | 2026-09-29 |
 | `reep/schema.json` | https://data.reep.football/releases/20260926T145536Z/schema.json | 2026-09-29 | 2026-09-29 |
+| `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-09-30 | 2026-09-30 |
+| `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
+| `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -39,7 +42,14 @@ curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
 curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
 curl -sL -o specs/sportradar/soccer-extended-v4-openapi.yaml https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml
 curl -sL -o specs/reep/openapi.yaml https://reep.football/openapi.yaml
+for v in 5 6 7; do
+  curl -sL -o specs/statsports/thirdpartyapi-v$v.json \
+    https://statsportsproseries.com/thirdpartyapi/swagger/v$v/swagger.json
+done
 ```
+
+Check the STATSports files after a refresh: every path should start `/api/thirdPartyData/`
+(see [STATSports](#statsports) below).
 
 The Sportradar specs are the ones the public Swagger UIs at
 `https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html` and
@@ -55,6 +65,35 @@ Then regenerate the derived truth and re-run the tests:
 pnpm openapi:truth
 pnpm test
 ```
+
+## Wearable and sports-science vendors
+
+STATSports sells measuring devices. Its API
+returns a customer's own athlete data. The specifications describe that data: field
+names, types, units where stated, and endpoint paths. None of the files holds
+athlete data. Several fields they describe are personal or health data (dates of
+birth, sex, body weight, heart rate); the docs list those as fields only.
+
+### STATSports
+
+The Swagger UI at https://statsportsproseries.com/thirdpartyapi/index.html lists
+three versions, v5, v6 and v7. All three are mirrored, because the docs cover each
+one. The spec declares no `servers`; the callable base is
+`https://statsportsproseries.com/thirdpartyapi`. Its `test` endpoint answered HTTP
+200 at `https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/test` on
+2026-09-30.
+
+The server is not stable in one respect. Repeated fetches of the same file return
+path keys with a varying number of leading `/thirdpartyapi` segments
+(`/api/thirdPartyData/test`, `/thirdpartyapi/api/thirdPartyData/test`,
+`/thirdpartyapi/thirdpartyapi/api/thirdPartyData/test`, and so on); the rest of the
+document does not change. The snapshots here keep the form with no prefix, and
+`scripts/check_upstream.py` removes the prefix from both sides before it compares.
+If a refresh brings back a prefixed copy, fetch again.
+
+The spec's `info.license` is named "Privacy Policy" and links to
+`https://statsports.com/apex-pro-series-privacy-policy/`, which returned 404 on
+2026-09-30. No other terms for the specification were found.
 
 ## What these are and are not
 

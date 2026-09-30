@@ -15,3 +15,8 @@ python3 scripts/gen_openapi_truth.py \
   specs/sportradar/soccer-v4-openapi.yaml specs/sportradar/soccer-extended-v4-openapi.yaml \
   --provider sportradar
 python3 scripts/gen_openapi_truth.py specs/reep/openapi.yaml --provider reep
+# STATSports publishes v5, v6 and v7 of its third-party API; clients still call all three.
+python3 scripts/gen_openapi_truth.py \
+  specs/statsports/thirdpartyapi-v5.json specs/statsports/thirdpartyapi-v6.json \
+  specs/statsports/thirdpartyapi-v7.json \
+  --provider statsports
