@@ -12,8 +12,9 @@ Opta projects often need two different pass-map surfaces:
 
 `matchevent` pass rows do not provide a general explicit receiver field. Qualifiers
 `140` and `141` are destination coordinates, not the receiving player. Qualifier
-`20` is an involved-player field on some event families and should not be treated
-as a universal pass recipient.
+`20` is the right-foot flag, not a player field. Qualifier `30` lists player IDs
+only on team set-up and formation-change events, so no qualifier names the
+receiver of a completed pass.
 
 If an event-only pipeline needs a passing network, make the receiver rule explicit:
 infer the receiver from the next same-team touch/pass in match-time order, or use a

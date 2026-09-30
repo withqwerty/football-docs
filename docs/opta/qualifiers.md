@@ -10,7 +10,7 @@ doc, not field names: the feed carries only the numeric `qualifierId`.
 
 | ID | Name | Notes |
 |----|------|-------|
-| 1 | longBall | Pass longer than 32 metres |
+| 1 | longBall | Intended long ball, including launches. The definition is about intent, not a fixed length: in Premier League 2025/26 data almost every pass of 32 metres or more has Q1, and some shorter passes have it too |
 | 2 | cross | Cross (Q2). Corners commonly carry Q2 + Q6; free-kick crosses commonly carry Q2 + Q5; open-play crosses are Q2 without Q5/Q6. |
 | 3 | headPass | Headed pass (Q3). Distinct from Q15, the headed shot qualifier. |
 | 4 | throughBall | Through ball (Q4). Do not confuse with Q5 free-kick delivery. |
@@ -20,7 +20,7 @@ doc, not field names: the feed carries only the numeric `qualifierId`.
 | 124 | goalKick | Goal kick pass. For goal-kick distribution charts, combine with pass end coordinates Q140/Q141. |
 | 279 | kickOff | Kick-off pass. Value `S` is the kick-off that starts a period; `G` is the kick-off after a goal. |
 | 7 | playersCaughtOffside | On an offside pass (typeId 2). The value is the ID of the player caught offside. It is not a goal-kick flag; goal kicks are Q124. |
-| 154 | intentionalAssist | Pass that creates a scoring chance, for example a cross into the box or a through ball |
+| 154 | intentionalAssist | The assist was intentional: the passer meant the pass, with no deflection. It appears on the assisting pass and on the shot. For the pass that set up a shot use Q210; for an assisted shot use Q29 |
 | 210 | assist | The pass set up a shot, a goal or a missed chance |
 | 196 | switchOfPlay | Pass crossing centre zone, y-distance > 60 |
 | 212 | length | Estimated distance in metres that the ball travelled on the pass or clearance |
@@ -66,8 +66,8 @@ charting-shot-placement for the full zone list.
 | ID | Name | Notes |
 |----|------|-------|
 | 28 | ownGoal | Own goal. contestantId is the team that scored it; credit the opposing team. Own-goal coordinates are near the defending end, so exclude or reattribute them before shot-distance analysis. |
-| 280 | fantasyAssistType | Fantasy assist type on a goal, as a string (open data shows values such as `PENALTY_WON`, `HANDBALL_WON`, `PASS_LOST` and `BLOCKED_SHOT`). It is not an own-goal flag; use Q28. |
-| 8 | goalDisallowed | On a pass (typeId 2): the pass led to a goal that was disallowed for a foul or offside. It is not a flag on goal events. |
+| 280 | fantasyAssistType | Fantasy assist type on a goal, as a string. F24 lists `PASS_LOST`, `BLOCKED_SHOT`, `ATTEMPT_SAVED`, `POST`, `FREE_KICK_WON`, `HANDBALL_WON`, `OWN_GOAL` and `PENALTY_WON`. `OWN_GOAL` appears on own goals together with Q28. It is not an own-goal flag; use Q28. |
+| 8 | goalDisallowed | On an offside pass (typeId 2): the pass led to a goal that was disallowed for a foul or offside. It is not a flag on goal events. A goal that VAR rules out becomes a Deleted after review event (typeId 84) with Q436 = 16 |
 | 102 | goalMouthY | Y coord in goal mouth; the posts are at 45.2 and 54.8 |
 | 103 | goalMouthZ | Z coord / height in goal mouth; 0 is the ground and the crossbar is at 38 |
 
@@ -103,7 +103,9 @@ charting-shot-placement for the full zone list.
 | 59 | jerseyNumber | Shirt number of player(s), shown for substitutions, lineups, and lineup changes |
 | 194 | captain | Player ID of the team captain |
 | 292 | detailedPositionId | Granular position on sub-on events (1-10) |
-| 364 | VARDelay | VAR delay marker on a start delay event (typeId 27) |
+| 364 | VARDelay | VAR delay marker on a start delay event (typeId 27). In Premier League 2025/26 data the matching end delay (typeId 28) carries it too |
+| 144 | deletedEventType | On a deleted event (typeId 43): the typeId the event had before it was deleted |
+| 436 | preReviewEventType | On a Deleted after review event (typeId 84): the typeId the event had before a VAR review deleted it. A goal ruled out by VAR has the value 16 |
 
 ## Card Qualifiers
 

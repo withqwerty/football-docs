@@ -10,7 +10,7 @@ specific match minute.
 | Field or qualifier | Meaning |
 |---|---|
 | typeId `16` | goal event |
-| qualifier `8` | goal disallowed; Stats Perform lists it on the pass (typeId `2`) that led to the disallowed goal, not on goal events |
+| qualifier `8` | goal disallowed; Stats Perform lists it on the offside pass (typeId `2`) that led to the disallowed goal, not on goal events |
 | qualifier `28` | own goal; credit the opposing team, not the event `contestantId` |
 | event `contestantId` / `teamId` | team attached to the event |
 | `timeMin` + `timeSec` | event clock in the Opta feed |
@@ -25,8 +25,10 @@ Recommended scoreline reconstruction:
 1. Select goal events: Opta typeId `16`, or `isGoal === true` in a WhoScored-shaped
    event model.
 2. As a guard, drop any goal event that carries qualifier `8` (`goalDisallowed`).
-   Stats Perform's MA36 table lists Q8 only on the pass (typeId `2`) that led to a
-   disallowed goal, so in a clean feed this step removes nothing.
+   Stats Perform's MA36 table lists Q8 only on the offside pass (typeId `2`) that
+   led to a disallowed goal, so in a clean feed this step removes nothing. A goal
+   that VAR rules out becomes a Deleted after review event (typeId `84`, with
+   qualifier `436` = `16`), so it is not selected in step 1.
 3. If qualifier `28` (`ownGoal`) is present, add the goal to the opponent's
    score; otherwise add it to the event team.
 4. Sort goals by period and clock/expanded minute.
@@ -146,7 +148,7 @@ official ball-in-play intervals.
 | Transition | Event rule | Notes |
 |---|---|---|
 | play to dead | typeId `5` ball out, typeId `16` goal, typeId `27` start delay, typeId `4` foul | For paired foul/out events, define which outcome/team is treated as the causer. |
-| dead to play | typeId `1` pass with restart qualifier `107`, `124`, `6`, `279`, or `5`; or typeId `28` end delay | Qualifier `107` = throw-in, `124` = goal kick in many JSON exports, `6` = corner, `279` = kick-off/restart, `5` = free kick. |
+| dead to play | typeId `1` pass with restart qualifier `107`, `124`, `6`, `279`, or `5`; or typeId `28` end delay | Qualifier `107` = throw-in, `124` = goal kick, `6` = corner, `279` = kick-off/restart, `5` = free kick. |
 | restart gap | dead trigger timestamp to matching restart pass timestamp | Keep restart type, period, time, and restarting team. |
 | goal-to-restart gap | goal event to following kick-off/restart | Useful for post-goal delay stories; keep it separate from generic ball-out gaps. |
 | dead-time barcode | dead segments over period start/end bounds | Render halves separately and show the half-time gap as a gap, not as dead time. |
@@ -210,7 +212,7 @@ Add tests or fixtures for these cases when implementing game-state logic:
 
 | Case | Expected handling |
 |---|---|
-| Disallowed goal with qualifier `8` | does not change scoreline |
+| Goal ruled out by VAR (typeId `84`, qualifier `436` = `16`) | does not change scoreline |
 | Own goal with qualifier `28` | increments the opposing team's score |
 | Multiple goals in stoppage time | sorted by expanded minute / period-aware clock |
 | Goal before a pass-map window | affects every later pass in that team's state |
