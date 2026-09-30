@@ -77,6 +77,17 @@ type CompareRow = {
 
 const QUERY_STOP_WORDS = new Set(["and", "or", "not", "near"]);
 
+/**
+ * Question words that carry no topic. The strict query leaves them out, so
+ * "What is Opta qualifier 214?" needs "opta", "qualifier" and "214" in one chunk,
+ * not "what" and "is" as well.
+ */
+const QUESTION_WORDS = new Set([
+  "a", "an", "the", "is", "are", "was", "were", "be", "do", "does", "did", "what", "which", "who",
+  "when", "where", "why", "how", "of", "in", "on", "at", "to", "for", "from", "by", "with", "about",
+  "it", "its", "this", "that", "i", "we", "you", "my", "our", "your", "can", "should", "there",
+]);
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
 
@@ -182,7 +193,8 @@ function quoteFtsToken(token: string): string {
 export function sanitiseFtsQuery(query: string): string {
   const tokens = extractFtsTokens(query);
   if (tokens.length === 0) return '""';
-  return tokens.map(quoteFtsToken).join(" AND ");
+  const topicTokens = tokens.filter((token) => !QUESTION_WORDS.has(token));
+  return (topicTokens.length ? topicTokens : tokens).map(quoteFtsToken).join(" AND ");
 }
 
 function relaxedFtsQuery(query: string): string {
@@ -347,6 +359,46 @@ function topUpRows<T extends { provider: string; category: string; title: string
     rows.push(row);
   }
   return rows;
+}
+
+/**
+ * Query terms that no indexed chunk contains, within the provider filter when
+ * one is set. A search that falls back to partial matches can otherwise return
+ * a confident-looking list for something the index does not cover at all.
+ */
+function unindexedTerms(db: Database.Database, query: string, provider: string | undefined): string[] {
+  const statement = provider
+    ? db.prepare(
+        "SELECT 1 FROM docs_fts JOIN docs d ON d.id = docs_fts.rowid WHERE docs_fts MATCH ? AND d.provider = ? LIMIT 1",
+      )
+    : db.prepare("SELECT 1 FROM docs_fts WHERE docs_fts MATCH ? LIMIT 1");
+  return extractFtsTokens(query).filter((token) => {
+    const params = provider ? [quoteFtsToken(token), provider] : [quoteFtsToken(token)];
+    return statement.get(...params) === undefined;
+  });
+}
+
+function unindexedTermsNote(terms: string[]): string {
+  if (terms.length === 0) return "";
+  const list = terms.map((term) => `"${term}"`).join(", ");
+  return ` No indexed doc mentions ${list}. If the question is about ${terms.length === 1 ? "that" : "those"}, it is not indexed.`;
+}
+
+/**
+ * Explain which results match every query term. The relaxed query fills the
+ * list with chunks that match any one term, and without a label an agent reads
+ * those as an answer.
+ */
+function partialMatchNote(strictCount: number, total: number, missingTerms: string[]): string {
+  if (strictCount === 0) {
+    return `No indexed doc matches every term, so these are partial matches. Check that they answer the question before relying on them.${unindexedTermsNote(
+      missingTerms,
+    )}\n\n`;
+  }
+  if (strictCount < total) {
+    return `Results 1-${strictCount} match every term. Results ${strictCount + 1}-${total} match only some terms.\n\n`;
+  }
+  return "";
 }
 
 function compareRows(
@@ -603,32 +655,39 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
     }
   }
 
-  let rows = searchRows(db, strictQuery, provider, limit);
+  const strictRows = searchRows(db, strictQuery, provider, limit);
+  let rows = strictRows;
 
   if (rows.length < limit && fallbackQuery !== strictQuery) {
     rows = topUpRows(rows, searchRows(db, fallbackQuery, provider, limit), limit);
   }
 
+  // Every term appears somewhere when the strict query matched, so only look
+  // for missing terms when it did not.
+  const missingTerms = strictRows.length === 0 ? unindexedTerms(db, args.query, provider) : [];
+  const providerLabel = providerFilterLabel(args.provider, provider);
+
   if (rows.length === 0) {
-    const providerLabel = providerFilterLabel(args.provider, provider);
     return textResult(
-      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}. Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
+      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}.${unindexedTermsNote(
+        missingTerms,
+      )} Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
     );
   }
 
   const results = rows
     .map((row, index) => {
+      const match = index < strictRows.length ? "" : " | **Match:** partial";
       return `## [${index + 1}] ${row.title}\n**Provider:** ${row.provider} | **Category:** ${
         row.category
-      } | ${sourceLabel(row)}\n\n${row.content}`;
+      } | ${sourceLabel(row)}${match}\n\n${row.content}`;
     })
     .join("\n\n---\n\n");
 
-  const providerLabel = providerFilterLabel(args.provider, provider);
   return textResult(
     `Found ${rows.length} result(s) for "${args.query}"${
       providerLabel ? ` in ${providerLabel}` : ""
-    }:\n\n${results}`,
+    }:\n\n${partialMatchNote(strictRows.length, rows.length, missingTerms)}${results}`,
   );
 }
 

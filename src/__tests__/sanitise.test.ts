@@ -8,7 +8,15 @@ describe("sanitiseFtsQuery", () => {
   });
 
   it("extracts useful tokens from quoted text", () => {
-    expect(sanitiseFtsQuery('the "best" xG')).toBe('"the" AND "best" AND "xg"');
+    expect(sanitiseFtsQuery('the "best" xG')).toBe('"best" AND "xg"');
+  });
+
+  it("leaves question words out of the strict query", () => {
+    expect(sanitiseFtsQuery("What is Opta qualifier 214?")).toBe('"opta" AND "qualifier" AND "214"');
+  });
+
+  it("keeps question words when the query has nothing else", () => {
+    expect(sanitiseFtsQuery("what is it")).toBe('"what" AND "is" AND "it"');
   });
 
   it("neutralises FTS5 AND/OR/NOT operators", () => {
