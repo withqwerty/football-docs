@@ -134,7 +134,7 @@ export function createFootballDocsServer(): McpServer {
 
   server.tool(
     "search_docs",
-    "Search football data provider documentation. Use for finding event types, qualifier IDs, API endpoints, coordinate systems, data models, and cross-provider mappings. Returns the most relevant documentation chunks. Results that do not contain every query term are marked \"partial\", and the reply names any query term that no indexed doc mentions: if the question is about that term, it is not indexed.",
+    "Search football data provider documentation. Use for finding event types, qualifier IDs, API endpoints, coordinate systems, data models, and cross-provider mappings. Returns the most relevant documentation chunks. Results that do not contain every query term are marked \"partial\", and the reply names any query term that no indexed doc mentions: if the question is about that term, it is not indexed. It also says when the query names a provider that is not indexed, and why.",
     {
       query: z.string().describe(
         "Search query. Examples: 'Opta goal qualifier', 'StatsBomb shot event type', 'coordinate system differences', 'xG qualifier ID', 'SportMonks fixture endpoint', 'FMDB Pro players endpoint'",

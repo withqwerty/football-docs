@@ -91,11 +91,16 @@ const QUESTION_WORDS = new Set([
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
 
+/** A provider that was assessed and is not indexed, and why. */
+type NotIndexed = { displayName: string; reason: string };
+
 /** The provider registry plus the alias maps derived from it. */
 type Registry = {
   providers: ProvidersFile["providers"];
   aliases: Record<string, string>;
   displayAliases: Record<string, string[]>;
+  /** Slug of a not-indexed provider's key, display name or alias -> its entry. */
+  notIndexed: Record<string, NotIndexed>;
 };
 
 function slugProvider(provider: string): string {
@@ -125,7 +130,15 @@ function buildRegistry(file: ProvidersFile): Registry {
     displayAliases[provider] = list;
   }
 
-  return { providers: file.providers, aliases, displayAliases };
+  const notIndexed: Record<string, NotIndexed> = {};
+  for (const [key, entry] of Object.entries(file.not_indexed ?? {})) {
+    const value = { displayName: entry.display_name, reason: entry.reason };
+    for (const name of [key, entry.display_name, ...entry.aliases]) {
+      notIndexed[slugProvider(name)] = value;
+    }
+  }
+
+  return { providers: file.providers, aliases, displayAliases, notIndexed };
 }
 
 let packagedRegistry: Registry | undefined;
@@ -277,9 +290,43 @@ function unknownProviderMessage(
   provider: string,
   providerSet: Set<string>,
 ): string {
+  const assessed = registry.notIndexed[slugProvider(original)];
+  if (assessed) {
+    return `Provider "${original.trim()}" is not indexed: ${assessed.reason} Call list_providers for the providers that are.`;
+  }
   const suggestions = providerSuggestions(registry, provider, providerSet);
   const suggestionText = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
   return `Provider "${providerFilterLabel(original, provider)}" is not indexed.${suggestionText} Call list_providers for available provider keys, or use request_update to suggest adding it.`;
+}
+
+/**
+ * Providers a query names that have no indexed docs: ones assessed and left
+ * out (providers.json not_indexed), and registered ones not indexed yet. A
+ * query for "Catapult PlayerLoad" otherwise gets Impect chunks, because the
+ * Impect docs mention that Catapult owns it, with nothing to say Catapult's own
+ * data is not covered. Single words and adjacent pairs are checked, so
+ * "Kitman Labs" matches as well as "kitman".
+ */
+function unindexedProviderNote(db: Database, registry: Registry, query: string): string {
+  const words = query.match(/[\p{L}\p{N}]+/gu) ?? [];
+  const candidates = [...words, ...words.slice(1).map((word, index) => `${words[index]} ${word}`)];
+  const indexed = indexedProviders(db);
+  const notes = new Map<string, string>();
+  for (const candidate of candidates) {
+    const slug = slugProvider(candidate);
+    const assessed = registry.notIndexed[slug];
+    if (assessed) {
+      notes.set(assessed.displayName, `${assessed.displayName} is not an indexed provider: ${assessed.reason}`);
+      continue;
+    }
+    const provider = registry.aliases[slug];
+    if (provider && !indexed.has(provider)) {
+      const name = registry.providers[provider]?.display_name ?? provider;
+      notes.set(name, `${name} is registered but has no indexed docs yet.`);
+    }
+  }
+  if (notes.size === 0) return "";
+  return `${[...notes.values()].join(" ")} Results below come from other providers and do not cover it.\n\n`;
 }
 
 function requestProviderKey(provider: string): string {
@@ -671,10 +718,13 @@ export function searchDocs(db: Database, args: SearchDocsArgs): ToolResponse {
   // for missing terms when it did not.
   const missingTerms = strictRows.length === 0 ? unindexedTerms(db, args.query, provider) : [];
   const providerLabel = providerFilterLabel(args.provider, provider);
+  // A provider filter already answers "is it indexed", so only check the
+  // query text when there is none.
+  const providerNote = provider ? "" : unindexedProviderNote(db, registry, args.query);
 
   if (rows.length === 0) {
     return textResult(
-      `No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}.${unindexedTermsNote(
+      `${providerNote}No results found for "${args.query}"${providerLabel ? ` in ${providerLabel}` : ""}.${unindexedTermsNote(
         missingTerms,
       )} Try broader football-data terms, remove the provider filter, or call list_providers to inspect coverage.`,
     );
@@ -692,7 +742,7 @@ export function searchDocs(db: Database, args: SearchDocsArgs): ToolResponse {
   return textResult(
     `Found ${rows.length} result(s) for "${args.query}"${
       providerLabel ? ` in ${providerLabel}` : ""
-    }:\n\n${partialMatchNote(strictRows.length, rows.length, missingTerms)}${results}`,
+    }:\n\n${providerNote}${partialMatchNote(strictRows.length, rows.length, missingTerms)}${results}`,
   );
 }
 

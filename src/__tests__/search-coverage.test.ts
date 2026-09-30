@@ -42,6 +42,40 @@ describe("search_docs coverage labels", () => {
     expect(text).toContain('No indexed doc mentions "catapult", "vector".');
   });
 
+  it("says when the query names a provider that was assessed and is not indexed", () => {
+    const text = searchDocs(db, { query: "Catapult player speed" }).content[0].text;
+
+    expect(text).toContain("Catapult is not an indexed provider:");
+    expect(text).toContain("Results below come from other providers and do not cover it.");
+    expect(text).toContain("## [1] Physical data");
+  });
+
+  it("matches a two-word provider name", () => {
+    const text = searchDocs(db, { query: "Kitman Labs player speed" }).content[0].text;
+
+    expect(text).toContain("Kitman Labs is not an indexed provider:");
+  });
+
+  it("says when the query names a registered provider with no indexed docs", () => {
+    const text = searchDocs(db, { query: "wyscout player speed" }).content[0].text;
+
+    expect(text).toMatch(/Wyscout is registered but has no indexed docs yet\./);
+  });
+
+  it("gives the reason when the provider filter names an assessed provider", () => {
+    const result = searchDocs(db, { query: "speed", provider: "Catapult" });
+
+    expect(result.isError).toBe(true);
+    expect(result.content[0].text).toMatch(/^Provider "Catapult" is not indexed: Catapult's OpenField Connect API docs/);
+  });
+
+  it("adds no provider note for an indexed provider", () => {
+    const text = searchDocs(db, { query: "Opta qualifier 214" }).content[0].text;
+
+    expect(text).not.toContain("not an indexed provider");
+    expect(text).not.toContain("registered but has no indexed docs");
+  });
+
   it("puts full matches first and says where the partial matches start", () => {
     const text = searchDocs(db, { query: "Opta qualifier 214" }).content[0].text;
 

@@ -87,7 +87,7 @@ Add to `claude_desktop_config.json`:
 
 | Tool | Description |
 |------|-------------|
-| `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version), mark partial matches, and name query terms that no indexed doc mentions. |
+| `search_docs` | Full-text search across all provider docs. Filter by provider. Results include provenance (source URL, version), mark partial matches, name query terms that no indexed doc mentions, and say when a query names a provider that is not indexed (the `not_indexed` list in `providers.json` gives the reason). |
 | `resolve_provider_id` | Resolve provider names and aliases to canonical indexed provider keys before searching. |
 | `get_provider_docs` | Retrieve docs for a resolved provider, optionally filtered by topic or category. |
 | `list_providers` | List all indexed providers and their doc coverage. |
