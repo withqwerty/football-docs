@@ -1287,9 +1287,9 @@ describe("golden retrieval evals", () => {
   it.each([
     {
       provider: "Opta F24",
-      topic: "qualifier 76 big chance",
+      topic: "qualifier 214 big chance",
       expectedProvider: "opta",
-      expected: ["Big chance", "**Source:** curated"],
+      expected: ["| 214 | bigChance |", "**Source:** curated"],
     },
     {
       provider: "StatsBomb Open Data",

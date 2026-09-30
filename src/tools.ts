@@ -177,7 +177,7 @@ function quoteFtsToken(token: string): string {
  *
  * User questions are usually natural language, not exact doc phrases. Joining
  * searchable tokens with AND keeps results precise while still allowing queries
- * like "Opta qualifier 76" to match docs that contain those tokens separately.
+ * like "Opta qualifier 214" to match docs that contain those tokens separately.
  */
 export function sanitiseFtsQuery(query: string): string {
   const tokens = extractFtsTokens(query);

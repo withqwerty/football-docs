@@ -135,7 +135,7 @@ development and tests always use the working tree's docs.
 
 ## Example queries
 
-- "What is Opta qualifier 76?" (big chance)
+- "What is Opta qualifier 214?" (big chance)
 - "How does StatsBomb represent shot events?"
 - "Compare Opta and Wyscout coordinate systems"
 - "What player ID fields does Transfermarkt expose?"
