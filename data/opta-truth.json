@@ -3,7 +3,7 @@
     "reference": "Stats Perform F24 appendices, Appendix 1 (event types) and Appendix 2 (qualifiers)",
     "url": "https://documentation.statsperform.com/docs/data/opta-push/assets/Appendix/FootballFeedSpec/f24-appendices.htm",
     "checked": "2026-09-30",
-    "note": "Checked by hand: F24 has no machine-readable form. Qualifier labels are this repo's camelCase labels, not the vendor's names. Each was checked against the F24 meaning and against Premier League 2025/26 match event data. Add an ID here only after checking it the same way."
+    "note": "Checked by hand: F24 has no machine-readable form. Qualifier labels are this repo's camelCase labels, not the vendor's names. Each was checked against its F24 meaning. Add an ID here only after checking it the same way."
   },
   "eventTypes": {
     "1": "Pass",

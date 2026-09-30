@@ -7,56 +7,54 @@ MA36 feed (August 2025), and against the Opta type lists in socceraction 1.5.3
 
 ## Event Type Reference
 
-Per-match averages count events of each type in Premier League 2025/26 match event
-data (318 matches), so they include both events of a pair. Outcome rules are from
-F24 Appendix 8 unless the note says otherwise.
+Outcome rules are from F24 Appendix 8 unless the note says otherwise.
 
-| typeId | Name | Per match avg | Outcome | Notes |
-|--------|------|---------------|---------|-------|
-| 1 | Pass | ~957 | 0=miss, 1=success | Includes open play, goal kicks, corners, free kicks played as passes |
-| 2 | Offside pass | ~3 | always 1 | Receiving player called offside |
-| 3 | Take on | ~36 | 0=fail, 1=success | Dribble past opponent |
-| 4 | Foul | ~43 | 0=committed, 1=fouled | Events come in pairs (one per team), so a match has about 22 fouls |
-| 5 | Out | ~104 | 0=put out, 1=gains possession | Ball out of play. Events come in pairs |
-| 6 | Corner awarded | ~20 | 0=conceded, 1=won | Events come in pairs |
-| 7 | Tackle | ~34 | 0=fail, 1=wins ball | Legal ground-level challenge |
-| 8 | Interception | ~17 | always 1 | Intercepts opposition pass |
-| 10 | Save | ~13 | always 1 | GK prevents goal (also outfield with qual 94) |
-| 11 | Claim | ~2 | 0=drops, 1=catches | GK catches crossed ball |
-| 12 | Clearance | ~57 | always 1 | Defensive clearance |
-| 13 | Miss | ~9 | always 1 | Shot wide or over |
-| 14 | Post | <1 | always 1 | Ball hits frame |
-| 15 | Attempt saved | ~13 | always 1 | Shot on target, saved |
-| 16 | Goal | ~2.7 | always 1 | Own goals have qualifier 28 |
-| 17 | Card | ~4 | always 1 | Yellow/second yellow/red via qualifiers 31/32/33 |
-| 18 | Player off | ~8 | always 1 | Substituted off |
-| 19 | Player on | ~8 | always 1 | Substituted on |
-| 20 | Player retired | <1 | always 1 | Player leaves the pitch, for example injured, with no substitution. Not a red card |
-| 21 | Player returns | <1 | always 1 | Player comes back on after leaving the pitch |
-| 27 | Start delay | ~5 | always 1 | Play stops for a delay. With qualifier 364, a VAR review |
-| 28 | End delay | ~5 | always 1 | The delay ends and play restarts |
-| 30 | End | ~6 | always 1 | End of a period. kloppy reads the period end time from it |
-| 32 | Start | ~4 | always 1 | Start of a period. kloppy reads the period start time from it |
-| 34 | Team set up | 2 | always 1 | Formation/lineup event |
-| 37 | Collection end | 2 | always 1 | |
-| 40 | Formation change | ~3 | always 1 | In-game formation change |
-| 41 | Punch | ~1 | always 1 in F24; the 2025/26 data has both 0 and 1 | GK punches the ball |
-| 42 | Good skill | <1 | always 1 | |
-| 43 | Deleted event | ~36 | always 1 | Opta removed this event. Drop it before analysis; kloppy does |
-| 44 | Aerial | ~64 | 0=lost, 1=won | Aerial duel. Events come in pairs |
-| 45 | Challenge | ~14 | always 0 | Unsuccessful tackle attempt |
-| 49 | Ball recovery | ~81 | always 1 | Player gathers loose ball |
-| 50 | Dispossessed | ~17 | always 1 | Loses ball via opponent tackle |
-| 51 | Error | ~2 | always 1 | Mistake losing ball |
-| 52 | Keeper pick-up | ~12 | always 1 | GK picks up ball |
-| 54 | Smother | <1 | always 1 | GK covers ball at attacker's feet |
-| 55 | Offside provoked | ~3 | always 1 | Defender's position causes offside |
-| 59 | Keeper sweeper | ~1 | 0=possession goes to the other team, 1=kept or put out of play | GK comes off line to clear/claim |
-| 61 | Ball touch | ~70 | 0=lost control, 1=ball hit the player unintentionally | Bad touch / loss of control |
-| 67 | 50/50 | 0 | 0=lost, 1=won | Two players contest loose ball. F24: not collected since 10 July 2023 |
-| 74 | Blocked pass | ~15 | always 1 | Player blocks an opponent's pass |
-| 83 | Attempted tackle | ~27 | not defined in F24; mostly 0 in the 2025/26 data | Unsuccessful tackle |
-| 84 | Deleted after review | <1 | — | An event deleted after a VAR review (from 1 March 2021). Qualifier 436 gives its typeId before deletion; a goal ruled out by VAR has 436 = `16` |
+| typeId | Name | Outcome | Notes |
+|--------|------|---------|-------|
+| 1 | Pass | 0=miss, 1=success | Includes open play, goal kicks, corners, free kicks played as passes |
+| 2 | Offside pass | always 1 | Receiving player called offside |
+| 3 | Take on | 0=fail, 1=success | Dribble past opponent |
+| 4 | Foul | 0=committed, 1=fouled | Events come in pairs (one per team) |
+| 5 | Out | 0=put out, 1=gains possession | Ball out of play |
+| 6 | Corner awarded | 0=conceded, 1=won | |
+| 7 | Tackle | 0=fail, 1=wins ball | Legal ground-level challenge |
+| 8 | Interception | always 1 | Intercepts opposition pass |
+| 10 | Save | always 1 | GK prevents goal (also outfield with qual 94) |
+| 11 | Claim | 0=drops, 1=catches | GK catches crossed ball |
+| 12 | Clearance | always 1 | Defensive clearance |
+| 13 | Miss | always 1 | Shot wide or over |
+| 14 | Post | always 1 | Ball hits frame |
+| 15 | Attempt saved | always 1 | Shot on target, saved |
+| 16 | Goal | always 1 | Own goals have qualifier 28 |
+| 17 | Card | always 1 | Yellow/second yellow/red via qualifiers 31/32/33 |
+| 18 | Player off | always 1 | Substituted off |
+| 19 | Player on | always 1 | Substituted on |
+| 20 | Player retired | always 1 | Player leaves the pitch, for example injured, with no substitution. Not a red card |
+| 21 | Player returns | always 1 | Player comes back on after leaving the pitch |
+| 27 | Start delay | always 1 | Play stops for a delay. With qualifier 364, a VAR review |
+| 28 | End delay | always 1 | The delay ends and play restarts |
+| 30 | End | always 1 | End of a period. kloppy reads the period end time from it |
+| 32 | Start | always 1 | Start of a period. kloppy reads the period start time from it |
+| 34 | Team set up | always 1 | Formation/lineup event |
+| 37 | Collection end | always 1 | |
+| 40 | Formation change | always 1 | In-game formation change |
+| 41 | Punch | always 1 | GK punches the ball |
+| 42 | Good skill | always 1 | |
+| 43 | Deleted event | always 1 | Opta removed this event. Drop it before analysis; kloppy does |
+| 44 | Aerial | 0=lost, 1=won | Aerial duel. Events come in pairs |
+| 45 | Challenge | always 0 | Unsuccessful tackle attempt |
+| 49 | Ball recovery | always 1 | Player gathers loose ball |
+| 50 | Dispossessed | always 1 | Loses ball via opponent tackle |
+| 51 | Error | always 1 | Mistake losing ball |
+| 52 | Keeper pick-up | always 1 | GK picks up ball |
+| 54 | Smother | always 1 | GK covers ball at attacker's feet |
+| 55 | Offside provoked | always 1 | Defender's position causes offside |
+| 59 | Keeper sweeper | 0=possession goes to the other team, 1=kept or put out of play | GK comes off line to clear/claim |
+| 61 | Ball touch | 0=lost control, 1=ball hit the player unintentionally | Bad touch / loss of control |
+| 67 | 50/50 | 0=lost, 1=won | Two players contest loose ball. F24: not collected since 10 July 2023 |
+| 74 | Blocked pass | always 1 | Player blocks an opponent's pass |
+| 83 | Attempted tackle | not defined in F24 | Unsuccessful tackle |
+| 84 | Deleted after review | — | An event deleted after a VAR review (from 1 March 2021). Qualifier 436 gives its typeId before deletion; a goal ruled out by VAR has 436 = `16` |
 
 A dash means the outcome has not been checked for that type.
 
