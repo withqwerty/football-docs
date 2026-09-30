@@ -1,0 +1,937 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Vald.Api.ExternalHumanTrak.V2",
+    "version": "v2"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "6410bbef-1e84-42ad-b419-c6cf4e5516eb",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "cb1d9fe6-2dde-4ff7-848c-53905d2c3bdb",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "3e7aa4f4-976b-4d6c-90af-77fe8ecbbbaa",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "582b8848-df5f-4611-b915-c0d7cd4c03a1",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/test/{testId}/repetitions": {
+      "get": {
+        "tags": [
+          "TestResult"
+        ],
+        "operationId": "488593fc-4da7-40bc-9ef6-a27ff72ea5f2",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "TenantId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/tests-by-modified-date": {
+      "get": {
+        "tags": [
+          "TestResult"
+        ],
+        "operationId": "a4d6d1d0-d768-46e3-a21c-106bbe321bad",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/test-type/metrics": {
+      "get": {
+        "tags": [
+          "TestTypes"
+        ],
+        "operationId": "c367ea77-c92d-4932-aa23-e43db889818b",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Microsoft.AspNetCore.Mvc.ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Vald.Api.ExternalHumanTrak.V2.DiagnosticsResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.DiagnosticsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse": {
+        "type": "object",
+        "properties": {
+          "testTypeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "example": {
+          "testTypeCode": "TT_TRUNK-LATERAL-FLEXION",
+          "repetitions": [
+            {
+              "number": 1,
+              "side": "Left",
+              "metrics": [
+                {
+                  "metricGroupCode": "MG_TRUNK-LATERAL-FLEXION_TRUNK-LATERAL-FLEXION-PEAK",
+                  "values": {
+                    "isSided": true,
+                    "leftValue": 11.11
+                  }
+                },
+                {
+                  "metricGroupCode": "MG_TRUNK-LATERAL-FLEXION_KNEE-FLEXION-AT-PEAK-TRUNK-LATERAL-FLEXION",
+                  "values": {
+                    "isSided": false,
+                    "unsidedValue": 22.22
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "side": {
+            "type": "string",
+            "nullable": true
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition_Metric"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition_Metric": {
+        "type": "object",
+        "properties": {
+          "metricGroupCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "values": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition_Metric_Result"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse_Repetition_Metric_Result": {
+        "type": "object",
+        "properties": {
+          "isSided": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.MovementSide": {
+        "enum": [
+          "Left",
+          "Right",
+          "Both",
+          "None",
+          "NotApplicable"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData": {
+        "type": "object",
+        "properties": {
+          "testResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitionCounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_RepetitionCount"
+            },
+            "nullable": true
+          },
+          "metricGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_MetricGroup"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_Aggregates": {
+        "required": [
+          "avg",
+          "max",
+          "min"
+        ],
+        "type": "object",
+        "properties": {
+          "max": {
+            "type": "number",
+            "format": "double"
+          },
+          "min": {
+            "type": "number",
+            "format": "double"
+          },
+          "avg": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_AsymmetryMeasurement": {
+        "required": [
+          "aggregates",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "aggregates": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_Aggregates"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_MetricGroup": {
+        "required": [
+          "classification",
+          "code",
+          "longName",
+          "shortName",
+          "trendSentiment"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "longName": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classification": {
+            "type": "string",
+            "nullable": true
+          },
+          "trendSentiment": {
+            "type": "string",
+            "nullable": true
+          },
+          "summaryMeasurements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_SummaryMeasurement"
+            },
+            "nullable": true
+          },
+          "asymmetryMeasurement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_AsymmetryMeasurement"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_RepetitionCount": {
+        "type": "object",
+        "properties": {
+          "movementSide": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.MovementSide"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_SummaryMeasurement": {
+        "required": [
+          "aggregates",
+          "side",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "side": {
+            "type": "string",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "aggregates": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetNestedTestResultsByModifiedDateResponse_TestResultsData_TestResult_Aggregates"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse": {
+        "required": [
+          "testTypes"
+        ],
+        "type": "object",
+        "properties": {
+          "testTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType": {
+        "required": [
+          "code",
+          "laterality",
+          "metricGroups",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "laterality": {
+            "type": "string",
+            "nullable": true
+          },
+          "metricGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup": {
+        "required": [
+          "asymmetryMetricTypes",
+          "classification",
+          "code",
+          "longName",
+          "repetitionMetricTypes",
+          "shortName",
+          "summaryMetricTypes",
+          "trendSentiment"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "longName": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classification": {
+            "type": "string",
+            "nullable": true
+          },
+          "trendSentiment": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitionMetricTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_RepetitionMetricType"
+            },
+            "nullable": true
+          },
+          "summaryMetricTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_SummaryMetricType"
+            },
+            "nullable": true
+          },
+          "asymmetryMetricTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_AsymmetryMetricType"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_AsymmetryMetricType": {
+        "required": [
+          "code",
+          "leftSummaryMetricTypeCode",
+          "name",
+          "rightSummaryMetricTypeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "leftSummaryMetricTypeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "rightSummaryMetricTypeCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_RepetitionMetricType": {
+        "required": [
+          "code",
+          "metricSide",
+          "movementSide",
+          "name",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "movementSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "metricSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalHumanTrak.V2.Proxies.Vald_.HumanTrakV2.GetTestTypeMetricsResponse_TestType_MetricGroup_SummaryMetricType": {
+        "required": [
+          "calculationType",
+          "code",
+          "metricSide",
+          "movementSide",
+          "name",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "movementSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "metricSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "calculationType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Auth0": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { },
+            "audience": "vald-api-external"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Auth0": [ ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "provider": "hawkin-dynamics",
+  "kind": "openapi",
+  "source": {
+    "specs": [
+      {
+        "spec": "specs/hawkin-dynamics/openapi.json",
+        "title": "Hawkin Force Platform API",
+        "version": "1.15"
+      }
+    ],
+    "generated_at": "2026-09-30"
+  },
+  "basePaths": [],
+  "paths": {
+    "/api/token": [
+      "GET"
+    ],
+    "/api/v1": [
+      "GET"
+    ],
+    "/api/v1/athletes": [
+      "GET",
+      "POST"
+    ],
+    "/api/v1/athletes/bulk": [
+      "POST",
+      "PUT"
+    ],
+    "/api/v1/athletes/{athleteId}": [
+      "PUT"
+    ],
+    "/api/v1/cop/{test_id}": [
+      "GET"
+    ],
+    "/api/v1/forcetime/{test_id}": [
+      "GET"
+    ],
+    "/api/v1/groups": [
+      "GET"
+    ],
+    "/api/v1/metrics": [
+      "GET"
+    ],
+    "/api/v1/tags": [
+      "GET"
+    ],
+    "/api/v1/teams": [
+      "GET"
+    ],
+    "/api/v1/test_types": [
+      "GET"
+    ]
+  },
+  "parameters": [
+    "athleteId",
+    "cursor",
+    "from",
+    "groupId",
+    "includeEid",
+    "includeInactive",
+    "paginate",
+    "syncFrom",
+    "syncTo",
+    "teamId",
+    "testTypeId",
+    "test_id",
+    "to"
+  ],
+  "schemas": [
+    "AccessTokenResponse",
+    "Athlete",
+    "AthleteInput",
+    "AthleteRef",
+    "AthleteUpdateInput",
+    "BulkResult",
+    "COPData",
+    "ErrorResponse",
+    "ForceTimeData",
+    "Group",
+    "Metric",
+    "MetricsResponse",
+    "Tag",
+    "Team",
+    "Test",
+    "TestType",
+    "TestTypeSummary",
+    "TestsResponse"
+  ],
+  "fields": [
+    "CombinedForce(N)",
+    "Displacement(m)",
+    "LeftForce(N)",
+    "Power(W)",
+    "RightForce(N)",
+    "Time(s)",
+    "Velocity(m/s)",
+    "XLeftForce(N)",
+    "XLeftMoments",
+    "XRightForce(N)",
+    "XRightMoments",
+    "YLeftForce(N)",
+    "YLeftMoments",
+    "YRightForce(N)",
+    "YRightMoments",
+    "access_token",
+    "active",
+    "athlete",
+    "canonicalId",
+    "canonicalTestTypeId",
+    "copX",
+    "copY",
+    "count",
+    "data",
+    "description",
+    "dob",
+    "eid",
+    "error",
+    "expires_at",
+    "external",
+    "failures",
+    "groups",
+    "hasFailures",
+    "hasMore",
+    "height",
+    "id",
+    "image",
+    "label",
+    "lastSyncTime",
+    "lastTestTime",
+    "lastTestedOn",
+    "leftCopX",
+    "leftCopY",
+    "metrics",
+    "name",
+    "nextCursor",
+    "position",
+    "reason",
+    "rightCopX",
+    "rightCopY",
+    "rsi",
+    "segment",
+    "sport",
+    "tags",
+    "teams",
+    "testType",
+    "testTypeName",
+    "timestamp",
+    "token_type",
+    "units"
+  ],
+  "enums": {}
+}

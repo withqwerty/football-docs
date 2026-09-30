@@ -459,6 +459,75 @@
         { "type": "curated", "note": "Overview and access patterns for free data sources" }
       ],
       "last_crawled": null
+    },
+    "statsports": {
+      "description": "Wearable GPS tracking (Apex devices, Sonra software); third-party API for a customer's session, player, drill KPI and raw GPS/IMU data",
+      "display_name": "STATSports",
+      "aliases": ["statsports-sonra", "sonra", "apex", "statsports-apex", "statsports-pro-series"],
+      "access_level": "public-api-docs",
+      "licence_status": "The OpenAPI specs are public and need no login, but STATSports publishes no licence for its API documentation: the specs' license field is named 'Privacy Policy' and its link returned 404 (checked 2026-09-30). Data access needs a thirdPartyApiId; the spec does not say how one is issued.",
+      "public_safety_notes": "The API returns personal and health data about a customer's athletes (names, date of birth, gender, height, weight, heart rate). Document field names and types only; never include athlete payloads or sample values. The help centre (elitesupport.statsports.com) blocks non-browser clients and is not a source. Spec snapshots in specs/statsports/ come from the public Swagger UI - see specs/README.md. Endpoint claims are validated against them in CI.",
+      "version": "3rd Party API v7 (v5 and v6 also documented)",
+      "package": null,
+      "sources": [
+        { "url": "https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json", "type": "openapi", "note": "Public unauthenticated OpenAPI 3.0.1 spec, mirrored at specs/statsports/thirdpartyapi-v7.json" },
+        { "url": "https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json", "type": "openapi", "note": "v6 spec (marked deprecated in its description), mirrored at specs/statsports/thirdpartyapi-v6.json" },
+        { "url": "https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json", "type": "openapi", "note": "v5 spec (marked deprecated in its description), mirrored at specs/statsports/thirdpartyapi-v5.json" },
+        { "type": "curated", "note": "Access, endpoint, data-model, drill KPI, identity and provenance docs written from the specs; Abs and Rel metric definitions quoted from a statsports.com article" }
+      ],
+      "last_crawled": "2026-09-30"
+    },
+    "firstbeat": {
+      "description": "Heart-rate and HRV monitoring (Firstbeat Sports sensors and Sports Cloud); Cloud API for a customer's athletes, measurements, sessions and analysis variables such as TRIMP and EPOC",
+      "display_name": "Firstbeat Sports",
+      "aliases": ["firstbeat-sports", "firstbeat-cloud-api", "firstbeat-sports-cloud"],
+      "access_level": "public-api-docs",
+      "licence_status": "The documentation site and OpenAPI spec are public and need no login, but Firstbeat publishes no licence for reusing them (the site shows only a copyright notice, checked 2026-09-30). Direct API access is for Premium+ customers; other levels connect through API partners. A Coach must also grant access in Sports Cloud.",
+      "public_safety_notes": "The API returns personal and health data (names, email addresses, heart rate, HRV, sleep and recovery measures). Document field and variable names, units and types only; never include athlete payloads or sample values. Spec snapshot in specs/firstbeat/ comes from the public https://apidocs.firstbeat.com/assets/api-specification/openapi.json - see specs/README.md. Endpoint claims are validated against it in CI.",
+      "version": "Cloud API 1.1.0",
+      "package": null,
+      "sources": [
+        { "url": "https://apidocs.firstbeat.com/assets/api-specification/openapi.json", "type": "openapi", "note": "Public unauthenticated OpenAPI 3.0.1 spec, mirrored at specs/firstbeat/openapi.json" },
+        { "type": "curated", "note": "Access, endpoint, data-model, identity and provenance docs from the spec; variable names, units and descriptions copied from https://apidocs.firstbeat.com/variables/; registration and usage limits from the public Getting Started and Usage Limits pages" }
+      ],
+      "last_crawled": "2026-09-30"
+    },
+    "hawkin-dynamics": {
+      "description": "Force plates; Force Platform API for an organisation's test results (jumps, isometric tests), force-time data, athletes and per-test-type metrics",
+      "display_name": "Hawkin Dynamics",
+      "aliases": ["hawkin", "hawkin-connect", "hawkin-force-platform"],
+      "access_level": "public-api-docs",
+      "licence_status": "The API reference, its inline OpenAPI document and metrics.json are public and need no login, but Hawkin publishes no licence for reusing them; its Hawkin Connect terms say the integrations' documentation is Hawkin Dynamics' property (checked 2026-09-30). API access needs an organisation administrator's token.",
+      "public_safety_notes": "The API returns personal and health data (names, date of birth, height, body weight, force and power measures). Document field names, metric ids, labels and units only; never include athlete payloads or sample values. Spec snapshots in specs/hawkin-dynamics/ come from the public API reference page - see specs/README.md. Endpoint claims are validated against them in CI.",
+      "version": "Force Platform API 1.15",
+      "package": null,
+      "sources": [
+        { "url": "https://connect.hawkindynamics.com/api", "type": "openapi", "note": "Public API reference with the OpenAPI 3.0.3 document inline; extracted to specs/hawkin-dynamics/openapi.json by scripts/extract_hawkin_openapi.mjs" },
+        { "type": "curated", "note": "Access, endpoint, data-model, identity and provenance docs from the spec; test metrics copied from the public https://connect.hawkindynamics.com/assets/metrics.json (mirrored at specs/hawkin-dynamics/metrics.json)" }
+      ],
+      "last_crawled": "2026-09-30"
+    },
+    "vald": {
+      "description": "Athlete testing devices (ForceDecks, NordBord, ForceFrame, SmartSpeed, DynaMo, HumanTrak); one external API per product plus Tenants and Profiles APIs",
+      "display_name": "VALD",
+      "aliases": ["vald-performance", "vald-hub", "forcedecks", "nordbord", "forceframe", "smartspeed", "vald-dynamo", "humantrak", "valdr"],
+      "access_level": "public-api-docs",
+      "licence_status": "The eight OpenAPI specs are public and need no login, but VALD publishes no licence for reusing them (checked 2026-09-30). API access needs client credentials that VALD issues.",
+      "public_safety_notes": "The APIs return personal and health data (names, date of birth, sex, email, height, weight, strength and movement measures). Document field names and types only; never include athlete payloads or sample values. The help centre (support.vald.com) returns a bot challenge to non-browser clients and is not a source. Spec snapshots in specs/vald/ come from the public euw Swagger hosts - see specs/README.md. Endpoint claims are validated against them in CI.",
+      "version": "ForceDecks v2019q3; NordBord, ForceFrame, SmartSpeed, DynaMo, Tenants and Profiles v1; HumanTrak v2",
+      "package": null,
+      "sources": [
+        { "url": "https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "Tenants API, mirrored at specs/vald/externaltenants.json" },
+        { "url": "https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "Profiles API, mirrored at specs/vald/externalprofile.json" },
+        { "url": "https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json", "type": "openapi", "note": "ForceDecks API, mirrored at specs/vald/extforcedecks.json" },
+        { "url": "https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "NordBord API, mirrored at specs/vald/externalnordbord.json" },
+        { "url": "https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "ForceFrame API, mirrored at specs/vald/externalforceframe.json" },
+        { "url": "https://prd-euw-api-extsmartspeed.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "SmartSpeed API, mirrored at specs/vald/extsmartspeed.json" },
+        { "url": "https://prd-euw-api-extdynamo.valdperformance.com/swagger/v1/swagger.json", "type": "openapi", "note": "DynaMo API, mirrored at specs/vald/extdynamo.json" },
+        { "url": "https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json", "type": "openapi", "note": "HumanTrak API, mirrored at specs/vald/externalhumantrakv2.json" },
+        { "type": "curated", "note": "Access, endpoint, schema, identity and provenance docs from the specs; token request, region codes and paging behaviour from VALD's MIT-licensed valdr 4.0.0 R package (https://cran.r-project.org/package=valdr)" }
+      ],
+      "last_crawled": "2026-09-30"
     }
   },
   "not_indexed": {

@@ -1,0 +1,1468 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Vald.Api.ExternalDynamo.V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "72da326b-519c-4929-b462-42300a87e3a7",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "dccbc7c7-29e0-4bb3-b7cb-50fbbb2626db",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "74a2c975-47bb-4ca1-81fe-48d9caa6711d",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "cd8cca10-7f55-4503-b58b-afa1107c7947",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2022q2/teams/{teamId}/tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "2db42f3b-5d3d-4930-b9ae-66c1f1b3ff8d",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "athleteId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testFromUTC",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "testToUTC",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "modifiedFromUTC",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "includeRepSummaries",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "includeReps",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.PagedDTO`1[[Vald.Api.ExternalDynamo.V1.Models.TestDTO, Vald.Api.ExternalDynamo.V1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2022q2/teams/{teamId}/tests/{testId}": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "e25e77c3-c7e7-4f47-a598-129c124aaa0a",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2022q2/teams/{teamId}/tests/{testId}/trace": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "678d4c7d-692d-4a11-b36f-fb6222314a55",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test/tests-by-modified-date": {
+      "get": {
+        "tags": [
+          "TestsPaged"
+        ],
+        "operationId": "d8837db2-5775-44ed-96b1-6b7ca3ea9f8b",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestCursorHttpResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Microsoft.AspNetCore.Mvc.ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.DiagnosticResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.DiagnosticResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.AsymmetryDTO": {
+        "type": "object",
+        "properties": {
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "valuePercentage": {
+            "maximum": 100,
+            "minimum": -100,
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.AttachmentType": {
+        "enum": [
+          "None",
+          "CurvedPad",
+          "FlatPad",
+          "PalmPad",
+          "TensionLink",
+          "GripInner",
+          "GripOuter"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.Attachments": {
+        "enum": [
+          "LeftNoneRightNone",
+          "LeftPalmPadRightCurvedPad",
+          "LeftPalmPadRightFlatPad",
+          "LeftFlatPadRightCurvedPad",
+          "LeftGripInnerRightGripOuter",
+          "LeftGripOuterRightGripInner",
+          "LeftTensionLinkRightTensionLink"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.BodyRegion": {
+        "enum": [
+          "Neck",
+          "Shoulder",
+          "Trunk",
+          "Hip",
+          "Elbow",
+          "Wrist",
+          "Hand",
+          "Knee",
+          "Ankle",
+          "Foot",
+          "Scapula"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startTimeUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "forceTrace": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ForceDTO"
+            },
+            "nullable": true
+          },
+          "imuTrace": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ImuDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ForceDTO": {
+        "type": "object",
+        "properties": {
+          "timeSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "forceNewtons": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ImuDTO": {
+        "type": "object",
+        "properties": {
+          "timeSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "orientation": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ImuDTO_QuaternionDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.GetTestTraceResponse_ImuDTO_QuaternionDTO": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "float"
+          },
+          "y": {
+            "type": "number",
+            "format": "float"
+          },
+          "z": {
+            "type": "number",
+            "format": "float"
+          },
+          "w": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.Laterality": {
+        "enum": [
+          "None",
+          "LeftSide",
+          "RightSide",
+          "LeftThenRight",
+          "RightThenLeft"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.Movement": {
+        "enum": [
+          "Abduction",
+          "Adduction",
+          "AdductionSqueeze",
+          "Flexion",
+          "Extension",
+          "ExternalRotation",
+          "InternalRotation",
+          "Rotation",
+          "Dorsiflexion",
+          "PlantarFlexion",
+          "Eversion",
+          "Inversion",
+          "GripSqueeze",
+          "LateralFlexionLeft",
+          "LateralFlexionRight",
+          "Protraction",
+          "Retraction",
+          "Scaption",
+          "RadialDeviation",
+          "UlnaDeviation",
+          "Supination",
+          "Pronation",
+          "Elevation",
+          "RotationLeft",
+          "RotationRight",
+          "ToeFlexion",
+          "ToeExtension",
+          "Custom",
+          "InternalRotationExternalRotation",
+          "FlexionExtension",
+          "AdductionAbduction",
+          "DorsiflexionPlantarFlexion",
+          "InversionEversion",
+          "LateralFlexionLeftLateralFlexionRight",
+          "RotationLeftRotationRight",
+          "SupinationPronation",
+          "HorizontalAbduction",
+          "HorizontalAdduction",
+          "HorizontalAbductionAdduction",
+          "IsometricMidThighPull",
+          "ISOITest",
+          "ISOYTest",
+          "ISOTTest",
+          "RadialDeviationUlnaDeviation",
+          "PinchGrip",
+          "FirstFingerPinch",
+          "SecondFingerPinch",
+          "ThirdFingerPinch",
+          "FourthFingerPinch",
+          "ThreePointPinch",
+          "FlexionKicker",
+          "ThumbPush",
+          "Pull",
+          "Push",
+          "Row",
+          "PullDown",
+          "LateralFlexion",
+          "IsometricBeltSquat"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.PagedDTO`1[[Vald.Api.ExternalDynamo.V1.Models.TestDTO, Vald.Api.ExternalDynamo.V1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestDTO"
+            },
+            "nullable": true
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.Position": {
+        "enum": [
+          "Neutral",
+          "p30DegreesAbduction",
+          "p45DegreesAbduction",
+          "p90DegreesAbduction",
+          "p90DegreesFlexion",
+          "Seated",
+          "LongSittingPlantarFlexed",
+          "LongSittingPlantigrade",
+          "Standing",
+          "LongSitting",
+          "SideLying",
+          "Prone",
+          "Supine",
+          "Supine90DegreesHipFlexion",
+          "Standing30DegreesAbduction",
+          "p90DegreesShoulderAbduction",
+          "HorizontalFlexion",
+          "p90DegreesElbowFlexion",
+          "ElbowExtended",
+          "MidProne",
+          "Pronated",
+          "Supinated",
+          "Custom",
+          "Supine90DegreesShoulderAbduction",
+          "p90DegreesShoulderFlexion",
+          "Knee0Degrees",
+          "Knee45Degrees",
+          "Knee90Degrees",
+          "Knee30Degrees",
+          "p45Degrees",
+          "p90Degrees",
+          "SeatedElbow90Degrees",
+          "SeatedElbow90Degrees90DegreeShoulderAbduction",
+          "StandingElbow90Degrees",
+          "StandingElbow90Degrees90DegreeShoulderAbduction",
+          "SupineElbow90Degrees90DegreeShoulderAbduction",
+          "SupineElbow90Degrees",
+          "SupineElbow90Degrees120ShoulderAbduction",
+          "SeatedShortLever",
+          "SeatedLongLever",
+          "StandingLongLever",
+          "StandingShortLever",
+          "ProneLongLever",
+          "Seated90DegreeShoulderFlexion",
+          "Standing90DegreeShoulderFlexion",
+          "SupineLongLever",
+          "SupineShortLever",
+          "SideLyingLongLever",
+          "SideLyingShortLever",
+          "Seated90DegreesShoulderAbductionLongLever",
+          "Seated90DegreesShoulderAbductionShortLever",
+          "Prone90DegreeKneeFlexion",
+          "ProneShortLever",
+          "SemiProne",
+          "SupineKnees45Degrees",
+          "SupineKnees90Degrees",
+          "IsometricMidThighPull",
+          "p90DegreeElbowFlexionWristNeutral",
+          "p90DegreeElbowFlexionWristSupinated",
+          "p90DegreeElbowFlexionWristPronated",
+          "p90DegreeElbowFlexion90AbductionWristNeutral",
+          "p90DegreeElbowFlexion90AbductionWristSupinated",
+          "p90DegreeElbowFlexion90AbductionWristPronated",
+          "p90DegreesElbowFlexionWristNeutral",
+          "p90DegreesElbowFlexionWristSupinated",
+          "p90DegreesElbowFlexionWristPronated",
+          "HalfKneeling",
+          "Overhead",
+          "Prone30DegreeKneeFlexion",
+          "Prone45DegreeKneeFlexion",
+          "Prone60DegreeKneeFlexion",
+          "Seated30DegreeKneeFlexion",
+          "Seated45DegreeKneeFlexion",
+          "Seated60DegreeKneeFlexion",
+          "Supine30DegreeKneeFlexion",
+          "Supine45DegreeKneeFlexion",
+          "Supine60DegreeKneeFlexion",
+          "StandingChesttoWall",
+          "StandingBacktoWall",
+          "Seated45DegreesShoulderAbductionShortLever",
+          "Seated45DegreesShoulderAbductionLongLever",
+          "ProneElbow90Degrees90DegreeShoulderAbduction",
+          "IsometricBeltSquat",
+          "BieringSorensenPosition",
+          "MidThigh"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.RatioDTO": {
+        "type": "object",
+        "properties": {
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Laterality"
+          },
+          "numeratorMovement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "denominatorMovement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.RepetitionDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Laterality"
+          },
+          "repNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startOffsetSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxForceNewtons": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rateOfForceDevelopmentNewtonsPerSecond": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeToPeakForceSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "rangeOfMotionDegrees": {
+            "type": "number",
+            "format": "double"
+          },
+          "baselineForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netPeakForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netForceAt100msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netForceAt150msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netForceAt200msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netImpulseAt100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netImpulseAt150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netImpulseAt200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "timeTo80PercentPeakForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rateOfForceDevelopment150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rateOfForceDevelopment200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rateOfForceDevelopment250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.RepetitionTypeSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Laterality"
+          },
+          "repCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxForceNewtons": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgForceNewtons": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxImpulseNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgImpulseNewtonSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxRateOfForceDevelopmentNewtonsPerSecond": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgRateOfForceDevelopmentNewtonsPerSecond": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxRangeOfMotionDegrees": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgRangeOfMotionDegrees": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgTimeToPeakForceSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "minTimeToPeakForceSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "avgBaselineForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetPeakForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetForceAt100msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetForceAt150msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetForceAt200msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetImpulseAt100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetImpulseAt150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgNetImpulseAt200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgTimeTo80PercentPeakForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgRateOfForceDevelopment150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgRateOfForceDevelopment200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "avgRateOfForceDevelopment250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxBaselineForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetPeakForceNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetForceAt100msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetForceAt150msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetForceAt200msNewtons": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetImpulseAt100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetImpulseAt150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxNetImpulseAt200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxRateOfForceDevelopment150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxRateOfForceDevelopment200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxRateOfForceDevelopment250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "minTimeTo80PercentPeakForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.TestCategory": {
+        "enum": [
+          "Strength",
+          "RangeofMotion"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.TestCursorHttpResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestDtoWithModifiedDate"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.TestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testCategory": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestCategory"
+          },
+          "bodyRegion": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.BodyRegion"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Position"
+          },
+          "customPosition": {
+            "type": "string",
+            "nullable": true
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Laterality"
+          },
+          "attachments": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Attachments"
+          },
+          "leftAttachment": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AttachmentType"
+          },
+          "rightAttachment": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AttachmentType"
+          },
+          "startTimeUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "hardwareInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "softwareInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysisInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "repetitionTypeSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RepetitionTypeSummaryDTO"
+            },
+            "nullable": true
+          },
+          "repetitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RepetitionDTO"
+            },
+            "nullable": true
+          },
+          "asymmetries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AsymmetryDTO"
+            },
+            "nullable": true
+          },
+          "ratios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RatioDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalDynamo.V1.Models.TestDtoWithModifiedDate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testCategory": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.TestCategory"
+          },
+          "bodyRegion": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.BodyRegion"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Movement"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Position"
+          },
+          "customPosition": {
+            "type": "string",
+            "nullable": true
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Laterality"
+          },
+          "attachments": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.Attachments"
+          },
+          "leftAttachment": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AttachmentType"
+          },
+          "rightAttachment": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AttachmentType"
+          },
+          "startTimeUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "hardwareInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "softwareInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysisInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "repetitionTypeSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RepetitionTypeSummaryDTO"
+            },
+            "nullable": true
+          },
+          "repetitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RepetitionDTO"
+            },
+            "nullable": true
+          },
+          "asymmetries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.AsymmetryDTO"
+            },
+            "nullable": true
+          },
+          "ratios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalDynamo.V1.Models.RatioDTO"
+            },
+            "nullable": true
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { },
+            "audience": "vald-api-external"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Diagnostics"
+    },
+    {
+      "name": "Tests"
+    },
+    {
+      "name": "TestsPaged"
+    }
+  ]
+}

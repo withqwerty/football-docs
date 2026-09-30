@@ -20,6 +20,20 @@ anyone can re-fetch and diff.
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-29 | 2026-09-29 |
 | `reep/release.json` | https://data.reep.football/releases/20260926T145536Z/release.json (via `latest.json`) | 2026-09-29 | 2026-09-29 |
 | `reep/schema.json` | https://data.reep.football/releases/20260926T145536Z/schema.json | 2026-09-29 | 2026-09-29 |
+| `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-09-30 | 2026-09-30 |
+| `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
+| `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
+| `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
+| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-09-30 | 2026-09-30 |
+| `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
+| `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalnordbord.json` | https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extsmartspeed.json` | https://prd-euw-api-extsmartspeed.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extdynamo.json` | https://prd-euw-api-extdynamo.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalhumantrakv2.json` | https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json | 2026-09-30 | 2026-09-30 |
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every
@@ -39,7 +53,22 @@ curl -sL -o specs/fmdb-pro/openapi.json  https://api.fmdb.pro/api/openapi
 curl -sL -o specs/sportradar/soccer-v4-openapi.yaml https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml
 curl -sL -o specs/sportradar/soccer-extended-v4-openapi.yaml https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml
 curl -sL -o specs/reep/openapi.yaml https://reep.football/openapi.yaml
+for v in 5 6 7; do
+  curl -sL -o specs/statsports/thirdpartyapi-v$v.json \
+    https://statsportsproseries.com/thirdpartyapi/swagger/v$v/swagger.json
+done
+curl -sL -o specs/firstbeat/openapi.json https://apidocs.firstbeat.com/assets/api-specification/openapi.json
+node scripts/extract_hawkin_openapi.mjs --out specs/hawkin-dynamics/openapi.json
+curl -sL -o specs/hawkin-dynamics/metrics.json https://connect.hawkindynamics.com/assets/metrics.json
+for s in externaltenants:v1 externalprofile:v1 extforcedecks:v2019q3 externalnordbord:v1 \
+         externalforceframe:v1 extsmartspeed:v1 extdynamo:v1 externalhumantrakv2:v2; do
+  curl -sL -o specs/vald/${s%%:*}.json \
+    https://prd-euw-api-${s%%:*}.valdperformance.com/swagger/${s##*:}/swagger.json
+done
 ```
+
+Check the STATSports files after a refresh: every path should start `/api/thirdPartyData/`
+(see [STATSports](#statsports) below).
 
 The Sportradar specs are the ones the public Swagger UIs at
 `https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html` and
@@ -55,6 +84,70 @@ Then regenerate the derived truth and re-run the tests:
 pnpm openapi:truth
 pnpm test
 ```
+
+## Wearable and sports-science vendors
+
+STATSports, Firstbeat, Hawkin Dynamics and VALD sell measuring devices. Their APIs
+return a customer's own athlete data. The specifications describe that data: field
+names, types, units where stated, and endpoint paths. None of the files holds
+athlete data. Several fields they describe are personal or health data (dates of
+birth, sex, body weight, heart rate); the docs list those as fields only.
+
+### STATSports
+
+The Swagger UI at https://statsportsproseries.com/thirdpartyapi/index.html lists
+three versions, v5, v6 and v7. All three are mirrored, because the docs cover each
+one. The spec declares no `servers`; the callable base is
+`https://statsportsproseries.com/thirdpartyapi`. Its `test` endpoint answered HTTP
+200 at `https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/test` on
+2026-09-30.
+
+The server is not stable in one respect. Repeated fetches of the same file return
+path keys with a varying number of leading `/thirdpartyapi` segments
+(`/api/thirdPartyData/test`, `/thirdpartyapi/api/thirdPartyData/test`,
+`/thirdpartyapi/thirdpartyapi/api/thirdPartyData/test`, and so on); the rest of the
+document does not change. The snapshots here keep the form with no prefix, and
+`scripts/check_upstream.py` removes the prefix from both sides before it compares.
+If a refresh brings back a prefixed copy, fetch again.
+
+The spec's `info.license` is named "Privacy Policy" and links to
+`https://statsports.com/apex-pro-series-privacy-policy/`, which returned 404 on
+2026-09-30. No other terms for the specification were found.
+
+### Firstbeat
+
+The page https://apidocs.firstbeat.com/api-specification/ embeds a static Redoc
+page, `/assets/api-specification/api-spec-static.html`. The OpenAPI file mirrored
+here is published beside it, at `/assets/api-specification/openapi.json`. The
+variable list the docs use (names, units, descriptions) is on
+https://apidocs.firstbeat.com/variables/ and is not part of the specification.
+
+### Hawkin Dynamics
+
+Hawkin publishes no specification file. The reference page
+https://connect.hawkindynamics.com/api carries the OpenAPI document inline, as a
+`const spec = {...};` literal, and its "Download JSON" button saves
+`JSON.stringify(spec, null, 2)`. `scripts/extract_hawkin_openapi.mjs` produces the
+same document without a browser: it evaluates only that literal, in an empty `vm`
+context. `/openapi.json` on the same host returned 404 on 2026-09-30.
+
+`metrics.json` is the file the page's Metrics tab loads. It lists 18 test types.
+The page leaves five of them out: two have no `testTypeName` ("intentionally
+excluded from the docs until the data is corrected", per the page script), and
+Clean, Snatch and Overhead Lift are "excluded by product decision". The docs follow
+the page and do not tabulate those five.
+
+### VALD
+
+VALD publishes one specification per product API, on hosts of the form
+`https://prd-<region>-api-<service>.valdperformance.com`. The `euw` copies are
+mirrored. On 2026-09-30 all eight were also fetched from the `use` and `aue` hosts
+and compared: they differ only in `operationId` values. VALD's server generates
+each `operationId` as a new random GUID on every request, so
+`scripts/check_upstream.py` ignores `operationId` when it compares.
+
+The VALD help centre (`support.vald.com`) returns a bot challenge to
+non-browser clients. Nothing from it is mirrored or quoted, and it is not crawled.
 
 ## What these are and are not
 

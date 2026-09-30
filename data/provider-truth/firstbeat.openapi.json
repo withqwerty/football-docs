@@ -1,0 +1,183 @@
+{
+  "provider": "firstbeat",
+  "kind": "openapi",
+  "source": {
+    "specs": [
+      {
+        "spec": "specs/firstbeat/openapi.json",
+        "title": "Firstbeat Cloud API",
+        "version": "1.1.0"
+      }
+    ],
+    "generated_at": "2026-09-30"
+  },
+  "basePaths": [
+    "/v1"
+  ],
+  "paths": {
+    "/account/api-key": [
+      "GET"
+    ],
+    "/account/new-secret": [
+      "GET"
+    ],
+    "/account/new-secret/confirm": [
+      "POST"
+    ],
+    "/account/register": [
+      "POST"
+    ],
+    "/sports/accounts": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/athletes": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/athletes/{athleteId}": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/athletes/{athleteId}/measurements": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/athletes/{athleteId}/measurements/{measurementId}/laps/{lapId}/results": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/athletes/{athleteId}/measurements/{measurementId}/results": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/coaches": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/coaches/{coachId}": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams/{teamId}": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams/{teamId}/athletes": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams/{teamId}/sessions": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams/{teamId}/sessions/{sessionId}/laps/{lapId}/results": [
+      "GET"
+    ],
+    "/sports/accounts/{accountId}/teams/{teamId}/sessions/{sessionId}/results": [
+      "GET"
+    ],
+    "/sports/event-types": [
+      "GET"
+    ],
+    "/sports/sports-types": [
+      "GET"
+    ]
+  },
+  "parameters": [
+    "Authorization",
+    "accountId",
+    "athleteId",
+    "coachId",
+    "eventType",
+    "exerciseType",
+    "format",
+    "fromTime",
+    "includeLaps",
+    "lapId",
+    "measurementId",
+    "measurementType",
+    "offset",
+    "sessionId",
+    "sportsType",
+    "teamId",
+    "toTime",
+    "type",
+    "var",
+    "x-api-key"
+  ],
+  "schemas": [
+    "Account",
+    "Accounts",
+    "ApiKey",
+    "Athlete",
+    "AthleteMeasurement",
+    "AthleteMeasurementLapResults",
+    "AthleteMeasurementResults",
+    "Athletes",
+    "Coach",
+    "Coaches",
+    "Group",
+    "MeasurementLap",
+    "Measurements",
+    "Register",
+    "RegisterResponse",
+    "Session",
+    "SessionLap",
+    "SessionLapMeasurementResults",
+    "SessionLapResults",
+    "SessionMeasurementResults",
+    "SessionResults",
+    "Sessions",
+    "SharedSecret",
+    "Team",
+    "Teams",
+    "TimeSeriesVariable",
+    "Variable"
+  ],
+  "fields": [
+    "accountId",
+    "accounts",
+    "apiKey",
+    "athleteId",
+    "athleteIds",
+    "athletes",
+    "authorizedBy",
+    "bits",
+    "coachId",
+    "coaches",
+    "consumerName",
+    "email",
+    "endTime",
+    "endTimeLocal",
+    "eventType",
+    "exerciseType",
+    "firstName",
+    "groupId",
+    "groups",
+    "id",
+    "lapId",
+    "laps",
+    "lastName",
+    "measurementId",
+    "measurementType",
+    "measurements",
+    "more",
+    "name",
+    "notes",
+    "samplingRate",
+    "sessionId",
+    "sessionType",
+    "sessions",
+    "sharedSecret",
+    "sportsType",
+    "startTime",
+    "startTimeLocal",
+    "teamId",
+    "teams",
+    "type",
+    "unit",
+    "value",
+    "variables"
+  ],
+  "enums": {
+    "measurementType": [
+      "exercise",
+      "manual",
+      "night",
+      "quickRecoveryTest"
+    ]
+  }
+}

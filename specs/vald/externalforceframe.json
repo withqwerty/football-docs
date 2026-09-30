@@ -1,0 +1,2654 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Vald.Api.ExternalForceFrame.V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "bf6a1860-bce6-4e13-9148-4791031e9d23",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "0d030184-28f1-49e8-afa9-87d2781c7eb7",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "a040e0e4-01e0-42f5-baf9-1113394024df",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "feb4271f-ea65-4cf1-a0a0-d1de8e050e2e",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}/forceframetrace": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "summary": "Retrieves a ForceFrame force trace.",
+        "operationId": "f306ece4-7c93-40c2-b5d9-a0bf0471becf",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "summary": "Retrieves a ForceFrame test summary.",
+        "operationId": "73aa2545-ca91-4889-aef9-84b4ecf20367",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}/repetitions": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "5f035f29-99e9-4053-a978-b223358c7f73",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "summary": "Retrieves a collection of pageable ForceFrame test summaries.",
+        "operationId": "61d4fe00-bb36-4e8c-a0c8-76e487226976",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TestFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TestToUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "AthleteId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/tests/v2": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "summary": "Retrieves a collection of ForceFrame test summaries.",
+        "operationId": "17361c34-c09e-4cf6-8951-33121d43479d",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}/metrics": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "summary": "Retrieves additional metrics for a ForceFrame test summary.",
+        "operationId": "e16a26ff-ea3d-4d27-af64-cea990d0f9c9",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/training/programs/current": {
+      "get": {
+        "tags": [
+          "TrainingPrograms"
+        ],
+        "summary": "Retrieves a list of ForceFrame training programs or a single program.",
+        "operationId": "04f6c1d2-d224-477e-8b08-551f328f35f8",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/training/sessions": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of ForceFrame training sessions.",
+        "operationId": "328e87e1-532b-4442-8109-176d7a089c93",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/training/sessions/exercises": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of ForceFrame training session exercises or a single training session exercise.",
+        "operationId": "8657ba8e-8c44-4323-9602-ad59f989cbd1",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/training/sessions/exercises/repetitions": {
+      "get": {
+        "tags": [
+          "TrainingSessions"
+        ],
+        "summary": "Retrieves a list of ForceFrame training session exercise repetitions or a single training session exercise repetition.",
+        "operationId": "a57d69f1-ded7-451d-aacd-137f1e316a66",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Microsoft.AspNetCore.Mvc.ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget": {
+        "enum": [
+          "Manual",
+          "Max",
+          "Average"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint": {
+        "enum": [
+          "Hamstring",
+          "Hip",
+          "Ankle",
+          "Knee",
+          "Shoulder",
+          "Neck",
+          "Elbow",
+          "Dyno",
+          "Custom"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality": {
+        "enum": [
+          "Bilateral",
+          "UnilateralAlternating",
+          "Left",
+          "Right",
+          "NA"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement": {
+        "enum": [
+          "Abduction",
+          "Adduction",
+          "InternalRotation",
+          "ExternalRotation",
+          "Flexion",
+          "Extension",
+          "Eccentric",
+          "Concentric",
+          "AbductionAdduction",
+          "InternalExternalRotation",
+          "FlexionExtension",
+          "EccentricConcentric",
+          "LateralFlexion",
+          "Dorsiflexion",
+          "Inversion",
+          "Eversion",
+          "PlantarFlexion",
+          "InnerPaddles",
+          "OuterPaddles"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.DiagnosticsResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Enums.SensorType": {
+        "enum": [
+          "InnerLeft",
+          "InnerRight",
+          "OuterLeft",
+          "OuterRight",
+          "FlatLeft",
+          "FlatRight"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sensorType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Enums.SensorType"
+          },
+          "repNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startOffsetSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "endOffsetSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "timeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rfd50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rfd100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rfd150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rfd200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rfd250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "innerLeftMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgForcePerKg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFDNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMinTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgTimeToMaxForceSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFD50msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFD100msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFD150msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFD200msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgRFD250msNewtonsPerSecond": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgImpulse50msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgImpulse100msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgImpulse150msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgImpulse200msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightMaxImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerLeftAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerRightAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerLeftAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "outerRightAvgImpulse250msNewtonSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.Force": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "innerLeftForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightForce": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.DiagnosticsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testPositionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "innerLeftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "innerRightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerLeftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerRightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testPositionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testPositionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "innerLeftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerLeftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "innerRightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerRightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerLeftAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerLeftRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerRightAvgForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightImpulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightMaxForce": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerRightRepetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "nullable": true
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testPositionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+            },
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse": {
+        "type": "object",
+        "properties": {
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testPositionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testPositionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "forces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.Force"
+            },
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "testDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise"
+            },
+            "nullable": true
+          },
+          "scheduledDatesUTC": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nullable": true
+          },
+          "addedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise": {
+        "required": [
+          "contractionTime",
+          "forceGoal",
+          "id",
+          "joint",
+          "laterality",
+          "movement",
+          "order",
+          "repetitions",
+          "restTime",
+          "restTimeAfterSet",
+          "tolerance",
+          "toleranceUnit",
+          "trainingPositionId",
+          "trainingZone"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contractionTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "forceGoal": {
+            "type": "number",
+            "format": "double"
+          },
+          "trainingZone": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget"
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement"
+          },
+          "joint": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint"
+          },
+          "repetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "restTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "restTimeAfterSet": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "tolerance": {
+            "type": "number",
+            "format": "double"
+          },
+          "toleranceUnit": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "order": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingPositionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "testPositionId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "repetitionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "repetition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repetitionDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programExerciseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "exerciseDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "impulseLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "impulseRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "stabilityRight": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneLeft": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeInZoneRight": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Diagnostics"
+    },
+    {
+      "name": "Test"
+    },
+    {
+      "name": "TrainingPrograms"
+    },
+    {
+      "name": "TrainingSessions"
+    }
+  ]
+}

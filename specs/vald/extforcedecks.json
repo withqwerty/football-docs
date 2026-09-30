@@ -1,0 +1,2517 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "VALD External ForceDecks API",
+    "contact": {
+      "name": "Support",
+      "url": "https://support.valdperformance.com",
+      "email": "support@valdperformance.com"
+    },
+    "version": "v2019q3"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "858b9f0d-ba3f-4edb-8ac1-9f62055fd3bb",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "0e74c54e-b689-4576-a746-0d40b085e2ec",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "9aa64110-7c8d-41f6-b1aa-b88fba30fd4c",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "f0e6842c-5c59-4d24-b493-a5b259be8b92",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDiagnosticsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDiagnosticsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDiagnosticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resultdefinitions": {
+      "get": {
+        "tags": [
+          "ResultDefinitions"
+        ],
+        "summary": "Retrieves a collection of ForceDecks result definitions.",
+        "operationId": "3e0176b3-def6-431a-80a6-95c4d4b95a8b",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResultDefinitionsResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/resultdefinitions/{resultId}": {
+      "get": {
+        "tags": [
+          "ResultDefinitions"
+        ],
+        "summary": "Retrieves a ForceDecks result definition.",
+        "operationId": "c9ce97d5-b60e-4eba-a3f8-58400cadebc0",
+        "parameters": [
+          {
+            "name": "resultId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResultDefinitionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2019q3/teams": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Tenants API.",
+        "operationId": "7c540aee-2f7b-4b42-ac7e-becd8109c0b0",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TeamDTO"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/athletes": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
+        "operationId": "eb842fec-8a7a-4702-b676-692fa330be3c",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "modifiedFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AthleteItemDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/athletes/softdeleted": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
+        "operationId": "6a46a189-34a2-46b7-b5d6-0a929bbf6064",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "deletedFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AthleteItemDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/athletes/deleted": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
+        "operationId": "e7b41470-931e-4f49-b834-05d9c7e85b6b",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "deletedFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeletedAthleteDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/athlete/{athleteId}/tests/{page}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "4f38fd47-7362-4851-af15-a501d6efffac",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "athleteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "modifiedFrom",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestDTOPagedDTO"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/athlete/{athleteId}/tests/deleted": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "42496fe1-c96f-4e1b-a2e7-4cc45145c744",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "athleteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "deletedFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeletedTestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/{page}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "cfe9f298-b3d2-4f68-bc4b-aa12e9b5da8c",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "modifiedFrom",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestDTOPagedDTO"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/{dateFrom}/{dateTo}/{page}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "97bef3bd-ccb2-40bd-a141-0547c62f2105",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestDTOPagedDTO"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/summary/{dateFrom}/{dateTo}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "687e5443-5821-426e-8add-576940bb14a4",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SummaryTestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/typesummarybyathlete/{dateFrom}/{dateTo}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "f9d51299-cc84-45ca-81fc-8053cd5bef0b",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestTypeSummaryDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/deleted": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "82b9566f-2508-4b08-9fe5-b6922160096c",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "deletedFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeletedTestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/detailed/{dateFrom}/{dateTo}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
+        "operationId": "75129023-3a67-458b-b1ca-4639a2453950",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DetailedTestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/{testId}/trials": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "operationId": "7b9ba992-f784-4e1f-a674-3e226850289d",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrialDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/{testId}/recording": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "operationId": "1fdb76e2-69d8-4d25-b305-4cb9b6377b24",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "includeSampleData",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v2019q3/teams/{teamId}/tests/{testId}/recording/file": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "operationId": "a78cabc2-5929-4eed-8093-687bdb0a8153",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v2019q3/teams/{teamId}/recordings/{recordingId}": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /v2019q3/teams/{teamId}/tests/{testId}/recording.",
+        "operationId": "1542fe90-ea5f-4da6-861a-f3a77021c91d",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "recordingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "includeSampleData",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2019q3/teams/{teamId}/recordings/{recordingId}/file": {
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /v2019q3/teams/{teamId}/tests/{testId}/recording/file.",
+        "operationId": "7f8f41b2-22fa-4432-9215-2e2197d92a0e",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "recordingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Retrieves a collection of ForceDecks test summaries.",
+        "operationId": "6dd2e2a6-e710-43c3-bbaa-679f8320df85",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ProfileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCursorPagedTestsResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AthleteItemDTO": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "givenName": {
+            "type": "string",
+            "nullable": true
+          },
+          "familyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModifiedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeDTO"
+            },
+            "nullable": true
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttributeDTO": {
+        "type": "object",
+        "properties": {
+          "attributeValueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "valueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributeTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "typeName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AzureRegion": {
+        "enum": [
+          "NoRegion",
+          "AustraliaEast",
+          "WestEurope",
+          "EastUnitedStates"
+        ],
+        "type": "string"
+      },
+      "DeletedAthleteDTO": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "isHardDeleted": {
+            "type": "boolean"
+          },
+          "deletedUTC": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeletedTestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "deletedUTC": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DetailedTestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "analysedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "analysedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "testType": {
+            "type": "string",
+            "nullable": true
+          },
+          "param": {
+            "$ref": "#/components/schemas/TestParameterDTO"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeDTO"
+            },
+            "nullable": true
+          },
+          "trials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrialDTO"
+            },
+            "nullable": true
+          },
+          "trialCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiagnosticsResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetCursorPagedTestsResponse": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiagnosticsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetResultDefinitionResponse": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "resultIdString": {
+            "type": "string",
+            "nullable": true
+          },
+          "resultName": {
+            "type": "string",
+            "nullable": true
+          },
+          "resultDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "resultGroup": {
+            "$ref": "#/components/schemas/ResultGroup"
+          },
+          "supportsAsymmetry": {
+            "type": "boolean"
+          },
+          "isRepeatResult": {
+            "type": "boolean"
+          },
+          "resultUnit": {
+            "$ref": "#/components/schemas/UnitType"
+          },
+          "resultUnitName": {
+            "type": "string",
+            "nullable": true
+          },
+          "resultUnitScaleFactor": {
+            "type": "number",
+            "format": "double"
+          },
+          "numberOfDecimalPlaces": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trendDirection": {
+            "$ref": "#/components/schemas/TrendDirection"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetResultDefinitionsResponse": {
+        "type": "object",
+        "properties": {
+          "resultDefinitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetResultDefinitionResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "RecordingDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "recordedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordingInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordingType": {
+            "$ref": "#/components/schemas/RecordingType"
+          },
+          "recordingOutput": {
+            "$ref": "#/components/schemas/RecordingOutput"
+          },
+          "samplingFrequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastModifiedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordingDataHeader": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "recordingData": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RecordingOutput": {
+        "enum": [
+          "None",
+          "ForceZ",
+          "ForceX",
+          "ForceY",
+          "CentreOfPressureX",
+          "CentreOfPressureY",
+          "ForceComponents",
+          "CustomComponents"
+        ],
+        "type": "string"
+      },
+      "RecordingType": {
+        "enum": [
+          "None",
+          "Single",
+          "Dual",
+          "AuxSingle",
+          "AuxDual"
+        ],
+        "type": "string"
+      },
+      "ResultDefinition": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "result": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "repeatable": {
+            "type": "boolean"
+          },
+          "asymmetry": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResultGroup": {
+        "enum": [
+          "None",
+          "General",
+          "EISPhases",
+          "EISVariables",
+          "Performance",
+          "Takeoff",
+          "Rebound",
+          "Landing",
+          "Balance",
+          "Functional",
+          "BestHop",
+          "BestNHops",
+          "Fatigue"
+        ],
+        "type": "string"
+      },
+      "ResultLimb": {
+        "enum": [
+          "Trial",
+          "Left",
+          "Right",
+          "Asym"
+        ],
+        "type": "string"
+      },
+      "SummaryTestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "testType": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "samplingFrequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "number",
+            "format": "double"
+          },
+          "dataSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "analysedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "analysisInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModifiedUTC": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TeamDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "region": {
+            "$ref": "#/components/schemas/AzureRegion"
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestAttributeResponse": {
+        "type": "object",
+        "properties": {
+          "attributeValueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attributeValueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributeTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attributeTypeName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "recordingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "analysedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "analysedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModifiedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "testType": {
+            "type": "string",
+            "nullable": true
+          },
+          "param": {
+            "$ref": "#/components/schemas/TestParameterDTO"
+          },
+          "extParams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestParameterDTO"
+            },
+            "nullable": true
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeDTO"
+            },
+            "nullable": true
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestDTOPagedDTO": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestDTO"
+            },
+            "nullable": true
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextPage": {
+            "type": "string",
+            "nullable": true
+          },
+          "previousPage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestParameterDTO": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "value": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "definition": {
+            "$ref": "#/components/schemas/ResultDefinition"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestParameterResponse": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestResponse": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedDateOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordedDateTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "analysedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "analysedDateOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "analysedDateTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "testType": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "parameter": {
+            "$ref": "#/components/schemas/TestParameterResponse"
+          },
+          "extendedParameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestParameterResponse"
+            },
+            "nullable": true
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestAttributeResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestTypeSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "testType": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrendDirection": {
+        "enum": [
+          "None",
+          "Positive",
+          "Negative"
+        ],
+        "type": "string"
+      },
+      "TrialDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "athleteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hubAthleteId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "recordedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordedOffset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordedTimezone": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "endTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrialResultDTO"
+            },
+            "nullable": true
+          },
+          "lastModifiedUTC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "limb": {
+            "$ref": "#/components/schemas/TrialLimb"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrialLimb": {
+        "enum": [
+          "Both",
+          "Left",
+          "Right"
+        ],
+        "type": "string"
+      },
+      "TrialResultDTO": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "time": {
+            "type": "number",
+            "format": "double"
+          },
+          "limb": {
+            "$ref": "#/components/schemas/ResultLimb"
+          },
+          "repeat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/ResultDefinition"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnitType": {
+        "enum": [
+          "NoUnit",
+          "Meter",
+          "Centimeter",
+          "CentimeterSI",
+          "Millimeter",
+          "Inch",
+          "MeterSquared",
+          "CentimeterSquared",
+          "MillimeterSquared",
+          "Newton",
+          "NewtonPerCentimeter",
+          "NewtonPerMeter",
+          "NewtonPerSecond",
+          "NewtonPerSecondPerKilo",
+          "NewtonPerSecondPerCentimeter",
+          "NewtonPerKilo",
+          "NewtonSecond",
+          "NewtonSecondPerKilo",
+          "MeterPerSecond",
+          "MeterPerSecondPerSecond",
+          "CentimeterPerSecond",
+          "MillimeterPerSecond",
+          "Second",
+          "Millisecond",
+          "Watt",
+          "WattPerKilo",
+          "WattPerSecond",
+          "WattPerSecondPerKilo",
+          "Joule",
+          "Percent",
+          "Asymmetry",
+          "Kilo",
+          "Pound",
+          "RSIModified",
+          "KilogramMeterPerSecond",
+          "Boolean",
+          "Enum"
+        ],
+        "type": "string"
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Diagnostics"
+    },
+    {
+      "name": "ResultDefinitions"
+    },
+    {
+      "name": "Team"
+    },
+    {
+      "name": "Tests"
+    }
+  ]
+}

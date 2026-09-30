@@ -1,0 +1,1478 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Vald.Api.ExternalSmartSpeed.V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/version": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "bb29876c-1e8a-4e2e-8daa-7c52f65a424e",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "a978a456-bc38-42bf-91ca-0c6849223756",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "f92ea754-7658-40a9-9e85-6bc5631a3d04",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/diagnostics": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "3d728411-b6b2-45e2-a807-188cd2e6f1e8",
+        "parameters": [
+          {
+            "name": "Diagnostics-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.GetDiagnosticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/team/{teamId}/tests/{testId}/detail": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "4e6c5902-c101-4cd9-8067-e54d3b4499b8",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/team/{teamId}/tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "8f77099d-eb0d-4cce-9bbd-62a8002f9fea",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "AthleteId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "TestFromUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TestToUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "GroupUnderTestId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test/tests-by-modified-date": {
+      "get": {
+        "tags": [
+          "TestsPaged"
+        ],
+        "operationId": "72b0c805-1877-40f8-ad27-52a0ebb0a7a3",
+        "parameters": [
+          {
+            "name": "TenantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ModifiedFromUtc",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Microsoft.AspNetCore.Mvc.ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.DiagnosticResult": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOk": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.DiagnosticResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.CutChoice": {
+        "enum": [
+          "Random",
+          "Fixed"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Direction": {
+        "enum": [
+          "Left",
+          "Right",
+          "Random",
+          "Both"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.IntervalType": {
+        "enum": [
+          "FixedDuration",
+          "FixedRecovery"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "groupUnderTestId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trialIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tag": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.TestTag"
+          },
+          "additionalTestResult": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_AdditionalTestResultDto"
+          },
+          "repResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_RepResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_AdditionalSplitData": {
+        "type": "object",
+        "properties": {
+          "expectedDirection": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "colour": {
+            "type": "string",
+            "nullable": true
+          },
+          "splitType": {
+            "type": "string",
+            "nullable": true
+          },
+          "goalSplitTime": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "goalCumulativeTime": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_AdditionalTestResultDto": {
+        "type": "object",
+        "properties": {
+          "totalOne": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "totalOneToTwo": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "totalOneToThree": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "totalOneToFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "totalThreeToFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "reactionTime": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "heightM": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "weightKg": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "direction": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_JumpResult": {
+        "type": "object",
+        "properties": {
+          "jumpIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contactTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "flightTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "splitCompleteDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_RepResult": {
+        "type": "object",
+        "properties": {
+          "restDuration": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "repIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "splitResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_SplitResult"
+            },
+            "nullable": true
+          },
+          "jumpResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_JumpResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_SplitResult": {
+        "type": "object",
+        "properties": {
+          "gateIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "splitIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "splitTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "cumulativeTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "splitCompleteDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "additionalSplitData": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestDetailHttpResponse_AdditionalSplitData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testResultId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "groupUnderTestId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deviceCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "testTypeName": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.TestTypeName"
+          },
+          "testName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isValid": {
+            "type": "boolean"
+          },
+          "additionalOptionsFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_AdditionalOptionsFieldsDto"
+          },
+          "jumpingSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_JumpingSummaryFieldsDto"
+          },
+          "runningSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_RunningSummaryFieldsDto"
+          },
+          "allGroups": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_AdditionalOptionsFieldsDto": {
+        "type": "object",
+        "properties": {
+          "startType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.StartType"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Direction"
+          },
+          "cutDirectionChoice": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.CutChoice"
+          },
+          "reactiveDelayEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "reactiveDelayMinimumInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "reactiveDelayMaximumInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "events": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "durationInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "lapCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "intervalType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.IntervalType"
+          },
+          "testStandardType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.TestStandardType"
+          },
+          "dropHeight": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "dropHeightEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "weightKg": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_FvpSummaryDto": {
+        "type": "object",
+        "properties": {
+          "maxVelocity": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxForce": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxForceNormalised": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxPower": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxPowerNormalised": {
+            "type": "number",
+            "format": "float"
+          },
+          "forceVelocityCurve": {
+            "type": "number",
+            "format": "float"
+          },
+          "drf": {
+            "type": "number",
+            "format": "float"
+          },
+          "rfMax": {
+            "type": "number",
+            "format": "float"
+          },
+          "tau": {
+            "type": "number",
+            "format": "float"
+          },
+          "vMax": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_GateSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "splitOne": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitTwo": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitThree": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeOne": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeTwo": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeThree": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_JumpingSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "flightTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "contactTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "heightMeters": {
+            "type": "number",
+            "format": "float"
+          },
+          "rsi": {
+            "type": "number",
+            "format": "float"
+          },
+          "flightTimeOverContractionTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "peakPowerOutput": {
+            "type": "number",
+            "format": "float"
+          },
+          "legStiffness": {
+            "type": "number",
+            "format": "float"
+          },
+          "impulse": {
+            "type": "number",
+            "format": "float"
+          },
+          "flightTimePlusContractionTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "peakPowerOutputOverTotalMass": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_RunningSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "totalTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "bestSplitSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "splitAverageSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "velocityFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_VelocityFieldsDto"
+          },
+          "gateSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_GateSummaryFieldsDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_VelocityFieldsDto": {
+        "type": "object",
+        "properties": {
+          "peakVelocityMetersPerSecond": {
+            "type": "number",
+            "format": "float"
+          },
+          "meanVelocityMetersPerSecond": {
+            "type": "number",
+            "format": "float"
+          },
+          "distance": {
+            "type": "number",
+            "format": "float"
+          },
+          "fvpSummaryDto": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.GetTestSummariesHttpResponse_FvpSummaryDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse": {
+        "type": "object",
+        "properties": {
+          "summaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_Summary"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_AdditionalOptionsFieldsDto": {
+        "type": "object",
+        "properties": {
+          "startType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.StartType"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Direction"
+          },
+          "cutDirectionChoice": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.CutChoice"
+          },
+          "reactiveDelayEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "reactiveDelayMinimumInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "reactiveDelayMaximumInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "events": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "durationInSeconds": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "lapCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "intervalType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.IntervalType"
+          },
+          "testStandardType": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.TestStandardType"
+          },
+          "dropHeight": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "dropHeightEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "weightKg": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_FvpSummaryDto": {
+        "type": "object",
+        "properties": {
+          "maxVelocity": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxForce": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxForceNormalised": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxPower": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxPowerNormalised": {
+            "type": "number",
+            "format": "float"
+          },
+          "forceVelocityCurve": {
+            "type": "number",
+            "format": "float"
+          },
+          "drf": {
+            "type": "number",
+            "format": "float"
+          },
+          "rfMax": {
+            "type": "number",
+            "format": "float"
+          },
+          "tau": {
+            "type": "number",
+            "format": "float"
+          },
+          "vMax": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_GateSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "splitOne": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitTwo": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitThree": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "splitFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeOne": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeTwo": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeThree": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "cumulativeFour": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_JumpingSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "flightTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "contactTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "heightMeters": {
+            "type": "number",
+            "format": "float"
+          },
+          "rsi": {
+            "type": "number",
+            "format": "float"
+          },
+          "flightTimeOverContractionTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "peakPowerOutput": {
+            "type": "number",
+            "format": "float"
+          },
+          "legStiffness": {
+            "type": "number",
+            "format": "float"
+          },
+          "impulse": {
+            "type": "number",
+            "format": "float"
+          },
+          "flightTimePlusContractionTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "peakPowerOutputOverTotalMass": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_RunningSummaryFieldsDto": {
+        "type": "object",
+        "properties": {
+          "totalTimeSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "bestSplitSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "splitAverageSeconds": {
+            "type": "number",
+            "format": "float"
+          },
+          "velocityFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_VelocityFieldsDto"
+          },
+          "gateSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_GateSummaryFieldsDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_Summary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testResultId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "groupUnderTestId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deviceCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trialNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "testTypeName": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.TestTypeName"
+          },
+          "testName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isValid": {
+            "type": "boolean"
+          },
+          "additionalOptionsFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_AdditionalOptionsFieldsDto"
+          },
+          "jumpingSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_JumpingSummaryFieldsDto"
+          },
+          "runningSummaryFields": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_RunningSummaryFieldsDto"
+          },
+          "allGroups": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_VelocityFieldsDto": {
+        "type": "object",
+        "properties": {
+          "peakVelocityMetersPerSecond": {
+            "type": "number",
+            "format": "float"
+          },
+          "meanVelocityMetersPerSecond": {
+            "type": "number",
+            "format": "float"
+          },
+          "distance": {
+            "type": "number",
+            "format": "float"
+          },
+          "fvpSummaryDto": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalSmartSpeed.V1.Models.TestCursorHttpResponse_FvpSummaryDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.StartType": {
+        "enum": [
+          "Standard",
+          "InBeam",
+          "TrafficLight",
+          "ReactiveStart"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.TestStandardType": {
+        "enum": [
+          "Standard",
+          "Free",
+          "Events",
+          "Duration"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.TestTag": {
+        "enum": [
+          "Valid",
+          "Invalid"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalSmartSpeed.V1.TestTypeName": {
+        "enum": [
+          "TrafficLightSprint",
+          "Cut",
+          "Free",
+          "LapTiming",
+          "Serpentine",
+          "IntervalShuttle",
+          "Grid",
+          "IntervalProtocol",
+          "Pacing",
+          "ReactiveProAgility",
+          "TrafficLightStart_0121",
+          "AutoStart_112",
+          "TrafficLightStart_0123",
+          "TrafficLightStart_013",
+          "ProAgility",
+          "OneWay",
+          "FvpSprint",
+          "Jumping"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.prd.vald.com/oauth/token",
+            "scopes": { },
+            "audience": "vald-api-external"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Diagnostics"
+    },
+    {
+      "name": "Test"
+    },
+    {
+      "name": "Tests"
+    },
+    {
+      "name": "TestsPaged"
+    }
+  ]
+}

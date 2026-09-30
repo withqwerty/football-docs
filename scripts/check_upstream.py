@@ -11,8 +11,9 @@ One report from the checks that otherwise live in separate places:
    since that is the version the truth files describe; failing that, the entry's
    `version` when it is a version number (some describe an API, not a package).
 2. Spec snapshots. Every file listed in specs/README.md is fetched again from its
-   public URL and compared with the copy in specs/. Reep's snapshots are left to
-   check_reep_live.py, which knows how its release stamps work.
+   public URL and compared with the copy in specs/, byte for byte unless
+   `comparable` says otherwise. Reep's snapshots are left to check_reep_live.py,
+   which knows how its release stamps work.
 3. Derived truth. BeSoccer (a Postman collection) and Driblab (a Notion page)
    publish no spec to mirror, so their truth files are regenerated from the
    public source and compared with the committed ones, ignoring the `source`
@@ -98,6 +99,54 @@ def check_packages():
     return findings
 
 
+def _without_operation_ids(node):
+    if isinstance(node, dict):
+        return {k: _without_operation_ids(v) for k, v in node.items() if k != "operationId"}
+    if isinstance(node, list):
+        return [_without_operation_ids(v) for v in node]
+    return node
+
+
+def _collapse_statsports_prefix(spec):
+    # Each request to the STATSports Swagger endpoint can add another leading
+    # /thirdpartyapi segment to every path key; the path itself does not change.
+    paths = spec.get("paths") or {}
+    spec["paths"] = {re.sub(r"^(?:/thirdpartyapi)+", "", p): item for p, item in paths.items()}
+    return spec
+
+
+def _extract_hawkin(page_bytes):
+    with tempfile.NamedTemporaryFile(suffix=".html") as page:
+        page.write(page_bytes)
+        page.flush()
+        result = subprocess.run(
+            ["node", str(ROOT / "scripts" / "extract_hawkin_openapi.mjs"), page.name],
+            capture_output=True, check=True,
+        )
+    return result.stdout
+
+
+def comparable(path, local_bytes, remote_bytes):
+    """Both sides of a snapshot comparison, made stable where the publisher's output is not.
+
+    Most specs are compared byte for byte. Three are not stable or not a file:
+    VALD regenerates every operationId as a random GUID on each request, the
+    STATSports server varies the path prefix, and Hawkin publishes its spec
+    inline in an HTML page (see specs/README.md).
+    """
+    if path == "hawkin-dynamics/openapi.json":
+        remote_bytes = _extract_hawkin(remote_bytes)
+    if path.startswith("vald/"):
+        return (_without_operation_ids(json.loads(local_bytes)),
+                _without_operation_ids(json.loads(remote_bytes)))
+    if path.startswith("statsports/"):
+        return (_collapse_statsports_prefix(json.loads(local_bytes)),
+                _collapse_statsports_prefix(json.loads(remote_bytes)))
+    if path == "hawkin-dynamics/openapi.json":
+        return json.loads(local_bytes), json.loads(remote_bytes)
+    return local_bytes, remote_bytes
+
+
 def check_specs():
     table = (ROOT / "specs" / "README.md").read_text()
     findings = []
@@ -112,7 +161,16 @@ def check_specs():
             print(f"  ??? {path}: could not fetch ({error})")
             findings.append(f"specs/{path}: fetch failed ({error})")
             continue
-        same = local.exists() and local.read_bytes() == remote
+        try:
+            if local.exists():
+                local_side, remote_side = comparable(path, local.read_bytes(), remote)
+                same = local_side == remote_side
+            else:
+                same = False
+        except Exception as error:  # noqa: BLE001 - a page that no longer parses is a finding
+            print(f"  ??? {path}: could not compare ({error})")
+            findings.append(f"specs/{path}: comparison failed ({error})")
+            continue
         print(f"  {'ok ' if same else 'NEW'} {path}")
         if not same:
             findings.append(f"specs/{path}: upstream changed (refresh it, then pnpm openapi:truth)")

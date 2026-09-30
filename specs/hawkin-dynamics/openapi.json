@@ -1,0 +1,1635 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hawkin Force Platform API",
+    "version": "1.15",
+    "description": "## Overview\nThis API provides programmatic access to your Hawkin force platform data.\n\n**Designed for server-to-server use.** Not intended for direct client-app access.\n\n**Rate limiting:** As your database grows, use `from`/`to` or `syncFrom`/`syncTo` parameters to limit response size. Responses exceeding the memory limit will fail.\n\n### Recommended Sync Strategy\n- **Incremental (ongoing):** Scheduled job using `syncFrom`/`syncTo` every 5 minutes\n- **Historical bulk export:** Use `from`/`to` per month in parallel or sequential requests\n\n### Team-Scoped Tokens\nA Refresh Token may be **scoped to specific teams**. When it is, the Access Token it produces restricts **every read** to those teams:\n- List endpoints (tests, athletes, teams, groups) return only in-scope records.\n- Requesting a specific out-of-scope resource returns an **empty result with HTTP 200** — an empty object (`{}`) for single-resource endpoints such as `/forcetime/{test_id}` and `/cop/{test_id}`, or an empty `data` array for list endpoints. It does **not** return `404`.\n\nDesign your integration to treat an empty 200 response as \"no access / no data\" rather than an error.\n\n### What's New in 1.15\n- **New endpoint:** `GET /api/v1/cop/{test_id}` — center-of-pressure time series for Free Run tests.\n- **Force-Time data** now documents shear forces (`XLeftForce(N)` … `YRightForce(N)`), moments (`XLeftMoments` … `YRightMoments`), and `eid`. `rsi` is an array of numbers, `timestamp` is an integer (Unix seconds), and `testType` is the full test-type object.\n- **Tests:** non-calculable metric values are `null` (not `\"N/A\"`); each test includes an `active` boolean by default.\n- **Metrics:** the per-test-type field is `testTypeName`.\n- **Test Types:** response is a bare JSON array.\n- **Teams / Groups / Tags:** responses include a `count` field; `teamId` query param documented on Athletes, Teams, and Groups.\n- Documented **team-scoped token** behavior (see above).",
+    "contact": {
+      "email": "dev-team@hawkindynamics.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://cloud.hawkindynamics.com",
+      "description": "Americas (default)"
+    },
+    {
+      "url": "https://eu.cloud.hawkindynamics.com",
+      "description": "Europe"
+    },
+    {
+      "url": "https://apac.cloud.hawkindynamics.com",
+      "description": "Asia-Pacific"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Obtain access tokens using your refresh token. A refresh token may be scoped to specific teams, in which case the resulting access token restricts all reads to those teams (out-of-scope requests return empty results with HTTP 200)."
+    },
+    {
+      "name": "Tests",
+      "description": "Retrieve test results and force-time data"
+    },
+    {
+      "name": "Athletes",
+      "description": "Manage athlete records"
+    },
+    {
+      "name": "Organization",
+      "description": "Teams, groups, tags, test types, and metrics"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your Refresh Token (from Settings → Integrations in the Hawkin dashboard). It will be exchanged for a short-lived Access Token automatically."
+      }
+    },
+    "schemas": {
+      "AccessTokenResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token to use in subsequent API requests"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expires_at": {
+            "type": "integer",
+            "description": "Unix timestamp when the token expires",
+            "example": 1551301530
+          }
+        }
+      },
+      "TestType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "9710f473daa20f7069c3d337753e879c"
+          },
+          "name": {
+            "type": "string",
+            "example": "Countermovement Jump"
+          },
+          "canonicalId": {
+            "type": "string",
+            "example": "7nNduHeM5zETPjHxvm7s"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AthleteRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Test": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "exampleTestId0000000"
+          },
+          "testType": {
+            "$ref": "#/components/schemas/TestType"
+          },
+          "athlete": {
+            "$ref": "#/components/schemas/AthleteRef"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp of the test",
+            "example": 1551301560
+          },
+          "segment": {
+            "type": "string",
+            "description": "Test type and trial number within session",
+            "example": "Countermovement Jump:5"
+          },
+          "eid": {
+            "type": "string",
+            "description": "Equipment ID of the hardware that produced the test. Only present when the request was made with includeEid=true.",
+            "example": "eq_AB12CD"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the test is active (not archived). Included by default because the public endpoint uses includeInactive=true; set includeInactive=false to return only active tests.",
+            "example": true
+          }
+        },
+        "additionalProperties": {
+          "type": "number",
+          "nullable": true,
+          "description": "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null (the public endpoint uses useNulls=true), not the string 'N/A'."
+        }
+      },
+      "TestsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Test"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "example": 1
+          },
+          "lastTestTime": {
+            "type": "integer",
+            "description": "Unix timestamp of the most recent test",
+            "example": 1551301560
+          },
+          "lastSyncTime": {
+            "type": "integer",
+            "description": "Unix timestamp to use as syncFrom in your next request",
+            "example": 1551301560
+          },
+          "hasMore": {
+            "type": "boolean",
+            "description": "True if more pages exist. Only present when paginate=true."
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for next page. Null on last page. Only present when paginate=true."
+          }
+        }
+      },
+      "Athlete": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "active",
+          "teams",
+          "groups"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of team IDs"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of group IDs"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URL to the athlete's photo. Three-state: omitted when never set, null when explicitly cleared, string when set."
+          },
+          "position": {
+            "type": "string",
+            "description": "Free-text playing position (e.g. \"Forward\"). Omitted when blank."
+          },
+          "dob": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of birth as ISO-8601 (YYYY-MM-DD). Omitted when blank."
+          },
+          "sport": {
+            "type": "string",
+            "description": "Free-text sport name (e.g. \"Basketball\"). Omitted when blank."
+          },
+          "height": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 300,
+            "description": "Athlete height in centimeters. Guaranteed numeric and in-range when present. Omitted entirely when no valid height is on file."
+          },
+          "lastTestedOn": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch seconds of the athlete's most recent test session. Omitted when the athlete has no tests on file."
+          },
+          "external": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Custom external properties as key-value pairs"
+          }
+        }
+      },
+      "AthleteInput": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true,
+            "description": "URL to athlete image",
+            "default": null
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Team IDs. Defaults to [defaultTeamId]"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "Group IDs"
+          },
+          "external": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Custom properties"
+          }
+        }
+      },
+      "AthleteUpdateInput": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Required. The athlete's ID"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "external": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Custom properties. Note: custom properties NOT present in the request will be REMOVED."
+          }
+        }
+      },
+      "BulkResult": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Athlete"
+            }
+          },
+          "hasFailures": {
+            "type": "boolean"
+          },
+          "failures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "ForceTimeData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "testType": {
+            "$ref": "#/components/schemas/TestType"
+          },
+          "athlete": {
+            "$ref": "#/components/schemas/AthleteRef"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp (seconds) of the test",
+            "example": 1551301560
+          },
+          "eid": {
+            "type": "string",
+            "nullable": true,
+            "description": "Equipment ID of the hardware that produced the test. Null when unavailable.",
+            "example": "eq_AB12CD"
+          },
+          "Time(s)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              0.001,
+              0.002,
+              0.003
+            ]
+          },
+          "LeftForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              481,
+              480,
+              482
+            ]
+          },
+          "RightForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              481,
+              480,
+              482
+            ]
+          },
+          "CombinedForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              962,
+              960,
+              964
+            ]
+          },
+          "XLeftForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Medio-lateral (X-axis) shear force under the left platform."
+          },
+          "XRightForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Medio-lateral (X-axis) shear force under the right platform."
+          },
+          "YLeftForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Anterior-posterior (Y-axis) shear force under the left platform."
+          },
+          "YRightForce(N)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Anterior-posterior (Y-axis) shear force under the right platform."
+          },
+          "XLeftMoments": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Moment about the X-axis under the left platform."
+          },
+          "XRightMoments": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Moment about the X-axis under the right platform."
+          },
+          "YLeftMoments": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Moment about the Y-axis under the left platform."
+          },
+          "YRightMoments": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Moment about the Y-axis under the right platform."
+          },
+          "Velocity(m/s)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
+          },
+          "Displacement(m)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
+          },
+          "Power(W)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
+          },
+          "rsi": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Reactive Strength Index values (one per contact/flight cycle)."
+          }
+        }
+      },
+      "COPData": {
+        "type": "object",
+        "description": "Center-of-pressure time series for a Free Run test. `Time(s)` is derived from the platform sampling rate (hertz). copX/copY are the combined center of pressure; leftCop*/rightCop* are per-platform.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "testType": {
+            "$ref": "#/components/schemas/TestType"
+          },
+          "athlete": {
+            "$ref": "#/components/schemas/AthleteRef"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp (seconds) of the test",
+            "example": 1551301560
+          },
+          "eid": {
+            "type": "string",
+            "nullable": true,
+            "description": "Equipment ID of the hardware that produced the test. Null when unavailable."
+          },
+          "Time(s)": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Sample timestamps in seconds, derived from the sampling rate (hertz).",
+            "example": [
+              0,
+              0.001,
+              0.002
+            ]
+          },
+          "copX": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Combined center-of-pressure X position."
+          },
+          "copY": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Combined center-of-pressure Y position."
+          },
+          "leftCopX": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Left-platform center-of-pressure X position."
+          },
+          "leftCopY": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Left-platform center-of-pressure Y position."
+          },
+          "rightCopX": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Right-platform center-of-pressure X position."
+          },
+          "rightCopY": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Right-platform center-of-pressure Y position."
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TestTypeSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Metric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "units": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "MetricsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "canonicalTestTypeId": {
+              "type": "string"
+            },
+            "testTypeName": {
+              "type": "string",
+              "description": "Human-readable name of the test type (e.g. 'Countermovement Jump')."
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Metric"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/token": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get Access Token",
+        "description": "Exchange your Refresh Token for a short-lived Access Token (1 hour). Generate your Refresh Token in the Hawkin dashboard under **Settings → Integrations**. Only the organization administrator account can generate API tokens.\n\n**Note:** After you authenticate using the Authorize button above, executing this endpoint will use your cached refresh token to demonstrate the exchange.",
+        "responses": {
+          "200": {
+            "description": "Access token successfully issued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh Token is invalid or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Refresh Token is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Get Tests",
+        "description": "Retrieve test results for your organization. Returns all tests unless filtered. **Important:** For large databases, always use time-range parameters to avoid memory limit failures.\n\n**Note:** Available metrics can change at any time. Some tests may be missing metrics if they cannot be calculated.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Unix timestamp — return tests from this time onward. Best for bulk historical exports.",
+            "schema": {
+              "type": "integer",
+              "example": 1551301530
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Unix timestamp — return tests up to this time. Best for bulk historical exports.",
+            "schema": {
+              "type": "integer",
+              "example": 1552301530
+            }
+          },
+          {
+            "name": "syncFrom",
+            "in": "query",
+            "description": "Unix timestamp — return tests **modified or created** since this time. Includes updates. Best for incremental sync. Cannot be used to fetch entire database.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "syncTo",
+            "in": "query",
+            "description": "Unix timestamp — upper bound for syncFrom queries. Store the returned `lastSyncTime` value and pass as `syncFrom` in your next request.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "athleteId",
+            "in": "query",
+            "description": "Filter by a specific athlete ID. Can only be used with `from`/`to` parameters.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "query",
+            "description": "Filter by one or more team IDs (comma-separated, max 10). Can only be used with `from`/`to` parameters.",
+            "schema": {
+              "type": "string",
+              "example": "teamIdA,teamIdB,teamIdC"
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "description": "Filter by one or more group IDs (comma-separated, max 10). Can only be used with `from`/`to` parameters.",
+            "schema": {
+              "type": "string",
+              "example": "groupIdA,groupIdB"
+            }
+          },
+          {
+            "name": "testTypeId",
+            "in": "query",
+            "description": "Filter by a specific test type ID. Can only be used with `from`/`to` parameters.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeInactive",
+            "in": "query",
+            "description": "Default true. Set to false to return only active tests.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "includeEid",
+            "in": "query",
+            "description": "Default false. Set to true to include the hardware `eid` (equipment ID) on each returned test record.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "paginate",
+            "in": "query",
+            "description": "Set to true to enable paginated responses (1,000 tests per page).",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Firestore document ID from previous response's nextCursor. Omit on first request.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of test results matching the query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forcetime/{test_id}": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Get Force-Time Data",
+        "description": "Retrieve the raw force-time series data for a specific test. Returns time-series arrays for left force, right force, combined force, velocity, displacement, and power sampled at 1ms intervals.",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "description": "The test ID to retrieve force-time data for",
+            "schema": {
+              "type": "string",
+              "example": "exampleTestId0000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Force-time data for the requested test",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForceTimeData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Test not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cop/{test_id}": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Get Center of Pressure Data",
+        "description": "Retrieve the center-of-pressure (COP) time series for a **Free Run** test. Returns `Time(s)` (derived from the platform sampling rate in hertz) alongside combined and per-platform COP coordinates.\n\n**Free Run tests only.** This endpoint returns COP data exclusively for Free Run tests.\n\n**Team-scoped tokens:** if the access token is scoped to teams that do not include this test, the endpoint returns an empty object (`{}`) with HTTP 200 rather than a 404.",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "description": "The Free Run test ID to retrieve COP data for",
+            "schema": {
+              "type": "string",
+              "example": "exampleTestId0000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "COP data for the requested Free Run test. A team-scoped token without access to the test receives an empty object ({}) with status 200.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/COPData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returned when the test does not exist, is not a Free Run test, or has no COP data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/test_types": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Get Test Types",
+        "description": "Retrieve all test types available in the Hawkin system (e.g. Countermovement Jump, Squat Jump, Drop Jump).\n\n**Note:** Unlike the other list endpoints, this endpoint returns a **bare JSON array** (`[{ id, name }, ...]`), not an object wrapped in `data`.",
+        "responses": {
+          "200": {
+            "description": "Bare array of test types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestTypeSummary"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "summary": "Get Metrics",
+        "description": "Retrieve all metrics available for each test type, including ID, label, units, and description. Useful for building metric lookup tables.",
+        "responses": {
+          "200": {
+            "description": "Array of test types with their associated metrics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/athletes": {
+      "get": {
+        "tags": [
+          "Athletes"
+        ],
+        "summary": "Get Athletes",
+        "description": "Retrieve all athletes in your organization. Returns only active athletes by default; set includeInactive=true to also include archived records.",
+        "parameters": [
+          {
+            "name": "includeInactive",
+            "in": "query",
+            "description": "Default false. Set to true to also include athletes whose `active` field is false.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "query",
+            "description": "Optional. Restrict results to one or more teams (comma-separated team IDs). With a team-scoped token, results are already limited to the token's teams.",
+            "schema": {
+              "type": "string",
+              "example": "teamIdA,teamIdB"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of athlete records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Athlete"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Athletes"
+        ],
+        "summary": "Create Athlete",
+        "description": "Create a single new athlete record.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AthleteInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created athlete object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Athlete"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/athletes/bulk": {
+      "post": {
+        "tags": [
+          "Athletes"
+        ],
+        "summary": "Create Athletes (Bulk)",
+        "description": "Bulk create up to **500 athletes** in a single request. Returns details of successfully created athletes and any failures.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "maxItems": 500,
+                "items": {
+                  "$ref": "#/components/schemas/AthleteInput"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk creation result with successes and failures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large (exceeds 500 athletes)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Athletes"
+        ],
+        "summary": "Update Athletes (Bulk)",
+        "description": "Bulk update up to **500 athletes** in a single request.\n\n**Note:** Optional fields not included in the request will be left unchanged. However, when updating `external` properties, any custom properties **not present in the request will be removed**.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "maxItems": 500,
+                "items": {
+                  "$ref": "#/components/schemas/AthleteUpdateInput"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk update result with successes and failures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/athletes/{athleteId}": {
+      "put": {
+        "tags": [
+          "Athletes"
+        ],
+        "summary": "Update Athlete",
+        "description": "Update a single athlete by ID.\n\n**Note:** Optional fields not included will be left unchanged. However, when updating `external` properties, custom properties **not present in the request will be removed**.",
+        "parameters": [
+          {
+            "name": "athleteId",
+            "in": "path",
+            "required": true,
+            "description": "The athlete's ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AthleteUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated athlete object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Athlete"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams": {
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "summary": "Get Teams",
+        "description": "Retrieve all teams in your organization with their IDs and names.",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "query",
+            "description": "Optional. Restrict results to one or more teams (comma-separated team IDs). With a team-scoped token, results are already limited to the token's teams.",
+            "schema": {
+              "type": "string",
+              "example": "teamIdA,teamIdB"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Team"
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of teams returned."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups": {
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "summary": "Get Groups",
+        "description": "Retrieve all groups in your organization with their IDs and names.",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "query",
+            "description": "Optional. Restrict results to one or more teams (comma-separated team IDs). With a team-scoped token, results are already limited to the token's teams.",
+            "schema": {
+              "type": "string",
+              "example": "teamIdA,teamIdB"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Group"
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of groups returned."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags": {
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "summary": "Get Tags",
+        "description": "Retrieve all tags in your organization. Tags are used to sub-classify tests within a test type (e.g. 'Arm Swing', 'Right Single Leg').",
+        "responses": {
+          "200": {
+            "description": "Array of tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of tags returned."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

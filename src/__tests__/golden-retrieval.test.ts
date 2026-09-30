@@ -1115,7 +1115,9 @@ describe("golden retrieval evals", () => {
           "cumulative xG timeline shot flow score strip halftime guide full time guide goal markers sparse shots Understat Opta StatsBomb shot xG source model provider labels",
         // 15, not 12: the Sportradar reference pages shifted term weights enough to
         // move one xg-timelines section to 15th, with no new page above it.
-        max_results: 15,
+        // 16, not 15: the wearable vendor docs did the same again, to 16th; none of
+        // their pages rank above it.
+        max_results: 16,
       },
       expectedProvider: "free-sources",
       expected: [
@@ -1159,6 +1161,26 @@ describe("golden retrieval evals", () => {
       args: { query: "where does football-data.co.uk get its results", max_results: 5 },
       expectedProvider: "free-sources",
       expected: ["football-data.co.uk data sources", "XScores"],
+    },
+    {
+      id: "statsports-high-speed-running",
+      args: { query: "STATSports high speed running", provider: "statsports", max_results: 3 },
+      expected: ["**Category:** drill-kpi-metrics", "`highSpeedRunningAbs`", "`hsrRelPerMin`"],
+    },
+    {
+      id: "hawkin-countermovement-jump-rsi",
+      args: { query: "Hawkin countermovement jump RSI", provider: "hawkin-dynamics", max_results: 3 },
+      expected: ["Countermovement Jump metrics", "`cmjRsi`", "7nNduHeM5zETPjHxvm7s"],
+    },
+    {
+      id: "firstbeat-trimp-training-load",
+      args: { query: "Firstbeat TRIMP training load", provider: "firstbeat", max_results: 3 },
+      expected: ["`trimp`", "The TRIMP sum from the past 7 days.", "`acwr`"],
+    },
+    {
+      id: "vald-forcedecks-tests-by-modified-date",
+      args: { query: "ForceDecks test summaries ModifiedFromUtc TenantId", provider: "vald", max_results: 3 },
+      expected: ["VALD ForceDecks: `GET /tests`", "`ModifiedFromUtc`", "`GetCursorPagedTestsResponse`"],
     },
   ])("answers $id from sourced docs", ({ args, expected, expectedProvider }) => {
     const result = searchDocs(db, args);
@@ -1254,6 +1276,26 @@ describe("golden retrieval evals", () => {
       provider: "fmdb-pro",
       expected: ["**Display name:** FMDB Pro", "**Indexed:** yes", "fmdb"],
     },
+    {
+      query: "Sonra",
+      provider: "statsports",
+      expected: ["**Display name:** STATSports", "**Indexed:** yes", "statsports-sonra"],
+    },
+    {
+      query: "Firstbeat",
+      provider: "firstbeat",
+      expected: ["**Display name:** Firstbeat Sports", "**Indexed:** yes", "firstbeat-sports"],
+    },
+    {
+      query: "Hawkin",
+      provider: "hawkin-dynamics",
+      expected: ["**Display name:** Hawkin Dynamics", "**Indexed:** yes", "hawkin"],
+    },
+    {
+      query: "ForceDecks",
+      provider: "vald",
+      expected: ["**Display name:** VALD", "**Indexed:** yes", "nordbord"],
+    },
   ])("resolves provider alias $query to $provider", ({ query, provider, expected }) => {
     const result = resolveProviderId(db, { query });
     const text = result.content[0].text;
@@ -1320,6 +1362,18 @@ describe("golden retrieval evals", () => {
       topic: "tracking rendering official physical outputs",
       expectedProvider: "kloppy",
       expected: ["tracking-rendering", "Second Spectrum"],
+    },
+    {
+      provider: "ForceDecks",
+      topic: "tests modified",
+      expectedProvider: "vald",
+      expected: ["ModifiedFromUtc", "**Source:**"],
+    },
+    {
+      provider: "Firstbeat Sports",
+      topic: "usage limits daily quota",
+      expectedProvider: "firstbeat",
+      expected: ["5000 requests / day", "ThrottledException"],
     },
   ])("gets provider docs for $provider", ({ provider, topic, expectedProvider, expected }) => {
     const result = getProviderDocs(db, { provider, topic, max_results: 5 });
