@@ -9,7 +9,10 @@
     "  api_docs     - Standalone API documentation site",
     "  curated      - Hand-written by football-docs contributors",
     "",
-    "To add a new provider: add an entry here, then run: npm run crawl -- --provider <name>"
+    "To add a new provider: add an entry here, then run: npm run crawl -- --provider <name>",
+    "",
+    "not_indexed lists providers that were assessed and are not indexed, with the reason.",
+    "search_docs names them when a query mentions them, so agents do not read unrelated results as an answer."
   ],
   "providers": {
     "espn": {
@@ -399,7 +402,9 @@
     "floodlight": {
       "description": "Python library for spatial football data analysis (tracking, pitch control, metrics)",
       "display_name": "floodlight",
-      "aliases": [],
+      "aliases": [
+        "kinexon"
+      ],
       "access_level": "open-source",
       "licence_status": "Open-source library documentation.",
       "public_safety_notes": "Use public library docs and open examples only.",
@@ -454,6 +459,46 @@
         { "type": "curated", "note": "Overview and access patterns for free data sources" }
       ],
       "last_crawled": null
+    }
+  },
+  "not_indexed": {
+    "catapult": {
+      "display_name": "Catapult",
+      "aliases": [
+        "catapult-sports",
+        "catapult-connect",
+        "openfield",
+        "catapult-openfield"
+      ],
+      "reason": "Catapult's OpenField Connect API docs are public but not licensed for republishing, and the docs site disallows crawling (checked 2026-09-30). Impect, which Catapult owns, is indexed."
+    },
+    "kitman-labs": {
+      "display_name": "Kitman Labs",
+      "aliases": [
+        "kitman"
+      ],
+      "reason": "Kitman Labs gives its API documentation to customers only (checked 2026-09-30)."
+    },
+    "inbody": {
+      "display_name": "InBody",
+      "aliases": [
+        "lookinbody"
+      ],
+      "reason": "InBody's API documentation needs a LookinBody login (checked 2026-09-30)."
+    },
+    "wimu": {
+      "display_name": "WIMU (Hudl)",
+      "aliases": [
+        "hudl-wimu",
+        "wimu-pro",
+        "realtrack"
+      ],
+      "reason": "Hudl has not published WIMU API reference documentation (checked 2026-09-30)."
+    },
+    "zone7": {
+      "display_name": "Zone7",
+      "aliases": [],
+      "reason": "Zone7 publishes no API documentation (checked 2026-09-30)."
     }
   }
 }

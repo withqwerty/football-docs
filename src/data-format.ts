@@ -72,8 +72,16 @@ const providerEntrySchema = z.looseObject({
   last_crawled: z.string().nullable(),
 });
 
+/** A provider that was assessed and is not indexed, with the reason. */
+const notIndexedEntrySchema = z.looseObject({
+  display_name: z.string(),
+  aliases: z.array(z.string()),
+  reason: z.string(),
+});
+
 export const providersFileSchema = z.looseObject({
   providers: z.record(z.string(), providerEntrySchema),
+  not_indexed: z.record(z.string(), notIndexedEntrySchema).optional(),
 });
 
 export type ProvidersFile = z.infer<typeof providersFileSchema>;
