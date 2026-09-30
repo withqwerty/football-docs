@@ -52,7 +52,7 @@ describe("Opta ID validation", () => {
 
   it("flags an event type with the wrong name", () => {
     const violations = validateOptaDocs(
-      [{ path: "docs/opta/event-types.md", text: "| typeId | Name | Per match avg |\n|---|---|---|\n| 32 | Ball recovery | ~80 |\n" }],
+      [{ path: "docs/opta/event-types.md", text: "| typeId | Name | Outcome |\n|---|---|---|\n| 32 | Ball recovery | always 1 |\n" }],
       truth,
     );
     expect(violations.map((v) => v.message)).toEqual(['typeId 32 is named "Ball recovery"; F24 names it "Start"']);
