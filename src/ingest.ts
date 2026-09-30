@@ -23,8 +23,8 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Database from "better-sqlite3";
 import { SCHEMA_SQL, writeMeta } from "./data-format.js";
+import { type Database, openDatabase, transaction } from "./sqlite.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = resolve(__dirname, "..", "docs");
@@ -124,7 +124,7 @@ export function chunkMarkdown(text: string, provider: string, category: string):
 }
 
 /** Ingest all docs for a provider. */
-function ingestProvider(db: Database.Database, provider: string): number {
+function ingestProvider(db: Database, provider: string): number {
   const providerDir = resolve(DOCS_DIR, provider);
   if (!existsSync(providerDir)) {
     console.log(`  Skipping ${provider}: no docs directory`);
@@ -168,7 +168,7 @@ function ingestProvider(db: Database.Database, provider: string): number {
 export { SCHEMA_SQL };
 
 /** Ensure tables exist without dropping existing data. */
-function ensureSchema(db: Database.Database): void {
+function ensureSchema(db: Database): void {
   db.exec(SCHEMA_SQL);
 }
 
@@ -190,7 +190,7 @@ function dataStamp(): string {
 }
 
 /** Record the format, the stamp and the provider registry the chunks were built with. */
-function recordMeta(db: Database.Database): void {
+function recordMeta(db: Database): void {
   writeMeta(db, {
     dataStamp: dataStamp(),
     commit: process.env.GITHUB_SHA || git(["rev-parse", "HEAD"]),
@@ -199,7 +199,7 @@ function recordMeta(db: Database.Database): void {
 }
 
 /** Drop everything and recreate from scratch. */
-function rebuildSchema(db: Database.Database): void {
+function rebuildSchema(db: Database): void {
   db.exec(`
     DROP TABLE IF EXISTS docs_fts;
     DROP TABLE IF EXISTS docs;
@@ -214,8 +214,8 @@ function main() {
 
   mkdirSync(DB_DIR, { recursive: true });
 
-  const db = new Database(DB_PATH);
-  db.pragma("journal_mode = WAL");
+  const db = openDatabase(DB_PATH);
+  db.exec("PRAGMA journal_mode = WAL");
 
   if (singleProvider) {
     // Single-provider mode: only rebuild that provider's data
@@ -223,7 +223,7 @@ function main() {
     ensureSchema(db);
 
     // Atomically delete existing data and re-ingest for this provider
-    const deleteAndReinsert = db.transaction(() => {
+    transaction(db, () => {
       const rows = db.prepare(
         "SELECT id, provider, category, title, content FROM docs WHERE provider = ?"
       ).all(singleProvider) as Array<{ id: number; provider: string; category: string; title: string; content: string }>;
@@ -237,7 +237,6 @@ function main() {
 
       db.prepare("DELETE FROM docs WHERE provider = ?").run(singleProvider);
     });
-    deleteAndReinsert();
 
     console.log(`Ingesting ${singleProvider}...\n`);
     const count = ingestProvider(db, singleProvider);
@@ -251,7 +250,7 @@ function main() {
       console.log(`No docs directory at ${DOCS_DIR}`);
       console.log("Create docs/{provider}/*.md files first.");
       recordMeta(db);
-      db.pragma("journal_mode = DELETE");
+      db.exec("PRAGMA journal_mode = DELETE");
       db.close();
       return;
     }
@@ -278,7 +277,7 @@ function main() {
   // A shipped or downloaded file must not be in WAL mode: opening it read-only
   // would try to create -wal/-shm files next to it, which fails in a read-only
   // install and leaves side files behind in the cache.
-  db.pragma("journal_mode = DELETE");
+  db.exec("PRAGMA journal_mode = DELETE");
   db.close();
 }
 

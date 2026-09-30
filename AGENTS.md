@@ -65,7 +65,7 @@ pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
 ```
 
-Node >= 20. Package manager is pnpm. Linter is Biome (not ESLint).
+Node >= 22.13 (the index uses the built-in `node:sqlite`). Package manager is pnpm. Linter is Biome (not ESLint).
 
 ## Corpus scope
 
@@ -130,7 +130,8 @@ ID fields and access shape.
 - When a doc in `docs/free-sources/` changes how to fetch the data, change its check
   in `scripts/check_free_sources_live.py` in the same commit and run the script.
   CI does not run it; `pnpm check:upstream` does, before a release.
-- `better-sqlite3` is in `onlyBuiltDependencies` — if install fails, check the native
-  build toolchain.
+- SQLite access goes through `src/sqlite.ts`, which wraps Node's built-in
+  `node:sqlite`. Do not add a native SQLite addon back: `npx` shares one cache
+  between Node versions, and an addon built for one Node ABI fails under another.
 - Each Python ground-truth package needs its own venv; co-installing makes pip
   silently downgrade conflicting versions.

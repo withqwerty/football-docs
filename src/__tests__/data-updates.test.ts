@@ -2,7 +2,6 @@ import { createHash, generateKeyPairSync, type KeyObject, sign } from "node:cryp
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import Database from "better-sqlite3";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   compareVersions,
@@ -16,6 +15,7 @@ import {
 import { keyIdFor, TRUSTED_KEYS, type TrustedKey, verifySignedManifest } from "../data-signing.js";
 import { cachedFileName, cleanDataDir, dataModeFor, IndexChooser, selectDatabase } from "../data-source.js";
 import { checkForUpdate, MANIFEST_NAME } from "../data-update.js";
+import { openDatabase, pragmaValue } from "../sqlite.js";
 import { listProviders, resolveProviderId } from "../tools.js";
 
 const ROOT = resolve(import.meta.dirname, "..", "..");
@@ -43,7 +43,7 @@ interface BuildOptions {
 }
 
 function buildDb(path: string, options: BuildOptions): string {
-  const db = new Database(path);
+  const db = openDatabase(path);
   db.exec(SCHEMA_SQL);
   const insert = db.prepare(
     "INSERT INTO docs (provider, category, title, content, source_type) VALUES (?, ?, ?, ?, 'curated')",
@@ -55,7 +55,7 @@ function buildDb(path: string, options: BuildOptions): string {
   if (options.schemaVersion) db.prepare("UPDATE meta SET value = ? WHERE key = 'schema_version'").run(options.schemaVersion);
   if (options.minServer) db.prepare("UPDATE meta SET value = ? WHERE key = 'min_server_version'").run(options.minServer);
   if (options.extraSql) db.exec(options.extraSql);
-  db.pragma("journal_mode = DELETE");
+  db.exec("PRAGMA journal_mode = DELETE");
   db.close();
   return path;
 }
@@ -154,12 +154,12 @@ describe("data format", () => {
 });
 
 describe("the committed index", () => {
-  const db = new Database(resolve(ROOT, "data", "docs.db"), { readonly: true });
+  const db = openDatabase(resolve(ROOT, "data", "docs.db"), { readonly: true });
 
   it("records the current provider registry and is not in WAL mode", () => {
     const meta = db.prepare("SELECT value FROM meta WHERE key = 'providers_json'").get() as { value: string };
     expect(meta.value).toBe(PROVIDERS_JSON);
-    expect(db.pragma("journal_mode", { simple: true })).toBe("delete");
+    expect(pragmaValue(db, "journal_mode")).toBe("delete");
     expect(readMeta(db)?.schemaVersion).toBe(DATA_SCHEMA_VERSION);
   });
 });
@@ -172,14 +172,14 @@ describe("registry", () => {
       stamp: "2026-09-29T07:00:00Z",
       providersJson: JSON.stringify(registry),
     });
-    const db = new Database(path, { readonly: true });
+    const db = openDatabase(path, { readonly: true });
     const text = resolveProviderId(db, { query: "only-in-this-build" }).content[0].text;
     db.close();
     expect(text).toContain("provider ID: **opta**");
   });
 
   it("falls back to the packaged providers.json for a database without meta", () => {
-    const db = new Database(":memory:");
+    const db = openDatabase(":memory:");
     db.exec("CREATE TABLE docs (id INTEGER PRIMARY KEY, provider TEXT, category TEXT, title TEXT, content TEXT)");
     const text = resolveProviderId(db, { query: "Stats Perform" }).content[0].text;
     const list = listProviders(db).content[0].text;
@@ -190,7 +190,7 @@ describe("registry", () => {
 
   it("names the data stamp and source in list_providers", () => {
     const path = buildDb(join(dir, "stamp.db"), { stamp: "2026-09-29T07:00:00Z" });
-    const db = new Database(path, { readonly: true });
+    const db = openDatabase(path, { readonly: true });
     const text = listProviders(db, { source: "downloaded" }).content[0].text;
     db.close();
     expect(text).toContain("Data: built 2026-09-29T07:00:00.000Z from commit abc1234 (downloaded).");

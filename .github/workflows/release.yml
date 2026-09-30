@@ -34,9 +34,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           # Trusted publishing needs npm >= 11.5.1, and Node 22 still ships npm
-          # 10. Node 24 ships 11.19. The whole job runs on one version because
-          # switching mid-job would leave better-sqlite3's native binding built
-          # for the wrong ABI, and `pnpm ingest` below would fail on it.
+          # 10. Node 24 ships 11.19.
           node-version: 24
           registry-url: https://registry.npmjs.org
           # Deliberately no dependency cache. npm's own guidance is not to cache

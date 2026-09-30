@@ -16,7 +16,7 @@ import { spawn } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
 const [serve, dbPath] = process.argv.slice(2).map((path) => resolve(path));
 if (!serve || !dbPath) {
@@ -24,7 +24,7 @@ if (!serve || !dbPath) {
   process.exit(2);
 }
 
-const db = new Database(dbPath, { readonly: true });
+const db = new DatabaseSync(dbPath, { readOnly: true });
 const providers = db.prepare("SELECT DISTINCT provider FROM docs ORDER BY provider").all().map((row) => row.provider);
 db.close();
 

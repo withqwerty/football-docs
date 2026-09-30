@@ -29,6 +29,9 @@ MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard fo
 
 ## Quick start
 
+The server needs Node.js 22.13 or newer. It uses Node's built-in SQLite, so no
+native module is compiled at install time.
+
 ### Claude Code
 
 ```bash
@@ -393,10 +396,8 @@ workflow run without the workflow asking for it.
 Two consequences worth knowing:
 
 - **The release job runs on Node 24.** Trusted publishing needs npm >= 11.5.1 and
-  Node 22 still ships npm 10. The whole job uses one Node version, because
-  switching mid-job would leave `better-sqlite3`'s native binding built for the
-  wrong ABI and `pnpm ingest` would fail on it. Node 24 is in the CI matrix for
-  the same reason: a release must not be the first time the suite meets it.
+  Node 22 still ships npm 10. Node 24 is in the CI matrix so that a release is
+  not the first time the suite meets it.
 - **The release job does not cache dependencies.** This is the tree that gets
   published, so it is resolved fresh from the lockfile rather than rehydrated
   from a cache that earlier runs could have poisoned.

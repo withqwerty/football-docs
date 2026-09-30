@@ -1,13 +1,13 @@
-import Database from "better-sqlite3";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { SCHEMA_SQL } from "../ingest.js";
+import { type Database, openDatabase } from "../sqlite.js";
 import { searchDocs } from "../tools.js";
 
 describe("search_docs coverage labels", () => {
-  let db: Database.Database;
+  let db: Database;
 
   beforeAll(() => {
-    db = new Database(":memory:");
+    db = openDatabase(":memory:");
     db.exec(SCHEMA_SQL);
     const insert = db.prepare("INSERT INTO docs (provider, category, title, content) VALUES (?, ?, ?, ?)");
     insert.run("opta", "qualifiers", "Shot Qualifiers", "Qualifier 214 is big chance on Opta shot events.");

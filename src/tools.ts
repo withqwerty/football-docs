@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type Database from "better-sqlite3";
 import { type ProviderRegistryEntry, type ProvidersFile, providersFileSchema, readMeta } from "./data-format.js";
+import type { Database } from "./sqlite.js";
 
 export { type ResolveEntityArgs, resolveEntity } from "./reep.js";
 
@@ -137,7 +137,7 @@ const registryCache = new Map<string, Registry>();
  * without one (older releases, and the in-memory databases tests build) fall
  * back to the packaged providers.json.
  */
-function registryFor(db: Database.Database): Registry {
+function registryFor(db: Database): Registry {
   const stamp = dataStampValue(db);
   if (stamp === null) {
     packagedRegistry ??= buildRegistry(
@@ -145,7 +145,12 @@ function registryFor(db: Database.Database): Registry {
     );
     return packagedRegistry;
   }
-  const key = `${db.name}\u0000${stamp}`;
+  // Two files can share a stamp (a pinned copy of a downloaded index, or test
+  // fixtures), so the stored registry is part of the key.
+  const providersJson = db.prepare("SELECT value FROM meta WHERE key = 'providers_json'").get() as
+    | { value: string }
+    | undefined;
+  const key = `${stamp}\u0000${providersJson?.value ?? ""}`;
   let registry = registryCache.get(key);
   if (!registry) {
     const meta = readMeta(db);
@@ -157,7 +162,7 @@ function registryFor(db: Database.Database): Registry {
 }
 
 /** The raw data_stamp, or null for a database without a meta table. */
-function dataStampValue(db: Database.Database): string | null {
+function dataStampValue(db: Database): string | null {
   const hasMeta = db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'meta'").get();
   if (!hasMeta) return null;
   const row = db.prepare("SELECT value FROM meta WHERE key = 'data_stamp'").get() as { value: string } | undefined;
@@ -214,7 +219,7 @@ function providerFilterLabel(original: string | undefined, normalised: string | 
   return trimmed === normalised ? normalised : `${trimmed} (${normalised})`;
 }
 
-function indexedProviders(db: Database.Database): Set<string> {
+function indexedProviders(db: Database): Set<string> {
   const rows = db.prepare("SELECT DISTINCT provider FROM docs ORDER BY provider").all() as Array<{
     provider: string;
   }>;
@@ -310,7 +315,7 @@ function normaliseLimit(value: number | undefined, defaultValue: number, maxValu
 }
 
 function searchRows(
-  db: Database.Database,
+  db: Database,
   matchQuery: string,
   provider: string | undefined,
   limit: number,
@@ -366,7 +371,7 @@ function topUpRows<T extends { provider: string; category: string; title: string
  * one is set. A search that falls back to partial matches can otherwise return
  * a confident-looking list for something the index does not cover at all.
  */
-function unindexedTerms(db: Database.Database, query: string, provider: string | undefined): string[] {
+function unindexedTerms(db: Database, query: string, provider: string | undefined): string[] {
   const statement = provider
     ? db.prepare(
         "SELECT 1 FROM docs_fts JOIN docs d ON d.id = docs_fts.rowid WHERE docs_fts MATCH ? AND d.provider = ? LIMIT 1",
@@ -402,7 +407,7 @@ function partialMatchNote(strictCount: number, total: number, missingTerms: stri
 }
 
 function compareRows(
-  db: Database.Database,
+  db: Database,
   registry: Registry,
   matchQuery: string,
   providers: string[] | undefined,
@@ -427,7 +432,7 @@ function compareRows(
 }
 
 function compareRowsForProvider(
-  db: Database.Database,
+  db: Database,
   matchQuery: string,
   provider: string,
   limit: number,
@@ -472,7 +477,7 @@ function providerMetadata(registry: Registry, provider: string): ProviderRegistr
   return registry.providers[provider];
 }
 
-function providerCoverage(db: Database.Database, provider: string): {
+function providerCoverage(db: Database, provider: string): {
   indexed: boolean;
   total: number;
   categories: string[];
@@ -494,7 +499,7 @@ function providerCoverage(db: Database.Database, provider: string): {
 }
 
 function formatProviderResolution(
-  db: Database.Database,
+  db: Database,
   registry: Registry,
   provider: string,
   originalQuery: string,
@@ -522,7 +527,7 @@ function formatProviderResolution(
 }
 
 function providerDocsRows(
-  db: Database.Database,
+  db: Database,
   provider: string,
   matchQuery: string | undefined,
   category: string | undefined,
@@ -565,7 +570,7 @@ function providerDocsRows(
 }
 
 export function resolveProviderId(
-  db: Database.Database,
+  db: Database,
   args: ResolveProviderIdArgs,
 ): ToolResponse {
   const registry = registryFor(db);
@@ -590,7 +595,7 @@ export function resolveProviderId(
 }
 
 export function getProviderDocs(
-  db: Database.Database,
+  db: Database,
   args: GetProviderDocsArgs,
 ): ToolResponse {
   const registry = registryFor(db);
@@ -641,7 +646,7 @@ export function getProviderDocs(
   );
 }
 
-export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolResponse {
+export function searchDocs(db: Database, args: SearchDocsArgs): ToolResponse {
   const limit = normaliseLimit(args.max_results, 10, 50);
   const strictQuery = sanitiseFtsQuery(args.query);
   const fallbackQuery = relaxedFtsQuery(args.query);
@@ -694,7 +699,7 @@ export function searchDocs(db: Database.Database, args: SearchDocsArgs): ToolRes
 /** Where the open index came from, for the freshness line in list_providers. */
 export type DataSourceLabel = "bundled" | "downloaded" | "pinned";
 
-function dataLine(db: Database.Database, source: DataSourceLabel | undefined): string {
+function dataLine(db: Database, source: DataSourceLabel | undefined): string {
   const stamp = dataStampValue(db);
   if (!stamp) return "Data: built before data stamps were recorded.";
   const commit = (db.prepare("SELECT value FROM meta WHERE key = 'commit'").get() as { value: string } | undefined)
@@ -703,7 +708,7 @@ function dataLine(db: Database.Database, source: DataSourceLabel | undefined): s
 }
 
 export function listProviders(
-  db: Database.Database,
+  db: Database,
   options: { source?: DataSourceLabel } = {},
 ): ToolResponse {
   const registry = registryFor(db);
@@ -736,7 +741,7 @@ export function listProviders(
 }
 
 export function compareProviders(
-  db: Database.Database,
+  db: Database,
   args: CompareProvidersArgs,
 ): ToolResponse {
   const strictQuery = sanitiseFtsQuery(args.topic);
@@ -808,7 +813,7 @@ export function compareProviders(
 }
 
 export function requestUpdate(
-  db: Database.Database,
+  db: Database,
   args: RequestUpdateArgs,
   options: { now?: Date; requestId?: string } = {},
 ): ToolResponse {

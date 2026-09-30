@@ -1,9 +1,9 @@
-import Database from "better-sqlite3";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type Database, openDatabase, transaction } from "../sqlite.js";
 import { requestUpdate } from "../tools.js";
 
-function createQueueDb(): Database.Database {
-  const db = new Database(":memory:");
+function createQueueDb(): Database {
+  const db = openDatabase(":memory:");
   db.exec(`
     CREATE TABLE requests (
       id TEXT PRIMARY KEY,
@@ -19,7 +19,7 @@ function createQueueDb(): Database.Database {
 }
 
 describe("requestUpdate", () => {
-  let db: Database.Database;
+  let db: Database;
 
   beforeEach(() => {
     db = createQueueDb();
@@ -153,12 +153,11 @@ describe("requestUpdate", () => {
       `INSERT INTO requests (id, type, provider, reason, requested_at, status)
        VALUES (?, 'new_provider', ?, 'test', '2026-07-09T10:00:00.000Z', 'pending')`,
     );
-    const transaction = db.transaction(() => {
+    transaction(db, () => {
       for (let i = 0; i < 500; i += 1) {
         insert.run(`req_${i}`, `provider-${i}`);
       }
     });
-    transaction();
 
     const result = requestUpdate(
       db,
