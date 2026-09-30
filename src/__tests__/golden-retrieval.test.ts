@@ -1184,7 +1184,7 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("api-endpoints (13)");
     expect(text).toContain("charting-analysis-metrics (7)");
     expect(text).toContain("aliases: hudl, hudl-wyscout");
-    expect(text).toContain("**sportmonks** (567 chunks)");
+    expect(text).toContain("**sportmonks** (568 chunks)");
     expect(text).toContain("charting-season-stories (7)");
     expect(text).toContain("**fmdb-pro** (37 chunks)");
     expect(text).toContain("aliases: fmdb");

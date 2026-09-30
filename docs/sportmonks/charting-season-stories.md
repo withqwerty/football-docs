@@ -13,7 +13,7 @@ graphics if the include set is chosen deliberately.
 | Goals, assists, cards, substitutions | `events.player` | Event `type_id` values identify goal, card, substitution, and VAR incidents. |
 | Round-by-round table position | `GET /standings/rounds/{roundId}?include=participant;details` | Use after fetching season rounds. The `details` array carries points, wins, goals, and goal difference. |
 | Injury or absence timelines | `/sidelineds/seasons/{seasonId}/teams/{teamId}` plus player/team includes as needed | Useful for availability stories, but coverage varies by plan and competition. |
-| Scores and half-time/full-time splits | `scores` | Use score `description` values such as `CURRENT`, `HT`, `FT`, `ET`, and `PS`. |
+| Scores and half-time/full-time splits | `scores` | Use score `description` values such as `CURRENT`, `1ST_HALF`, `2ND_HALF`, `EXTRA_TIME` and `PENALTIES`. |
 
 For historical or post-match analysis pages, prefer fixture endpoints over
 livescores. Fixtures are designed for complete match data at any time; livescore
@@ -104,8 +104,8 @@ Fixture events use `type_id` for incident type:
 | `16` | Penalty goal | `player_id` is penalty taker. |
 | `18` | Substitution | `player_id` on, `related_player_id` off. |
 | `19` | Yellow card | `player_id` receives the card. |
-| `20` | Second yellow / yellow-red | `player_id` receives the second yellow. |
-| `21` | Red card | `player_id` receives the card. |
+| `20` | Red card | `player_id` receives the card. |
+| `21` | Yellow/red card | `player_id` receives the second yellow. |
 
 Sort events by `sort_order` when available, not just by `minute`, because VAR
 chains, substitutions, and cards can share the same displayed minute.

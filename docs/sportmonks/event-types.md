@@ -1,5 +1,12 @@
 # SportMonks Event & Stat Type IDs
 
+Every ID below is from SportMonks' public type definitions for Football API v3
+(https://docs.sportmonks.com/v3/definitions/types and its events, statistics,
+expected, transfers and position pages, plus the types spreadsheet linked from
+the Types page), checked on 2026-09-30. SportMonks has about 1,300 types; the
+complete live list needs an API key (`GET /v3/core/types`). IDs in the JSON
+examples are illustrative.
+
 ## Fixture Event Type IDs
 
 These are the `type_id` values returned in the fixture events (incidents) endpoint.
@@ -10,16 +17,16 @@ These are the `type_id` values returned in the fixture events (incidents) endpoi
 |---|---|---|
 | 14 | Goal | Regular goal |
 | 15 | Own Goal | Own goal |
-| 16 | Penalty Goal | Converted penalty (in-game) |
-| 17 | Penalty Missed | Missed/saved penalty (in-game) |
+| 16 | Penalty | Converted penalty (in-game) |
+| 17 | Missed Penalty | Missed or saved penalty (in-game) |
 
 ### Cards
 
 | Type ID | Name | Description |
 |---|---|---|
-| 19 | Yellow Card | Yellow card |
-| 20 | Yellow/Red Card | Second yellow leading to red |
-| 21 | Red Card | Straight red card |
+| 19 | Yellowcard | Yellow card |
+| 20 | Redcard | Straight red card |
+| 21 | Yellow/Red card | Second yellow leading to red |
 
 ### Substitutions
 
@@ -31,14 +38,14 @@ These are the `type_id` values returned in the fixture events (incidents) endpoi
 
 | Type ID | Name | Description |
 |---|---|---|
-| 22 | Penalty Shootout Goal | Penalty scored in shootout |
-| 23 | Penalty Shootout Miss | Penalty missed in shootout |
+| 22 | Penalty Shootout Miss | Penalty missed in shootout |
+| 23 | Penalty Shootout Goal | Penalty scored in shootout |
 
 ### VAR
 
 | Type ID | Name | Description |
 |---|---|---|
-| 24 | VAR Event | VAR decision |
+| 10 | VAR | VAR decision |
 
 ## Event Response Structure
 
@@ -50,7 +57,7 @@ These are the `type_id` values returned in the fixture events (incidents) endpoi
   "participant_id": 9,
   "player_id": 456,
   "related_player_id": null,
-  "player_name": "M. Salah",
+  "player_name": "Example Player",
   "minute": 42,
   "extra_minute": null,
   "section": "event",
@@ -69,85 +76,102 @@ Statistics are returned per-player or per-team on fixture endpoints. These are t
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 41 | Shots Total | Total shots |
-| 42 | Shots On Target | Shots on target |
-| 43 | Shots Off Target | Shots off target |
-| 44 | Shots Blocked | Shots blocked by defenders |
-| 86 | Hit Woodwork | Shots hitting the post/crossbar |
-| 52 | Shots Inside Box | Shots from inside the penalty area |
-| 53 | Shots Outside Box | Shots from outside the penalty area |
+| 42 | Shots Total | Total shots |
+| 86 | Shots On Target | Shots on target |
+| 41 | Shots Off Target | Shots off target |
+| 58 | Shots Blocked | Shots blocked by defenders |
+| 64 | Hit Woodwork | Shots hitting the post or crossbar |
+| 49 | Shots Insidebox | Shots from inside the penalty area |
+| 50 | Shots Outsidebox | Shots from outside the penalty area |
+| 52 | Goals | Goals scored |
+| 580 | Big Chances Created | Big chances created |
+| 581 | Big Chances Missed | Big chances missed |
 
 ### Passing
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 80 | Passes Total | Total passes attempted |
-| 81 | Passes Accurate | Accurate passes |
-| 116 | Passes Accurate % | Pass accuracy percentage |
-| 84 | Key Passes | Passes leading to a shot |
-| 117 | Crosses Total | Total crosses |
-| 118 | Crosses Accurate | Accurate crosses |
-| 119 | Long Balls Total | Total long balls |
-| 120 | Long Balls Accurate | Accurate long balls |
+| 80 | Passes | Total passes attempted |
+| 116 | Accurate Passes | Accurate passes |
+| 1584 | Accurate Passes Percentage | Pass accuracy percentage |
+| 117 | Key Passes | Passes leading to a shot |
+| 79 | Assists | Assists |
+| 98 | Total Crosses | Total crosses |
+| 99 | Accurate Crosses | Accurate crosses |
+| 122 | Long Balls | Total long balls |
+| 123 | Long Balls Won | Accurate long balls |
 
 ### Defence
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 45 | Tackles | Total tackles |
-| 78 | Interceptions | Interceptions |
-| 51 | Clearances | Clearances |
-| 56 | Blocked Shots | Shots blocked |
+| 78 | Tackles | Total tackles |
+| 100 | Interceptions | Interceptions |
+| 101 | Clearances | Clearances |
+| 97 | Blocked Shots | Shots blocked |
 
 ### Possession & Dribbling
 
 | Stat Type ID | Name | Description |
 |---|---|---|
 | 45 | Ball Possession % | Team possession percentage |
-| 79 | Dribbles Attempted | Dribble attempts |
-| 108 | Dribbles Won | Successful dribbles |
-| 83 | Touches | Total touches |
+| 108 | Dribble Attempts | Dribble attempts |
+| 109 | Successful Dribbles | Successful dribbles |
+| 110 | Dribbled Past | Times the player was dribbled past |
+| 120 | Touches | Total touches |
 
 ### Duels
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 105 | Duels Total | Total duels contested |
+| 105 | Total Duels | Total duels contested |
 | 106 | Duels Won | Duels won |
-| 46 | Aerials Won | Aerial duels won |
+| 107 | Aerials Won | Aerial duels won |
 
 ### Goalkeeper
 
 | Stat Type ID | Name | Description |
 |---|---|---|
 | 57 | Saves | Goalkeeper saves |
-| 208 | Punches | Goalkeeper punches |
-| 209 | Goal Kicks | Goal kicks taken |
-| 210 | Throws | Goalkeeper throws |
+| 103 | Punches | Goalkeeper punches |
+| 53 | Goal Kicks | Goal kicks taken |
+| 1535 | Goalkeeper Goals Conceded | Goals conceded while in goal |
 
 ### Discipline & Fouls
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 47 | Fouls Committed | Fouls committed |
-| 48 | Fouls Drawn | Fouls suffered |
-| 56 | Offsides | Offsides |
-| 57 | Corners | Corner kicks |
+| 56 | Fouls | Fouls committed |
+| 96 | Fouls Drawn | Fouls suffered |
+| 51 | Offsides | Offsides |
+| 34 | Corners | Corner kicks |
+| 84 | Yellowcards | Yellow cards |
+| 83 | Redcards | Red cards |
+| 85 | Yellowred Cards | Second yellow cards |
 
 ### Team-level
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 34 | Ball Possession | Team possession % |
-| 50 | Dangerous Attacks | Dangerous attack count |
-| 49 | Attacks | Total attack count |
+| 43 | Attacks | Total attack count |
+| 44 | Dangerous Attacks | Dangerous attack count |
+
+### Player rating and minutes
+
+| Stat Type ID | Name | Description |
+|---|---|---|
+| 118 | Rating | Player rating |
+| 119 | Minutes Played | Minutes played |
 
 ### xG (if available on plan)
 
 | Stat Type ID | Name | Description |
 |---|---|---|
-| 580 | Expected Goals (xG) | Expected goals value |
-| 581 | Expected Assists (xA) | Expected assists value |
+| 5304 | Expected Goals (xG) | Expected goals value |
+| 5305 | Expected Goals on Target (xGoT) | Expected goals on target value |
+
+The expected-types page lists the rest of the xG family. SportMonks publishes no
+type ID named expected assists (xA).
 
 ## Statistics Response Structure
 
@@ -176,28 +200,26 @@ Lineups include position information:
 | 24 | Goalkeeper |
 | 25 | Defender |
 | 26 | Midfielder |
-| 27 | Forward |
+| 27 | Attacker |
 
 Detailed position data (e.g., centre-back, left-wing) is available through the player's `detailed_position_id` field.
 
-## Market Value & Transfer Types
-
-| Type | Description |
-|---|---|
-| 1 | Transfer |
-| 2 | Loan |
-| 3 | Free Transfer |
-| 4 | Loan Return |
-
-## Common Sidelined Type IDs
-
-Used for injury/absence tracking:
+## Transfer Types
 
 | Type ID | Name |
 |---|---|
-| 1 | Injury |
-| 2 | Illness |
-| 3 | Suspension |
-| 4 | Rest |
-| 5 | National Team Duty |
-| 6 | Personal Reasons |
+| 218 | Loan |
+| 219 | Transfer |
+| 220 | Free Transfer |
+| 9688 | End of Loan |
+
+## Common Sidelined Type IDs
+
+Sidelined entries use injury and suspension types. SportMonks has many; common ones:
+
+| Type ID | Name |
+|---|---|
+| 629 | Injury |
+| 1692 | Suspension |
+| 336 | Ill |
+| 590 | Rest |

@@ -1,0 +1,4723 @@
+{
+ "source": {
+  "pages": "https://docs.sportmonks.com/v3/definitions/types (events, statistics, expected, transfers, positions and standings pages, and the types spreadsheet linked from the Types page); https://docs.sportmonks.com/v3/definitions/states",
+  "fetched": "2026-09-30",
+  "note": "ID, name, developer name and code as SportMonks publishes them. Not the complete list: SportMonks has about 1,300 types, and the full list needs an API key (GET /v3/core/types)."
+ },
+ "types": {
+  "1": {
+   "name": "1st Half",
+   "developer_name": "1ST_HALF",
+   "code": "1st-half"
+  },
+  "2": {
+   "name": "2nd Half",
+   "developer_name": "2ND_HALF",
+   "code": "2nd-half"
+  },
+  "3": {
+   "name": "Extra Time",
+   "developer_name": "ET",
+   "code": "extra-time"
+  },
+  "5": {
+   "name": "Penalties",
+   "developer_name": "PENALTY_SHOOTOUT",
+   "code": "penalties"
+  },
+  "6": {
+   "name": "Referee",
+   "developer_name": "REFEREE",
+   "code": "referee"
+  },
+  "7": {
+   "name": "1st Assistant",
+   "developer_name": "REFEREE_TWO",
+   "code": "1st_assistant"
+  },
+  "8": {
+   "name": "2nd Assistant",
+   "developer_name": "REFEREE_THREE",
+   "code": "2nd_assistant"
+  },
+  "9": {
+   "name": "4th Official",
+   "developer_name": "REFEREE_FOUR",
+   "code": "4th_official"
+  },
+  "10": {
+   "name": "VAR",
+   "developer_name": "VAR",
+   "code": "VAR"
+  },
+  "11": {
+   "name": "Lineup",
+   "developer_name": "LINEUP",
+   "code": "lineup"
+  },
+  "12": {
+   "name": "Bench",
+   "developer_name": "BENCH",
+   "code": "bench"
+  },
+  "13": {
+   "name": "Sidelined",
+   "developer_name": "SIDELINED",
+   "code": "sidelined"
+  },
+  "14": {
+   "name": "Goal",
+   "developer_name": "GOAL",
+   "code": "goal"
+  },
+  "15": {
+   "name": "Own Goal",
+   "developer_name": "OWNGOAL",
+   "code": "owngoal"
+  },
+  "16": {
+   "name": "Penalty",
+   "developer_name": "PENALTY",
+   "code": "penalty"
+  },
+  "17": {
+   "name": "Missed Penalty",
+   "developer_name": "MISSED_PENALTY",
+   "code": "missed_penalty"
+  },
+  "18": {
+   "name": "Substitution",
+   "developer_name": "SUBSTITUTION",
+   "code": "substitution"
+  },
+  "19": {
+   "name": "Yellowcard",
+   "developer_name": "YELLOWCARD",
+   "code": "yellowcard"
+  },
+  "20": {
+   "name": "Redcard",
+   "developer_name": "REDCARD",
+   "code": "redcard"
+  },
+  "21": {
+   "name": "Yellow/Red card",
+   "developer_name": "YELLOWREDCARD",
+   "code": "yellowredcard"
+  },
+  "22": {
+   "name": "Penalty Shootout Missed",
+   "developer_name": "PENALTY_SHOOTOUT_MISS",
+   "code": "pen_shootout_miss"
+  },
+  "23": {
+   "name": "Penalty Shootout Goal",
+   "developer_name": "PENALTY_SHOOTOUT_GOAL",
+   "code": "pen_shootout_goal"
+  },
+  "24": {
+   "name": "Goalkeeper",
+   "developer_name": "GOALKEEPER",
+   "code": "goalkeeper"
+  },
+  "25": {
+   "name": "Defender",
+   "developer_name": "DEFENDER",
+   "code": "defender"
+  },
+  "26": {
+   "name": "Midfielder",
+   "developer_name": "MIDFIELDER",
+   "code": "midfielder"
+  },
+  "27": {
+   "name": "Attacker",
+   "developer_name": "ATTACKER",
+   "code": "attacker"
+  },
+  "28": {
+   "name": "Unknown",
+   "developer_name": "UNKNOWN",
+   "code": "unknown"
+  },
+  "29": {
+   "name": "Video",
+   "developer_name": "VIDEO",
+   "code": "video"
+  },
+  "30": {
+   "name": "Clip",
+   "developer_name": "CLIP",
+   "code": "clip"
+  },
+  "31": {
+   "name": "File",
+   "developer_name": "FILE",
+   "code": "file"
+  },
+  "32": {
+   "name": "Probability",
+   "developer_name": "PROBABILITY",
+   "code": "probability"
+  },
+  "33": {
+   "name": "Valuebet",
+   "developer_name": "VALUEBET",
+   "code": "valuebet"
+  },
+  "34": {
+   "name": "Corners",
+   "developer_name": "CORNERS",
+   "code": "corners"
+  },
+  "35": {
+   "name": "Neutral Venue",
+   "developer_name": "NEUTRAL_VENUE",
+   "code": "neutral_venue"
+  },
+  "36": {
+   "name": "Kickoff",
+   "developer_name": "KICKOFF",
+   "code": "kickoff"
+  },
+  "37": {
+   "name": "Match Details",
+   "developer_name": "MATCH_DETAILS",
+   "code": "match_details"
+  },
+  "39": {
+   "name": "Extra Time - 2nd Half",
+   "developer_name": "ET_2ND_HALF",
+   "code": "extra-time-2nd-half"
+  },
+  "40": {
+   "name": "Captain",
+   "developer_name": "CAPTAIN",
+   "code": "captain"
+  },
+  "41": {
+   "name": "Shots Off Target",
+   "developer_name": "SHOTS_OFF_TARGET",
+   "code": "shots-off-target"
+  },
+  "42": {
+   "name": "Shots Total",
+   "developer_name": "SHOTS_TOTAL",
+   "code": "shots-total"
+  },
+  "43": {
+   "name": "Attacks",
+   "developer_name": "ATTACKS",
+   "code": "attacks"
+  },
+  "44": {
+   "name": "Dangerous Attacks",
+   "developer_name": "DANGEROUS_ATTACKS",
+   "code": "dangerous-attacks"
+  },
+  "45": {
+   "name": "Ball Possession %",
+   "developer_name": "BALL_POSSESSION",
+   "code": "ball-possession"
+  },
+  "46": {
+   "name": "Ball Safe",
+   "developer_name": "BALL_SAFE",
+   "code": "ball-safe"
+  },
+  "47": {
+   "name": "Penalties",
+   "developer_name": "PENALTIES",
+   "code": "penalties"
+  },
+  "49": {
+   "name": "Shots Insidebox",
+   "developer_name": "SHOTS_INSIDEBOX",
+   "code": "shots-insidebox"
+  },
+  "50": {
+   "name": "Shots Outsidebox",
+   "developer_name": "SHOTS_OUTSIDEBOX",
+   "code": "shots-outsidebox"
+  },
+  "51": {
+   "name": "Offsides",
+   "developer_name": "OFFSIDES",
+   "code": "offsides"
+  },
+  "52": {
+   "name": "Goals",
+   "developer_name": "GOALS",
+   "code": "goals"
+  },
+  "53": {
+   "name": "Goal Kicks",
+   "developer_name": "GOAL_KICKS",
+   "code": "goals-kicks"
+  },
+  "54": {
+   "name": "Goal Attempts",
+   "developer_name": "GOAL_ATTEMPTS",
+   "code": "goal-attempts"
+  },
+  "55": {
+   "name": "Free Kicks",
+   "developer_name": "FREE_KICKS",
+   "code": "free-kicks"
+  },
+  "56": {
+   "name": "Fouls",
+   "developer_name": "FOULS",
+   "code": "fouls"
+  },
+  "57": {
+   "name": "Saves",
+   "developer_name": "SAVES",
+   "code": "saves"
+  },
+  "58": {
+   "name": "Shots Blocked",
+   "developer_name": "SHOTS_BLOCKED",
+   "code": "shots-blocked"
+  },
+  "59": {
+   "name": "Substitutions",
+   "developer_name": "SUBSTITUTIONS",
+   "code": "substitutions"
+  },
+  "60": {
+   "name": "Throwins",
+   "developer_name": "THROWINS",
+   "code": "throwins"
+  },
+  "61": {
+   "name": "Beats",
+   "developer_name": "BEATS",
+   "code": "beats"
+  },
+  "62": {
+   "name": "Long Passes",
+   "developer_name": "LONG_PASSES",
+   "code": "long-passes"
+  },
+  "63": {
+   "name": "Short Passes",
+   "developer_name": "SHORT_PASSES",
+   "code": "short-passes"
+  },
+  "64": {
+   "name": "Hit Woodwork",
+   "developer_name": "HIT_WOODWORK",
+   "code": "hit-woodwork"
+  },
+  "65": {
+   "name": "Successful Headers",
+   "developer_name": "SUCCESSFUL_HEADERS",
+   "code": "successful-headers"
+  },
+  "66": {
+   "name": "Successful Interceptions",
+   "developer_name": "SUCCESSFUL_INTERCEPTIONS",
+   "code": "successful-interceptions"
+  },
+  "67": {
+   "name": "Successful Centers",
+   "developer_name": "SUCCESSFUL_CENTERS",
+   "code": "successful-centers"
+  },
+  "68": {
+   "name": "Substitutions Overtime",
+   "developer_name": "SUBSTITUTIONS_OVERTIME",
+   "code": "substitutions-overtime"
+  },
+  "69": {
+   "name": "Offsides Overtime",
+   "developer_name": "OFFSIDES_OVERTIME",
+   "code": "offsides-overtime"
+  },
+  "70": {
+   "name": "Headers",
+   "developer_name": "HEADERS",
+   "code": "headers"
+  },
+  "71": {
+   "name": "Last Substituttion",
+   "developer_name": "LAST_SUBSTITUTION",
+   "code": "last-substituttion"
+  },
+  "72": {
+   "name": "First Substitution",
+   "developer_name": "FIRST_SUBSTITUTION",
+   "code": "first-substitution"
+  },
+  "73": {
+   "name": "Successful Center",
+   "developer_name": "SUCCESSFUL_CENTER",
+   "code": "successful-center"
+  },
+  "74": {
+   "developer_name": "YELLOWCARDS_OVERTIME",
+   "code": "yellowcards-overtime"
+  },
+  "75": {
+   "name": "Corners Overtime",
+   "developer_name": "CORNERS_OVERTIME",
+   "code": "corners-overtime"
+  },
+  "76": {
+   "name": "Goalkeeper Comes Out",
+   "developer_name": "GOALKEEPER_COME_OUTS",
+   "code": "goalkeeper-comes-out"
+  },
+  "77": {
+   "name": "Challenges",
+   "developer_name": "CHALLENGES",
+   "code": "challenges"
+  },
+  "78": {
+   "name": "Tackles",
+   "developer_name": "TACKLES",
+   "code": "tackles"
+  },
+  "79": {
+   "name": "Assists",
+   "developer_name": "ASSISTS",
+   "code": "assists"
+  },
+  "80": {
+   "name": "Passes",
+   "developer_name": "PASSES",
+   "code": "passes"
+  },
+  "81": {
+   "name": "Successful Passes",
+   "developer_name": "SUCCESSFUL_PASSES",
+   "code": "successful-passes"
+  },
+  "82": {
+   "name": "Successful Passes Percentage",
+   "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
+   "code": "successful-passes-percentage"
+  },
+  "83": {
+   "name": "Redcards",
+   "developer_name": "REDCARDS",
+   "code": "redcards"
+  },
+  "84": {
+   "name": "Yellowcards",
+   "developer_name": "YELLOWCARDS",
+   "code": "yellowcards"
+  },
+  "85": {
+   "name": "Yellowred Cards",
+   "developer_name": "YELLOWRED_CARDS",
+   "code": "yellowred-cards"
+  },
+  "86": {
+   "name": "Shots On Target",
+   "developer_name": "SHOTS_ON_TARGET",
+   "code": "shots-on-target"
+  },
+  "87": {
+   "name": "Injuries",
+   "developer_name": "INJURIES",
+   "code": "injuries"
+  },
+  "88": {
+   "name": "Goals Conceded",
+   "developer_name": "GOALS_CONCEDED",
+   "code": "goals-conceded"
+  },
+  "91": {
+   "name": "First Offside",
+   "developer_name": "FIRST_OFFSIDE",
+   "code": "first-offside"
+  },
+  "92": {
+   "name": "Last Offside",
+   "developer_name": "LAST_OFFSIDE",
+   "code": "last-offside"
+  },
+  "94": {
+   "name": "Dispossessed",
+   "developer_name": "DISPOSSESSED",
+   "code": "dispossessed"
+  },
+  "95": {
+   "name": "Offsides Provoked",
+   "developer_name": "OFFSIDES_PROVOKED",
+   "code": "offsides-provoked"
+  },
+  "96": {
+   "name": "Fouls Drawn",
+   "developer_name": "FOULS_DRAWN",
+   "code": "fouls-drawn"
+  },
+  "97": {
+   "name": "Blocked Shots",
+   "developer_name": "BLOCKED_SHOTS",
+   "code": "blocked-shots"
+  },
+  "98": {
+   "name": "Total Crosses",
+   "developer_name": "TOTAL_CROSSES",
+   "code": "total-crosses"
+  },
+  "99": {
+   "name": "Accurate Crosses",
+   "developer_name": "ACCURATE_CROSSES",
+   "code": "accurate-crosses"
+  },
+  "100": {
+   "name": "Interceptions",
+   "developer_name": "INTERCEPTIONS",
+   "code": "interceptions"
+  },
+  "101": {
+   "name": "Clearances",
+   "developer_name": "CLEARANCES",
+   "code": "clearances"
+  },
+  "102": {
+   "name": "Clearances Won",
+   "developer_name": "CLEARANCES_WON",
+   "code": "clearances-won"
+  },
+  "103": {
+   "name": "Punches",
+   "developer_name": "PUNCHES",
+   "code": "punches"
+  },
+  "104": {
+   "name": "Saves Insidebox",
+   "developer_name": "SAVES_INSIDE_BOX",
+   "code": "saves-insidebox"
+  },
+  "105": {
+   "name": "Total Duels",
+   "developer_name": "TOTAL_DUELS",
+   "code": "total-duels"
+  },
+  "106": {
+   "name": "Duels Won",
+   "developer_name": "DUELS_WON",
+   "code": "duels-won"
+  },
+  "107": {
+   "name": "Aerials Won",
+   "developer_name": "AERIALS_WON",
+   "code": "aeriels-won"
+  },
+  "108": {
+   "name": "Dribble Attempts",
+   "developer_name": "DRIBBLED_ATTEMPTS",
+   "code": "dribble-attempts"
+  },
+  "109": {
+   "name": "Successful Dribbles",
+   "developer_name": "SUCCESSFUL_DRIBBLES",
+   "code": "successful-dribbles"
+  },
+  "110": {
+   "name": "Dribbled Past",
+   "developer_name": "DRIBBLED_PAST",
+   "code": "dribbled-past"
+  },
+  "111": {
+   "name": "Penalties Scored",
+   "developer_name": "PENALTIES_SCORED",
+   "code": "penalties-scored"
+  },
+  "112": {
+   "name": "Penalties Missed",
+   "developer_name": "PENALTIES_MISSES",
+   "code": "penalties-missed"
+  },
+  "113": {
+   "name": "Penalties Saved",
+   "developer_name": "PENALTIES_SAVED",
+   "code": "penalties-saved"
+  },
+  "114": {
+   "name": "Penalties Committed",
+   "developer_name": "PENALTIES_COMMITTED",
+   "code": "penalties-committed"
+  },
+  "115": {
+   "name": "Penalties Won",
+   "developer_name": "PENALTIES_WON",
+   "code": "penalties-won"
+  },
+  "116": {
+   "name": "Accurate Passes",
+   "developer_name": "ACCURATE_PASSES",
+   "code": "accurate-passes"
+  },
+  "117": {
+   "name": "Key Passes",
+   "developer_name": "KEY_PASSES",
+   "code": "key-passes"
+  },
+  "118": {
+   "name": "Rating",
+   "developer_name": "RATING",
+   "code": "rating"
+  },
+  "119": {
+   "name": "Minutes Played",
+   "developer_name": "MINUTES_PLAYED",
+   "code": "minutes-played"
+  },
+  "120": {
+   "name": "Touches",
+   "developer_name": "TOUCHES",
+   "code": "touches"
+  },
+  "121": {
+   "name": "Turn Over",
+   "developer_name": "TURN_OVER",
+   "code": "turn-over"
+  },
+  "122": {
+   "name": "Long Balls",
+   "developer_name": "LONG_BALLS",
+   "code": "long-balls"
+  },
+  "123": {
+   "name": "Long Balls Won",
+   "developer_name": "LONG_BALLS_WON",
+   "code": "long-balls-won"
+  },
+  "124": {
+   "name": "Through Balls",
+   "developer_name": "THROUGH_BALLS",
+   "code": "through-balls"
+  },
+  "125": {
+   "name": "Through Balls Won",
+   "developer_name": "THROUGH_BALLS_WON",
+   "code": "through-balls-won"
+  },
+  "126": {
+   "name": "Corner",
+   "developer_name": "CORNER",
+   "code": "corner"
+  },
+  "129": {
+   "name": "Overall Matched Played",
+   "developer_name": "OVERALL_MATCHES",
+   "code": "overall-matches-played"
+  },
+  "130": {
+   "name": "Overall Won",
+   "developer_name": "OVERALL_WINS",
+   "code": "overall-won"
+  },
+  "131": {
+   "name": "Overall Draw",
+   "developer_name": "OVERALL_DRAWS",
+   "code": "overall-draw"
+  },
+  "132": {
+   "name": "Overall Lost",
+   "developer_name": "OVERALL_LOST",
+   "code": "overall-lost"
+  },
+  "133": {
+   "name": "Overal Goals Scored",
+   "developer_name": "OVERALL_SCORED",
+   "code": "overall-goals-for"
+  },
+  "134": {
+   "name": "Overall Goals Conceded",
+   "developer_name": "OVERALL_CONCEDED",
+   "code": "overall-goals-against"
+  },
+  "135": {
+   "name": "Home Matched Played",
+   "developer_name": "HOME_MATCHES",
+   "code": "home-matches-played"
+  },
+  "136": {
+   "name": "Home Won",
+   "developer_name": "HOME_WINS",
+   "code": "home-won"
+  },
+  "137": {
+   "name": "Home Draw",
+   "developer_name": "HOME_DRAWS",
+   "code": "home-draw"
+  },
+  "138": {
+   "name": "Home Lost",
+   "developer_name": "HOME_LOST",
+   "code": "home-lost"
+  },
+  "139": {
+   "name": "Home Goals Scored",
+   "developer_name": "HOME_SCORED",
+   "code": "home-scored"
+  },
+  "140": {
+   "name": "Home Goals Conceded",
+   "developer_name": "HOME_CONCEDED",
+   "code": "home-conceded"
+  },
+  "141": {
+   "name": "Away Matched Played",
+   "developer_name": "AWAY_MATCHES",
+   "code": "away-matches-played"
+  },
+  "142": {
+   "name": "Away Won",
+   "developer_name": "AWAY_WINS",
+   "code": "away-won"
+  },
+  "143": {
+   "name": "Away Draw",
+   "developer_name": "AWAY_DRAWS",
+   "code": "away-draw"
+  },
+  "144": {
+   "name": "Away Lost",
+   "developer_name": "AWAY_LOST",
+   "code": "away-lost"
+  },
+  "145": {
+   "name": "Away Goals Scored",
+   "developer_name": "AWAY_SCORED",
+   "code": "away-scored"
+  },
+  "146": {
+   "name": "Away Goals Conceded",
+   "developer_name": "AWAY_CONCEDED",
+   "code": "away-conceded"
+  },
+  "147": {
+   "name": "Promotion",
+   "developer_name": "PROMOTION",
+   "code": "promotion"
+  },
+  "148": {
+   "name": "Centre Back",
+   "developer_name": "CENTRE_BACK",
+   "code": "centre-back"
+  },
+  "149": {
+   "name": "Defensive Midfield",
+   "developer_name": "DEFENSIVE_MIDFIELD",
+   "code": "defensive-midfied"
+  },
+  "150": {
+   "name": "Attacking Midfield",
+   "developer_name": "ATTACKING_MIDFIELD",
+   "code": "attacking-midfied"
+  },
+  "151": {
+   "name": "Centre Forward",
+   "developer_name": "CENTRE_FORWARD",
+   "code": "centre-forward"
+  },
+  "152": {
+   "name": "Left Wing",
+   "developer_name": "LEFT_WING",
+   "code": "left-wing"
+  },
+  "153": {
+   "name": "Central Midfield",
+   "developer_name": "CENTRAL_MIDFIELD",
+   "code": "central-midfied"
+  },
+  "154": {
+   "name": "Right Back",
+   "developer_name": "RIGHT_BACK",
+   "code": "right-back"
+  },
+  "155": {
+   "name": "Left Back",
+   "developer_name": "LEFT_BACK",
+   "code": "left-back"
+  },
+  "156": {
+   "name": "Right Wing",
+   "developer_name": "RIGHT_WING",
+   "code": "right-wing"
+  },
+  "157": {
+   "name": "Left Midfield",
+   "developer_name": "LEFT_MIDFIELD",
+   "code": "left-midfield"
+  },
+  "158": {
+   "name": "Right Midfield",
+   "developer_name": "RIGHT_MIDFIELD",
+   "code": "right-midfield"
+  },
+  "159": {
+   "name": "Formation",
+   "developer_name": "FORMATION",
+   "code": "formation"
+  },
+  "160": {
+   "name": "Ball Coordinates",
+   "developer_name": "BALL_COORDINATES",
+   "code": "ball-coordinates"
+  },
+  "161": {
+   "name": "Home Participant Colors",
+   "developer_name": "HOME_PARTICIPANT_COLORS",
+   "code": "home-participany-colors"
+  },
+  "162": {
+   "name": "Away Participant Colors",
+   "developer_name": "AWAY_PARTICIPANT_COLORS",
+   "code": "away-participany-colors"
+  },
+  "163": {
+   "name": "Secondary Striker",
+   "developer_name": "SECONDARY_STRIKER",
+   "code": "secondary_striker"
+  },
+  "164": {
+   "name": "Has Standings",
+   "developer_name": "HAS_STANDING",
+   "code": "has-standings"
+  },
+  "165": {
+   "name": "Has Topscorers",
+   "developer_name": "HAS_TOPSCORERS",
+   "code": "has-topscorers"
+  },
+  "168": {
+   "name": "8th Finals",
+   "developer_name": "8TH_FINALS",
+   "code": "8th-finals"
+  },
+  "169": {
+   "name": "Points",
+   "developer_name": "POINTS",
+   "code": "points"
+  },
+  "170": {
+   "name": "Head to Head",
+   "developer_name": "HEAD_TO_HEAD",
+   "code": "head-to-head"
+  },
+  "171": {
+   "name": "Goal Difference, Matches Played, Goals Scored",
+   "developer_name": "GOAL_DIFFERENCE",
+   "code": "goal-difference"
+  },
+  "172": {
+   "name": "Split Points Rule",
+   "developer_name": "SPLIT_POINTS_RULE",
+   "code": "split-points-rule"
+  },
+  "173": {
+   "name": "Points",
+   "developer_name": "POINTS",
+   "code": "points"
+  },
+  "174": {
+   "name": "Goals For",
+   "developer_name": "GOALS_FOR",
+   "code": "goals-for"
+  },
+  "175": {
+   "name": "Goals Against",
+   "developer_name": "GOALS_AGAINST",
+   "code": "goals-aginst"
+  },
+  "176": {
+   "name": "Streak",
+   "developer_name": "STREAK",
+   "code": "streak"
+  },
+  "179": {
+   "name": "Goal Difference",
+   "developer_name": "OVERALL_GOAL_DIFFERENCE",
+   "code": "goal-difference"
+  },
+  "180": {
+   "name": "UEFA Champions League",
+   "developer_name": "UEFA_CHAMPIONS_LEAGUE",
+   "code": "uefa-champions-league"
+  },
+  "181": {
+   "name": "UEFA Europa League",
+   "developer_name": "UEFA_EUROPA_LEAGUE",
+   "code": "uefa-europa-league"
+  },
+  "182": {
+   "name": "Relegation",
+   "developer_name": "RELEGATION",
+   "code": "relegation"
+  },
+  "183": {
+   "name": "Championship Round",
+   "developer_name": "CHAMPIONSHIP_ROUND",
+   "code": "championship-round"
+  },
+  "184": {
+   "name": "Relegation Round",
+   "developer_name": "RELEGATION_ROUND",
+   "code": "relegation-round"
+  },
+  "185": {
+   "name": "Home Points",
+   "developer_name": "HOME_POINTS",
+   "code": "home-points"
+  },
+  "186": {
+   "name": "Away Points",
+   "developer_name": "AWAY_POINTS",
+   "code": "away-points"
+  },
+  "187": {
+   "name": "Overall Points",
+   "developer_name": "TOTAL_POINTS",
+   "code": "overall-points"
+  },
+  "188": {
+   "name": "Season Matches",
+   "developer_name": "MATCHES",
+   "code": "matches"
+  },
+  "189": {
+   "name": "Season Teams",
+   "developer_name": "TOTAL_TEAMS",
+   "code": "total-teams"
+  },
+  "190": {
+   "name": "Matches Ended In Draw",
+   "developer_name": "MATCHES_ENDED_IN_DRAW",
+   "code": "matches-ended-in-draw"
+  },
+  "191": {
+   "name": "Number Of Goals",
+   "developer_name": "NUMBER_OF_GOALS",
+   "code": "number-of-goals"
+  },
+  "192": {
+   "name": "Both Teams To Score",
+   "developer_name": "BTTS",
+   "code": "btts"
+  },
+  "193": {
+   "name": "Cards",
+   "developer_name": "CARDS",
+   "code": "cards"
+  },
+  "194": {
+   "name": "Cleansheets",
+   "developer_name": "CLEANSHEET",
+   "code": "cleansheets"
+  },
+  "195": {
+   "name": "Goalkeeper Cleansheets",
+   "developer_name": "GOALKEEPER_CLEANSHEET",
+   "code": "goalkeeper-cleansheets"
+  },
+  "196": {
+   "name": "Scoring Minutes",
+   "developer_name": "SCORING_MINUTES",
+   "code": "scoring-minutes"
+  },
+  "197": {
+   "name": "Goal Line",
+   "developer_name": "GOAL_LINE",
+   "code": "goal-line"
+  },
+  "201": {
+   "name": "Win Percentage",
+   "developer_name": "WIN_PERCENTAGE",
+   "code": "win-percentage"
+  },
+  "202": {
+   "name": "Defeat Percentage",
+   "developer_name": "DEFEAT_PERCENTAGE",
+   "code": "defeat-percentage"
+  },
+  "203": {
+   "name": "Draw Percentage",
+   "developer_name": "DRAW_PERCENTAGE",
+   "code": "draw-percentage"
+  },
+  "204": {
+   "name": "Most Scored",
+   "developer_name": "PARTICIPANT_MOST_SCORED",
+   "code": "participant-most-scored"
+  },
+  "205": {
+   "name": "Most Conceded",
+   "developer_name": "PARTICIPANT_MOST_CONCEDED",
+   "code": "participant-most-conceded"
+  },
+  "206": {
+   "name": "Most Scored Per Match",
+   "developer_name": "PARTICIPANT_MOST_SCORED_PER_MATCH",
+   "code": "participant-most-scored-per-match"
+  },
+  "207": {
+   "name": "Most Conceded Per Match",
+   "developer_name": "PARTICIPANT_MOST_CONCEDED_PER_MATCH",
+   "code": "participant-most-conceded-per-match"
+  },
+  "208": {
+   "name": "Goal Topscorer",
+   "developer_name": "GOAL_TOPSCORER",
+   "code": "goal-topscorer"
+  },
+  "209": {
+   "name": "Assist Topscorer",
+   "developer_name": "ASSIST_TOPSCORER",
+   "code": "assist-topscorer"
+  },
+  "210": {
+   "name": "Card Topscorer",
+   "developer_name": "CARD_TOPSCORER",
+   "code": "card-topscorer"
+  },
+  "211": {
+   "name": "Highest Rated Player",
+   "developer_name": "HIGHEST_RATED_PLAYER",
+   "code": "highest-rated-player"
+  },
+  "212": {
+   "name": "Highest Rated Team",
+   "developer_name": "HIGHEST_RATED_TEAM",
+   "code": "highest-rated-team"
+  },
+  "213": {
+   "name": "Conceded Scoring Minutes",
+   "developer_name": "CONCEDED_SCORING_MINUTES",
+   "code": "conceded-scoring-minutes"
+  },
+  "214": {
+   "name": "Team Wins",
+   "developer_name": "WIN",
+   "code": "team-wins"
+  },
+  "215": {
+   "name": "Team Draws",
+   "developer_name": "DRAW",
+   "code": "team-draws"
+  },
+  "216": {
+   "name": "Team Lost",
+   "developer_name": "LOST",
+   "code": "team-lost"
+  },
+  "217": {
+   "name": "Major League",
+   "developer_name": "MAJOR_LEAGUE",
+   "code": "major-league"
+  },
+  "218": {
+   "name": "Loan",
+   "developer_name": "LOAN_TRANSFER",
+   "code": "loan-transfer"
+  },
+  "219": {
+   "name": "Transfer",
+   "developer_name": "TRANSFER",
+   "code": "transfer"
+  },
+  "220": {
+   "name": "Free Transfer",
+   "developer_name": "FREE_TRANSFER",
+   "code": "free-transfer"
+  },
+  "221": {
+   "name": "Coach",
+   "developer_name": "COACH",
+   "code": "coach"
+  },
+  "222": {
+   "name": "Provides News",
+   "developer_name": "PROVIDES_NEWS",
+   "code": "provides-news"
+  },
+  "223": {
+   "name": "Group Stage",
+   "developer_name": "GROUP_STAGE",
+   "code": "group-stage"
+  },
+  "224": {
+   "name": "Knock Out",
+   "developer_name": "KNOCK_OUT",
+   "code": "knock-out"
+  },
+  "225": {
+   "name": "Qualifying",
+   "developer_name": "QUALIFYING",
+   "code": "qualifying"
+  },
+  "226": {
+   "name": "Assistant Coach",
+   "developer_name": "ASSISTANT_COACH",
+   "code": "assistant-coach"
+  },
+  "227": {
+   "name": "Goalkeeping Coach",
+   "developer_name": "GOALKEEPING_COACH",
+   "code": "goalkeeping-coach"
+  },
+  "228": {
+   "name": "Forward Coach",
+   "developer_name": "FORWARD_COACH",
+   "code": "forward-coach"
+  },
+  "229": {
+   "name": "Preferred Foot",
+   "developer_name": "PREFERRED_FOOT",
+   "code": "preferred-foot"
+  },
+  "230": {
+   "name": "Rule Color",
+   "developer_name": "RULE_COLOR",
+   "code": "rule-color"
+  },
+  "231": {
+   "name": "Both Teams To Score Probability",
+   "developer_name": "BTTS_PROBABILITY",
+   "code": "both-teams-to-score-probability"
+  },
+  "232": {
+   "name": "Half Time/Full Time Probability",
+   "developer_name": "HTFT_PROBABILITY",
+   "code": "half-time-full-time-probability"
+  },
+  "233": {
+   "name": "First Half Winner Probability",
+   "developer_name": "FIRST_HALF_WINNER_PROBABILITY",
+   "code": "first-half-winner"
+  },
+  "234": {
+   "name": "Over/Under 1.5 Probability",
+   "developer_name": "OVER_UNDER_1_5_PROBABILITY",
+   "code": "over-under-1_5-probability"
+  },
+  "235": {
+   "name": "Over/Under 2.5 Probability",
+   "developer_name": "OVER_UNDER_2_5_PROBABILITY",
+   "code": "over-under-2_5-probability"
+  },
+  "236": {
+   "name": "Over/Under 3.5 Probability",
+   "developer_name": "OVER_UNDER_3_5_PROBABILITY",
+   "code": "over-under-3_5_probability"
+  },
+  "237": {
+   "name": "Fulltime Result Probability",
+   "developer_name": "FULLTIME_RESULT_PROBABILITY",
+   "code": "fulltime-result-probability"
+  },
+  "238": {
+   "name": "Team To Score First Probability",
+   "developer_name": "TEAM_TO_SCORE_FIRST_PROBABILITY",
+   "code": "team_to_score_first-probability"
+  },
+  "239": {
+   "name": "Double Chance Probability",
+   "developer_name": "DOUBLE_CHANCE_PROBABILITY",
+   "code": "double_chance-probability"
+  },
+  "240": {
+   "name": "Correct Score Probability",
+   "developer_name": "CORRECT_SCORE_PROBABILITY",
+   "code": "correct-score-probability"
+  },
+  "241": {
+   "name": "Historical Log Loss",
+   "developer_name": "HISTORICAL_LOG_LOSS",
+   "code": "historical-log-loss"
+  },
+  "242": {
+   "name": "Model Hit Ratio",
+   "developer_name": "MODEL_HIT_RATIO",
+   "code": "model-hit-ratio"
+  },
+  "243": {
+   "name": "Model Predictability",
+   "developer_name": "MODEL_PREDICTABILITY",
+   "code": "model-predictability"
+  },
+  "244": {
+   "name": "Model Predictive Power",
+   "developer_name": "MODEL_PREDICTIVE_POWER",
+   "code": "model-predictive-power"
+  },
+  "245": {
+   "name": "Models Log Loss",
+   "developer_name": "MODELS_LOG_LOSS",
+   "code": "models-log-loss"
+  },
+  "246": {
+   "name": "UEFA Champions League Qualifiers",
+   "developer_name": "UEFA_CHAMPIONS_LEAGUE_QUALIFIERS",
+   "code": "uefa-champions-league-qualifiers"
+  },
+  "247": {
+   "name": "UEFA Cup",
+   "developer_name": "UEFA_CUP",
+   "code": "uefa-cup"
+  },
+  "248": {
+   "name": "Intertoto Cup",
+   "developer_name": "INTERTOTO_CUP",
+   "code": "intertoto-cup"
+  },
+  "249": {
+   "name": "Relegation Play-off",
+   "developer_name": "RELEGATION_PLAY_OFF",
+   "code": "relegation-play-off"
+  },
+  "250": {
+   "name": "Possible Relegation",
+   "developer_name": "POSSIBLE__RELEGATION",
+   "code": "possible-relegation"
+  },
+  "251": {
+   "name": "Promotion Group",
+   "developer_name": "PROMOTION_GROUP",
+   "code": "promotion-group"
+  },
+  "252": {
+   "name": "Relegation Group",
+   "developer_name": "RELEGATION_GROUP",
+   "code": "relegation-group"
+  },
+  "254": {
+   "name": "Champions League Qualifiers Play-off",
+   "developer_name": "CHAMPIONS_LEAGUE_QUALIFIERS_PLAY_OFF",
+   "code": "champions-league-qualifiers-play-off"
+  },
+  "255": {
+   "name": "Next Round",
+   "developer_name": "NEXT_ROUND",
+   "code": "next-round"
+  },
+  "256": {
+   "name": "Semi-finals",
+   "developer_name": "SEMI_FINALS",
+   "code": "semi-finals"
+  },
+  "257": {
+   "name": "Final Tournament",
+   "developer_name": "FINAL_TOURNAMENT",
+   "code": "final-tournament"
+  },
+  "258": {
+   "name": "Intercontinental Play-off",
+   "developer_name": "INTERCONTINENTAL_PLAY_OFF",
+   "code": "intercontinental-play-off"
+  },
+  "259": {
+   "name": "Final Tournament or Play-offs",
+   "developer_name": "FINAL_TOURNAMENT_OR_PLAY_OFFS",
+   "code": "final-tournament-or-play-offs"
+  },
+  "260": {
+   "name": "AFC Champions League Qualifiers",
+   "developer_name": "AFC_CHAMPIONS_LEAGUE_QUALIFIERS",
+   "code": "afc-champions-league-qualifiers"
+  },
+  "261": {
+   "name": "AFC Cup",
+   "developer_name": "AFC_CUP",
+   "code": "afc-cup"
+  },
+  "262": {
+   "name": "Possible 8th Finals",
+   "developer_name": "POSSIBLE_8TH_FINALS",
+   "code": "possible-8th-finals"
+  },
+  "263": {
+   "name": "UEFA Europa League Play-off",
+   "developer_name": "UEFA_EUROPA_LEAGUE_PLAY_OFF",
+   "code": "uefa-europa-league-play-off"
+  },
+  "264": {
+   "name": "Promotion Play-off",
+   "developer_name": "PROMOTION_PLAY_OFF",
+   "code": "promotion-play-off"
+  },
+  "265": {
+   "name": "UEFA Europa League Qualifiers",
+   "developer_name": "UEFA_EUROPA_LEAGUE_QUALIFIERS",
+   "code": "uefa-europa-league-qualifiers"
+  },
+  "266": {
+   "name": "Middle Play-off",
+   "developer_name": "MIDDLE_PLAY_OFF",
+   "code": "middle-play-off"
+  },
+  "267": {
+   "name": "Champion",
+   "developer_name": "CHAMPION",
+   "code": "champion"
+  },
+  "268": {
+   "name": "CONMEBOL Libertadores",
+   "developer_name": "CONMEBOL_LIBERTADORES",
+   "code": "conmebol-libertadores"
+  },
+  "269": {
+   "name": "Final Series Play-offs",
+   "developer_name": "FINAL_SERIES_PLAY_OFFS",
+   "code": "final-series-play-offs"
+  },
+  "270": {
+   "name": "Possible Final",
+   "developer_name": "POSSIBLE_FINAL",
+   "code": "possible-final"
+  },
+  "271": {
+   "name": "Possible Final Tournament",
+   "developer_name": "POSSIBLE_FINAL_TOURNAMENT",
+   "code": "possible-final-tournament"
+  },
+  "272": {
+   "name": "Possible Next Round",
+   "developer_name": "POSSIBLE_NEXT_ROUND",
+   "code": "possible-next-round"
+  },
+  "273": {
+   "name": "CAF Champions League",
+   "developer_name": "CAF_CHAMPIONS_LEAGUE",
+   "code": "caf-champions-league"
+  },
+  "274": {
+   "name": "CAF Confederation Cup",
+   "developer_name": "CAF_CONFEDERATION_CUP",
+   "code": "caf-confederation-cup"
+  },
+  "275": {
+   "name": "Quarter-finals",
+   "developer_name": "QUARTER_FINALS",
+   "code": "quarter-finals"
+  },
+  "276": {
+   "name": "Possible Semi-finals",
+   "developer_name": "POSSIBLE_SEMI_FINALS",
+   "code": "possible-semi-finals"
+  },
+  "277": {
+   "name": "World Cup",
+   "developer_name": "WORLD_CUP",
+   "code": "world-cup"
+  },
+  "278": {
+   "name": "Play-off",
+   "developer_name": "PLAY_OFF",
+   "code": "play-off"
+  },
+  "279": {
+   "name": "Final Series",
+   "developer_name": "FINAL_SERIES",
+   "code": "final-series"
+  },
+  "280": {
+   "name": "Final",
+   "developer_name": "FINAL",
+   "code": "final"
+  },
+  "281": {
+   "name": "CONCACAF Champions League",
+   "developer_name": "CONCACAF_CHAMPIONS_LEAGUE",
+   "code": "concacaf-champions-league"
+  },
+  "282": {
+   "name": "Lower Table Round",
+   "developer_name": "LOWER_TABLE_ROUND",
+   "code": "lower-table-round"
+  },
+  "283": {
+   "name": "CAF Champions League Qualifiers",
+   "developer_name": "CAF_CHAMPIONS_LEAGUE_QUALIFIERS",
+   "code": "caf-champions-league-qualifiers"
+  },
+  "284": {
+   "name": "AFC Champions League",
+   "developer_name": "AFC_CHAMPIONS_LEAGUE",
+   "code": "afc-champions-league"
+  },
+  "285": {
+   "name": "CFU Club Championship",
+   "developer_name": "CFU_CLUB_CHAMPIONSHIP",
+   "code": "cfu-club-championship"
+  },
+  "286": {
+   "name": "CONMEBOL Libertadores Qualifiers",
+   "developer_name": "CONMEBOL_LIBERTADORES_QUALIFIERS",
+   "code": "conmebol-libertadores-qualifiers"
+  },
+  "287": {
+   "name": "CONMEBOL Sudamericana",
+   "developer_name": "CONMEBOL_SUDAMERICANA",
+   "code": "conmebol-sudamericana"
+  },
+  "288": {
+   "name": "Champion Play-off",
+   "developer_name": "CHAMPION_PLAY_OFF",
+   "code": "champion-play-off"
+  },
+  "289": {
+   "name": "UEFA Conference League Qualifiers",
+   "developer_name": "UEFA_CONFERENCE_LEAGUE_QUALIFIERS",
+   "code": "uefa-conference-league-qualifiers"
+  },
+  "290": {
+   "name": "AFC Cup Play-offs",
+   "developer_name": "AFC_CUP_PLAY_OFFS",
+   "code": "afc-cup-play-offs"
+  },
+  "291": {
+   "name": "Championship Round Play-offs",
+   "developer_name": "CHAMPIONSHIP_ROUND_PLAY_OFFS",
+   "code": "championship-round-play-offs"
+  },
+  "292": {
+   "name": "Possible Promotion Play-off",
+   "developer_name": "POSSIBLE_PROMOTION_PLAY_OFF",
+   "code": "possible-promotion-play-off"
+  },
+  "293": {
+   "name": "UEFA Conference League Play-offs",
+   "developer_name": "UEFA_CONFERENCE_LEAGUE_PLAY_OFFS",
+   "code": "uefa-conference-league-play-offs"
+  },
+  "294": {
+   "name": "3rd Place Final",
+   "developer_name": "3RD_PLACE_FINAL",
+   "code": "3rd-place-final"
+  },
+  "295": {
+   "name": "Bottom Play-offs",
+   "developer_name": "BOTTOM_PLAY_OFFS",
+   "code": "bottom-play-offs"
+  },
+  "296": {
+   "name": "OFC Champions League",
+   "developer_name": "OFC_CHAMPIONS_LEAGUE",
+   "code": "ofc-champions-league"
+  },
+  "297": {
+   "name": "Possible Quarter-finals",
+   "developer_name": "POSSIBLE_QUARTER_FINALS",
+   "code": "possible-quarter-finals"
+  },
+  "298": {
+   "name": "16th Finals",
+   "developer_name": "16TH_FINALS",
+   "code": "16th-finals"
+  },
+  "299": {
+   "name": "UEFA Conference League Qualifiers Play-off",
+   "developer_name": "UEFA_CONFERENCE_LEAGUE_QUALIFIERS_PLAY_OFF",
+   "code": "uefa-conference-league-qualifiers-play-off"
+  },
+  "300": {
+   "name": "Preliminary Promotion Play-off",
+   "developer_name": "PRELIMINARY_PROMOTION_PLAY_OFF",
+   "code": "preliminary-promotion-play-off"
+  },
+  "301": {
+   "name": "Final Round Play-off",
+   "developer_name": "FINAL_ROUND_PLAY_OFF",
+   "code": "final-round-play-off"
+  },
+  "302": {
+   "name": "CAF Confederation Cup Qualifiers",
+   "developer_name": "CAF_CONFEDERATION_CUP_QUALIFIERS",
+   "code": "caf-confederation-cup-qualifiers"
+  },
+  "303": {
+   "name": "5th-8th Place Play-offs",
+   "developer_name": "5TH_8TH_PLACE_PLAY_OFFS",
+   "code": "5th-8th-place-play-offs"
+  },
+  "304": {
+   "name": "5th Place Final",
+   "developer_name": "5TH_PLACE_FINAL",
+   "code": "5th-place-final"
+  },
+  "305": {
+   "name": "7th Place Final",
+   "developer_name": "7TH_PLACE_FINAL",
+   "code": "7th-place-final"
+  },
+  "306": {
+   "name": "Final Serie",
+   "developer_name": "FINAL_SERIE",
+   "code": "final-serie"
+  },
+  "307": {
+   "name": "Play-offs",
+   "developer_name": "PLAY_OFFS",
+   "code": "play-offs"
+  },
+  "308": {
+   "name": "9th Place Final",
+   "developer_name": "9TH_PLACE_FINAL",
+   "code": "9th-place-final"
+  },
+  "309": {
+   "name": "11th Place Final",
+   "developer_name": "11TH_PLACE_FINAL",
+   "code": "11th-place-final"
+  },
+  "310": {
+   "name": "Possible Final Series",
+   "developer_name": "POSSIBLE_FINAL_SERIES",
+   "code": "possible-final-series"
+  },
+  "311": {
+   "name": "Possible Play-off",
+   "developer_name": "POSSIBLE_PLAY_OFF",
+   "code": "possible-play-off"
+  },
+  "312": {
+   "name": "Possible Relegation Play-off",
+   "developer_name": "POSSIBLE_RELEGATION_PLAY_OFF",
+   "code": "possible-relegation-play-off"
+  },
+  "313": {
+   "name": "Possible Promotion",
+   "developer_name": "POSSIBLE_PROMOTION",
+   "code": "possible-promotion"
+  },
+  "314": {
+   "name": "VAR Moments",
+   "developer_name": "VAR_MOMENTS",
+   "code": "var-moments"
+  },
+  "315": {
+   "name": "Has Outgroup Matches",
+   "developer_name": "OUTGROUP_MATCHES",
+   "code": "outgroup-matches"
+  },
+  "316": {
+   "name": "Championship Round Relegation Round",
+   "developer_name": "CHAMPIONSHIP_ROUND_RELEGATION_ROUND",
+   "code": "championship-round-relegation-round"
+  },
+  "320": {
+   "name": "UEFA CUP",
+   "code": "uefa-cup"
+  },
+  "321": {
+   "name": "Appearances",
+   "developer_name": "APPEARANCES",
+   "code": "appearances"
+  },
+  "322": {
+   "name": "Lineups",
+   "developer_name": "LINEUPS",
+   "code": "lineups"
+  },
+  "323": {
+   "name": "Bench",
+   "developer_name": "BENCH",
+   "code": "bench"
+  },
+  "324": {
+   "name": "Own Goals",
+   "developer_name": "OWN_GOALS",
+   "code": "own-goals"
+  },
+  "326": {
+   "name": "Home Over/Under 3.5 Probability",
+   "developer_name": "HOME_OVER_UNDER_3_5_PROBABILITY",
+   "code": "home-over-under-3_5_probability"
+  },
+  "327": {
+   "name": "Away Over/Under 3.5 Probability",
+   "developer_name": "AWAY_OVER_UNDER_3_5_PROBABILITY",
+   "code": "away-over-under-3_5_probability"
+  },
+  "328": {
+   "name": "Away Over/Under 2.5 Probability",
+   "developer_name": "AWAY_OVER_UNDER_2_5_PROBABILITY",
+   "code": "away-over-under-2_5_probability"
+  },
+  "330": {
+   "name": "Home Over/Under 2.5 Probability",
+   "developer_name": "HOME_OVER_UNDER_2_5_PROBABILITY",
+   "code": "home-over-under-2_5_probability"
+  },
+  "331": {
+   "name": "Home Over/Under 1.5 Probability",
+   "developer_name": "HOME_OVER_UNDER_1_5_PROBABILITY",
+   "code": "home-over-under-1_5_probability"
+  },
+  "332": {
+   "name": "Away Over/Under 1.5 Probability",
+   "developer_name": "AWAY_OVER_UNDER_1_5_PROBABILITY",
+   "code": "away-over-under-1_5_probability"
+  },
+  "333": {
+   "name": "Away Over/Under 0.5 Probability",
+   "developer_name": "AWAY_OVER_UNDER_0_5_PROBABILITY",
+   "code": "away-over-under-0_5_probability"
+  },
+  "334": {
+   "name": "Home Over/Under 0.5 Probability",
+   "developer_name": "HOME_OVER_UNDER_0_5_PROBABILITY",
+   "code": "home-over-under-0_5_probability"
+  },
+  "335": {
+   "name": "Over/Under 0.5 Probability",
+   "developer_name": "OVER_UNDER_0_5_PROBABILITY",
+   "code": "over-under-0_5-probability"
+  },
+  "336": {
+   "name": "Ill",
+   "developer_name": "ILL",
+   "code": "ill"
+  },
+  "337": {
+   "name": "Cruciate Ligament Rupture",
+   "developer_name": "CRUCIATE_LIGAMENT_RUPTURE",
+   "code": "cruciate-ligament-rupture"
+  },
+  "339": {
+   "name": "Groin Injury",
+   "developer_name": "GROIN_INJURY",
+   "code": "groin-injury"
+  },
+  "531": {
+   "name": "Knock",
+   "developer_name": "KNOCK",
+   "code": "knock"
+  },
+  "532": {
+   "name": "Calf Injury",
+   "developer_name": "CALF_INJURY",
+   "code": "calf-injury"
+  },
+  "533": {
+   "name": "Thigh Problems",
+   "developer_name": "THIGH_PROBLEMS",
+   "code": "thigh-problems"
+  },
+  "534": {
+   "name": "Fibula Fracture",
+   "developer_name": "FIBULA_FRACTURE",
+   "code": "fibula-fracture"
+  },
+  "535": {
+   "name": "Hamstring Injury",
+   "developer_name": "HAMSTRING_INJURY",
+   "code": "hamstring-injury"
+  },
+  "536": {
+   "name": "Knee Injury",
+   "developer_name": "KNEE_INJURY",
+   "code": "knee-injury"
+  },
+  "537": {
+   "name": "Ankle Injury",
+   "developer_name": "ANKLE_INJURY",
+   "code": "ankle-injury"
+  },
+  "538": {
+   "name": "COVID 19",
+   "developer_name": "COVID_19",
+   "code": "covid-19"
+  },
+  "540": {
+   "name": "Knee Surgery",
+   "developer_name": "KNEE_SURGERY",
+   "code": "knee-surgery"
+  },
+  "541": {
+   "name": "Ankle Fracture",
+   "developer_name": "ANKLE_FRACTURE",
+   "code": "ankle-fracture"
+  },
+  "542": {
+   "name": "Metatarsal Fracture",
+   "developer_name": "METATARSAL_FRACTURE",
+   "code": "metatarsal-fracture"
+  },
+  "543": {
+   "name": "Pubitis",
+   "developer_name": "PUBITIS",
+   "code": "pubitis"
+  },
+  "544": {
+   "name": "Thigh muscle rupture",
+   "developer_name": "THIGH_MUSCLE_RUPTURE",
+   "code": "thigh-muscle-rupture"
+  },
+  "545": {
+   "name": "Shoulder Injury",
+   "developer_name": "SHOULDER_INJURY",
+   "code": "shoulder-injury"
+  },
+  "546": {
+   "name": "Ruptured cruciate ligament",
+   "developer_name": "RUPTURED_CRUCIATE_LIGAMENT",
+   "code": "ruptured-cruciate-ligament"
+  },
+  "547": {
+   "name": "Fitness",
+   "developer_name": "FITNESS",
+   "code": "fitness"
+  },
+  "548": {
+   "name": "Groin Surgery",
+   "developer_name": "GROIN_SURGERY",
+   "code": "groin-surgery"
+  },
+  "549": {
+   "name": "Foot Injury",
+   "developer_name": "FOOT_INJURY",
+   "code": "foot-injury"
+  },
+  "550": {
+   "name": "Concussion",
+   "developer_name": "CONCUSSION",
+   "code": "concussion"
+  },
+  "551": {
+   "name": "Hip Injury",
+   "developer_name": "HIP_INJURY",
+   "code": "hip-injury"
+  },
+  "552": {
+   "name": "Leg Injury",
+   "developer_name": "LEG_INJURY",
+   "code": "leg-injury"
+  },
+  "553": {
+   "name": "Inguinal Hernia",
+   "developer_name": "INGUINAL_HERNIA",
+   "code": "inguinal-hernia"
+  },
+  "554": {
+   "name": "Muscle Injury",
+   "developer_name": "MUSCLE_INJURY",
+   "code": "muscle-injury"
+  },
+  "555": {
+   "name": "Thumb Injury",
+   "developer_name": "THUMB_INJURY",
+   "code": "thumb-injury"
+  },
+  "556": {
+   "name": "Heart Condition",
+   "developer_name": "HEART_CONDITION",
+   "code": "heart-condition"
+  },
+  "557": {
+   "name": "Cruciate Ligament Injury",
+   "developer_name": "CRUCIATE_LIGAMENT_INJURY",
+   "code": "cruciate-ligament-injury"
+  },
+  "558": {
+   "name": "Foot surgery",
+   "developer_name": "FOOT_SURGERY",
+   "code": "foot-surgery"
+  },
+  "559": {
+   "name": "Calculates Trophies",
+   "developer_name": "CALCULATES_TROPHIES",
+   "code": "calculates_thropies"
+  },
+  "560": {
+   "name": "Caretaker Manager",
+   "developer_name": "CARETAKER_MANAGER",
+   "code": "caretaker-manager"
+  },
+  "561": {
+   "name": "Suspended",
+   "developer_name": "SUSPENDED",
+   "code": "suspended"
+  },
+  "562": {
+   "name": "Twisted knee",
+   "developer_name": "TWISTED_KNEE",
+   "code": "twisted-knee"
+  },
+  "563": {
+   "name": "Skip Season Topscorer Calculation",
+   "developer_name": "SKIP_SEASON_TOPSCORERS_CALCULATION",
+   "code": "skip-season-topscorer-calculation"
+  },
+  "567": {
+   "name": "Pitch",
+   "developer_name": "PITCH",
+   "code": "pitch"
+  },
+  "568": {
+   "name": "Offside",
+   "developer_name": "OFFSIDE",
+   "code": "offside"
+  },
+  "569": {
+   "name": "Shot On Target",
+   "developer_name": "SHOT_ON_TARGET",
+   "code": "shot-on-target"
+  },
+  "570": {
+   "name": "Shots Off Target",
+   "developer_name": "SHOT_OFF_TARGET",
+   "code": "shot-off-target"
+  },
+  "571": {
+   "name": "Error Lead To Goal",
+   "developer_name": "ERROR_LEAD_TO_GOAL",
+   "code": "error-lead-to-goal"
+  },
+  "573": {
+   "name": "None",
+   "developer_name": "NONE",
+   "code": "none"
+  },
+  "574": {
+   "name": "Referees",
+   "developer_name": "REFEREES",
+   "code": "referees"
+  },
+  "575": {
+   "name": "Failed To Score",
+   "developer_name": "FAILED_TO_SCORE",
+   "code": "failed-toscore"
+  },
+  "578": {
+   "name": "Attendance",
+   "developer_name": "ATTENDANCE",
+   "code": "attendance"
+  },
+  "580": {
+   "name": "Big Chances Created",
+   "developer_name": "BIG_CHANCES_CREATED",
+   "code": "big-chances-created"
+  },
+  "581": {
+   "name": "Big Chances Missed",
+   "developer_name": "BIG_CHANCES_MISSED",
+   "code": "big-chances-missed"
+  },
+  "582": {
+   "name": "Clearance Offline",
+   "developer_name": "CLEARANCE_OFFLINE",
+   "code": "clearance-offline"
+  },
+  "583": {
+   "name": "Last Man Tackle",
+   "developer_name": "LAST_MAN_TACKLE",
+   "code": "last-man-tackle"
+  },
+  "584": {
+   "name": "Good High Claim",
+   "developer_name": "GOOD_HIGH_CLAIM",
+   "code": "good-high-claim"
+  },
+  "585": {
+   "name": "Tear in a joint capsule",
+   "developer_name": "TEAR_IN_JOINT_CAPSULE",
+   "code": "team-in-joint-capsule"
+  },
+  "587": {
+   "name": "Unknown Injury",
+   "developer_name": "UNKNOWN_INJURY",
+   "code": "unknown-injury"
+  },
+  "588": {
+   "name": "Adductor problems",
+   "developer_name": "ADDUCTOR_PROBLEMS",
+   "code": "adductor-problems"
+  },
+  "589": {
+   "name": "Muscle Fatigue",
+   "developer_name": "MUSCLE_FATIGUE",
+   "code": "muscle-fatigue"
+  },
+  "590": {
+   "name": "Rest",
+   "developer_name": "REST",
+   "code": "rest"
+  },
+  "591": {
+   "name": "Distortion of the ankle",
+   "developer_name": "DISTORTION_OF_THE_ANKLE",
+   "code": "distortion-of-the-ankle"
+  },
+  "592": {
+   "name": "Ruptured intraarticular ligament initiation in knee",
+   "developer_name": "RUPTURED_NKEE_LIGAMENT",
+   "code": "ruptured-intraarticular-ligament-initiation-in-knee"
+  },
+  "593": {
+   "name": "Thigh Muscle Strain",
+   "developer_name": "THIGH_MUSCLE_STRAIN",
+   "code": "thigh-muscle-strain"
+  },
+  "594": {
+   "name": "Meniscal Injury",
+   "developer_name": "MENSICAL_INJURY",
+   "code": "meniscal-injury"
+  },
+  "595": {
+   "name": "Back Injury",
+   "developer_name": "BACK_INJURY",
+   "code": "back-injury"
+  },
+  "596": {
+   "name": "Biceps femoris muscle injury",
+   "developer_name": "BICEPS_FEMORIS_MUSCLE_INJURY",
+   "code": "biceps-femoris-muscle-injury"
+  },
+  "597": {
+   "name": "Tear in the abductor muscle",
+   "developer_name": "TEAR_IN_ABDUCTOR_MUSCLE",
+   "code": "tear-in-abductor-muscle"
+  },
+  "598": {
+   "name": "Muscular problems",
+   "developer_name": "MUSCULAR_PROBLEMS",
+   "code": "muscular-problems"
+  },
+  "599": {
+   "name": "Torn muscle bundle",
+   "developer_name": "TORN_MUSCLE_BLEND",
+   "code": "torn-muscle-blend"
+  },
+  "600": {
+   "name": "Dead Leg",
+   "developer_name": "DEAD_LEG",
+   "code": "dead-leg"
+  },
+  "601": {
+   "name": "Abdominal Influenza",
+   "developer_name": "ABDOMINAL_INFLUENZA",
+   "code": "abdominal-Influenza"
+  },
+  "602": {
+   "name": "Femoral fracture",
+   "developer_name": "FEMORAL_FRACTURE",
+   "code": "femoral-fracture"
+  },
+  "603": {
+   "name": "Achilles tendon problems",
+   "developer_name": "ACHILLES_TENDON_PROBLEMS",
+   "code": "achilles-tendon-problems"
+  },
+  "604": {
+   "name": "Achilles tendon rupture",
+   "developer_name": "ACHILLES_TENDON_RUPTURE",
+   "code": "achilles-tendon-rupture"
+  },
+  "605": {
+   "name": "Hip problems",
+   "developer_name": "HIP_PROBLEMS",
+   "code": "hip-problems"
+  },
+  "606": {
+   "name": "Fractured Finger",
+   "developer_name": "FRACTURED_FINGER",
+   "code": "fractured-finger"
+  },
+  "607": {
+   "name": "Bruised Foot",
+   "developer_name": "BRUISED_FOOT",
+   "code": "bruised-foot"
+  },
+  "608": {
+   "name": "Surgery",
+   "developer_name": "SURGERY",
+   "code": "surgery"
+  },
+  "609": {
+   "name": "Torn Knee Ligament",
+   "developer_name": "TORN_KNEE_LIGAMENT",
+   "code": "torn-knee-ligament"
+  },
+  "610": {
+   "name": "Flu",
+   "developer_name": "FLU",
+   "code": "flu"
+  },
+  "611": {
+   "name": "Fractured Jaw",
+   "developer_name": "FRACTURED_JAW",
+   "code": "fractured-jaw"
+  },
+  "612": {
+   "name": "Heel Bone Injury",
+   "developer_name": "HEEL_BONE_INJURY",
+   "code": "heel-bone-injury"
+  },
+  "613": {
+   "name": "Hashtag",
+   "developer_name": "HASHTAG",
+   "code": "hashtag"
+  },
+  "614": {
+   "name": "Herniated Disc",
+   "developer_name": "HERNIATED_DISC",
+   "code": "herniated-disc"
+  },
+  "615": {
+   "name": "Peroneus Tendon Injury",
+   "developer_name": "PERONEUS_TENDON_INJURY",
+   "code": "peroneus-tendon-injury"
+  },
+  "616": {
+   "name": "Fractures Eye Socket",
+   "developer_name": "FRACTURED_EYE_SOCKET",
+   "code": "fractured-eye-socket"
+  },
+  "618": {
+   "name": "Ruptured Knee Ligament",
+   "developer_name": "RUPTURED_KNEE_LIGAMENT",
+   "code": "ruptured-knee-ligament"
+  },
+  "619": {
+   "name": "Back Trouble",
+   "developer_name": "BACK_TROUBLE",
+   "code": "back-trouble"
+  },
+  "620": {
+   "name": "Ruptured Ankle",
+   "developer_name": "RUPTURED_ANKLE",
+   "code": "ruptured-ankle"
+  },
+  "621": {
+   "name": "Syndesmotic Ligament Tear",
+   "developer_name": "SYNDESMOTIC_LIGAMENT_TEAR",
+   "code": "syndesmotic-ligament-tear"
+  },
+  "622": {
+   "name": "Pulled Hamstring At Adductors",
+   "developer_name": "PULLED_HAMSTRING_AT_ADDUCTORS",
+   "code": "pulled-hamstring-at-adductors"
+  },
+  "623": {
+   "name": "Fractured Toe",
+   "developer_name": "FRACTURED_TOE",
+   "code": "fractured-toe"
+  },
+  "624": {
+   "name": "Facial Fracture",
+   "developer_name": "FACIAL_FRACTURE",
+   "code": "facial-fractures"
+  },
+  "625": {
+   "name": "Acromioclavicular Saparation",
+   "developer_name": "ACROMIOCLAVICULAR_SEPARATION",
+   "code": "acromioclavicular-separation"
+  },
+  "626": {
+   "name": "Frontal Bone Fracture",
+   "developer_name": "FRONTAL_BONE_FRACTURE",
+   "code": "frontal-bone-fracture"
+  },
+  "627": {
+   "name": "Cancer",
+   "developer_name": "CANCER",
+   "code": "cancer"
+  },
+  "628": {
+   "name": "Fractured Leg",
+   "developer_name": "FRACTURED_LEG",
+   "code": "fractured-leg"
+  },
+  "629": {
+   "name": "Injury",
+   "developer_name": "INJURY",
+   "code": "injury"
+  },
+  "630": {
+   "name": "Head Injury",
+   "developer_name": "HEAD_INJURY",
+   "code": "head-injury"
+  },
+  "631": {
+   "name": "Cheekbone Fracture",
+   "developer_name": "CHEEKBONE_FRACTURE",
+   "code": "cheekbone-fracture"
+  },
+  "632": {
+   "name": "Torn Muscle Fibre",
+   "developer_name": "TORN_MUSCLE_FIBRE",
+   "code": "torn-muscle-fibre"
+  },
+  "633": {
+   "name": "Cartilage Damage",
+   "developer_name": "CARTILAGE_DAMAGE",
+   "code": "cartilage-damage"
+  },
+  "636": {
+   "name": "Ruptured Meniscus",
+   "developer_name": "RUPTURED_MENISCUS",
+   "code": "ruptured-minuscis"
+  },
+  "637": {
+   "name": "Inflammation",
+   "developer_name": "INFLAMMATION",
+   "code": "inflammation"
+  },
+  "638": {
+   "name": "Fractured Arm",
+   "developer_name": "FRACTURED_ARM",
+   "code": "fractured-arm"
+  },
+  "639": {
+   "name": "Arthroscopie",
+   "developer_name": "ARTHROSCOPIE",
+   "code": "arthroscopie"
+  },
+  "640": {
+   "name": "Lumbago",
+   "developer_name": "LUMBAGO",
+   "code": "lumbago"
+  },
+  "641": {
+   "name": "Lymphome",
+   "developer_name": "LYMPHOMA",
+   "code": "lymphoma"
+  },
+  "642": {
+   "name": "Pubalgia",
+   "developer_name": "PUBALGIA",
+   "code": "pubalgia"
+  },
+  "643": {
+   "name": "Tibia Fracture",
+   "developer_name": "TIBIA_FRACTURE",
+   "code": "tibia-fracture"
+  },
+  "644": {
+   "name": "Mensical Laceration",
+   "developer_name": "MENSICAL_LACERATION",
+   "code": "mensical-laceration"
+  },
+  "645": {
+   "name": "Patella Rupture",
+   "developer_name": "PATELLA_RUPTURE",
+   "code": "patella-ruptire"
+  },
+  "646": {
+   "name": "Forearm Fracture",
+   "developer_name": "FOREARM_FRACTURE",
+   "code": "forearm-fracture"
+  },
+  "647": {
+   "name": "Disrupted Calf Muscle",
+   "developer_name": "DISRUPTED_CALF_MUSCLE",
+   "code": "disrupted-calf-muscle"
+  },
+  "648": {
+   "name": "Medial Collateral Ligament Injury",
+   "developer_name": "MEDIAL_COLLATERAL_LIGAMENT_INJURY",
+   "code": "medial-collateral-ligament-injury"
+  },
+  "649": {
+   "name": "Fractured Rib",
+   "developer_name": "FRACTURED_RIB",
+   "code": "fractured-rib"
+  },
+  "650": {
+   "name": "Bruised Rib",
+   "developer_name": "BRUISED_RIB",
+   "code": "bruised-rib"
+  },
+  "651": {
+   "name": "Sideband Team in Knee",
+   "developer_name": "SIDEBAND_TEAR_IN_KNEE",
+   "code": "sideband-tear-in-knee"
+  },
+  "652": {
+   "name": "Cold",
+   "developer_name": "COLD",
+   "code": "cold"
+  },
+  "653": {
+   "name": "Gastric Problems",
+   "developer_name": "GASTRIC_PROBLEMS",
+   "code": "gastric-problems"
+  },
+  "654": {
+   "name": "Virus Infection",
+   "developer_name": "VIRUS_INFECTION",
+   "code": "virus-infection"
+  },
+  "655": {
+   "name": "Traffic Accident",
+   "developer_name": "TRAFFIC_ACCIDENT",
+   "code": "traffic-accident"
+  },
+  "656": {
+   "name": "Shinbone Injury",
+   "developer_name": "SHINBONE_INJURY",
+   "code": "shinbone-injury"
+  },
+  "658": {
+   "name": "Bruise",
+   "developer_name": "BRUISE",
+   "code": "bruise"
+  },
+  "659": {
+   "name": "Nose Surgery",
+   "developer_name": "NOSE_SURGERY",
+   "code": "nose-surgery"
+  },
+  "660": {
+   "name": "Nose Injury",
+   "developer_name": "NOSE_INJURY",
+   "code": "nose-injury"
+  },
+  "661": {
+   "name": "Calf Problems",
+   "developer_name": "CALF_PROBLEMS",
+   "code": "calf-problems"
+  },
+  "662": {
+   "name": "Back Bruise",
+   "developer_name": "BACK_BRUISE",
+   "code": "back-bruise"
+  },
+  "663": {
+   "name": "Pneumonia",
+   "developer_name": "PNEUMONIA",
+   "code": "pneumonia"
+  },
+  "664": {
+   "name": "Hand Injury",
+   "developer_name": "HAND_INJURY",
+   "code": "hand-injury"
+  },
+  "665": {
+   "name": "Quarantine",
+   "developer_name": "QUARANTINE",
+   "code": "quarantine"
+  },
+  "666": {
+   "name": "Collarbone Fracture",
+   "developer_name": "COLLARBONE_FRACTURE",
+   "code": "collarbone-fracture"
+  },
+  "667": {
+   "name": "Torn Muscle Bundle",
+   "developer_name": "TORN_MUSCLE_BUNDLE",
+   "code": "torn-muscle-bundle"
+  },
+  "669": {
+   "name": "Abscess",
+   "developer_name": "ABSCESS",
+   "code": "abscess"
+  },
+  "670": {
+   "name": "Medial Collateral Ligament Tear",
+   "developer_name": "MEDIAL_COLLATERAL_LIGAMENT_TEAR",
+   "code": "medial-collateral-ligament-tear"
+  },
+  "671": {
+   "name": "Ankle Surgery",
+   "developer_name": "ANKLE_SURGERY",
+   "code": "ankle-surgery"
+  },
+  "672": {
+   "name": "Ankle Problems",
+   "developer_name": "ANKLE_PROBLEMS",
+   "code": "ankle-problems"
+  },
+  "673": {
+   "name": "Toe Injury",
+   "developer_name": "TOE_INJURY",
+   "code": "toe-injury"
+  },
+  "674": {
+   "name": "Cals Sclerosis",
+   "developer_name": "CALS_SCLEROSIS",
+   "code": "cals-sclerosis"
+  },
+  "675": {
+   "name": "Appendectomy",
+   "developer_name": "APPENDECTOMY",
+   "code": "appendectomy"
+  },
+  "676": {
+   "name": "Eye Injury",
+   "developer_name": "EYE_INJURY",
+   "code": "eye-injury"
+  },
+  "677": {
+   "name": "Minor Knock",
+   "developer_name": "MINOR_KNOCK",
+   "code": "minor-knock"
+  },
+  "678": {
+   "name": "Overstretching",
+   "developer_name": "OVERSTRETCHING",
+   "code": "overstretching"
+  },
+  "679": {
+   "name": "Knee Inflammation",
+   "developer_name": "KNEE_INFLAMMATION",
+   "code": "knee-inflammation"
+  },
+  "680": {
+   "name": "Fatigue Fracture",
+   "developer_name": "FATIGUE_FRACTURE",
+   "code": "fatigue-fracture"
+  },
+  "681": {
+   "name": "Inflamed Ligaments Of The Knee",
+   "developer_name": "INFLAMED_LIGAMENTS_OF_THE_KNEE",
+   "code": "inflamed-ligaments-of-the-knee"
+  },
+  "682": {
+   "name": "Sprain",
+   "developer_name": "SPRAIN",
+   "code": "sprain"
+  },
+  "683": {
+   "name": "Bruised Knee",
+   "developer_name": "BRUISED_KNEE",
+   "code": "bruised-knee"
+  },
+  "684": {
+   "name": "Chickenpox",
+   "developer_name": "CHICKENPOX",
+   "code": "chickenpox"
+  },
+  "687": {
+   "name": "Knee Problems",
+   "developer_name": "KNEE_PROBLEMS",
+   "code": "knee-problems"
+  },
+  "688": {
+   "name": "Heelspur",
+   "developer_name": "HEELSPUR",
+   "code": "heelspur"
+  },
+  "690": {
+   "name": "Tendon Irritation",
+   "developer_name": "TENDON_IRRITATION",
+   "code": "tendon-irritation"
+  },
+  "691": {
+   "name": "Fever",
+   "developer_name": "FEVER",
+   "code": "fever"
+  },
+  "692": {
+   "name": "Arch Pain",
+   "developer_name": "ARCH_PAIN",
+   "code": "arch-pain"
+  },
+  "693": {
+   "name": "Achilles Irritation",
+   "developer_name": "ACHILLES_IRRITATION",
+   "code": "achilles-irritation"
+  },
+  "694": {
+   "name": "Muscle Fiber Tear",
+   "developer_name": "MUSCLE_FIBER_TEAR",
+   "code": "muscle-fiber-tear"
+  },
+  "695": {
+   "name": "Flesh Wound",
+   "developer_name": "FLESH_WOUND",
+   "code": "flesh-wound"
+  },
+  "696": {
+   "name": "Meniscus Damage",
+   "developer_name": "MENISCUS_DAMAGE",
+   "code": "meniscus-damage"
+  },
+  "697": {
+   "name": "Calf Muscle Strain",
+   "developer_name": "CALF_MUSCLE_STRAIN",
+   "code": "calf-muscle-strain"
+  },
+  "700": {
+   "name": "Fractured Hand",
+   "developer_name": "FRACTURED_HAND",
+   "code": "fractured-hand"
+  },
+  "701": {
+   "name": "Fractured Foot",
+   "developer_name": "FRACTURED_FOOT",
+   "code": "fractured-foot"
+  },
+  "702": {
+   "name": "Stretched Ligament",
+   "developer_name": "STRETCHED_LIGAMENT",
+   "code": "stretched-ligament"
+  },
+  "703": {
+   "name": "Compression Of Spinal",
+   "developer_name": "COMPRESSION_OF_SPINAL",
+   "code": "compression-of-spinal"
+  },
+  "704": {
+   "name": "Bone Bruise",
+   "developer_name": "BONE_BRUISE",
+   "code": "bone-bruise"
+  },
+  "705": {
+   "name": "Torn Collateral Ligament",
+   "developer_name": "TORN_COLLATERAL_LIGAMENT",
+   "code": "torn-collateral-ligament"
+  },
+  "706": {
+   "name": "Sprained Ankle",
+   "developer_name": "SPRAINED_ANKLE",
+   "code": "sprained-ankle"
+  },
+  "708": {
+   "name": "Torn Muscle",
+   "developer_name": "TORN_MUSCLE",
+   "code": "torn-muscle"
+  },
+  "709": {
+   "name": "Arm Injury",
+   "developer_name": "ARM_INJURY",
+   "code": "arm-injury"
+  },
+  "711": {
+   "name": "Heel Pain",
+   "developer_name": "HEEL_PAIN",
+   "code": "heel-pain"
+  },
+  "712": {
+   "name": "Metatarsal Bone Bruise",
+   "developer_name": "METATARSAL_BONE_BRUISE",
+   "code": "metatarsal-bone-bruise"
+  },
+  "713": {
+   "name": "Finger Injury",
+   "developer_name": "FINGER_INJURY",
+   "code": "finger-injury"
+  },
+  "714": {
+   "name": "Partial Damage To The Cruciate Ligament",
+   "developer_name": "PARTIAL_DAMAGE_TO_THE_CRUCIATE_LIGAMENT",
+   "code": "partial-damage-to-the-cruciate-ligament"
+  },
+  "715": {
+   "name": "Torn Meniscus",
+   "developer_name": "TORN_MENISCUS",
+   "code": "torn-meniscus"
+  },
+  "716": {
+   "name": "Pelvis Injury",
+   "developer_name": "PELVIS_INJURY",
+   "code": "pelvis-injury"
+  },
+  "717": {
+   "name": "Ruptured Ankle Aigament",
+   "developer_name": "RUPTURED_ANKLE_AIGAMENT",
+   "code": "ruptured-ankle-aigament"
+  },
+  "718": {
+   "name": "Torn Tendon",
+   "developer_name": "TORN_TENDON",
+   "code": "torn-tendon"
+  },
+  "720": {
+   "name": "Fibula Shaft Fractures",
+   "developer_name": "FIBULA_SHAFT_FRACTURES",
+   "code": "fibula-shaft-fractures"
+  },
+  "721": {
+   "name": "Stomach Complaints",
+   "developer_name": "STOMACH_COMPLAINTS",
+   "code": "stomach-complaints"
+  },
+  "722": {
+   "name": "Dental Surgery",
+   "developer_name": "DENTAL_SURGERY",
+   "code": "dental-surgery"
+  },
+  "723": {
+   "name": "Whiplash",
+   "developer_name": "WHIPLASH",
+   "code": "whiplash"
+  },
+  "724": {
+   "name": "Pubis Bone Irritation",
+   "developer_name": "PUBIS_BONE_IRRITATION",
+   "code": "pubis-bone-irritation"
+  },
+  "726": {
+   "name": "Shoulder Fracture",
+   "developer_name": "SHOULDER_FRACTURE",
+   "code": "shoulder-fracture"
+  },
+  "728": {
+   "name": "Torn Ligament",
+   "developer_name": "TORN_LIGAMENT",
+   "code": "torn-ligament"
+  },
+  "729": {
+   "name": "Nasal Bone Fracture",
+   "developer_name": "NASAL_BONE_FRACTURE",
+   "code": "nasal-bone-fracture"
+  },
+  "730": {
+   "name": "Mononucleosis",
+   "developer_name": "MONONUCLEOSIS",
+   "code": "mononucleosis"
+  },
+  "731": {
+   "name": "Bone Chipping",
+   "developer_name": "BONE_CHIPPING",
+   "code": "bone-chipping"
+  },
+  "733": {
+   "name": "Vertebra Injury",
+   "developer_name": "VERTEBRA_INJURY",
+   "code": "vertebra-injury"
+  },
+  "734": {
+   "name": "Pubis Bone Contusion",
+   "developer_name": "PUBIS_BONE_CONTUSION",
+   "code": "pubis-bone-contusion"
+  },
+  "735": {
+   "name": "Fracture Of The Orbit",
+   "developer_name": "FRACTURE_OF_THE_ORBIT",
+   "code": "fracture-of-the-orbit"
+  },
+  "736": {
+   "name": "Stress Response Of The Bone",
+   "developer_name": "STRESS_RESPONSE_OF_THE_BONE",
+   "code": "stress-response-of-the-bone"
+  },
+  "737": {
+   "name": "Infection",
+   "developer_name": "INFECTION",
+   "code": "infection"
+  },
+  "738": {
+   "name": "Umbilical Hernia",
+   "developer_name": "UMBILICAL_HERNIA",
+   "code": "umbilical-hernia"
+  },
+  "739": {
+   "name": "Hamstring Contusion",
+   "developer_name": "HAMSTRING_CONTUSION",
+   "code": "hamstring-contusion"
+  },
+  "740": {
+   "name": "Adductors Avulsion",
+   "developer_name": "ADDUCTORS_AVULSION",
+   "code": "adductors-avulsion"
+  },
+  "741": {
+   "name": "Hand Fracture",
+   "developer_name": "HAND_FRACTURE",
+   "code": "hand-fracture"
+  },
+  "742": {
+   "name": "Fissure Of The Fibula",
+   "developer_name": "FISSURE_OF_THE_FIBULA",
+   "code": "fissure-of-the-fibula"
+  },
+  "743": {
+   "name": "Appendicitis",
+   "developer_name": "APPENDICITIS",
+   "code": "appendicitis"
+  },
+  "744": {
+   "name": "Contracture",
+   "developer_name": "CONTRACTURE",
+   "code": "contracture"
+  },
+  "745": {
+   "name": "Neck Injury",
+   "developer_name": "NECK_INJURY",
+   "code": "neck-injury"
+  },
+  "746": {
+   "name": "Navicular Bone Fracture",
+   "developer_name": "NAVICULAR_BONE_FRACTURE",
+   "code": "navicular-bone-fracture"
+  },
+  "747": {
+   "name": "Scaphoid Operation",
+   "developer_name": "SCAPHOID_OPERATION",
+   "code": "scaphoid-operation"
+  },
+  "748": {
+   "name": "Fracture",
+   "developer_name": "FRACTURE",
+   "code": "fracture"
+  },
+  "750": {
+   "name": "Ligament Problems",
+   "developer_name": "LIGAMENT_PROBLEMS",
+   "code": "ligament-problems"
+  },
+  "752": {
+   "name": "Facial Injury",
+   "developer_name": "FACIAL_INJURY",
+   "code": "facial-injury"
+  },
+  "753": {
+   "name": "Abdominal Muscles Injury",
+   "developer_name": "ABDOMINAL_MUSCLES_INJURY",
+   "code": "abdominal-muscles-injury"
+  },
+  "755": {
+   "name": "Elbow Injury",
+   "developer_name": "ELBOW_INJURY",
+   "code": "elbow-injury"
+  },
+  "756": {
+   "name": "Double Torn Ligament",
+   "developer_name": "DOUBLE_TORN_LIGAMENT",
+   "code": "double-torn-ligament"
+  },
+  "757": {
+   "name": "Food Poisoning",
+   "developer_name": "FOOD_POISONING",
+   "code": "food-poisoning"
+  },
+  "758": {
+   "name": "Bruised Hip",
+   "developer_name": "BRUISED_HIP",
+   "code": "bruised-hip"
+  },
+  "759": {
+   "name": "Bruised Ankle",
+   "developer_name": "BRUISED_ANKLE",
+   "code": "bruised-ankle"
+  },
+  "760": {
+   "name": "Torn Lateral Collateral Ligament",
+   "developer_name": "TORN_LATERAL_COLLATERAL_LIGAMENT",
+   "code": "torn-lateral-collateral-ligament"
+  },
+  "761": {
+   "name": "Capsular Rupture In The Ankle",
+   "developer_name": "CAPSULAR_RUPTURE_IN_THE_ANKLE",
+   "code": "capsular-rupture-in-the-ankle"
+  },
+  "762": {
+   "name": "Tonsillitis",
+   "developer_name": "TONSILLITIS",
+   "code": "tonsillitis"
+  },
+  "764": {
+   "name": "Insect Bite",
+   "developer_name": "INSECT_BITE",
+   "code": "insect-bite"
+  },
+  "767": {
+   "name": "Patella Problems",
+   "developer_name": "PATELLA_PROBLEMS",
+   "code": "patella-problems"
+  },
+  "768": {
+   "name": "Intraarticular Ligament Fissure",
+   "developer_name": "INTRAARTICULAR_LIGAMENT_FISSURE",
+   "code": "intraarticular-ligament-fissure"
+  },
+  "769": {
+   "name": "Hairline Crack In The Foot",
+   "developer_name": "HAIRLINE_CRACK_IN_THE_FOOT",
+   "code": "hairline-crack-in-the-foot"
+  },
+  "770": {
+   "name": "Problems With The Right Hip Flexor",
+   "developer_name": "PROBLEMS_WITH_THE_RIGHT_HIP_FLEXOR",
+   "code": "problems-with-the-right-hip-flexor"
+  },
+  "771": {
+   "name": "Lumbar Vertebrae Problems",
+   "developer_name": "LUMBAR_VERTEBRAE_PROBLEMS",
+   "code": "lumbar-vertebrae-problems"
+  },
+  "773": {
+   "name": "Angina",
+   "developer_name": "ANGINA",
+   "code": "angina"
+  },
+  "774": {
+   "name": "Tarsal Rupture",
+   "developer_name": "TARSAL_RUPTURE",
+   "code": "tarsal-rupture"
+  },
+  "775": {
+   "name": "Medial Collateral Ligament Avulsion",
+   "developer_name": "MEDIAL_COLLATERAL_LIGAMENT_AVULSION",
+   "code": "medial-collateral-ligament-avulsion"
+  },
+  "776": {
+   "name": "Abdominal Strain",
+   "developer_name": "ABDOMINAL_STRAIN",
+   "code": "abdominal-strain"
+  },
+  "777": {
+   "name": "Ruptured Lateral Collateral Ligament",
+   "developer_name": "RUPTURED_LATERAL_COLLATERAL_LIGAMENT",
+   "code": "ruptured-lateral-collateral-ligament"
+  },
+  "779": {
+   "name": "Plantar Fascia",
+   "developer_name": "PLANTAR_FASCIA",
+   "code": "plantar-fascia"
+  },
+  "782": {
+   "name": "Sideband Strain In The Knee",
+   "developer_name": "SIDEBAND_STRAIN_IN_THE_KNEE",
+   "code": "sideband-strain-in-the-knee"
+  },
+  "784": {
+   "name": "Cervical Spine Injury",
+   "developer_name": "CERVICAL_SPINE_INJURY",
+   "code": "cervical-spine-injury"
+  },
+  "785": {
+   "name": "Ruptured Syndesmotic Ligament",
+   "developer_name": "RUPTURED_SYNDESMOTIC_LIGAMENT",
+   "code": "ruptured-syndesmotic-ligament"
+  },
+  "786": {
+   "name": "Cheek Bone Contusion",
+   "developer_name": "CHEEK_BONE_CONTUSION",
+   "code": "cheek-bone-contusion"
+  },
+  "787": {
+   "name": "Laceration",
+   "developer_name": "LACERATION",
+   "code": "laceration"
+  },
+  "788": {
+   "name": "Wirst Injury",
+   "developer_name": "WIRST_INJURY",
+   "code": "wirst-injury"
+  },
+  "789": {
+   "name": "Shin Bone Bruise",
+   "developer_name": "SHIN_BONE_BRUISE",
+   "code": "shin-bone-bruise"
+  },
+  "790": {
+   "name": "Sinus Fracture",
+   "developer_name": "SINUS_FRACTURE",
+   "code": "sinus-fracture"
+  },
+  "791": {
+   "name": "Ruptured Sideband In The Knee",
+   "developer_name": "RUPTURED_SIDEBAND_IN_THE_KNEE",
+   "code": "ruptured-sideband-in-the-knee"
+  },
+  "792": {
+   "name": "Broken Wrist",
+   "developer_name": "BROKEN_WRIST",
+   "code": "broken-wrist"
+  },
+  "793": {
+   "name": "Pinched Nerve",
+   "developer_name": "PINCHED_NERVE",
+   "code": "pinched-nerve"
+  },
+  "794": {
+   "name": "Bronchitis",
+   "developer_name": "BRONCHITIS",
+   "code": "bronchitis"
+  },
+  "795": {
+   "name": "Cheekbone Surgery",
+   "developer_name": "CHEEKBONE_SURGERY",
+   "code": "cheekbone-surgery"
+  },
+  "796": {
+   "name": "Fractured Skull",
+   "developer_name": "FRACTURED_SKULL",
+   "code": "fractured-skull"
+  },
+  "797": {
+   "name": "Ruptured Intraarticular Ligament Initiation In The Ankle",
+   "developer_name": "RUPTURED_INTRAARTICULAR_LIGAMENT_INITIATION_IN_THE_ANKLE",
+   "code": "ruptured-intraarticular-ligament-initiation-in-the-ankle"
+  },
+  "798": {
+   "name": "Tendonitis",
+   "developer_name": "TENDONITIS",
+   "code": "tendonitis"
+  },
+  "799": {
+   "name": "Sideband Tear",
+   "developer_name": "SIDEBAND_TEAR",
+   "code": "sideband-tear"
+  },
+  "800": {
+   "name": "Edema In The Knee",
+   "developer_name": "EDEMA_IN_THE_KNEE",
+   "code": "edema-in-the-knee"
+  },
+  "801": {
+   "name": "Rupture Of The Timpanum",
+   "developer_name": "RUPTURE_OF_THE_TIMPANUM",
+   "code": "rupture-of-the-timpanum"
+  },
+  "804": {
+   "name": "Tendon Crack",
+   "developer_name": "TENDON_CRACK",
+   "code": "tendon-crack"
+  },
+  "805": {
+   "name": "Ruptured Ligaments",
+   "developer_name": "RUPTURED_LIGAMENTS",
+   "code": "ruptured-ligaments"
+  },
+  "806": {
+   "name": "Muscle Bruise",
+   "developer_name": "MUSCLE_BRUISE",
+   "code": "muscle-bruise"
+  },
+  "807": {
+   "name": "Bone Inflammation",
+   "developer_name": "BONE_INFLAMMATION",
+   "code": "bone-inflammation"
+  },
+  "808": {
+   "name": "Cracked Lung",
+   "developer_name": "CRACKED_LUNG",
+   "code": "cracked-lung"
+  },
+  "809": {
+   "name": "Compartment Syndrome",
+   "developer_name": "COMPARTMENT_SYNDROME",
+   "code": "compartment-syndrome"
+  },
+  "810": {
+   "name": "Sideband Injury",
+   "developer_name": "SIDEBAND_INJURY",
+   "code": "sideband-injury"
+  },
+  "811": {
+   "name": "Bursitis",
+   "developer_name": "BURSITIS",
+   "code": "bursitis"
+  },
+  "812": {
+   "name": "Lumbar Vertebra Fracture",
+   "developer_name": "LUMBAR_VERTEBRA_FRACTURE",
+   "code": "lumbar-vertebra-fracture"
+  },
+  "814": {
+   "name": "Muscle Partial Avulsion",
+   "developer_name": "MUSCLE_PARTIAL_AVULSION",
+   "code": "muscle-partial-avulsion"
+  },
+  "815": {
+   "name": "Tibia And Fibula Fracture",
+   "developer_name": "TIBIA_AND_FIBULA_FRACTURE",
+   "code": "tibia-and-fibula-fracture"
+  },
+  "816": {
+   "name": "Pneumothorax",
+   "developer_name": "PNEUMOTHORAX",
+   "code": "pneumothorax"
+  },
+  "817": {
+   "name": "Testicular Cancer",
+   "developer_name": "TESTICULAR_CANCER",
+   "code": "testicular-cancer"
+  },
+  "818": {
+   "name": "Ruptured Sideband",
+   "developer_name": "RUPTURED_SIDEBAND",
+   "code": "ruptured-sideband"
+  },
+  "819": {
+   "name": "Contused Laceration",
+   "developer_name": "CONTUSED_LACERATION",
+   "code": "contused-laceration"
+  },
+  "821": {
+   "name": "Patella Tendon Irritation",
+   "developer_name": "PATELLA_TENDON_IRRITATION",
+   "code": "patella-tendon-irritation"
+  },
+  "822": {
+   "name": "Cruciate Ligament Stretch",
+   "developer_name": "CRUCIATE_LIGAMENT_STRETCH",
+   "code": "cruciate-ligament-stretch"
+  },
+  "824": {
+   "name": "Problems With The Left Hip Flexor",
+   "developer_name": "PROBLEMS_WITH_THE_LEFT_HIP_FLEXOR",
+   "code": "problems-with-the-left-hip-flexor"
+  },
+  "825": {
+   "name": "Bone Buckling",
+   "developer_name": "BONE_BUCKLING",
+   "code": "bone-buckling"
+  },
+  "826": {
+   "name": "Fractured Thumb",
+   "developer_name": "FRACTURED_THUMB",
+   "code": "fractured-thumb"
+  },
+  "828": {
+   "name": "Fractured Kneecap",
+   "developer_name": "FRACTURED_KNEECAP",
+   "code": "fractured-kneecap"
+  },
+  "829": {
+   "name": "Problems With The Hip Flexor",
+   "developer_name": "PROBLEMS_WITH_THE_HIP_FLEXOR",
+   "code": "problems-with-the-hip-flexor"
+  },
+  "830": {
+   "name": "Screwsnails Removal",
+   "developer_name": "SCREWS_NAILS_REMOVAL",
+   "code": "screwsnails-removal"
+  },
+  "831": {
+   "name": "Infected Wound",
+   "developer_name": "INFECTED_WOUND",
+   "code": "infected-wound"
+  },
+  "832": {
+   "name": "Toothache",
+   "developer_name": "TOOTHACHE",
+   "code": "toothache"
+  },
+  "833": {
+   "name": "Rupture Of The Pattella",
+   "developer_name": "RUPTURE_OF_THE_PATTELLA",
+   "code": "rupture-of-the-pattella"
+  },
+  "835": {
+   "name": "Muscular Hairline Crack",
+   "developer_name": "MUSCULAR_HAIRLINE_CRACK",
+   "code": "muscular-hairline-crack"
+  },
+  "836": {
+   "name": "Chest Injury",
+   "developer_name": "CHEST_INJURY",
+   "code": "chest-injury"
+  },
+  "837": {
+   "name": "Intestial Virus",
+   "developer_name": "INTESTIAL_VIRUS",
+   "code": "intestial-virus"
+  },
+  "839": {
+   "name": "Cruciate Ligament Strain",
+   "developer_name": "CRUCIATE_LIGAMENT_STRAIN",
+   "code": "cruciate-ligament-strain"
+  },
+  "842": {
+   "name": "Pelvic Tumor",
+   "developer_name": "PELVIC_TUMOR",
+   "code": "pelvic-tumor"
+  },
+  "843": {
+   "name": "Meniscus Irritation",
+   "developer_name": "MENISCUS_IRRITATION",
+   "code": "meniscus-irritation"
+  },
+  "844": {
+   "name": "Skin Disease",
+   "developer_name": "SKIN_DISEASE",
+   "code": "skin-disease"
+  },
+  "846": {
+   "name": "Strain In The Thigh And Gluteal Muscles",
+   "developer_name": "STRAIN_IN_THE_THIGH_AND_GLUTEAL_MUSCLES",
+   "code": "strain-in-the-thigh-and-gluteal-muscles"
+  },
+  "847": {
+   "name": "Ankle Inflammation",
+   "developer_name": "ANKLE_INFLAMMATION",
+   "code": "ankle-inflammation"
+  },
+  "849": {
+   "name": "Impingement Syndrome",
+   "developer_name": "IMPINGEMENT_SYNDROME",
+   "code": "impingement-syndrome"
+  },
+  "851": {
+   "name": "Fracture Dislocation Of The Ankle",
+   "developer_name": "FRACTURE_DISLOCATION_OF_THE_ANKLE",
+   "code": "fracture-dislocation-of-the-ankle"
+  },
+  "853": {
+   "name": "Cut",
+   "developer_name": "CUT",
+   "code": "cut"
+  },
+  "854": {
+   "name": "Capsular Tear",
+   "developer_name": "CAPSULAR_TEAR",
+   "code": "capsular-tear"
+  },
+  "855": {
+   "name": "Coccyx Contusion",
+   "developer_name": "COCCYX_CONTUSION",
+   "code": "coccyx-contusion"
+  },
+  "856": {
+   "name": "Sciatic Problem",
+   "developer_name": "SCIATIC_PROBLEM",
+   "code": "sciatic-problem"
+  },
+  "858": {
+   "name": "Blockade In The Spinal",
+   "developer_name": "BLOCKADE_IN_THE_SPINAL",
+   "code": "blockade-in-the-spinal"
+  },
+  "859": {
+   "name": "Laceration Of The Capsule",
+   "developer_name": "LACERATION_OF_THE_CAPSULE",
+   "code": "laceration-of-the-capsule"
+  },
+  "860": {
+   "name": "Fracture Of The Lower Leg",
+   "developer_name": "FRACTURE_OF_THE_LOWER_LEG",
+   "code": "fracture-of-the-lower-leg"
+  },
+  "861": {
+   "name": "Burns",
+   "developer_name": "BURNS",
+   "code": "burns"
+  },
+  "862": {
+   "name": "Dislocation Of The Patella",
+   "developer_name": "DISLOCATION_OF_THE_PATELLA",
+   "code": "dislocation-of-the-patella"
+  },
+  "864": {
+   "name": "Cervical Fracture",
+   "developer_name": "CERVICAL_FRACTURE",
+   "code": "cervical-fracture"
+  },
+  "865": {
+   "name": "Ruptured Sideband In The Ankle",
+   "developer_name": "RUPTURED_SIDEBAND_IN_THE_ANKLE",
+   "code": "ruptured-sideband-in-the-ankle"
+  },
+  "866": {
+   "name": "Midface Fracture",
+   "developer_name": "MIDFACE_FRACTURE",
+   "code": "midface-fracture"
+  },
+  "867": {
+   "name": "Meningitis",
+   "developer_name": "MENINGITIS",
+   "code": "meningitis"
+  },
+  "868": {
+   "name": "Kidney Problems",
+   "developer_name": "KIDNEY_PROBLEMS",
+   "code": "kidney-problems"
+  },
+  "869": {
+   "name": "Testicular Disruption",
+   "developer_name": "TESTICULAR_DISRUPTION",
+   "code": "testicular-disruption"
+  },
+  "870": {
+   "name": "Inflamation Of Biceps",
+   "developer_name": "INFLAMATION_OF_BICEPS",
+   "code": "inflamation-of-biceps"
+  },
+  "872": {
+   "name": "Bullet Wound",
+   "developer_name": "BULLET_WOUND",
+   "code": "bullet-wound"
+  },
+  "874": {
+   "name": "Hairline Crack In Calfbone",
+   "developer_name": "HAIRLINE_CRACK_IN_CALFBONE",
+   "code": "hairline-crack-in-calfbone"
+  },
+  "875": {
+   "name": "Femoral Neck Fracture",
+   "developer_name": "FEMORAL_NECK_FRACTURE",
+   "code": "femoral-neck-fracture"
+  },
+  "876": {
+   "name": "Periostitis",
+   "developer_name": "PERIOSTITIS",
+   "code": "periostitis"
+  },
+  "877": {
+   "name": "Collapsed Lung",
+   "developer_name": "COLLAPSED_LUNG",
+   "code": "collapsed-lung"
+  },
+  "878": {
+   "name": "Internal Bleeding In The Thigh",
+   "developer_name": "INTERNAL_BLEEDING_IN_THE_THIGH",
+   "code": "internal-bleeding-in-the-thigh"
+  },
+  "879": {
+   "name": "Tooth Inflammation",
+   "developer_name": "TOOTH_INFLAMMATION",
+   "code": "tooth-inflammation"
+  },
+  "883": {
+   "name": "Circulation Problems",
+   "developer_name": "CIRCULATION_PROBLEMS",
+   "code": "circulation-problems"
+  },
+  "885": {
+   "name": "Sepsis",
+   "developer_name": "SEPSIS",
+   "code": "sepsis"
+  },
+  "886": {
+   "name": "Strain Of The Patella",
+   "developer_name": "STRAIN_OF_THE_PATELLA",
+   "code": "strain-of-the-patella"
+  },
+  "889": {
+   "name": "Marrow Bulge",
+   "developer_name": "MARROW_BULGE",
+   "code": "marrow-bulge"
+  },
+  "890": {
+   "name": "Tibial Plateau Contusion",
+   "developer_name": "TIBIAL_PLATEAU_CONTUSION",
+   "code": "tibial-plateau-contusion"
+  },
+  "892": {
+   "name": "Malaria",
+   "developer_name": "MALARIA",
+   "code": "malaria"
+  },
+  "893": {
+   "name": "Jumpers Knee",
+   "developer_name": "JUMPERS_KNEE",
+   "code": "jumpers-knee"
+  },
+  "894": {
+   "name": "Blood Clot In The Lungs",
+   "developer_name": "BLOOD_CLOT_IN_THE_LUNGS",
+   "code": "blood-clot-in-the-lungs"
+  },
+  "895": {
+   "name": "Open Wound",
+   "developer_name": "OPEN_WOUND",
+   "code": "open-wound"
+  },
+  "896": {
+   "name": "Bruise On Ankle",
+   "developer_name": "BRUISE_ON_ANKLE",
+   "code": "bruise-on-ankle"
+  },
+  "901": {
+   "name": "Hearing Impairment",
+   "developer_name": "HEARING_IMPAIRMENT",
+   "code": "hearing-impairment"
+  },
+  "905": {
+   "name": "Ulnar Fracture",
+   "developer_name": "ULNAR_FRACTURE",
+   "code": "ulnar-fracture"
+  },
+  "908": {
+   "name": "Intraarticular Ligament Crack In The Ankle",
+   "developer_name": "INTRAARTICULAR_LIGAMENT_CRACK_IN_THE_ANKLE",
+   "code": "intraarticular-ligament-crack-in-the-ankle"
+  },
+  "909": {
+   "name": "Overstretching Of The Syndesmotic Ligament",
+   "developer_name": "OVERSTRETCHING_OF_THE_SYNDESMOTIC_LIGAMENT",
+   "code": "overstretching-of-the-syndesmotic-ligament"
+  },
+  "915": {
+   "name": "Longitudinal Crack In The Tendon",
+   "developer_name": "LONGITUDINAL_CRACK_IN_THE_TENDON",
+   "code": "longitudinal-crack-in-the-tendon"
+  },
+  "918": {
+   "name": "Knee Cyst",
+   "developer_name": "KNEE_CYST",
+   "code": "knee-cyst"
+  },
+  "919": {
+   "name": "Bowel Surgery",
+   "developer_name": "BOWEL_SURGERY",
+   "code": "bowel-surgery"
+  },
+  "920": {
+   "name": "Inflamed Head Of Fibula",
+   "developer_name": "INFLAMED_HEAD_OF_FIBULA",
+   "code": "inflamed-head-of-fibula"
+  },
+  "922": {
+   "name": "Fracture Of The Humerus Head",
+   "developer_name": "FRACTURE_OF_THE_HUMERUS_HEAD",
+   "code": "fracture-of-the-humerus-head"
+  },
+  "923": {
+   "name": "Cyst On The Paw",
+   "developer_name": "CYST_ON_THE_PAW",
+   "code": "cyst-on-the-paw"
+  },
+  "924": {
+   "name": "Stroke",
+   "developer_name": "STROKE",
+   "code": "stroke"
+  },
+  "926": {
+   "name": "Allergic Reaction",
+   "developer_name": "ALLERGIC_REACTION",
+   "code": "allergic-reaction"
+  },
+  "927": {
+   "name": "Bruise On The Shin",
+   "developer_name": "BRUISE_ON_THE_SHIN",
+   "code": "bruise-on-the-shin"
+  },
+  "929": {
+   "name": "Stiffness",
+   "developer_name": "STIFFNESS",
+   "code": "stiffness"
+  },
+  "937": {
+   "name": "Patella Tendon Luxation",
+   "developer_name": "PATELLA_TENDON_LUXATION",
+   "code": "patella-tendon-luxation"
+  },
+  "944": {
+   "name": "Varicose Veins",
+   "developer_name": "VARICOSE_VEINS",
+   "code": "varicose-veins"
+  },
+  "945": {
+   "name": "Lung Contusion",
+   "developer_name": "LUNG_CONTUSION",
+   "code": "lung-contusion"
+  },
+  "947": {
+   "name": "Bone Bruise Syndrom",
+   "developer_name": "BONE_BRUISE_SYNDROM",
+   "code": "bone-bruise-syndrom"
+  },
+  "948": {
+   "name": "Bruised Acromioclavicular",
+   "developer_name": "BRUISED_ACROMIOCLAVICULAR",
+   "code": "bruised-acromioclavicular"
+  },
+  "950": {
+   "name": "Venous Occlusion",
+   "developer_name": "VENOUS_OCCLUSION",
+   "code": "venous-occlusion"
+  },
+  "957": {
+   "name": "Inflammation In Spine",
+   "developer_name": "INFLAMMATION_IN_SPINE",
+   "code": "inflammation-in-spine"
+  },
+  "958": {
+   "name": "Shingles",
+   "developer_name": "SHINGLES",
+   "code": "shingles"
+  },
+  "967": {
+   "name": "Heel Cyst",
+   "developer_name": "HEEL_CYST",
+   "code": "heel-cyst"
+  },
+  "968": {
+   "name": "Depression",
+   "developer_name": "DEPRESSION",
+   "code": "depression"
+  },
+  "972": {
+   "name": "Vestibular Disorder",
+   "developer_name": "VESTIBULAR_DISORDER",
+   "code": "vestibular-disorder"
+  },
+  "974": {
+   "name": "Splenic Infarct",
+   "developer_name": "SPLENIC_INFARCT",
+   "code": "splenic-infarct"
+  },
+  "978": {
+   "name": "Swine Flu",
+   "developer_name": "SWINE_FLU",
+   "code": "swine-flu"
+  },
+  "982": {
+   "name": "Pancratitis",
+   "developer_name": "PANCRATITIS",
+   "code": "pancratitis"
+  },
+  "983": {
+   "name": "Basal Skull Fracture",
+   "developer_name": "BASAL_SKULL_FRACTURE",
+   "code": "basal-skull-fracture"
+  },
+  "984": {
+   "name": "Partial Demolition Of The Plantar Fascia",
+   "developer_name": "PARTIAL_DEMOLITION_OF_THE_PLANTAR_FASCIA",
+   "code": "partial-demolition-of-the-plantar-fascia"
+  },
+  "985": {
+   "name": "Coma",
+   "developer_name": "COMA",
+   "code": "coma"
+  },
+  "986": {
+   "name": "Hailrine Crack In Lumbar Vertebra",
+   "developer_name": "HAILRINE_CRACK_IN_LUMBAR_VERTEBRA",
+   "code": "hailrine-crack-in-lumbar-vertebra"
+  },
+  "987": {
+   "name": "Kidney Tumour",
+   "developer_name": "KIDNEY_TUMOUR",
+   "code": "kidney-tumour"
+  },
+  "989": {
+   "name": "Pelvic Obliquity",
+   "developer_name": "PELVIC_OBLIQUITY",
+   "code": "pelvic-obliquity"
+  },
+  "991": {
+   "name": "Kidney Stone Surgery",
+   "developer_name": "KIDNEY_STONE_SURGERY",
+   "code": "kidney-stone-surgery"
+  },
+  "994": {
+   "name": "Brain Haemorrhage",
+   "developer_name": "BRAIN_HAEMORRHAGE",
+   "code": "brain-haemorrhage"
+  },
+  "995": {
+   "name": "Bruised Pelvis",
+   "developer_name": "BRUISED_PELVIS",
+   "code": "bruised-pelvis"
+  },
+  "1000": {
+   "name": "Neuropathy",
+   "developer_name": "NEUROPATHY",
+   "code": "neuropathy"
+  },
+  "1003": {
+   "name": "Hole In The Eardrum",
+   "developer_name": "HOLE_IN_THE_EARDRUM",
+   "code": "hole-in-the-eardrum"
+  },
+  "1009": {
+   "name": "Scissure",
+   "developer_name": "SCISSURE",
+   "code": "scissure"
+  },
+  "1017": {
+   "name": "Neck Bruise",
+   "developer_name": "NECK_BRUISE",
+   "code": "neck-bruise"
+  },
+  "1020": {
+   "name": "Hearing Trauma",
+   "developer_name": "HEARING_TRAUMA",
+   "code": "hearing-trauma"
+  },
+  "1043": {
+   "name": "Corn",
+   "developer_name": "CORN",
+   "code": "corn"
+  },
+  "1068": {
+   "name": "Craze In The Middle Finger",
+   "developer_name": "CRAZE_IN_THE_MIDDLE_FINGER",
+   "code": "craze-in-the-middle-finger"
+  },
+  "1083": {
+   "name": "Coccyx Fistula",
+   "developer_name": "COCCYX_FISTULA",
+   "code": "coccyx-fistula"
+  },
+  "1488": {
+   "name": "Accurate Pass Percentage",
+   "developer_name": "ACCURATE_PASS_PERCENTAGE",
+   "code": "accurate-pass-percentage"
+  },
+  "1489": {
+   "name": "Treatments",
+   "developer_name": "TREATMENTS",
+   "code": "treatment"
+  },
+  "1490": {
+   "name": "Man of Match",
+   "developer_name": "MAN_OF_MATCH",
+   "code": "man-of-match"
+  },
+  "1491": {
+   "name": "Duels Lost",
+   "developer_name": "DUELS_LOST",
+   "code": "duels-lost"
+  },
+  "1492": {
+   "name": "Promotion - World Cup (Play Offs)",
+   "developer_name": "PROMOTION_WORLD_CUP_PLAY_OFFS",
+   "code": "promotion-world-cup-play-offs"
+  },
+  "1493": {
+   "name": "Promotion - Europa League (Play Offs)",
+   "developer_name": "PROMOTION_EUROPA_LEAGUE_PLAYOFFS",
+   "code": "promotion-europa-league-playoffs"
+  },
+  "1494": {
+   "name": "Ranking of third-placed teams",
+   "developer_name": "RANKING_OF_THIRD_PLACED_TEAMS",
+   "code": "ranking-of-third-placed-teams"
+  },
+  "1495": {
+   "name": "Roughing",
+   "developer_name": "ROUGHING",
+   "code": "roughing"
+  },
+  "1496": {
+   "name": "Foul",
+   "developer_name": "FOUL",
+   "code": "foul"
+  },
+  "1497": {
+   "name": "Argument",
+   "developer_name": "ARGUMENT",
+   "code": "argument"
+  },
+  "1498": {
+   "name": "Violent conduct",
+   "developer_name": "VIOLENT_CONDUCT",
+   "code": "violent-conduct"
+  },
+  "1499": {
+   "name": "Handball",
+   "developer_name": "HANDBALL",
+   "code": "handball"
+  },
+  "1500": {
+   "name": "Dangerous play",
+   "developer_name": "DANGEROUS_PLAY",
+   "code": "dangerous-play"
+  },
+  "1501": {
+   "name": "Time wasting",
+   "developer_name": "TIME_WASTING",
+   "code": "time-wasting"
+  },
+  "1502": {
+   "name": "Persistent fouling",
+   "developer_name": "PERSITENT_FOULING",
+   "code": "persistent-fouling"
+  },
+  "1503": {
+   "name": "Simulation",
+   "developer_name": "SIMULATION",
+   "code": "simulation"
+  },
+  "1504": {
+   "name": "Entering field unallowed",
+   "developer_name": "ENTERING_FIELD_UNALLOWED",
+   "code": "entering_field_unallowed"
+  },
+  "1505": {
+   "name": "Professional last man foul",
+   "developer_name": "PROFESSIONAL_LAST_MAN_FOUL",
+   "code": "professional-last-man-foul"
+  },
+  "1506": {
+   "name": "Off the ball foul",
+   "developer_name": "OFF_THE_BALL_FOUL",
+   "code": "off-the-ball-foul"
+  },
+  "1507": {
+   "name": "Penalty Scored",
+   "developer_name": "PENALTY_SCORED",
+   "code": "penalty-scored"
+  },
+  "1508": {
+   "name": "Penalty shot off target",
+   "developer_name": "PENALTY_SHOT_OFF_TARGET",
+   "code": "penalty-shot-off-target"
+  },
+  "1509": {
+   "name": "Penalty saved by  goalkeeper",
+   "developer_name": "PENALTY_SAVED_BY_GOALKEEPER",
+   "code": "penalty-saved-by-goalkeeper"
+  },
+  "1510": {
+   "name": "Hit the post",
+   "developer_name": "HIT_THE_POST",
+   "code": "hit-the-post"
+  },
+  "1511": {
+   "name": "Holding",
+   "developer_name": "HOLDING",
+   "code": "holding"
+  },
+  "1512": {
+   "name": "Goal Disallowed",
+   "developer_name": "GOAL_DISALLOWED",
+   "code": "goal-disallowed"
+  },
+  "1513": {
+   "name": "Elbowing",
+   "developer_name": "ELBOWING",
+   "code": "elbowing"
+  },
+  "1514": {
+   "name": "Offside",
+   "developer_name": "OFFSIDE",
+   "code": "offside"
+  },
+  "1515": {
+   "name": "Diving",
+   "developer_name": "DIVING",
+   "code": "diving"
+  },
+  "1516": {
+   "name": "Tripping",
+   "developer_name": "TRIPPING",
+   "code": "tripping"
+  },
+  "1517": {
+   "name": "Handling",
+   "developer_name": "HANDLING",
+   "code": "handling"
+  },
+  "1518": {
+   "name": "Taking of shirt",
+   "developer_name": "TAKING_OF_SHIRT",
+   "code": "taking-of-shirt"
+  },
+  "1519": {
+   "name": "Free Kick",
+   "developer_name": "FREE_KICK",
+   "code": "free-kick"
+  },
+  "1520": {
+   "name": "Long distance shot",
+   "developer_name": "LONG_DISTANCE_SHOT",
+   "code": "long-distance-shot"
+  },
+  "1521": {
+   "name": "Left foot shot",
+   "developer_name": "LEFT_FOOT_SHOT",
+   "code": "left-foot-shot"
+  },
+  "1522": {
+   "name": "Right foot shot",
+   "developer_name": "RIGHT_FOOT_SHOT",
+   "code": "right-foot-shot"
+  },
+  "1523": {
+   "name": "Tactical sub",
+   "developer_name": "TACTICAL_SUB",
+   "code": "tactical-sub"
+  },
+  "1524": {
+   "name": "Substitution because of injury",
+   "developer_name": "SUB_BECAUSE_OF_INJURY",
+   "code": "sub-because-of-injury"
+  },
+  "1525": {
+   "name": "Current",
+   "developer_name": "CURRENT",
+   "code": "current"
+  },
+  "1526": {
+   "name": "Goal Difference, Goals Scored",
+   "developer_name": "GOAL_DIFFERENCE_GOALS_SCORED",
+   "code": "goal-difference-goals-scored"
+  },
+  "1527": {
+   "name": "Counter Attacks",
+   "developer_name": "COUNTER_ATTACKS",
+   "code": "counter-attacks"
+  },
+  "1533": {
+   "name": "Successful Crosses Percentage",
+   "developer_name": "SUCCESSFUL_CROSSES_PERCENTAGE",
+   "code": "successful-crosses-percentage"
+  },
+  "1535": {
+   "name": "Goalkeeper Goals Conceded",
+   "developer_name": "GOALKEEPER_GOALS_CONCEDED",
+   "code": "goalkeeper-goals-conceded"
+  },
+  "1584": {
+   "name": "Accurate Passes Percentage",
+   "developer_name": "ACCURATE_PASSES_PERCENTAGE",
+   "code": "accurate-passes-percentage"
+  },
+  "1585": {
+   "name": "Corners Over/Under 10.5 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_10_5_PROBABILITY",
+   "code": "corners-over-under-10_5-probability"
+  },
+  "1600": {
+   "name": "Penalty Topscorer",
+   "developer_name": "PENALTY_TOPSCORER",
+   "code": "penalty-topscorer"
+  },
+  "1601": {
+   "name": "Missed Penalty Topscorer",
+   "developer_name": "MISSED_PENALTY_TOPSCORER",
+   "code": "missed-penalty-topscorer"
+  },
+  "1604": {
+   "name": "9th-12th Place Play-offs",
+   "developer_name": "9th_12th_Place_Play_Offs",
+   "code": "9th-12th Place Play-offs"
+  },
+  "1605": {
+   "name": "Successful Dribbles Percentage",
+   "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
+   "code": "successful-dribbles-percentage"
+  },
+  "1675": {
+   "name": "Highlight",
+   "developer_name": "HIGHLIGHT",
+   "code": "highlight"
+  },
+  "1677": {
+   "name": "Shots",
+   "developer_name": "SHOTS",
+   "code": "shots"
+  },
+  "1678": {
+   "name": "Head to Head + Ranking Previous Stage",
+   "developer_name": "HEAD_TO_HEAD_RANKING_PREV_STAGE",
+   "code": "head-to-head-ranking-prev-stage"
+  },
+  "1679": {
+   "name": "Over/Under 4.5 Probability",
+   "developer_name": "OVER_UNDER_4_5_PROBABILITY",
+   "code": "over-under-4_5-probability"
+  },
+  "1680": {
+   "name": "Split Points Up Rule",
+   "developer_name": "SPLIT_POINTS_UP_RULE",
+   "code": "split-points-up-rule"
+  },
+  "1682": {
+   "name": "Doubtful",
+   "developer_name": "DOUBTFUL",
+   "code": "doubtful"
+  },
+  "1683": {
+   "name": "Corners Over/Under 5 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_5_PROBABILITY",
+   "code": "corners-over-under-5-probability"
+  },
+  "1684": {
+   "name": "Corners Over/Under 11 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_11_PROBABILITY",
+   "code": "corners-over-under-11-probability"
+  },
+  "1685": {
+   "name": "Corners Over/Under 6 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_6_PROBABILITY",
+   "code": "corners-over-under-6-probability"
+  },
+  "1686": {
+   "name": "Corners Over/Under 7 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_7_PROBABILITY",
+   "code": "corners-over-under-7-probability"
+  },
+  "1687": {
+   "name": "Corners Over/Under 9 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_9_PROBABILITY",
+   "code": "corners-over-under-9-probability"
+  },
+  "1688": {
+   "name": "Corners Over/Under 10 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_10_PROBABILITY",
+   "code": "corners-over-under-10-probability"
+  },
+  "1689": {
+   "name": "Corners Over/Under 8 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_8_PROBABILITY",
+   "code": "corners-over-under-8-probability"
+  },
+  "1690": {
+   "name": "Corners Over/Under 4 Probability",
+   "developer_name": "CORNERS_OVER_UNDER_4_PROBABILITY",
+   "code": "corners-over-under-4-probability"
+  },
+  "1692": {
+   "name": "Suspension",
+   "developer_name": "SUSPENSION",
+   "code": "suspension"
+  },
+  "1693": {
+   "name": "Not Available",
+   "developer_name": "NOT_AVAILABLE",
+   "code": "not-available"
+  },
+  "1694": {
+   "name": "Header",
+   "developer_name": "HEADER",
+   "code": "header"
+  },
+  "1695": {
+   "name": "Shot",
+   "developer_name": "SHOT",
+   "code": "shot"
+  },
+  "1696": {
+   "name": "Leaving Field",
+   "developer_name": "LEAVING_FIELD"
+  },
+  "1697": {
+   "name": "VAR_CARD",
+   "developer_name": "VAR_CARD"
+  },
+  "2127": {
+   "name": "Card Withdrawn",
+   "developer_name": "CARD_WITHDRAWN"
+  },
+  "5303": {
+   "name": "Unsporting behaviour",
+   "developer_name": "UNSPORTING_BEHAVIOUR"
+  },
+  "5304": {
+   "name": "Expected Goals (xG)",
+   "developer_name": "EXPECTED_GOALS",
+   "code": "expected-goals"
+  },
+  "5305": {
+   "name": "Expected Goals on Target (xGoT)",
+   "developer_name": "EXPECTED_GOALS_ON_TARGET",
+   "code": "expected-goals-on-target"
+  },
+  "7939": {
+   "name": "Expected Points (xPTS)",
+   "developer_name": "EXPECTED_POINTS",
+   "code": "expected-points"
+  },
+  "7940": {
+   "name": "Expected Goals Penalties (xGPen)",
+   "developer_name": "EXPECTED_GOALS_PENALTIES",
+   "code": "expected-goals-penalties"
+  },
+  "7941": {
+   "name": "Expected Goals Free Kicks (xGFK)",
+   "developer_name": "EXPECTED_GOALS_FREE_KICKS",
+   "code": "expected-goals-free-kicks"
+  },
+  "7942": {
+   "name": "Expected Goals Corners (xGC)",
+   "developer_name": "EXPECTED_GOALS_CORNERS",
+   "code": "expected-goals-corners"
+  },
+  "7943": {
+   "name": "Non-Penalty Expected Goals (npxG)",
+   "developer_name": "EXPECTED_NON_PENALTY_GOALS",
+   "code": "expected-goals-non-penalty"
+  },
+  "7944": {
+   "name": "Expected Goals Set Play (xGSP)",
+   "developer_name": "EXPECTED_GOALS_SET_PLAY",
+   "code": "expected-goals-set-play"
+  },
+  "7945": {
+   "name": "Expected Goals Open Play (xGOP)",
+   "developer_name": "EXPECTED_GOALS_OPEN_PLAY",
+   "code": "expected-goals-open-play"
+  },
+  "9672": {
+   "developer_name": "AVERAGE_PLAYER_HEIGHT",
+   "code": "average-player-height"
+  },
+  "9673": {
+   "developer_name": "AVERAGE_PLAYER_AGE",
+   "code": "average-player-age"
+  },
+  "9674": {
+   "developer_name": "AMOUNT_OF_FOREIGNERS",
+   "code": "amount-of-foreigners"
+  },
+  "9675": {
+   "developer_name": "PLAYERS_FOOTING",
+   "code": "players-footing"
+  },
+  "9676": {
+   "developer_name": "AVERAGE_POINTS_PER_GAME",
+   "code": "average-points-per-game"
+  },
+  "9677": {
+   "developer_name": "APPEARING_PLAYERS",
+   "code": "appearing-players"
+  },
+  "9678": {
+   "developer_name": "MOST_SUBSTITUTED_PLAYERS",
+   "code": "most-substituted-players"
+  },
+  "9679": {
+   "developer_name": "MOST_INJURED_PLAYERS",
+   "code": "most-injured-players"
+  },
+  "9680": {
+   "developer_name": "PENALTY_CONVERSION_RATE",
+   "code": "penalty-conversion-rate"
+  },
+  "9681": {
+   "developer_name": "SHOT_CONVERSION_RATE",
+   "code": "shot-conversion-rate"
+  },
+  "9682": {
+   "developer_name": "SHOT_ON_TARGET_PERCENTAGE",
+   "code": "shot-on-target-percentage"
+  },
+  "9683": {
+   "developer_name": "CARDS_PER_FOUL",
+   "code": "cards-per-foul"
+  },
+  "9684": {
+   "name": "Expected Goals Difference (xGD)",
+   "developer_name": "EXPECTED_GOALS_DIFFERENCE",
+   "code": "Expected-goals-difference"
+  },
+  "9685": {
+   "name": "Shooting Performance (SP)",
+   "developer_name": "SHOOTING_PERFORMANCE",
+   "code": "Shooting_performance"
+  },
+  "9686": {
+   "name": "Expected Goals Prevented (xGP)",
+   "developer_name": "EXPECTED_GOALS_PREVENTED",
+   "code": "Expected-goals-prevented"
+  },
+  "9687": {
+   "name": "Expected Goals Against (xGA)",
+   "developer_name": "EXPECTED_GOALS_AGAINST",
+   "code": "Expected-goals-against"
+  },
+  "9688": {
+   "developer_name": "END_OF_LOAN",
+   "code": "end-of-loan"
+  },
+  "9698": {
+   "name": "Penalty confirmed",
+   "developer_name": "PENALTY_CONFIRMED"
+  },
+  "9699": {
+   "name": "Penalty cancelled",
+   "developer_name": "PENALTY_CANCELLED"
+  },
+  "9701": {
+   "name": "Card adjusted",
+   "developer_name": "CARD_ADJUSTED"
+  },
+  "9702": {
+   "name": "Red card cancelled",
+   "developer_name": "RED_CARD_CANCELLED"
+  },
+  "9703": {
+   "name": "Goal awarded",
+   "developer_name": "GOAL_AWARDED"
+  },
+  "9704": {
+   "name": "Review",
+   "developer_name": "REVIEW"
+  },
+  "9706": {
+   "developer_name": "CHANCES_CREATED",
+   "code": "Chances-created"
+  },
+  "27248": {
+   "developer_name": "SCORING_FREQUENCY",
+   "code": "Scoring-frequency"
+  },
+  "27249": {
+   "developer_name": "TOTAL_MINUTES_PLAYED",
+   "code": "Total-minutes-played"
+  },
+  "27250": {
+   "developer_name": "MOST_SCORED_HALF",
+   "code": "Most-scored-half"
+  },
+  "27251": {
+   "developer_name": "MOST_FREQUENT_SCORING_MINUTE",
+   "code": "Most-frequent-scoring-minute"
+  },
+  "27252": {
+   "developer_name": "INTERCEPTION_STATS",
+   "code": "Interception-stats"
+  },
+  "27253": {
+   "developer_name": "PASS_STATS",
+   "code": "Pass-stats"
+  },
+  "27254": {
+   "developer_name": "ASSIST_STATS",
+   "code": "Assist-stats"
+  },
+  "27255": {
+   "developer_name": "CROSSES_BLOCKED",
+   "code": "Crosses-blocked"
+  },
+  "27256": {
+   "developer_name": "HALF_RESULTS",
+   "code": "Half-results"
+  },
+  "27257": {
+   "developer_name": "TEAM_OF_THE_WEEK",
+   "code": "team-of-the-week"
+  },
+  "27258": {
+   "developer_name": "NATIONAL_TEAM_PLAYERS",
+   "code": "National-team-players"
+  },
+  "27259": {
+   "developer_name": "HATTRICKS",
+   "code": "Hattricks"
+  },
+  "27260": {
+   "developer_name": "INJURY_TIME_GOALS",
+   "code": "Injury Time Goals"
+  },
+  "27261": {
+   "developer_name": "GOAL_RESULTS",
+   "code": "Goal Results"
+  },
+  "27263": {
+   "developer_name": "GAMES_PLAYED",
+   "code": "Games Played"
+  },
+  "27264": {
+   "developer_name": "SUCCESSFUL_LONG_PASSES",
+   "code": "Successful Long Passes"
+  },
+  "27265": {
+   "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
+   "code": "Successful Long Passes Percentage"
+  },
+  "27266": {
+   "developer_name": "AERIALS_LOST",
+   "code": "Aerials Lost"
+  },
+  "27267": {
+   "developer_name": "TACKLES_WON",
+   "code": "Tackles Won"
+  },
+  "27268": {
+   "developer_name": "TACKLES_WON_PERCENTAGE",
+   "code": "Tacles Won Percentage"
+  },
+  "27269": {
+   "developer_name": "PASSES_IN_FINAL_THIRD",
+   "code": "Passes In Final Third"
+  },
+  "27270": {
+   "developer_name": "LONG_BALLS_WON_PERCENTAGE",
+   "code": "Long Balls Won Percentage"
+  },
+  "27271": {
+   "developer_name": "BALL_RECOVERY",
+   "code": "Ball Recovery"
+  },
+  "27272": {
+   "developer_name": "BACKWARD_PASSES",
+   "code": "Backward Passes"
+  },
+  "27273": {
+   "developer_name": "POSSESSION_LOST",
+   "code": "Possession Lost"
+  },
+  "27274": {
+   "developer_name": "AERIALS",
+   "code": "Aerials"
+  },
+  "27275": {
+   "developer_name": "AERIALS_WON_PERCENTAGE",
+   "code": "Aerials Won Percentage"
+  },
+  "27276": {
+   "developer_name": "DUELS_WON_PERCENTAGE",
+   "code": "Duels Won Percentage"
+  },
+  "48997": {
+   "developer_name": "ERROR_LEAD_TO_SHOT",
+   "code": "Error Lead To Shot"
+  },
+  "76084": {
+   "name": "Match Fact First to Score Doesn't Win Streak",
+   "code": "first-to-score-doesnt-win-streak"
+  },
+  "76085": {
+   "name": "Match Facts Historic Outcomes",
+   "code": "historic-outcomes"
+  },
+  "76086": {
+   "name": "Match Facts Outcomes by Goals",
+   "developer_name": "MATCH_FACT_OUTCOMES_BY_GOALS"
+  },
+  "76087": {
+   "name": "Match Facts Outcomes by Players Sent Off Field",
+   "developer_name": "MATCH_FACT_OUTCOMES_BY_PLAYERS_SENT_OFF_FIELD"
+  },
+  "76088": {
+   "name": "Match Facts Win",
+   "code": "win"
+  },
+  "76089": {
+   "name": "Match Facts Loss",
+   "code": "loss"
+  },
+  "76090": {
+   "name": "Match Facts Cleansheet",
+   "code": "cleansheet"
+  },
+  "76091": {
+   "name": "Match Facts Goals Conceded",
+   "code": "goals-conceded"
+  },
+  "76092": {
+   "name": "Match Facts First to Score",
+   "code": "first-to-score"
+  },
+  "76093": {
+   "name": "Match Facts Last Win Information",
+   "code": "last-win-information"
+  },
+  "76094": {
+   "name": "Match Facts Win Streak",
+   "code": "win-streak"
+  },
+  "76095": {
+   "name": "Match Facts Loss Streak",
+   "code": "loss-streak"
+  },
+  "76096": {
+   "name": "Match Facts Draw Streak",
+   "code": "draw-streak"
+  },
+  "76097": {
+   "name": "Match Facts Unbeaten Streak",
+   "code": "unbeaten-streak"
+  },
+  "76098": {
+   "name": "Match Facts Winless Streak",
+   "code": "winless-streak"
+  },
+  "76099": {
+   "name": "Match Facts Was First to Score Streak",
+   "code": "was-first-to-score-streak"
+  },
+  "76100": {
+   "name": "Match Facts Was Not First to Score Streak",
+   "code": "was-not-first-to-score-streak"
+  },
+  "76101": {
+   "name": "Match Facts Expected Goals on Target",
+   "code": "expected-goals-on-target"
+  },
+  "76102": {
+   "name": "Match Facts Goal Timings",
+   "code": "goals-timings"
+  },
+  "76103": {
+   "name": "Match Facts Goal Line Streak",
+   "code": "goal-line-streak"
+  },
+  "76104": {
+   "name": "Match Facts Most Recent Match",
+   "code": "most-recent-match"
+  },
+  "76105": {
+   "name": "Match Facts Draw",
+   "code": "draw"
+  },
+  "76106": {
+   "name": "Match Facts Goal",
+   "code": "goals"
+  },
+  "76107": {
+   "name": "Match Facts Corners",
+   "code": "corners"
+  },
+  "76108": {
+   "name": "Match Facts Redcard",
+   "code": "redcards"
+  },
+  "76109": {
+   "name": "Match Facts Yellowcards",
+   "code": "yellow-cards"
+  },
+  "76110": {
+   "name": "Match Facts Yellowred Cards",
+   "code": "yellowred-cards"
+  },
+  "76111": {
+   "name": "Match Fact Both Teams to Score",
+   "code": "btts"
+  },
+  "76112": {
+   "name": "Match Fact Winning Margin",
+   "code": "winning-margin"
+  },
+  "76113": {
+   "name": "Match Fact Goal Line",
+   "code": "goal-line"
+  },
+  "76114": {
+   "name": "Match Fact Expected Goals",
+   "code": "expected-goal"
+  },
+  "76115": {
+   "name": "Total H2H Matches",
+   "code": "total-h2h-matches"
+  },
+  "76116": {
+   "name": "Match Facts First to Score Wins Streak",
+   "code": "first-to-score-wins-streak"
+  },
+  "81170": {
+   "name": "Match Fact Missing Key Players",
+   "code": "missing-key-players"
+  },
+  "81171": {
+   "name": "Match Fact No Early Goal Streak",
+   "code": "no-early-goal-streak"
+  },
+  "81172": {
+   "name": "Match Fact No Late Goal Streak",
+   "code": "no-late-goal-streak"
+  },
+  "81173": {
+   "name": "Match Fact Rating",
+   "code": "ratings"
+  },
+  "81174": {
+   "name": "Match Fact Team Fatigue",
+   "code": "team-fatigue"
+  },
+  "81175": {
+   "name": "Match Fact BTTS Streak",
+   "code": "btts-streak"
+  },
+  "81176": {
+   "name": "Match Fact Cards Count in Match",
+   "code": "cards-count-in-match"
+  },
+  "81177": {
+   "name": "Match Fact Cards Count",
+   "code": "cards-count"
+  },
+  "81178": {
+   "name": "Match Fact Cards Streak",
+   "code": "cards-streak"
+  },
+  "81179": {
+   "name": "Match Fact Cards Streak in Match",
+   "code": "cards-streak-in-match"
+  },
+  "81180": {
+   "name": "Match Fact Early Goal Streak",
+   "code": "early-goal-streak"
+  },
+  "81181": {
+   "name": "Match Fact Late Goal Streak",
+   "code": "late-goal-streak"
+  },
+  "87860": {
+   "name": "Match Fact Last 5 Win",
+   "code": "last-5-win"
+  },
+  "87861": {
+   "name": "Match Fact Last 5 Draw",
+   "code": "last-5-draw"
+  },
+  "87862": {
+   "name": "Match Fact Last 5 Loss",
+   "code": "last-5-loss"
+  },
+  "87863": {
+   "name": "Match Fact Last 5 Cleansheet",
+   "code": "last-5-cleansheet"
+  },
+  "87864": {
+   "name": "Match Fact Last 5 Goals",
+   "code": "last-5-goals"
+  },
+  "87865": {
+   "name": "Match Fact Last 5 Goals Conceded",
+   "code": "last-5-goals-conceded"
+  },
+  "87866": {
+   "name": "Match Fact Last 5 Corners",
+   "code": "last-5-corners"
+  },
+  "87867": {
+   "name": "Match Fact Last 5 Redcards",
+   "code": "last-5-redcards"
+  },
+  "87868": {
+   "name": "Match Fact Last 5 Yellowcards",
+   "code": "last-5-yellowcards"
+  },
+  "87869": {
+   "name": "Match Fact Last 5 Yellow-red cards",
+   "code": "last-5-yellow-red-cards"
+  },
+  "87870": {
+   "name": "Match Fact Last 5 Shots Total",
+   "code": "last-5-shots-total"
+  },
+  "87871": {
+   "name": "Match Fact Last 5 Shots on Target",
+   "code": "last-5-shots-on-target"
+  },
+  "87872": {
+   "name": "Match Fact Last 5 First to Score",
+   "code": "last-5-first-to-score"
+  },
+  "87873": {
+   "name": "Match Fact Last 10 Win",
+   "code": "last-10-win"
+  },
+  "87874": {
+   "name": "Match Fact Last 10 Draw",
+   "code": "last-10-draw"
+  },
+  "87875": {
+   "name": "Match Fact Last 10 Loss",
+   "code": "last-10-loss"
+  },
+  "87876": {
+   "name": "Match Fact Last 10 Cleansheet",
+   "code": "last-10-cleansheet"
+  },
+  "87877": {
+   "name": "Match Fact Last 10 Goals",
+   "code": "last-10-goals"
+  },
+  "87878": {
+   "name": "Match Fact Last 10 Goals Conceded",
+   "code": "last-10-goals-conceded"
+  },
+  "87879": {
+   "name": "Match Fact Last 10 Corners",
+   "code": "last-10-corners"
+  },
+  "87880": {
+   "name": "Match Fact Last 10 Redcards",
+   "code": "last-10-redcards"
+  },
+  "87881": {
+   "name": "Match Fact Last 10 Yellowcards",
+   "code": "last-10-yellowcards"
+  },
+  "87882": {
+   "name": "Match Fact Last 10 Yellowred Cards",
+   "code": "last-10-yellowred-cards"
+  },
+  "87883": {
+   "name": "Match Fact Last 10 Shots Total",
+   "code": "last-10-shots-total"
+  },
+  "87884": {
+   "name": "Match Fact Last 10 Shots on Target",
+   "code": "last-10-shots-on-target"
+  },
+  "87885": {
+   "name": "Match Fact Last 10 First to Score",
+   "code": "last-10-first-to-score"
+  },
+  "87886": {
+   "name": "Match Fact Last 15 Win",
+   "code": "last-15-win"
+  },
+  "87887": {
+   "name": "Match Fact Last 15 Draw",
+   "code": "last-15-draw"
+  },
+  "87888": {
+   "name": "Match Fact Last 15 Loss",
+   "code": "last-15-loss"
+  },
+  "87889": {
+   "name": "Match Fact Last 15 Cleansheet",
+   "code": "last-15-cleansheet"
+  },
+  "87890": {
+   "name": "Match Fact Last 15 Goals",
+   "code": "last-15-goals"
+  },
+  "87891": {
+   "name": "Match Fact Last 15 Goals Conceded",
+   "code": "last-15-goals-conceded"
+  },
+  "87892": {
+   "name": "Match Fact Last 15 Corners",
+   "code": "last-15-corners"
+  },
+  "87893": {
+   "name": "Match Fact Last 15 Redcards",
+   "code": "last-15-redcards"
+  },
+  "87894": {
+   "name": "Match Fact Last 15 Yellowcards",
+   "code": "last-15-yellowcards"
+  },
+  "87895": {
+   "name": "Match Fact Last 15 Yellowred Cards",
+   "code": "last-15-yellowred-cards"
+  },
+  "87896": {
+   "name": "Match Fact Last 15 Shots Total",
+   "code": "last-15-shots-total"
+  },
+  "87897": {
+   "name": "Match Fact Last 15 Shots on Target",
+   "code": "last-15-shots-on-target"
+  },
+  "87898": {
+   "name": "Match Fact Last 15 First to Score",
+   "code": "last-15-first-to-score"
+  },
+  "87899": {
+   "name": "Match Fact Last 25 Win",
+   "code": "last-25-win"
+  },
+  "87900": {
+   "name": "Match Fact Last 25 Draw",
+   "code": "last-25-draw"
+  },
+  "87901": {
+   "name": "Match Fact Last 25 Loss",
+   "code": "last-25-loss"
+  },
+  "87902": {
+   "name": "Match Fact Last 25 Cleansheet",
+   "code": "last-25-cleansheet"
+  },
+  "87903": {
+   "name": "Match Fact Last 25 Goals",
+   "code": "last-25-goals"
+  },
+  "87904": {
+   "name": "Match Fact Last 25 Goals Conceded",
+   "code": "last-25-goals-conceded"
+  },
+  "87905": {
+   "name": "Match Fact Last 25 Corners",
+   "code": "last-25-corners"
+  },
+  "87906": {
+   "name": "Match Fact Last 25 Redcards",
+   "code": "last-25-redcards"
+  },
+  "87907": {
+   "name": "Match Fact Last 25 Yellowcards",
+   "code": "last-25-yellowcards"
+  },
+  "87908": {
+   "name": "Match Fact Last 25 Yellowred Cards",
+   "code": "last-25-yellowred-cards"
+  },
+  "87909": {
+   "name": "Match Fact Last 25 Shots Total",
+   "code": "last-25-shots-total"
+  },
+  "87910": {
+   "name": "Match Fact Last 25 Shots on Target",
+   "code": "last-25-shots-on-target"
+  },
+  "87911": {
+   "name": "Match Fact Last 25 First to Score",
+   "code": "last-25-first-to-score"
+  },
+  "87912": {
+   "name": "Match Fact Last 5 Goal Line",
+   "code": "last-5-goal-line"
+  },
+  "87913": {
+   "name": "Match Fact Last 5 BTTS",
+   "code": "last-5-btts"
+  },
+  "87914": {
+   "name": "Match Fact Last 5 Winning Margin",
+   "code": "last-5-winning-margin"
+  },
+  "87915": {
+   "name": "Match Fact Last 10 Goal Line",
+   "code": "last-10-goal-line"
+  },
+  "87916": {
+   "name": "Match Fact Last 10 BTTS",
+   "code": "last-10-btts"
+  },
+  "87917": {
+   "name": "Match Fact Last 10 Winning Margin",
+   "code": "last-10-winning-margin"
+  },
+  "87918": {
+   "name": "Match Fact Last 15 Goal Line",
+   "code": "last-15-goal-line"
+  },
+  "87919": {
+   "name": "Match Fact Last 15 BTTS",
+   "code": "last-15-btts"
+  },
+  "87920": {
+   "name": "Match Fact Last 15 Winning Margin",
+   "code": "last-15-winning-margin"
+  },
+  "87921": {
+   "name": "Match Fact Last 25 Goal Line",
+   "code": "last-25-goal-line"
+  },
+  "87922": {
+   "name": "Match Fact Last 25 BTTS",
+   "code": "last-25-btts"
+  },
+  "87923": {
+   "name": "Match Fact Last 25 Winning Margin",
+   "code": "last-25-winning-margin"
+  },
+  "87924": {
+   "name": "Match Fact Last 5 Cards Count",
+   "code": "last-5-cards-count"
+  },
+  "87925": {
+   "name": "Match Fact Last 10 Cards Count",
+   "code": "last-10-cards-count"
+  },
+  "87926": {
+   "name": "Match Fact Last 15 Cards Count",
+   "code": "last-15-cards-count"
+  },
+  "87927": {
+   "name": "Match Fact Last 25 Cards Count",
+   "code": "last-25-cards-count"
+  },
+  "87928": {
+   "name": "Match Fact Last 5 Goal Timings",
+   "code": "last-5-goal-timings"
+  },
+  "87929": {
+   "name": "Match Fact Last 10 Goal Timings",
+   "code": "last-10-goal-timings"
+  },
+  "87930": {
+   "name": "Match Fact Last 15 Goal Timings",
+   "code": "last-15-goal-timings"
+  },
+  "87931": {
+   "name": "Match Fact Last 25 Goal Timings",
+   "code": "last-25-goal-timings"
+  },
+  "87932": {
+   "name": "Match Fact Last 10 Cards Count in Match",
+   "code": "last-10-cards-count-in-match"
+  },
+  "109563": {
+   "name": "Match Fact Corners Live Comparison",
+   "developer_name": "MATCH_FACT_CORNERS_LIVE_COMPARISON"
+  },
+  "109564": {
+   "name": "Match Fact First to Score Doesn't Win Streak (Live)",
+   "developer_name": "MATCH_FACT_FIRST_TO_SCORE_DOESNT_WIN_STREAK_LIVE"
+  },
+  "109565": {
+   "name": "Match Fact Winless Streak Coach",
+   "code": "match-fact-winless-streak-coach"
+  },
+  "109566": {
+   "name": "Match Fact Loss Coach",
+   "code": "match-fact-loss-coach"
+  },
+  "109567": {
+   "name": "Match Fact Dangerous Attack Live Comparison",
+   "developer_name": "MATCH_FACT_DANGEROUS_ATTACKS_LIVE_COMPARISON"
+  },
+  "109568": {
+   "name": "Match Fact Passes Comparison",
+   "code": "match-fact-passes-comparison"
+  },
+  "109569": {
+   "name": "Match Fact Attacks Live Comparison",
+   "developer_name": "MATCH_FACT_ATTACKS_LIVE_COMPARISON"
+  },
+  "109570": {
+   "name": "Match Fact Draw Streak Coach",
+   "code": "match-fact-draw-streak-coach"
+  },
+  "109571": {
+   "name": "Match Fact BTTS Streak (Live)",
+   "developer_name": "MATCH_FACT_BTTS_STREAK_LIVE"
+  },
+  "109572": {
+   "name": "Match Fact Expected Goals Comparison",
+   "code": "match-fact-expected-goals-comparison"
+  },
+  "109573": {
+   "name": "Match Fact Was Not First to Score Streak (Live)",
+   "developer_name": "MATCH_FACT_WAS_NOT_FIRST_TO_SCORE_STREAK_LIVE"
+  },
+  "109574": {
+   "name": "Match Fact Shots On Target Comparison",
+   "code": "match-fact-shots-on-target-comparison"
+  },
+  "109575": {
+   "name": "Match Fact Cards Per Foul Ref Comparison",
+   "code": "match-fact-cards-per-foul-ref-comparison"
+  },
+  "109576": {
+   "name": "Match Fact Yellow Cards Comparison",
+   "code": "match-fact-yellowcards-comparison"
+  },
+  "109577": {
+   "name": "Match Fact Last 5 Draw Coach",
+   "code": "match-fact-last-5-draw-coach"
+  },
+  "109578": {
+   "name": "Match Fact Last 5 Win Coach",
+   "code": "match-fact-last-5-win-coach"
+  },
+  "109579": {
+   "name": "Match Fact No Early Goal Streak (Live)",
+   "developer_name": "MATCH_FACT_NO_EARLY_GOAL_STREAK_LIVE"
+  },
+  "109580": {
+   "name": "Match Fact Unbeaten Streak Coach",
+   "code": "match-fact-unbeaten-streak-coach"
+  },
+  "109581": {
+   "name": "Match Fact Loss Streak (Live)",
+   "developer_name": "MATCH_FACT_LOSS_STREAK_LIVE"
+  },
+  "109582": {
+   "name": "Match Fact Free Kicks Live Comparison",
+   "developer_name": "MATCH_FACT_FREE_KICKS_LIVE_COMPARISON"
+  },
+  "109583": {
+   "name": "Match Fact No Late Goal Streak (Live)",
+   "developer_name": "MATCH_FACT_NO_LATE_GOAL_STREAK_LIVE"
+  },
+  "109584": {
+   "name": "Match Fact Win Streak Coach",
+   "code": "match-fact-win-streak-coach"
+  },
+  "109585": {
+   "name": "Match Fact Loss Streak Coach",
+   "code": "match-fact-loss-streak-coach"
+  },
+  "109586": {
+   "name": "Match Fact Red Cards Comparison",
+   "code": "match-fact-redcards-comparison"
+  },
+  "109587": {
+   "name": "Match Fact Shots Total Live Comparison",
+   "developer_name": "MATCH_FACT_SHOTS_TOTAL_LIVE_COMPARISON"
+  },
+  "109588": {
+   "name": "Match Fact Shooting Performance Comparison",
+   "code": "match-fact-shooting-performance-comparison"
+  },
+  "109589": {
+   "name": "Match Fact YellowRed Cards Per Foul Ref Comparison",
+   "code": "match-fact-yellowred-cards-per-foul-ref-comparison"
+  },
+  "109590": {
+   "name": "Match Fact Was First to Score Streak (Live)",
+   "developer_name": "MATCH_FACT_WAS_FIRST_TO_SCORE_STREAK_LIVE"
+  },
+  "109591": {
+   "name": "Match Fact Late Goal Streak (Live)",
+   "developer_name": "MATCH_FACT_LATE_GOAL_STREAK_LIVE"
+  },
+  "109592": {
+   "name": "Match Fact Fouls Comparison",
+   "code": "match-fact-fouls-comparison"
+  },
+  "109593": {
+   "name": "Match Fact Yellow Red Cards Comparison",
+   "code": "match-fact-yellowred-cards-comparison"
+  },
+  "109594": {
+   "name": "Match Fact Played For Other Team",
+   "code": "match-fact-played-for-other-team"
+  },
+  "109595": {
+   "name": "Match Fact Red Cards Per Foul Ref Comparison",
+   "code": "match-fact-redcards-per-foul-ref-comparison"
+  },
+  "109596": {
+   "name": "Match Fact Key Passes Comparison",
+   "code": "match-fact-key-passes-comparison"
+  },
+  "109597": {
+   "name": "Match Fact Last 5 Loss Coach",
+   "code": "match-fact-last-5-loss-coach"
+  },
+  "109598": {
+   "name": "Match Fact Shots on Target Live Comparison",
+   "developer_name": "MATCH_FACT_SHOTS_ON_TARGET_LIVE_COMPARISON"
+  },
+  "109599": {
+   "name": "Match Fact Duels Won Comparison",
+   "code": "match-fact-duels-won-comparison"
+  },
+  "109600": {
+   "name": "Match Fact Corners Comparison",
+   "code": "match-fact-corners-comparison"
+  },
+  "109601": {
+   "name": "Match Fact Unbeaten Streak (Live)",
+   "developer_name": "MATCH_FACT_UNBEATEN_STREAK_LIVE"
+  },
+  "109602": {
+   "name": "Match Fact Yellow Cards Per Foul Ref Comparison",
+   "code": "match-fact-yellowcards-per-foul-ref-comparison"
+  },
+  "109603": {
+   "name": "Match Fact Winless Streak (Live)",
+   "developer_name": "MATCH_FACT_WINLESS_STREAK_LIVE"
+  },
+  "109604": {
+   "name": "Match Fact Attacks Comparison",
+   "code": "match-fact-attacks-comparison"
+  },
+  "109605": {
+   "name": "Match Fact Win Streak (Live)",
+   "developer_name": "MATCH_FACT_WIN_STREAK_LIVE"
+  },
+  "109606": {
+   "name": "Match Fact Shots Total Comparison",
+   "code": "match-fact-shots-total-comparison"
+  },
+  "109607": {
+   "name": "Match Fact Total H2H Matches Coach",
+   "code": "match-fact-total-h2h-matches-coach"
+  },
+  "109608": {
+   "name": "Match Fact Draw Coach",
+   "code": "match-fact-draw-coach"
+  },
+  "109609": {
+   "name": "Match Fact Win Coach",
+   "code": "match-fact-win-coach"
+  },
+  "110624": {
+   "name": "Match Fact Shots on Target",
+   "code": "match-fact-shots-on-target"
+  },
+  "110625": {
+   "name": "Match Fact Shots Total",
+   "code": "match-fact-shots-total"
+  },
+  "117172": {
+   "developer_name": "CUMULATIVE_MINUTES_PLAYED",
+   "code": "Cumulative Minutes Played"
+  },
+  "121211": {
+   "name": "Overview Match Fact Summary",
+   "developer_name": "OVERVIEW_MATCH_FACT_SUMMARY"
+  }
+ },
+ "states": {
+  "1": {
+   "name": "Not Started",
+   "state": "NS"
+  },
+  "2": {
+   "name": "1st Half",
+   "state": "INPLAY_1ST_HALF"
+  },
+  "3": {
+   "name": "Half-Time",
+   "state": "HT"
+  },
+  "4": {
+   "name": "Regular Time Finished",
+   "state": "BREAK"
+  },
+  "5": {
+   "name": "Full-Time",
+   "state": "FT"
+  },
+  "6": {
+   "name": "Extra Time",
+   "state": "INPLAY_ET"
+  },
+  "7": {
+   "name": "Finished After Extra Time",
+   "state": "AET"
+  },
+  "8": {
+   "name": "Full-Time After Penalties",
+   "state": "FT_PEN"
+  },
+  "9": {
+   "name": "Penalty Shootout",
+   "state": "INPLAY_PENALTIES"
+  },
+  "10": {
+   "name": "Postponed",
+   "state": "POSTPONED"
+  },
+  "11": {
+   "name": "Suspended",
+   "state": "SUSPENDED"
+  },
+  "12": {
+   "name": "Cancelled",
+   "state": "CANCELLED"
+  },
+  "13": {
+   "name": "To Be Announced",
+   "state": "TBA"
+  },
+  "14": {
+   "name": "Walk Over",
+   "state": "WO"
+  },
+  "15": {
+   "name": "Abandoned",
+   "state": "ABANDONED"
+  },
+  "16": {
+   "name": "Delayed",
+   "state": "DELAYED"
+  },
+  "17": {
+   "name": "Awarded",
+   "state": "AWARDED"
+  },
+  "18": {
+   "name": "Interrupted",
+   "state": "INTERRUPTED"
+  },
+  "19": {
+   "name": "Awaiting Updates",
+   "state": "AWAITING_UPDATES"
+  },
+  "20": {
+   "name": "Deleted",
+   "state": "DELETED"
+  },
+  "21": {
+   "name": "Extra Time Break",
+   "state": "EXTRA_TIME_BREAK"
+  },
+  "22": {
+   "name": "2nd Half",
+   "state": "INPLAY_2ND_HALF"
+  },
+  "25": {
+   "name": "Penalties Break",
+   "state": "PEN_BREAK"
+  },
+  "26": {
+   "name": "Pending",
+   "state": "PENDING"
+  }
+ }
+}

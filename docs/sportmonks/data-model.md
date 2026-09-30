@@ -95,14 +95,14 @@ Fixture scores are nested under `scores`, each with a `description` and `score` 
     {
       "id": 1,
       "fixture_id": 19145782,
-      "type_id": 1,
+      "type_id": 1525,
       "description": "CURRENT",
       "score": { "goals": 2, "participant": "home" }
     },
     {
       "id": 2,
       "fixture_id": 19145782,
-      "type_id": 1,
+      "type_id": 1525,
       "description": "CURRENT",
       "score": { "goals": 1, "participant": "away" }
     }
@@ -110,7 +110,7 @@ Fixture scores are nested under `scores`, each with a `description` and `score` 
 }
 ```
 
-Score type descriptions: `CURRENT`, `HT` (half-time), `FT` (full-time), `ET` (extra time), `PS` (penalties).
+Score type descriptions: `CURRENT` (type 1525), `1ST_HALF` (1), `2ND_HALF` (2), `2ND_HALF_ONLY`, `EXTRA_TIME`, `EXTRA_TIME_ONLY` and `PENALTIES`. `2ND_HALF` is the score at the end of the second half; `2ND_HALF_ONLY` counts only goals scored in it.
 
 ### Team (Participant)
 
@@ -119,11 +119,11 @@ Score type descriptions: `CURRENT`, `HT` (half-time), `FT` (full-time), `ET` (ex
   "id": 9,
   "sport_id": 1,
   "country_id": 462,
-  "venue_id": 214,
-  "name": "Liverpool",
-  "short_code": "LIV",
+  "venue_id": 151,
+  "name": "Manchester City",
+  "short_code": "MCI",
   "image_path": "https://cdn.sportmonks.com/images/soccer/teams/9/9.png",
-  "founded": 1892,
+  "founded": 1880,
   "type": "domestic",
   "gender": "male"
 }
@@ -140,7 +140,7 @@ Score type descriptions: `CURRENT`, `HT` (half-time), `FT` (full-time), `ET` (ex
   "city_id": null,
   "position_id": 27,
   "detailed_position_id": 156,
-  "type_id": 24,
+  "type_id": 27,
   "common_name": "M. Salah",
   "firstname": "Mohamed",
   "lastname": "Salah",
@@ -335,7 +335,7 @@ League ──── Season ──── Round ──── Fixture
   "id": 12345,
   "player_id": 456,
   "team_id": 9,
-  "type_id": 1,
+  "type_id": 629,
   "category": "injury",
   "start_date": "2024-11-15",
   "end_date": "2024-12-20",

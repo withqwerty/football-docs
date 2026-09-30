@@ -156,7 +156,7 @@ development and tests always use the working tree's docs.
 | Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
 | kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
-| SportMonks | 567 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
+| SportMonks | 568 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
@@ -177,7 +177,7 @@ development and tests always use the working tree's docs.
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 
-**2,859 searchable chunks** across 26 providers and tools.
+**2,860 searchable chunks** across 26 providers and tools.
 
 ESPN coverage consists of curated, dated observations of ESPN-hosted soccer
 endpoints, checked for eng.1 and esp.1. These observations are not an official API
@@ -210,6 +210,7 @@ trusting them.
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
 | StatsBomb | ID and name pairs observed in a sample of the public [open data](https://github.com/statsbomb/open-data) (three matches per competition-season, at a pinned commit). IDs the sample lacks must be listed in both the Open Data Events specification and kloppy's parser. Regenerate with `pnpm statsbomb:truth` | `src/__tests__/statsbomb-truth.test.ts` |
 | Opta | Stats Perform's F24 appendices, which have no machine-readable form. `data/opta-truth.json` holds each ID the docs use, with its label, checked by hand. The test also rejects the wrong meanings earlier docs gave some IDs (`WRONG_MEANINGS` in `src/opta-truth.ts`) | `src/__tests__/opta-truth.test.ts` |
+| SportMonks | Type and state IDs as SportMonks publishes them on its definitions pages and in the types spreadsheet linked from its Types page (`data/sportmonks-types-truth.json`, fetched 2026-09-30). Not the full list: the complete one needs an API key | `src/__tests__/sportmonks-truth.test.ts` |
 | Reep | The public OpenAPI spec (endpoint paths and methods), and one release's manifest and column schema (CSV table list, columns used in the SQL examples, licence and exclusions) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
 
 ESPN has a separate observation check in `src/__tests__/espn.test.ts`. It validates

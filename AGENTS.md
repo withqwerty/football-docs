@@ -34,7 +34,8 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
 | `src/statsbomb-truth.ts` | Validates StatsBomb ID tables against a sample of the open data |
-| `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/provider-truth/opta.json` |
+| `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/opta-truth.json` |
+| `src/sportmonks-truth.ts` | Holds SportMonks ID tables to its published definitions |
 | `src/__tests__/` | Vitest tests |
 | `scripts/` | Ground-truth generators (Python), live checks, and the data-release scripts (`write-data-manifest.mjs`, `check-data-compat.mjs`) |
 | `bin/serve.js` | npm bin entry — launches compiled `dist/index.js` |
