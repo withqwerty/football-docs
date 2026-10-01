@@ -29,10 +29,11 @@ import {
   USER_AGENT,
 } from "./core.js";
 import { licenceName } from "./records.js";
+import { isPdf, pdfSections, readPdf, renderFull, type Section, splitSections } from "./text.js";
 
 const MAX_REDIRECTS = 5;
-/** Pages up to this size come back whole; longer ones come back by section. */
-export const WHOLE_PAGE_CHARS = 40_000;
+/** PDFs may be larger than web pages. */
+const MAX_PDF_BYTES = 50 * 1024 * 1024;
 
 export type Lookup = (host: string) => Promise<string[]>;
 
@@ -117,19 +118,19 @@ export function isBotChallenge(status: number, headers: Headers, body: string): 
   return CHALLENGE_MARKERS.some((pattern) => pattern.test(body));
 }
 
-export type FetchedPage = { url: string; status: number; contentType: string; body: string };
+export type FetchedPage = { url: string; status: number; contentType: string; bytes: Uint8Array };
 
 export class BotChallengeError extends Error {}
 
 /** GET with redirects followed by hand, so every hop is checked against the address rules. */
-export async function fetchPage(ctx: PaperContext, start: URL, lookup: Lookup): Promise<FetchedPage> {
+export async function fetchPage(ctx: PaperContext, start: URL, lookup: Lookup = defaultLookup): Promise<FetchedPage> {
   let url = start;
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     let response: Response;
     try {
       response = await ctx.fetchImpl(url.href, {
         redirect: "manual",
-        headers: { "User-Agent": USER_AGENT, Accept: "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5" },
+        headers: { "User-Agent": USER_AGENT, Accept: "text/html,application/xhtml+xml,application/pdf,text/plain;q=0.9,*/*;q=0.5" },
         signal: AbortSignal.timeout(20_000),
       });
     } catch (error) {
@@ -142,12 +143,12 @@ export async function fetchPage(ctx: PaperContext, start: URL, lookup: Lookup): 
       continue;
     }
     const contentType = response.headers.get("content-type") ?? "";
-    const body = new TextDecoder().decode(await readCapped(response));
-    if (isBotChallenge(response.status, response.headers, body)) {
+    const bytes = await readCapped(response, /pdf/i.test(contentType) ? MAX_PDF_BYTES : undefined);
+    if (!/pdf/i.test(contentType) && isBotChallenge(response.status, response.headers, new TextDecoder().decode(bytes.slice(0, 50_000)))) {
       throw new BotChallengeError(`${url.host} answered with a bot check (HTTP ${response.status})`);
     }
     if (!response.ok) throw new FetchError(`HTTP ${response.status}`, response.status);
-    return { url: url.href, status: response.status, contentType, body };
+    return { url: url.href, status: response.status, contentType, bytes };
   }
   throw new FetchError(`more than ${MAX_REDIRECTS} redirects`);
 }
@@ -256,8 +257,6 @@ function licenceLink(document: Doc): string | undefined {
   return cc?.getAttribute("href") ?? undefined;
 }
 
-export type Section = { heading: string; level: number; text: string };
-
 export type WebPage = {
   title?: string;
   author?: string;
@@ -270,53 +269,6 @@ export type WebPage = {
   sections: Section[];
   text: string;
 };
-
-/** Split markdown into sections at its headings. Text before the first heading is section 0. */
-export function splitSections(markdown: string): Section[] {
-  const sections: Section[] = [];
-  let current: Section = { heading: "(start)", level: 0, text: "" };
-  let inFence = false;
-  for (const line of markdown.split("\n")) {
-    if (/^(```|~~~)/.test(line)) inFence = !inFence;
-    const heading = !inFence ? line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/) : null;
-    if (heading) {
-      if (current.text.trim() || current.level > 0) sections.push({ ...current, text: current.text.trim() });
-      current = { heading: heading[2], level: heading[1].length, text: "" };
-    } else {
-      current.text += `${line}\n`;
-    }
-  }
-  if (current.text.trim() || current.level > 0) sections.push({ ...current, text: current.text.trim() });
-  return sections.flatMap((section) => splitLongSection(section, WHOLE_PAGE_CHARS));
-}
-
-/** Cut a section longer than max at paragraph breaks into parts, so no one reply is unbounded. */
-export function splitLongSection(section: Section, max: number): Section[] {
-  if (section.text.length <= max) return [section];
-  const parts: string[] = [];
-  let part = "";
-  for (const paragraph of section.text.split(/\n{2,}/)) {
-    if (part && part.length + paragraph.length + 2 > max) {
-      parts.push(part);
-      part = "";
-    }
-    // A single paragraph longer than max is cut hard.
-    for (let start = 0; start < paragraph.length; start += max) {
-      const piece = paragraph.slice(start, start + max);
-      if (part && part.length + piece.length + 2 > max) {
-        parts.push(part);
-        part = "";
-      }
-      part = part ? `${part}\n\n${piece}` : piece;
-    }
-  }
-  if (part) parts.push(part);
-  return parts.map((text, index) => ({
-    heading: index === 0 ? section.heading : `${section.heading} (part ${index + 1} of ${parts.length})`,
-    level: section.level,
-    text,
-  }));
-}
 
 export function extractPage(html: string, pageUrl: string): WebPage {
   const withBase = html.includes("<base ") ? html : html.replace(/(<head[^>]*>)/i, `$1<base href="${pageUrl}">`);
@@ -350,36 +302,48 @@ export function extractPage(html: string, pageUrl: string): WebPage {
   };
 }
 
+/** The text of a fetched HTML page, PDF or plain-text file. */
+export async function pageText(page: FetchedPage): Promise<WebPage & { pdf: boolean }> {
+  if (/application\/pdf/i.test(page.contentType) || isPdf(page.bytes)) {
+    const pdf = await readPdf(page.bytes);
+    const sections = pdfSections(pdf.pages);
+    return { title: pdf.title, author: pdf.author, sections, text: sections.map((s) => s.text).join("\n\n"), pdf: true };
+  }
+  const body = new TextDecoder().decode(page.bytes);
+  if (/html|xml/i.test(page.contentType) || /^\s*<(!doctype|html)/i.test(body)) return { ...extractPage(body, page.url), pdf: false };
+  return { sections: splitSections(body.trim()), text: body.trim(), pdf: false };
+}
+
 // ---------------------------------------------------------------------------
 // The tool
 
 export type WebSourceArgs = { url: string; section?: number };
 
-function outline(sections: Section[]): string {
-  // Indent from the page's top heading level, which is often h2 or lower.
-  const top = Math.min(...sections.map((section) => section.level || Number.POSITIVE_INFINITY));
-  return sections
-    .map((section, index) => `${"  ".repeat(Math.max(0, section.level - top))}- [${index}] ${section.heading} (${section.text.length} characters)`)
-    .join("\n");
-}
+export type LoadedWebSource = {
+  url: URL;
+  page: FetchedPage;
+  content: WebPage & { pdf: boolean };
+  snapshots: Snapshots;
+  snapshotError: unknown;
+  fromArchive: boolean;
+};
 
-function sectionText(section: Section): string {
-  return section.level > 0 ? `${"#".repeat(section.level)} ${section.heading}\n\n${section.text}` : section.text;
-}
-
-export type WebSourceResult = { text: string; isError?: boolean };
-
-export async function readWebSource(
+/**
+ * Fetch a public page with its Wayback snapshots. When the live page fails
+ * (but not at a bot check), read the latest archived copy instead. Returns an
+ * error message instead of throwing.
+ */
+export async function loadWebSource(
   ctx: PaperContext,
-  args: WebSourceArgs,
+  rawUrl: string,
   log: ServiceLog,
   lookup: Lookup = defaultLookup,
-): Promise<WebSourceResult> {
+): Promise<LoadedWebSource | { error: string }> {
   let url: URL;
   try {
-    url = await checkPublicUrl(args.url.trim(), lookup);
+    url = await checkPublicUrl(rawUrl.trim(), lookup);
   } catch (error) {
-    return { text: `Cannot read ${args.url}: ${reason(error)}.`, isError: true };
+    return { error: `Cannot read ${rawUrl}: ${reason(error)}.` };
   }
 
   // Ask the Wayback Machine while the page loads.
@@ -402,21 +366,19 @@ export async function readWebSource(
   if (page) {
     log.ok(url.host);
   } else {
-    const error = pageError;
-    if (error instanceof BotChallengeError) {
+    if (pageError instanceof BotChallengeError) {
       log.failed(url.host, "bot check");
       return {
-        text: [
-          `${error.message}. football-docs stops here and does not try to get past bot checks.`,
-          "Open the page in a browser to read it.",
+        error: [
+          `${pageError.message}. football-docs stops here and does not try to get past bot checks.`,
+          "Open the page in a browser to read it. For a paper you can download, use add_local_paper with the file.",
           snapshots.latest ? `An archived copy exists: ${snapshots.latest.url} (${snapshotDate(snapshots.latest.timestamp)}).` : "",
         ]
           .filter(Boolean)
           .join("\n"),
-        isError: true,
       };
     }
-    log.failed(url.host, reason(error));
+    log.failed(url.host, reason(pageError));
     if (snapshots.latest) {
       const raw = snapshots.latest.url.replace(/\/web\/(\d+)\//, "/web/$1id_/");
       try {
@@ -428,38 +390,43 @@ export async function readWebSource(
       }
     }
   }
+  if (!page) return { error: `Could not read ${url.href}: the page and any archived copy failed to load.` };
 
-  if (!page) {
-    return { text: `Could not read ${url.href}: the page and any archived copy failed to load.`, isError: true };
+  try {
+    return { url, page, content: await pageText(page), snapshots, snapshotError, fromArchive };
+  } catch (error) {
+    return { error: `Could not read the text of ${url.href}: ${reason(error)}.` };
   }
+}
 
-  if (/application\/pdf/i.test(page.contentType) || page.body.startsWith("%PDF-")) {
-    return {
-      text: `${url.href} is a PDF. This version of football-docs cannot read PDFs yet. Use get_paper for papers with a DOI or arXiv ID.`,
-      isError: true,
-    };
-  }
+export type WebSourceResult = { text: string; isError?: boolean };
 
-  const isHtml = /html|xml/i.test(page.contentType) || /^\s*<(!doctype|html)/i.test(page.body);
-  const extracted: WebPage = isHtml
-    ? extractPage(page.body, page.url)
-    : { sections: splitSections(page.body.trim()), text: page.body.trim() };
+export async function readWebSource(
+  ctx: PaperContext,
+  args: WebSourceArgs,
+  log: ServiceLog,
+  lookup: Lookup = defaultLookup,
+): Promise<WebSourceResult> {
+  const loaded = await loadWebSource(ctx, args.url, log, lookup);
+  if ("error" in loaded) return { text: loaded.error, isError: true };
+  const { url, page, content, snapshots, snapshotError, fromArchive } = loaded;
 
-  const lines = [`# ${extracted.title ?? url.href}`, ""];
+  const lines = [`# ${content.title ?? url.href}`, ""];
   lines.push(`- **URL:** ${url.href}${page.url !== url.href && !fromArchive ? ` (redirected to ${page.url})` : ""}`);
+  if (content.pdf) lines.push(`- **Format:** PDF, ${content.sections.length} sections`);
   if (fromArchive) lines.push("- **Read from:** the Wayback Machine's latest copy, because the live page did not load");
-  if (extracted.canonical && extracted.canonical !== url.href) lines.push(`- **Canonical URL:** ${extracted.canonical}`);
-  if (extracted.siteName) lines.push(`- **Site:** ${extracted.siteName}`);
-  lines.push(`- **Author:** ${extracted.author ?? "not stated on the page"}`);
-  lines.push(`- **Published:** ${extracted.published ?? "no date on the page"}`);
-  if (extracted.modified) lines.push(`- **Modified:** ${extracted.modified}`);
-  const licence = extracted.licence ? licenceName(extracted.licence) : undefined;
+  if (content.canonical && content.canonical !== url.href) lines.push(`- **Canonical URL:** ${content.canonical}`);
+  if (content.siteName) lines.push(`- **Site:** ${content.siteName}`);
+  lines.push(`- **Author:** ${content.author ?? `not stated in the ${content.pdf ? "file" : "page"}`}`);
+  lines.push(`- **Published:** ${content.published ?? `no date on the ${content.pdf ? "file" : "page"}`}`);
+  if (content.modified) lines.push(`- **Modified:** ${content.modified}`);
+  const licence = content.licence ? licenceName(content.licence) : undefined;
   lines.push(
-    `- **Licence:** ${!licence ? "none stated on the page" : licence === extracted.licence ? licence : `${licence} (${extracted.licence})`}`,
+    `- **Licence:** ${!licence ? `none stated on the ${content.pdf ? "file" : "page"}` : licence === content.licence ? licence : `${licence} (${content.licence})`}`,
   );
   if (snapshots.earliest) {
     lines.push(`- **Earliest Wayback snapshot:** ${snapshotDate(snapshots.earliest.timestamp)} ${snapshots.earliest.url}`);
-    if (!extracted.published) {
+    if (!content.published) {
       lines.push(`  (The page has no date. It existed by ${snapshotDate(snapshots.earliest.timestamp)}, the date of this snapshot.)`);
     }
   }
@@ -470,39 +437,6 @@ export async function readWebSource(
     lines.push(`- **Wayback:** no snapshot. To make one, open https://web.archive.org/save/${url.href}`);
   }
   lines.push("");
-
-  const sections = extracted.sections;
-  if (args.section !== undefined) {
-    const section = sections[args.section];
-    if (!section) {
-      lines.push(`There is no section ${args.section}. Sections:`, "", outline(sections));
-      return { text: lines.join("\n"), isError: true };
-    }
-    lines.push(`Section ${args.section} of ${sections.length - 1}:`, "", sectionText(section));
-    return { text: lines.join("\n") };
-  }
-
-  if (extracted.text.length <= WHOLE_PAGE_CHARS) {
-    lines.push("## Page text", "", extracted.text || "(no text found on the page)");
-    return { text: lines.join("\n") };
-  }
-
-  lines.push(
-    `The page text is ${extracted.text.length} characters, so it comes back by section. Call again with section: N.`,
-    "",
-    "## Sections",
-    "",
-    outline(sections),
-    "",
-  );
-  const first: string[] = [];
-  let budget = WHOLE_PAGE_CHARS;
-  for (const section of sections) {
-    const text = sectionText(section);
-    if (text.length > budget) break;
-    first.push(text, "");
-    budget -= text.length;
-  }
-  if (first.length) lines.push(`## Page text (sections 0 to ${first.length / 2 - 1})`, "", ...first);
-  return { text: lines.join("\n") };
+  const rendered = renderFull(content.sections, args.section);
+  return { text: [...lines, ...rendered.lines].join("\n").trimEnd(), isError: rendered.isError };
 }

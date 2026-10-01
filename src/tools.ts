@@ -17,6 +17,11 @@ export const TOOL_NAMES = [
   "search_papers",
   "get_paper",
   "get_web_source",
+  "read_paper",
+  "match_quote",
+  "add_local_paper",
+  "forget_paper",
+  "purge_cache",
 ] as const;
 
 type TextContent = {

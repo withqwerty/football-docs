@@ -94,9 +94,14 @@ Add to `claude_desktop_config.json`:
 | `compare_providers` | Compare how different providers handle the same concept. |
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
 | `resolve_entity` | Map a player, coach, referee, team, competition, season, stage or match to its IDs at every provider through the [Reep register](https://reep.football). Uses a local copy of the free register (`REEP_DUCKDB_PATH`), else the Reep API (`REEP_API_KEY`; keys are issued by hand on request to getintouch+nutmeg@withqwerty.com, with no self-service sign-up), else returns setup steps and a DuckDB query. See [Reep through football-docs](docs/reep/overview.md#using-reep-through-football-docs). |
-| `search_papers` | Search scholarly papers on football analytics and sport science in [OpenAlex](https://openalex.org) (title, abstract and full text), [arXiv](https://arxiv.org) and [SportRxiv](https://sportrxiv.org). See [Papers and web sources](#papers-and-web-sources). |
-| `get_paper` | Look up one paper by DOI, arXiv ID or OpenAlex ID: authors, date, venue, all IDs, licence, open copies with their licences, abstract and a citation line. |
-| `get_web_source` | Read a public web page (a blog post, newsletter or club or vendor article) as text, with its author, date, licence and Wayback Machine snapshots. Long pages come back by section. |
+| `search_papers` | Search scholarly papers on football analytics and sport science in [OpenAlex](https://openalex.org) (title, abstract and full text), [arXiv](https://arxiv.org) and [SportRxiv](https://sportrxiv.org), and, when asked, your Zotero library. See [Papers and web sources](#papers-and-web-sources). |
+| `get_paper` | Look up one paper by DOI, arXiv ID, OpenAlex ID or Zotero item: authors, date, venue, all IDs, licence, open copies with their licences, abstract and a citation line. |
+| `get_web_source` | Read a public web page or PDF (a blog post, newsletter, club or vendor article, or an author's copy of a paper) as text, with its author, date, licence and Wayback Machine snapshots. Long pages come back by section. |
+| `read_paper` | Read a paper: the full text of an open copy, by section, with its licence; or the outline and short passages of a paper you supplied. Kept in your library, so a second read sends no request. |
+| `match_quote` | Check that a quote appears in a paper or web page: exact, normalised, close (with a score) or none, with the section, page and a W3C text quote selector. |
+| `add_local_paper` | Add a PDF you have to your library, for papers with no open copy. |
+| `forget_paper` | Remove one paper from your library. |
+| `purge_cache` | Delete your whole paper library (needs `confirm: true`). |
 
 Provider filters use the indexed provider keys shown by `list_providers`, but common aliases are accepted. Examples: `fbref`, `understat`, `ClubElo`, `football-data.co.uk`, and `engsoccerdata` search `free-sources`; `Sofascore` searches `soccerdata`; `ESPN`, `ESPN FC`, and `espn-soccer` search `espn`; `FMDB` searches `fmdb-pro`; `Transfer Room` searches `transferroom`; `Hudl Wyscout` searches `wyscout`; `Stats Perform` / `Opta F24` / `WhoScored` search `opta`; `Metrica`, `Sportec` / `DFL`, and `TRACAB` search `databallpy`; `Second Spectrum` searches `kloppy`; `Hawk-Eye`, `SciSports`, `Signality`, `Respovision`, `GradientSports` and `OptaVision` search `fast-forward`; `unravel` searches `unravelsports`; `SportRadar API` / `Soccer Extended` search `sportradar`; `Sonra` / `Apex` search `statsports`; `Hawkin` searches `hawkin-dynamics`; `ForceDecks` / `NordBord` / `ForceFrame` search `vald`; `The Sports DB` / `TSDB` search `thesportsdb`; `StatsBomb Open Data` searches `statsbomb`.
 
@@ -145,35 +150,64 @@ development and tests always use the working tree's docs.
 Many football methods come from papers, and some from blog posts: Karun Singh
 introduced expected threat (xT) in a blog post, not a paper. `search_papers`
 finds papers and the works that cite an idea; a web search finds the original
-post, and `get_web_source` reads it. `get_paper` checks that a reference exists.
+post, and `get_web_source` reads it. `get_paper` checks that a reference exists,
+`read_paper` reads it, and `match_quote` checks that a quote is in the source.
 
-These three tools call public services at run time. Each reply ends with the
-services it asked.
+### Open and paid papers
+
+| Paper | How it gets in | What the tools return |
+|---|---|---|
+| Open copy: arXiv, an open repository, an open-access publisher, SportRxiv, a public web page | `read_paper` or `get_web_source` finds and reads it | The full text, by section, with its licence |
+| A paper you have through a subscription or purchase | You download the PDF and call `add_local_paper`, or keep it in Zotero and use its `zotero:` ID | The outline and passages of at most 200 characters (`FOOTBALL_DOCS_PAPERS_PASSAGE_CHARS`, 50 to 1000) |
+
+football-docs never logs in to a publisher or a library, never holds your
+credentials or cookies, and does not use publisher text-mining APIs (their terms
+exclude tools like this). When a site answers with a bot check, the tool stops;
+download the paper yourself instead.
+
+Zotero: in Zotero 7, open Settings > Advanced and turn on "Allow other
+applications on this computer to communicate with Zotero". Then
+`search_papers` with `sources: ["zotero"]` searches your library, and
+`read_paper` reads an item's PDF through Zotero's local API on port 23119.
+
+### Services
+
+The tools call public services at run time. Each reply ends with the services
+it asked.
 
 | Service | Used for | Limits |
 |---|---|---|
-| OpenAlex | Search (title, abstract and full text); DOI and OpenAlex ID lookups | 1000 credits a day without a key: a search costs 10, a lookup costs nothing. A free key from [openalex.org/settings/api](https://openalex.org/settings/api) raises it. |
-| arXiv | Search (title, abstract, authors); arXiv ID lookups with the paper's licence | One request every three seconds; the tool waits its turn. |
-| SportRxiv | Search in a local copy of its OAI feed | The first search downloads the feed (under 1000 records); after a week, the next search asks only for changes. |
+| OpenAlex | Search (title, abstract and full text); DOI and OpenAlex ID lookups; open copies | 1000 credits a day without a key: a search costs 10, a lookup costs nothing. A free key from [openalex.org/settings/api](https://openalex.org/settings/api) raises it. |
+| arXiv | Search (title, abstract, authors); arXiv ID lookups with the paper's licence; the paper's HTML or PDF | One request every three seconds to the API; the tool waits its turn. |
+| SportRxiv | Search in a local copy of its OAI feed; preprint PDFs | The first search downloads the feed (under 1000 records); after a week, the next search asks only for changes. |
 | Crossref | DOI lookups that OpenAlex does not know | |
 | Wayback Machine | The earliest and latest snapshot of a web page; the archived copy when the live page fails | The tool never asks it to save a page. |
+| The host of an open copy or web page | The text | Bot checks stop the tool. |
 
-Rules the tools keep:
+### Your library
 
-- Nothing they fetch goes into this repository, `data/docs.db` or a data release.
-  The SportRxiv metadata copy is kept in `$XDG_DATA_HOME/football-docs/papers/`
-  (by default `~/.local/share/football-docs/papers/`), readable only by you.
-- `get_web_source` reads only public `http` and `https` addresses. It refuses
-  names that resolve to loopback, private or link-local addresses, also after a
-  redirect.
-- When a site answers with a bot check, the tool stops. It does not try to get
-  past one.
-- It cannot read PDFs yet.
+- Text the tools read is kept in `$XDG_DATA_HOME/football-docs/papers/` (by
+  default `~/.local/share/football-docs/papers/`). The folder and its files are
+  readable only by you. A second read sends no request.
+- `forget_paper` removes one paper; `purge_cache` with `confirm: true` deletes
+  the whole library and the SportRxiv copy. Neither touches your own files or
+  Zotero.
+- Nothing in the library goes into this repository, `data/docs.db` or a data
+  release. A test fails if a cached paper or any PDF is added to the repository.
+- `get_web_source`, `read_paper` and `match_quote` read only public `http` and
+  `https` addresses. They refuse names that resolve to loopback, private or
+  link-local addresses, also after a redirect.
+- `add_local_paper` reads only PDF files, given by their full path.
 
-Settings, as environment variables in the server's MCP configuration:
+### Settings
 
-- `FOOTBALL_DOCS_PAPERS=off`: turn these three tools off. They then send no
-  request. The other tools never call these services.
+As environment variables in the server's MCP configuration:
+
+- `FOOTBALL_DOCS_PAPERS=off`: send no paper or web request. Your library, files
+  you add and Zotero on this computer still work. The provider-doc tools never
+  call these services.
+- `FOOTBALL_DOCS_PAPERS_PASSAGE_CHARS=<n>`: the longest passage returned from a
+  paper you supplied, 50 to 1000 characters (default 200).
 - `OPENALEX_API_KEY=<key>`: your OpenAlex key. Instead of the environment, you can
   keep it in the system keychain:
   - macOS: `security add-generic-password -s football-docs -a OPENALEX_API_KEY -w <key>`
@@ -188,7 +222,8 @@ Settings, as environment variables in the server's MCP configuration:
 - "Does SportMonks have xG data?"
 - "What event types does kloppy map to GenericEvent?"
 - "How does SPADL represent a tackle?"
-- "Who introduced expected threat (xT)? Cite the original." (a web search finds the post, `get_web_source` reads it, `search_papers` finds the papers that cite it)
+- "Who introduced expected threat (xT)? Cite the original." (a web search finds the post, `get_web_source` reads it, `match_quote` checks the quote, `search_papers` finds the papers that cite it)
+- "How does VAEP define the value of an action? Quote the paper." (`read_paper` on arXiv 1802.07127, then `match_quote`)
 
 ## Indexed providers
 

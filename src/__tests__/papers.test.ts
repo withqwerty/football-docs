@@ -1,48 +1,16 @@
-import { mkdtempSync, statSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { statSync } from "node:fs";
 import { join } from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 import { arxivQuery, arxivYear } from "../papers/arxiv.js";
-import { type PaperOptions, plainText, resetRateLimits } from "../papers/core.js";
+import { plainText, resetRateLimits } from "../papers/core.js";
 import { creditNote, rebuildAbstract } from "../papers/openalex.js";
 import { citeAs, licenceName, parsePaperId } from "../papers/records.js";
+import { splitLongSection, splitSections } from "../papers/text.js";
 import { getPaper, getWebSource, searchPapers } from "../papers/tools.js";
-import { checkPublicUrl, isBotChallenge, splitLongSection, splitSections } from "../papers/web.js";
+import { checkPublicUrl, isBotChallenge } from "../papers/web.js";
+import { samplePaper } from "./fixtures-pdf.js";
+import { options, type Route, text } from "./papers-helpers.js";
 
-// The paper tools call public services. These tests answer every request from
-// a table of canned replies, keyed by URL prefix, and fail on any request the
-// table does not expect, so nothing here touches the network.
-
-type Reply = { status?: number; body?: string; headers?: Record<string, string> };
-type Route = [prefix: string, reply: Reply | ((url: string, init?: RequestInit) => Reply)];
-
-function fakeFetch(routes: Route[], calls: string[] = []): typeof fetch {
-  return (async (input: string | URL | Request, init?: RequestInit) => {
-    const url = String(input instanceof Request ? input.url : input);
-    calls.push(`${init?.method ?? "GET"} ${url}`);
-    const route = routes.find(([prefix]) => url.startsWith(prefix));
-    if (!route) throw new Error(`unexpected request: ${url}`);
-    const reply = typeof route[1] === "function" ? route[1](url, init) : route[1];
-    return new Response(reply.status && [204, 301, 302, 304].includes(reply.status) ? null : (reply.body ?? ""), {
-      status: reply.status ?? 200,
-      headers: reply.headers,
-    });
-  }) as typeof fetch;
-}
-
-function options(routes: Route[], calls: string[] = [], extra: PaperOptions = {}): PaperOptions & { lookup: (host: string) => Promise<string[]> } {
-  return {
-    env: {},
-    fetchImpl: fakeFetch(routes, calls),
-    cacheDir: mkdtempSync(join(tmpdir(), "fd-papers-")),
-    sleep: async () => undefined,
-    keychain: async () => null,
-    lookup: async () => ["93.184.216.34"],
-    ...extra,
-  };
-}
-
-const text = (result: { content: Array<{ text: string }> }) => result.content[0].text;
 
 // ---------------------------------------------------------------------------
 // Canned replies, cut down from real responses
@@ -487,10 +455,15 @@ describe("get_web_source", () => {
     expect(out).toMatch(/local and private addresses are not allowed/);
   });
 
-  it("says a PDF cannot be read yet", async () => {
+  it("reads a PDF by its sections", async () => {
     const url = "https://example.org/paper.pdf";
-    const opts = options([...waybackRoutes(url), [url, { body: "%PDF-1.7 ...", headers: { "content-type": "application/pdf" } }]]);
-    expect(text(await getWebSource({ url }, opts))).toMatch(/is a PDF\. This version of football-docs cannot read PDFs yet/);
+    const opts = options([...waybackRoutes(url), [url, { bytes: samplePaper(), headers: { "content-type": "application/pdf" } }]]);
+    const out = text(await getWebSource({ url }, opts));
+    expect(out).toContain("# Valuing Actions in Football");
+    expect(out).toMatch(/Format:\*\* PDF, 6 sections/);
+    expect(out).toMatch(/Author:\*\* Ada Lovelace/);
+    expect(out).toContain("## 2 Method");
+    expect(out).toContain("change in the probability of scoring a goal");
   });
 
   it("returns a long page by section", async () => {

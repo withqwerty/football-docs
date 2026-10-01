@@ -21,7 +21,17 @@ import { z } from "zod";
 import { hardenConnection } from "./data-format.js";
 import { cleanDataDir, dataModeFor, defaultDataDir, IndexChooser } from "./data-source.js";
 import { checkForUpdate } from "./data-update.js";
-import { getPaper, getWebSource, SEARCH_SOURCES, searchPapers } from "./papers/tools.js";
+import {
+  addLocalPaper,
+  forgetPaper,
+  getPaper,
+  getWebSource,
+  matchQuote,
+  purgeCache,
+  readPaper,
+  SEARCH_SOURCES,
+  searchPapers,
+} from "./papers/tools.js";
 import { ENTITY_TYPES } from "./reep.js";
 import { type Database, openDatabase } from "./sqlite.js";
 import {
@@ -299,7 +309,9 @@ export function createFootballDocsServer(): McpServer {
       sources: z
         .array(z.enum(SEARCH_SOURCES))
         .optional()
-        .describe("Sources to ask (default all three). SportRxiv is searched in a local copy of its feed."),
+        .describe(
+          "Sources to ask. Default: openalex, arxiv and sportrxiv (searched in a local copy of its feed). Add zotero to search the user's own Zotero library on this computer.",
+        ),
       max_results: z.number().optional().default(10).describe("Results per source, 1 to 25 (default 10)."),
       year_from: z.number().int().optional().describe("Only papers published in or after this year."),
       year_to: z.number().int().optional().describe("Only papers published in or before this year."),
@@ -311,7 +323,7 @@ export function createFootballDocsServer(): McpServer {
   server.tool(
     "get_paper",
     [
-      "Look up one paper by DOI, arXiv ID or OpenAlex ID: title, authors, date, venue, all IDs, licence, open copies",
+      "Look up one paper by DOI, arXiv ID, OpenAlex ID, zotero: ID or local: ID: title, authors, date, venue, all IDs, licence, open copies",
       "with their licences, abstract and a citation line. arXiv IDs come from arXiv with the paper's licence; DOIs",
       "from OpenAlex, then SportRxiv or Crossref. Use it to check that a reference exists and says what is claimed.",
     ].join(" "),
@@ -330,7 +342,8 @@ export function createFootballDocsServer(): McpServer {
       "Read a public web page (blog post, newsletter, club or vendor article) as text, with its author, date,",
       "licence and Wayback Machine snapshots. Use it for methods first published on the web, such as Karun Singh's",
       "xT post, after finding the page with a web search. A page with no date gets the date of its earliest snapshot",
-      "as an upper bound. Long pages come back by section. The tool stops at bot checks and refuses local addresses.",
+      "as an upper bound. Reads HTML and PDF. Long pages come back by section. The tool stops at bot checks and refuses",
+      "local addresses.",
     ].join(" "),
     {
       url: z.string().describe("The page's http(s) URL."),
@@ -343,6 +356,75 @@ export function createFootballDocsServer(): McpServer {
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     async (args) => getWebSource(args),
+  );
+
+  const paperId = z
+    .string()
+    .describe("A DOI, arXiv ID, OpenAlex ID, zotero:KEY from search_papers, or local:… from add_local_paper.");
+
+  server.tool(
+    "read_paper",
+    [
+      "Read a paper's text. Finds an open copy (arXiv, open repositories, open-access publishers, SportRxiv) and returns",
+      "it in full, by section, with its licence. For a paper the user supplied (add_local_paper or zotero:), returns",
+      "only the outline and passages of at most 200 characters (FOOTBALL_DOCS_PAPERS_PASSAGE_CHARS). The text is kept in",
+      "the user's library, so a second call sends no request. It never logs in anywhere and stops at bot checks; when",
+      "no open copy can be read it says so and suggests add_local_paper.",
+    ].join(" "),
+    {
+      id: paperId,
+      section: z.number().int().min(0).optional().describe("Section number from the outline of an earlier call (open copies only)."),
+      query: z.string().optional().describe("Words to find: returns passages that hold all of them, with their section and page."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    async (args) => readPaper(args),
+  );
+
+  server.tool(
+    "match_quote",
+    [
+      "Check that a quote appears in its source: a paper (any ID read_paper takes) or a web page URL. Reports exact,",
+      "normalised (same words; case, spacing, quote marks, dashes or line-end hyphens differ), close (with a similarity",
+      "score: quote the source's own words instead) or none, with the section, page and a W3C TextQuoteSelector. Use it",
+      "before citing a definition or a claim.",
+    ].join(" "),
+    {
+      source: z.string().describe("A paper ID or an http(s) URL."),
+      quote: z.string().min(10).describe("The quote to check, at least 10 characters."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    async (args) => matchQuote(args),
+  );
+
+  server.tool(
+    "add_local_paper",
+    [
+      "Add a PDF the user has (for example a paper from their library's subscription) to their football-docs library.",
+      "Only PDF files are read; the text stays on this computer and is never sent anywhere. Returns a local: ID for",
+      "read_paper and match_quote, which give only the outline and short passages of such papers.",
+    ].join(" "),
+    {
+      path: z.string().describe("The full path to the PDF, for example /Users/me/Downloads/paper.pdf or ~/Downloads/paper.pdf."),
+      id: z.string().optional().describe("The paper's DOI or arXiv ID, to fill in its title and authors. Found in the PDF when omitted."),
+    },
+    { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
+    async (args) => addLocalPaper(args),
+  );
+
+  server.tool(
+    "forget_paper",
+    "Remove one paper's text from the user's football-docs library. The user's own file and Zotero are not touched.",
+    { id: paperId },
+    { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
+    async (args) => forgetPaper(args),
+  );
+
+  server.tool(
+    "purge_cache",
+    "Delete the user's whole football-docs paper library and the SportRxiv copy. Call with confirm: true only when the user asked for it.",
+    { confirm: z.boolean().describe("Must be true to delete.") },
+    { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
+    async (args) => purgeCache(args),
   );
 
   return server;

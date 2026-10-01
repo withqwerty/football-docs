@@ -5,13 +5,15 @@
 
 import { truncate } from "./core.js";
 
-export type PaperSource = "openalex" | "arxiv" | "sportrxiv" | "crossref";
+export type PaperSource = "openalex" | "arxiv" | "sportrxiv" | "crossref" | "zotero" | "local";
 
 export const SOURCE_NAMES: Record<PaperSource, string> = {
   openalex: "OpenAlex",
   arxiv: "arXiv",
   sportrxiv: "SportRxiv",
   crossref: "Crossref",
+  zotero: "your Zotero library",
+  local: "a file you added",
 };
 
 export type OpenCopy = {
@@ -32,7 +34,7 @@ export type PaperRecord = {
   date?: string;
   venue?: string;
   type?: string;
-  ids: { doi?: string; arxiv?: string; openalex?: string };
+  ids: { doi?: string; arxiv?: string; openalex?: string; zotero?: string };
   /** The record's landing page. */
   url?: string;
   abstract?: string;
@@ -50,6 +52,8 @@ export type PaperId =
   | { kind: "doi"; doi: string }
   | { kind: "arxiv"; arxiv: string }
   | { kind: "openalex"; openalex: string }
+  | { kind: "local"; key: string }
+  | { kind: "zotero"; key: string }
   | { kind: "semantic-scholar"; value: string }
   | { kind: "url"; url: string }
   | { kind: "unknown"; value: string };
@@ -75,6 +79,11 @@ export function normaliseDoi(value: string): string {
 
 export function parsePaperId(input: string): PaperId {
   const value = input.trim();
+
+  const local = value.match(/^local:([0-9a-f]{12,64})$/i);
+  if (local) return { kind: "local", key: `local:${local[1].toLowerCase()}` };
+  const zotero = value.match(/^zotero:([A-Za-z0-9]{8})$/);
+  if (zotero) return { kind: "zotero", key: zotero[1].toUpperCase() };
 
   const arxiv = arxivFrom(value);
   if (arxiv) return { kind: "arxiv", arxiv };
@@ -153,6 +162,7 @@ function idLine(record: PaperRecord): string {
   if (record.ids.doi) parts.push(`DOI ${record.ids.doi}`);
   if (record.ids.arxiv) parts.push(`arXiv ${record.ids.arxiv}`);
   if (record.ids.openalex) parts.push(`OpenAlex ${record.ids.openalex}`);
+  if (record.ids.zotero) parts.push(`zotero:${record.ids.zotero}`);
   return parts.join(" · ") || "no stable ID";
 }
 

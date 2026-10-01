@@ -47,7 +47,8 @@ export function papersDisabled(env: Env): boolean {
 
 export const DISABLED_MESSAGE = [
   "Paper and web-source lookups are off (FOOTBALL_DOCS_PAPERS=off), so no request was sent.",
-  "Unset FOOTBALL_DOCS_PAPERS in the MCP server's environment to turn them on.",
+  "Papers already in your library, files you add and Zotero on this computer still work.",
+  "Unset FOOTBALL_DOCS_PAPERS in the MCP server's environment to turn lookups on.",
 ].join(" ");
 
 export function defaultCacheDir(env: Env = process.env): string {
@@ -55,11 +56,23 @@ export function defaultCacheDir(env: Env = process.env): string {
   return resolve(base, "football-docs", "papers");
 }
 
+/** Zotero's local API stays reachable when outbound lookups are off. */
+const LOCAL_ONLY_PREFIX = "http://localhost:23119/";
+
 export function contextFrom(options: PaperOptions = {}): PaperContext {
   const env = options.env ?? process.env;
+  const baseFetch = options.fetchImpl ?? fetch;
+  // With the off switch set, nothing may leave the machine, whatever path a tool takes.
+  const guardedFetch: typeof fetch = (input, init) => {
+    const url = String(input instanceof Request ? input.url : input);
+    if (papersDisabled(env) && !url.startsWith(LOCAL_ONLY_PREFIX)) {
+      return Promise.reject(new FetchError("lookups are off (FOOTBALL_DOCS_PAPERS=off)"));
+    }
+    return baseFetch(input, init);
+  };
   return {
     env,
-    fetchImpl: options.fetchImpl ?? fetch,
+    fetchImpl: guardedFetch,
     cacheDir: options.cacheDir ?? defaultCacheDir(env),
     sleep: options.sleep ?? ((ms) => new Promise((done) => setTimeout(done, ms))),
     now: options.now ?? Date.now,
