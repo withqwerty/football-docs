@@ -83,7 +83,7 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json`, `
 | `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | `PlayerDataV5` |
 <!-- generated:statsports-endpoints-v5 end -->
 
-Every operation in v5 takes one parameter: `api-version` (header, `string`, required, default `"5"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented.
+Every operation in v5 takes one parameter: `api-version` (header, `string`, default `"5"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented. Unlike v6 and v7, the v5 spec does not mark `api-version` as required.
 
 ## Endpoint notes from the spec
 
