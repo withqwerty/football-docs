@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.15 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -68,7 +68,7 @@ marked **Personal data** hold data about an identifiable athlete. On `Athlete`,
 | `active` | `boolean` |  |  |  | Whether the test is active (not archived). Included by default because the public endpoint uses includeInactive=true; set includeInactive=false to return only active tests. |
 <!-- generated:hawkin-schema-test end -->
 
-Besides the fields above, a `Test` has `additionalProperties` of type `number`, nullable, described as: "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null (the public endpoint uses useNulls=true), not the string 'N/A'."
+Besides the fields above, a `Test` has `additionalProperties` of type `number`, nullable, described as: "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null by default (useNulls=true); with useNulls=false they are the string 'N/A'. Values are unrounded unless rounding=true. Omitted entirely when nestMetrics=true (see TestNested)."
 
 The reference page's Metrics section says something different: "The id shown for each metric is the property name you'll see in API responses". The metric `id` values are camelCase (for example `jumpHeight`), while the spec's example key is `Jump Height(m)`, which is the metric's `label` followed by its `units` in brackets. The two statements disagree; check a live response before relying on either.
 
@@ -77,13 +77,44 @@ The reference page's Metrics section says something different: "The id shown for
 <!-- generated:hawkin-schema-testsresponse start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `data` | array of `Test` |  |  |  |  |
+| `data` | array of `Test` |  |  |  | Test records. Each item is a Test, or a TestNested when the request was made with nestMetrics=true. |
 | `count` | `integer` |  |  |  |  |
 | `lastTestTime` | `integer` |  |  |  | Unix timestamp of the most recent test |
 | `lastSyncTime` | `integer` |  |  |  | Unix timestamp to use as syncFrom in your next request |
 | `hasMore` | `boolean` |  |  |  | True if more pages exist. Only present when paginate=true. |
 | `nextCursor` | `string` |  | yes |  | Cursor for next page. Null on last page. Only present when paginate=true. |
 <!-- generated:hawkin-schema-testsresponse end -->
+
+## `TestNested`
+
+Shape of each test when the request was made with nestMetrics=true. Metadata fields match Test; metrics move into a `metrics` array and are never rounded.
+
+<!-- generated:hawkin-schema-testnested start -->
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `id` | `string` |  |  |  |  |
+| `testType` | `TestType` |  |  |  |  |
+| `athlete` | `AthleteRef` |  |  |  |  |
+| `timestamp` | `integer` |  |  |  | Unix timestamp of the test |
+| `segment` | `string` |  |  |  | Test type and trial number within session |
+| `active` | `boolean` |  |  |  | Whether the test is active (not archived). Present when includeInactive=true (the default). |
+| `metrics` | array of `NestedMetric` |  |  |  |  |
+<!-- generated:hawkin-schema-testnested end -->
+
+## `NestedMetric`
+
+One metric on a test when the request was made with nestMetrics=true. Only metrics with a numeric value are included (from the `nestMetrics` parameter's description).
+
+<!-- generated:hawkin-schema-nestedmetric start -->
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `metricId` | `string` |  |  |  | Stable metric ID |
+| `metricLabel` | `string` |  |  |  | Metric label |
+| `metricUnits` | `string` |  |  |  | Units, may be empty |
+| `metricValue` | `number` |  |  |  | Unrounded metric value |
+<!-- generated:hawkin-schema-nestedmetric end -->
+
+In this shape each metric carries its `metricId` (for example `jumpHeight`), its `metricLabel` and its `metricUnits` as separate fields, rather than a single `Jump Height(m)` style key.
 
 ## `Athlete`
 

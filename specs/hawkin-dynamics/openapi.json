@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Hawkin Force Platform API",
-    "version": "1.15",
-    "description": "## Overview\nThis API provides programmatic access to your Hawkin force platform data.\n\n**Designed for server-to-server use.** Not intended for direct client-app access.\n\n**Rate limiting:** As your database grows, use `from`/`to` or `syncFrom`/`syncTo` parameters to limit response size. Responses exceeding the memory limit will fail.\n\n### Recommended Sync Strategy\n- **Incremental (ongoing):** Scheduled job using `syncFrom`/`syncTo` every 5 minutes\n- **Historical bulk export:** Use `from`/`to` per month in parallel or sequential requests\n\n### Team-Scoped Tokens\nA Refresh Token may be **scoped to specific teams**. When it is, the Access Token it produces restricts **every read** to those teams:\n- List endpoints (tests, athletes, teams, groups) return only in-scope records.\n- Requesting a specific out-of-scope resource returns an **empty result with HTTP 200** — an empty object (`{}`) for single-resource endpoints such as `/forcetime/{test_id}` and `/cop/{test_id}`, or an empty `data` array for list endpoints. It does **not** return `404`.\n\nDesign your integration to treat an empty 200 response as \"no access / no data\" rather than an error.\n\n### What's New in 1.15\n- **New endpoint:** `GET /api/v1/cop/{test_id}` — center-of-pressure time series for Free Run tests.\n- **Force-Time data** now documents shear forces (`XLeftForce(N)` … `YRightForce(N)`), moments (`XLeftMoments` … `YRightMoments`), and `eid`. `rsi` is an array of numbers, `timestamp` is an integer (Unix seconds), and `testType` is the full test-type object.\n- **Tests:** non-calculable metric values are `null` (not `\"N/A\"`); each test includes an `active` boolean by default.\n- **Metrics:** the per-test-type field is `testTypeName`.\n- **Test Types:** response is a bare JSON array.\n- **Teams / Groups / Tags:** responses include a `count` field; `teamId` query param documented on Athletes, Teams, and Groups.\n- Documented **team-scoped token** behavior (see above).",
+    "version": "1.16",
+    "description": "## Overview\nThis API provides programmatic access to your Hawkin force platform data.\n\n**Designed for server-to-server use.** Not intended for direct client-app access.\n\n**Rate limiting:** As your database grows, use `from`/`to` or `syncFrom`/`syncTo` parameters to limit response size. Responses exceeding the memory limit will fail.\n\n### Recommended Sync Strategy\n- **Incremental (ongoing):** Scheduled job using `syncFrom`/`syncTo` every 5 minutes\n- **Historical bulk export:** Use `from`/`to` per month in parallel or sequential requests\n\n### Team-Scoped Tokens\nA Refresh Token may be **scoped to specific teams**. When it is, the Access Token it produces restricts **every read** to those teams:\n- List endpoints (tests, athletes, teams, groups) return only in-scope records.\n- Requesting a specific out-of-scope resource returns an **empty result with HTTP 200** — an empty object (`{}`) for single-resource endpoints such as `/forcetime/{test_id}` and `/cop/{test_id}`, or an empty `data` array for list endpoints. It does **not** return `404`.\n\nDesign your integration to treat an empty 200 response as \"no access / no data\" rather than an error.\n\n### What's New in 1.16\n- **Get Tests** accepts three new optional boolean query params alongside `includeInactive`: `useNulls` (default `true`), `rounding` (default `false`) and `nestMetrics` (default `false`). Each overrides the response shape for that request only; omitting a param keeps the default, so existing integrations are unaffected.\n- **Who these are for:** customers migrating from a legacy named endpoint to `/api/v1`. Combine them to reproduce your old endpoint's exact response shape without changing your parser. New integrations should leave them at their defaults.\n- `useNulls=false` returns non-calculable metrics as the string `\"N/A\"` instead of `null`. `rounding=true` rounds each metric to its standard display precision. `nestMetrics=true` returns metrics as a `metrics` array of `{metricId, metricLabel, metricUnits, metricValue}` objects (see the `TestNested` schema); values in that shape are never rounded, so `rounding` has no effect with it.\n\n### What's New in 1.15\n- **New endpoint:** `GET /api/v1/cop/{test_id}` — center-of-pressure time series for Free Run tests.\n- **Force-Time data** now documents shear forces (`XLeftForce(N)` … `YRightForce(N)`), moments (`XLeftMoments` … `YRightMoments`), and `eid`. `rsi` is an array of numbers, `timestamp` is an integer (Unix seconds), and `testType` is the full test-type object.\n- **Tests:** non-calculable metric values are `null` (not `\"N/A\"`); each test includes an `active` boolean by default.\n- **Metrics:** the per-test-type field is `testTypeName`.\n- **Test Types:** response is a bare JSON array.\n- **Teams / Groups / Tags:** responses include a `count` field; `teamId` query param documented on Athletes, Teams, and Groups.\n- Documented **team-scoped token** behavior (see above).",
     "contact": {
       "email": "dev-team@hawkindynamics.com"
     }
@@ -153,7 +153,70 @@
         "additionalProperties": {
           "type": "number",
           "nullable": true,
-          "description": "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null (the public endpoint uses useNulls=true), not the string 'N/A'."
+          "description": "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null by default (useNulls=true); with useNulls=false they are the string 'N/A'. Values are unrounded unless rounding=true. Omitted entirely when nestMetrics=true (see TestNested)."
+        }
+      },
+      "NestedMetric": {
+        "type": "object",
+        "description": "One metric on a test when the request was made with nestMetrics=true.",
+        "properties": {
+          "metricId": {
+            "type": "string",
+            "description": "Stable metric ID",
+            "example": "jumpHeight"
+          },
+          "metricLabel": {
+            "type": "string",
+            "description": "Metric label",
+            "example": "Jump Height"
+          },
+          "metricUnits": {
+            "type": "string",
+            "description": "Units, may be empty",
+            "example": "m"
+          },
+          "metricValue": {
+            "type": "number",
+            "description": "Unrounded metric value",
+            "example": 0.4123
+          }
+        }
+      },
+      "TestNested": {
+        "type": "object",
+        "description": "Shape of each test when the request was made with nestMetrics=true. Metadata fields match Test; metrics move into a `metrics` array and are never rounded.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "exampleTestId0000000"
+          },
+          "testType": {
+            "$ref": "#/components/schemas/TestType"
+          },
+          "athlete": {
+            "$ref": "#/components/schemas/AthleteRef"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp of the test",
+            "example": 1551301560
+          },
+          "segment": {
+            "type": "string",
+            "description": "Test type and trial number within session",
+            "example": "Countermovement Jump:5"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the test is active (not archived). Present when includeInactive=true (the default).",
+            "example": true
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NestedMetric"
+            }
+          }
         }
       },
       "TestsResponse": {
@@ -163,7 +226,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Test"
-            }
+            },
+            "description": "Test records. Each item is a Test, or a TestNested when the request was made with nestMetrics=true."
           },
           "count": {
             "type": "integer",
@@ -835,6 +899,33 @@
             "schema": {
               "type": "boolean",
               "default": true
+            }
+          },
+          {
+            "name": "useNulls",
+            "in": "query",
+            "description": "Default true. Non-calculable metric values are returned as `null`. Set to false to receive the string `\"N/A\"` instead. Intended for customers migrating from a legacy named endpoint that returned `\"N/A\"`; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "rounding",
+            "in": "query",
+            "description": "Default false. Set to true to round each metric value to its standard display precision. Has no effect when `nestMetrics=true` (nested metric values are never rounded). Intended for customers migrating from a legacy named endpoint that returned rounded values; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "nestMetrics",
+            "in": "query",
+            "description": "Default false. Set to true to return each test's metrics as a `metrics` array of `{metricId, metricLabel, metricUnits, metricValue}` objects (see the `TestNested` schema) instead of flat metric-name keys. Only metrics with a numeric value are included. Intended for customers migrating from a legacy named endpoint that returned nested metrics; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           },
           {

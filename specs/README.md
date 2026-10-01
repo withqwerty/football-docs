@@ -24,7 +24,7 @@ anyone can re-fetch and diff.
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
 | `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
-| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-09-30 | 2026-09-30 |
+| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-10-01 | 2026-10-01 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
