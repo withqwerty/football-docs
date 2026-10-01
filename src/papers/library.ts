@@ -17,7 +17,7 @@ import { existsSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs
 import { homedir } from "node:os";
 import { basename, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Env, FetchError, type PaperContext, readCacheJson, readCapped, reason, USER_AGENT, writeCacheJson } from "./core.js";
+import { apiKey, type Env, FetchError, type PaperContext, readCacheJson, readCapped, reason, USER_AGENT, writeCacheJson } from "./core.js";
 import type { PaperRecord } from "./records.js";
 import { isPdf, pdfSections, readPdf, type Section, splitSections } from "./text.js";
 
@@ -187,10 +187,19 @@ export async function readLocalPdf(path: string): Promise<LocalPdf> {
 }
 
 // ---------------------------------------------------------------------------
-// Zotero's local API (Zotero 7: Settings > Advanced > "Allow other applications
-// on this computer to communicate with Zotero"). Read requests need no key.
+// Zotero
+//
+// Two routes to the same library:
+// - the local API of Zotero 7 on this computer (Settings > Advanced > "Allow
+//   other applications on this computer to communicate with Zotero"). Read
+//   requests need no key, and nothing leaves the machine;
+// - the Zotero web API at api.zotero.org, with a read-only key from
+//   zotero.org/settings/keys (ZOTERO_API_KEY, and ZOTERO_USER_ID or the user
+//   ID the key reports). Used when Zotero is not running here. It reads only
+//   files kept in Zotero's own storage, not linked files.
 
-export const ZOTERO_API = "http://localhost:23119/api/users/0";
+export const ZOTERO_LOCAL = "http://localhost:23119/api/users/0";
+const ZOTERO_WEB = "https://api.zotero.org";
 
 export type ZoteroItem = {
   key: string;
@@ -210,39 +219,102 @@ export type ZoteroItem = {
   };
 };
 
-async function zoteroGet(ctx: PaperContext, path: string): Promise<Response> {
+export type ZoteroRoute = { kind: "local" | "web"; base: string; headers: Record<string, string>; label: string };
+
+const LOCAL_ROUTE: ZoteroRoute = {
+  kind: "local",
+  base: ZOTERO_LOCAL,
+  headers: { "User-Agent": USER_AGENT, "Zotero-API-Version": "3" },
+  label: "Zotero on this computer",
+};
+
+const userIds = new Map<string, string>();
+
+/** Forget the user IDs read from keys. Tests only. */
+export function resetZoteroRoutes(): void {
+  userIds.clear();
+}
+
+async function zoteroFetch(ctx: PaperContext, route: ZoteroRoute, url: string, redirect: RequestRedirect = "follow"): Promise<Response> {
   let response: Response;
   try {
-    response = await ctx.fetchImpl(`${ZOTERO_API}${path}`, {
-      headers: { "User-Agent": USER_AGENT, "Zotero-API-Version": "3" },
-      signal: AbortSignal.timeout(15_000),
-    });
-  } catch {
-    throw new FetchError("Zotero is not running, or its local API is not reachable on port 23119");
+    response = await ctx.fetchImpl(url, { headers: route.headers, redirect, signal: AbortSignal.timeout(20_000) });
+  } catch (error) {
+    if (route.kind === "local") throw new FetchError("Zotero is not running, or its local API is not reachable on port 23119");
+    throw new FetchError(`the Zotero web API did not answer (${reason(error)})`);
   }
   if (response.status === 403) {
+    await response.body?.cancel().catch(() => undefined);
     throw new FetchError(
-      "Zotero's local API is off. In Zotero 7, open Settings > Advanced and turn on \"Allow other applications on this computer to communicate with Zotero\"",
+      route.kind === "local"
+        ? "Zotero's local API is off. In Zotero 7, open Settings > Advanced and turn on \"Allow other applications on this computer to communicate with Zotero\""
+        : "the Zotero web API refused the key (HTTP 403). Check at zotero.org/settings/keys that it allows access to your library, and to files for PDFs",
       403,
     );
   }
-  if (response.status === 404) throw new FetchError("no such Zotero item", 404);
-  if (!response.ok) throw new FetchError(`Zotero answered HTTP ${response.status}`, response.status);
+  if (response.status === 404) {
+    await response.body?.cancel().catch(() => undefined);
+    throw new FetchError("no such Zotero item, or no file stored for it", 404);
+  }
+  if (response.status === 429 || response.status === 503) {
+    const wait = response.headers.get("retry-after") ?? response.headers.get("backoff");
+    throw new FetchError(`Zotero asked to slow down${wait ? `; try again in ${wait} seconds` : ""}`, response.status);
+  }
+  if (!response.ok && !(redirect === "manual" && response.status >= 300 && response.status < 400)) {
+    throw new FetchError(`Zotero answered HTTP ${response.status}`, response.status);
+  }
   return response;
 }
 
-async function zoteroJson<T>(ctx: PaperContext, path: string): Promise<T> {
-  const response = await zoteroGet(ctx, path);
+async function zoteroJson<T>(ctx: PaperContext, route: ZoteroRoute, path: string): Promise<T> {
+  const response = await zoteroFetch(ctx, route, `${route.base}${path}`);
   return JSON.parse(new TextDecoder().decode(await readCapped(response))) as T;
+}
+
+async function webRoute(ctx: PaperContext): Promise<ZoteroRoute | null> {
+  const key = await apiKey(ctx, "ZOTERO_API_KEY");
+  if (!key) return null;
+  const headers = { "User-Agent": USER_AGENT, "Zotero-API-Version": "3", "Zotero-API-Key": key };
+  let userId = ctx.env.ZOTERO_USER_ID?.trim() || userIds.get(key);
+  if (!userId) {
+    const probe: ZoteroRoute = { kind: "web", base: ZOTERO_WEB, headers, label: "Zotero web API" };
+    const current = await zoteroJson<{ userID?: number }>(ctx, probe, "/keys/current");
+    if (!current.userID) throw new FetchError("the Zotero key did not report a user ID; set ZOTERO_USER_ID");
+    userId = String(current.userID);
+    userIds.set(key, userId);
+  }
+  if (!/^\d+$/.test(userId)) throw new FetchError("ZOTERO_USER_ID must be the number shown at zotero.org/settings/keys");
+  return { kind: "web", base: `${ZOTERO_WEB}/users/${userId}`, headers, label: "Zotero web API" };
+}
+
+/**
+ * The route to use: the local API when Zotero answers on this computer, else
+ * the web API when a key is set. The error names both ways to set one up.
+ */
+export async function zoteroRoute(ctx: PaperContext): Promise<ZoteroRoute> {
+  let localProblem: string;
+  try {
+    await zoteroJson(ctx, LOCAL_ROUTE, "/items/top?limit=1");
+    return LOCAL_ROUTE;
+  } catch (error) {
+    localProblem = reason(error);
+  }
+  const web = await webRoute(ctx);
+  if (web) return web;
+  throw new FetchError(
+    `${localProblem}. To read Zotero without the app running, set ZOTERO_API_KEY to a read-only key from zotero.org/settings/keys`,
+  );
 }
 
 export function zoteroCreators(item: ZoteroItem): string[] {
   return (item.data.creators ?? []).map((c) => c.name ?? [c.firstName, c.lastName].filter(Boolean).join(" ")).filter(Boolean);
 }
 
-export async function searchZotero(ctx: PaperContext, query: string, limit: number): Promise<ZoteroItem[]> {
+export async function searchZotero(ctx: PaperContext, query: string, limit: number): Promise<{ items: ZoteroItem[]; label: string }> {
+  const route = await zoteroRoute(ctx);
   const q = encodeURIComponent(query.replace(/"/g, ""));
-  return zoteroJson<ZoteroItem[]>(ctx, `/items/top?q=${q}&qmode=titleCreatorYear&limit=${limit}`);
+  const items = await zoteroJson<ZoteroItem[]>(ctx, route, `/items/top?q=${q}&qmode=titleCreatorYear&limit=${limit}`);
+  return { items, label: route.label };
 }
 
 export function fromZotero(item: ZoteroItem): PaperRecord {
@@ -260,37 +332,80 @@ export function fromZotero(item: ZoteroItem): PaperRecord {
   };
 }
 
-export type ZoteroPaper = { item: ZoteroItem; attachment: ZoteroItem; sections: Section[]; sha256: string };
+/** A Zotero item with no PDF attachment. Carries the item, so a caller can read its DOI instead. */
+export class NoZoteroPdfError extends FetchError {
+  constructor(
+    readonly item: ZoteroItem,
+    readonly label: string,
+  ) {
+    super(`the Zotero item ${item.key} has no PDF attachment`);
+  }
+}
+
+export type ZoteroPaper = { item: ZoteroItem; attachment: ZoteroItem; sections: Section[]; sha256: string; label: string };
+
+/** A PDF's sections and hash from its bytes. */
+async function pdfFromBytes(data: Uint8Array): Promise<{ sections: Section[]; sha256: string }> {
+  if (!isPdf(data)) throw new FetchError("the stored file is not a PDF");
+  const pdf = await readPdf(data);
+  return { sections: pdfSections(pdf.pages), sha256: createHash("sha256").update(data).digest("hex") };
+}
+
+/**
+ * The file of an attachment through the web API. The API answers with a
+ * redirect to the storage host; that request goes without the Zotero key, so
+ * the key is sent only to api.zotero.org.
+ */
+async function webFile(ctx: PaperContext, route: ZoteroRoute, attachmentKey: string): Promise<Uint8Array> {
+  const response = await zoteroFetch(ctx, route, `${route.base}/items/${attachmentKey}/file`, "manual");
+  const location = response.headers.get("location");
+  if (response.status >= 300 && response.status < 400 && location) {
+    await response.body?.cancel().catch(() => undefined);
+    const file = await ctx.fetchImpl(new URL(location, route.base).href, {
+      headers: { "User-Agent": USER_AGENT },
+      signal: AbortSignal.timeout(60_000),
+    });
+    if (!file.ok) throw new FetchError(`the Zotero file download answered HTTP ${file.status}`, file.status);
+    return readCapped(file, MAX_LOCAL_PDF_BYTES);
+  }
+  return readCapped(response, MAX_LOCAL_PDF_BYTES);
+}
 
 /**
  * The text of a Zotero item's PDF: the item itself when it is a PDF
- * attachment, else its first PDF attachment. Reads the file Zotero stores;
- * when Zotero has no file on this computer, uses Zotero's own full-text index.
+ * attachment, else its first PDF attachment. Reads the stored file; when there
+ * is none (a linked file, through the web API), uses Zotero's own full-text index.
  */
 export async function readZoteroPaper(ctx: PaperContext, key: string): Promise<ZoteroPaper> {
   if (!/^[A-Z0-9]{8}$/.test(key)) throw new FetchError("a Zotero item key is 8 capital letters and digits, such as ABCD2345");
-  const item = await zoteroJson<ZoteroItem>(ctx, `/items/${key}`);
+  const route = await zoteroRoute(ctx);
+  const item = await zoteroJson<ZoteroItem>(ctx, route, `/items/${key}`);
   let attachment = item;
   let parent = item;
   if (item.data.itemType !== "attachment") {
-    const children = await zoteroJson<ZoteroItem[]>(ctx, `/items/${key}/children`);
+    const children = await zoteroJson<ZoteroItem[]>(ctx, route, `/items/${key}/children`);
     const pdf = children.find((child) => child.data.itemType === "attachment" && child.data.contentType === "application/pdf");
-    if (!pdf) throw new FetchError(`the Zotero item ${key} has no PDF attachment`);
+    if (!pdf) throw new NoZoteroPdfError(item, route.label);
     attachment = pdf;
   } else if (item.data.parentItem) {
-    parent = await zoteroJson<ZoteroItem>(ctx, `/items/${item.data.parentItem}`);
+    parent = await zoteroJson<ZoteroItem>(ctx, route, `/items/${item.data.parentItem}`);
   }
 
   try {
-    const url = (await (await zoteroGet(ctx, `/items/${attachment.key}/file/view/url`)).text()).trim();
-    if (url.startsWith("file:")) {
-      const local = await readLocalPdf(fileURLToPath(url));
-      return { item: parent, attachment, sections: local.sections, sha256: local.sha256 };
+    if (route.kind === "local") {
+      const url = (await (await zoteroFetch(ctx, route, `${route.base}/items/${attachment.key}/file/view/url`)).text()).trim();
+      if (url.startsWith("file:")) {
+        const local = await readLocalPdf(fileURLToPath(url));
+        return { item: parent, attachment, sections: local.sections, sha256: local.sha256, label: route.label };
+      }
+    } else {
+      const pdf = await pdfFromBytes(await webFile(ctx, route, attachment.key));
+      return { item: parent, attachment, ...pdf, label: route.label };
     }
   } catch (error) {
-    if (!(error instanceof FetchError) || error.status === 403) throw error;
+    if (!(error instanceof FetchError) || error.status === 403 || error.status === 429 || error.status === 503) throw error;
   }
-  const fulltext = await zoteroJson<{ content?: string }>(ctx, `/items/${attachment.key}/fulltext`).catch((error) => {
+  const fulltext = await zoteroJson<{ content?: string }>(ctx, route, `/items/${attachment.key}/fulltext`).catch((error) => {
     throw new FetchError(`Zotero has neither the file nor its full text for ${attachment.key} (${reason(error)})`);
   });
   const content = fulltext.content ?? "";
@@ -299,5 +414,6 @@ export async function readZoteroPaper(ctx: PaperContext, key: string): Promise<Z
     attachment,
     sections: splitSections(content),
     sha256: createHash("sha256").update(content).digest("hex"),
+    label: route.label,
   };
 }

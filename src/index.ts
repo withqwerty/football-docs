@@ -310,7 +310,7 @@ export function createFootballDocsServer(): McpServer {
         .array(z.enum(SEARCH_SOURCES))
         .optional()
         .describe(
-          "Sources to ask. Default: openalex, arxiv and sportrxiv (searched in a local copy of its feed). Add zotero to search the user's own Zotero library on this computer.",
+          "Sources to ask. Default: openalex, arxiv and sportrxiv (searched in a local copy of its feed). Add zotero to search the user's own Zotero library (Zotero on this computer, else the Zotero web API with ZOTERO_API_KEY).",
         ),
       max_results: z.number().optional().default(10).describe("Results per source, 1 to 25 (default 10)."),
       year_from: z.number().int().optional().describe("Only papers published in or after this year."),
@@ -384,7 +384,7 @@ export function createFootballDocsServer(): McpServer {
     "match_quote",
     [
       "Check that a quote appears in its source: a paper (any ID read_paper takes) or a web page URL. Reports exact,",
-      "normalised (same words; case, spacing, quote marks, dashes or line-end hyphens differ), close (with a similarity",
+      "normalised (same words; case, spacing, quote marks, ligatures or hyphens differ), close (with a similarity",
       "score: quote the source's own words instead) or none, with the section, page and a W3C TextQuoteSelector. Use it",
       "before citing a definition or a claim.",
     ].join(" "),

@@ -5,7 +5,7 @@
  * Quote matching follows the W3C TextQuoteSelector idea: the matched text plus
  * a little text before and after it, so a reader can find the place again. It
  * tries an exact match first, then a match after normalising case, spacing,
- * quotes, dashes, ligatures and line-end hyphens, then the closest passage
+ * quotes, ligatures and hyphens between letters, then the closest passage
  * with a similarity score.
  */
 
@@ -150,10 +150,13 @@ export function pdfSections(pages: string[]): Section[] {
   return sections.flatMap((section) => splitLongSection(section, WHOLE_TEXT_CHARS));
 }
 
-/** Join PDF lines into paragraphs: mend words hyphenated at a line end, keep blank lines. */
+/**
+ * Trim PDF lines and blank-line runs. Hyphens at line ends stay as the PDF has
+ * them: "ad-\ndressing" is one word, but "end-\nto-end" keeps its hyphen, and
+ * text alone cannot tell the two apart. Quote matching ignores them instead.
+ */
 function tidy(text: string): string {
   return text
-    .replace(/(\p{Ll})-\n(\p{Ll})/gu, "$1$2")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
@@ -257,8 +260,8 @@ const FOLD: Record<string, string> = {
 };
 
 /**
- * Lower case, one space for any run of white space, plain quotes and dashes,
- * ligatures expanded, soft hyphens and line-end hyphens removed, markdown
+ * Lower case, one space for any run of white space, plain quotes, ligatures
+ * expanded, soft hyphens and hyphens between letters removed, markdown
  * emphasis and link brackets dropped.
  */
 export function normalise(input: string): Normalised {
@@ -267,13 +270,18 @@ export function normalise(input: string): Normalised {
   let lastSpace = true;
   for (let i = 0; i < input.length; i++) {
     let ch = input[i];
-    // A hyphen at a line end inside a word: drop it and the line break.
-    if (ch === "-" && input[i + 1] === "\n" && /\p{L}/u.test(input[i - 1] ?? "") && /\p{Ll}/u.test(input[i + 2] ?? "")) {
-      i++;
-      continue;
-    }
     if (ch === "*" || ch === "_" || ch === "`" || ch === "[" || ch === "]") continue;
     ch = FOLD[ch] ?? ch;
+    // A hyphen or dash between letters, also across a line break, is dropped,
+    // so "ad-\ndressing", "addressing", "end-\nto-end" and "end-to-end" all
+    // compare equal.
+    if (ch === "-" && /\p{L}/u.test(input[i - 1] ?? "")) {
+      const next = input[i + 1] === "\n" ? input[i + 2] : input[i + 1];
+      if (/\p{L}/u.test(next ?? "")) {
+        if (input[i + 1] === "\n") i++;
+        continue;
+      }
+    }
     for (const c of ch.normalize("NFKC").toLowerCase()) {
       if (/\s/.test(c)) {
         if (lastSpace) continue;
@@ -407,7 +415,8 @@ export function passages(source: string, query: string, cap: number, limit = 5):
     if (start < lastEnd) continue;
     // The marks for cut text count towards the cap.
     const lead = start > 0 ? "…" : "";
-    out.push(lead + truncate(source.slice(start, start + cap).replace(/\s+/g, " ").trim(), cap - lead.length - 1));
+    const raw = source.slice(start, start + cap).replace(/-[ \t]*\n[ \t]*/g, "-").replace(/\s+/g, " ").trim();
+    out.push(lead + truncate(raw, cap - lead.length - 1));
     lastEnd = start + cap;
     if (out.length >= limit) break;
   }
