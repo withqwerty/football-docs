@@ -37,3 +37,24 @@ jobs:
       - run: pnpm run ingest
       - run: pnpm test
       - run: pnpm run build
+
+  # The package runs wherever an MCP client runs, so the suite runs on macOS and
+  # Windows too. A separate job keeps the names of the required checks above.
+  cross-os:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm run ingest
+      - run: pnpm test
+      - run: pnpm run build
