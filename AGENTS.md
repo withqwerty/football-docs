@@ -73,6 +73,7 @@ pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
 python3 scripts/gen_vendor_tables.py  # rebuild the generated tables in the wearable vendor docs from specs/ (--check to diff only)
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
+pnpm site:stats                       # release facts for nutmeg-site and the announcement card (needs data/docs.db)
 ```
 
 Node >= 22.13 (the index uses the built-in `node:sqlite`). Package manager is pnpm. Linter is Biome (not ESLint).

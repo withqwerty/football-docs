@@ -463,6 +463,13 @@ git tag -a v0.11.0 -m "v0.11.0"
 git push origin v0.11.0
 ```
 
+3. The release job attaches `site-stats.json` (version, chunk and provider counts,
+   tools, per-provider chunks; `pnpm site:stats` prints the same) to the GitHub
+   Release. In nutmeg-site, `pnpm football-docs:release` reads it from the latest
+   release, rebuilds the football-docs section and saves the announcement card as
+   `cards/football-docs-v<version>.png`. Update its "What's new" text, then
+   `pnpm deploy` there.
+
 Release notes come from the body of the `chore: release vX.Y.Z` commit, so write
 that message as the release notes you want readers to see. The workflow reads it
 from the second parent when the tag sits on a merge commit, strips the commit

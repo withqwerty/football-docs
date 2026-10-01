@@ -21,6 +21,7 @@
     "discover": "tsx src/crawl.ts --discover",
     "impect:truth": "tsx src/impect-truth.ts",
     "statsbomb:truth": "tsx src/statsbomb-truth.ts",
+    "site:stats": "tsx scripts/site-stats.ts",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "prepublishOnly": "pnpm build && pnpm ingest",

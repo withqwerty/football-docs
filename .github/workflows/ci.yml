@@ -37,6 +37,8 @@ jobs:
       - run: pnpm run ingest
       - run: pnpm test
       - run: pnpm run build
+      # The release job attaches this file; a broken script should fail here first.
+      - run: pnpm -s site:stats > /dev/null
 
   # The package runs wherever an MCP client runs, so the suite runs on macOS and
   # Windows too. A separate job keeps the names of the required checks above.
