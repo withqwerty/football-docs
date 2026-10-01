@@ -6,7 +6,6 @@ Opta uses a 0-100 normalised pitch for event coordinates (`x`, `y` fields on eac
 
 - **x-axis:** 0 = own goal-line, 100 = opponent's goal-line (direction of attack)
 - **y-axis:** 0 = right touchline, 100 = left touchline (when facing opponent's goal)
-- Values can slightly overflow (observed range: -1.7 to 101.7 on x, -2.0 to 102.0 on y)
 
 Coordinates are always normalised **left to right**. The attacking team plays from x=0 to x=100 regardless of actual pitch direction or period.
 

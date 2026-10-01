@@ -9,7 +9,6 @@ The public Opta Analyst website (theanalyst.com) uses a static feed key that pro
 | Base URL | `https://api.performfeeds.com/soccerdata` |
 | Required headers | `Referer: https://theanalyst.com/`, `Origin: https://theanalyst.com` |
 | Response format | JSONP (wrapped in `cb(...)`) or JSON with `_fmt=json` |
-| Rate limiting | None observed, but throttle to ~0.5s between calls |
 
 ## Available Endpoints
 
