@@ -66,12 +66,12 @@ def latest_release(package):
 
 def truth_pins():
     """The exact versions scripts/gen_all_truth.sh installs, by package name."""
-    script = (ROOT / "scripts" / "gen_all_truth.sh").read_text()
+    script = (ROOT / "scripts" / "gen_all_truth.sh").read_text(encoding="utf-8")
     return dict(re.findall(r'^\s*"([A-Za-z0-9_.-]+)==([^"]+)"', script, re.M))
 
 
 def check_packages():
-    providers = json.loads((ROOT / "providers.json").read_text())["providers"]
+    providers = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))["providers"]
     pins = truth_pins()
     findings = []
     print("Package versions")
@@ -148,7 +148,7 @@ def comparable(path, local_bytes, remote_bytes):
 
 
 def check_specs():
-    table = (ROOT / "specs" / "README.md").read_text()
+    table = (ROOT / "specs" / "README.md").read_text(encoding="utf-8")
     findings = []
     print("\nSpec snapshots")
     for path, url in re.findall(r"^\| `([^`]+)` \| (https?://\S+)", table, re.M):
@@ -191,7 +191,7 @@ def compare_regenerated(label, truth_file, command):
             detail = (result.stderr or result.stdout).strip().splitlines()[-1:]
             print(f"  ??? {label}: generator failed ({' '.join(detail)})")
             return [f"{label}: truth generator failed, check the source layout"]
-        fresh = json.loads(path.read_text())
+        fresh = json.loads(path.read_text(encoding="utf-8"))
     finally:
         path.write_bytes(committed)
     old = json.loads(committed)

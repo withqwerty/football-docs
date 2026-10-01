@@ -30,7 +30,7 @@ HTTP_METHODS = {"get", "put", "post", "delete", "options", "head", "patch", "tra
 
 
 def load_spec(path: Path) -> dict[str, Any]:
-    text = path.read_text()
+    text = path.read_text(encoding="utf-8")
     if path.suffix in {".yml", ".yaml"}:
         try:
             import yaml
@@ -117,7 +117,7 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{args.provider}.openapi.json"
-    out_path.write_text(json.dumps(truth, indent=2) + "\n")
+    out_path.write_text(json.dumps(truth, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     print(
         f"{args.provider}: {len(args.spec)} spec(s) -> {out_path.name} "

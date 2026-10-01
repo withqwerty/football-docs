@@ -17,6 +17,8 @@ describe("generated vendor tables", () => {
     const result = spawnSync("python3", ["scripts/gen_vendor_tables.py", "--check"], {
       cwd: ROOT,
       encoding: "utf8",
+      // Python on Windows defaults to the ANSI code page for files and pipes.
+      env: { ...process.env, PYTHONUTF8: "1" },
     });
     if (result.error) throw result.error;
     const report = `${result.stdout}${result.stderr}`;

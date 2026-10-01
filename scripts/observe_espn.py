@@ -196,7 +196,7 @@ def main():
         "scope": "Dated response structure only; no official schema, completeness or stability guarantee.",
         "observations": observations,
     }
-    OUTPUT.write_text(json.dumps(result, indent=2) + "\n")
+    OUTPUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Wrote {len(observations)} observations to {OUTPUT.name}")
 
 

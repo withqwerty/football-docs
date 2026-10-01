@@ -61,7 +61,7 @@ def main() -> None:
     )
     args = ap.parse_args()
 
-    collection = json.loads(args.collection.read_text())
+    collection = json.loads(args.collection.read_text(encoding="utf-8"))
     entries = walk(collection.get("item"))
     if args.group_prefix:
         entries = [(p, i) for p, i in entries if p.startswith(args.group_prefix)]
@@ -123,7 +123,7 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{args.provider}.postman.json"
-    out_path.write_text(json.dumps(truth, indent=2) + "\n")
+    out_path.write_text(json.dumps(truth, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     print(
         f"{args.provider}: {args.collection.name} -> {out_path.name} "

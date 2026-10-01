@@ -1,0 +1,6 @@
+# Check text out with LF on every OS. The docs, specs and truth files are
+# parsed line by line, and the tests and scripts expect LF; a Windows checkout
+# would otherwise turn them into CRLF.
+* text=auto eol=lf
+*.db binary
+*.png binary

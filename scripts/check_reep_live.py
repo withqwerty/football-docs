@@ -78,7 +78,7 @@ def check_links(manifest):
 
     cited = set()
     for doc in sorted(DOCS.glob("*.md")):
-        for url in re.findall(r"https://(?:data\.)?reep\.football[^\s)`\"']*", doc.read_text()):
+        for url in re.findall(r"https://(?:data\.)?reep\.football[^\s)`\"']*", doc.read_text(encoding="utf-8")):
             url = url.rstrip(".,;:")
             if "{" in url or "<" in url or "/api/v1" in url:
                 continue  # templates and keyed API calls are not plain links
@@ -97,8 +97,8 @@ def check_links(manifest):
 
 def diff_release(live_manifest, live_schema):
     drift = []
-    old_manifest = json.loads((SPECS / "release.json").read_text())
-    old_schema = json.loads((SPECS / "schema.json").read_text())
+    old_manifest = json.loads((SPECS / "release.json").read_text(encoding="utf-8"))
+    old_schema = json.loads((SPECS / "schema.json").read_text(encoding="utf-8"))
 
     if live_manifest["stamp"] != old_manifest["stamp"]:
         print(f"  new release: {old_manifest['stamp']} -> {live_manifest['stamp']}")
