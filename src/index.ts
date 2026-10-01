@@ -3,7 +3,8 @@
  *
  * A Context7-style searchable index of football data provider documentation.
  * Exposes tools for searching docs, listing providers, comparing providers,
- * requesting documentation updates, and resolving football entities.
+ * requesting documentation updates, and resolving football entities, plus
+ * paper and web-source lookups that call public services at run time.
  *
  * Data is stored in a SQLite FTS5 index for fast offline search. Update
  * requests are stored in a separate writable SQLite DB in a user-writable
@@ -20,6 +21,7 @@ import { z } from "zod";
 import { hardenConnection } from "./data-format.js";
 import { cleanDataDir, dataModeFor, defaultDataDir, IndexChooser } from "./data-source.js";
 import { checkForUpdate } from "./data-update.js";
+import { getPaper, getWebSource, SEARCH_SOURCES, searchPapers } from "./papers/tools.js";
 import { ENTITY_TYPES } from "./reep.js";
 import { type Database, openDatabase } from "./sqlite.js";
 import {
@@ -278,6 +280,69 @@ export function createFootballDocsServer(): McpServer {
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     async (args) => resolveEntity(args),
+  );
+
+  server.tool(
+    "search_papers",
+    [
+      "Search scholarly papers on football analytics and sport science: OpenAlex (title, abstract and full text),",
+      "arXiv (title, abstract, authors) and SportRxiv (title, abstract, keywords). Use it to find the paper behind a",
+      "method (xG, VAEP, EPV, pitch control) or the works that cite an idea. Use words and \"quoted phrases\";",
+      "OpenAlex matches full text, so a hit may cite the idea rather than introduce it. Many methods first appeared",
+      "in blog posts or conference papers without a DOI (xT, for example): search the web for those and read them",
+      "with get_web_source. The reply names the services asked. FOOTBALL_DOCS_PAPERS=off turns paper lookups off.",
+    ].join(" "),
+    {
+      query: z
+        .string()
+        .describe('Words and "quoted phrases", optionally with AND / OR / NOT. Examples: \'"expected threat" soccer\', \'"pitch control" Spearman\', \'VAEP action values\''),
+      sources: z
+        .array(z.enum(SEARCH_SOURCES))
+        .optional()
+        .describe("Sources to ask (default all three). SportRxiv is searched in a local copy of its feed."),
+      max_results: z.number().optional().default(10).describe("Results per source, 1 to 25 (default 10)."),
+      year_from: z.number().int().optional().describe("Only papers published in or after this year."),
+      year_to: z.number().int().optional().describe("Only papers published in or before this year."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    async (args) => searchPapers(args),
+  );
+
+  server.tool(
+    "get_paper",
+    [
+      "Look up one paper by DOI, arXiv ID or OpenAlex ID: title, authors, date, venue, all IDs, licence, open copies",
+      "with their licences, abstract and a citation line. arXiv IDs come from arXiv with the paper's licence; DOIs",
+      "from OpenAlex, then SportRxiv or Crossref. Use it to check that a reference exists and says what is claimed.",
+    ].join(" "),
+    {
+      id: z
+        .string()
+        .describe("A DOI (10.1145/3292500.3330758 or https://doi.org/...), an arXiv ID or URL (1802.07127, arxiv.org/abs/1802.07127), or an OpenAlex ID (W4288278931)."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    async (args) => getPaper(args),
+  );
+
+  server.tool(
+    "get_web_source",
+    [
+      "Read a public web page (blog post, newsletter, club or vendor article) as text, with its author, date,",
+      "licence and Wayback Machine snapshots. Use it for methods first published on the web, such as Karun Singh's",
+      "xT post, after finding the page with a web search. A page with no date gets the date of its earliest snapshot",
+      "as an upper bound. Long pages come back by section. The tool stops at bot checks and refuses local addresses.",
+    ].join(" "),
+    {
+      url: z.string().describe("The page's http(s) URL."),
+      section: z
+        .number()
+        .int()
+        .min(0)
+        .optional()
+        .describe("For a long page, the section number from the outline of an earlier call."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    async (args) => getWebSource(args),
   );
 
   return server;

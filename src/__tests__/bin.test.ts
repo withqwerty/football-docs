@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
+import { TOOL_NAMES } from "../tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
@@ -198,6 +199,9 @@ describe("npm bin entrypoint", () => {
       expect(getProviderDocsTool?.inputSchema?.properties?.provider?.description).toContain("Provider key or alias");
       expect(getProviderDocsTool?.inputSchema?.properties?.topic?.description).toContain("Optional topic");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("common aliases");
+      const names = toolsResponse.result?.tools?.map((tool) => tool.name) ?? [];
+      // The server registers exactly the tools the README documents (corpus-contract checks the README).
+      expect([...names].sort()).toEqual([...TOOL_NAMES].sort());
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("Sofascore");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("WhoScored");
       expect(compareTool?.inputSchema?.properties?.providers?.description).toContain("ClubElo");

@@ -14,6 +14,9 @@ export const TOOL_NAMES = [
   "compare_providers",
   "request_update",
   "resolve_entity",
+  "search_papers",
+  "get_paper",
+  "get_web_source",
 ] as const;
 
 type TextContent = {
