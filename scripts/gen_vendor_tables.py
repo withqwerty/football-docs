@@ -133,7 +133,7 @@ PERSONAL_FIELDS: dict[str, set[str]] = {
 @functools.cache
 def load(path: str) -> dict[str, Any]:
     """A spec under specs/. Cached and shared, so callers must not modify it."""
-    return json.loads((SPECS / path).read_text())
+    return json.loads((SPECS / path).read_text(encoding="utf-8"))
 
 
 def ref_name(ref: str) -> str:
@@ -726,7 +726,7 @@ def main() -> int:
     stale: list[str] = []
     for doc, rendered in sorted(by_doc.items()):
         path = DOCS / doc
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         new, seen = apply(text, doc, rendered)
         missing = sorted(set(rendered) - seen)
         if missing:
@@ -740,7 +740,7 @@ def main() -> int:
             )
             print("\n".join(diff))
         else:
-            path.write_text(new)
+            path.write_text(new, encoding="utf-8", newline="\n")
             print(f"updated docs/{doc}")
 
     if args.check and stale:

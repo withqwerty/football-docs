@@ -323,7 +323,7 @@ def main() -> None:
 
     TRUTH_DIR.mkdir(parents=True, exist_ok=True)
     out = TRUTH_DIR / f"{args.provider}.notion.json"
-    out.write_text(json.dumps(truth, indent=2, ensure_ascii=False) + "\n")
+    out.write_text(json.dumps(truth, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     print(
         f"{out.relative_to(REPO)}: {len(truth['paths'])} paths, "
         f"{len(truth['parameters'])} parameters, {len(truth['fields'])} fields"

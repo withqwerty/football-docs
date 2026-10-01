@@ -17,10 +17,12 @@ describe("generated vendor tables", () => {
     const result = spawnSync("python3", ["scripts/gen_vendor_tables.py", "--check"], {
       cwd: ROOT,
       encoding: "utf8",
+      // Python on Windows defaults to the ANSI code page for files and pipes.
+      env: { ...process.env, PYTHONUTF8: "1" },
     });
     if (result.error) throw result.error;
     const report = `${result.stdout}${result.stderr}`;
     expect(result.status, report).toBe(0);
     expect(result.stdout).toContain("generated sections match specs/");
-  });
+  }, 30_000); // Python start-up and the spec parse take over 5 s on the Windows runner.
 });

@@ -268,7 +268,7 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{args.provider}.json"
-    out_path.write_text(json.dumps(truth, indent=2) + "\n")
+    out_path.write_text(json.dumps(truth, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     print(
         f"{args.provider}: {args.package} {version} -> {out_path.name} "

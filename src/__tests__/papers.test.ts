@@ -269,8 +269,11 @@ describe("SportRxiv mirror", () => {
     );
     await searchPapers({ query: "football", sources: ["sportrxiv"] }, opts);
     expect(calls).toHaveLength(2);
-    expect(statSync(opts.cacheDir!).mode & 0o777).toBe(0o700);
-    expect(statSync(join(opts.cacheDir!, "sportrxiv.json")).mode & 0o777).toBe(0o600);
+    // Windows has no POSIX modes; the user folder's access rules apply there.
+    if (process.platform !== "win32") {
+      expect(statSync(opts.cacheDir!).mode & 0o777).toBe(0o700);
+      expect(statSync(join(opts.cacheDir!, "sportrxiv.json")).mode & 0o777).toBe(0o600);
+    }
 
     // Within the week: no request.
     now += 24 * 60 * 60 * 1000;

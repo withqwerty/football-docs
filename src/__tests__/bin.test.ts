@@ -78,6 +78,8 @@ describe("npm bin entrypoint", () => {
     execFileSync("pnpm", ["build"], {
       cwd: ROOT,
       encoding: "utf-8",
+      // On Windows pnpm is pnpm.cmd, which Node runs only through a shell.
+      shell: process.platform === "win32",
       stdio: "pipe",
       timeout: 30_000,
     });
