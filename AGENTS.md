@@ -66,6 +66,7 @@ pnpm provider:truth                   # regenerate package ground truth (python3
 pnpm openapi:truth                    # regenerate spec-derived ground truth
 pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
+python3 scripts/gen_vendor_tables.py  # rebuild the generated tables in the wearable vendor docs from specs/ (--check to diff only)
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
 ```
 
@@ -131,6 +132,10 @@ ID fields and access shape.
   the data can reach anyone. See README "How doc changes reach users".
   The tests check chunk counts, not chunk text, so a wrong index can still pass CI.
   When a PR changes `data/docs.db`, rebuild it yourself and compare the rows.
+- Text between `<!-- generated:<id> start -->` and `end -->` markers is built from
+  `specs/` by `scripts/gen_vendor_tables.py`. Do not edit it by hand: change the spec
+  or the script, then rerun it. A test fails when the two disagree. See
+  `specs/README.md`.
 - When a doc in `docs/free-sources/` changes how to fetch the data, change its check
   in `scripts/check_free_sources_live.py` in the same commit and run the script.
   CI does not run it; `pnpm check:upstream` does, before a release.

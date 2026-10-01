@@ -149,6 +149,45 @@ each `operationId` as a new random GUID on every request, so
 The VALD help centre (`support.vald.com`) returns a bot challenge to
 non-browser clients. Nothing from it is mirrored or quoted, and it is not crawled.
 
+### Generated tables
+
+The large tables in `docs/statsports/`, `docs/firstbeat/`, `docs/hawkin-dynamics/`
+and `docs/vald/` are built from the files above by `scripts/gen_vendor_tables.py`:
+schema field tables, the STATSports drill KPI tables, Hawkin's per-test-type metric
+tables, VALD's schema and enum tables, and the endpoint tables. Each one sits
+between two marker comments:
+
+```markdown
+<!-- generated:statsports-drillkpi-v7-accelerations start -->
+| Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
+...
+<!-- generated:statsports-drillkpi-v7-accelerations end -->
+```
+
+The script rewrites only the text between markers. Headings, notes and counts
+outside them are hand-written. `pnpm ingest` drops the marker lines, so they never
+reach the index. `src/__tests__/vendor-tables.test.ts` runs the script with
+`--check`, so `pnpm test` fails when a doc and its spec disagree.
+
+The script has two editorial inputs, because no spec gives them: which fields are
+marked **Personal data** (`PERSONAL_FIELDS`), and how the 319 `DrillKpiV7` fields
+are grouped under headings (`DRILLKPI_GROUPS`). A new drill KPI field that no
+group's pattern matches goes under "load, work and other"; one that matches two
+patterns stops the script. Firstbeat's variables page is not in any spec, so
+`docs/firstbeat/variables.md` stays hand-written.
+
+To refresh a vendor:
+
+1. Fetch the new spec with the commands in [Refreshing](#refreshing).
+2. Run `python3 scripts/gen_vendor_tables.py`. It prints each doc it changed.
+3. Read the diff. Update the hand-written text the change affects: field counts,
+   the version-difference notes, and the notes after each table. Mark any new
+   personal-data field in `PERSONAL_FIELDS` and run the script again.
+4. Run `pnpm ingest`, then `pnpm test`.
+
+`python3 scripts/gen_vendor_tables.py --check` writes nothing; it prints the diff
+and exits 1 if any generated section is out of date.
+
 ## What these are and are not
 
 - They describe each vendor's **API surface** — paths, parameters, schema field
