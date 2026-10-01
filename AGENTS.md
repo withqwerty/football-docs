@@ -13,7 +13,11 @@ Crawls provider documentation (StatsBomb, Opta, Wyscout, kloppy, SportMonks and
 others) into markdown files with provenance frontmatter, ingests them into a SQLite
 FTS index (`data/docs.db`), and exposes MCP tools over it: `search_docs`,
 `resolve_provider_id`, `get_provider_docs`, `list_providers`, `compare_providers`,
-`request_update` and `resolve_entity`.
+`request_update` and `resolve_entity`. The paper tools (`search_papers`, `get_paper`,
+`get_web_source`, `read_paper`, `match_quote`, `add_local_paper`, `forget_paper`,
+`purge_cache`) look up and read papers and web pages at run time. Their text is
+kept in the user's cache folder, never in the repository or the index; the
+public-safety test fails on a committed PDF or cached paper.
 
 See the README's "Indexed providers" table for the current corpus size — it is
 regenerated on each release and this file is not kept in lockstep with it.
@@ -33,6 +37,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/discover.ts` | Source probing without crawling |
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
+| `src/papers/` | Paper and web-source tools: OpenAlex, arXiv, SportRxiv, Crossref, Wayback and Zotero (local and web API) clients, PDF text and sections (unpdf), quote matching, the user's paper library, the identifier parser and the off switch |
 | `src/statsbomb-truth.ts` | Validates StatsBomb ID tables against a sample of the open data |
 | `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/opta-truth.json` |
 | `src/sportmonks-truth.ts` | Holds SportMonks ID tables to its published definitions |

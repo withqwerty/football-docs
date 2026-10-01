@@ -24,6 +24,9 @@ const FORBIDDEN: Array<{ label: string; pattern: RegExp }> = [
   { label: "private ingestion tooling", pattern: /\bloom (refetch|fetch|sync)\b/i },
 ];
 
+// The marker is assembled at runtime so this file does not hold it.
+const paperMarkerJoin = "/";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(__dirname, "..", "..");
 
@@ -68,6 +71,28 @@ describe("public-safety boundary", () => {
   it("does not describe AGENTS.md as gitignored, because it is published", () => {
     const agents = readFileSync(resolve(REPO, "AGENTS.md"), "utf-8");
     expect(agents).not.toMatch(/AGENTS\.md.{0,40}gitignored/i);
+  });
+
+  it("holds no paper text and no PDF", () => {
+    // The paper tools keep text from papers, some of it paid access, in the
+    // user's cache folder. Every cached entry carries the library's format
+    // marker. Nothing with that marker, and no PDF, may enter the repository
+    // or the shipped index. New files that are not yet committed count too.
+    const out = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: REPO, encoding: "utf-8" });
+    const marker = ["football-docs", "paper-text", "v1"].join(paperMarkerJoin);
+    const violations: string[] = [];
+    for (const file of out.split("\n").filter(Boolean)) {
+      if (file.startsWith("node_modules/")) continue;
+      let bytes: Buffer;
+      try {
+        bytes = readFileSync(resolve(REPO, file));
+      } catch {
+        continue;
+      }
+      if (bytes.subarray(0, 16).includes("%PDF-")) violations.push(`${file}: a PDF`);
+      else if (!file.startsWith("src/") && bytes.includes(marker)) violations.push(`${file}: cached paper text`);
+    }
+    expect(violations).toEqual([]);
   });
 
   it("detects a planted violation", () => {
