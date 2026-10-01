@@ -310,7 +310,7 @@ export function createFootballDocsServer(): McpServer {
         .array(z.enum(SEARCH_SOURCES))
         .optional()
         .describe(
-          "Sources to ask. Default: openalex, arxiv and sportrxiv (searched in a local copy of its feed). Add zotero to search the user's own Zotero library on this computer.",
+          "Sources to ask. Default: openalex, arxiv and sportrxiv (searched in a local copy of its feed). Add zotero to search the user's own Zotero library (Zotero on this computer, else the Zotero web API with ZOTERO_API_KEY).",
         ),
       max_results: z.number().optional().default(10).describe("Results per source, 1 to 25 (default 10)."),
       year_from: z.number().int().optional().describe("Only papers published in or after this year."),

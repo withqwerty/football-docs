@@ -102,8 +102,8 @@ export async function searchPapers(args: SearchPapersArgs, options: PaperOptions
         return { source, records, total: found.total };
       }
       if (source === "zotero") {
-        const items = await searchZotero(ctx, query, limit);
-        log.ok("Zotero on this computer", `${items.length} matches`);
+        const { items, label } = await searchZotero(ctx, query, limit);
+        log.ok(label, `${items.length} matches`);
         return { source, records: items.map(fromZotero), total: items.length };
       }
       const state = await loadMirror(ctx);

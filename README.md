@@ -165,10 +165,20 @@ credentials or cookies, and does not use publisher text-mining APIs (their terms
 exclude tools like this). When a site answers with a bot check, the tool stops;
 download the paper yourself instead.
 
-Zotero: in Zotero 7, open Settings > Advanced and turn on "Allow other
-applications on this computer to communicate with Zotero". Then
-`search_papers` with `sources: ["zotero"]` searches your library, and
-`read_paper` reads an item's PDF through Zotero's local API on port 23119.
+Zotero: `search_papers` with `sources: ["zotero"]` searches your library, and
+`read_paper` reads an item's PDF. Two ways to connect, tried in this order:
+
+1. Zotero on this computer. In Zotero 7, open Settings > Advanced and turn on
+   "Allow other applications on this computer to communicate with Zotero". The
+   tools then use its local API on port 23119; nothing leaves the machine.
+2. The Zotero web API, for when Zotero is not running here (another machine, a
+   cloud session). Create a read-only key at
+   [zotero.org/settings/keys](https://www.zotero.org/settings/keys) with access
+   to your library and its files, and set `ZOTERO_API_KEY` (and optionally
+   `ZOTERO_USER_ID`; without it the tools ask the key). It reads only files kept
+   in Zotero's own storage, not linked files; for those it uses Zotero's
+   full-text index. The key is sent only to api.zotero.org, never to the file
+   storage host.
 
 ### Services
 
@@ -204,9 +214,13 @@ it asked.
 
 As environment variables in the server's MCP configuration:
 
-- `FOOTBALL_DOCS_PAPERS=off`: send no paper or web request. Your library, files
-  you add and Zotero on this computer still work. The provider-doc tools never
+- `FOOTBALL_DOCS_PAPERS=off`: send no paper or web request, including to the
+  Zotero web API. Your library, files you add and Zotero on this computer still
+  work. The provider-doc tools never
   call these services.
+- `ZOTERO_API_KEY=<key>` and `ZOTERO_USER_ID=<number>`: a read-only Zotero web
+  API key, for reading Zotero when the app is not running here. The key can also
+  go in the keychain, as for OpenAlex below.
 - `FOOTBALL_DOCS_PAPERS_PASSAGE_CHARS=<n>`: the longest passage returned from a
   paper you supplied, 50 to 1000 characters (default 200).
 - `OPENALEX_API_KEY=<key>`: your OpenAlex key. On macOS and Linux you can keep it

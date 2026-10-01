@@ -4,13 +4,16 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { beforeEach, describe, expect, it } from "vitest";
 import { resetRateLimits } from "../papers/core.js";
-import { FORMAT, passageChars } from "../papers/library.js";
+import { FORMAT, passageChars, resetZoteroRoutes } from "../papers/library.js";
 import { findQuote, normalise, passages, stripMarkdown } from "../papers/text.js";
 import { addLocalPaper, forgetPaper, getPaper, matchQuote, purgeCache, readPaper, searchPapers } from "../papers/tools.js";
 import { samplePaper } from "./fixtures-pdf.js";
 import { options, type Route, text } from "./papers-helpers.js";
 
-beforeEach(() => resetRateLimits());
+beforeEach(() => {
+  resetRateLimits();
+  resetZoteroRoutes();
+});
 
 const ARXIV_OAI = `<?xml version="1.0" encoding="UTF-8"?>
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"><GetRecord><record><metadata>
@@ -243,6 +246,7 @@ describe("Zotero", () => {
 
   function zoteroRoutes(pdfPath: string): Route[] {
     return [
+      [`${ZOTERO}/items/top?limit=1`, { body: "[]" }],
       [`${ZOTERO}/items/top?q=`, { body: JSON.stringify([{ key: "ABCD2345", data: { key: "ABCD2345", itemType: "journalArticle", title: "Valuing Actions in Football", creators: [{ firstName: "Ada", lastName: "Lovelace" }], date: "2021", DOI: "10.9999/va" } }]) }],
       [`${ZOTERO}/items/ABCD2345/children`, { body: JSON.stringify([{ key: "PDF23456", data: { key: "PDF23456", itemType: "attachment", contentType: "application/pdf" } }]) }],
       [`${ZOTERO}/items/ABCD2345`, { body: JSON.stringify({ key: "ABCD2345", data: { key: "ABCD2345", itemType: "journalArticle", title: "Valuing Actions in Football", creators: [{ firstName: "Ada", lastName: "Lovelace" }], date: "2021", DOI: "10.9999/va" } }) }],
@@ -272,5 +276,104 @@ describe("Zotero", () => {
     const opts = options([[`${ZOTERO}/`, { status: 403, body: "Local API is not enabled" }]]);
     const out = text(await readPaper({ id: "zotero:ABCD2345" }, opts));
     expect(out).toMatch(/Allow other applications on this computer to communicate with Zotero/);
+  });
+});
+
+describe("Zotero web API", () => {
+  const WEB = "https://api.zotero.org";
+  const ITEM = { key: "ABCD2345", data: { key: "ABCD2345", itemType: "journalArticle", title: "Valuing Actions in Football", creators: [{ name: "Ada Lovelace" }], date: "2021" } };
+  const PDF_CHILD = [{ key: "PDF23456", data: { key: "PDF23456", itemType: "attachment", contentType: "application/pdf", linkMode: "imported_file" } }];
+  const LOCAL_DOWN: Route = ["http://localhost:23119/", () => { throw new Error("connection refused"); }];
+
+  function webRoutes(extra: Route[] = []): Route[] {
+    return [
+      LOCAL_DOWN,
+      [`${WEB}/keys/current`, { body: JSON.stringify({ userID: 4242, access: { user: { library: true, files: true } } }) }],
+      ...extra,
+      [`${WEB}/users/4242/items/top?q=`, { body: JSON.stringify([ITEM]) }],
+      [`${WEB}/users/4242/items/ABCD2345/children`, { body: JSON.stringify(PDF_CHILD) }],
+      [`${WEB}/users/4242/items/ABCD2345`, { body: JSON.stringify(ITEM) }],
+    ];
+  }
+
+  it("uses the web API when Zotero is not running, with the user ID the key reports", async () => {
+    const calls: string[] = [];
+    const opts = options(webRoutes(), calls, { env: { ZOTERO_API_KEY: "k-zot" } });
+    const out = text(await searchPapers({ query: "valuing actions", sources: ["zotero"] }, opts));
+    expect(out).toContain("zotero:ABCD2345");
+    expect(out).toMatch(/Services asked: Zotero web API \(1 matches\)\./);
+    expect(calls.filter((call) => call.includes("/keys/current"))).toHaveLength(1);
+  });
+
+  it("skips the key lookup when ZOTERO_USER_ID is set", async () => {
+    const calls: string[] = [];
+    const opts = options(webRoutes(), calls, { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } });
+    await searchPapers({ query: "valuing", sources: ["zotero"] }, opts);
+    expect(calls.some((call) => call.includes("/keys/current"))).toBe(false);
+  });
+
+  it("downloads the stored PDF without sending the key to the storage host", async () => {
+    const sent: Array<{ url: string; key: string | null }> = [];
+    const pdf = samplePaper();
+    const routes = webRoutes([
+      [`${WEB}/users/4242/items/PDF23456/file`, { status: 302, headers: { location: "https://files.zotero.net/abc/valuing.pdf" } }],
+      ["https://files.zotero.net/", { bytes: pdf, headers: { "content-type": "application/pdf" } }],
+    ]);
+    const base = options(routes);
+    const fetchImpl: typeof fetch = (input, init) => {
+      sent.push({ url: String(input), key: new Headers(init?.headers).get("zotero-api-key") });
+      return base.fetchImpl!(input, init);
+    };
+    const opts = { ...base, fetchImpl, env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } };
+    const out = text(await readPaper({ id: "zotero:ABCD2345", query: "passes box" }, opts));
+    expect(out).toMatch(/Text from:\*\* Zotero item ABCD2345 \(Zotero web API\)/);
+    expect(out).toMatch(/\[section 4: 3 Results, page 3\]/);
+    expect(sent.find((call) => call.url.startsWith("https://files.zotero.net/"))?.key).toBeNull();
+    expect(sent.filter((call) => call.url.startsWith(WEB)).every((call) => call.key === "k-zot")).toBe(true);
+  });
+
+  it("falls back to Zotero's full-text index for a file it does not store", async () => {
+    const opts = options(
+      webRoutes([
+        [`${WEB}/users/4242/items/PDF23456/file`, { status: 404 }],
+        [`${WEB}/users/4242/items/PDF23456/fulltext`, { body: JSON.stringify({ content: "Passes into the box add the most value per action." }) }],
+      ]),
+      [],
+      { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } },
+    );
+    const out = text(await matchQuote({ source: "zotero:ABCD2345", quote: "Passes into the box add the most value" }, opts));
+    expect(out).toMatch(/Result: exact\./);
+  });
+
+  it("explains a key without file or library access", async () => {
+    const opts = options([LOCAL_DOWN, [`${WEB}/users/4242/`, { status: 403 }]], [], { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } });
+    expect(text(await readPaper({ id: "zotero:ABCD2345" }, opts))).toMatch(/refused the key \(HTTP 403\).*zotero\.org\/settings\/keys/);
+  });
+
+  it("names both set-ups when neither route is available", async () => {
+    const opts = options([LOCAL_DOWN]);
+    expect(text(await readPaper({ id: "zotero:ABCD2345" }, opts))).toMatch(/Zotero is not running.*set ZOTERO_API_KEY/);
+  });
+
+  it("prefers Zotero on this computer when it answers", async () => {
+    const calls: string[] = [];
+    const opts = options(
+      [
+        ["http://localhost:23119/api/users/0/items/top?limit=1", { body: "[]" }],
+        ["http://localhost:23119/api/users/0/items/top?q=", { body: JSON.stringify([ITEM]) }],
+      ],
+      calls,
+      { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } },
+    );
+    expect(text(await searchPapers({ query: "valuing", sources: ["zotero"] }, opts))).toMatch(/Zotero on this computer \(1 matches\)/);
+    expect(calls.some((call) => call.includes("api.zotero.org"))).toBe(false);
+  });
+
+  it("sends nothing to the web API when lookups are off", async () => {
+    const calls: string[] = [];
+    const opts = options(webRoutes(), calls, { env: { FOOTBALL_DOCS_PAPERS: "off", ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } });
+    const out = text(await searchPapers({ query: "valuing", sources: ["zotero"] }, opts));
+    expect(out).toMatch(/lookups are off/);
+    expect(calls.some((call) => call.includes("api.zotero.org"))).toBe(false);
   });
 });

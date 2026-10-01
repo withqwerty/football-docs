@@ -37,7 +37,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/discover.ts` | Source probing without crawling |
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
-| `src/papers/` | Paper and web-source tools: OpenAlex, arXiv, SportRxiv, Crossref, Wayback and Zotero clients, PDF text and sections (unpdf), quote matching, the user's paper library, the identifier parser and the off switch |
+| `src/papers/` | Paper and web-source tools: OpenAlex, arXiv, SportRxiv, Crossref, Wayback and Zotero (local and web API) clients, PDF text and sections (unpdf), quote matching, the user's paper library, the identifier parser and the off switch |
 | `src/statsbomb-truth.ts` | Validates StatsBomb ID tables against a sample of the open data |
 | `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/opta-truth.json` |
 | `src/sportmonks-truth.ts` | Holds SportMonks ID tables to its published definitions |

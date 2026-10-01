@@ -194,7 +194,7 @@ export async function loadPaper(ctx: PaperContext, rawId: string, log: ServiceLo
       if (cached) return { entry: cached, fromLibrary: true };
       try {
         const paper = await readZoteroPaper(ctx, id.key);
-        log.ok("Zotero on this computer");
+        log.ok(paper.label);
         const year = Number(paper.item.data.date?.match(/\d{4}/)?.[0]);
         const entry: StoredPaper = {
           format: FORMAT,
@@ -204,7 +204,7 @@ export async function loadPaper(ctx: PaperContext, rawId: string, log: ServiceLo
           authors: zoteroCreators(paper.item),
           year: Number.isFinite(year) ? year : undefined,
           ids: { doi: paper.item.data.DOI?.toLowerCase() || undefined },
-          origin: `Zotero item ${paper.item.key}`,
+          origin: `Zotero item ${paper.item.key}${paper.label === "Zotero web API" ? " (Zotero web API)" : ""}`,
           zotero: id.key,
           sha256: paper.sha256,
           savedAt: new Date(ctx.now()).toISOString(),
@@ -213,7 +213,7 @@ export async function loadPaper(ctx: PaperContext, rawId: string, log: ServiceLo
         saveEntry(ctx, entry);
         return { entry, fromLibrary: false };
       } catch (error) {
-        log.failed("Zotero on this computer", reason(error));
+        log.failed("Zotero", reason(error));
         return { error: `Could not read zotero:${id.key}: ${reason(error)}.` };
       }
     }
