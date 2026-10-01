@@ -384,7 +384,7 @@ export function createFootballDocsServer(): McpServer {
     "match_quote",
     [
       "Check that a quote appears in its source: a paper (any ID read_paper takes) or a web page URL. Reports exact,",
-      "normalised (same words; case, spacing, quote marks, dashes or line-end hyphens differ), close (with a similarity",
+      "normalised (same words; case, spacing, quote marks, ligatures or hyphens differ), close (with a similarity",
       "score: quote the source's own words instead) or none, with the section, page and a W3C TextQuoteSelector. Use it",
       "before citing a definition or a claim.",
     ].join(" "),

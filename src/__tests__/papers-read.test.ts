@@ -62,6 +62,12 @@ describe("quote matching", () => {
     expect(normalise("“ﬁner” grid — model").text).toBe('"finer" grid - model');
   });
 
+  it("matches a compound word that a PDF broke at a line end", () => {
+    const pdfText = "we describe a scalable end-\nto-end tree boosting system";
+    expect(findQuote(pdfText, "a scalable end-to-end tree boosting system").kind).toBe("normalised");
+    expect(findQuote(pdfText, "a scalable endtoend tree boosting system").kind).toBe("normalised");
+  });
+
   it("scores a reworded quote as close and an unrelated one as none", () => {
     const close = findQuote(source, "a finer grid leads to a more flexible model which can better distinguish between situations");
     expect(close.kind).toBe("close");

@@ -357,7 +357,7 @@ export function bestQuoteMatch(sections: Section[], quote: string): QuoteResult 
 
 const VERDICTS: Record<QuoteMatch["kind"], string> = {
   exact: "The quote appears word for word.",
-  normalised: "The quote appears with the same words; only case, spacing, quote marks, dashes or line-end hyphens differ.",
+  normalised: "The quote appears with the same words; only case, spacing, quote marks, ligatures or hyphens differ.",
   close: "The source says something close but not the same. Quote the source's own words, shown below.",
   none: "The quote does not appear in the source.",
 };
@@ -371,7 +371,8 @@ export function quoteReport(sections: Section[], quote: string, access: Access, 
   const where = `section ${best.section} (${best.heading}${best.page ? `, page ${best.page}` : ""}), characters ${match.start} to ${match.end}`;
   const lines = [`**Result: ${match.kind}${match.kind === "close" || match.kind === "none" ? ` (similarity ${match.score.toFixed(2)})` : ""}.** ${VERDICTS[match.kind]}`, ""];
   // Selectors and passages carry the source's words, without markdown marks.
-  const plain = (value: string) => stripMarkdown(value).replace(/\s+/g, " ");
+  // A hyphen at a line end stays, joined to the next line.
+  const plain = (value: string) => stripMarkdown(value).replace(/-[ \t]*\n[ \t]*/g, "-").replace(/\s+/g, " ");
   const found = plain(text.slice(match.start, match.end));
 
   if (match.kind === "none") {
