@@ -24,5 +24,5 @@ describe("generated vendor tables", () => {
     const report = `${result.stdout}${result.stderr}`;
     expect(result.status, report).toBe(0);
     expect(result.stdout).toContain("generated sections match specs/");
-  });
+  }, 30_000); // Python start-up and the spec parse take over 5 s on the Windows runner.
 });
