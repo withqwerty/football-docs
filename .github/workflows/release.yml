@@ -130,6 +130,17 @@ jobs:
             gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file /tmp/notes.md
           fi
 
+      # The website and the announcement card read their numbers from this file
+      # (nutmeg-site fetches it from the latest release). It is built from the
+      # same index the package ships, so the two cannot disagree. Re-running
+      # replaces it, which is safe: it is derived, never hand-edited.
+      - name: Attach site stats
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm -s site:stats --out /tmp/site-stats.json
+          gh release upload "$GITHUB_REF_NAME" /tmp/site-stats.json --clobber
+
       # No token. npm's trusted publishing authenticates this workflow to the
       # registry over OIDC, and the trust configuration on the package names
       # this repository and this file - so publishing rights are bound to this
