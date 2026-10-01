@@ -6,10 +6,10 @@
       {
         "spec": "specs/hawkin-dynamics/openapi.json",
         "title": "Hawkin Force Platform API",
-        "version": "1.15"
+        "version": "1.16"
       }
     ],
-    "generated_at": "2026-09-30"
+    "generated_at": "2026-10-01"
   },
   "basePaths": [],
   "paths": {
@@ -59,13 +59,16 @@
     "groupId",
     "includeEid",
     "includeInactive",
+    "nestMetrics",
     "paginate",
+    "rounding",
     "syncFrom",
     "syncTo",
     "teamId",
     "testTypeId",
     "test_id",
-    "to"
+    "to",
+    "useNulls"
   ],
   "schemas": [
     "AccessTokenResponse",
@@ -80,9 +83,11 @@
     "Group",
     "Metric",
     "MetricsResponse",
+    "NestedMetric",
     "Tag",
     "Team",
     "Test",
+    "TestNested",
     "TestType",
     "TestTypeSummary",
     "TestsResponse"
@@ -131,6 +136,10 @@
     "lastTestedOn",
     "leftCopX",
     "leftCopY",
+    "metricId",
+    "metricLabel",
+    "metricUnits",
+    "metricValue",
     "metrics",
     "name",
     "nextCursor",

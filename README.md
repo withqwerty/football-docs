@@ -276,10 +276,10 @@ As environment variables in the server's MCP configuration:
 | Transfermarkt | 5 | identity-surfaces, data-provenance |
 | STATSports | 70 | api-access, api-endpoints, data-model, drill-kpi-metrics (all 319 DrillKpiV7 fields), identity-surfaces, data-provenance |
 | Firstbeat | 79 | api-access, api-endpoints, data-model, variables (100 scalars, 17 time series), identity-surfaces, data-provenance |
-| Hawkin Dynamics | 67 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
+| Hawkin Dynamics | 69 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 
-**3,394 searchable chunks** across 30 providers and tools.
+**3,396 searchable chunks** across 30 providers and tools.
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

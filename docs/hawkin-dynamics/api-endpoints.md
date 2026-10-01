@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.15 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -10,7 +10,7 @@ crawled_at: 2026-09-30
 ## Endpoint inventory
 
 All 14 operations in the Hawkin Force Platform API spec
-(`info.version` "1.15"), from the OpenAPI document published inline on
+(`info.version` "1.16"), from the OpenAPI document published inline on
 https://connect.hawkindynamics.com/api. Paths are relative to the regional base URL
 (see Hawkin Dynamics API access), for example
 `https://cloud.hawkindynamics.com/api/v1/athletes`.
@@ -62,6 +62,9 @@ Parameters:
 - `groupId` (query, string) — Filter by one or more group IDs (comma-separated, max 10). Can only be used with `from`/`to` parameters.
 - `testTypeId` (query, string) — Filter by a specific test type ID. Can only be used with `from`/`to` parameters.
 - `includeInactive` (query, boolean) default `true` — Default true. Set to false to return only active tests.
+- `useNulls` (query, boolean) default `true` — Default true. Non-calculable metric values are returned as `null`. Set to false to receive the string `"N/A"` instead. Intended for customers migrating from a legacy named endpoint that returned `"N/A"`; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.
+- `rounding` (query, boolean) default `false` — Default false. Set to true to round each metric value to its standard display precision. Has no effect when `nestMetrics=true` (nested metric values are never rounded). Intended for customers migrating from a legacy named endpoint that returned rounded values; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.
+- `nestMetrics` (query, boolean) default `false` — Default false. Set to true to return each test's metrics as a `metrics` array of `{metricId, metricLabel, metricUnits, metricValue}` objects (see the `TestNested` schema) instead of flat metric-name keys. Only metrics with a numeric value are included. Intended for customers migrating from a legacy named endpoint that returned nested metrics; new integrations should leave the default. Omit to keep the default; any value other than `true` is treated as false.
 - `includeEid` (query, boolean) default `false` — Default false. Set to true to include the hardware `eid` (equipment ID) on each returned test record.
 - `paginate` (query, boolean) — Set to true to enable paginated responses (1,000 tests per page).
 - `cursor` (query, string) — Firestore document ID from previous response's nextCursor. Omit on first request.
