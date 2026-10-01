@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD SmartSpeed endpoints
 
+<!-- generated:vald-smartspeed-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -28,17 +29,20 @@ crawled_at: 2026-09-30
 | `GET` | `/v1/team/{teamId}/tests/{testId}/detail` |  |  |
 | `GET` | `/v1/team/{teamId}/tests` |  |  |
 | `GET` | `/v1/test/tests-by-modified-date` |  |  |
+<!-- generated:vald-smartspeed-endpoints end -->
 
 ## VALD SmartSpeed service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-smartspeed-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `400` Bad Request: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalSmartSpeed.V1.Configuration.Diagnostics.GetDiagnosticsResponse` |
+<!-- generated:vald-smartspeed-health end -->
 
 ## VALD SmartSpeed: `GET /v1/team/{teamId}/tests/{testId}/detail`
 
@@ -89,6 +93,7 @@ Responses:
 
 The 32 component schemas of the SmartSpeed spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-smartspeed-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -488,3 +493,4 @@ Type `string`.
 | `OneWay` |
 | `FvpSprint` |
 | `Jumping` |
+<!-- generated:vald-smartspeed-schemas end -->

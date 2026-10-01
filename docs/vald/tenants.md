@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD Tenants endpoints
 
+<!-- generated:vald-tenants-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/categories` |  |  |
@@ -37,17 +38,20 @@ crawled_at: 2026-09-30
 | `GET` | `/tenants` |  |  |
 | `GET` | `/tenants/{tenantId}` |  |  |
 | `DELETE` | `/tenants/{tenantId}/syncids` |  |  |
+<!-- generated:vald-tenants-endpoints end -->
 
 ## VALD Tenants service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-tenants-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string, required) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalTenants.V1.Models.GetDiagnosticsResponse` |
+<!-- generated:vald-tenants-health end -->
 
 ## VALD Tenants: `GET /categories`
 
@@ -187,6 +191,7 @@ Responses:
 
 The 18 component schemas of the Tenants spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-tenants-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -411,3 +416,4 @@ Type `string`.
 | `Marathon` |
 | `WaterPolo` |
 | `Unknown` |
+<!-- generated:vald-tenants-schemas end -->

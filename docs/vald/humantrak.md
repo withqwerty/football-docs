@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD HumanTrak endpoints
 
+<!-- generated:vald-humantrak-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -28,17 +29,20 @@ crawled_at: 2026-09-30
 | `GET` | `/v2/test/{testId}/repetitions` |  |  |
 | `GET` | `/v2/tests-by-modified-date` |  |  |
 | `GET` | `/v2/test-type/metrics` |  |  |
+<!-- generated:vald-humantrak-endpoints end -->
 
 ## VALD HumanTrak service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-humantrak-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string, required) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse` |
+<!-- generated:vald-humantrak-health end -->
 
 ## VALD HumanTrak: `GET /v2/test/{testId}/repetitions`
 
@@ -79,6 +83,7 @@ Responses:
 
 The 23 component schemas of the HumanTrak spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-humantrak-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -284,3 +289,4 @@ Type `string`.
 | `metricSide` | `string` | yes | yes |
 | `unit` | `string` | yes | yes |
 | `calculationType` | `string` | yes | yes |
+<!-- generated:vald-humantrak-schemas end -->

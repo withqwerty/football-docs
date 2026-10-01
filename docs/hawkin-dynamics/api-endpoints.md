@@ -15,6 +15,7 @@ https://connect.hawkindynamics.com/api. Paths are relative to the regional base 
 (see Hawkin Dynamics API access), for example
 `https://cloud.hawkindynamics.com/api/v1/athletes`.
 
+<!-- generated:hawkin-endpoint-inventory start -->
 | Method | Path | Tag | Summary |
 |---|---|---|---|
 | `GET` | `/api/token` | Authentication | Get Access Token |
@@ -31,6 +32,7 @@ https://connect.hawkindynamics.com/api. Paths are relative to the regional base 
 | `GET` | `/api/v1/teams` | Organization | Get Teams |
 | `GET` | `/api/v1/groups` | Organization | Get Groups |
 | `GET` | `/api/v1/tags` | Organization | Get Tags |
+<!-- generated:hawkin-endpoint-inventory end -->
 
 The spec applies `BearerAuth` to every operation. `GET /api/token` takes the refresh token as the bearer; every other operation takes the access token.
 
@@ -137,10 +139,12 @@ Responses:
 
 `200` response body fields:
 
+<!-- generated:hawkin-response-athletes start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `Athlete` |  |  |  |  |
 | `count` | `integer` |  |  |  |  |
+<!-- generated:hawkin-response-athletes end -->
 
 ## `POST /api/v1/athletes` (Create Athlete)
 
@@ -214,10 +218,12 @@ Responses:
 
 `200` response body fields:
 
+<!-- generated:hawkin-response-teams start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `Team` |  |  |  |  |
 | `count` | `integer` |  |  |  | Number of teams returned. |
+<!-- generated:hawkin-response-teams end -->
 
 ## `GET /api/v1/groups` (Get Groups)
 
@@ -235,10 +241,12 @@ Responses:
 
 `200` response body fields:
 
+<!-- generated:hawkin-response-groups start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `Group` |  |  |  |  |
 | `count` | `integer` |  |  |  | Number of groups returned. |
+<!-- generated:hawkin-response-groups end -->
 
 ## `GET /api/v1/tags` (Get Tags)
 
@@ -252,7 +260,17 @@ Responses:
 
 `200` response body fields:
 
+<!-- generated:hawkin-response-tags start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `object` |  |  |  |  |
 | `count` | `integer` |  |  |  | Number of tags returned. |
+
+Each `data` item is an object with these fields:
+
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `id` | `string` |  |  |  |  |
+| `name` | `string` |  |  |  |  |
+| `description` | `string` |  |  |  |  |
+<!-- generated:hawkin-response-tags end -->

@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD ForceFrame endpoints
 
+<!-- generated:vald-forceframe-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -35,17 +36,20 @@ crawled_at: 2026-09-30
 | `GET` | `/training/sessions` | Retrieves a list of ForceFrame training sessions. |  |
 | `GET` | `/training/sessions/exercises` | Retrieves a list of ForceFrame training session exercises or a single training session exercise. |  |
 | `GET` | `/training/sessions/exercises/repetitions` | Retrieves a list of ForceFrame training session exercise repetitions or a single training session exercise repetition. |  |
+<!-- generated:vald-forceframe-endpoints end -->
 
 ## VALD ForceFrame service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-forceframe-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse` |
+<!-- generated:vald-forceframe-health end -->
 
 ## VALD ForceFrame: `GET /tests/{testId}/forceframetrace`
 
@@ -223,6 +227,7 @@ Responses:
 
 The 22 component schemas of the ForceFrame spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-forceframe-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -666,3 +671,4 @@ Type `string`.
 | `stabilityRight` | `number` | `double` |
 | `timeInZoneLeft` | `number` | `double` |
 | `timeInZoneRight` | `number` | `double` |
+<!-- generated:vald-forceframe-schemas end -->

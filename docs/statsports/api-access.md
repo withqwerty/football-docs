@@ -48,8 +48,9 @@ The host root, `https://statsportsproseries.com/`, redirects to a sign-in page
 | v5 | `info.description` ends "This API version has been deprecated." | 5 |
 
 Every operation in every version takes the header `api-version`: `string`,
-required, described as "The requested API version". The spec's default is `"7"`,
-`"6"` or `"5"`, matching the spec file. The paths are the same in every version, so
+described as "The requested API version". The v6 and v7 specs mark it required;
+the v5 spec does not. The spec's default is `"7"`, `"6"` or `"5"`, matching the
+spec file. The paths are the same in every version, so
 the header alone selects the version.
 
 ## Authentication

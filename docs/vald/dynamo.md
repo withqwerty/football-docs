@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD DynaMo endpoints
 
+<!-- generated:vald-dynamo-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -29,17 +30,20 @@ crawled_at: 2026-09-30
 | `GET` | `/v2022q2/teams/{teamId}/tests/{testId}` |  |  |
 | `GET` | `/v2022q2/teams/{teamId}/tests/{testId}/trace` |  |  |
 | `GET` | `/v1/test/tests-by-modified-date` |  |  |
+<!-- generated:vald-dynamo-endpoints end -->
 
 ## VALD DynaMo service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-dynamo-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `400` Bad Request: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalDynamo.V1.Configuration.Diagnostics.GetDiagnosticsResponse` |
+<!-- generated:vald-dynamo-health end -->
 
 ## VALD DynaMo: `GET /v2022q2/teams/{teamId}/tests`
 
@@ -108,6 +112,7 @@ Responses:
 
 The 23 component schemas of the DynaMo spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-dynamo-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -564,3 +569,4 @@ Type `string`.
 | `asymmetries` | array of `Vald.Api.ExternalDynamo.V1.Models.AsymmetryDTO` |  | yes |
 | `ratios` | array of `Vald.Api.ExternalDynamo.V1.Models.RatioDTO` |  | yes |
 | `modifiedDateUtc` | `string` | `date-time` |  |
+<!-- generated:vald-dynamo-schemas end -->

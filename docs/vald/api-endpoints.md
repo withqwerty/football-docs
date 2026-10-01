@@ -16,6 +16,7 @@ every operation in the eight specifications, except the four service health
 endpoints (`/version`, `/liveness`, `/readiness`, `/diagnostics`) that every
 service has. Each product's page has the parameters, responses and schemas.
 
+<!-- generated:vald-endpoint-inventory start -->
 | API | Host service | Method | Path | Summary | Deprecated |
 |---|---|---|---|---|---|
 | Tenants | `externaltenants` | `GET` | `/categories` |  |  |
@@ -91,9 +92,11 @@ service has. Each product's page has the parameters, responses and schemas.
 | HumanTrak | `externalhumantrakv2` | `GET` | `/v2/test/{testId}/repetitions` |  |  |
 | HumanTrak | `externalhumantrakv2` | `GET` | `/v2/tests-by-modified-date` |  |  |
 | HumanTrak | `externalhumantrakv2` | `GET` | `/v2/test-type/metrics` |  |  |
+<!-- generated:vald-endpoint-inventory end -->
 
 ## VALD operation counts
 
+<!-- generated:vald-operation-counts start -->
 | API | Host service | Spec version | Operations (with health endpoints) | Schemas | Schema fields |
 |---|---|---|---|---|---|
 | Tenants | `externaltenants` | `v1` | 16 | 18 | 53 |
@@ -104,3 +107,4 @@ service has. Each product's page has the parameters, responses and schemas.
 | SmartSpeed | `extsmartspeed` | `v1` | 7 | 32 | 186 |
 | DynaMo | `extdynamo` | `v1` | 8 | 23 | 149 |
 | HumanTrak | `externalhumantrakv2` | `v2` | 7 | 23 | 80 |
+<!-- generated:vald-operation-counts end -->

@@ -15,6 +15,7 @@ version; the `api-version` header selects the version. All paths sit under
 `/api/thirdPartyData/`, and the callable base URL is
 `https://statsportsproseries.com/thirdpartyapi` (see STATSports API access).
 
+<!-- generated:statsports-endpoint-inventory start -->
 | Operation | v5 | v6 | v7 |
 |---|---|---|---|
 | `GET /api/thirdPartyData/test` | yes | yes | yes |
@@ -26,11 +27,13 @@ version; the `api-version` header selects the version. All paths sit under
 | `POST /api/thirdPartyData/getSessionGpsData` | no | yes | yes |
 | `POST /api/thirdPartyData/getSessionImuData` | no | yes | yes |
 | `POST /api/thirdPartyData/getSessionRawData` | no | yes | yes |
+<!-- generated:statsports-endpoint-inventory end -->
 
 ## Version 7 endpoints
 
 Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json`, `info.version` "7". `info.description`: "3rd Party API To Allow Authorized 3rd Parties Access To STATSports Data."
 
+<!-- generated:statsports-endpoints-v7 start -->
 | Method | Path | Request body | Response `200` |
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/test` | none | no body in the spec |
@@ -42,6 +45,7 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json`, `
 | `POST` | `/api/thirdPartyData/getSessionGpsData` | `ThirdPartyRawDataDto` (application/json) | `GpsDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionImuData` | `ThirdPartyRawDataDto` (application/json) | `ImuDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionRawData` | `ThirdPartyRawDataDto` (application/json) | `GpsImuDataV6RawDataResponse` |
+<!-- generated:statsports-endpoints-v7 end -->
 
 Every operation in v7 takes one parameter: `api-version` (header, `string`, required, default `"7"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented.
 
@@ -49,6 +53,7 @@ Every operation in v7 takes one parameter: `api-version` (header, `string`, requ
 
 Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json`, `info.version` "6". `info.description`: "3rd Party API To Allow Authorized 3rd Parties Access To STATSports Data. This API version has been deprecated."
 
+<!-- generated:statsports-endpoints-v6 start -->
 | Method | Path | Request body | Response `200` |
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/test` | none | no body in the spec |
@@ -60,6 +65,7 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json`, `
 | `POST` | `/api/thirdPartyData/getSessionGpsData` | `ThirdPartyRawDataDto` (application/json) | `GpsDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionImuData` | `ThirdPartyRawDataDto` (application/json) | `ImuDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionRawData` | `ThirdPartyRawDataDto` (application/json) | `GpsImuDataV6RawDataResponse` |
+<!-- generated:statsports-endpoints-v6 end -->
 
 Every operation in v6 takes one parameter: `api-version` (header, `string`, required, default `"6"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented.
 
@@ -67,6 +73,7 @@ Every operation in v6 takes one parameter: `api-version` (header, `string`, requ
 
 Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json`, `info.version` "5". `info.description`: "3rd Party API To Allow Authorized 3rd Parties Access To STATSports Data. This API version has been deprecated."
 
+<!-- generated:statsports-endpoints-v5 start -->
 | Method | Path | Request body | Response `200` |
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/test` | none | no body in the spec |
@@ -74,8 +81,9 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json`, `
 | `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | `ThirdPartyDataV5` |
 | `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | `ThirdPartyDataV5` |
 | `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | `PlayerDataV5` |
+<!-- generated:statsports-endpoints-v5 end -->
 
-Every operation in v5 takes one parameter: `api-version` (header, `string`, required, default `"5"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented.
+Every operation in v5 takes one parameter: `api-version` (header, `string`, default `"5"`), described as "The requested API version". The spec gives no summary or description for any operation. Every response in the spec is `200` "Success"; no error responses are documented. Unlike v6 and v7, the v5 spec does not mark `api-version` as required.
 
 ## Endpoint notes from the spec
 

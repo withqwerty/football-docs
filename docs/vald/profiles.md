@@ -21,6 +21,7 @@ crawled_at: 2026-09-30
 
 ## VALD Profiles endpoints
 
+<!-- generated:vald-profiles-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -36,17 +37,20 @@ crawled_at: 2026-09-30
 | `DELETE` | `/profiles/groups` |  |  |
 | `POST` | `/profiles/groups` |  |  |
 | `POST` | `/profiles/merge` |  |  |
+<!-- generated:vald-profiles-endpoints end -->
 
 ## VALD Profiles service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-profiles-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalProfile.V1.Models.GetDiagnosticsResponse` |
+<!-- generated:vald-profiles-health end -->
 
 ## VALD Profiles: `POST /profiles/import`
 
@@ -156,6 +160,7 @@ Responses:
 
 The 14 component schemas of the Profiles spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-profiles-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -300,3 +305,4 @@ Type `string`.
 | `Female` |
 | `Unknown` |
 | `NotApplicable` |
+<!-- generated:vald-profiles-schemas end -->

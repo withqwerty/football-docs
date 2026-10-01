@@ -186,6 +186,15 @@ Content for section B is long enough to pass the threshold.`;
     }
   });
 
+  it("leaves generated-section markers out of the index", () => {
+    const plain = "## Fields\n\n| Field | Type |\n|---|---|\n| `id` | `string` |\n\nA note after the table.";
+    const marked = plain
+      .replace("| Field", "<!-- generated:example-fields start -->\n| Field")
+      .replace("| `string` |\n", "| `string` |\n<!-- generated:example-fields end -->\n");
+    expect(marked).toContain("<!-- generated:example-fields end -->");
+    expect(chunkMarkdown(marked, "prov", "cat")).toEqual(chunkMarkdown(plain, "prov", "cat"));
+  });
+
   it("defaults to curated when no frontmatter", () => {
     const text = "## Section\n\nContent that is long enough to be indexed by the chunker.";
     const chunks = chunkMarkdown(text, "prov", "cat");
