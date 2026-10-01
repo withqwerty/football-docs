@@ -180,6 +180,9 @@ Zotero: `search_papers` with `sources: ["zotero"]` searches your library, and
    full-text index. The key is sent only to api.zotero.org, never to the file
    storage host.
 
+An item saved without its PDF (metadata only) is read by its DOI instead, so
+`read_paper` still returns the open copy when there is one.
+
 ### Services
 
 The tools call public services at run time. Each reply ends with the services

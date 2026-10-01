@@ -332,6 +332,16 @@ export function fromZotero(item: ZoteroItem): PaperRecord {
   };
 }
 
+/** A Zotero item with no PDF attachment. Carries the item, so a caller can read its DOI instead. */
+export class NoZoteroPdfError extends FetchError {
+  constructor(
+    readonly item: ZoteroItem,
+    readonly label: string,
+  ) {
+    super(`the Zotero item ${item.key} has no PDF attachment`);
+  }
+}
+
 export type ZoteroPaper = { item: ZoteroItem; attachment: ZoteroItem; sections: Section[]; sha256: string; label: string };
 
 /** A PDF's sections and hash from its bytes. */
@@ -375,7 +385,7 @@ export async function readZoteroPaper(ctx: PaperContext, key: string): Promise<Z
   if (item.data.itemType !== "attachment") {
     const children = await zoteroJson<ZoteroItem[]>(ctx, route, `/items/${key}/children`);
     const pdf = children.find((child) => child.data.itemType === "attachment" && child.data.contentType === "application/pdf");
-    if (!pdf) throw new FetchError(`the Zotero item ${key} has no PDF attachment`);
+    if (!pdf) throw new NoZoteroPdfError(item, route.label);
     attachment = pdf;
   } else if (item.data.parentItem) {
     parent = await zoteroJson<ZoteroItem>(ctx, route, `/items/${item.data.parentItem}`);

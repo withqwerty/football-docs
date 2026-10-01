@@ -19,6 +19,7 @@ import {
   canonicalKey,
   FORMAT,
   loadEntry,
+  NoZoteroPdfError,
   passageChars,
   readZoteroPaper,
   type StoredPaper,
@@ -213,6 +214,14 @@ export async function loadPaper(ctx: PaperContext, rawId: string, log: ServiceLo
         saveEntry(ctx, entry);
         return { entry, fromLibrary: false };
       } catch (error) {
+        // An item saved without its PDF: read the paper by its DOI instead,
+        // which finds an open copy when there is one.
+        if (error instanceof NoZoteroPdfError) {
+          log.ok(error.label, "item has no PDF");
+          const doi = error.item.data.DOI?.trim();
+          if (doi) return loadPaper(ctx, doi, log, lookup);
+          return { error: `The Zotero item ${id.key} has no PDF attachment and no DOI. Attach the PDF in Zotero, or use add_local_paper.` };
+        }
         log.failed("Zotero", reason(error));
         return { error: `Could not read zotero:${id.key}: ${reason(error)}.` };
       }

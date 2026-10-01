@@ -345,6 +345,23 @@ describe("Zotero web API", () => {
     expect(out).toMatch(/Result: exact\./);
   });
 
+  it("reads an item saved without its PDF through the item's DOI", async () => {
+    const withDoi = { ...ITEM, data: { ...ITEM.data, DOI: "10.48550/arXiv.2511.09457" } };
+    const opts = options(
+      [
+        LOCAL_DOWN,
+        [`${WEB}/users/4242/items/ABCD2345/children`, { body: "[]" }],
+        [`${WEB}/users/4242/items/ABCD2345`, { body: JSON.stringify(withDoi) }],
+        ...ARXIV_ROUTES,
+      ],
+      [],
+      { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } },
+    );
+    const out = text(await readPaper({ id: "zotero:ABCD2345" }, opts));
+    expect(out).toMatch(/Access:\*\* open copy, so the full text is returned/);
+    expect(out).toMatch(/Services asked: Zotero web API \(item has no PDF\); arXiv; arxiv\.org \(arXiv HTML\)\./);
+  });
+
   it("explains a key without file or library access", async () => {
     const opts = options([LOCAL_DOWN, [`${WEB}/users/4242/`, { status: 403 }]], [], { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } });
     expect(text(await readPaper({ id: "zotero:ABCD2345" }, opts))).toMatch(/refused the key \(HTTP 403\).*zotero\.org\/settings\/keys/);
