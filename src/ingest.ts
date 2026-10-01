@@ -92,11 +92,17 @@ export function parseFrontmatter(raw: string): { frontmatter: Frontmatter; body:
   return { frontmatter: fm, body };
 }
 
+/**
+ * Marks a section that scripts/gen_vendor_tables.py rebuilds from specs/. The
+ * marker is for maintainers; it is kept out of the index.
+ */
+const GENERATED_MARKER = /^<!-- generated:[a-z0-9-]+ (start|end) -->$/;
+
 /** Split a markdown file into chunks by ## or ### headings. */
 export function chunkMarkdown(text: string, provider: string, category: string): DocChunk[] {
   const { frontmatter, body } = parseFrontmatter(text);
   const chunks: DocChunk[] = [];
-  const lines = body.split("\n");
+  const lines = body.split("\n").filter((line) => !GENERATED_MARKER.test(line));
 
   let currentTitle = `${provider} - ${category}`;
   let currentLines: string[] = [];
