@@ -174,6 +174,7 @@ describe("papers you supply", () => {
     const added = text(await addLocalPaper({ path: pdfFile() }, opts));
     const id = added.match(/\*\*(local:[0-9a-f]{16})\*\*/)![1];
     expect(added).toContain('Added "Valuing Actions in Football"');
+    expect(added).toMatch(/Text from:\*\* your file valuing-actions\.pdf$/m);
     expect(added).toMatch(/\[3\] 2 Method/);
 
     const outline = text(await readPaper({ id }, opts));

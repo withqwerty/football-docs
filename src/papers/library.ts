@@ -15,7 +15,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
-import { isAbsolute, join, resolve } from "node:path";
+import { basename, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Env, FetchError, type PaperContext, readCacheJson, readCapped, reason, USER_AGENT, writeCacheJson } from "./core.js";
 import type { PaperRecord } from "./records.js";
@@ -158,7 +158,8 @@ export function purgeAll(ctx: PaperContext): { papers: number; bytes: number } {
 
 export function expandPath(path: string): string {
   const trimmed = path.trim();
-  const expanded = trimmed === "~" || trimmed.startsWith("~/") ? join(homedir(), trimmed.slice(1)) : trimmed;
+  // "~/" on macOS and Linux; "~\\" too, for Windows.
+  const expanded = trimmed === "~" || /^~[/\\]/.test(trimmed) ? join(homedir(), trimmed.slice(1)) : trimmed;
   return resolve(expanded);
 }
 
@@ -177,7 +178,7 @@ export async function readLocalPdf(path: string): Promise<LocalPdf> {
   const pdf = await readPdf(data);
   return {
     sha256: createHash("sha256").update(data).digest("hex"),
-    name: full.split("/").pop() ?? full,
+    name: basename(full),
     sections: pdfSections(pdf.pages),
     title: pdf.title,
     author: pdf.author,

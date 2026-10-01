@@ -187,8 +187,9 @@ it asked.
 ### Your library
 
 - Text the tools read is kept in `$XDG_DATA_HOME/football-docs/papers/` (by
-  default `~/.local/share/football-docs/papers/`). The folder and its files are
-  readable only by you. A second read sends no request.
+  default `~/.local/share/football-docs/papers/`). On macOS and Linux the folder
+  and its files are readable only by you (modes 0700 and 0600); on Windows they
+  have the access rules of your user folder. A second read sends no request.
 - `forget_paper` removes one paper; `purge_cache` with `confirm: true` deletes
   the whole library and the SportRxiv copy. Neither touches your own files or
   Zotero.
@@ -208,10 +209,11 @@ As environment variables in the server's MCP configuration:
   call these services.
 - `FOOTBALL_DOCS_PAPERS_PASSAGE_CHARS=<n>`: the longest passage returned from a
   paper you supplied, 50 to 1000 characters (default 200).
-- `OPENALEX_API_KEY=<key>`: your OpenAlex key. Instead of the environment, you can
-  keep it in the system keychain:
+- `OPENALEX_API_KEY=<key>`: your OpenAlex key. On macOS and Linux you can keep it
+  in the system keychain instead of the environment:
   - macOS: `security add-generic-password -s football-docs -a OPENALEX_API_KEY -w <key>`
-  - Linux: `secret-tool store --label=football-docs service football-docs key OPENALEX_API_KEY`
+  - Linux (needs `secret-tool`, from libsecret): `secret-tool store --label=football-docs service football-docs key OPENALEX_API_KEY`
+  - Windows: use the environment variable; the tools do not read Windows Credential Manager.
 
 ## Example queries
 
