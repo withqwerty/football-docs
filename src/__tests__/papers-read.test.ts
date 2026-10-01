@@ -285,6 +285,9 @@ describe("Zotero", () => {
   });
 });
 
+/** The host of a logged call such as "GET https://api.zotero.org/keys/current". */
+const hostOf = (call: string) => new URL(call.slice(call.indexOf(" ") + 1)).host;
+
 describe("Zotero web API", () => {
   const WEB = "https://api.zotero.org";
   const ITEM = { key: "ABCD2345", data: { key: "ABCD2345", itemType: "journalArticle", title: "Valuing Actions in Football", creators: [{ name: "Ada Lovelace" }], date: "2021" } };
@@ -334,8 +337,8 @@ describe("Zotero web API", () => {
     const out = text(await readPaper({ id: "zotero:ABCD2345", query: "passes box" }, opts));
     expect(out).toMatch(/Text from:\*\* Zotero item ABCD2345 \(Zotero web API\)/);
     expect(out).toMatch(/\[section 4: 3 Results, page 3\]/);
-    expect(sent.find((call) => call.url.startsWith("https://files.zotero.net/"))?.key).toBeNull();
-    expect(sent.filter((call) => call.url.startsWith(WEB)).every((call) => call.key === "k-zot")).toBe(true);
+    expect(sent.find((call) => new URL(call.url).host === "files.zotero.net")?.key).toBeNull();
+    expect(sent.filter((call) => new URL(call.url).host === "api.zotero.org").every((call) => call.key === "k-zot")).toBe(true);
   });
 
   it("falls back to Zotero's full-text index for a file it does not store", async () => {
@@ -389,7 +392,7 @@ describe("Zotero web API", () => {
       { env: { ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } },
     );
     expect(text(await searchPapers({ query: "valuing", sources: ["zotero"] }, opts))).toMatch(/Zotero on this computer \(1 matches\)/);
-    expect(calls.some((call) => call.includes("api.zotero.org"))).toBe(false);
+    expect(calls.some((call) => hostOf(call) === "api.zotero.org")).toBe(false);
   });
 
   it("sends nothing to the web API when lookups are off", async () => {
@@ -397,6 +400,6 @@ describe("Zotero web API", () => {
     const opts = options(webRoutes(), calls, { env: { FOOTBALL_DOCS_PAPERS: "off", ZOTERO_API_KEY: "k-zot", ZOTERO_USER_ID: "4242" } });
     const out = text(await searchPapers({ query: "valuing", sources: ["zotero"] }, opts));
     expect(out).toMatch(/lookups are off/);
-    expect(calls.some((call) => call.includes("api.zotero.org"))).toBe(false);
+    expect(calls.some((call) => hostOf(call) === "api.zotero.org")).toBe(false);
   });
 });
