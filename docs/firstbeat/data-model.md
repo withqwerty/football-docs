@@ -89,14 +89,18 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 
 ## `Account`
 
-`authorizedBy` is an object with one field, `coachId` (`integer`).
-
 <!-- generated:firstbeat-schema-account start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `accountId` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `authorizedBy` | `object` |  |  |  |  |
+
+`authorizedBy` is an object with these fields:
+
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `coachId` | `integer` |  |  |  |  |
 <!-- generated:firstbeat-schema-account end -->
 
 ## `Athletes`

@@ -164,6 +164,11 @@ between two marker comments:
 <!-- generated:statsports-drillkpi-v7-accelerations end -->
 ```
 
+A field whose object is defined inline, with no schema name of its own, gets a
+second table of its own fields under the first. Constraints the spec sets on a
+field (`minLength`, `maximum`, `default`, `readOnly` and others) go in the
+Description column.
+
 The script rewrites only the text between markers. Headings, notes and counts
 outside them are hand-written. `pnpm ingest` drops the marker lines, so they never
 reach the index. `src/__tests__/vendor-tables.test.ts` runs the script with

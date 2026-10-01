@@ -407,7 +407,7 @@ The 33 component schemas of the ForceDecks spec, in spec order. No field has a d
 | `lastModifiedUTC` | `string` | `date-time` |  |  |
 | `notes` | `string` |  | yes |  |
 | `attributes` | array of `AttributeDTO` |  | yes |  |
-| `links` | object (map of `string`) |  | yes |  |
+| `links` | object (map of `string`) |  | yes | readOnly: `true` |
 
 ### `AttributeDTO`
 
@@ -470,8 +470,8 @@ Type `string`.
 | `notes` | `string` |  | yes |  |
 | `attributes` | array of `AttributeDTO` |  | yes |  |
 | `trials` | array of `TrialDTO` |  | yes |  |
-| `trialCount` | `integer` | `int32` |  |  |
-| `links` | object (map of `string`) |  | yes |  |
+| `trialCount` | `integer` | `int32` |  | readOnly: `true` |
+| `links` | object (map of `string`) |  | yes | readOnly: `true` |
 
 ### `DiagnosticsResult`
 
@@ -641,12 +641,12 @@ Type `string`.
 
 ### `TeamDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |
-| `name` | `string` |  | yes |
-| `region` | `AzureRegion` |  |  |
-| `links` | object (map of `string`) |  | yes |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  |  |
+| `name` | `string` |  | yes |  |
+| `region` | `AzureRegion` |  |  |  |
+| `links` | object (map of `string`) |  | yes | readOnly: `true` |
 
 ### `TestAttributeResponse`
 
@@ -679,7 +679,7 @@ Type `string`.
 | `weight` | `number` | `double` |  | **Personal data.** |
 | `notes` | `string` |  | yes |  |
 | `attributes` | array of `AttributeDTO` |  | yes |  |
-| `links` | object (map of `string`) |  | yes |  |
+| `links` | object (map of `string`) |  | yes | readOnly: `true` |
 
 ### `TestDTOPagedDTO`
 
@@ -694,11 +694,11 @@ Type `string`.
 
 ### `TestParameterDTO`
 
-| Field | Type | Format |
-| --- | --- | --- |
-| `resultId` | `integer` | `int32` |
-| `value` | `number` | `double` |
-| `definition` | `ResultDefinition` |  |
+| Field | Type | Format | Description |
+| --- | --- | --- | --- |
+| `resultId` | `integer` | `int32` | readOnly: `true` |
+| `value` | `number` | `double` | readOnly: `true` |
+| `definition` | `ResultDefinition` |  |  |
 
 ### `TestParameterResponse`
 

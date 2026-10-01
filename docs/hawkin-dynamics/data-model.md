@@ -139,6 +139,13 @@ The reference page's Metrics section says something different: "The id shown for
 | `data` | array of `Athlete` |  |  |  |  |
 | `hasFailures` | `boolean` |  |  |  |  |
 | `failures` | array of `object` |  |  |  |  |
+
+Each `failures` item is an object with these fields:
+
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `reason` | `string` |  |  |  |  |
+| `data` | `object` |  |  |  |  |
 <!-- generated:hawkin-schema-bulkresult end -->
 
 ## `ForceTimeData`

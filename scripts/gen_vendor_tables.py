@@ -182,6 +182,8 @@ def notes(vendor: str, schema: str, field: str, prop: dict[str, Any]) -> str:
         parts.append(" ".join(bounds))
     if "default" in prop:
         parts.append(f"default: `{fmt(prop['default'])}`")
+    if prop.get("readOnly"):
+        parts.append("readOnly: `true`")
     return " ".join(parts)
 
 
@@ -218,17 +220,48 @@ def field_rows(vendor: str, name: str, schema: dict[str, Any]) -> list[dict[str,
 FULL_COLUMNS = ["Field", "Type", "Format", "Nullable", "Required", "Description"]
 
 
-def full_field_table(vendor: str, name: str, schema: dict[str, Any]) -> str:
+def full_rows_table(rows: list[dict[str, str]]) -> str:
     """Six fixed columns, as the STATSports, Firstbeat and Hawkin pages use."""
-    rows = field_rows(vendor, name, schema)
     return table(FULL_COLUMNS, [[row[c] for c in FULL_COLUMNS] for row in rows])
 
 
-def compact_field_table(vendor: str, name: str, schema: dict[str, Any]) -> str:
+def compact_rows_table(rows: list[dict[str, str]]) -> str:
     """Field and Type, plus only the optional columns some row fills, as the VALD pages use."""
-    rows = field_rows(vendor, name, schema)
     columns = ["Field", "Type"] + [c for c in FULL_COLUMNS[2:] if any(row[c] for row in rows)]
     return table(columns, [[row[c] for c in columns] for row in rows], separator="| --- ")
+
+
+def inline_objects(schema: dict[str, Any], path: str = "") -> list[tuple[str, bool, dict[str, Any]]]:
+    """Objects defined inline in a schema's fields, with no component name of their own:
+    (field path, whether it is an array item, schema), outermost first."""
+    found = []
+    for field, prop in (schema.get("properties") or {}).items():
+        label = f"{path}.{field}" if path else field
+        node, is_item = prop, False
+        while node.get("type") == "array":
+            node, is_item = node.get("items", {}), True
+        if "properties" in node:
+            found.append((label, is_item, node))
+            found += inline_objects(node, label)
+    return found
+
+
+def field_tables(vendor: str, name: str, schema: dict[str, Any], render: Callable[[list[dict[str, str]]], str]) -> str:
+    """A schema's field table, then one table per inline object among its fields."""
+    parts = [render(field_rows(vendor, name, schema))]
+    for label, is_item, node in inline_objects(schema):
+        lead = f"Each `{label}` item" if is_item else f"`{label}`"
+        parts.append(f"{lead} is an object with these fields:")
+        parts.append(render(field_rows(vendor, f"{name}.{label}", node)))
+    return "\n\n".join(parts)
+
+
+def full_field_table(vendor: str, name: str, schema: dict[str, Any]) -> str:
+    return field_tables(vendor, name, schema, full_rows_table)
+
+
+def compact_field_table(vendor: str, name: str, schema: dict[str, Any]) -> str:
+    return field_tables(vendor, name, schema, compact_rows_table)
 
 
 HTTP_METHODS = ("get", "put", "post", "delete", "options", "head", "patch", "trace")

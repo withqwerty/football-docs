@@ -265,4 +265,12 @@ Responses:
 |---|---|---|---|---|---|
 | `data` | array of `object` |  |  |  |  |
 | `count` | `integer` |  |  |  | Number of tags returned. |
+
+Each `data` item is an object with these fields:
+
+| Field | Type | Format | Nullable | Required | Description |
+|---|---|---|---|---|---|
+| `id` | `string` |  |  |  |  |
+| `name` | `string` |  |  |  |  |
+| `description` | `string` |  |  |  |  |
 <!-- generated:hawkin-response-tags end -->
