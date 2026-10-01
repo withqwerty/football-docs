@@ -13,6 +13,7 @@ All 20 operations in the Firstbeat Cloud API spec (`info.version`
 "1.1.0"). The server in the spec is `https://api.firstbeat.com/v1`, so
 `GET /sports/accounts` is called as `https://api.firstbeat.com/v1/sports/accounts`.
 
+<!-- generated:firstbeat-endpoint-inventory start -->
 | Method | Path | Tag | Summary |
 |---|---|---|---|
 | `POST` | `/account/register` | account | Register as an API consumer |
@@ -35,6 +36,7 @@ All 20 operations in the Firstbeat Cloud API spec (`info.version`
 | `GET` | `/sports/accounts/{accountId}/teams/{teamId}/sessions` | sports | Get team sessions |
 | `GET` | `/sports/accounts/{accountId}/teams/{teamId}/sessions/{sessionId}/results` | sports | Get session results |
 | `GET` | `/sports/accounts/{accountId}/teams/{teamId}/sessions/{sessionId}/laps/{lapId}/results` | sports | Get session lap results |
+<!-- generated:firstbeat-endpoint-inventory end -->
 
 ## `POST /account/register`
 

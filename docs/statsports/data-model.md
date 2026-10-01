@@ -34,6 +34,7 @@ special category data under UK and EU GDPR.
 
 ## `ThirdPartyDataV7` (session response)
 
+<!-- generated:statsports-schema-thirdpartydatav7 start -->
 Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -44,9 +45,11 @@ Defined in the v7 spec.
 | `session` | `SessionDataV7` |  |  |  |  |
 | `players` | array of `SessionPlayerDataV7` |  | yes |  |  |
 | `clubId` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-thirdpartydatav7 end -->
 
 ## `ThirdPartyDataV6` (session response)
 
+<!-- generated:statsports-schema-thirdpartydatav6 start -->
 Defined in the v6 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -57,9 +60,11 @@ Defined in the v6 spec.
 | `session` | `SessionDataV6` |  |  |  |  |
 | `players` | array of `SessionPlayerDataV6` |  | yes |  |  |
 | `clubId` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-thirdpartydatav6 end -->
 
 ## `ThirdPartyDataV5` (session response)
 
+<!-- generated:statsports-schema-thirdpartydatav5 start -->
 Defined in the v5 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -69,9 +74,11 @@ Defined in the v5 spec.
 | `shareDate` | `string` | `date-time` | yes |  |  |
 | `session` | `SessionDataV5` |  |  |  |  |
 | `players` | array of `SessionPlayerDataV5` |  | yes |  |  |
+<!-- generated:statsports-schema-thirdpartydatav5 end -->
 
 ## `SessionDataV7` (session)
 
+<!-- generated:statsports-schema-sessiondatav7 start -->
 Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -81,9 +88,11 @@ Defined in the v7 spec.
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
 | `squadId` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-sessiondatav7 end -->
 
 ## `SessionDataV6` (session)
 
+<!-- generated:statsports-schema-sessiondatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -92,9 +101,11 @@ Defined in the v6, v7 specs.
 | `startTime` | `string` | `date-time` |  |  |  |
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-sessiondatav6 end -->
 
 ## `SessionDataV5` (session)
 
+<!-- generated:statsports-schema-sessiondatav5 start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -103,9 +114,11 @@ Defined in the v5, v6, v7 specs.
 | `startTime` | `string` | `date-time` |  |  |  |
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-sessiondatav5 end -->
 
 ## `SessionPlayerDataV7` (player in a session)
 
+<!-- generated:statsports-schema-sessionplayerdatav7 start -->
 Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -115,9 +128,11 @@ Defined in the v7 spec.
 | `id` | `string` | `uuid` |  |  |  |
 | `sessionId` | `string` | `uuid` |  |  |  |
 | `dataId` | `string` | `uuid` |  |  |  |
+<!-- generated:statsports-schema-sessionplayerdatav7 end -->
 
 ## `SessionPlayerDataV6` (player in a session)
 
+<!-- generated:statsports-schema-sessionplayerdatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -127,18 +142,22 @@ Defined in the v6, v7 specs.
 | `id` | `string` | `uuid` |  |  |  |
 | `sessionId` | `string` | `uuid` |  |  |  |
 | `dataId` | `string` | `uuid` |  |  |  |
+<!-- generated:statsports-schema-sessionplayerdatav6 end -->
 
 ## `SessionPlayerDataV5` (player in a session)
 
+<!-- generated:statsports-schema-sessionplayerdatav5 start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `player` | `PlayerDataV5` |  |  |  |  |
 | `drills` | array of `DrillDataV5` |  | yes |  |  |
+<!-- generated:statsports-schema-sessionplayerdatav5 end -->
 
 ## `PlayerDataV6` (player)
 
+<!-- generated:statsports-schema-playerdatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -166,11 +185,13 @@ Defined in the v6, v7 specs.
 | `sessionId` | `string` |  | yes |  |  |
 | `primaryPosition` | `string` |  | yes |  |  |
 | `secondaryPosition` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-playerdatav6 end -->
 
 `gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `thirdPartyId1`, `thirdPartyId2` and `thirdPartyId3` have no description in the spec.
 
 ## `PlayerDataV5` (player)
 
+<!-- generated:statsports-schema-playerdatav5 start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -196,11 +217,13 @@ Defined in the v5, v6, v7 specs.
 | `thirdPartyId3` | `string` |  | yes |  |  |
 | `playerThirdParties` | array of `PlayerThirdParty` |  | yes |  |  |
 | `position` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-playerdatav5 end -->
 
 `gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `thirdPartyId1`, `thirdPartyId2` and `thirdPartyId3` have no description in the spec.
 
 ## `PlayerThirdParty` (player third-party ID)
 
+<!-- generated:statsports-schema-playerthirdparty start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -215,11 +238,13 @@ Defined in the v5, v6, v7 specs.
 | `playerId` | `string` | `uuid` |  |  |  |
 | `thirdPartyId` | `integer` | `int32` |  |  |  |
 | `customId` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-playerthirdparty end -->
 
 `thirdPartyId` is an `integer`; the spec does not list its values or say which third party each value names.
 
 ## `DrillDataV7` (drill)
 
+<!-- generated:statsports-schema-drilldatav7 start -->
 Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -236,9 +261,11 @@ Defined in the v7 spec.
 | `secondaryLabel` | `string` |  | yes |  |  |
 | `tertiaryLabel` | `string` |  | yes |  |  |
 | `freeText` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-drilldatav7 end -->
 
 ## `DrillDataV6` (drill)
 
+<!-- generated:statsports-schema-drilldatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -255,9 +282,11 @@ Defined in the v6, v7 specs.
 | `secondaryLabel` | `string` |  | yes |  |  |
 | `tertiaryLabel` | `string` |  | yes |  |  |
 | `freeText` | `string` |  | yes |  |  |
+<!-- generated:statsports-schema-drilldatav6 end -->
 
 ## `DrillDataV5` (drill)
 
+<!-- generated:statsports-schema-drilldatav5 start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -267,27 +296,33 @@ Defined in the v5, v6, v7 specs.
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
 | `drillKpi` | `DrillKpiV5` |  |  |  |  |
+<!-- generated:statsports-schema-drilldatav5 end -->
 
 ## `ThirdPartyDto` (request body)
 
+<!-- generated:statsports-schema-thirdpartydto start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `thirdPartyApiId` | `string` | `uuid` |  |  |  |
 | `sessionDate` | `string` | `date-time` | yes |  |  |
+<!-- generated:statsports-schema-thirdpartydto end -->
 
 ## `ThirdPartyShareDateDto` (request body)
 
+<!-- generated:statsports-schema-thirdpartysharedatedto start -->
 Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `thirdPartyApiId` | `string` | `uuid` |  | yes |  |
 | `shareDate` | `string` | `date-time` | yes |  |  |
+<!-- generated:statsports-schema-thirdpartysharedatedto end -->
 
 ## `ThirdPartyDateRangeDto` (request body)
 
+<!-- generated:statsports-schema-thirdpartydaterangedto start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -295,9 +330,11 @@ Defined in the v6, v7 specs.
 | `thirdPartyApiId` | `string` | `uuid` |  |  |  |
 | `sessionStartDate` | `string` | `date-time` | yes |  |  |
 | `sessionEndDate` | `string` | `date-time` | yes |  |  |
+<!-- generated:statsports-schema-thirdpartydaterangedto end -->
 
 ## `ThirdPartyRawDataDto` (request body)
 
+<!-- generated:statsports-schema-thirdpartyrawdatadto start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -305,18 +342,22 @@ Defined in the v6, v7 specs.
 | `thirdPartyApiId` | `string` | `uuid` |  |  |  |
 | `rawDataId` | `string` | `uuid` |  |  |  |
 | `nextPage` | `integer` | `int32` |  |  |  |
+<!-- generated:statsports-schema-thirdpartyrawdatadto end -->
 
 ## `GpsDataV6RawDataResponse` (raw GPS page)
 
+<!-- generated:statsports-schema-gpsdatav6rawdataresponse start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `nextPage` | `integer` | `int32` |  |  |  |
 | `data` | array of `GpsDataV6` |  | yes |  |  |
+<!-- generated:statsports-schema-gpsdatav6rawdataresponse end -->
 
 ## `GpsDataV6` (GPS sample)
 
+<!-- generated:statsports-schema-gpsdatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -326,20 +367,24 @@ Defined in the v6, v7 specs.
 | `lon` | `number` | `double` |  |  |  |
 | `v` | `number` | `double` |  |  |  |
 | `hr` | `number` | `double` |  |  | **Personal data.** |
+<!-- generated:statsports-schema-gpsdatav6 end -->
 
 The spec gives no units or descriptions for `t`, `lat`, `lon`, `v` or `hr`. `hr` is heart rate data, which is health data.
 
 ## `ImuDataV6RawDataResponse` (raw IMU page)
 
+<!-- generated:statsports-schema-imudatav6rawdataresponse start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `nextPage` | `integer` | `int32` |  |  |  |
 | `data` | array of `ImuDataV6` |  | yes |  |  |
+<!-- generated:statsports-schema-imudatav6rawdataresponse end -->
 
 ## `ImuDataV6` (IMU sample)
 
+<!-- generated:statsports-schema-imudatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -351,20 +396,24 @@ Defined in the v6, v7 specs.
 | `gx` | `number` | `double` |  |  |  |
 | `gy` | `number` | `double` |  |  |  |
 | `gz` | `number` | `double` |  |  |  |
+<!-- generated:statsports-schema-imudatav6 end -->
 
 The spec gives no units or descriptions for `t`, `ax`, `ay`, `az`, `gx`, `gy` or `gz`.
 
 ## `GpsImuDataV6RawDataResponse` (raw GPS and IMU page)
 
+<!-- generated:statsports-schema-gpsimudatav6rawdataresponse start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `nextPage` | `integer` | `int32` |  |  |  |
 | `data` | array of `GpsImuDataV6` |  | yes |  |  |
+<!-- generated:statsports-schema-gpsimudatav6rawdataresponse end -->
 
 ## `GpsImuDataV6` (GPS sample with IMU samples)
 
+<!-- generated:statsports-schema-gpsimudatav6 start -->
 Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
@@ -375,6 +424,7 @@ Defined in the v6, v7 specs.
 | `v` | `number` | `double` |  |  |  |
 | `hr` | `number` | `double` |  |  | **Personal data.** |
 | `imuData` | array of `ImuDataV6` |  | yes |  |  |
+<!-- generated:statsports-schema-gpsimudatav6 end -->
 
 ## `IntPtr` (empty schema)
 

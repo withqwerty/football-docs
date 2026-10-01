@@ -48,16 +48,19 @@ inference, not a statement in the spec.
 
 ## DrillKpiV7 fields: duration and total distance
 
+<!-- generated:statsports-drillkpi-v7-duration start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `totalTime` | `number` | `double` | yes | yes |
 | `distanceTotal` | `number` | `double` | yes | yes |
 | `distancePerMin` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-duration end -->
 
 ## DrillKpiV7 fields: distance in speed zones and high-speed running
 
 High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`, `hsrAbsPerMin` and `hsrRelPerMin`. The spec gives no speed threshold for high-speed running or for any zone `Z1` to `Z6`, and no unit.
 
+<!-- generated:statsports-drillkpi-v7-speed-zones start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `distanceZ1Rel` | `number` | `double` | yes | yes |
@@ -82,9 +85,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `distanceZ3Z6Rel` | `number` | `double` | yes | yes |
 | `distanceZ4Z6Abs` | `number` | `double` | yes | yes |
 | `distanceZ4Z6Rel` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-speed-zones end -->
 
 ## DrillKpiV7 fields: time in speed zones
 
+<!-- generated:statsports-drillkpi-v7-time-in-speed-zones start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `timeZ1Rel` | `number` | `double` | yes | yes |
@@ -99,9 +104,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `timeZ4Abs` | `number` | `double` | yes | yes |
 | `timeZ5Abs` | `number` | `double` | yes | yes |
 | `timeZ6Abs` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-time-in-speed-zones end -->
 
 ## DrillKpiV7 fields: metabolic power and hml
 
+<!-- generated:statsports-drillkpi-v7-metabolic start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `emd` | `number` | `double` | yes | yes |
@@ -142,9 +149,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `hmlEffortsMaxSpeed` | `number` | `double` | yes | yes |
 | `hmlEffortsTotalDistance` | `number` | `double` | yes | yes |
 | `averageTimeSinceLastHmlEffort` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-metabolic end -->
 
 ## DrillKpiV7 fields: speed and speed intensity
 
+<!-- generated:statsports-drillkpi-v7-speed start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `maxSpeed` | `number` | `double` | yes | yes |
@@ -162,9 +171,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `speedIntensityZ4Abs` | `number` | `double` | yes | yes |
 | `speedIntensityZ5Abs` | `number` | `double` | yes | yes |
 | `speedIntensityZ6Abs` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-speed end -->
 
 ## DrillKpiV7 fields: impacts and dynamic stress load
 
+<!-- generated:statsports-drillkpi-v7-impacts start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `dsl` | `number` | `double` | yes | yes |
@@ -203,9 +214,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `impactsZ3Z6Abs` | `number` | `double` |  |  |
 | `impactsZ4Z6Abs` | `number` | `double` |  |  |
 | `impactsZ5Z6Abs` | `number` | `double` |  |  |
+<!-- generated:statsports-drillkpi-v7-impacts end -->
 
 ## DrillKpiV7 fields: accelerations
 
+<!-- generated:statsports-drillkpi-v7-accelerations start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `accelerationsRel` | `integer` | `int32` |  |  |
@@ -259,9 +272,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `accelerationsZ3Z6Abs` | `number` | `double` |  |  |
 | `accelerationsZ4Z6Abs` | `number` | `double` |  |  |
 | `accelerationsZ5Z6Abs` | `number` | `double` |  |  |
+<!-- generated:statsports-drillkpi-v7-accelerations end -->
 
 ## DrillKpiV7 fields: decelerations
 
+<!-- generated:statsports-drillkpi-v7-decelerations start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `decelerationsRel` | `integer` | `int32` |  |  |
@@ -313,9 +328,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `decelerationsZ3Z6Abs` | `number` | `double` |  |  |
 | `decelerationsZ4Z6Abs` | `number` | `double` |  |  |
 | `decelerationsZ5Z6Abs` | `number` | `double` |  |  |
+<!-- generated:statsports-drillkpi-v7-decelerations end -->
 
 ## DrillKpiV7 fields: sprints, high-intensity bursts and zone entries
 
+<!-- generated:statsports-drillkpi-v7-sprints start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `sprints` | `integer` | `int32` | yes | yes |
@@ -336,11 +353,13 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `hibsMaxSpeed` | `number` | `double` | yes | yes |
 | `averageTimeSinceHib` | `number` | `double` | yes | yes |
 | `averageTimeSinceSprint` | `number` | `double` | yes | yes |
+<!-- generated:statsports-drillkpi-v7-sprints end -->
 
 ## DrillKpiV7 fields: heart rate
 
 **Personal data.** These fields are heart rate data about an identifiable athlete, which is health data (special category data under UK and EU GDPR).
 
+<!-- generated:statsports-drillkpi-v7-heart-rate start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `maxHeartrate` | `number` | `double` | yes | yes |
@@ -373,9 +392,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `timeHeartRateZ4Z6Rel` | `number` | `double` |  |  |
 | `averageHeartRate` | `number` | `double` | yes | yes |
 | `minimumHeartrate` | `number` | `double` |  |  |
+<!-- generated:statsports-drillkpi-v7-heart-rate end -->
 
 ## DrillKpiV7 fields: load, work and other
 
+<!-- generated:statsports-drillkpi-v7-load start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `fatigueIndex` | `number` | `double` | yes | yes |
@@ -393,9 +414,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `ballInPlayTimePercent` | `number` | `double` | yes |  |
 | `edi` | `number` | `double` |  |  |
 | `mechanicalLoad` | `number` | `double` |  |  |
+<!-- generated:statsports-drillkpi-v7-load end -->
 
 ## DrillKpiV7 fields: steps, step impacts and dynamic load
 
+<!-- generated:statsports-drillkpi-v7-steps start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `stepBalance` | `number` | `double` | yes | yes |
@@ -417,9 +440,11 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `leftMagImpact` | `number` | `double` | yes | yes |
 | `leftAverageVertImpact` | `number` | `double` | yes | yes |
 | `runningSymmetry` | `number` | `double` | yes |  |
+<!-- generated:statsports-drillkpi-v7-steps end -->
 
 ## DrillKpiV7 fields: goalkeeper
 
+<!-- generated:statsports-drillkpi-v7-goalkeeper start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `averageGoalkeeperPower` | `number` | `double` | yes | yes |
@@ -429,25 +454,31 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `goalkeeperLoad` | `number` | `double` | yes | yes |
 | `averageTimeSinceLastDive` | `number` | `double` | yes | yes |
 | `averageDiveImpact` | `number` | `double` | yes |  |
+<!-- generated:statsports-drillkpi-v7-goalkeeper end -->
 
 ## DrillKpiV7 fields: change of direction
 
+<!-- generated:statsports-drillkpi-v7-change-of-direction start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `changeOfDirectionRight` | `integer` | `int32` |  |  |
 | `changeOfDirectionLeft` | `integer` | `int32` |  |  |
 | `changeOfDirectionTotal` | `integer` | `int32` |  |  |
+<!-- generated:statsports-drillkpi-v7-change-of-direction end -->
 
 ## DrillKpiV7 fields: custom metrics
 
+<!-- generated:statsports-drillkpi-v7-custom-metrics start -->
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `customMetrics` | object (map of `number`) |  | yes |  |
+<!-- generated:statsports-drillkpi-v7-custom-metrics end -->
 
 ## DrillKpiV6 fields not in DrillKpiV7
 
 These 79 `DrillKpiV6` field names do not appear in `DrillKpiV7`. Many look like the unsuffixed forms of v7 `Rel` and `Abs` fields (for example `accelerations` in v6, and `accelerationsRel` and `accelerationsAbs` in v7), but the spec does not map one to the other. The v6 heart-rate zone fields are spelled `timeHeartrateZ1` to `timeHeartrateZ6` (lower-case `r`).
 
+<!-- generated:statsports-drillkpi-v6-not-in-v7 start -->
 | Field | Type | Format | In `DrillKpiV5` |
 |---|---|---|---|
 | `metabolicDistanceZ1` | `number` | `double` | yes |
@@ -529,11 +560,13 @@ These 79 `DrillKpiV6` field names do not appear in `DrillKpiV7`. Many look like 
 | `impactsZ5Z6` | `number` | `double` | yes |
 | `metabolicDistance` | `number` | `double` | yes |
 | `metabolicTime` | `number` | `double` | yes |
+<!-- generated:statsports-drillkpi-v6-not-in-v7 end -->
 
 ## DrillKpiV6 fields not in DrillKpiV5
 
 `DrillKpiV6` has every `DrillKpiV5` field, with the same type, plus these 11:
 
+<!-- generated:statsports-drillkpi-v6-not-in-v5 start -->
 | Field | Type | Format | In `DrillKpiV7` |
 |---|---|---|---|
 | `accelerationSymmetry` | `number` | `double` | yes |
@@ -547,3 +580,4 @@ These 79 `DrillKpiV6` field names do not appear in `DrillKpiV7`. Many look like 
 | `scrums` | `number` | `double` | yes |
 | `ballInPlayTimePercent` | `number` | `double` | yes |
 | `customMetrics` | object (map of `number`) |  | yes |
+<!-- generated:statsports-drillkpi-v6-not-in-v5 end -->

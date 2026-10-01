@@ -16,38 +16,47 @@ marked **Personal data** hold data about an identifiable athlete. On `Athlete`,
 
 ## `AccessTokenResponse`
 
+<!-- generated:hawkin-schema-accesstokenresponse start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `access_token` | `string` |  |  |  | JWT access token to use in subsequent API requests |
 | `token_type` | `string` |  |  |  |  |
 | `expires_at` | `integer` |  |  |  | Unix timestamp when the token expires |
+<!-- generated:hawkin-schema-accesstokenresponse end -->
 
 ## `TestType`
 
+<!-- generated:hawkin-schema-testtype start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `canonicalId` | `string` |  |  |  |  |
 | `tags` | array of `Tag` |  |  |  |  |
+<!-- generated:hawkin-schema-testtype end -->
 
 ## `Tag`
 
+<!-- generated:hawkin-schema-tag start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `description` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-tag end -->
 
 ## `AthleteRef`
 
+<!-- generated:hawkin-schema-athleteref start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  | **Personal data.** |
+<!-- generated:hawkin-schema-athleteref end -->
 
 ## `Test`
 
+<!-- generated:hawkin-schema-test start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
@@ -57,6 +66,7 @@ marked **Personal data** hold data about an identifiable athlete. On `Athlete`,
 | `segment` | `string` |  |  |  | Test type and trial number within session |
 | `eid` | `string` |  |  |  | Equipment ID of the hardware that produced the test. Only present when the request was made with includeEid=true. |
 | `active` | `boolean` |  |  |  | Whether the test is active (not archived). Included by default because the public endpoint uses includeInactive=true; set includeInactive=false to return only active tests. |
+<!-- generated:hawkin-schema-test end -->
 
 Besides the fields above, a `Test` has `additionalProperties` of type `number`, nullable, described as: "Metric values keyed by metric name (e.g. 'Jump Height(m)'). Non-calculable metrics are returned as null (the public endpoint uses useNulls=true), not the string 'N/A'."
 
@@ -64,6 +74,7 @@ The reference page's Metrics section says something different: "The id shown for
 
 ## `TestsResponse`
 
+<!-- generated:hawkin-schema-testsresponse start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `Test` |  |  |  |  |
@@ -72,9 +83,11 @@ The reference page's Metrics section says something different: "The id shown for
 | `lastSyncTime` | `integer` |  |  |  | Unix timestamp to use as syncFrom in your next request |
 | `hasMore` | `boolean` |  |  |  | True if more pages exist. Only present when paginate=true. |
 | `nextCursor` | `string` |  | yes |  | Cursor for next page. Null on last page. Only present when paginate=true. |
+<!-- generated:hawkin-schema-testsresponse end -->
 
 ## `Athlete`
 
+<!-- generated:hawkin-schema-athlete start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  | yes |  |
@@ -89,9 +102,11 @@ The reference page's Metrics section says something different: "The id shown for
 | `height` | `number` |  |  |  | **Personal data.** Athlete height in centimeters. Guaranteed numeric and in-range when present. Omitted entirely when no valid height is on file. minimum: `1` maximum: `300` |
 | `lastTestedOn` | `integer` | `int64` |  |  | Unix epoch seconds of the athlete's most recent test session. Omitted when the athlete has no tests on file. |
 | `external` | `object` |  |  |  | Custom external properties as key-value pairs |
+<!-- generated:hawkin-schema-athlete end -->
 
 ## `AthleteInput`
 
+<!-- generated:hawkin-schema-athleteinput start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `name` | `string` |  |  | yes | **Personal data.** |
@@ -100,9 +115,11 @@ The reference page's Metrics section says something different: "The id shown for
 | `teams` | array of `string` |  |  |  | Team IDs. Defaults to [defaultTeamId] |
 | `groups` | array of `string` |  |  |  | Group IDs default: `[]` |
 | `external` | `object` |  |  |  | Custom properties |
+<!-- generated:hawkin-schema-athleteinput end -->
 
 ## `AthleteUpdateInput`
 
+<!-- generated:hawkin-schema-athleteupdateinput start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  | yes | Required. The athlete's ID |
@@ -112,17 +129,21 @@ The reference page's Metrics section says something different: "The id shown for
 | `teams` | array of `string` |  |  |  |  |
 | `groups` | array of `string` |  |  |  |  |
 | `external` | `object` |  |  |  | Custom properties. Note: custom properties NOT present in the request will be REMOVED. |
+<!-- generated:hawkin-schema-athleteupdateinput end -->
 
 ## `BulkResult`
 
+<!-- generated:hawkin-schema-bulkresult start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `data` | array of `Athlete` |  |  |  |  |
 | `hasFailures` | `boolean` |  |  |  |  |
 | `failures` | array of `object` |  |  |  |  |
+<!-- generated:hawkin-schema-bulkresult end -->
 
 ## `ForceTimeData`
 
+<!-- generated:hawkin-schema-forcetimedata start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
@@ -146,11 +167,13 @@ The reference page's Metrics section says something different: "The id shown for
 | `Displacement(m)` | array of `number` |  |  |  |  |
 | `Power(W)` | array of `number` |  |  |  |  |
 | `rsi` | array of `number` |  |  |  | Reactive Strength Index values (one per contact/flight cycle). |
+<!-- generated:hawkin-schema-forcetimedata end -->
 
 ## `COPData`
 
 Center-of-pressure time series for a Free Run test. `Time(s)` is derived from the platform sampling rate (hertz). copX/copY are the combined center of pressure; leftCop*/rightCop* are per-platform.
 
+<!-- generated:hawkin-schema-copdata start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
@@ -165,36 +188,45 @@ Center-of-pressure time series for a Free Run test. `Time(s)` is derived from th
 | `leftCopY` | array of `number` |  |  |  | Left-platform center-of-pressure Y position. |
 | `rightCopX` | array of `number` |  |  |  | Right-platform center-of-pressure X position. |
 | `rightCopY` | array of `number` |  |  |  | Right-platform center-of-pressure Y position. |
+<!-- generated:hawkin-schema-copdata end -->
 
 ## `Team`
 
+<!-- generated:hawkin-schema-team start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-team end -->
 
 ## `Group`
 
+<!-- generated:hawkin-schema-group start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-group end -->
 
 ## `TestTypeSummary`
 
+<!-- generated:hawkin-schema-testtypesummary start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-testtypesummary end -->
 
 ## `Metric`
 
+<!-- generated:hawkin-schema-metric start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  |  |
 | `label` | `string` |  |  |  |  |
 | `units` | `string` |  | yes |  |  |
 | `description` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-metric end -->
 
 ## `MetricsResponse`
 
@@ -202,6 +234,8 @@ Center-of-pressure time series for a Free Run test. `Time(s)` is derived from th
 
 ## `ErrorResponse`
 
+<!-- generated:hawkin-schema-errorresponse start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `error` | `string` |  |  |  |  |
+<!-- generated:hawkin-schema-errorresponse end -->

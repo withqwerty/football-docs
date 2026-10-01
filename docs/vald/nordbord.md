@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD NordBord endpoints
 
+<!-- generated:vald-nordbord-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -37,17 +38,20 @@ crawled_at: 2026-09-30
 | `GET` | `/training/sessions/isometric` | Retrieves a list of Nordbord isometric training sessions |  |
 | `GET` | `/training/sessions/isometric/exercises` | Retrieves a list of Nordbord isometric training exercise sessions |  |
 | `GET` | `/training/sessions/isometric/exercises/repetitions` | Retrieves a list of Nordbord isometric training exercise sessions |  |
+<!-- generated:vald-nordbord-endpoints end -->
 
 ## VALD NordBord service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-nordbord-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalNordbord.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse` |
+<!-- generated:vald-nordbord-health end -->
 
 ## VALD NordBord: `GET /tests/{testId}/nordbordtrace`
 
@@ -257,6 +261,7 @@ Responses:
 
 The 27 component schemas of the NordBord spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-nordbord-schemas start -->
 ### `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 `additionalProperties`: `{}`.
@@ -692,3 +697,4 @@ Type `string`.
 | `Manual` |
 | `Max` |
 | `Average` |
+<!-- generated:vald-nordbord-schemas end -->

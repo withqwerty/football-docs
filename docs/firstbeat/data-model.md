@@ -45,113 +45,142 @@ Fields marked **Personal data** identify a person.
 
 ## `Register`
 
+<!-- generated:firstbeat-schema-register start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `consumerName` | `string` |  |  | yes | minLength: `2` maxLength: `100` |
+<!-- generated:firstbeat-schema-register end -->
 
 ## `RegisterResponse`
 
+<!-- generated:firstbeat-schema-registerresponse start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` |  |  |  | minLength: `36` maxLength: `36` |
 | `consumerName` | `string` |  |  |  | minLength: `2` maxLength: `100` |
 | `sharedSecret` | `string` |  |  |  | minLength: `36` maxLength: `36` |
+<!-- generated:firstbeat-schema-registerresponse end -->
 
 ## `ApiKey`
 
+<!-- generated:firstbeat-schema-apikey start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `apiKey` | `string` |  |  |  | minLength: `20` maxLength: `128` |
+<!-- generated:firstbeat-schema-apikey end -->
 
 The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.firstbeat.com/getting-started/) shows the response as `{"apikey": "..."}` and reads `response.json()["apikey"]`, with a lower-case `k`. The two sources disagree.
 
 ## `SharedSecret`
 
+<!-- generated:firstbeat-schema-sharedsecret start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `sharedSecret` | `string` |  |  |  | minLength: `36` maxLength: `36` |
+<!-- generated:firstbeat-schema-sharedsecret end -->
 
 ## `Accounts`
 
+<!-- generated:firstbeat-schema-accounts start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `accounts` | array of `Account` |  |  |  |  |
+<!-- generated:firstbeat-schema-accounts end -->
 
 ## `Account`
 
 `authorizedBy` is an object with one field, `coachId` (`integer`).
 
+<!-- generated:firstbeat-schema-account start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `accountId` | `string` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `authorizedBy` | `object` |  |  |  |  |
+<!-- generated:firstbeat-schema-account end -->
 
 ## `Athletes`
 
+<!-- generated:firstbeat-schema-athletes start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `more` | `boolean` |  |  |  |  |
 | `athletes` | array of `Athlete` |  |  |  |  |
+<!-- generated:firstbeat-schema-athletes end -->
 
 ## `Athlete`
 
+<!-- generated:firstbeat-schema-athlete start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `athleteId` | `integer` |  |  |  |  |
 | `firstName` | `string` |  |  |  | **Personal data.** |
 | `lastName` | `string` |  |  |  | **Personal data.** |
 | `email` | `string` |  |  |  | **Personal data.** |
+<!-- generated:firstbeat-schema-athlete end -->
 
 ## `Coaches`
 
+<!-- generated:firstbeat-schema-coaches start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `more` | `boolean` |  |  |  |  |
 | `coaches` | array of `Coach` |  |  |  |  |
+<!-- generated:firstbeat-schema-coaches end -->
 
 ## `Coach`
 
+<!-- generated:firstbeat-schema-coach start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `coachId` | `integer` |  |  |  |  |
 | `firstName` | `string` |  |  |  | **Personal data.** |
 | `lastName` | `string` |  |  |  | **Personal data.** |
 | `email` | `string` |  |  |  | **Personal data.** |
+<!-- generated:firstbeat-schema-coach end -->
 
 ## `Teams`
 
+<!-- generated:firstbeat-schema-teams start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `more` | `boolean` |  |  |  |  |
 | `teams` | array of `Team` |  |  |  |  |
+<!-- generated:firstbeat-schema-teams end -->
 
 ## `Team`
 
+<!-- generated:firstbeat-schema-team start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `teamId` | `integer` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `athleteIds` | array of `integer` |  |  |  |  |
 | `groups` | array of `Group` |  |  |  |  |
+<!-- generated:firstbeat-schema-team end -->
 
 ## `Group`
 
+<!-- generated:firstbeat-schema-group start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `groupId` | `integer` |  |  |  |  |
 | `name` | `string` |  |  |  |  |
 | `athleteIds` | array of `integer` |  |  |  |  |
+<!-- generated:firstbeat-schema-group end -->
 
 ## `Sessions`
 
+<!-- generated:firstbeat-schema-sessions start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `more` | `boolean` |  |  |  |  |
 | `sessions` | array of `Session` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessions end -->
 
 ## `Session`
 
+<!-- generated:firstbeat-schema-session start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `sessionId` | `integer` |  |  |  |  |
@@ -166,9 +195,11 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `notes` | `string` |  |  |  |  |
 | `athleteIds` | array of `integer` |  |  |  |  |
 | `laps` | array of `SessionLap` |  |  |  |  |
+<!-- generated:firstbeat-schema-session end -->
 
 ## `SessionLap`
 
+<!-- generated:firstbeat-schema-sessionlap start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `lapId` | `integer` |  |  |  |  |
@@ -178,22 +209,28 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `endTime` | `string` | `date-time` |  |  |  |
 | `endTimeLocal` | `string` | `date-time` |  |  |  |
 | `athleteIds` | array of `integer` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessionlap end -->
 
 ## `SessionResults`
 
+<!-- generated:firstbeat-schema-sessionresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `measurements` | array of `SessionMeasurementResults` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessionresults end -->
 
 ## `Measurements`
 
+<!-- generated:firstbeat-schema-measurements start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `more` | `boolean` |  |  |  |  |
 | `measurements` | array of `AthleteMeasurement` |  |  |  |  |
+<!-- generated:firstbeat-schema-measurements end -->
 
 ## `AthleteMeasurement`
 
+<!-- generated:firstbeat-schema-athletemeasurement start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `measurementId` | `integer` |  |  |  |  |
@@ -209,9 +246,11 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `eventType` | `string` |  |  |  |  |
 | `notes` | `string` |  |  |  |  |
 | `laps` | array of `MeasurementLap` |  |  |  |  |
+<!-- generated:firstbeat-schema-athletemeasurement end -->
 
 ## `MeasurementLap`
 
+<!-- generated:firstbeat-schema-measurementlap start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `lapId` | `integer` |  |  |  |  |
@@ -220,9 +259,11 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `startTimeLocal` | `string` | `date-time` |  |  |  |
 | `endTime` | `string` | `date-time` |  |  |  |
 | `endTimeLocal` | `string` | `date-time` |  |  |  |
+<!-- generated:firstbeat-schema-measurementlap end -->
 
 ## `SessionMeasurementResults`
 
+<!-- generated:firstbeat-schema-sessionmeasurementresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `athleteId` | `integer` |  |  |  |  |
@@ -237,9 +278,11 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `eventType` | `string` |  |  |  |  |
 | `notes` | `string` |  |  |  |  |
 | `variables` | array of `Variable` or `TimeSeriesVariable` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessionmeasurementresults end -->
 
 ## `AthleteMeasurementResults`
 
+<!-- generated:firstbeat-schema-athletemeasurementresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `athleteId` | `integer` |  |  |  |  |
@@ -255,9 +298,11 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `eventType` | `string` |  |  |  |  |
 | `notes` | `string` |  |  |  |  |
 | `variables` | array of `Variable` or `TimeSeriesVariable` |  |  |  |  |
+<!-- generated:firstbeat-schema-athletemeasurementresults end -->
 
 ## `AthleteMeasurementLapResults`
 
+<!-- generated:firstbeat-schema-athletemeasurementlapresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `athleteId` | `integer` |  |  |  |  |
@@ -275,15 +320,19 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `eventType` | `string` |  |  |  |  |
 | `notes` | `string` |  |  |  |  |
 | `variables` | array of `Variable` or `TimeSeriesVariable` |  |  |  |  |
+<!-- generated:firstbeat-schema-athletemeasurementlapresults end -->
 
 ## `SessionLapResults`
 
+<!-- generated:firstbeat-schema-sessionlapresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `measurements` | array of `SessionLapMeasurementResults` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessionlapresults end -->
 
 ## `SessionLapMeasurementResults`
 
+<!-- generated:firstbeat-schema-sessionlapmeasurementresults start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `sessionId` | `integer` |  |  |  |  |
@@ -300,19 +349,23 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `eventType` | `string` |  |  |  |  |
 | `notes` | `string` |  |  |  |  |
 | `variables` | array of `Variable` or `TimeSeriesVariable` |  |  |  |  |
+<!-- generated:firstbeat-schema-sessionlapmeasurementresults end -->
 
 ## `Variable`
 
+<!-- generated:firstbeat-schema-variable start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `name` | `string` |  |  |  |  |
 | `unit` | `string` |  |  |  |  |
 | `value` | `number` |  |  |  |  |
+<!-- generated:firstbeat-schema-variable end -->
 
 `variables` in the results schemas is an array whose items are one of `Variable` or `TimeSeriesVariable` (`oneOf`). Names, units and meanings of the variables are listed in Firstbeat variables.
 
 ## `TimeSeriesVariable`
 
+<!-- generated:firstbeat-schema-timeseriesvariable start -->
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `name` | `string` |  |  |  |  |
@@ -321,5 +374,6 @@ The spec names this field `apiKey`. The "Getting Started" page (https://apidocs.
 | `type` | `string` |  |  |  |  |
 | `bits` | `integer` |  |  |  |  |
 | `value` | `string` |  |  |  |  |
+<!-- generated:firstbeat-schema-timeseriesvariable end -->
 
 `variables` in the results schemas is an array whose items are one of `Variable` or `TimeSeriesVariable` (`oneOf`). Names, units and meanings of the variables are listed in Firstbeat variables.

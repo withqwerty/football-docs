@@ -19,6 +19,7 @@ crawled_at: 2026-09-30
 
 ## VALD ForceDecks endpoints
 
+<!-- generated:vald-forcedecks-endpoints start -->
 | Method | Path | Summary | Deprecated |
 |---|---|---|---|
 | `GET` | `/version` |  |  |
@@ -45,17 +46,20 @@ crawled_at: 2026-09-30
 | `GET` | `/v2019q3/teams/{teamId}/recordings/{recordingId}` |  | yes |
 | `GET` | `/v2019q3/teams/{teamId}/recordings/{recordingId}/file` |  | yes |
 | `GET` | `/tests` | Retrieves a collection of ForceDecks test summaries. |  |
+<!-- generated:vald-forcedecks-endpoints end -->
 
 ## VALD ForceDecks service health endpoints
 
 `/version`, `/liveness`, `/readiness` and `/diagnostics` report on the service itself, not on athlete data.
 
+<!-- generated:vald-forcedecks-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
 | `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `ProblemDetails`<br>`200` OK: `GetDiagnosticsResponse` |
+<!-- generated:vald-forcedecks-health end -->
 
 ## VALD ForceDecks: `GET /resultdefinitions`
 
@@ -388,6 +392,7 @@ Responses:
 
 The 33 component schemas of the ForceDecks spec, in spec order. No field has a description in the spec. Fields marked **Personal data** hold data about an identifiable person; body measures are health data.
 
+<!-- generated:vald-forcedecks-schemas start -->
 ### `AthleteItemDTO`
 
 | Field | Type | Format | Nullable | Description |
@@ -837,3 +842,4 @@ Type `string`.
 | `detail` | `string` |  | yes |
 | `instance` | `string` |  | yes |
 | `errors` | object (map of array of `string`) |  | yes |
+<!-- generated:vald-forcedecks-schemas end -->

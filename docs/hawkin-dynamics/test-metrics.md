@@ -26,6 +26,7 @@ script says: "Two test types in metrics.json are missing testTypeName and are
 intentionally excluded from the docs until the data is corrected. Clean / Snatch /
 Overhead Lift are excluded by product decision." This page leaves them out too:
 
+<!-- generated:hawkin-metrics-excluded start -->
 | `canonicalTestTypeId` | Name | Metrics in the file |
 |---|---|---|
 | `zwGhMmCVKKrf8Fgccg23` | (no `testTypeName`) | 19 |
@@ -33,6 +34,7 @@ Overhead Lift are excluded by product decision." This page leaves them out too:
 | `cloaBt6gXbKvsrDcqNAs` | Clean | 44 |
 | `HWI4BzMSq0S0HFjWPIeC` | Snatch | 44 |
 | `3HKDlteQolAUXmEKKWoT` | Overhead Lift | 46 |
+<!-- generated:hawkin-metrics-excluded end -->
 
 Metric naming patterns in the file: many asymmetry metrics have an `id` starting
 `lr` with units `%`, next to `left...` and `right...` metrics (for example
@@ -45,6 +47,7 @@ personal data, and as health data where they describe the body.
 
 ## CMJ Rebound metrics
 
+<!-- generated:hawkin-metrics-cmj-rebound start -->
 `canonicalTestTypeId`: `pqgf2TPUOQOQs6r0HQWb`. 115 metrics.
 
 | `id` | Label | Units | Description |
@@ -164,9 +167,11 @@ personal data, and as health data where they describe the body.
 | `reboundP2PropulsiveImpulse` | Rebound P2 Propulsive Impulse | N.s | The propulsive impulse applied during the second half of the propulsive phase of the rebound jump. |
 | `cmjP1p2PropulsiveImpulseIndex` | CMJ P1\|P2 Propulsive Impulse Index |  | The ratio of the propulsive impulse applied during the first half of the propulsive phase to the propulsive impulse applied during the second half of the propulsive phase of the CMJ. |
 | `reboundP1p2PropulsiveImpulseIndex` | Rebound P1\|P2 Propulsive Impulse Index |  | The ratio of the propulsive impulse applied during the first half of the propulsive phase to the propulsive impulse applied during the second half of the propulsive phase of the rebound jump. |
+<!-- generated:hawkin-metrics-cmj-rebound end -->
 
 ## Countermovement Jump metrics
 
+<!-- generated:hawkin-metrics-countermovement-jump start -->
 `canonicalTestTypeId`: `7nNduHeM5zETPjHxvm7s`. 85 metrics.
 
 | `id` | Label | Units | Description |
@@ -256,9 +261,11 @@ personal data, and as health data where they describe the body.
 | `p1PropulsiveImpulse` | P1 Propulsive Impulse | N.s | The propulsive impulse applied during the first half of the propulsive phase. |
 | `p2PropulsiveImpulse` | P2 Propulsive Impulse | N.s | The propulsive impulse applied during the second half of the propulsive phase. |
 | `p1p2PropulsiveImpulseIndex` | P1\|P2 Propulsive Impulse Index |  | The ratio of the propulsive impulse applied during the first half of the propulsive phase to the propulsive impulse applied during the second half of the propulsive phase. |
+<!-- generated:hawkin-metrics-countermovement-jump end -->
 
 ## Drop Jump metrics
 
+<!-- generated:hawkin-metrics-drop-jump start -->
 `canonicalTestTypeId`: `gyBETpRXpdr63Ab2E0V8`. 85 metrics.
 
 | `id` | Label | Units | Description |
@@ -348,9 +355,11 @@ personal data, and as health data where they describe the body.
 | `landingHeight` | Landing Height | m | The vertical free fall height of the system centre of mass between apex of the preceding jump and the instant they make contact with the force plate(s) to commence the landing phase. |
 | `landingPerformanceIndex` | Landing Performance Index |  | The landing height divided by the landing time. |
 | `landingTime` | Landing Phase | s | The time taken to complete the landing phase (starting at the instant of touchdown and ending at the first instant that center of mass velocity equals zero). |
+<!-- generated:hawkin-metrics-drop-jump end -->
 
 ## Drop Landing metrics
 
+<!-- generated:hawkin-metrics-drop-landing start -->
 `canonicalTestTypeId`: `rKgI4y3ItTAzUekTUpvR`. 41 metrics.
 
 | `id` | Label | Units | Description |
@@ -396,9 +405,11 @@ personal data, and as health data where they describe the body.
 | `landingHeight` | Drop Height | m | The vertical free fall height of the system center of mass between the instant the athlete drops off the box or platform and the instant they make contact with the force plate(s). |
 | `landingPerformanceIndex` | Landing Performance Index |  | The drop height divided by the landing time. |
 | `landingTime` | Landing Phase | s | The time taken to complete the landing phase (starting at the instant of touchdown and ending at the first instant that center of mass velocity equals zero). |
+<!-- generated:hawkin-metrics-drop-landing end -->
 
 ## Free Run metrics
 
+<!-- generated:hawkin-metrics-free-run start -->
 `canonicalTestTypeId`: `5pRSUQVSJVnxijpPMck3`. 29 metrics.
 
 | `id` | Label | Units | Description |
@@ -432,9 +443,11 @@ personal data, and as health data where they describe the body.
 | `rightAvgAPSwayVelocity` | Right Avg. AP Sway Velocity | cm/s | The average anterior-posterior sway velocity on the right plate during the free run. |
 | `leftAvgSwayVelocity` | Left Sway Velocity | cm/s | The average sway velocity on the left plate during the free run. |
 | `rightAvgSwayVelocity` | Right Sway Velocity | cm/s | The average sway velocity on the right plate during the free run. |
+<!-- generated:hawkin-metrics-free-run end -->
 
 ## Isometric Test metrics
 
+<!-- generated:hawkin-metrics-isometric-test start -->
 `canonicalTestTypeId`: `2uS5XD5kXmWgIZ5HhQ3A`. 62 metrics.
 
 | `id` | Label | Units | Description |
@@ -501,9 +514,11 @@ personal data, and as health data where they describe the body.
 | `rfd50` | RFD 0-50 ms | N/s | The average slope of the vertical ground reaction force applied during the isometric test between 0 and 50 ms. |
 | `systemWeight` | System Weight | N | The lowest 1s average of the vertical ground reaction force applied to the system center of mass during the weighting phase, identified by an optimization loop. |
 | `timeToPeak` | Time to Peak Force | s | The time taken from the initiation of the pull to the instant of peak verical ground reaction force during the isometric test. |
+<!-- generated:hawkin-metrics-isometric-test end -->
 
 ## Multi Rebound metrics
 
+<!-- generated:hawkin-metrics-multi-rebound start -->
 `canonicalTestTypeId`: `r4fhrkPdYlLxYQxEeM78`. 29 metrics.
 
 | `id` | Label | Units | Description |
@@ -537,9 +552,11 @@ personal data, and as health data where they describe the body.
 | `top5AvgContactTime` | Top 5 Jumps Avg. Contact Time | s | The average contact time of the five highest jumps identified during the multi rebound, calculated using the time from initial contact to the instant of take-off (i.e. Time to Take-off). |
 | `avgContactTime` | Avg. Contact Time | s | The average contact time of all the jumps performed during the multi rebound, calculated using the time from initial contact to the instant of take-off (i.e. Time to Take-off). |
 | `weight` | System Weight | N | The lowest 1 s average of the vertical ground reaction force applied to the system center of mass during the weighting phase, identified by an optimization loop. |
+<!-- generated:hawkin-metrics-multi-rebound end -->
 
 ## Squat Jump metrics
 
+<!-- generated:hawkin-metrics-squat-jump start -->
 `canonicalTestTypeId`: `QEG7m7DhYsD6BrcQ8pic`. 47 metrics.
 
 | `id` | Label | Units | Description |
@@ -591,9 +608,11 @@ personal data, and as health data where they describe the body.
 | `p1PropulsiveImpulse` | P1 Propulsive Impulse | N.s | The propulsive impulse applied during the first half of the propulsive phase. |
 | `p2PropulsiveImpulse` | P2 Propulsive Impulse | N.s | The propulsive impulse applied during the second half of the propulsive phase. |
 | `p1p2PropulsiveImpulseIndex` | P1\|P2 Propulsive Impulse Index |  | The ratio of the propulsive impulse applied during the first half of the propulsive phase to the propulsive impulse applied during the second half of the propulsive phase. |
+<!-- generated:hawkin-metrics-squat-jump end -->
 
 ## TS Free Run metrics
 
+<!-- generated:hawkin-metrics-ts-free-run start -->
 `canonicalTestTypeId`: `4KlQgKmBxbOY6uKTLDFL`. 17 metrics.
 
 | `id` | Label | Units | Description |
@@ -615,9 +634,11 @@ personal data, and as health data where they describe the body.
 | `netForceAt150` | Net Force at 150 ms | N | The net instantaneous force applied at 150 ms during the repetition. |
 | `netForceAt200` | Net Force at 200 ms | N | The net instantaneous force applied at 200 ms during the repetition. |
 | `netForceAt250` | Net Force at 250 ms | N | The net instantaneous force applied at 250 ms during the repetition. |
+<!-- generated:hawkin-metrics-ts-free-run end -->
 
 ## TS Isometric Test metrics
 
+<!-- generated:hawkin-metrics-ts-isometric-test start -->
 `canonicalTestTypeId`: `umnEZPgi6zaxuw0KhUpM`. 17 metrics.
 
 | `id` | Label | Units | Description |
@@ -639,27 +660,33 @@ personal data, and as health data where they describe the body.
 | `netForceAt150` | Net Force at 150 ms | N | The net instantaneous force applied at 150 ms during the repetition. |
 | `netForceAt200` | Net Force at 200 ms | N | The net instantaneous force applied at 200 ms during the repetition. |
 | `netForceAt250` | Net Force at 250 ms | N | The net instantaneous force applied at 250 ms during the repetition. |
+<!-- generated:hawkin-metrics-ts-isometric-test end -->
 
 ## TS Multi Strike Test metrics
 
+<!-- generated:hawkin-metrics-ts-multi-strike-test start -->
 `canonicalTestTypeId`: `lTxe8g3IvOmRTtM0JpFE`. 2 metrics.
 
 | `id` | Label | Units | Description |
 |---|---|---|---|
 | `peakForce` | Peak Strike Force | N | The peak force achieved during the test. |
 | `relativePeakForce` | Relative Peak Strike Force | N/kg | The highest peak force achieved during the test relative to bodyweight. |
+<!-- generated:hawkin-metrics-ts-multi-strike-test end -->
 
 ## TS Strike Test metrics
 
+<!-- generated:hawkin-metrics-ts-strike-test start -->
 `canonicalTestTypeId`: `iwRh0Pzy5xUxz5nqLYij`. 2 metrics.
 
 | `id` | Label | Units | Description |
 |---|---|---|---|
 | `peakForce` | Peak Strike Force | N | The peak force achieved during the test. |
 | `relativePeakForce` | Relative Peak Strike Force | N/kg | The highest peak force achieved during the test relative to bodyweight. |
+<!-- generated:hawkin-metrics-ts-strike-test end -->
 
 ## Weigh In metrics
 
+<!-- generated:hawkin-metrics-weigh-in start -->
 `canonicalTestTypeId`: `ubeWMPN1lJFbuQbAM97s`. 4 metrics.
 
 | `id` | Label | Units | Description |
@@ -668,3 +695,4 @@ personal data, and as health data where they describe the body.
 | `weightKgs` | Weight | kgs | Weight in Kilograms |
 | `weightLbs` | Weight | lbs | Weight in Pounds |
 | `standardDeviation` | Standard Deviation | N | The standard deviation of the weighing period. Can be used to determine if the subject was moving too much. |
+<!-- generated:hawkin-metrics-weigh-in end -->
