@@ -270,9 +270,41 @@ export type WebPage = {
   text: string;
 };
 
+/** MathML elements that give a formula structure plain text cannot show. */
+const STRUCTURED_MATH = "msub, msup, msubsup, mfrac, msqrt, mroot, munder, mover, munderover, mtable, mmultiscripts";
+
+/**
+ * Replace each MathML formula with one text form. LaTeXML pages (arXiv HTML)
+ * carry every formula twice, as rendered MathML and as a LaTeX annotation, so
+ * their text read "13×1013\times 10" and a quote with maths in it could not
+ * match. A simple formula becomes its rendered text ("13×10", "M=192"), which
+ * is what a reader quotes; one with subscripts, fractions and the like
+ * becomes its LaTeX source as inline code, which keeps its structure.
+ */
+export function flattenMath(document: Doc): void {
+  for (const math of Array.from(document.querySelectorAll("math"))) {
+    const latex = (
+      math.querySelector('annotation[encoding="application/x-tex"]')?.textContent ??
+      math.getAttribute("alttext") ??
+      ""
+    ).trim();
+    for (const annotation of Array.from(math.querySelectorAll("annotation, annotation-xml"))) annotation.remove();
+    const rendered = (math.textContent ?? "").replace(/\s+/g, "");
+    const structured = latex && math.querySelector(STRUCTURED_MATH);
+    if (structured || !rendered) {
+      const code = document.createElement("code");
+      code.textContent = latex || rendered;
+      math.replaceWith(code);
+    } else {
+      math.replaceWith(document.createTextNode(rendered));
+    }
+  }
+}
+
 export function extractPage(html: string, pageUrl: string): WebPage {
   const withBase = html.includes("<base ") ? html : html.replace(/(<head[^>]*>)/i, `$1<base href="${pageUrl}">`);
   const { document } = parseHTML(withBase);
+  flattenMath(document);
   const facts = {
     title: meta(document, "og:title", "twitter:title", "citation_title") ?? plainText(document.querySelector("title")?.textContent),
     author: meta(document, "citation_author", "author", "article:author") ?? jsonLdField(document, "author"),

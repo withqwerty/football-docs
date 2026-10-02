@@ -22,6 +22,14 @@ import type { PaperRecord } from "./records.js";
 import { isPdf, pdfSections, readPdf, type Section, splitSections } from "./text.js";
 
 export const FORMAT = "football-docs/paper-text/v1";
+
+/**
+ * The version of the text extraction. Raise it when extraction changes in a
+ * way that makes stored text wrong; open copies saved under an older version
+ * are then fetched again. (2: MathML formulas kept once, not twice.) Papers
+ * the user supplied are kept, since only they can supply them again.
+ */
+export const TEXT_VERSION = 2;
 const TEXT_DIR = "text";
 const INDEX_FILE = "library.json";
 const MAX_LOCAL_PDF_BYTES = 100 * 1024 * 1024;
@@ -43,6 +51,8 @@ export type StoredPaper = {
   zotero?: string;
   sha256?: string;
   savedAt: string;
+  /** TEXT_VERSION when saved; absent on entries saved before versions existed. */
+  textVersion?: number;
   sections: Section[];
 };
 
@@ -89,17 +99,26 @@ export function canonicalKey(key: string): string {
 
 export function saveEntry(ctx: PaperContext, entry: StoredPaper): void {
   const file = fileFor(entry.key);
-  writeCacheJson(textDir(ctx), file, entry);
+  writeCacheJson(textDir(ctx), file, { ...entry, textVersion: TEXT_VERSION });
   const index = readIndex(ctx);
   for (const alias of aliasesOf(entry)) index.aliases[canonicalKey(alias)] = file;
   writeCacheJson(ctx.cacheDir, INDEX_FILE, index);
 }
 
-export function loadEntry(ctx: PaperContext, key: string): StoredPaper | null {
+/** The entry filed under a key, whatever its text version. */
+function loadAnyEntry(ctx: PaperContext, key: string): StoredPaper | null {
   const file = readIndex(ctx).aliases[canonicalKey(key)];
   if (!file) return null;
   const entry = readCacheJson<StoredPaper>(textDir(ctx), file);
   return entry?.format === FORMAT ? entry : null;
+}
+
+export function loadEntry(ctx: PaperContext, key: string): StoredPaper | null {
+  const entry = loadAnyEntry(ctx, key);
+  if (!entry) return null;
+  // An open copy read by an older extractor is read again.
+  if (entry.access === "open" && (entry.textVersion ?? 1) < TEXT_VERSION) return null;
+  return entry;
 }
 
 /** User papers whose metadata names this DOI. */
@@ -123,7 +142,7 @@ export function listEntries(ctx: PaperContext): StoredPaper[] {
 
 /** Remove one entry and its aliases. Returns the removed entry, if any. */
 export function forgetEntry(ctx: PaperContext, key: string): StoredPaper | null {
-  const entry = loadEntry(ctx, key);
+  const entry = loadAnyEntry(ctx, key);
   if (!entry) return null;
   const file = fileFor(entry.key);
   rmSync(join(textDir(ctx), file), { force: true });
