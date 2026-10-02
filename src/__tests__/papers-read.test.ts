@@ -113,6 +113,20 @@ describe("read_paper on open copies", () => {
     expect(second).toMatch(/your library \(no request sent\)/);
   });
 
+  it("reads an open copy again when it was saved by an older text extractor", async () => {
+    const calls: string[] = [];
+    const opts = options(ARXIV_ROUTES, calls);
+    await readPaper({ id: "2511.09457" }, opts);
+    const index = JSON.parse(readFileSync(join(opts.cacheDir!, "library.json"), "utf8")) as { aliases: Record<string, string> };
+    const file = join(opts.cacheDir!, "text", Object.values(index.aliases)[0]);
+    const entry = JSON.parse(readFileSync(file, "utf8"));
+    writeFileSync(file, JSON.stringify({ ...entry, textVersion: undefined }));
+    const before = calls.length;
+    const out = text(await readPaper({ id: "2511.09457" }, opts));
+    expect(calls.length).toBeGreaterThan(before);
+    expect(out).not.toMatch(/your library \(no request sent\)/);
+  });
+
   it("returns passages for a query", async () => {
     const opts = options(ARXIV_ROUTES);
     const out = text(await readPaper({ id: "2511.09457", query: "finer grid" }, opts));

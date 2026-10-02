@@ -5,9 +5,9 @@ import { arxivQuery, arxivYear } from "../papers/arxiv.js";
 import { plainText, resetRateLimits } from "../papers/core.js";
 import { creditNote, rebuildAbstract } from "../papers/openalex.js";
 import { citeAs, licenceName, parsePaperId } from "../papers/records.js";
-import { splitLongSection, splitSections } from "../papers/text.js";
+import { findQuote, splitLongSection, splitSections } from "../papers/text.js";
 import { getPaper, getWebSource, searchPapers } from "../papers/tools.js";
-import { checkPublicUrl, isBotChallenge } from "../papers/web.js";
+import { checkPublicUrl, extractPage, isBotChallenge } from "../papers/web.js";
 import { samplePaper } from "./fixtures-pdf.js";
 import { options, type Route, text } from "./papers-helpers.js";
 
@@ -512,6 +512,28 @@ describe("address rules", () => {
   it("recognises a challenge page but not a long article that mentions a captcha", () => {
     expect(isBotChallenge(503, new Headers(), "<title>Just a moment...</title>")).toBe(true);
     expect(isBotChallenge(200, new Headers(), `<p>g-recaptcha</p>${"x".repeat(30_000)}`)).toBe(false);
+  });
+});
+
+describe("maths in arXiv HTML", () => {
+  // LaTeXML (arXiv's HTML) writes each formula as rendered MathML plus a LaTeX
+  // annotation. Read naively, "13×10" came out as "13×1013\times 10".
+  const simple =
+    '<math alttext="13\\times 10" display="inline"><semantics><mrow><mn>13</mn><mo>×</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">13\\times 10</annotation></semantics></math>';
+  const structured =
+    '<math alttext="T_{s\\to s^{\\prime}}" display="inline"><semantics><msub><mi>T</mi><mrow><mi>s</mi><mo>→</mo><msup><mi>s</mi><mo>′</mo></msup></mrow></msub><annotation encoding="application/x-tex">T_{s\\to s^{\\prime}}</annotation></semantics></math>';
+  const html = `<html><head><title>Paper</title></head><body><article><h2>Rule of thumb</h2><p>${"Background on grids. ".repeat(20)}</p><p>This means that the rule of thumb gives that a ${simple} grid yields the most flexible model with an acceptable model error. The transition matrix ${structured} is estimated from data.</p></article></body></html>`;
+
+  it("keeps one form of each formula", () => {
+    const { text } = extractPage(html, "https://arxiv.org/html/2511.09457");
+    expect(text).toContain("a 13×10 grid yields");
+    expect(text).not.toContain("13×1013");
+    expect(text).toContain("`T_{s\\to s^{\\prime}}`");
+  });
+
+  it("matches a quote that contains maths exactly", () => {
+    const { text } = extractPage(html, "https://arxiv.org/html/2511.09457");
+    expect(findQuote(text, "the rule of thumb gives that a 13×10 grid yields the most flexible model").kind).toBe("exact");
   });
 });
 
