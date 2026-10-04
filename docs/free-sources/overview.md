@@ -142,6 +142,10 @@ Season format: `2425` for 2024/25. League codes: `E0` (Premier League), `E1` (Ch
 - `HC`, `AC` (Corners), `HF`, `AF` (Fouls), `HY`, `AY` (Yellows), `HR`, `AR` (Reds)
 - Betting odds from multiple bookmakers (B365H, B365D, B365A, etc.)
 
+Every column, including each bookmaker's odds, the market averages and maximums,
+the closing-odds columns (`PSCH`, `AvgCH` and so on) and Asian handicap odds, is
+listed in [football-data.co.uk CSV columns](football-data-columns.md).
+
 **Project use**: Excellent for scorigami, scoreline grids, baseline baking,
 result-history charts, odds-history backfills, and simple match-stat trend
 stories. For scorigami baselines, use full-time fields (`FTHG`, `FTAG`, `FTR`)
