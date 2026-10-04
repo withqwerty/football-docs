@@ -83,6 +83,14 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
+### After an update
+
+`npx` updates its cached copy of football-docs in place. A server that was
+already running keeps the old version until it restarts, and its replies then
+start with a note: "football-docs on disk is now vX, but this server is still
+running vY". Reconnect the server to fix it (in Claude Code: `/mcp`, then
+reconnect football-docs).
+
 ## Tools
 
 | Tool | Description |
