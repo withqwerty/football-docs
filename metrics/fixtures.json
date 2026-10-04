@@ -1,0 +1,10 @@
+{
+  "statsbomb-open-data": {
+    "repository": "https://github.com/statsbomb/open-data",
+    "commit": "4b73468fc5b0f1950f9f66fada70ad3a4f9327cb",
+    "licence": "StatsBomb open data: free to use with attribution to StatsBomb (see the repository's LICENSE.pdf). The files are downloaded at test time, not stored here.",
+    "events_sha256": {
+      "3869685": "a0b0036d50c10a4c8879d1ee9f24a7502ec2cfb264a61951c8d500dfc897ec35"
+    }
+  }
+}

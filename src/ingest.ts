@@ -31,6 +31,7 @@ const DOCS_DIR = resolve(__dirname, "..", "docs");
 const DB_DIR = resolve(__dirname, "..", "data");
 const DB_PATH = resolve(DB_DIR, "docs.db");
 const PROVIDERS_PATH = resolve(__dirname, "..", "providers.json");
+const METRIC_CARDS_PATH = resolve(__dirname, "..", "metrics", "cards.json");
 
 interface Frontmatter {
   source_url: string | null;
@@ -201,6 +202,7 @@ function recordMeta(db: Database): void {
     dataStamp: dataStamp(),
     commit: process.env.GITHUB_SHA || git(["rev-parse", "HEAD"]),
     providersJson: readFileSync(PROVIDERS_PATH, "utf-8"),
+    metricCardsJson: existsSync(METRIC_CARDS_PATH) ? readFileSync(METRIC_CARDS_PATH, "utf-8") : undefined,
   });
 }
 

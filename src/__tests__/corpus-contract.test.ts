@@ -50,7 +50,7 @@ describe("corpus and public contract", () => {
 
   it("keeps README provider counts in sync with the shipped database", () => {
     const readme = readFileSync(resolve(ROOT, "README.md"), "utf-8");
-    const summary = readme.match(/\*\*([\d,]+) searchable chunks\*\* across (\d+) providers and tools\./);
+    const summary = readme.match(/\*\*([\d,]+) searchable chunks\*\* across (\d+) providers and tools(?: \([^)]*\))?\./);
 
     expect(summary).not.toBeNull();
     const totalFromReadme = Number(summary![1].replace(/,/g, ""));

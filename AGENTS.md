@@ -38,6 +38,8 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
 | `src/papers/` | Paper and web-source tools: OpenAlex, arXiv, SportRxiv, Crossref, Wayback and Zotero (local and web API) clients, PDF text and sections (unpdf), quote matching, the user's paper library, the identifier parser and the off switch |
+| `src/metrics.ts` | Metric card format, get_metric and list_metrics |
+| `metrics/` | Metric cards (`cards/*.toml`), the generated `cards.json`, Python reference code and its tests |
 | `src/statsbomb-truth.ts` | Validates StatsBomb ID tables against a sample of the open data |
 | `src/opta-truth.ts` | Holds Opta ID tables to the hand-checked `data/opta-truth.json` |
 | `src/sportmonks-truth.ts` | Holds SportMonks ID tables to its published definitions |
@@ -73,6 +75,9 @@ pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
 python3 scripts/gen_vendor_tables.py  # rebuild the generated tables in the wearable vendor docs from specs/ (--check to diff only)
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
+python3 scripts/gen_metric_cards.py   # rebuild metrics/cards.json and docs/metric-cards/ from metrics/cards/*.toml (--check to diff only)
+python3 -m pytest metrics/tests       # metric card reference code against its test values (downloads pinned StatsBomb open data)
+pnpm metrics:sources                  # re-check every metric card quote against its live source (run before a release)
 pnpm site:stats                       # release facts for nutmeg-site and the announcement card (needs data/docs.db)
 ```
 

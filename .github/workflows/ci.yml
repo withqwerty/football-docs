@@ -60,3 +60,20 @@ jobs:
       - run: pnpm run ingest
       - run: pnpm test
       - run: pnpm run build
+
+  # Metric card reference code, checked against each card's test values on
+  # StatsBomb open data (downloaded at a pinned commit and SHA-256, cached).
+  metric-references:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/football-docs-metrics
+          key: metric-fixtures-${{ hashFiles('metrics/fixtures.json') }}
+      - run: pip install pytest==8.4.2
+      - run: python scripts/gen_metric_cards.py --check
+      - run: python -m pytest -q metrics/tests

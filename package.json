@@ -22,6 +22,7 @@
     "impect:truth": "tsx src/impect-truth.ts",
     "statsbomb:truth": "tsx src/statsbomb-truth.ts",
     "site:stats": "tsx scripts/site-stats.ts",
+    "metrics:sources": "tsx scripts/check-metric-sources.ts",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "prepublishOnly": "pnpm build && pnpm ingest",

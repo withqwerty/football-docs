@@ -159,6 +159,8 @@ export interface MetaInput {
   dataStamp: string;
   commit: string | null;
   providersJson: string;
+  /** metrics/cards.json, when the build has metric cards. Servers before 0.17 ignore the key. */
+  metricCardsJson?: string;
 }
 
 /** Replace the meta table's contents. Used by ingest. */
@@ -171,6 +173,7 @@ export function writeMeta(db: Database, input: MetaInput): void {
     insert.run("data_stamp", new Date(input.dataStamp).toISOString());
     if (input.commit) insert.run("commit", input.commit);
     insert.run("providers_json", input.providersJson);
+    if (input.metricCardsJson) insert.run("metric_cards", input.metricCardsJson);
   });
 }
 

@@ -14,6 +14,8 @@ export const TOOL_NAMES = [
   "compare_providers",
   "request_update",
   "resolve_entity",
+  "get_metric",
+  "list_metrics",
   "search_papers",
   "get_paper",
   "get_web_source",

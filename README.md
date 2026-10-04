@@ -102,6 +102,8 @@ reconnect football-docs).
 | `compare_providers` | Compare how different providers handle the same concept. |
 | `request_update` | Request a new provider, flag outdated docs, or suggest a better doc source. Queues locally and points to the matching public GitHub issue template. |
 | `resolve_entity` | Map a player, coach, referee, team, competition, season, stage or match to its IDs at every provider through the [Reep register](https://reep.football). Uses a local copy of the free register (`REEP_DUCKDB_PATH`), else the Reep API (`REEP_API_KEY`; keys are issued by hand on request to getintouch+nutmeg@withqwerty.com, with no self-service sign-up), else returns setup steps and a DuckDB query. See [Reep through football-docs](docs/reep/overview.md#using-reep-through-football-docs). |
+| `get_metric` | Read a metric card: one checked definition of a football metric with each published variant under its own ID, its formula, source and a checked quote, reference code with test values on open data, and caveats. See [Metric cards](#metric-cards). |
+| `list_metrics` | List the metric cards and their variant IDs. |
 | `search_papers` | Search scholarly papers on football analytics and sport science in [OpenAlex](https://openalex.org) (title, abstract and full text), [arXiv](https://arxiv.org) and [SportRxiv](https://sportrxiv.org), and, when asked, your Zotero library. See [Papers and web sources](#papers-and-web-sources). |
 | `get_paper` | Look up one paper by DOI, arXiv ID, OpenAlex ID or Zotero item: authors, date, venue, all IDs, licence, open copies with their licences, abstract and a citation line. |
 | `get_web_source` | Read a public web page or PDF (a blog post, newsletter, club or vendor article, or an author's copy of a paper) as text, with its author, date, licence and Wayback Machine snapshots. Long pages come back by section. |
@@ -240,6 +242,35 @@ As environment variables in the server's MCP configuration:
   - Linux (needs `secret-tool`, from libsecret): `secret-tool store --label=football-docs service football-docs key OPENALEX_API_KEY`
   - Windows: use the environment variable; the tools do not read Windows Credential Manager.
 
+## Metric cards
+
+A metric card is one checked definition of a football metric. Many metrics have
+several published definitions that give different numbers: on the 2022 World
+Cup final, Argentina's PPDA is 7.42 by the StatsBomb/Hudl formula and 9.77 by
+Trainor's original. A card lists each definition as a variant with its own ID
+(`ppda.statsbomb-hudl`), so an agent can cite exactly which one it used.
+
+Each variant has:
+
+- the definition, formula and zone, in words accurate to the source;
+- the source, with one short quote checked by `match_quote` (or in a browser
+  where the page builds its text with JavaScript) and the date of the check;
+- where possible, reference code (`metrics/reference/`), marked exact when it is
+  the source's own formula on the source's own data and approximation
+  otherwise, with test values on public open data (StatsBomb open data, at a
+  pinned commit, downloaded at test time).
+
+Read a card with `get_metric("ppda")` or one variant with
+`get_metric("ppda.statsbomb-hudl")`; `list_metrics` lists them. Cards are also in
+`search_docs` under the provider `metric-cards`.
+
+For maintainers: cards are written in `metrics/cards/<id>.toml`.
+`python3 scripts/gen_metric_cards.py` builds `metrics/cards.json` (stored in the
+index for `get_metric`) and `docs/metric-cards/<id>.md` (for search); CI fails if they
+are out of date. `python3 -m pytest metrics/tests` checks every reference
+implementation against its card's test values. Before a release, `pnpm
+metrics:sources` re-checks every card quote against its live source.
+
 ## Example queries
 
 - "What is Opta qualifier 214?" (big chance)
@@ -286,8 +317,9 @@ As environment variables in the server's MCP configuration:
 | Firstbeat | 79 | api-access, api-endpoints, data-model, variables (100 scalars, 17 time series), identity-surfaces, data-provenance |
 | Hawkin Dynamics | 69 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
+| Metric cards | 11 | ppda (more cards coming); see [Metric cards](#metric-cards) |
 
-**3,405 searchable chunks** across 30 providers and tools.
+**3,416 searchable chunks** across 31 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
