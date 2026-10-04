@@ -34,6 +34,7 @@ import {
 } from "./papers/tools.js";
 import { ENTITY_TYPES } from "./reep.js";
 import { type Database, openDatabase } from "./sqlite.js";
+import { InstallWatch } from "./stale-install.js";
 import {
   compareProviders,
   getProviderDocs,
@@ -61,6 +62,9 @@ const QUEUE_DB_PATH = resolve(QUEUE_DB_DIR, "requests.db");
 
 const DATA_DIR = defaultDataDir();
 const DATA_MODE = dataModeFor(process.env, PACKAGE_ROOT);
+
+/** Notices when npx updates this install while the server is running. */
+const install = new InstallWatch(resolve(PACKAGE_ROOT, "package.json"), PKG_VERSION);
 
 function logToStderr(message: string): void {
   // stdout is the MCP channel; anything else written there corrupts it.
@@ -164,7 +168,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("Maximum number of results to return (default 10)"),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async (args) => withDocsDb((db) => searchDocs(db, args)),
+    async (args) => install.wrap(() => withDocsDb((db) => searchDocs(db, args))),
   );
 
   server.tool(
@@ -176,7 +180,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("Provider name, brand, product, or alias to resolve to a canonical provider key."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async (args) => withDocsDb((db) => resolveProviderId(db, args)),
+    async (args) => install.wrap(() => withDocsDb((db) => resolveProviderId(db, args))),
   );
 
   server.tool(
@@ -198,7 +202,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("Maximum number of provider docs to return (default 10)."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async (args) => withDocsDb((db) => getProviderDocs(db, args)),
+    async (args) => install.wrap(() => withDocsDb((db) => getProviderDocs(db, args))),
   );
 
   server.tool(
@@ -206,7 +210,7 @@ export function createFootballDocsServer(): McpServer {
     "List all indexed football data providers, their document count, and coverage categories. Use to understand what documentation is available. Call this first to see what providers are indexed before searching.",
     {},
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async () => withDocsDb((db) => listProviders(db, { source: currentSelection().source })),
+    async () => install.wrap(() => withDocsDb((db) => listProviders(db, { source: currentSelection().source }))),
   );
 
   server.tool(
@@ -224,7 +228,7 @@ export function createFootballDocsServer(): McpServer {
         ),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-    async (args) => withDocsDb((db) => compareProviders(db, args)),
+    async (args) => install.wrap(() => withDocsDb((db) => compareProviders(db, args))),
   );
 
   server.tool(
@@ -253,7 +257,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("URLs for documentation sources (readthedocs, GitHub, llms.txt, etc.)"),
     },
     { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
-    async (args) => withQueueDb((db) => requestUpdate(db, args)),
+    async (args) => install.wrap(() => withQueueDb((db) => requestUpdate(db, args))),
   );
 
   server.tool(
@@ -289,7 +293,7 @@ export function createFootballDocsServer(): McpServer {
       type: z.enum(ENTITY_TYPES).optional().describe("Restrict results to one entity type"),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => resolveEntity(args),
+    async (args) => install.wrap(() => resolveEntity(args)),
   );
 
   server.tool(
@@ -317,7 +321,7 @@ export function createFootballDocsServer(): McpServer {
       year_to: z.number().int().optional().describe("Only papers published in or before this year."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => searchPapers(args),
+    async (args) => install.wrap(() => searchPapers(args)),
   );
 
   server.tool(
@@ -333,7 +337,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("A DOI (10.1145/3292500.3330758 or https://doi.org/...), an arXiv ID or URL (1802.07127, arxiv.org/abs/1802.07127), or an OpenAlex ID (W4288278931)."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => getPaper(args),
+    async (args) => install.wrap(() => getPaper(args)),
   );
 
   server.tool(
@@ -355,7 +359,7 @@ export function createFootballDocsServer(): McpServer {
         .describe("For a long page, the section number from the outline of an earlier call."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => getWebSource(args),
+    async (args) => install.wrap(() => getWebSource(args)),
   );
 
   const paperId = z
@@ -377,7 +381,7 @@ export function createFootballDocsServer(): McpServer {
       query: z.string().optional().describe("Words to find: returns passages that hold all of them, with their section and page."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => readPaper(args),
+    async (args) => install.wrap(() => readPaper(args)),
   );
 
   server.tool(
@@ -393,7 +397,7 @@ export function createFootballDocsServer(): McpServer {
       quote: z.string().min(10).describe("The quote to check, at least 10 characters."),
     },
     { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
-    async (args) => matchQuote(args),
+    async (args) => install.wrap(() => matchQuote(args)),
   );
 
   server.tool(
@@ -408,7 +412,7 @@ export function createFootballDocsServer(): McpServer {
       id: z.string().optional().describe("The paper's DOI or arXiv ID, to fill in its title and authors. Found in the PDF when omitted."),
     },
     { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
-    async (args) => addLocalPaper(args),
+    async (args) => install.wrap(() => addLocalPaper(args)),
   );
 
   server.tool(
@@ -416,7 +420,7 @@ export function createFootballDocsServer(): McpServer {
     "Remove one paper's text from the user's football-docs library. The user's own file and Zotero are not touched.",
     { id: paperId },
     { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
-    async (args) => forgetPaper(args),
+    async (args) => install.wrap(() => forgetPaper(args)),
   );
 
   server.tool(
@@ -424,7 +428,7 @@ export function createFootballDocsServer(): McpServer {
     "Delete the user's whole football-docs paper library and the SportRxiv copy. Call with confirm: true only when the user asked for it.",
     { confirm: z.boolean().describe("Must be true to delete.") },
     { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
-    async (args) => purgeCache(args),
+    async (args) => install.wrap(() => purgeCache(args)),
   );
 
   return server;
