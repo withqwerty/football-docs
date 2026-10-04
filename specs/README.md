@@ -24,6 +24,7 @@ anyone can re-fetch and diff.
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
 | `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
+| `football-data/notes.txt` | https://www.football-data.co.uk/notes.txt | 2026-10-04 | 2026-10-04 |
 | `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-10-01 | 2026-10-01 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
@@ -34,6 +35,12 @@ anyone can re-fetch and diff.
 | `vald/extsmartspeed.json` | https://prd-euw-api-extsmartspeed.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/extdynamo.json` | https://prd-euw-api-extdynamo.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalhumantrakv2.json` | https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json | 2026-09-30 | 2026-09-30 |
+
+`football-data/notes.txt` is not an API spec: it is football-data.co.uk's key
+to its CSV columns, served as plain text. It is stored with LF line ends (the
+site serves CRLF; `check_upstream.py` ignores the difference), and
+`scripts/gen_football_data_columns.py` builds the tables in
+`docs/free-sources/football-data-columns.md` from it.
 
 On 2026-08-31 each snapshot was re-fetched and compared with the copy in this
 directory. Wyscout, FMDB Pro, Sportradar and SkillCorner had all changed, so every

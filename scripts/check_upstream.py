@@ -144,6 +144,9 @@ def comparable(path, local_bytes, remote_bytes):
                 _collapse_statsports_prefix(json.loads(remote_bytes)))
     if path == "hawkin-dynamics/openapi.json":
         return json.loads(local_bytes), json.loads(remote_bytes)
+    if path.endswith(".txt"):
+        # Served with CRLF line ends; the repository stores text with LF.
+        return local_bytes.replace(b"\r\n", b"\n"), remote_bytes.replace(b"\r\n", b"\n")
     return local_bytes, remote_bytes
 
 

@@ -259,7 +259,7 @@ As environment variables in the server's MCP configuration:
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
 | SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
-| Free sources | 60 | overview, fbref, understat, contextual-story-joins, xg-timelines, data-provenance |
+| Free sources | 69 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
 | Opta | 73 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces, data-provenance |
@@ -279,7 +279,7 @@ As environment variables in the server's MCP configuration:
 | Hawkin Dynamics | 69 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 
-**3,396 searchable chunks** across 30 providers and tools.
+**3,405 searchable chunks** across 30 providers and tools.
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
