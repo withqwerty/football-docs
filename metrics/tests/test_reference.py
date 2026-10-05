@@ -23,10 +23,13 @@ def resolve(path):
 
 
 @pytest.mark.parametrize(("variant", "fixture"), CASES)
-def test_reference_value(variant, fixture, load_events):
-    function = resolve(variant["reference"]["function"])
-    events = load_events(variant["reference"]["dataset"], fixture["match_id"])
-    value = function(events, fixture["team"])
+def test_reference_value(variant, fixture, load_events, load_resource):
+    reference = variant["reference"]
+    function = resolve(reference["function"])
+    events = load_events(reference["dataset"], fixture["match_id"])
+    # Pinned extra inputs, such as a published xT surface, are passed by name.
+    extras = {name: load_resource(name) for name in reference.get("requires", [])}
+    value = function(events, fixture["team"], **extras)
     tolerance = fixture.get("tolerance", 1e-4)
     assert value is not None and abs(value - fixture["expected"]) <= tolerance, (
         f"{variant['id']} gives {value} for {fixture['team']} in match {fixture['match_id']}, "

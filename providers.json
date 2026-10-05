@@ -234,7 +234,7 @@
       "last_crawled": "2026-07-09"
     },
     "metric-cards": {
-      "description": "Metric cards: one checked definition per football metric (PPDA and more), with each published variant, its source and a checked quote, and reference code tested on public open data. Read one with get_metric.",
+      "description": "Metric cards: one checked definition per football metric (xG, npxG, xG assisted, xA, PPDA, progressive passes and carries, xT, VAEP, field tilt, pass completion), with each published variant, its source and a checked quote, and reference code tested on public open data. Read one with get_metric.",
       "display_name": "Metric cards",
       "aliases": ["metrics", "metric", "metric-card", "methods"],
       "access_level": "open-data",

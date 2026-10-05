@@ -43,7 +43,14 @@ const variantSchema = z.object({
   notes: z.array(z.string()).optional(),
   source: sourceSchema,
   reference: z
-    .object({ function: z.string(), dataset: z.string(), exact: z.boolean(), mapping: z.string() })
+    .object({
+      function: z.string(),
+      dataset: z.string(),
+      exact: z.boolean(),
+      mapping: z.string(),
+      /** Pinned extra inputs from metrics/fixtures.json, such as a published xT surface. */
+      requires: z.array(z.string()).optional(),
+    })
     .optional(),
   fixtures: z.array(fixtureSchema).optional(),
 });
@@ -168,7 +175,10 @@ export function getMetric(db: Database, args: { id: string }): ToolResponse {
     for (const entry of card.variants) lines.push(formatVariant(entry), "");
   }
   lines.push("", "## Caveats", "", ...card.caveats.map((caveat) => `- ${clean(caveat)}`));
-  if (card.related?.length) lines.push("", `Related: ${card.related.join(", ")}.`);
+  if (card.related?.length) {
+    const known = new Set(cards.map((entry) => entry.id));
+    lines.push("", `Related: ${card.related.map((id) => (known.has(id) ? id : `${id} (no card yet)`)).join(", ")}.`);
+  }
   lines.push("", "Cite a value with the exact variant ID: values from different variants are not comparable.");
   return textResult(lines.join("\n").trimEnd());
 }

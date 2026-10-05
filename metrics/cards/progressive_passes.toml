@@ -1,0 +1,238 @@
+# Metric card: progressive passes. Edit this file, then run python3 scripts/gen_metric_cards.py.
+# Quotes are the source's own words, checked with match_quote (or in a browser
+# where the text is not in the page's readable text), on the date given.
+
+id = "progressive_passes"
+name = "Progressive passes"
+aliases = ["prog passes", "PrgP", "progressive pass", "forward progressive passes"]
+data = "event"
+unit = "passes (a count, often given per 90 minutes)"
+measures = "How often a player or team moves the ball a long way towards the opponent's goal with a pass."
+direction = "Higher values mean more ball progression by passing. A count, not a quality measure: it grows with possession and with the number of passes a player makes."
+version = 1
+updated = "2026-10-04"
+
+summary = """
+A progressive pass is a pass that moves the ball a long way towards the opponent's goal. There is no single definition: at least five public rules are in use. Wyscout uses fixed distances in metres that depend on the halves the pass starts and ends in; FBref (on Opta data, until January 2026) used 10 yards measured from the ball's furthest point in the last six passes; Opta Analyst, American Soccer Analysis and a 2023 StatsBomb blog use "at least 25% of the remaining distance to goal" with different zones and set-piece rules. Values from different definitions are not comparable: on the 2022 World Cup final the reference code gives from 50 (ASA) to 176 (Wyscout) progressive passes for both teams together.
+"""
+
+caveats = [
+  "Values from different definitions are not comparable: the zone, the distance rule, set-piece handling and whether failed passes count all change the number. Cite the variant ID.",
+  "Wyscout counts unsuccessful progressive passes; FBref, Opta Analyst, ASA and the StatsBomb blog count completed passes only.",
+  "Units differ: Wyscout states metres, FBref yards; StatsBomb's 120 x 80 grid is in yards on a fixed pitch, whatever the real pitch size.",
+  "Most sources do not say whether 'closer to goal' is the straight-line distance to the centre of the goal or the gain along the pitch. The reference code says which it uses.",
+  "A count grows with possession and pass volume: compare per 90 minutes or per 100 passes or touches, and with team style in mind.",
+  "Many web explainers attribute thresholds to the wrong provider (for example the Wyscout 30 / 15 / 10 m rule to StatsBomb or FBref). Use the provider's own glossary.",
+  "FBref no longer shows Opta's advanced data: the Sports Reference blog said on 20 January 2026 that the data provider had ended its access. FBref values are historical.",
+]
+
+related = ["progressive_carries", "xt", "passes_into_final_third"]
+
+[origin]
+text = "No single origin is confirmed. The earliest dated public definition found is in a July 2019 Stop Bunching blog post, which quotes an older Wyscout rule based on pass length: forward passes 30 m long when they start in the team's own half, or at least 10 m long in the opponent's half. Wyscout's current glossary measures distance gained towards goal instead. The '25% of the remaining distance to goal' rule comes from John Muller, as American Soccer Analysis says (February 2021); Muller's app futi still uses it (September 2026)."
+source = "http://stopbunching.blogspot.com/2019/07/picking-progressive-passers.html"
+
+[[variants]]
+id = "progressive_passes.wyscout"
+name = "Wyscout"
+definition = "A forward pass that moves the ball closer to the opponent's goal, measured from the start point to the next touch: at least 30 m closer when the start and finish are both in the team's own half, at least 15 m when they are in different halves, and at least 10 m when both are in the opponent's half."
+formula = "gain = distance to the opponent's goal at the start - distance at the next touch; progressive if gain >= 30 m (own half to own half), >= 15 m (across halfway) or >= 10 m (opponent's half to opponent's half)"
+zone = "Whole pitch; the threshold depends on the halves the pass starts and ends in."
+counts = "All progressive passes, successful or not. A progressive pass is successful (API tagId 1801) when the next touch is by a teammate, unsuccessful (tagId 1802) otherwise; the glossary also gives 'Accurate progressive passes (%)'."
+notes = [
+  "The glossary does not say whether 'closer to the opponent's goal' is the straight-line distance to the goal or the gain along the pitch. The Soccermatics course implements it as straight-line distance to the centre of the goal.",
+  "Wyscout measures to the next touch of the ball, not to a recorded end location.",
+  "The glossary lists set pieces (corner kick, free kick, throw-in) under their own heading, apart from passes.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://dataglossary.wyscout.com/progressive_pass/"
+  title = "Progressive pass"
+  author = "Wyscout"
+  quote = "at least 30 meters closer to the opponent’s goal if the starting and finishing points are within a team’s own half - at least 15 meters closer to the opponent’s goal if the starting and finishing points are in different halves - at least 10 meters closer to the opponent’s goal if the starting and finishing points are in the opponent’s half"
+  check = "normalised"
+  checked = "2026-10-04"
+  check_note = "The three thresholds are list items on the page; the hyphens mark the list items."
+
+  [variants.reference]
+  function = "football_metrics.progression:progressive_passes_wyscout"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events: every open-play Pass event, completed or not (set pieces left out: pass.type Corner, Free Kick, Throw-in, Goal Kick or Kick Off); pass.end_location stands for the next touch; distance is the straight-line distance to the goal centre (120, 40); own half is x < 60; StatsBomb yards are converted to metres (1 yard = 0.9144 m)."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 97.0
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 79.0
+
+[[variants]]
+id = "progressive_passes.fbref-opta"
+name = "FBref (Opta data), historical"
+definition = "Completed passes that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any completed pass into the penalty area. Passes from the defending 40% of the pitch do not count."
+formula = "completed pass, start not in the defending 40%, and (end - furthest point of the ball in the last six passes >= 10 yards towards the goal line, or end in the penalty area)"
+zone = "Passes from outside the passing team's defending 40%."
+counts = "Completed passes only."
+notes = [
+  "FBref removed its Opta advanced data on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'), so this variant is historical.",
+  "FBref does not say how the 'furthest point in the last six passes' is found (which passes, and whether across possessions). The reference code states its reading.",
+  "The same text defined FBref's 'Progressive Passes Received'.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://web.archive.org/web/20250503183817/https://fbref.com/en/comps/9/passing/Premier-League-Stats"
+  title = "Premier League Passing Stats (archived 3 May 2025)"
+  author = "FBref"
+  date = "2025-05-03"
+  quote = "Completed passes that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any completed pass into the penalty area. Excludes passes from the defending 40% of the pitch"
+  check = "browser"
+  checked = "2026-10-04"
+  check_note = "The definition is the column tooltip (the data-tip attribute of the PrgP header), not readable page text, so match_quote cannot read it; checked word for word in the archived page in a browser."
+
+  [variants.reference]
+  function = "football_metrics.progression:progressive_passes_fbref"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events of a definition written for Opta events: completed Pass events (no pass.outcome), set pieces included, starting at x >= 48; progressive if the end is in the penalty area (x >= 102, 18 <= y <= 62) from outside it, or if end x minus the furthest x of the ball is at least 10 (StatsBomb units are yards). The furthest x is read as the largest x among the pass start and the start and end of the team's previous six completed passes in the same StatsBomb possession."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 64.0
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 48.0
+
+[[variants]]
+id = "progressive_passes.opta-analyst"
+name = "Opta Analyst"
+definition = "Completed open-play passes in the attacking two-thirds of the pitch that move the ball at least 25% closer to the goal."
+formula = "completed open-play pass in the attacking two-thirds with distance to goal at the end <= 0.75 x distance to goal at the start"
+zone = "The attacking two-thirds of the pitch."
+counts = "Completed open-play passes only."
+notes = [
+  "The Opta Analyst glossary defines it as a completed pass in the attacking two-thirds that moves the ball at least 25% closer to goal, without saying open play; the 1 October 2022 article says open play.",
+  "Neither page says whether the pass must start or end in the attacking two-thirds.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://theanalyst.com/2022/10/what-you-didnt-know-about-premier-league-passing"
+  title = "What You Didn't Know About Premier League Passing"
+  author = "Jonathan Manuel"
+  date = "2022-10-01"
+  quote = "completed open-play passes in the attacking two-thirds of the pitch that move the ball at least 25% closer to the goal"
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.progression:progressive_passes_opta_analyst"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events of a definition written for Opta events: completed Pass events (no pass.outcome) that are not set pieces (pass.type not Corner, Free Kick, Throw-in, Goal Kick or Kick Off), starting at x >= 40, whose straight-line distance to the goal centre (120, 40) at pass.end_location is at most 75% of the distance at the start."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 36.0
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 17.0
+
+[[variants]]
+id = "progressive_passes.asa"
+name = "American Soccer Analysis (John Muller's rule)"
+definition = "An open-play pass that moves the ball at least 25% of the remaining distance to goal, counted only when it starts in the attacking 60% of the pitch."
+formula = "open-play pass starting in the attacking 60% with distance to goal at the end <= 0.75 x distance to goal at the start"
+zone = "Passes that start in the attacking 60% of the pitch."
+counts = "Completed passes: the same article describes its progressive-pass goal category as shots after a completed open-play pass that moves at least 25% closer to goal."
+notes = [
+  "ASA says the rule comes from John Muller, and that fixed distances miss passes from the sides of the box that do not travel 10 yards.",
+  "ASA calls progressive passes over 35 yards 'long balls'.",
+  "The article is dated 17 February 2021 (by Jamon Moore and Carl Carpenter) although its URL contains 2021/7/10.",
+  "futi (John Muller, 19 September 2026) uses the same 25% rule for progressive passes, carries and receptions, but does not state a zone or a set-piece rule.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://www.americansocceranalysis.com/home/2021/7/10/where-goals-come-from"
+  title = "Where Goals Come From"
+  author = "Jamon Moore and Carl Carpenter"
+  date = "2021-02-17"
+  quote = "an open play pass that moves the ball at least 25% of the remaining distance to goal. We only count passes that start in the attacking 60% of the pitch."
+  check = "normalised"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.progression:progressive_passes_asa"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events: completed Pass events (no pass.outcome) that are not set pieces (pass.type not Corner, Free Kick, Throw-in, Goal Kick or Kick Off), starting at x >= 48, whose straight-line distance to the goal centre (120, 40) at pass.end_location is at most 75% of the distance at the start."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 33.0
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 17.0
+
+[[variants]]
+id = "progressive_passes.statsbomb-blog-2023"
+name = "Hudl StatsBomb blog (2023)"
+definition = "Any successful pass, set pieces excluded, that moves the ball at least 25% of the remaining distance towards the centre of the goal. The same article applies the rule to carries."
+formula = "completed non-set-piece pass with distance to the goal centre at the end <= 0.75 x distance at the start"
+zone = "Whole pitch (no zone limit is stated)."
+counts = "Successful passes only, set pieces excluded."
+notes = [
+  "This is the methodology of one blog article, not a Hudl StatsBomb product metric: Hudl's Event Data Glossary (player metrics) has no progressive pass or progressive carry metric; its nearest is Deep Progressions, passes and dribbles/carries into the opposition final third (start_location_x < 80 and end_location_x >= 80).",
+  "At player level the article normalises by the number of touches (progressive passes per 100 touches).",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://blogarchive.statsbomb.com/articles/soccer/the-art-of-progression-an-analysis-of-passing-vs-ball-carrying/"
+  title = "The Art of Progression: An Analysis of Passing vs. Ball Carrying"
+  author = "Jaymes Monte"
+  date = "2023-03-22"
+  quote = "Any successful pass (set pieces excluded) or carry (including dribbles) that moves the ball at least 25% of the remaining distance towards the centre of the goal."
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.progression:progressive_passes_statsbomb_blog"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "StatsBomb's own rule on StatsBomb events, but the article gives it in prose, not on StatsBomb fields, so the field choices are ours: successful = no pass.outcome; set pieces = pass.type Corner, Free Kick, Throw-in, Goal Kick or Kick Off; distance = straight-line distance from location and pass.end_location to the goal centre (120, 40)."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 46.0
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 23.0

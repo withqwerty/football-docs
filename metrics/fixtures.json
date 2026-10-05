@@ -6,5 +6,12 @@
     "events_sha256": {
       "3869685": "a0b0036d50c10a4c8879d1ee9f24a7502ec2cfb264a61951c8d500dfc897ec35"
     }
+  },
+  "resources": {
+    "singh_open_xt_12x8": {
+      "url": "https://karun.in/blog/data/open_xt_12x8_v1.json",
+      "sha256": "5d8e9aaa1da23bbb39a6c6ffdd5b96d175e01c800064c5a1cc19e228c9875a7f",
+      "note": "Karun Singh's published 12 x 8 xT value surface (JSON: 8 rows across the pitch, 12 columns along it). No licence is stated, so it is downloaded at test time, not stored here."
+    }
   }
 }

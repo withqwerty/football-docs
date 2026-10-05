@@ -1,0 +1,176 @@
+# Metric card: field tilt. Edit this file, then run python3 scripts/gen_metric_cards.py.
+# Quotes are the source's own words, checked with match_quote (or in a browser
+# where the page builds its text with JavaScript), on the date given.
+
+id = "field_tilt"
+name = "Field tilt"
+aliases = ["territorial dominance", "final-third pass share", "final-third touch share", "territory share"]
+data = "event"
+unit = "share of both teams' final-third passes or touches (0 to 1, often shown as a percentage)"
+measures = "How much of a match's play in the final thirds belongs to one team: its passes (or touches) in its attacking third as a share of both teams' passes (or touches) in their attacking thirds."
+direction = "Higher values mean more territorial dominance. The two teams' values in one match add up to 1. A match with no counted event in either final third has no value (division by zero)."
+version = 1
+updated = "2026-10-04"
+
+summary = """
+Field tilt divides a team's final-third passes (or touches) by the sum of both teams' final-third passes (or touches). No source we read credits an originator; the earliest use we found is Stats Perform's 'How we measure pressure' (about 2016). Public definitions differ on passes or touches, on where the final third starts, and they do not say whether failed passes count. On the 2022 World Cup final, Argentina's field tilt is 0.6186 by final-third passes and 0.6303 by final-third touches (both approximations on StatsBomb events).
+"""
+
+caveats = [
+  "Values from different definitions are not comparable: passes or touches, the final-third line and the event list all change the number. Cite the variant ID.",
+  "No public definition we read says whether failed passes count or which events are touches.",
+  "It is a ratio, so it ignores volume: 241 to 107 final-third touches and 122 to 54 give the same 69.3% (Cannon Stats).",
+  "High field tilt does not mean good chances: Opta Analyst shows a team with a high field tilt and few expected goals per final-third entry.",
+  "Game state changes it: a team that leads often gives up territory.",
+  "Territory confounds PPDA: Stats Perform graphs PPDA against field tilt to show that teams which dominate territory may make their defensive actions high up the pitch anyway.",
+  "A season value can be a mean of match values (Driblab) or a ratio of season sums; they differ.",
+]
+
+related = ["ppda", "possession_share", "progressive_passes", "pass_completion"]
+
+[origin]
+text = "Not confirmed. No source we read credits an originator. The earliest use we found is Stats Perform's 'How we measure pressure', which uses 2015-2016 data (so about 2016) and is now republished with a 2026 date and no named author. It defines field tilt as team final-third passes divided by team and opponent final-third passes, and uses it to show how territory confounds PPDA."
+source = "https://www.statsperform.com/insights/how-we-measure-pressure/"
+
+[[variants]]
+id = "field_tilt.stats-perform-2016"
+name = "Stats Perform, about 2016: final-third passes"
+definition = "A team's passes in the final third divided by the passes in the final third by the team and its opponent together."
+formula = "team final-third passes / (team final-third passes + opponent final-third passes)"
+zone = "Each team's attacking third. The page does not say where the line is; Opta's thirds put it at x = 66.7 of 100 (StatsBomb x = 80 of 120)."
+counts = "Passes. The page does not say whether failed passes count."
+notes = [
+  "The page now shows a 2026 date but uses 2015-2016 data, so it was republished; the original date and author are not known.",
+  "The page uses field tilt only in a graph against PPDA, to show how territory confounds PPDA.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://www.statsperform.com/insights/how-we-measure-pressure/"
+  title = "How we measure pressure"
+  author = "Stats Perform"
+  quote = "Graphing PPDA against Field Tilt (team final third passes / team and opponent final third passes) illustrates how the relationship between territorial dominance and PPDA slightly confounds the intended measurement of PPDA."
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.territory:field_tilt_opta_passes"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events of a definition written for Opta events. Pass = a StatsBomb Pass that Opta would also log as a pass: not pass.cross = true, not pass.type Throw-in, not pass.body_part Keeper Arm (Opta: crosses, keeper throws and throw-ins do not count as a pass). All such passes count, completed or not, as the page does not say. Final third = pass start location x >= 80 of 120 in the passing team's direction (Opta x >= 66.7 of 100). Penalty shoot-out (period 5) excluded."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 0.6186
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 0.3814
+
+[[variants]]
+id = "field_tilt.opta-analyst"
+name = "Opta Analyst (2024): final-third passes"
+definition = "A team's share of possession in its attacking third against its opponent's, counted as passes: over 50% means the team makes more passes in the opposition's final third than the opponent makes in the team's defensive third."
+formula = "team passes in the opposition's final third / (team passes in the opposition's final third + opponent passes in the team's defensive third)"
+zone = "Each team's attacking third. The article does not say where the line is; Opta's thirds put it at x = 66.7 of 100 (StatsBomb x = 80 of 120)."
+counts = "Passes. The article does not say whether failed passes count."
+notes = [
+  "The article describes the metric in passing; Opta Analyst's definitions page has no field tilt entry.",
+  "The article gives Tottenham's 2024/25 Premier League field tilt after four matches as 78.4%, the league's highest.",
+  "The reference code is the same as for field_tilt.stats-perform-2016: both are final-third pass shares on Opta data.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://theanalyst.com/articles/tottenham-problems-chances-created"
+  title = "Possession and Territory, but Too Few Chances Created: Tottenham's Final-Third Problems Analysed"
+  author = "Ali Tweedale (Opta Analyst)"
+  date = "2024-09-18"
+  quote = "Field tilt measures territorial dominance between teams, looking at the share of possession each side has in their attacking third compared to their opponent. A field tilt of over 50% means your team makes more passes in the opposition’s final third than they make in your defensive third."
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.territory:field_tilt_opta_passes"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events of a definition written for Opta events. Pass = a StatsBomb Pass that Opta would also log as a pass: not pass.cross = true, not pass.type Throw-in, not pass.body_part Keeper Arm. All such passes count, completed or not, as the article does not say. Final third = pass start location x >= 80 of 120 in the passing team's direction (Opta x >= 66.7 of 100). Penalty shoot-out (period 5) excluded."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 0.6186
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 0.3814
+
+[[variants]]
+id = "field_tilt.touches"
+name = "Final-third touches (Cannon Stats, 2023)"
+definition = "A team's touches in the final third divided by both teams' touches in the final third."
+formula = "team final-third touches / (team final-third touches + opponent final-third touches)"
+zone = "Each team's attacking third. The post does not say where the line is."
+counts = "Touches. The post does not list which events are touches or name its data provider."
+notes = [
+  "The post's worked example: 241 and 107 final-third touches give 69.3% and 30.7% (241 / (241 + 107)).",
+  "The author's match graphics show field tilt as a 10-minute moving average across the match; the match value is the full-match ratio.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://www.cannonstats.com/p/should-we-care-about-field-tilt"
+  title = "Should we care about Field Tilt?"
+  author = "Scott Willis (Cannon Stats)"
+  date = "2023-11-07"
+  quote = "Field tilt is a pretty simple metric, it is simply the ratio of each team’s final third touches compared to the total final third touches."
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.territory:field_tilt_touches"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events: the post lists no touch events, so this uses Hudl StatsBomb's own touch list from its 'Touches in Box' formula (support.hudl.com event data glossary, player metrics). Touch = Pass with no pass.outcome or with outcome Pass Offside; Dribble with outcome Complete; Duel of type Tackle not Lost, Lost In Play or Lost Out; Interception; Clearance; Shot; Block; Ball Receipt* with no outcome; Goal Keeper of type Shot Saved, Shot Saved Off T, Shot Saved To Post, Saved To Post, Penalty Saved, Penalty Saved To Post, Save, Collected, Punch, Smother or Keeper Sweeper. Final third = event location x >= 80 of 120 in the acting team's direction. Penalty shoot-out (period 5) excluded."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 0.6303
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 0.3697
+
+[[variants]]
+id = "field_tilt.driblab"
+name = "Driblab (2023): passes and touches in the last 35 m"
+definition = "A team's share of all passes and touches by both teams in the last 35 metres of the pitch."
+formula = "team passes and touches in the last 35 m / both teams' passes and touches in the last 35 m"
+zone = "The last 35 metres of the pitch, each team in its attacking direction. On a 105 m pitch that is the final third; on other pitch lengths it is not."
+counts = "Passes and touches. The post does not say how the two are combined (added, or passes as part of touches)."
+notes = [
+  "The season value is the mean of the match percentages, not a ratio of season sums: the post describes it as the average, over the matches, of each match's percentage of touches in the final third.",
+  "Shown in the match sheets of Driblab's driblabPRO platform. The post's example: Barcelona 63.9 and Girona 36.3%.",
+  "No reference implementation: the post does not say how passes and touches are combined or which events are touches.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://www.driblab.com/blog/field-tilt-percentage-of-passes-and-touches-in-the-final-third"
+  title = "'Field Tilt': percentage of passes and touches in the final third"
+  author = "Alejandro Arroyo (Driblab)"
+  date = "2023-12-14"
+  quote = "This functionality is based on the last 35 metres of the pitch, the area where the teams move from the build-up zone to the finishing zone, where teams change pace."
+  check = "exact"
+  checked = "2026-10-04"

@@ -1,0 +1,135 @@
+# Metric card: xT. Edit this file, then run python3 scripts/gen_metric_cards.py.
+
+id = "xt"
+name = "xT (expected threat)"
+aliases = ["expected threat", "xthreat"]
+data = "event"
+unit = "probability of scoring (an action's value is a difference of two probabilities)"
+measures = "How much a ball-progressing action (pass, cross or carry) raises the chance of scoring, from where the ball starts to where it ends, using a value for each zone of the pitch."
+direction = "Higher means more threat added. Moving the ball backwards gives a negative value."
+version = 1
+updated = "2026-10-04"
+
+summary = """
+xT gives every zone of the pitch a value: the probability that a team with the ball there scores within the next few actions. A pass, cross or carry is worth the value of the zone where it ends minus the value of the zone where it starts. Karun Singh introduced it in a blog post in early 2019. The value surface is learned from data, so the grid size, the data, the stopping rule for the iteration and which actions count all change the numbers. On the 2022 World Cup final, Singh's published 12 x 8 surface gives Argentina 1.86 xT added and France 1.18.
+"""
+
+caveats = [
+  "The grid size, the training data, the number of iterations and which shots feed the goal probability are free choices; different packages give different numbers for the same action. Cite the variant and the surface.",
+  "xT values only ball-progressing actions. Defensive actions, take-ons and moves inside one zone are worth zero.",
+  "It values the attacking side only, and ignores what happens after a turnover.",
+  "The state is the ball's zone alone: no players, no pressure, no game state, and one surface for a whole league unless it is fitted per team.",
+  "Shots are not valued as actions, so player xT totals favour creators over finishers.",
+  "Singh's post values successful moves; socceraction counts failed moves in the move probability, so failed moves act as lost possession in the fit.",
+]
+
+related = ["vaep", "progressive_passes", "progressive_carries"]
+
+[origin]
+text = "Karun Singh, 'Introducing Expected Threat (xT)', blog post, early 2019. The page has no date; the Wayback Machine holds it from 22 February 2019. Singh credits Cervone et al.'s possession-value work in basketball for the motivation and notes that valuing every location on the pitch is not new. Earlier Markov-chain possession models in football include Sarah Rudd's 2011 NESSIS talk."
+source = "https://karun.in/blog/expected-threat.html"
+
+[[variants]]
+id = "xt.singh-2019"
+name = "Singh (2019), the original"
+definition = "Each zone's xT is the probability of shooting there times the probability of scoring from there, plus the probability of moving the ball times the sum, over every zone it can move to, of the move probability times that zone's xT. The values are found by iteration from zero; after n iterations a zone's xT is the probability of scoring within the next n actions. An action that moves the ball from one zone to another is worth the end zone's xT minus the start zone's."
+formula = "xT(x,y) = s(x,y) * g(x,y) + m(x,y) * sum over zones (z,w) of T((x,y) -> (z,w)) * xT(z,w); action value = xT(end zone) - xT(start zone)"
+zone = "Whole pitch, divided into a 16 x 12 grid (192 zones); the post says another resolution can be used."
+counts = "Successful moves only (passes and dribbles completed without losing possession), from the 2017/18 Premier League season. Iterated 4 to 5 times."
+notes = [
+  "s is the shot probability, g the goal probability given a shot, m the move probability (s + m = 1) and T the matrix of move transitions between zones.",
+  "The post does not name its data provider, and the fitted 16 x 12 surface is not published, so this variant has no reference code.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://karun.in/blog/expected-threat.html"
+  title = "Introducing Expected Threat (xT)"
+  author = "Karun Singh"
+  date = "2019 (undated page; archived 2019-02-22)"
+  quote = "for the purposes of this post, we're working with a 16x12 grid on the pitch, which gives us 192 zones."
+  check = "exact"
+  checked = "2026-10-04"
+
+[[variants]]
+id = "xt.singh-open-12x8"
+name = "Singh's published 12 x 8 surface"
+definition = "A ready-made xT surface that Singh published as a JSON file: 8 rows across the pitch and 12 columns along it, from about 0.0064 near the own goal to about 0.2575 in front of the opponent's goal. Actions are valued with it the way socceraction's ExpectedThreat.rate does: successful passes, crosses and dribbles (carries) only, end zone value minus start zone value."
+formula = "action value = surface[end zone] - surface[start zone]; team total = sum over the team's successful passes, crosses and carries"
+zone = "Whole pitch, 12 x 8 grid."
+counts = "Successful moves only. Set-piece passes (free kicks, corners, throw-ins, goal kicks) are not valued; a kick-off is an ordinary pass."
+notes = [
+  "Which data and how many iterations produced the published surface is not stated.",
+  "The surface is symmetric top to bottom, so the orientation of the y axis does not change values.",
+  "socceraction's load_model reads this file; its documentation points to the URL.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://raw.githubusercontent.com/ML-KULeuven/socceraction/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/xthreat.py"
+  title = "socceraction xthreat.py, load_model (v1.5.3)"
+  author = "KU Leuven DTAI"
+  quote = "Karun Singh provides such a grid at the follwing url"
+  check = "exact"
+  checked = "2026-10-04"
+  check_note = "The quote keeps the source's spelling ('follwing'). The surface itself is https://karun.in/blog/data/open_xt_12x8_v1.json."
+
+  [variants.reference]
+  function = "football_metrics.xt:xt_singh_open_surface"
+  dataset = "statsbomb-open-data"
+  requires = ["singh_open_xt_12x8"]
+  exact = false
+  mapping = "Singh's surface applied to StatsBomb events, choosing actions as socceraction's StatsBomb converter and ExpectedThreat.rate do: a Pass with no outcome and a pass.type other than Free Kick, Corner, Throw-in or Goal Kick, or a Carry (socceraction's dribble). Zones: column = int(x / 120 * 12), row = int(y / 80 * 8), clipped. socceraction also inserts synthetic dribbles between consecutive actions of the same team (3 to 60 units apart, under 10 seconds); StatsBomb's Carry events stand for those here."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 1.8631
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 1.1759
+
+[[variants]]
+id = "xt.socceraction"
+name = "socceraction (KU Leuven), fitted"
+definition = "socceraction fits the surface itself from SPADL actions. Move actions are passes, dribbles and crosses; take-ons are left out. The shot probability uses open-play shots only (SPADL type shot, not free-kick or penalty shots). The move probability counts every move attempt, and the transition matrix divides successful moves by all attempts, so failed moves act as lost possession. Iteration stops when no zone changes by more than a small tolerance."
+formula = "as xt.singh-2019, with T = successful moves / all move attempts from each zone; iterate until the largest change is below eps"
+zone = "Whole pitch; default grid 16 x 12."
+counts = "Fitting uses all move attempts; rating values successful moves only."
+notes = [
+  "Defaults in socceraction v1.5.3: l = 16, w = 12, eps = 1e-5; optional bilinear interpolation.",
+  "No reference code here yet: a fit needs many matches of training data.",
+  "The socceraction README says the package is no longer actively developed; pin the version.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://raw.githubusercontent.com/ML-KULeuven/socceraction/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/xthreat.py"
+  title = "socceraction xthreat.py, get_move_actions (v1.5.3)"
+  author = "KU Leuven DTAI"
+  quote = "These include passes, dribbles and crosses. Take-ons are ignored because they typically coincide with dribbles and do not move the ball to a different cell."
+  check = "normalised"
+  checked = "2026-10-04"
+
+[[variants]]
+id = "xt.databallpy"
+name = "DataBallPy"
+definition = "DataBallPy's xT model follows Singh's method on a finer grid of 32 x 24 cells, interpolated to a smoother surface. Before fitting it deletes own goals, shots from the own half (which it treats as data errors) and events in set-piece situations (corners, free kicks, throw-ins, goal kicks)."
+formula = "as xt.singh-2019, on a 32 x 24 grid"
+zone = "Whole pitch, 32 x 24 grid."
+notes = [
+  "No reference code here; DataBallPy ships its own fitted model.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://databallpy.readthedocs.io/en/main/features/xt_models.html"
+  title = "Expected Threat (xT) models"
+  author = "DataBallPy"
+  quote = "closely based on the work and blog of Karun Singh"
+  check = "exact"
+  checked = "2026-10-04"

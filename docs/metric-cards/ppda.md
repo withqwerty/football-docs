@@ -133,4 +133,4 @@ Passes allowed per defensive action in the opposition half.
 
 ## Related cards
 
-`field_tilt`, `pressures`, `defensive_action_height`
+`field_tilt`, `pressures` (no card yet), `defensive_action_height` (no card yet)

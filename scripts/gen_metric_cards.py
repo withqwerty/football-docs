@@ -74,6 +74,10 @@ def validate(card, path):
                 fail(name, f"{vid}: reference.function must look like package.module:function")
             if reference.get("dataset") not in DATASETS:
                 fail(name, f"{vid}: reference.dataset must be one of {sorted(DATASETS)}")
+            pinned = json.loads((ROOT / "metrics" / "fixtures.json").read_text(encoding="utf-8")).get("resources", {})
+            for extra in reference.get("requires", []):
+                if extra not in pinned:
+                    fail(name, f"{vid}: reference.requires names {extra}, which metrics/fixtures.json does not pin")
             if not variant.get("fixtures"):
                 fail(name, f"{vid}: a variant with reference code needs at least one fixture")
         for fixture in variant.get("fixtures", []):
@@ -87,7 +91,7 @@ def clean(text):
     return " ".join(str(text).split())
 
 
-def render(card):
+def render(card, known=frozenset()):
     lines = [
         "---",
         "source_type: curated",
@@ -145,7 +149,7 @@ def render(card):
 
     lines += ["## Caveats", ""] + [f"- {clean(caveat)}" for caveat in card["caveats"]] + [""]
     if card.get("related"):
-        lines += ["## Related cards", "", ", ".join(f"`{item}`" for item in card["related"]), ""]
+        lines += ["## Related cards", "", ", ".join(f"`{item}`" + ("" if item in known else " (no card yet)") for item in card["related"]), ""]
     return "\n".join(lines)
 
 
@@ -157,7 +161,8 @@ def build():
     for card in cards:
         card["summary"] = clean(card["summary"])
     payload = json.dumps({"format": "football-docs/metric-cards/v1", "cards": cards}, indent=2, ensure_ascii=False) + "\n"
-    pages = {DOCS / f"{card['id']}.md": render(card) for card in cards}
+    known = frozenset(card["id"] for card in cards)
+    pages = {DOCS / f"{card['id']}.md": render(card, known) for card in cards}
     return payload, pages
 
 

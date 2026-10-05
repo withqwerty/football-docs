@@ -43,6 +43,36 @@ def statsbomb_events(match_id):
     return json.loads(data)
 
 
+def resource(name):
+    spec = FIXTURES.get("resources", {}).get(name)
+    if not spec:
+        raise KeyError(f"resource {name} is not pinned in metrics/fixtures.json")
+    path = CACHE / "resources" / f"{name}-{spec['sha256'][:12]}"
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        request = urllib.request.Request(spec["url"], headers={"User-Agent": "football-docs metric tests"})
+        with urllib.request.urlopen(request, timeout=60) as response:
+            path.write_bytes(response.read())
+    data = path.read_bytes()
+    digest = hashlib.sha256(data).hexdigest()
+    if digest != spec["sha256"]:
+        path.unlink(missing_ok=True)
+        raise ValueError(f"resource {name}: SHA-256 {digest} does not match the pinned {spec['sha256']}")
+    return json.loads(data)
+
+
+@pytest.fixture(scope="session")
+def load_resource():
+    loaded = {}
+
+    def load(name):
+        if name not in loaded:
+            loaded[name] = resource(name)
+        return loaded[name]
+
+    return load
+
+
 @pytest.fixture(scope="session")
 def load_events():
     loaded = {}
