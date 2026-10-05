@@ -2,12 +2,12 @@
 source_type: curated
 source_url: 1802.07127
 upstream_version: metric card v1
-crawled_at: 2026-10-04
+crawled_at: 2026-10-05
 ---
 
 # VAEP (valuing actions by estimating probabilities)
 
-Metric card `vaep`, version 1, updated 2026-10-04. Look it up exactly with `get_metric("vaep")`, or one variant with its ID.
+Metric card `vaep`, version 1, updated 2026-10-05. Look it up exactly with `get_metric("vaep")`, or one variant with its ID.
 
 VAEP values every on-the-ball action by how it changes two probabilities: that the team in possession scores within the next few actions, and that it concedes within them. Two classifiers estimate those probabilities from the last three actions; an action's value is its change in scoring probability minus its change in conceding probability. Tom Decroos, Lotte Bransen, Jan Van Haaren and Jesse Davis introduced it (KDD 2019, arXiv 1802.07127). Values depend on the trained model, so there are no fixed test values: this card has no reference code, and numbers from different models are not comparable.
 
@@ -41,8 +41,11 @@ Actions are in SPADL. A game state is approximated by the previous three actions
 - **Source:** Actions Speak Louder than Goals: Valuing Player Actions in Soccer (Tom Decroos, Lotte Bransen, Jan Van Haaren, Jesse Davis, 2019 (KDD); arXiv first version 2018): 1802.07127
 - **Quote** (matches the source word for word, 2026-10-04): "In this paper, we chose k=10 based on domain knowledge and preliminary experiments."
 - **Reference code:** none yet.
-- The paper trains with CatBoost on Wyscout data: 11565 league games from 2012/13 to 2017/18 in the English, Spanish, German, Italian, French, Dutch and Belgian top divisions.
+- The paper uses Wyscout data: 11565 league games from 2012/13 to 2017/18 in the English, Spanish, German, Italian, French, Dutch and Belgian top divisions. One model is trained on 2012/13 to 2015/16 to value 2016/17, and a second on 2012/13 to 2016/17 to value 2017/18.
 - Features: the SPADL attributes of the three actions, plus derived features such as distance and angle to goal and time between actions, and game context such as the score.
+- The paper compares four learners on Brier score and ROC AUC: CatBoost (default parameters) is best for both probabilities, and XGBoost is a close second. Logistic regression and random forest do worse.
+- In the paper's data, 1.5% of game states lead to a scored goal and 0.5% to a conceded goal within the label window.
+- The paper reads a value as goals: an action valued at +0.05 is expected to add 0.05 goals for the acting team.
 - No reference code: the values need a trained model, and the paper's models and data are not public.
 
 ## vaep.socceraction: socceraction (KU Leuven), the reference implementation
@@ -55,6 +58,7 @@ socceraction implements the paper's labels (10 actions ahead) and three-action s
 - **Quote** (matches the source word for word, 2026-10-04): "if the previous action was too long ago, the odds of scoring are now 0"
 - **Reference code:** none yet.
 - Constants and defaults read from socceraction v1.5.3 (commit 3ca3ce0b): _samephase_nb = 10, nr_actions = 10, nb_prev_actions = 3, learner = 'xgboost'.
+- socceraction's public notebooks (1 to 4) use a smaller set-up than these defaults: StatsBomb open data for the 2018 World Cup (64 matches), features of the current action only (nb_prev_actions = 1), XGBoost with 50 trees of depth 3, and the same games for training and evaluation. Values from the notebooks are not comparable with values from the VAEP class defaults.
 - The socceraction README says the package is no longer actively developed.
 - No reference code here: values need a trained model.
 
