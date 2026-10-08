@@ -233,6 +233,23 @@
       ],
       "last_crawled": "2026-07-09"
     },
+    "metric-cards": {
+      "description": "Metric cards: one checked definition per football metric (xG, npxG, xG assisted, xA, PPDA, progressive passes and carries, xT, VAEP, field tilt, pass completion), with each published variant, its source and a checked quote, and reference code tested on public open data. Read one with get_metric.",
+      "display_name": "Metric cards",
+      "aliases": ["metrics", "metric", "metric-card", "methods"],
+      "access_level": "open-data",
+      "licence_status": "Written for football-docs from public sources. Each variant cites its source and quotes one short passage with attribution; reference test values come from StatsBomb open data, downloaded at test time.",
+      "public_safety_notes": "Public sources only: papers, public blogs, providers' public glossaries, public open data. No values or observations from private or licensed data. Generated from metrics/cards/*.toml by scripts/gen_metric_cards.py; edit the TOML, not docs/metric-cards/.",
+      "version": null,
+      "package": null,
+      "sources": [
+        {
+          "type": "curated",
+          "note": "metrics/cards/*.toml, rendered to docs/metric-cards/ and metrics/cards.json"
+        }
+      ],
+      "last_crawled": null
+    },
     "reep": {
       "description": "Open football identity register: stable Reep IDs for players, coaches, referees, teams, competitions, seasons, stages and matches, with a crosswalk of provider IDs. Free CC0 download (DuckDB, CSV) and a keyed API",
       "display_name": "Reep",

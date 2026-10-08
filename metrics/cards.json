@@ -1,0 +1,1925 @@
+{
+  "format": "football-docs/metric-cards/v1",
+  "cards": [
+    {
+      "id": "field_tilt",
+      "name": "Field tilt",
+      "aliases": [
+        "territorial dominance",
+        "final-third pass share",
+        "final-third touch share",
+        "territory share"
+      ],
+      "data": "event",
+      "unit": "share of both teams' final-third passes or touches (0 to 1, often shown as a percentage)",
+      "measures": "How much of a match's play in the final thirds belongs to one team: its passes (or touches) in its attacking third as a share of both teams' passes (or touches) in their attacking thirds.",
+      "direction": "Higher values mean more territorial dominance. The two teams' values in one match add up to 1. A match with no counted event in either final third has no value (division by zero).",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "Field tilt divides a team's final-third passes (or touches) by the sum of both teams' final-third passes (or touches). No source we read credits an originator; the earliest use we found is Stats Perform's 'How we measure pressure' (about 2016). Public definitions differ on passes or touches, on where the final third starts, and they do not say whether failed passes count. On the 2022 World Cup final, Argentina's field tilt is 0.6186 by final-third passes and 0.6303 by final-third touches (both approximations on StatsBomb events).",
+      "caveats": [
+        "Values from different definitions are not comparable: passes or touches, the final-third line and the event list all change the number. Cite the variant ID.",
+        "No public definition we read says whether failed passes count or which events are touches.",
+        "It is a ratio, so it ignores volume: 241 to 107 final-third touches and 122 to 54 give the same 69.3% (Cannon Stats).",
+        "High field tilt does not mean good chances: Opta Analyst shows a team with a high field tilt and few expected goals per final-third entry.",
+        "Game state changes it: a team that leads often gives up territory.",
+        "Territory confounds PPDA: Stats Perform graphs PPDA against field tilt to show that teams which dominate territory may make their defensive actions high up the pitch anyway.",
+        "A season value can be a mean of match values (Driblab) or a ratio of season sums; they differ."
+      ],
+      "related": [
+        "ppda",
+        "possession_share",
+        "progressive_passes",
+        "pass_completion"
+      ],
+      "origin": {
+        "text": "Not confirmed. No source we read credits an originator. The earliest use we found is Stats Perform's 'How we measure pressure', which uses 2015-2016 data (so about 2016) and is now republished with a 2026 date and no named author. It defines field tilt as team final-third passes divided by team and opponent final-third passes, and uses it to show how territory confounds PPDA.",
+        "source": "https://www.statsperform.com/insights/how-we-measure-pressure/"
+      },
+      "variants": [
+        {
+          "id": "field_tilt.stats-perform-2016",
+          "name": "Stats Perform, about 2016: final-third passes",
+          "definition": "A team's passes in the final third divided by the passes in the final third by the team and its opponent together.",
+          "formula": "team final-third passes / (team final-third passes + opponent final-third passes)",
+          "zone": "Each team's attacking third. The page does not say where the line is; Opta's thirds put it at x = 66.7 of 100 (StatsBomb x = 80 of 120).",
+          "counts": "Passes. The page does not say whether failed passes count.",
+          "notes": [
+            "The page now shows a 2026 date but uses 2015-2016 data, so it was republished; the original date and author are not known.",
+            "The page uses field tilt only in a graph against PPDA, to show how territory confounds PPDA."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.statsperform.com/insights/how-we-measure-pressure/",
+            "title": "How we measure pressure",
+            "author": "Stats Perform",
+            "quote": "Graphing PPDA against Field Tilt (team final third passes / team and opponent final third passes) illustrates how the relationship between territorial dominance and PPDA slightly confounds the intended measurement of PPDA.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.territory:field_tilt_opta_passes",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events. Pass = a StatsBomb Pass that Opta would also log as a pass: not pass.cross = true, not pass.type Throw-in, not pass.body_part Keeper Arm (Opta: crosses, keeper throws and throw-ins do not count as a pass). All such passes count, completed or not, as the page does not say. Final third = pass start location x >= 80 of 120 in the passing team's direction (Opta x >= 66.7 of 100). Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.6186
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.3814
+            }
+          ]
+        },
+        {
+          "id": "field_tilt.opta-analyst",
+          "name": "Opta Analyst (2024): final-third passes",
+          "definition": "A team's share of possession in its attacking third against its opponent's, counted as passes: over 50% means the team makes more passes in the opposition's final third than the opponent makes in the team's defensive third.",
+          "formula": "team passes in the opposition's final third / (team passes in the opposition's final third + opponent passes in the team's defensive third)",
+          "zone": "Each team's attacking third. The article does not say where the line is; Opta's thirds put it at x = 66.7 of 100 (StatsBomb x = 80 of 120).",
+          "counts": "Passes. The article does not say whether failed passes count.",
+          "notes": [
+            "The article describes the metric in passing; Opta Analyst's definitions page has no field tilt entry.",
+            "The article gives Tottenham's 2024/25 Premier League field tilt after four matches as 78.4%, the league's highest.",
+            "The reference code is the same as for field_tilt.stats-perform-2016: both are final-third pass shares on Opta data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/tottenham-problems-chances-created",
+            "title": "Possession and Territory, but Too Few Chances Created: Tottenham's Final-Third Problems Analysed",
+            "author": "Ali Tweedale (Opta Analyst)",
+            "date": "2024-09-18",
+            "quote": "Field tilt measures territorial dominance between teams, looking at the share of possession each side has in their attacking third compared to their opponent. A field tilt of over 50% means your team makes more passes in the opposition’s final third than they make in your defensive third.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.territory:field_tilt_opta_passes",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events. Pass = a StatsBomb Pass that Opta would also log as a pass: not pass.cross = true, not pass.type Throw-in, not pass.body_part Keeper Arm. All such passes count, completed or not, as the article does not say. Final third = pass start location x >= 80 of 120 in the passing team's direction (Opta x >= 66.7 of 100). Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.6186
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.3814
+            }
+          ]
+        },
+        {
+          "id": "field_tilt.touches",
+          "name": "Final-third touches (Cannon Stats, 2023)",
+          "definition": "A team's touches in the final third divided by both teams' touches in the final third.",
+          "formula": "team final-third touches / (team final-third touches + opponent final-third touches)",
+          "zone": "Each team's attacking third. The post does not say where the line is.",
+          "counts": "Touches. The post does not list which events are touches or name its data provider.",
+          "notes": [
+            "The post's worked example: 241 and 107 final-third touches give 69.3% and 30.7% (241 / (241 + 107)).",
+            "The author's match graphics show field tilt as a 10-minute moving average across the match; the match value is the full-match ratio."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.cannonstats.com/p/should-we-care-about-field-tilt",
+            "title": "Should we care about Field Tilt?",
+            "author": "Scott Willis (Cannon Stats)",
+            "date": "2023-11-07",
+            "quote": "Field tilt is a pretty simple metric, it is simply the ratio of each team’s final third touches compared to the total final third touches.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.territory:field_tilt_touches",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events: the post lists no touch events, so this uses Hudl StatsBomb's own touch list from its 'Touches in Box' formula (support.hudl.com event data glossary, player metrics). Touch = Pass with no pass.outcome or with outcome Pass Offside; Dribble with outcome Complete; Duel of type Tackle not Lost, Lost In Play or Lost Out; Interception; Clearance; Shot; Block; Ball Receipt* with no outcome; Goal Keeper of type Shot Saved, Shot Saved Off T, Shot Saved To Post, Saved To Post, Penalty Saved, Penalty Saved To Post, Save, Collected, Punch, Smother or Keeper Sweeper. Final third = event location x >= 80 of 120 in the acting team's direction. Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.6303
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.3697
+            }
+          ]
+        },
+        {
+          "id": "field_tilt.driblab",
+          "name": "Driblab (2023): passes and touches in the last 35 m",
+          "definition": "A team's share of all passes and touches by both teams in the last 35 metres of the pitch.",
+          "formula": "team passes and touches in the last 35 m / both teams' passes and touches in the last 35 m",
+          "zone": "The last 35 metres of the pitch, each team in its attacking direction. On a 105 m pitch that is the final third; on other pitch lengths it is not.",
+          "counts": "Passes and touches. The post does not say how the two are combined (added, or passes as part of touches).",
+          "notes": [
+            "The season value is the mean of the match percentages, not a ratio of season sums: the post describes it as the average, over the matches, of each match's percentage of touches in the final third.",
+            "Shown in the match sheets of Driblab's driblabPRO platform. The post's example: Barcelona 63.9 and Girona 36.3%.",
+            "No reference implementation: the post does not say how passes and touches are combined or which events are touches."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.driblab.com/blog/field-tilt-percentage-of-passes-and-touches-in-the-final-third",
+            "title": "'Field Tilt': percentage of passes and touches in the final third",
+            "author": "Alejandro Arroyo (Driblab)",
+            "date": "2023-12-14",
+            "quote": "This functionality is based on the last 35 metres of the pitch, the area where the teams move from the build-up zone to the finishing zone, where teams change pace.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    },
+    {
+      "id": "npxg",
+      "name": "npxG (non-penalty expected goals)",
+      "aliases": [
+        "non-penalty expected goals",
+        "non-penalty xG",
+        "NPxG",
+        "NP xG",
+        "not penalty expected goals"
+      ],
+      "data": "event",
+      "unit": "expected goals (a sum of per-shot goal probabilities, each between 0 and 1)",
+      "measures": "The quality of the chances a team or player creates without penalties: the xG total with penalty kicks taken out, so that a penalty, which every provider values at one fixed number, does not swamp the total.",
+      "direction": "Higher values mean more or better chances. A team with no counted shot has a total of 0.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "npxG is xG without penalty kicks. It is a filter on the xg card, so the provider's model still sets each shot's value. Two traps: Hudl StatsBomb's metric named xG is already non-penalty (its label is NP xG), so it matches this card, not xg; and FBref's npxG also removed shots from a rebound after a penalty, which a plain filter on shot type keeps. Penalty shoot-out kicks are never counted. On the 2022 World Cup final, France's npxG is 0.7056 against an xG of 2.2726, because two of its in-play shots were penalties.",
+      "caveats": [
+        "Check what a column called xG means before comparing: Hudl StatsBomb's player and team xG leave penalties out, FBref's and Understat's xG include them.",
+        "Rebounds after a penalty: FBref's npxG left them out; a filter on shot type (Hudl StatsBomb) keeps them. Understat does not say.",
+        "The shot values come from each provider's model, so npxG from different providers is not comparable. Cite the variant ID.",
+        "Penalty shoot-out kicks are not part of match xG or npxG.",
+        "Own goals are not shots and carry no xG.",
+        "npxG removes the penalty but not the foul that won it: a player who wins penalties gets no credit for them."
+      ],
+      "related": [
+        "xg",
+        "xg_assisted",
+        "xa",
+        "psxg"
+      ],
+      "origin": {
+        "text": "No single origin. npxG is a filter on xG (see the xg card for Sam Green's 2012 OptaPro post). FBref's xG explainer recommends npxG (non-penalty expected goals) for xG without penalty kicks. Who first used the label is not known.",
+        "source": "https://web.archive.org/web/20260107000728/https://fbref.com/en/expected-goals-model-explained/"
+      },
+      "variants": [
+        {
+          "id": "npxg.statsbomb-hudl",
+          "name": "Hudl StatsBomb 'xG' (NP xG)",
+          "definition": "The sum of the StatsBomb xG value over the team's shots whose shot type is not Penalty. Hudl StatsBomb names this metric xG in its glossary; the column label is NP xG (abbreviation NPxG). In the player glossary, xG is 'Non-penalty expected goals produced by the player' over non-penalty shots.",
+          "formula": "Count of shot_xg where shot type≠penalty (sum of shot.statsbomb_xg over Shot events with shot.type.name not \"Penalty\")",
+          "zone": "Whole pitch (every non-penalty shot).",
+          "notes": [
+            "'Cumulative' in Hudl's description means a running total. The formula is a plain sum, not the possession-capped cumulative xG of xg.statsbomb-cumulative.",
+            "A shot from a rebound after a penalty counts, as its shot type is not Penalty.",
+            "Hudl's 'xG Conceded' and 'xG Difference' are also non-penalty; 'xG Difference Inclusive' includes penalties (see xg.statsbomb-hudl)."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/event-data-glossary-team-metrics",
+            "title": "Event Data Glossary: Team Metrics",
+            "author": "Hudl StatsBomb",
+            "quote": "Cumulative expected goal value of all non-penalty shots.",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.xg:npxg_statsbomb_hudl",
+            "dataset": "statsbomb-open-data",
+            "exact": true,
+            "mapping": "The source's own formula on the source's own event data: shot.statsbomb_xg summed over the team's Shot events with shot.type.name not \"Penalty\", with penalty shoot-out kicks (period 5) left out."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 1.9748
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.7056
+            }
+          ]
+        },
+        {
+          "id": "npxg.fbref",
+          "name": "FBref (Opta values, penalty rebounds removed), historical to January 2026",
+          "definition": "FBref's possession-capped xG (xg.fbref) without penalty kicks and without shots from a rebound after a penalty kick: FBref treats such a rebound as part of the penalty kick xG. In FBref's example a Reus penalty (.79) and his rebound (.92) give .9832 xG and 0 npxG.",
+          "formula": "xg.fbref total, leaving out penalty kicks and shots from a rebound after a penalty kick",
+          "zone": "Whole pitch (every non-penalty shot).",
+          "notes": [
+            "FBref's tooltip names the column 'Non-Penalty Expected Goals' (npxG) and says 'Provided by Opta.'",
+            "Historical: FBref removed its Opta advanced data, xG and npxG included, on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'). Values cited from FBref before then follow this variant.",
+            "No reference code: the values come from Opta's model, which is not in the open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20260107000728/https://fbref.com/en/expected-goals-model-explained/",
+            "title": "xG Explained",
+            "author": "FBref (Sports Reference)",
+            "quote": "However, since the second shot is also considered to be a part of the penalty kick xG, Reus gets 0 npxG (non-penalty expected goals) on this play.",
+            "check": "exact",
+            "checked": "2026-10-04",
+            "check_note": "FBref blocks automated clients, so the quote is checked against a Wayback Machine snapshot of 7 January 2026."
+          }
+        },
+        {
+          "id": "npxg.understat",
+          "name": "Understat (NPxG)",
+          "definition": "Understat's xG without penalties. Its team column NPxG is expected goals for, without penalties and own goals; its player column NPxG is xG without penalties.",
+          "formula": "sum of Understat shot xG over shots whose situation is not Penalty",
+          "zone": "Whole pitch (every non-penalty shot).",
+          "notes": [
+            "Checked on Understat's public data (4 October 2026): in Liverpool v Manchester City, 8 February 2026 (Understat match 29024), Manchester City's npxG of 1.65359 is its xG of 2.41476 minus its one penalty (0.7612).",
+            "Understat does not say how it treats a rebound after a penalty, or how own goals enter its xG.",
+            "NPxGA and NPxGD are the same measure for shots conceded and the difference.",
+            "No reference code: the values come from Understat's model, which is not in the open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://understat.com/js/league.min.js",
+            "title": "Understat league page script (column tooltips)",
+            "author": "Understat",
+            "quote": "Expected goals for without penalties and own goals",
+            "check": "exact",
+            "checked": "2026-10-04",
+            "check_note": "The tooltip text is in the page's script, not its HTML."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pass_completion",
+      "name": "Pass completion",
+      "aliases": [
+        "pass completion rate",
+        "pass accuracy",
+        "passing accuracy",
+        "passing %",
+        "pass %",
+        "pass success rate",
+        "Passing%"
+      ],
+      "data": "event",
+      "unit": "share of attempted passes that were completed (0 to 1, often shown as a percentage)",
+      "measures": "How often a team's (or player's) passes reach a teammate: completed passes divided by attempted passes.",
+      "direction": "Higher values mean more passes completed. It is not a measure of passing quality on its own: safe, short passes raise it. No value when no pass is counted (division by zero).",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "Pass completion divides completed passes by attempted passes. The formula is generic, but providers differ on what counts as a pass (crosses, throw-ins, goal kicks, corners, keeper throws) and on what counts as completed (StatsBomb: no failed pass outcome; Opta: reaches a teammate without an opposition touch; Wyscout: the next touch is by a teammate). On the 2022 World Cup final, Argentina's pass completion is 0.8081 by the Hudl StatsBomb formula, 0.8165 by an approximation of Opta's pass set and 0.8183 by an approximation of Wyscout's.",
+      "caveats": [
+        "Values from different definitions are not comparable: the pass set and the success rule both change the number. Cite the variant ID.",
+        "Completion rate ignores pass difficulty: long balls, crosses and passes under pressure fail more often, so style drives it. Expected pass completion (xPass) models adjust for difficulty; each provider's trained model is closed, and a separate card (expected_pass_completion) will cover them.",
+        "StatsBomb's failed outcomes include Out, Pass Offside and Unknown as well as Incomplete. Each counts as attempted and not completed here; a house formula that drops offside or unknown passes gives a different value.",
+        "A season value can be a ratio of season sums or a mean of match rates; they differ.",
+        "Set pieces and goal kicks have their own completion rates; a definition that keeps them in mixes those rates with open play."
+      ],
+      "related": [
+        "possession_share",
+        "progressive_passes",
+        "field_tilt",
+        "ppda",
+        "expected_pass_completion"
+      ],
+      "origin": {
+        "text": "Generic: a completion rate has no single originator, and no source we read credits one. Opta's definitions call it 'simply a formula'.",
+        "source": "https://theanalyst.com/articles/opta-football-stats-definitions"
+      },
+      "variants": [
+        {
+          "id": "pass_completion.statsbomb-hudl",
+          "name": "Hudl StatsBomb (Passing%)",
+          "definition": "Completed passes divided by all passes: every StatsBomb Pass event counts as an attempt, set pieces, goal kicks, throw-ins, crosses and keeper throws included.",
+          "formula": "count of passes where pass outcome = completed / count of all passes",
+          "zone": "Whole pitch.",
+          "counts": "All Pass events. Completed = no pass.outcome in the event data; the failed outcomes are Incomplete, Out, Pass Offside and Unknown.",
+          "notes": [
+            "The team glossary also defines Opposition Passing% (the same formula on the opponent's passes); the player glossary defines Passing% as the percentage of all attempted passes that were completed.",
+            "Hudl StatsBomb publishes split rates separately, for example Long Ball% (pass length >= 35) and Crossing% (pass.cross = true)."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/event-data-glossary-team-metrics",
+            "title": "Event Data Glossary: Team Metrics",
+            "author": "Hudl StatsBomb",
+            "quote": "Count of passes where pass outcome = completed / Count of all passes",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.territory:pass_completion_statsbomb_hudl",
+            "dataset": "statsbomb-open-data",
+            "exact": true,
+            "mapping": "The source's own formula on the source's own event data. Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.8081
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.7614
+            }
+          ]
+        },
+        {
+          "id": "pass_completion.opta",
+          "name": "Opta",
+          "definition": "Successful passes divided by attempted passes, for whichever set of passes is selected; usually crosses are left out. Opta's pass event covers open-play passes, goal kicks, corners and free kicks played as a pass; crosses, keeper throws and throw-ins do not count as a pass. A completed pass goes to a teammate directly without a touch from an opposition player.",
+          "formula": "successful passes / attempted passes (Opta pass events, usually without crosses)",
+          "zone": "Whole pitch, or any selected area.",
+          "counts": "Opta pass events: open-play passes, goal kicks, corners and free kicks played as a pass. Not crosses (counted separately as crossing success), keeper throws or throw-ins.",
+          "notes": [
+            "The definition leaves open which passes are in the set, so a published Opta rate can use a narrower set, for example open play only."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/opta-football-stats-definitions",
+            "title": "Opta football stats definitions",
+            "author": "Opta Analyst",
+            "quote": "This is simply a formula where successful passes are divided by total attempted passes in whichever combination of passes is selected. Usually, pass completion excludes crosses.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.territory:pass_completion_opta",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events. Pass = a StatsBomb Pass that is not pass.cross = true (cross), not pass.type Throw-in and not pass.body_part Keeper Arm (keeper throw). Corners and free kicks stay in unless StatsBomb sets pass.cross = true; in the 2022 World Cup final no Corner pass has pass.cross = true, so crossed corners (crosses to Opta) stay in. Completed = no pass.outcome (Opta: to a teammate without an opposition touch); Out, Pass Offside and Unknown count as attempted and not completed. Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.8165
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.764
+            }
+          ]
+        },
+        {
+          "id": "pass_completion.wyscout",
+          "name": "Wyscout (pass accuracy)",
+          "definition": "The percentage of successful passes. A pass is an attempt to pass the ball to a teammate; it is successful if the next touch of the ball is by a teammate. Crosses, head passes, hand passes, smart passes and long passes are included; goal kicks, corner kicks, free-kick crosses and throw-ins are not.",
+          "formula": "successful passes (next touch by a teammate) / passes (without goal kicks, corner kicks, free-kick crosses and throw-ins)",
+          "zone": "Whole pitch.",
+          "counts": "Passes including crosses, head passes and hand passes. Not goal kicks, corner kicks, free-kick crosses or throw-ins.",
+          "notes": [
+            "The success rule is about the next touch, not the intended receiver: a loose ball that a teammate touches next counts as successful.",
+            "Wyscout marks success with API tag 1801 (successful) or 1802 (not successful)."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/pass/",
+            "title": "Pass",
+            "author": "Wyscout",
+            "quote": "A pass is considered successful if the next touch of the ball is by a teammate.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.territory:pass_completion_wyscout",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Wyscout events. Pass = a StatsBomb Pass that is not pass.type Goal Kick, Corner or Throw-in, and not pass.type Free Kick with pass.cross = true (free-kick cross). Keeper Arm passes (hand passes) and crosses stay in. Successful = no pass.outcome; StatsBomb records no 'next touch' field, so a failed pass that a teammate touches next counts as failed here but successful in Wyscout. Out, Pass Offside and Unknown count as not successful. Penalty shoot-out (period 5) excluded."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 0.8183
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.7765
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ppda",
+      "name": "PPDA (passes allowed per defensive action)",
+      "aliases": [
+        "passes per defensive action",
+        "passes allowed per defensive action",
+        "passes/defensive action",
+        "pressing score"
+      ],
+      "data": "event",
+      "unit": "passes per defensive action (a ratio)",
+      "measures": "How intensely a team presses the opponent's build-up: how many passes it lets the opponent make, in the pressing zone, for each defensive action it makes there.",
+      "direction": "Lower values mean more pressing. A team with no counted defensive action has no value (division by zero).",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "PPDA divides the opponent's passes by the pressing team's defensive actions, both counted in the part of the pitch where the pressing happens. Colin Trainor introduced it in 2014. At least five public definitions are in use, and they differ in the zone, in which defensive actions count, and in whether failed passes count. Values from different definitions are not comparable: on the 2022 World Cup final, Argentina's PPDA is 7.42 by the StatsBomb/Hudl formula and 9.77 by an approximation of Trainor's original.",
+      "caveats": [
+        "Values from different definitions are not comparable: zone, actions and pass counting all change the number. Cite the variant ID.",
+        "No public definition counts ball recoveries as a defensive action. A formula that does (for example in the opposition half) is a house variant and gives much lower values.",
+        "PPDA measures the high press only; a team that presses in its own half looks passive.",
+        "Possession and territory confound it: a dominant team's defensive actions happen high up the pitch anyway.",
+        "Every variant counts fouls, which end a possession but are not pressing.",
+        "Game state, red cards and the scoreline change pressing; Trainor smooths match values with a 6-game rolling mean.",
+        "A season value can be a ratio of sums (Understat) or a mean of match values; they differ."
+      ],
+      "related": [
+        "field_tilt",
+        "pressures",
+        "defensive_action_height"
+      ],
+      "origin": {
+        "text": "Colin Trainor, StatsBomb blog, 30 July 2014, building on his 'passes allowed per pressing action' ratios (9 October 2013), which counted the whole pitch. Wyscout's glossary also credits him with introducing it in 2014. He chose the zone with Rene Maric of Spielverlagerung.",
+        "source": "https://blogarchive.statsbomb.com/articles/soccer/defensive-metrics-measuring-the-intensity-of-a-high-press/"
+      },
+      "variants": [
+        {
+          "id": "ppda.trainor-2014",
+          "name": "Trainor (2014), the original",
+          "definition": "All opposition passes, completed or not, divided by the pressing team's tackles, interceptions, challenges (failed tackles) and fouls, both counted beyond Opta's x = 40 line in the pressing team's direction: its attacking 60% of the pitch.",
+          "formula": "opponent passes (x > 40 of 100, pressing team's view) / (tackles + interceptions + challenges + fouls by the pressing team at x > 40)",
+          "zone": "Pressing team's attacking 60% (Opta x > 40 of 100).",
+          "counts": "All passes, completed or not: Trainor says it does not matter whether the opposition completed them.",
+          "notes": [
+            "Trainor plots a 6-game rolling average of match values and also gives league and season tables.",
+            "He tested the boundary at x = 33, 40 and 50 before choosing 40."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://blogarchive.statsbomb.com/articles/soccer/defensive-metrics-measuring-the-intensity-of-a-high-press/",
+            "title": "Defensive Metrics: Measuring the Intensity of a High Press",
+            "author": "Colin Trainor",
+            "date": "2014-07-30",
+            "quote": "PPDA = Number of Passes made by Attacking Team / Number of Defensive Actions",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.ppda:ppda_trainor_2014",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events: tackle = Duel of type Tackle (any outcome), challenge = Dribbled Past, interception = Interception, foul = Foul Committed; Opta x > 40 of 100 = StatsBomb x > 48 of 120."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 9.7674
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 11.7317
+            }
+          ]
+        },
+        {
+          "id": "ppda.statsbomb-hudl",
+          "name": "Hudl StatsBomb",
+          "definition": "The opponent's completed passes in its own 60% of the pitch, divided by the pressing team's tackles, interceptions (including interceptions made with a pass), dribbled-past events and fouls outside its own defending 40%.",
+          "formula": "opposition passes with pass outcome = completed and start x < 72 / pressing team's (tackle or interception (including pass type = interception) or dribbled past or foul) with x >= 48 (StatsBomb 120 x 80 pitch)",
+          "zone": "Pressing team's attacking 60% (StatsBomb x >= 48 of 120).",
+          "counts": "Completed passes only.",
+          "notes": [
+            "Hudl's prose description also lists blocks, but its exact formula does not; this variant follows the formula.",
+            "The formula counts interceptions made with a pass (pass type Interception). On the 2022 World Cup final that adds 2 actions for Argentina and moves its PPDA from 7.77 to 7.42.",
+            "StatsBomb's IQ season value (team_season_ppda) exists; whether it is a ratio of sums or a mean of match values is not stated."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/passes-defensive-action",
+            "title": "Passes Per Defensive Action (PPDA)",
+            "author": "Hudl StatsBomb",
+            "quote": "Count of opposition event name = pass and pass outcome = completed and start_location_x<72/count of (event_name = tackle or interception (including pass type = interception) or dribbled past or foul) and event_x>=48",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.ppda:ppda_statsbomb_hudl",
+            "dataset": "statsbomb-open-data",
+            "exact": true,
+            "mapping": "The source's own formula on the source's own event data."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 7.4222
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 9.0909
+            }
+          ]
+        },
+        {
+          "id": "ppda.wyscout",
+          "name": "Wyscout",
+          "definition": "Opponent passes that start in the pressing team's final 60%, divided by the pressing team's fouls, interceptions, won defensive duels and sliding tackles there.",
+          "formula": "opponent passes started in the final 60% / (fouls + interceptions + won defensive duels + sliding tackles) in the final 60%",
+          "zone": "Pressing team's final 60%.",
+          "counts": "All opponent passes that start in the zone; the page does not say whether failed passes count.",
+          "notes": [
+            "Lost duels do not count. Challenges and blocked passes are not in the list.",
+            "The glossary's worked example: Liverpool v Manchester United, 20 October 2019, Liverpool 207 / (10 + 16 + 11 + 3) = 5.2.",
+            "No reference implementation yet: the action list uses Wyscout's duel outcomes. The public Wyscout match event dataset (Pappalardo et al.) could carry one."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/ppda/",
+            "title": "PPDA",
+            "author": "Wyscout",
+            "quote": "we calculate all opponent passes that started there and divide them by the sum of defensive actions (fouls, interceptions, won defensive duels, sliding tackles) of the pressing team",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "ppda.opta-analyst",
+          "name": "Opta Analyst",
+          "definition": "Opposition passes outside the pressing team's own defensive third, divided by the pressing team's fouls, tackles, interceptions, challenges and blocked passes outside its own defensive third.",
+          "formula": "opposition passes outside the pressing team's defensive third / (fouls + tackles + interceptions + challenges + blocked passes) outside that third",
+          "zone": "Outside the pressing team's own defensive third (about 67% of the pitch, not 60%).",
+          "counts": "Not stated.",
+          "notes": [
+            "Adds blocked passes to Trainor's four actions. The page shows no date, so when this wording started is not known."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/opta-football-stats-definitions",
+            "title": "Opta football stats definitions",
+            "author": "Opta Analyst",
+            "quote": "In our PPDA calculation, the defensive actions are fouls, tackles, interceptions, challenges, and blocked passes.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.ppda:ppda_opta_analyst",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events: blocked pass = Block (which also covers blocked shots), challenge = Dribbled Past, tackle = Duel of type Tackle; outside the defensive third = x > 40 of 120 for the pressing team. All passes are counted, as the page does not say."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 6.8116
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 8.9661
+            }
+          ]
+        },
+        {
+          "id": "ppda.stats-perform-2016",
+          "name": "Stats Perform (Opta Pro), about 2016",
+          "definition": "Opponent passes allowed per defensive action in the opponent's defensive three-fifths of the pitch, deferring to Trainor for the details.",
+          "formula": "as ppda.trainor-2014",
+          "zone": "Opponent's defensive 3/5 (the same 60% as Trainor).",
+          "counts": "As Trainor.",
+          "notes": [
+            "The page now shows a 2026 date but uses 2015/16 data, so it was republished; the original date and author are not known."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.statsperform.com/insights/how-we-measure-pressure/",
+            "title": "How we measure pressure",
+            "author": "Stats Perform",
+            "quote": "Opponent passes allowed per defensive action, in the opponent's defensive 3/5ths of the pitch",
+            "check": "normalised",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "ppda.understat",
+          "name": "Understat",
+          "definition": "Passes allowed per defensive action in the opposition half.",
+          "formula": "opponent passes in the opposition half / defensive actions in the opposition half",
+          "zone": "The opposition half (50% of the pitch, not 60%).",
+          "counts": "Not stated.",
+          "notes": [
+            "The page does not list which defensive actions count.",
+            "Understat's data hold ppda.att and ppda.def per match; its season value is the sum of att divided by the sum of def (a ratio of sums, not a mean of match values).",
+            "OPPDA is the same measure for the opponent's pressing against this team."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://understat.com/js/league.min.js",
+            "title": "Understat league page script (column tooltips)",
+            "author": "Understat",
+            "quote": "Passes allowed per defensive action in the opposition half",
+            "check": "exact",
+            "checked": "2026-10-04",
+            "check_note": "The tooltip text is in the page's script, not its HTML."
+          }
+        }
+      ]
+    },
+    {
+      "id": "progressive_carries",
+      "name": "Progressive carries",
+      "aliases": [
+        "prog carries",
+        "PrgC",
+        "progressive carry",
+        "progressive runs",
+        "progressive ball carries"
+      ],
+      "data": "event",
+      "unit": "carries (a count, often given per 90 minutes)",
+      "measures": "How often a player or team moves the ball a long way towards the opponent's goal by running with it.",
+      "direction": "Higher values mean more ball progression by carrying. A count, not a quality measure: it grows with possession, space and the number of carries a player makes.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "A progressive carry is a carry (a player moving with the ball at their feet) that takes the ball a long way towards the opponent's goal. The public rules differ a lot: Wyscout's 'progressive run' uses 30 / 15 / 10 m thresholds by half, FBref (on Opta data, until January 2026) used 10 yards from the ball's furthest point in the last six passes, Opta Analyst counts any carry that gains more than 5 m upfield, a Stats Perform article counts carries of more than 5 m that end at least 5 m closer to goal in the opposition half, and a 2023 StatsBomb blog uses 25% of the remaining distance to goal. Carries are also derived differently by each provider. On the 2022 World Cup final the reference code gives from 48 (Wyscout) to 173 (Opta Analyst) progressive carries for both teams together.",
+      "caveats": [
+        "Values from different definitions are not comparable: the distance rule, the zone and the carry itself all differ. Cite the variant ID.",
+        "Carries are derived, not observed directly, and each provider derives them differently: Opta needs a movement of five metres or more, StatsBomb's Carry is a player controlling the ball at their feet, moving or standing still, and Wyscout's run is one player's continuous control of the ball.",
+        "Units differ: Wyscout and Opta Analyst state metres, FBref yards; StatsBomb's 120 x 80 grid is in yards on a fixed pitch, whatever the real pitch size.",
+        "Whether 'closer to goal' means the straight-line distance to the centre of the goal or the gain along the pitch is often not stated. The reference code says which it uses.",
+        "Counts grow with possession and with the space the opponent allows (strong teams carry more against deep blocks); compare per 90 minutes or per 100 touches.",
+        "Many web explainers give a rule of 10 m outside the final 40% and 5 m inside it attributed to FBref, StatsBomb or Opta with no primary source; it does not match FBref's own wording.",
+        "FBref no longer shows Opta's advanced data: the Sports Reference blog said on 20 January 2026 that the data provider had ended its access. FBref values are historical."
+      ],
+      "related": [
+        "progressive_passes",
+        "xt",
+        "passes_into_final_third"
+      ],
+      "origin": {
+        "text": "No single origin is confirmed. A Stats Perform article by Peter Mckeever, written with Premier League data up to 2018 (the page now shows a 2026 republication date), defines progressive carries on Opta's carries, which it calls a by-product of the OptaPro sequence data framework. StatsBomb added Carry events to its data in specification v1.1 (13 May 2019).",
+        "source": "https://www.statsperform.com/insights/identifying-progressive-ball-carriers/"
+      },
+      "variants": [
+        {
+          "id": "progressive_carries.wyscout",
+          "name": "Wyscout (progressive run)",
+          "definition": "A continuous ball control by one player that moves the ball closer to the opponent's goal, measured from the start point to the player's last touch: at least 30 m closer when the start and finish are both in the own half, at least 15 m when they are in different halves, and at least 10 m when both are in the opponent's half.",
+          "formula": "gain = distance to the opponent's goal at the start - distance at the last touch; progressive if gain >= 30 m (own half to own half), >= 15 m (across halfway) or >= 10 m (opponent's half to opponent's half)",
+          "zone": "Whole pitch; the threshold depends on the halves the run starts and ends in.",
+          "counts": "All progressive runs; the glossary gives no success rule for runs.",
+          "notes": [
+            "Wyscout calls it a progressive run, not a progressive carry. Its thresholds are the same as for its progressive pass.",
+            "The glossary does not say whether 'closer to opponent goal' is the straight-line distance to the goal or the gain along the pitch."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/progressive_run/",
+            "title": "Progressive run",
+            "author": "Wyscout",
+            "quote": "at least 30 meters closer to opponent goal if starting and finishing points are in own half - at least 15 meters closer to opponent goal if starting and finishing points are in different field halves - at least 10 meters closer to opponent goal if starting and finishing points are in opponent half",
+            "check": "normalised",
+            "checked": "2026-10-04",
+            "check_note": "The three thresholds are list items on the page; the hyphens mark the list items."
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_carries_wyscout",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events: a StatsBomb Carry event stands for a Wyscout run (they are not the same event), and carry.end_location for the last touch; distance is the straight-line distance to the goal centre (120, 40); own half is x < 60; StatsBomb yards are converted to metres (1 yard = 0.9144 m)."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 23.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 25.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_carries.fbref-opta",
+          "name": "FBref (Opta data), historical",
+          "definition": "Carries that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any carry into the penalty area. Carries that end in the defending 50% of the pitch do not count.",
+          "formula": "carry ending outside the defending 50%, and (end - furthest point of the ball in the last six passes >= 10 yards towards the goal line, or end in the penalty area)",
+          "zone": "Carries that end outside the carrying team's defending 50% (in the opponent's half).",
+          "counts": "All carries that meet the rule; FBref states no success rule.",
+          "notes": [
+            "FBref removed its Opta advanced data on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'), so this variant is historical.",
+            "The zone rule differs from FBref's progressive passes, which exclude passes that start in the defending 40%; for carries the end point must be outside the defending 50%.",
+            "FBref does not say how the 'furthest point in the last six passes' is found. The reference code states its reading."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20250504112623/https://fbref.com/en/comps/9/possession/Premier-League-Stats",
+            "title": "Premier League Possession Stats (archived 4 May 2025)",
+            "author": "FBref",
+            "date": "2025-05-04",
+            "quote": "Carries that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any carry into the penalty area. Excludes carries which end in the defending 50% of the pitch",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The definition is the column tooltip (the data-tip attribute of the PrgC header), not readable page text, so match_quote cannot read it; checked word for word in the archived page in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_carries_fbref",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta carries: StatsBomb Carry events that end at x >= 60; progressive if carry.end_location is in the penalty area (x >= 102, 18 <= y <= 62) from outside it, or if end x minus the furthest x of the ball is at least 10 (StatsBomb units are yards). The furthest x is read as the largest x among the carry start and the start and end of the team's previous six completed passes in the same StatsBomb possession."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 28.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 37.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_carries.opta-analyst",
+          "name": "Opta Analyst",
+          "definition": "Ball carries that move the ball more than five metres upfield. A carry is the player moving the ball five metres or more.",
+          "formula": "carry with (end - start along the length of the pitch) > 5 m",
+          "zone": "Whole pitch.",
+          "counts": "All carries that meet the rule.",
+          "notes": [
+            "The same glossary defines carry directness as total progressive carry distance / total carry distance.",
+            "The page shows no date."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/opta-football-stats-definitions",
+            "title": "Opta football stats definitions",
+            "author": "Opta Analyst",
+            "quote": "Ball carries that move the ball more than five metres upfield.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_carries_opta_analyst",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta carries: StatsBomb Carry events whose gain along x (carry.end_location x - location x) is more than 5 m = 5.468 StatsBomb units (yards). StatsBomb carries shorter than Opta's 5 m minimum can never pass this test."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 83.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 90.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_carries.stats-perform-2019",
+          "name": "Stats Perform (Peter Mckeever)",
+          "definition": "Carries in the opposition half that are longer than five metres and move the ball at least five metres towards the opposition goal. A carry is any movement of the ball by a player of more than five metres from where they received the ball; a progressive carry is successful when the player keeps possession.",
+          "formula": "carry with length > 5 m, in the opposition half, and distance to goal at the start - distance at the end >= 5 m",
+          "zone": "The opposition half.",
+          "counts": "All such carries; successful ones are those where the player retains possession.",
+          "notes": [
+            "The article says the carries 'occur in the opposition half' but also shows defenders who begin a progressive carry in their own half and move the ball into the opposition half. The reference code therefore tests where the carry ends.",
+            "The article uses Premier League data from 2013 to 2018. The page now shows a republication date of 4 June 2026; the original date is not shown."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.statsperform.com/insights/identifying-progressive-ball-carriers/",
+            "title": "Identifying Progressive Ball Carriers",
+            "author": "Peter Mckeever",
+            "quote": "In this article we look at carries that occur in the opposition half, which are greater than five metres and move the ball at least five metres towards the opposition goal.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_carries_stats_perform_2019",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta carries: StatsBomb Carry events with straight-line length over 5 m (5.468 yards), ending at x > 60, whose straight-line distance to the goal centre (120, 40) falls by at least 5 m. Possession retention is not tested, so all carries that meet the rule count."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 56.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 56.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_carries.statsbomb-blog-2023",
+          "name": "Hudl StatsBomb blog (2023)",
+          "definition": "Any carry, dribbles included, that moves the ball at least 25% of the remaining distance towards the centre of the goal. The same article applies the rule to successful passes.",
+          "formula": "carry with distance to the goal centre at the end <= 0.75 x distance at the start",
+          "zone": "Whole pitch (no zone limit is stated).",
+          "counts": "All carries that meet the rule (the article's 'successful' qualifier is attached to passes; StatsBomb carries have no outcome).",
+          "notes": [
+            "This is the methodology of one blog article, not a Hudl StatsBomb product metric: Hudl's Event Data Glossary (player metrics) has no progressive carry metric.",
+            "At player level the article normalises by the number of touches (progressive carries per 100 touches)."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://blogarchive.statsbomb.com/articles/soccer/the-art-of-progression-an-analysis-of-passing-vs-ball-carrying/",
+            "title": "The Art of Progression: An Analysis of Passing vs. Ball Carrying",
+            "author": "Jaymes Monte",
+            "date": "2023-03-22",
+            "quote": "Any successful pass (set pieces excluded) or carry (including dribbles) that moves the ball at least 25% of the remaining distance towards the centre of the goal.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_carries_statsbomb_blog",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "StatsBomb's own rule on StatsBomb events, but the article gives it in prose, not on StatsBomb fields, so the field choices are ours: every Carry event (a StatsBomb Dribble event marks a take-on at one location; the ball movement with it is in Carry events); distance = straight-line distance from location and carry.end_location to the goal centre (120, 40)."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 25.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 26.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "progressive_passes",
+      "name": "Progressive passes",
+      "aliases": [
+        "prog passes",
+        "PrgP",
+        "progressive pass",
+        "forward progressive passes"
+      ],
+      "data": "event",
+      "unit": "passes (a count, often given per 90 minutes)",
+      "measures": "How often a player or team moves the ball a long way towards the opponent's goal with a pass.",
+      "direction": "Higher values mean more ball progression by passing. A count, not a quality measure: it grows with possession and with the number of passes a player makes.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "A progressive pass is a pass that moves the ball a long way towards the opponent's goal. There is no single definition: at least five public rules are in use. Wyscout uses fixed distances in metres that depend on the halves the pass starts and ends in; FBref (on Opta data, until January 2026) used 10 yards measured from the ball's furthest point in the last six passes; Opta Analyst, American Soccer Analysis and a 2023 StatsBomb blog use \"at least 25% of the remaining distance to goal\" with different zones and set-piece rules. Values from different definitions are not comparable: on the 2022 World Cup final the reference code gives from 50 (ASA) to 176 (Wyscout) progressive passes for both teams together.",
+      "caveats": [
+        "Values from different definitions are not comparable: the zone, the distance rule, set-piece handling and whether failed passes count all change the number. Cite the variant ID.",
+        "Wyscout counts unsuccessful progressive passes; FBref, Opta Analyst, ASA and the StatsBomb blog count completed passes only.",
+        "Units differ: Wyscout states metres, FBref yards; StatsBomb's 120 x 80 grid is in yards on a fixed pitch, whatever the real pitch size.",
+        "Most sources do not say whether 'closer to goal' is the straight-line distance to the centre of the goal or the gain along the pitch. The reference code says which it uses.",
+        "A count grows with possession and pass volume: compare per 90 minutes or per 100 passes or touches, and with team style in mind.",
+        "Many web explainers attribute thresholds to the wrong provider (for example the Wyscout 30 / 15 / 10 m rule to StatsBomb or FBref). Use the provider's own glossary.",
+        "FBref no longer shows Opta's advanced data: the Sports Reference blog said on 20 January 2026 that the data provider had ended its access. FBref values are historical."
+      ],
+      "related": [
+        "progressive_carries",
+        "xt",
+        "passes_into_final_third"
+      ],
+      "origin": {
+        "text": "No single origin is confirmed. The earliest dated public definition found is in a July 2019 Stop Bunching blog post, which quotes an older Wyscout rule based on pass length: forward passes 30 m long when they start in the team's own half, or at least 10 m long in the opponent's half. Wyscout's current glossary measures distance gained towards goal instead. The '25% of the remaining distance to goal' rule comes from John Muller, as American Soccer Analysis says (February 2021); Muller's app futi still uses it (September 2026).",
+        "source": "http://stopbunching.blogspot.com/2019/07/picking-progressive-passers.html"
+      },
+      "variants": [
+        {
+          "id": "progressive_passes.wyscout",
+          "name": "Wyscout",
+          "definition": "A forward pass that moves the ball closer to the opponent's goal, measured from the start point to the next touch: at least 30 m closer when the start and finish are both in the team's own half, at least 15 m when they are in different halves, and at least 10 m when both are in the opponent's half.",
+          "formula": "gain = distance to the opponent's goal at the start - distance at the next touch; progressive if gain >= 30 m (own half to own half), >= 15 m (across halfway) or >= 10 m (opponent's half to opponent's half)",
+          "zone": "Whole pitch; the threshold depends on the halves the pass starts and ends in.",
+          "counts": "All progressive passes, successful or not. A progressive pass is successful (API tagId 1801) when the next touch is by a teammate, unsuccessful (tagId 1802) otherwise; the glossary also gives 'Accurate progressive passes (%)'.",
+          "notes": [
+            "The glossary does not say whether 'closer to the opponent's goal' is the straight-line distance to the goal or the gain along the pitch. The Soccermatics course implements it as straight-line distance to the centre of the goal.",
+            "Wyscout measures to the next touch of the ball, not to a recorded end location.",
+            "The glossary lists set pieces (corner kick, free kick, throw-in) under their own heading, apart from passes."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/progressive_pass/",
+            "title": "Progressive pass",
+            "author": "Wyscout",
+            "quote": "at least 30 meters closer to the opponent’s goal if the starting and finishing points are within a team’s own half - at least 15 meters closer to the opponent’s goal if the starting and finishing points are in different halves - at least 10 meters closer to the opponent’s goal if the starting and finishing points are in the opponent’s half",
+            "check": "normalised",
+            "checked": "2026-10-04",
+            "check_note": "The three thresholds are list items on the page; the hyphens mark the list items."
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_passes_wyscout",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events: every open-play Pass event, completed or not (set pieces left out: pass.type Corner, Free Kick, Throw-in, Goal Kick or Kick Off); pass.end_location stands for the next touch; distance is the straight-line distance to the goal centre (120, 40); own half is x < 60; StatsBomb yards are converted to metres (1 yard = 0.9144 m)."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 97.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 79.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_passes.fbref-opta",
+          "name": "FBref (Opta data), historical",
+          "definition": "Completed passes that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any completed pass into the penalty area. Passes from the defending 40% of the pitch do not count.",
+          "formula": "completed pass, start not in the defending 40%, and (end - furthest point of the ball in the last six passes >= 10 yards towards the goal line, or end in the penalty area)",
+          "zone": "Passes from outside the passing team's defending 40%.",
+          "counts": "Completed passes only.",
+          "notes": [
+            "FBref removed its Opta advanced data on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'), so this variant is historical.",
+            "FBref does not say how the 'furthest point in the last six passes' is found (which passes, and whether across possessions). The reference code states its reading.",
+            "The same text defined FBref's 'Progressive Passes Received'."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20250503183817/https://fbref.com/en/comps/9/passing/Premier-League-Stats",
+            "title": "Premier League Passing Stats (archived 3 May 2025)",
+            "author": "FBref",
+            "date": "2025-05-03",
+            "quote": "Completed passes that move the ball towards the opponent's goal line at least 10 yards from its furthest point in the last six passes, or any completed pass into the penalty area. Excludes passes from the defending 40% of the pitch",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The definition is the column tooltip (the data-tip attribute of the PrgP header), not readable page text, so match_quote cannot read it; checked word for word in the archived page in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_passes_fbref",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events: completed Pass events (no pass.outcome), set pieces included, starting at x >= 48; progressive if the end is in the penalty area (x >= 102, 18 <= y <= 62) from outside it, or if end x minus the furthest x of the ball is at least 10 (StatsBomb units are yards). The furthest x is read as the largest x among the pass start and the start and end of the team's previous six completed passes in the same StatsBomb possession."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 64.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 48.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_passes.opta-analyst",
+          "name": "Opta Analyst",
+          "definition": "Completed open-play passes in the attacking two-thirds of the pitch that move the ball at least 25% closer to the goal.",
+          "formula": "completed open-play pass in the attacking two-thirds with distance to goal at the end <= 0.75 x distance to goal at the start",
+          "zone": "The attacking two-thirds of the pitch.",
+          "counts": "Completed open-play passes only.",
+          "notes": [
+            "The Opta Analyst glossary defines it as a completed pass in the attacking two-thirds that moves the ball at least 25% closer to goal, without saying open play; the 1 October 2022 article says open play.",
+            "Neither page says whether the pass must start or end in the attacking two-thirds."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/2022/10/what-you-didnt-know-about-premier-league-passing",
+            "title": "What You Didn't Know About Premier League Passing",
+            "author": "Jonathan Manuel",
+            "date": "2022-10-01",
+            "quote": "completed open-play passes in the attacking two-thirds of the pitch that move the ball at least 25% closer to the goal",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_passes_opta_analyst",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events of a definition written for Opta events: completed Pass events (no pass.outcome) that are not set pieces (pass.type not Corner, Free Kick, Throw-in, Goal Kick or Kick Off), starting at x >= 40, whose straight-line distance to the goal centre (120, 40) at pass.end_location is at most 75% of the distance at the start."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 36.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 17.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_passes.asa",
+          "name": "American Soccer Analysis (John Muller's rule)",
+          "definition": "An open-play pass that moves the ball at least 25% of the remaining distance to goal, counted only when it starts in the attacking 60% of the pitch.",
+          "formula": "open-play pass starting in the attacking 60% with distance to goal at the end <= 0.75 x distance to goal at the start",
+          "zone": "Passes that start in the attacking 60% of the pitch.",
+          "counts": "Completed passes: the same article describes its progressive-pass goal category as shots after a completed open-play pass that moves at least 25% closer to goal.",
+          "notes": [
+            "ASA says the rule comes from John Muller, and that fixed distances miss passes from the sides of the box that do not travel 10 yards.",
+            "ASA calls progressive passes over 35 yards 'long balls'.",
+            "The article is dated 17 February 2021 (by Jamon Moore and Carl Carpenter) although its URL contains 2021/7/10.",
+            "futi (John Muller, 19 September 2026) uses the same 25% rule for progressive passes, carries and receptions, but does not state a zone or a set-piece rule."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.americansocceranalysis.com/home/2021/7/10/where-goals-come-from",
+            "title": "Where Goals Come From",
+            "author": "Jamon Moore and Carl Carpenter",
+            "date": "2021-02-17",
+            "quote": "an open play pass that moves the ball at least 25% of the remaining distance to goal. We only count passes that start in the attacking 60% of the pitch.",
+            "check": "normalised",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_passes_asa",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "An approximation on StatsBomb events: completed Pass events (no pass.outcome) that are not set pieces (pass.type not Corner, Free Kick, Throw-in, Goal Kick or Kick Off), starting at x >= 48, whose straight-line distance to the goal centre (120, 40) at pass.end_location is at most 75% of the distance at the start."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 33.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 17.0
+            }
+          ]
+        },
+        {
+          "id": "progressive_passes.statsbomb-blog-2023",
+          "name": "Hudl StatsBomb blog (2023)",
+          "definition": "Any successful pass, set pieces excluded, that moves the ball at least 25% of the remaining distance towards the centre of the goal. The same article applies the rule to carries.",
+          "formula": "completed non-set-piece pass with distance to the goal centre at the end <= 0.75 x distance at the start",
+          "zone": "Whole pitch (no zone limit is stated).",
+          "counts": "Successful passes only, set pieces excluded.",
+          "notes": [
+            "This is the methodology of one blog article, not a Hudl StatsBomb product metric: Hudl's Event Data Glossary (player metrics) has no progressive pass or progressive carry metric; its nearest is Deep Progressions, passes and dribbles/carries into the opposition final third (start_location_x < 80 and end_location_x >= 80).",
+            "At player level the article normalises by the number of touches (progressive passes per 100 touches)."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://blogarchive.statsbomb.com/articles/soccer/the-art-of-progression-an-analysis-of-passing-vs-ball-carrying/",
+            "title": "The Art of Progression: An Analysis of Passing vs. Ball Carrying",
+            "author": "Jaymes Monte",
+            "date": "2023-03-22",
+            "quote": "Any successful pass (set pieces excluded) or carry (including dribbles) that moves the ball at least 25% of the remaining distance towards the centre of the goal.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          },
+          "reference": {
+            "function": "football_metrics.progression:progressive_passes_statsbomb_blog",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "StatsBomb's own rule on StatsBomb events, but the article gives it in prose, not on StatsBomb fields, so the field choices are ours: successful = no pass.outcome; set pieces = pass.type Corner, Free Kick, Throw-in, Goal Kick or Kick Off; distance = straight-line distance from location and pass.end_location to the goal centre (120, 40)."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 46.0
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 23.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vaep",
+      "name": "VAEP (valuing actions by estimating probabilities)",
+      "aliases": [
+        "valuing actions by estimating probabilities",
+        "atomic-vaep",
+        "atomic vaep"
+      ],
+      "data": "event",
+      "unit": "change in probability (an action's value is a difference of probability changes)",
+      "measures": "How much an on-the-ball action changes its team's chance of scoring soon minus its chance of conceding soon.",
+      "direction": "Higher means the action helped its team more. Values can be negative.",
+      "version": 1,
+      "updated": "2026-10-05",
+      "summary": "VAEP values every on-the-ball action by how it changes two probabilities: that the team in possession scores within the next few actions, and that it concedes within them. Two classifiers estimate those probabilities from the last three actions; an action's value is its change in scoring probability minus its change in conceding probability. Tom Decroos, Lotte Bransen, Jan Van Haaren and Jesse Davis introduced it (KDD 2019, arXiv 1802.07127). Values depend on the trained model, so there are no fixed test values: this card has no reference code, and numbers from different models are not comparable.",
+      "caveats": [
+        "Values depend on the trained probability models: the training data, the learner and the features. Compare values only within one model, and cite it.",
+        "VAEP values on-the-ball actions only; defending by positioning is not valued (the paper names this as a limitation).",
+        "The labels look a fixed number of actions ahead (k = 10), not a time window. A turnover followed by a goal within that window counts as a concede for the team that lost the ball.",
+        "Ratings from the original version are less stable across data splits than xT's and are driven by shots and goals; Atomic-VAEP was introduced partly to reduce this.",
+        "Game-context features such as the score can carry team strength into the values.",
+        "socceraction's code adds rules and constants the paper does not describe (see vaep.socceraction); pin the version.",
+        "No ground truth for action values exists, so a model cannot be shown to be right, only better calibrated."
+      ],
+      "related": [
+        "xt",
+        "xg"
+      ],
+      "origin": {
+        "text": "Tom Decroos, Lotte Bransen, Jan Van Haaren and Jesse Davis (KU Leuven and SciSports), 'Actions Speak Louder than Goals: Valuing Player Actions in Soccer', KDD 2019 (DOI 10.1145/3292500.3330758); first posted on arXiv in February 2018 (1802.07127).",
+        "source": "1802.07127"
+      },
+      "variants": [
+        {
+          "id": "vaep.decroos-2019",
+          "name": "Decroos et al. (2019), the paper",
+          "definition": "Actions are in SPADL. A game state is approximated by the previous three actions. A state gets a positive scoring label if the team in possession after the action scores within the next k actions, and a positive conceding label if it concedes within them, with k = 10. Two classifiers estimate the probabilities of scoring and of conceding; an action's value is the change in the scoring probability minus the change in the conceding probability that it causes. The offensive value is the scoring change and the defensive value is minus the conceding change.",
+          "formula": "V(a_i) = [P_score(S_i) - P_score(S_i-1)] - [P_concede(S_i) - P_concede(S_i-1)], with S_i approximated by the actions a_i-2, a_i-1, a_i and labels looking k = 10 actions ahead",
+          "zone": "Whole pitch.",
+          "counts": "On-the-ball actions only.",
+          "notes": [
+            "The paper uses Wyscout data: 11565 league games from 2012/13 to 2017/18 in the English, Spanish, German, Italian, French, Dutch and Belgian top divisions. One model is trained on 2012/13 to 2015/16 to value 2016/17, and a second on 2012/13 to 2016/17 to value 2017/18.",
+            "Features: the SPADL attributes of the three actions, plus derived features such as distance and angle to goal and time between actions, and game context such as the score.",
+            "The paper compares four learners on Brier score and ROC AUC: CatBoost (default parameters) is best for both probabilities, and XGBoost is a close second. Logistic regression and random forest do worse.",
+            "In the paper's data, 1.5% of game states lead to a scored goal and 0.5% to a conceded goal within the label window.",
+            "The paper reads a value as goals: an action valued at +0.05 is expected to add 0.05 goals for the acting team.",
+            "No reference code: the values need a trained model, and the paper's models and data are not public."
+          ],
+          "source": {
+            "kind": "paper",
+            "id": "1802.07127",
+            "title": "Actions Speak Louder than Goals: Valuing Player Actions in Soccer",
+            "author": "Tom Decroos, Lotte Bransen, Jan Van Haaren, Jesse Davis",
+            "date": "2019 (KDD); arXiv first version 2018",
+            "quote": "In this paper, we chose k=10 based on domain knowledge and preliminary experiments.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "vaep.socceraction",
+          "name": "socceraction (KU Leuven), the reference implementation",
+          "definition": "socceraction implements the paper's labels (10 actions ahead) and three-action state, with XGBoost as the default learner (CatBoost and LightGBM optional). Its formula adds rules the paper does not describe: the previous scoring probability is set to 0 when the previous action was more than 10 seconds earlier or was a scored shot; a penalty starts from a fixed scoring probability of 0.792453; a corner (crossed or short) starts from 0.0465. When possession changes between two actions, the previous action's conceding probability stands in for the previous scoring probability.",
+          "formula": "as vaep.decroos-2019, with previous probability reset to 0 after a gap of more than 10 seconds or a scored shot, and fixed priors of 0.792453 for penalties and 0.0465 for corners",
+          "zone": "Whole pitch.",
+          "notes": [
+            "Constants and defaults read from socceraction v1.5.3 (commit 3ca3ce0b): _samephase_nb = 10, nr_actions = 10, nb_prev_actions = 3, learner = 'xgboost'.",
+            "socceraction's public notebooks (1 to 4) use a smaller set-up than these defaults: StatsBomb open data for the 2018 World Cup (64 matches), features of the current action only (nb_prev_actions = 1), XGBoost with 50 trees of depth 3, and the same games for training and evaluation. Values from the notebooks are not comparable with values from the VAEP class defaults.",
+            "The socceraction README says the package is no longer actively developed.",
+            "No reference code here: values need a trained model."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://raw.githubusercontent.com/ML-KULeuven/socceraction/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/vaep/formula.py",
+            "title": "socceraction vaep/formula.py (v1.5.3)",
+            "author": "KU Leuven DTAI",
+            "quote": "if the previous action was too long ago, the odds of scoring are now 0",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "vaep.atomic",
+          "name": "Atomic-VAEP",
+          "definition": "VAEP on Atomic-SPADL, a version of SPADL in which every action always completes: the result attribute is gone, a pass becomes a pass followed by a receival, and new action types such as interception and out mark what happened next. Shots, free kicks and corners are split into a start and a completion.",
+          "formula": "as vaep.decroos-2019, on Atomic-SPADL actions",
+          "zone": "Whole pitch.",
+          "notes": [
+            "Introduced on the KU Leuven DTAI sports blog in 2020; no separate paper was found.",
+            "socceraction's atomic formula resets after goals and own goals, but has no time-gap reset and no penalty or corner constants.",
+            "No reference code here: values need a trained model."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dtai.cs.kuleuven.be/sports/blog/introducing-atomic-spadl:-a-new-way-to-represent-event-stream-data/",
+            "title": "Introducing Atomic-SPADL: A New Way to Represent Event Stream Data",
+            "author": "KU Leuven DTAI sports",
+            "quote": "all actions are “atomic” in the sense that they are always completed successfully without interruption.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xa",
+      "name": "xA (expected assists, pass-level model)",
+      "aliases": [
+        "expected assists",
+        "Opta xA",
+        "Stats Perform xA",
+        "pass xA"
+      ],
+      "data": "event",
+      "unit": "expected assists: a probability from 0 to 1 per completed pass, summed over passes",
+      "measures": "How likely a player's or team's completed passes were to become goal assists, judged from the pass itself, whether or not a shot followed.",
+      "direction": "Higher values mean the passes were more likely to become assists. Comparing xA with actual assists shows over- or under-performance.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "Opta / Stats Perform's expected assists (xA) is a pass-level model: every completed pass gets the probability that it becomes a goal assist, from the type of pass, the pattern of play, where the pass starts and ends, and its distance. A pass earns xA even if the receiver never shoots. This card is ONLY that pass-level metric. The same name, xA, is also used for the xG of the shot that a pass led to (Understat, Wyscout, American Soccer Analysis, and FBref before October 2022); that shot-linked metric is card `xg_assisted`, and the two are not comparable. Opta's model is closed and StatsBomb open data has no xA field, so this card has no reference code.",
+      "caveats": [
+        "This is not card xg_assisted. Many sites label the shot-linked metric (the xG of the shot after a pass) xA. Check which one a number is before you compare it.",
+        "xA is a closed model output: Opta names the inputs but not the weights, so nobody else can reproduce the values.",
+        "Only completed passes get xA. A failed pass into a dangerous area earns nothing.",
+        "The public description lists only the most important inputs, so the full feature set is not known.",
+        "Passes into dangerous areas earn xA even when nobody shoots, so xA and xG assisted can rank the same players differently."
+      ],
+      "related": [
+        "xg_assisted",
+        "xg",
+        "npxg",
+        "key_passes"
+      ],
+      "origin": {
+        "text": "Stats Perform (Opta). The earliest public description found is The Analyst's article 'What Are Expected Assists (xA)?' by Jonny Whitmore, 24 March 2021, which presents Stats Perform's xA model. Whether Opta used a pass-level xA before that date is not known. The name xA was already in use for the shot-linked metric (card xg_assisted) by 2018.",
+        "source": "https://theanalyst.com/articles/what-are-expected-assists-xa"
+      },
+      "variants": [
+        {
+          "id": "xa.opta",
+          "name": "Opta / Stats Perform",
+          "definition": "For every completed pass, the probability that it becomes a goal assist, from a logistic regression built on hundreds of thousands of passes from historical Opta data. A player's or team's xA is the sum over its completed passes.",
+          "formula": "xA(pass) = P(the completed pass becomes a goal assist | type of pass, pattern of play, location where the pass is received, location where the pass is made from, distance of the pass); xA(player) = sum of xA over the player's completed passes",
+          "zone": "Whole pitch.",
+          "counts": "Every completed pass in Stats Perform's event data, whether or not a shot follows.",
+          "notes": [
+            "The inputs named as the most important: type of pass (for example cross, non-cross, header, through ball), pattern of play (for example open play, corner, free kick, throw-in), location where the pass is received, location where the pass is made from, and distance of the pass.",
+            "Pattern of play and type of pass matter most, so the model has sub-models for the interactions between them.",
+            "The scale runs from 0 (a pass that will never become an assist) to 1 (a pass the receiver would score from every time).",
+            "Example in the article: in the 2019-20 Premier League, Trent Alexander-Arnold had 7.1 open-play xA and Andy Robertson 4.9, but Robertson made more open-play assists (10 against 6).",
+            "Opta Analyst's stats definitions page gives the shorter form: xA for a completed pass from the type of pass, end-point and length of pass.",
+            "No reference code: the model is closed and StatsBomb open data has no xA field."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/what-are-expected-assists-xa",
+            "title": "What Are Expected Assists (xA)?",
+            "author": "Jonny Whitmore (The Analyst, Stats Perform)",
+            "date": "2021-03-24",
+            "quote": "Stats Perform’s expected assists (xA) model measures the likelihood that a given pass will become a goal assist. The model rewards players who pass into dangerous areas, regardless of whether the receiver takes a shot or not.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xa.fbref",
+          "name": "FBref xA (Opta values), historical",
+          "definition": "Opta's xA as published on FBref from October 2022: the likelihood that a completed pass becomes a goal assist, from the type of pass, its location on the pitch, the phase of play and the distance covered.",
+          "formula": "as xa.opta (FBref showed Opta's values)",
+          "zone": "Whole pitch.",
+          "counts": "Every completed pass, whether or not a shot followed.",
+          "notes": [
+            "Before October 2022 FBref used the label xA for the shot-linked metric (card xg_assisted). When it switched its data provider to Opta it renamed that metric xAG and used xA for Opta's pass-level values.",
+            "Historical: FBref removed its Opta advanced data on 20 January 2026 (Sports Reference blog), so these values are no longer published there. The source is a Wayback Machine snapshot.",
+            "No reference code: the values come from Opta's closed model."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20251031052137/https://fbref.com/en/expected-goals-model-explained/",
+            "title": "Expected Goals Model Explained",
+            "author": "FBref (Sports Reference)",
+            "quote": "Players receive xA for every completed pass regardless of whether a shot occurred or not.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xg",
+      "name": "xG (expected goals)",
+      "aliases": [
+        "expected goals",
+        "xG",
+        "pre-shot xG",
+        "shot xG",
+        "statsbomb_xg",
+        "cumulative xG"
+      ],
+      "data": "event",
+      "unit": "expected goals (a sum of per-shot goal probabilities, each between 0 and 1)",
+      "measures": "The quality of the chances a team or player creates: each shot gets the probability, from a provider's model, that a shot like it is scored, and the card adds those probabilities up for a match, a season or a player.",
+      "direction": "Higher values mean more or better chances. A team with no counted shot has a total of 0.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "The xG of one shot is the output of a provider's model (Opta, Hudl StatsBomb, Wyscout, Understat and others), so this card does not define a model: it defines how shot values are read and added up. Totals differ for three reasons besides the model. Each provider gives every penalty one fixed value (Opta 0.79, Wyscout 0.76, Hudl StatsBomb 0.78, which is 0.7835 in the open data). Some totals add the shot values as they are (Wyscout, Understat, Hudl StatsBomb's xG columns) and some cap each possession at one goal with 1 - product of (1 - xG) (FBref, Hudl StatsBomb's cumulative xG). Penalty shoot-out kicks are not part of match xG. On the 2022 World Cup final, Argentina's xG is 2.7583 as a sum of StatsBomb shot values and 2.7027 as cumulative xG.",
+      "caveats": [
+        "Shot values from different providers' models are not comparable, even for the same shot. Cite the variant ID and the provider.",
+        "Penalty values differ by provider (0.76 to 0.79), so a penalty-heavy total moves with the provider. Use npxg to compare without them.",
+        "A sum of shot values can give one possession more than one goal (a shot and its rebound). FBref and Hudl StatsBomb's cumulative xG cap each possession at 1; plain sums do not.",
+        "Penalty shoot-out kicks are shot events in some data (StatsBomb period 5, each with a penalty xG value). Leave them out of match xG.",
+        "Own goals are not shots and carry no xG.",
+        "Providers update their models; a model change moves every value, so values from before and after a change are not comparable.",
+        "xG does not know who shoots: FBref's explainer notes that it ignores the quality of the players involved. Goals minus xG over a few matches is mostly noise.",
+        "A column called xG may already exclude penalties: Hudl StatsBomb's player and team xG are non-penalty. See npxg."
+      ],
+      "related": [
+        "npxg",
+        "xg_assisted",
+        "xa",
+        "psxg"
+      ],
+      "origin": {
+        "text": "Sam Green, 'Assessing the performance of Premier League goalscorers', OptaPro blog, Thursday 12 April 2012 (data to 9 April 2012). Green builds a model of a shot's probability of being scored and tallies up each player's shot probabilities into an expected goal (xG) value. Stats Perform's The Analyst credits Opta's Sam Green with introducing xG in 2012. Earlier academic models of shot probability exist; this post is the first public use of the name for this metric that the card can cite, not the first shot model.",
+        "source": "https://web.archive.org/web/20151120002822/http://www.optasportspro.com/about/optapro-blog/posts/2012/blog-assessing-the-performance-of-premier-league-goalscorers"
+      },
+      "variants": [
+        {
+          "id": "xg.statsbomb-hudl",
+          "name": "Hudl StatsBomb, sum of shot values (penalties included)",
+          "definition": "The sum of the StatsBomb xG value (shot.statsbomb_xg in the open data, shot_xg in Hudl's formulas) over all of the team's shots, penalties included. Hudl StatsBomb's team glossary uses this total as the 'for' side of 'xG Difference Inclusive'; its column named xG leaves penalties out (see npxg).",
+          "formula": "sum of shot.statsbomb_xg over the team's Shot events (Hudl: Count of shot_xg (for))",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "Hudl's formula for xG Difference Inclusive is the shot_xg total for the team minus the total against it; Hudl writes 'Count of' for a sum of the values.",
+            "Penalty value: the Hudl blog 'What are Expected Goals (xG)?' says the 2022 model update set it to 0.78 xG. In the open data every penalty checked carries 0.7835, including all 11 penalties of match 3869685 (3 in play, 8 in the shoot-out).",
+            "Hudl does not say how shoot-outs are treated; the reference code leaves out period 5, as for every match total.",
+            "StatsBomb's model uses freeze frames (goalkeeper and defender positions) and shot impact height; the open data has the value, not the model."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/event-data-glossary-team-metrics",
+            "title": "Event Data Glossary: Team Metrics",
+            "author": "Hudl StatsBomb",
+            "quote": "xG minus xG conceded (including penalties).",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.xg:xg_statsbomb_hudl",
+            "dataset": "statsbomb-open-data",
+            "exact": true,
+            "mapping": "The source's own formula on the source's own event data: the sum of shot.statsbomb_xg over the team's Shot events, with penalty shoot-out kicks (period 5) left out."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 2.7583
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 2.2726
+            }
+          ]
+        },
+        {
+          "id": "xg.statsbomb-cumulative",
+          "name": "Hudl StatsBomb cumulative xG (one possession is worth at most one goal)",
+          "definition": "Within each possession, the team's shots count as 1 minus the product of each shot's probability of not scoring, so a shot and its rebound cannot add up to more than one goal. The possession values are then added up. Hudl calls this cumulative xG and shows it in IQ, the IQ API and the match race chart.",
+          "formula": "sum over possessions of [1 - product over the possession's shots of (1 - shot_xg)]",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "Hudl's example: two shots of 0.8 xG in one sequence give 1 - (0.2 * 0.2) = 0.96, not 1.6.",
+            "The page first says cumulative xG applies to a sequence of play whose xG would otherwise total more than 1; its FAQ says it adjusts any sequence with more than one shot. The reference applies the formula to every possession; for a possession with one shot it gives that shot's value.",
+            "The page does not say whether penalties count. The reference counts every shot, penalties included.",
+            "On the 2022 World Cup final, two Argentina possessions have two shots each (104th and 107th minutes), so cumulative xG is 0.0556 lower than the plain sum."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/cumulative-expected-goals",
+            "title": "Cumulative Expected Goals (xG)",
+            "author": "Hudl StatsBomb",
+            "quote": "From a team perspective, that sequence of play can only ever be worth 1, so there is a simple formula that discounts the values in the sequence, to keep the combined value of these shots under the maximum of 1.",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+          },
+          "reference": {
+            "function": "football_metrics.xg:xg_statsbomb_cumulative",
+            "dataset": "statsbomb-open-data",
+            "exact": false,
+            "mapping": "Hudl's formula on StatsBomb events, but the grouping is an assumption: a 'sequence of play' is read as the event's possession number in the open data. Hudl's team glossary warns elsewhere that event data and IQ have different possessions, so IQ values can differ. All shots count, penalties included; penalty shoot-out kicks (period 5) are left out."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 2.7027
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 2.2726
+            }
+          ]
+        },
+        {
+          "id": "xg.fbref",
+          "name": "FBref (Opta values, possession-capped totals), historical to January 2026",
+          "definition": "Opta's shot xG, totalled per possession as 1 minus the probability that the defending team does not concede in that possession, so one possession is worth at most one goal. Totals include penalty kicks (0.79 each) and leave out penalty shoot-outs. A player's total uses the same rule over his own shots in each possession, so player totals need not add up to the team total.",
+          "formula": "sum over possessions of [1 - product over the possession's shots of (1 - Opta xG)]",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "FBref's example: shots of .41, .47 and .79 in one Nürnberg possession give 1 - .0657 = .9343 xG, not 1.67.",
+            "FBref treats corner kicks and free kicks as the start of a new possession, and said it was still studying the issue.",
+            "FBref's column tooltip says xG totals include penalty kicks but not penalty shoot-outs, unless noted otherwise.",
+            "Historical: FBref removed its Opta advanced data, xG included, on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'). Values cited from FBref before then follow this variant.",
+            "No reference code: the values come from Opta's model, which is not in the open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20260107000728/https://fbref.com/en/expected-goals-model-explained/",
+            "title": "xG Explained",
+            "author": "FBref (Sports Reference)",
+            "quote": "To solve this problem, we find the probability that the defending team does not allow a goal in this possession.",
+            "check": "normalised",
+            "checked": "2026-10-04",
+            "check_note": "FBref blocks automated clients, so the quote is checked against a Wayback Machine snapshot of 7 January 2026."
+          }
+        },
+        {
+          "id": "xg.opta",
+          "name": "Opta (Stats Perform, The Analyst)",
+          "definition": "Opta's xG model gives each shot the probability that it is scored, from information on similar past shots; totals add those values. The current model is trained with XGBoost on nearly one million shots from 40 competitions between 2018-19 and 2021-22 and evaluates over 20 variables. Penalties get one constant value, 0.79 xG.",
+          "formula": "sum of Opta shot xG (penalties = 0.79)",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "Opta uses a separate model for women's competitions.",
+            "The page does not say how The Analyst totals shots within one possession.",
+            "No reference code: the values come from Opta's model, which is not in the open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://theanalyst.com/articles/what-is-expected-goals-xg",
+            "title": "What Are Expected Goals (xG)?",
+            "author": "Jonny Whitmore (The Analyst)",
+            "date": "2023-08-08",
+            "quote": "Penalties are the most consistent shot in football and are given a constant value reflective of their historical conversion rate (0.79 xG).",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xg.wyscout",
+          "name": "Wyscout",
+          "definition": "Wyscout's machine-learning model gives each shot a probability of scoring from the location of the shot, the location of the assist, foot or head, the assist type, a dribble just before the shot, set piece, counterattack or transition, and the tagger's assessment of danger. A penalty is fixed at 0.76. Totals add shot values with no cap per possession.",
+          "formula": "sum of Wyscout shot xG (penalties = 0.76), no possession cap",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "So a shot and its rebound can add up to more than 1 xG in one possession.",
+            "No reference code: the values come from Wyscout's model, which is not in StatsBomb's open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/xg/",
+            "title": "xG",
+            "author": "Wyscout",
+            "quote": "At the moment there are no additional constraints for xG of shots in the same possession. So a sequence of shots in short succession (like a rebound after a save) could theoretically yield an xG value of > 1.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xg.understat",
+          "name": "Understat",
+          "definition": "Understat's xG comes from a neural network trained on more than 100,000 shots with over 10 parameters each; the parameters are not listed. A team's match xG is the plain sum of its shot values, penalties included.",
+          "formula": "sum of Understat shot xG",
+          "zone": "Whole pitch (every shot).",
+          "notes": [
+            "Checked on Understat's public data (4 October 2026): in Liverpool v Manchester City, 8 February 2026 (Understat match 29024), Manchester City's match xG of 2.41476 is the sum of its 16 shot values, a 0.7612 penalty included.",
+            "Understat does not publish its penalty value. In Erling Haaland's shot data, penalties carry 0.7612 in the Premier League from 2022/23 and 0.7578 in his Bundesliga seasons 2020/21 and 2021/22.",
+            "No reference code: the values come from Understat's model, which is not in the open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://understat.com/",
+            "title": "Understat home page",
+            "author": "Understat",
+            "quote": "For this case, we trained neural network prediction algorithms with the large dataset (>100,000 shots, over 10 parameters for each).",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xg_assisted",
+      "name": "xG assisted (xGAs, xAG; the shot-linked xA)",
+      "aliases": [
+        "xG Assisted",
+        "xGAs",
+        "xAG",
+        "expected assisted goals",
+        "xA (Understat, Wyscout, American Soccer Analysis, FBref before October 2022)",
+        "xAssists",
+        "xG from key passes"
+      ],
+      "data": "event",
+      "unit": "expected goals (xG), summed over the assisted shots",
+      "measures": "The quality of the chances a player or team creates for team-mates: the xG of each shot that their pass led to, credited to the passer.",
+      "direction": "Higher values mean the passes set up more and better shots. A pass that no shot follows earns nothing.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "xG assisted credits the passer with the xG of the shot that the pass led directly to (the key pass or shot assist). It is a shot-linked metric: no shot, no credit, and the value is the shooter's xG, so it depends on the provider's xG model. Many sites call it xA, but it is NOT the pass-level expected assists model of Opta / Stats Perform, which values every completed pass whether or not a shot follows; that metric is card `xa`. FBref renamed its version from xA to xAG in October 2022 when it switched to Opta. On the 2022 World Cup final (StatsBomb open data), Argentina's xG assisted is 1.34 from 15 assisted shots and France's is 0.57 from 4.",
+      "caveats": [
+        "This is not card xa. Understat, Wyscout and American Soccer Analysis label this metric xA, and FBref did until October 2022; Opta's xA is a pass-level model. Check which one a number is before you compare it.",
+        "The value is the shooter's xG, so it depends on the provider's xG model and on what the receiver does after the pass, not only on the pass.",
+        "Penalties have no key pass, so penalty xG never counts. A foul won that leads to a penalty or a direct free kick earns nothing (Wyscout says so explicitly).",
+        "Rebounds and other shots with no linked key pass earn no xG assisted for anyone. On the 2022 World Cup final, Messi's extra-time goal (0.49 xG) has no key pass.",
+        "Set-piece deliveries (corners, free-kick passes, throw-ins) count unless a variant splits them out; Hudl StatsBomb has separate open-play and set-piece versions."
+      ],
+      "related": [
+        "xa",
+        "xg",
+        "npxg",
+        "key_passes"
+      ],
+      "origin": {
+        "text": "The first use of the name is not known. By 30 September 2018 Thom Lawrence of StatsBomb could describe xA as a basic metric that credits creative players who make key passes, so this shot-linked meaning was in use before Stats Perform published its pass-level xA (card xa) in March 2021.",
+        "source": "https://www.hudl.com/blog/introducing-xgchain-and-xgbuildup"
+      },
+      "variants": [
+        {
+          "id": "xg_assisted.statsbomb-hudl",
+          "name": "Hudl StatsBomb (xG Assisted)",
+          "definition": "For each player, the sum of the StatsBomb xG of the shots that the player assisted, that is, the shots whose key pass the player made.",
+          "formula": "Count of shot _xG for shots that the player assisted (team value: the sum over the team's players)",
+          "zone": "Whole pitch.",
+          "counts": "Every pass linked to a shot as its key pass (open play and set pieces). Penalties have no key pass and add nothing; Hudl's xG is non-penalty anyway.",
+          "notes": [
+            "The glossary short name is xG Assisted and the abbreviation xGAs.",
+            "Hudl also lists Open Play xG Assisted (OPxGAs, for events not from a set piece) and Set Piece xG Assisted (SPxGAs, for events from a set piece), and xG & xG Assisted (xG+xGAs). The glossary does not say which StatsBomb field decides 'from set piece', so these splits have no reference code.",
+            "On the 2022 World Cup final the team values are the sum of shot.statsbomb_xg over 15 assisted shots for Argentina and 4 for France. The same totals come from the pass side (pass.assisted_shot_id) and from all xG minus the xG of shots with no key pass.",
+            "Player values for the same match: Alexis Mac Allister 0.3034 (his assist for Di María's goal), Di María 0.2781, Messi 0.2742; for France, Ibrahima Konaté 0.2775 and Marcus Thuram 0.1017 (his assist for Mbappé's second goal). The module's xg_assisted_by_player function gives them."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://support.hudl.com/s/article/event-data-glossary-player-metrics",
+            "title": "Event Data Glossary: Player Metrics",
+            "author": "Hudl StatsBomb",
+            "quote": "xG assisted. This is calculated from the expected goal value of the assisted shot.",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser. The formula 'Count of shot _xG for shots that the player assisted' was checked the same way."
+          },
+          "reference": {
+            "function": "football_metrics.xg_assisted:xg_assisted_statsbomb_hudl",
+            "dataset": "statsbomb-open-data",
+            "exact": true,
+            "mapping": "The source's own definition on the source's own event data: an assisted shot is a Shot with shot.key_pass_id, its value is shot.statsbomb_xg, and the credit goes to the team (and player) of the linked Pass. The penalty shoot-out (period 5) is excluded; extra time counts."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 1.3397
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 0.5687
+            }
+          ]
+        },
+        {
+          "id": "xg_assisted.fbref",
+          "name": "FBref xAG (expected assisted goals), historical",
+          "definition": "The xG of the shot that follows a completed pass, credited to the passer. FBref used Opta's xG.",
+          "formula": "sum of Opta xG over the shots that directly follow the player's completed passes",
+          "zone": "Whole pitch.",
+          "counts": "Only completed passes that a shot follows.",
+          "notes": [
+            "FBref called this metric xA until October 2022. When it switched its data provider to Opta it renamed it xAG and used xA for Opta's pass-level model (card xa).",
+            "FBref also showed npxG + xAG and per-90 versions (xAG/90).",
+            "Historical: FBref removed its Opta advanced data on 20 January 2026 (Sports Reference blog), so these values are no longer published there. The source is a Wayback Machine snapshot.",
+            "No reference code: the value uses Opta's xG model, which is not in StatsBomb open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://web.archive.org/web/20251031052137/https://fbref.com/en/expected-goals-model-explained/",
+            "title": "Expected Goals Model Explained",
+            "author": "FBref (Sports Reference)",
+            "quote": "Players receive xAG only when a shot is taken after a completed pass.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xg_assisted.understat",
+          "name": "Understat (labelled xA)",
+          "definition": "The sum of the Understat xG of the shots that came from a player's key passes.",
+          "formula": "sum of Understat xG over the shots from the player's key passes",
+          "zone": "Whole pitch.",
+          "counts": "Key passes (passes that lead to a shot). The tooltip does not say how set pieces or penalties are treated; a penalty has no key pass.",
+          "notes": [
+            "Understat labels this column xA. It is not Opta's pass-level xA.",
+            "No reference code: the value uses Understat's own xG model, which is not in StatsBomb open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://understat.com/league/EPL",
+            "title": "Understat league table (column tooltips)",
+            "author": "Understat",
+            "quote": "The sum of Expected Goals of shots from a player's key passes",
+            "check": "browser",
+            "checked": "2026-10-04",
+            "check_note": "The tooltip is a title attribute that the page's script builds, so match_quote cannot read it; checked word for word in a browser."
+          }
+        },
+        {
+          "id": "xg_assisted.wyscout",
+          "name": "Wyscout (labelled xA)",
+          "definition": "The xA value of a pass is the xG of the shot that the pass led to. The pass must be a shot assist.",
+          "formula": "xA of a pass = Wyscout xG of the shot that the pass led to; a player's xA is the sum over the player's shot assists",
+          "zone": "Whole pitch.",
+          "counts": "Shot assists: regular passes, crosses, corners, throw-ins and passes from free kicks that a shot follows.",
+          "notes": [
+            "Fouls suffered that lead to penalties or direct free kicks earn no xA, as goals from them do not count as assisted.",
+            "A pass to an offside player is an unsuccessful pass and has no xA, even if a goal follows. The same applies after a VAR-found foul or offside.",
+            "Wyscout labels this xA. It is not Opta's pass-level xA.",
+            "No reference code: the value uses Wyscout's own xG model, which is not in StatsBomb open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://dataglossary.wyscout.com/xa/",
+            "title": "xA",
+            "author": "Wyscout",
+            "quote": "Expected assist (xA) value for a pass is the value of expected goals (xG) of the shot that this pass led to.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xg_assisted.asa",
+          "name": "American Soccer Analysis (xAssists, xA)",
+          "definition": "The xG of all the shots for which a player made the pass, using ASA's own xG model.",
+          "formula": "sum of ASA xG over the shots whose key pass the player made",
+          "zone": "Whole pitch.",
+          "counts": "Key passes, which ASA defines as passes that lead directly to a shot.",
+          "notes": [
+            "ASA's xG model is a logistic regression with separate models for teams, shooters and goalkeepers.",
+            "The page is undated. Its example credits Latif Blessing with 0.762 xA for a pass to a Christian Ramirez shot worth 0.762 xG that did not score.",
+            "No reference code: the value uses ASA's own xG model, which is not in StatsBomb open data."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://www.americansocceranalysis.com/explanation",
+            "title": "Expected goals explanation",
+            "author": "American Soccer Analysis",
+            "quote": "You will now find a new stat on the players page: xAssists. These measure the Expected Goals value of all shots for which a particular player passed the ball.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xt",
+      "name": "xT (expected threat)",
+      "aliases": [
+        "expected threat",
+        "xthreat"
+      ],
+      "data": "event",
+      "unit": "probability of scoring (an action's value is a difference of two probabilities)",
+      "measures": "How much a ball-progressing action (pass, cross or carry) raises the chance of scoring, from where the ball starts to where it ends, using a value for each zone of the pitch.",
+      "direction": "Higher means more threat added. Moving the ball backwards gives a negative value.",
+      "version": 1,
+      "updated": "2026-10-04",
+      "summary": "xT gives every zone of the pitch a value: the probability that a team with the ball there scores within the next few actions. A pass, cross or carry is worth the value of the zone where it ends minus the value of the zone where it starts. Karun Singh introduced it in a blog post in early 2019. The value surface is learned from data, so the grid size, the data, the stopping rule for the iteration and which actions count all change the numbers. On the 2022 World Cup final, Singh's published 12 x 8 surface gives Argentina 1.86 xT added and France 1.18.",
+      "caveats": [
+        "The grid size, the training data, the number of iterations and which shots feed the goal probability are free choices; different packages give different numbers for the same action. Cite the variant and the surface.",
+        "xT values only ball-progressing actions. Defensive actions, take-ons and moves inside one zone are worth zero.",
+        "It values the attacking side only, and ignores what happens after a turnover.",
+        "The state is the ball's zone alone: no players, no pressure, no game state, and one surface for a whole league unless it is fitted per team.",
+        "Shots are not valued as actions, so player xT totals favour creators over finishers.",
+        "Singh's post values successful moves; socceraction counts failed moves in the move probability, so failed moves act as lost possession in the fit."
+      ],
+      "related": [
+        "vaep",
+        "progressive_passes",
+        "progressive_carries"
+      ],
+      "origin": {
+        "text": "Karun Singh, 'Introducing Expected Threat (xT)', blog post, early 2019. The page has no date; the Wayback Machine holds it from 22 February 2019. Singh credits Cervone et al.'s possession-value work in basketball for the motivation and notes that valuing every location on the pitch is not new. Earlier Markov-chain possession models in football include Sarah Rudd's 2011 NESSIS talk.",
+        "source": "https://karun.in/blog/expected-threat.html"
+      },
+      "variants": [
+        {
+          "id": "xt.singh-2019",
+          "name": "Singh (2019), the original",
+          "definition": "Each zone's xT is the probability of shooting there times the probability of scoring from there, plus the probability of moving the ball times the sum, over every zone it can move to, of the move probability times that zone's xT. The values are found by iteration from zero; after n iterations a zone's xT is the probability of scoring within the next n actions. An action that moves the ball from one zone to another is worth the end zone's xT minus the start zone's.",
+          "formula": "xT(x,y) = s(x,y) * g(x,y) + m(x,y) * sum over zones (z,w) of T((x,y) -> (z,w)) * xT(z,w); action value = xT(end zone) - xT(start zone)",
+          "zone": "Whole pitch, divided into a 16 x 12 grid (192 zones); the post says another resolution can be used.",
+          "counts": "Successful moves only (passes and dribbles completed without losing possession), from the 2017/18 Premier League season. Iterated 4 to 5 times.",
+          "notes": [
+            "s is the shot probability, g the goal probability given a shot, m the move probability (s + m = 1) and T the matrix of move transitions between zones.",
+            "The post does not name its data provider, and the fitted 16 x 12 surface is not published, so this variant has no reference code."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://karun.in/blog/expected-threat.html",
+            "title": "Introducing Expected Threat (xT)",
+            "author": "Karun Singh",
+            "date": "2019 (undated page; archived 2019-02-22)",
+            "quote": "for the purposes of this post, we're working with a 16x12 grid on the pitch, which gives us 192 zones.",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xt.singh-open-12x8",
+          "name": "Singh's published 12 x 8 surface",
+          "definition": "A ready-made xT surface that Singh published as a JSON file: 8 rows across the pitch and 12 columns along it, from about 0.0064 near the own goal to about 0.2575 in front of the opponent's goal. Actions are valued with it the way socceraction's ExpectedThreat.rate does: successful passes, crosses and dribbles (carries) only, end zone value minus start zone value.",
+          "formula": "action value = surface[end zone] - surface[start zone]; team total = sum over the team's successful passes, crosses and carries",
+          "zone": "Whole pitch, 12 x 8 grid.",
+          "counts": "Successful moves only. Set-piece passes (free kicks, corners, throw-ins, goal kicks) are not valued; a kick-off is an ordinary pass.",
+          "notes": [
+            "Which data and how many iterations produced the published surface is not stated.",
+            "The surface is symmetric top to bottom, so the orientation of the y axis does not change values.",
+            "socceraction's load_model reads this file; its documentation points to the URL."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://raw.githubusercontent.com/ML-KULeuven/socceraction/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/xthreat.py",
+            "title": "socceraction xthreat.py, load_model (v1.5.3)",
+            "author": "KU Leuven DTAI",
+            "quote": "Karun Singh provides such a grid at the follwing url",
+            "check": "exact",
+            "checked": "2026-10-04",
+            "check_note": "The quote keeps the source's spelling ('follwing'). The surface itself is https://karun.in/blog/data/open_xt_12x8_v1.json."
+          },
+          "reference": {
+            "function": "football_metrics.xt:xt_singh_open_surface",
+            "dataset": "statsbomb-open-data",
+            "requires": [
+              "singh_open_xt_12x8"
+            ],
+            "exact": false,
+            "mapping": "Singh's surface applied to StatsBomb events, choosing actions as socceraction's StatsBomb converter and ExpectedThreat.rate do: a Pass with no outcome and a pass.type other than Free Kick, Corner, Throw-in or Goal Kick, or a Carry (socceraction's dribble). Zones: column = int(x / 120 * 12), row = int(y / 80 * 8), clipped. socceraction also inserts synthetic dribbles between consecutive actions of the same team (3 to 60 units apart, under 10 seconds); StatsBomb's Carry events stand for those here."
+          },
+          "fixtures": [
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "Argentina",
+              "expected": 1.8631
+            },
+            {
+              "match_id": 3869685,
+              "label": "Argentina v France, World Cup 2022 final",
+              "team": "France",
+              "expected": 1.1759
+            }
+          ]
+        },
+        {
+          "id": "xt.socceraction",
+          "name": "socceraction (KU Leuven), fitted",
+          "definition": "socceraction fits the surface itself from SPADL actions. Move actions are passes, dribbles and crosses; take-ons are left out. The shot probability uses open-play shots only (SPADL type shot, not free-kick or penalty shots). The move probability counts every move attempt, and the transition matrix divides successful moves by all attempts, so failed moves act as lost possession. Iteration stops when no zone changes by more than a small tolerance.",
+          "formula": "as xt.singh-2019, with T = successful moves / all move attempts from each zone; iterate until the largest change is below eps",
+          "zone": "Whole pitch; default grid 16 x 12.",
+          "counts": "Fitting uses all move attempts; rating values successful moves only.",
+          "notes": [
+            "Defaults in socceraction v1.5.3: l = 16, w = 12, eps = 1e-5; optional bilinear interpolation.",
+            "No reference code here yet: a fit needs many matches of training data.",
+            "The socceraction README says the package is no longer actively developed; pin the version."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://raw.githubusercontent.com/ML-KULeuven/socceraction/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/xthreat.py",
+            "title": "socceraction xthreat.py, get_move_actions (v1.5.3)",
+            "author": "KU Leuven DTAI",
+            "quote": "These include passes, dribbles and crosses. Take-ons are ignored because they typically coincide with dribbles and do not move the ball to a different cell.",
+            "check": "normalised",
+            "checked": "2026-10-04"
+          }
+        },
+        {
+          "id": "xt.databallpy",
+          "name": "DataBallPy",
+          "definition": "DataBallPy's xT model follows Singh's method on a finer grid of 32 x 24 cells, interpolated to a smoother surface. Before fitting it deletes own goals, shots from the own half (which it treats as data errors) and events in set-piece situations (corners, free kicks, throw-ins, goal kicks).",
+          "formula": "as xt.singh-2019, on a 32 x 24 grid",
+          "zone": "Whole pitch, 32 x 24 grid.",
+          "notes": [
+            "No reference code here; DataBallPy ships its own fitted model."
+          ],
+          "source": {
+            "kind": "web",
+            "id": "https://databallpy.readthedocs.io/en/main/features/xt_models.html",
+            "title": "Expected Threat (xT) models",
+            "author": "DataBallPy",
+            "quote": "closely based on the work and blog of Karun Singh",
+            "check": "exact",
+            "checked": "2026-10-04"
+          }
+        }
+      ]
+    }
+  ]
+}

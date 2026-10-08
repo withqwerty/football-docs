@@ -25,3 +25,7 @@ docs/_reference/
 
 # Local AI agent notes
 CLAUDE.md
+
+# Python caches (metric reference tests)
+__pycache__/
+.pytest_cache/

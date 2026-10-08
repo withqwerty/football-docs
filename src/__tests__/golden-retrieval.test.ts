@@ -899,7 +899,9 @@ describe("golden retrieval evals", () => {
       id: "xt-expected-threat",
       args: {
         query: "xT expected threat action value grid socceraction pass carry shot chart",
-        max_results: 5,
+        // 7, not 5: the xt metric card's sections (its summary and two variants)
+        // now rank among the top results; the socceraction section is 7th.
+        max_results: 7,
       },
       expectedProvider: "socceraction",
       expected: ["Expected Threat", "xT", "grid", "xT(destination zone) - xT(origin zone)"],
@@ -1117,7 +1119,9 @@ describe("golden retrieval evals", () => {
         // move one xg-timelines section to 15th, with no new page above it.
         // 16, not 15: the wearable vendor docs did the same again, to 16th; none of
         // their pages rank above it.
-        max_results: 16,
+        // 19, not 16: four sections of the xg, npxg and xg_assisted metric cards now
+        // rank above the last free-sources section, which moved to 19th.
+        max_results: 19,
       },
       expectedProvider: "free-sources",
       expected: [

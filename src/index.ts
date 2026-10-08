@@ -21,6 +21,7 @@ import { z } from "zod";
 import { hardenConnection } from "./data-format.js";
 import { cleanDataDir, dataModeFor, defaultDataDir, IndexChooser } from "./data-source.js";
 import { checkForUpdate } from "./data-update.js";
+import { getMetric, listMetrics } from "./metrics.js";
 import {
   addLocalPaper,
   forgetPaper,
@@ -258,6 +259,29 @@ export function createFootballDocsServer(): McpServer {
     },
     { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
     async (args) => install.wrap(() => withQueueDb((db) => requestUpdate(db, args))),
+  );
+
+  server.tool(
+    "get_metric",
+    [
+      "Read a metric card: one checked definition of a football metric (for example PPDA), with every published",
+      "variant under its own ID (ppda.statsbomb-hudl, ppda.trainor-2014 ...), its formula, zone, source and a checked",
+      "quote, reference code with test values on public open data where it exists, and caveats. Values from different",
+      "variants are not comparable, so cite the exact variant ID. Use list_metrics to see the cards.",
+    ].join(" "),
+    {
+      id: z.string().describe("A card ID (ppda), a variant ID (ppda.statsbomb-hudl), or a metric name or alias (passes per defensive action)."),
+    },
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    async (args) => install.wrap(() => withDocsDb((db) => getMetric(db, args))),
+  );
+
+  server.tool(
+    "list_metrics",
+    "List the metric cards and their variant IDs, with which variants have reference code. Read one with get_metric.",
+    {},
+    { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    async () => install.wrap(() => withDocsDb((db) => listMetrics(db))),
   );
 
   server.tool(

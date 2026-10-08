@@ -1,0 +1,217 @@
+# Metric card: PPDA. Edit this file, then run python3 scripts/gen_metric_cards.py.
+# Quotes are the source's own words, checked with match_quote (or in a browser
+# where the page builds its text with JavaScript), on the date given.
+
+id = "ppda"
+name = "PPDA (passes allowed per defensive action)"
+aliases = ["passes per defensive action", "passes allowed per defensive action", "passes/defensive action", "pressing score"]
+data = "event"
+unit = "passes per defensive action (a ratio)"
+measures = "How intensely a team presses the opponent's build-up: how many passes it lets the opponent make, in the pressing zone, for each defensive action it makes there."
+direction = "Lower values mean more pressing. A team with no counted defensive action has no value (division by zero)."
+version = 1
+updated = "2026-10-04"
+
+summary = """
+PPDA divides the opponent's passes by the pressing team's defensive actions, both counted in the part of the pitch where the pressing happens. Colin Trainor introduced it in 2014. At least five public definitions are in use, and they differ in the zone, in which defensive actions count, and in whether failed passes count. Values from different definitions are not comparable: on the 2022 World Cup final, Argentina's PPDA is 7.42 by the StatsBomb/Hudl formula and 9.77 by an approximation of Trainor's original.
+"""
+
+caveats = [
+  "Values from different definitions are not comparable: zone, actions and pass counting all change the number. Cite the variant ID.",
+  "No public definition counts ball recoveries as a defensive action. A formula that does (for example in the opposition half) is a house variant and gives much lower values.",
+  "PPDA measures the high press only; a team that presses in its own half looks passive.",
+  "Possession and territory confound it: a dominant team's defensive actions happen high up the pitch anyway.",
+  "Every variant counts fouls, which end a possession but are not pressing.",
+  "Game state, red cards and the scoreline change pressing; Trainor smooths match values with a 6-game rolling mean.",
+  "A season value can be a ratio of sums (Understat) or a mean of match values; they differ.",
+]
+
+related = ["field_tilt", "pressures", "defensive_action_height"]
+
+[origin]
+text = "Colin Trainor, StatsBomb blog, 30 July 2014, building on his 'passes allowed per pressing action' ratios (9 October 2013), which counted the whole pitch. Wyscout's glossary also credits him with introducing it in 2014. He chose the zone with Rene Maric of Spielverlagerung."
+source = "https://blogarchive.statsbomb.com/articles/soccer/defensive-metrics-measuring-the-intensity-of-a-high-press/"
+
+[[variants]]
+id = "ppda.trainor-2014"
+name = "Trainor (2014), the original"
+definition = "All opposition passes, completed or not, divided by the pressing team's tackles, interceptions, challenges (failed tackles) and fouls, both counted beyond Opta's x = 40 line in the pressing team's direction: its attacking 60% of the pitch."
+formula = "opponent passes (x > 40 of 100, pressing team's view) / (tackles + interceptions + challenges + fouls by the pressing team at x > 40)"
+zone = "Pressing team's attacking 60% (Opta x > 40 of 100)."
+counts = "All passes, completed or not: Trainor says it does not matter whether the opposition completed them."
+notes = [
+  "Trainor plots a 6-game rolling average of match values and also gives league and season tables.",
+  "He tested the boundary at x = 33, 40 and 50 before choosing 40.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://blogarchive.statsbomb.com/articles/soccer/defensive-metrics-measuring-the-intensity-of-a-high-press/"
+  title = "Defensive Metrics: Measuring the Intensity of a High Press"
+  author = "Colin Trainor"
+  date = "2014-07-30"
+  quote = "PPDA = Number of Passes made by Attacking Team / Number of Defensive Actions"
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.ppda:ppda_trainor_2014"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events of a definition written for Opta events: tackle = Duel of type Tackle (any outcome), challenge = Dribbled Past, interception = Interception, foul = Foul Committed; Opta x > 40 of 100 = StatsBomb x > 48 of 120."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 9.7674
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 11.7317
+
+[[variants]]
+id = "ppda.statsbomb-hudl"
+name = "Hudl StatsBomb"
+definition = "The opponent's completed passes in its own 60% of the pitch, divided by the pressing team's tackles, interceptions (including interceptions made with a pass), dribbled-past events and fouls outside its own defending 40%."
+formula = "opposition passes with pass outcome = completed and start x < 72 / pressing team's (tackle or interception (including pass type = interception) or dribbled past or foul) with x >= 48 (StatsBomb 120 x 80 pitch)"
+zone = "Pressing team's attacking 60% (StatsBomb x >= 48 of 120)."
+counts = "Completed passes only."
+notes = [
+  "Hudl's prose description also lists blocks, but its exact formula does not; this variant follows the formula.",
+  "The formula counts interceptions made with a pass (pass type Interception). On the 2022 World Cup final that adds 2 actions for Argentina and moves its PPDA from 7.77 to 7.42.",
+  "StatsBomb's IQ season value (team_season_ppda) exists; whether it is a ratio of sums or a mean of match values is not stated.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://support.hudl.com/s/article/passes-defensive-action"
+  title = "Passes Per Defensive Action (PPDA)"
+  author = "Hudl StatsBomb"
+  quote = "Count of opposition event name = pass and pass outcome = completed and start_location_x<72/count of (event_name = tackle or interception (including pass type = interception) or dribbled past or foul) and event_x>=48"
+  check = "browser"
+  checked = "2026-10-04"
+  check_note = "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+
+  [variants.reference]
+  function = "football_metrics.ppda:ppda_statsbomb_hudl"
+  dataset = "statsbomb-open-data"
+  exact = true
+  mapping = "The source's own formula on the source's own event data."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 7.4222
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 9.0909
+
+[[variants]]
+id = "ppda.wyscout"
+name = "Wyscout"
+definition = "Opponent passes that start in the pressing team's final 60%, divided by the pressing team's fouls, interceptions, won defensive duels and sliding tackles there."
+formula = "opponent passes started in the final 60% / (fouls + interceptions + won defensive duels + sliding tackles) in the final 60%"
+zone = "Pressing team's final 60%."
+counts = "All opponent passes that start in the zone; the page does not say whether failed passes count."
+notes = [
+  "Lost duels do not count. Challenges and blocked passes are not in the list.",
+  "The glossary's worked example: Liverpool v Manchester United, 20 October 2019, Liverpool 207 / (10 + 16 + 11 + 3) = 5.2.",
+  "No reference implementation yet: the action list uses Wyscout's duel outcomes. The public Wyscout match event dataset (Pappalardo et al.) could carry one.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://dataglossary.wyscout.com/ppda/"
+  title = "PPDA"
+  author = "Wyscout"
+  quote = "we calculate all opponent passes that started there and divide them by the sum of defensive actions (fouls, interceptions, won defensive duels, sliding tackles) of the pressing team"
+  check = "exact"
+  checked = "2026-10-04"
+
+[[variants]]
+id = "ppda.opta-analyst"
+name = "Opta Analyst"
+definition = "Opposition passes outside the pressing team's own defensive third, divided by the pressing team's fouls, tackles, interceptions, challenges and blocked passes outside its own defensive third."
+formula = "opposition passes outside the pressing team's defensive third / (fouls + tackles + interceptions + challenges + blocked passes) outside that third"
+zone = "Outside the pressing team's own defensive third (about 67% of the pitch, not 60%)."
+counts = "Not stated."
+notes = [
+  "Adds blocked passes to Trainor's four actions. The page shows no date, so when this wording started is not known.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://theanalyst.com/articles/opta-football-stats-definitions"
+  title = "Opta football stats definitions"
+  author = "Opta Analyst"
+  quote = "In our PPDA calculation, the defensive actions are fouls, tackles, interceptions, challenges, and blocked passes."
+  check = "exact"
+  checked = "2026-10-04"
+
+  [variants.reference]
+  function = "football_metrics.ppda:ppda_opta_analyst"
+  dataset = "statsbomb-open-data"
+  exact = false
+  mapping = "An approximation on StatsBomb events: blocked pass = Block (which also covers blocked shots), challenge = Dribbled Past, tackle = Duel of type Tackle; outside the defensive third = x > 40 of 120 for the pressing team. All passes are counted, as the page does not say."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 6.8116
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 8.9661
+
+[[variants]]
+id = "ppda.stats-perform-2016"
+name = "Stats Perform (Opta Pro), about 2016"
+definition = "Opponent passes allowed per defensive action in the opponent's defensive three-fifths of the pitch, deferring to Trainor for the details."
+formula = "as ppda.trainor-2014"
+zone = "Opponent's defensive 3/5 (the same 60% as Trainor)."
+counts = "As Trainor."
+notes = [
+  "The page now shows a 2026 date but uses 2015/16 data, so it was republished; the original date and author are not known.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://www.statsperform.com/insights/how-we-measure-pressure/"
+  title = "How we measure pressure"
+  author = "Stats Perform"
+  quote = "Opponent passes allowed per defensive action, in the opponent's defensive 3/5ths of the pitch"
+  check = "normalised"
+  checked = "2026-10-04"
+
+[[variants]]
+id = "ppda.understat"
+name = "Understat"
+definition = "Passes allowed per defensive action in the opposition half."
+formula = "opponent passes in the opposition half / defensive actions in the opposition half"
+zone = "The opposition half (50% of the pitch, not 60%)."
+counts = "Not stated."
+notes = [
+  "The page does not list which defensive actions count.",
+  "Understat's data hold ppda.att and ppda.def per match; its season value is the sum of att divided by the sum of def (a ratio of sums, not a mean of match values).",
+  "OPPDA is the same measure for the opponent's pressing against this team.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://understat.com/js/league.min.js"
+  title = "Understat league page script (column tooltips)"
+  author = "Understat"
+  quote = "Passes allowed per defensive action in the opposition half"
+  check = "exact"
+  checked = "2026-10-04"
+  check_note = "The tooltip text is in the page's script, not its HTML."

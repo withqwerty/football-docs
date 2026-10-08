@@ -1,0 +1,117 @@
+# Metric card: npxG (non-penalty expected goals). Edit this file, then run python3 scripts/gen_metric_cards.py.
+# Quotes are the source's own words, checked with match_quote (or in a browser
+# where the page builds its text with JavaScript), on the date given.
+
+id = "npxg"
+name = "npxG (non-penalty expected goals)"
+aliases = ["non-penalty expected goals", "non-penalty xG", "NPxG", "NP xG", "not penalty expected goals"]
+data = "event"
+unit = "expected goals (a sum of per-shot goal probabilities, each between 0 and 1)"
+measures = "The quality of the chances a team or player creates without penalties: the xG total with penalty kicks taken out, so that a penalty, which every provider values at one fixed number, does not swamp the total."
+direction = "Higher values mean more or better chances. A team with no counted shot has a total of 0."
+version = 1
+updated = "2026-10-04"
+
+summary = """
+npxG is xG without penalty kicks. It is a filter on the xg card, so the provider's model still sets each shot's value. Two traps: Hudl StatsBomb's metric named xG is already non-penalty (its label is NP xG), so it matches this card, not xg; and FBref's npxG also removed shots from a rebound after a penalty, which a plain filter on shot type keeps. Penalty shoot-out kicks are never counted. On the 2022 World Cup final, France's npxG is 0.7056 against an xG of 2.2726, because two of its in-play shots were penalties.
+"""
+
+caveats = [
+  "Check what a column called xG means before comparing: Hudl StatsBomb's player and team xG leave penalties out, FBref's and Understat's xG include them.",
+  "Rebounds after a penalty: FBref's npxG left them out; a filter on shot type (Hudl StatsBomb) keeps them. Understat does not say.",
+  "The shot values come from each provider's model, so npxG from different providers is not comparable. Cite the variant ID.",
+  "Penalty shoot-out kicks are not part of match xG or npxG.",
+  "Own goals are not shots and carry no xG.",
+  "npxG removes the penalty but not the foul that won it: a player who wins penalties gets no credit for them.",
+]
+
+related = ["xg", "xg_assisted", "xa", "psxg"]
+
+[origin]
+text = "No single origin. npxG is a filter on xG (see the xg card for Sam Green's 2012 OptaPro post). FBref's xG explainer recommends npxG (non-penalty expected goals) for xG without penalty kicks. Who first used the label is not known."
+source = "https://web.archive.org/web/20260107000728/https://fbref.com/en/expected-goals-model-explained/"
+
+[[variants]]
+id = "npxg.statsbomb-hudl"
+name = "Hudl StatsBomb 'xG' (NP xG)"
+definition = "The sum of the StatsBomb xG value over the team's shots whose shot type is not Penalty. Hudl StatsBomb names this metric xG in its glossary; the column label is NP xG (abbreviation NPxG). In the player glossary, xG is 'Non-penalty expected goals produced by the player' over non-penalty shots."
+formula = "Count of shot_xg where shot type≠penalty (sum of shot.statsbomb_xg over Shot events with shot.type.name not \"Penalty\")"
+zone = "Whole pitch (every non-penalty shot)."
+notes = [
+  "'Cumulative' in Hudl's description means a running total. The formula is a plain sum, not the possession-capped cumulative xG of xg.statsbomb-cumulative.",
+  "A shot from a rebound after a penalty counts, as its shot type is not Penalty.",
+  "Hudl's 'xG Conceded' and 'xG Difference' are also non-penalty; 'xG Difference Inclusive' includes penalties (see xg.statsbomb-hudl).",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://support.hudl.com/s/article/event-data-glossary-team-metrics"
+  title = "Event Data Glossary: Team Metrics"
+  author = "Hudl StatsBomb"
+  quote = "Cumulative expected goal value of all non-penalty shots."
+  check = "browser"
+  checked = "2026-10-04"
+  check_note = "The page builds its text with JavaScript, so match_quote cannot read it; checked word for word in a browser."
+
+  [variants.reference]
+  function = "football_metrics.xg:npxg_statsbomb_hudl"
+  dataset = "statsbomb-open-data"
+  exact = true
+  mapping = "The source's own formula on the source's own event data: shot.statsbomb_xg summed over the team's Shot events with shot.type.name not \"Penalty\", with penalty shoot-out kicks (period 5) left out."
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "Argentina"
+  expected = 1.9748
+
+  [[variants.fixtures]]
+  match_id = 3869685
+  label = "Argentina v France, World Cup 2022 final"
+  team = "France"
+  expected = 0.7056
+
+[[variants]]
+id = "npxg.fbref"
+name = "FBref (Opta values, penalty rebounds removed), historical to January 2026"
+definition = "FBref's possession-capped xG (xg.fbref) without penalty kicks and without shots from a rebound after a penalty kick: FBref treats such a rebound as part of the penalty kick xG. In FBref's example a Reus penalty (.79) and his rebound (.92) give .9832 xG and 0 npxG."
+formula = "xg.fbref total, leaving out penalty kicks and shots from a rebound after a penalty kick"
+zone = "Whole pitch (every non-penalty shot)."
+notes = [
+  "FBref's tooltip names the column 'Non-Penalty Expected Goals' (npxG) and says 'Provided by Opta.'",
+  "Historical: FBref removed its Opta advanced data, xG and npxG included, on 20 January 2026 (Sports Reference blog, 'FBref & Stathead Data Update'). Values cited from FBref before then follow this variant.",
+  "No reference code: the values come from Opta's model, which is not in the open data.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://web.archive.org/web/20260107000728/https://fbref.com/en/expected-goals-model-explained/"
+  title = "xG Explained"
+  author = "FBref (Sports Reference)"
+  quote = "However, since the second shot is also considered to be a part of the penalty kick xG, Reus gets 0 npxG (non-penalty expected goals) on this play."
+  check = "exact"
+  checked = "2026-10-04"
+  check_note = "FBref blocks automated clients, so the quote is checked against a Wayback Machine snapshot of 7 January 2026."
+
+[[variants]]
+id = "npxg.understat"
+name = "Understat (NPxG)"
+definition = "Understat's xG without penalties. Its team column NPxG is expected goals for, without penalties and own goals; its player column NPxG is xG without penalties."
+formula = "sum of Understat shot xG over shots whose situation is not Penalty"
+zone = "Whole pitch (every non-penalty shot)."
+notes = [
+  "Checked on Understat's public data (4 October 2026): in Liverpool v Manchester City, 8 February 2026 (Understat match 29024), Manchester City's npxG of 1.65359 is its xG of 2.41476 minus its one penalty (0.7612).",
+  "Understat does not say how it treats a rebound after a penalty, or how own goals enter its xG.",
+  "NPxGA and NPxGD are the same measure for shots conceded and the difference.",
+  "No reference code: the values come from Understat's model, which is not in the open data.",
+]
+
+  [variants.source]
+  kind = "web"
+  id = "https://understat.com/js/league.min.js"
+  title = "Understat league page script (column tooltips)"
+  author = "Understat"
+  quote = "Expected goals for without penalties and own goals"
+  check = "exact"
+  checked = "2026-10-04"
+  check_note = "The tooltip text is in the page's script, not its HTML."

@@ -11,6 +11,7 @@ on:
     paths:
       - "docs/**"
       - "providers.json"
+      - "metrics/cards.json"
   workflow_dispatch:
 
 # Runs publish one at a time. A superseded pending run may be dropped; the run
