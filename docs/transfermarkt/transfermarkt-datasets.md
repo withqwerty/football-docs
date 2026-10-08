@@ -15,6 +15,26 @@ The repository licence is CC0-1.0. The files are published at
 The notes below were checked against the release of 2026-09-05 (files last
 modified 2026-09-05, repository commit `e44f186`).
 
+## Status: updates paused since July 2026
+
+The project's updates are paused, and the data is frozen. Its README and its
+status announcement (discussion #383, 2026-09-05) say the collection pipeline
+stopped completing in mid-July 2026: the last successful collection run was
+on 10 July 2026 and the last data update was published on 11 July 2026.
+There is no estimated date for updates to resume.
+
+| File | Nothing after |
+|---|---|
+| `games`, `game_events` | 2026-07-06 |
+| `appearances` | 2026-06-28 |
+| `player_valuations` | 2026-06-12 |
+
+2026/27 squads are not covered. The files published before the pause are
+still available to download. The 2026-09-05 release changed only the CSV
+quoting and the README, not the data. Do not treat the latest
+`player_valuations` row as a player's current value, or `players.csv` as
+current squads.
+
 ## player_valuations columns
 
 `player_valuations.csv.gz` has one row per market value record. The project
@@ -81,5 +101,6 @@ from 2018-06-01:
 Sources: the project's model SQL and asset definition at commit `e44f186`
 (https://github.com/dcaribou/transfermarkt-datasets), issue #137
 (https://github.com/dcaribou/transfermarkt-datasets/issues/137, closed
-2026-02-14), and the 2026-09-05 files `player_valuations.csv.gz`,
+2026-02-14), the status announcement
+(https://github.com/dcaribou/transfermarkt-datasets/discussions/383), and the 2026-09-05 files `player_valuations.csv.gz`,
 `players.csv.gz` and `clubs.csv.gz`. Checked 2026-10-08.
