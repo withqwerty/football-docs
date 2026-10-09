@@ -43,8 +43,8 @@ A season's stages carry `phase`, a coarse stage name such as `regular season`.
 Several distinct stages share the same `phase` value: Apertura, Clausura and a
 group stage can all arrive as `regular season`.
 
-The OpenAPI specs (Soccer v4 and Soccer Extended v4, checked 2026-09-29) add
-`phase_type` to the stage object. It is an enumerated, more granular stage type,
+The OpenAPI specs (Soccer v4 and Soccer Extended v4, checked 2026-10-09) add
+`phase_type` to the stage objects `season_stage` and `season_brackets_stage`. It is an enumerated, more granular stage type,
 for example `apertura`, `clausura`, `group_stage`, `knockout_stage` or
 `regular_season`. `phase` is unchanged for backward compatibility. Use `type`
 plus `phase_type` as the key for a stage within a season, and fall back to

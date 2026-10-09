@@ -20,7 +20,7 @@ PY="${PYTHON:-python3.11}"
 command -v "$PY" >/dev/null || { echo "need $PY on PATH (set PYTHON=...)"; exit 1; }
 
 PINS=(
-  "kloppy==3.19.0"
+  "kloppy==3.19.1"
   "socceraction==1.5.3"
   "soccerdata==1.9.1"
   "mplsoccer==1.8.1"

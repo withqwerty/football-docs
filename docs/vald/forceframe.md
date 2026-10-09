@@ -48,7 +48,7 @@ crawled_at: 2026-09-30
 | `GET /version` |  | `200` OK: `string` |
 | `GET /liveness` |  | `204` No Content |
 | `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
-| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse` |
+| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse` |
 <!-- generated:vald-forceframe-health end -->
 
 ## VALD ForceFrame: `GET /tests/{testId}/forceframetrace`
@@ -64,7 +64,7 @@ Responses:
 
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse`
+- `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}`
@@ -80,7 +80,7 @@ Responses:
 
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse`
+- `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}/repetitions`
@@ -92,7 +92,7 @@ Parameters:
 
 Responses:
 
-- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse`
+- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
@@ -116,7 +116,7 @@ Responses:
 
 - `204` No Content
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse`
+- `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/v2`
@@ -133,7 +133,7 @@ Responses:
 
 - `204` No Content
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `200` OK: `Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse`
+- `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}/metrics`
@@ -149,7 +149,7 @@ Responses:
 
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `200` OK: `Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse`
+- `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 
 ## VALD ForceFrame: `GET /training/programs/current`
@@ -163,7 +163,7 @@ Parameters:
 
 Responses:
 
-- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse`
+- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
@@ -181,7 +181,7 @@ Parameters:
 
 Responses:
 
-- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse`
+- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
@@ -199,7 +199,7 @@ Parameters:
 
 Responses:
 
-- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse`
+- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
@@ -217,7 +217,7 @@ Parameters:
 
 Responses:
 
-- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse`
+- `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
@@ -253,7 +253,7 @@ The 22 component schemas of the ForceFrame spec, in spec order. No field has a d
 | `instance` | `string` |  | yes |
 | `errors` | object (map of array of `string`) |  | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget`
+### `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget`
 
 Type `string`.
 
@@ -263,7 +263,7 @@ Type `string`.
 | `Max` |
 | `Average` |
 
-### `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint`
+### `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint`
 
 Type `string`.
 
@@ -279,7 +279,7 @@ Type `string`.
 | `Dyno` |
 | `Custom` |
 
-### `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality`
+### `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality`
 
 Type `string`.
 
@@ -291,7 +291,7 @@ Type `string`.
 | `Right` |
 | `NA` |
 
-### `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement`
+### `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement`
 
 Type `string`.
 
@@ -317,15 +317,7 @@ Type `string`.
 | `InnerPaddles` |
 | `OuterPaddles` |
 
-### `Vald.Api.ExternalForceFrame.V1.DiagnosticsResult`
-
-| Field | Type | Nullable |
-| --- | --- | --- |
-| `key` | `string` | yes |
-| `isOk` | `boolean` |  |
-| `message` | `string` | yes |
-
-### `Vald.Api.ExternalForceFrame.V1.Enums.SensorType`
+### `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType`
 
 Type `string`.
 
@@ -338,13 +330,28 @@ Type `string`.
 | `FlatLeft` |
 | `FlatRight` |
 
-### `Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.DiagnosticsResult`
+
+| Field | Type | Nullable |
+| --- | --- | --- |
+| `key` | `string` | yes |
+| `isOk` | `boolean` |  |
+| `message` | `string` | yes |
+
+### `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse`
+
+| Field | Type | Nullable |
+| --- | --- | --- |
+| `machineName` | `string` | yes |
+| `results` | array of `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.DiagnosticsResult` | yes |
+
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
 | `id` | `string` | `uuid` |  |
 | `testId` | `string` | `uuid` |  |
-| `sensorType` | `Vald.Api.ExternalForceFrame.V1.Enums.SensorType` |  |  |
+| `sensorType` | `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType` |  |  |
 | `repNumber` | `integer` | `int32` |  |
 | `startOffsetSeconds` | `number` | `double` | yes |
 | `endOffsetSeconds` | `number` | `double` | yes |
@@ -364,7 +371,7 @@ Type `string`.
 | `impulse200msNewtonSeconds` | `number` | `double` | yes |
 | `impulse250msNewtonSeconds` | `number` | `double` | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -475,7 +482,7 @@ Type `string`.
 | `outerLeftAvgImpulse250msNewtonSeconds` | `number` | `double` | yes |
 | `outerRightAvgImpulse250msNewtonSeconds` | `number` | `double` | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.Force`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.Force`
 
 | Field | Type | Format |
 | --- | --- | --- |
@@ -485,14 +492,7 @@ Type `string`.
 | `outerLeftForce` | `number` | `double` |
 | `outerRightForce` | `number` | `double` |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse`
-
-| Field | Type | Nullable |
-| --- | --- | --- |
-| `machineName` | `string` | yes |
-| `results` | array of `Vald.Api.ExternalForceFrame.V1.DiagnosticsResult` | yes |
-
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -523,7 +523,7 @@ Type `string`.
 | `testTypeName` | `string` |  | yes |
 | `testPositionName` | `string` |  | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponseV2`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -554,21 +554,21 @@ Type `string`.
 | `testTypeName` | `string` |  | yes |
 | `testPositionName` | `string` |  | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
-| `tests` | array of `Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse` |  | yes |
+| `tests` | array of `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse` |  | yes |
 | `page` | `integer` | `int32` |  |
 | `pageCount` | `integer` | `int32` |  |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse`
 
 | Field | Type | Nullable |
 | --- | --- | --- |
-| `tests` | array of `Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2` | yes |
+| `tests` | array of `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponseV2` | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -578,45 +578,23 @@ Type `string`.
 | `testTypeName` | `string` |  | yes |
 | `testPositionId` | `string` | `uuid` |  |
 | `testPositionName` | `string` |  | yes |
-| `forces` | array of `Vald.Api.ExternalForceFrame.V1.Models.Force` |  | yes |
+| `forces` | array of `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.Force` |  | yes |
 | `device` | `string` |  | yes |
 | `testDateUTC` | `string` | `date-time` |  |
 | `notes` | `string` |  | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
 | `id` | `string` | `uuid` |  |
 | `name` | `string` |  | yes |
-| `exercises` | array of `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise` |  | yes |
+| `exercises` | array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.TrainingExercise` |  | yes |
 | `scheduledDatesUTC` | array of `string` | `date-time` | yes |
 | `addedDate` | `string` | `date-time` |  |
 | `modifiedDate` | `string` | `date-time` |  |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise`
-
-| Field | Type | Format | Nullable | Required | Description |
-| --- | --- | --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  | yes |  |
-| `contractionTime` | `string` | `date-span` |  | yes |  |
-| `forceGoal` | `number` | `double` |  | yes |  |
-| `trainingZone` | `Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget` |  |  | yes |  |
-| `laterality` | `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality` |  |  | yes |  |
-| `movement` | `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement` |  |  | yes |  |
-| `joint` | `Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint` |  |  | yes |  |
-| `repetitions` | `integer` | `int32` |  | yes |  |
-| `restTime` | `string` | `date-span` |  | yes |  |
-| `restTimeAfterSet` | `string` | `date-span` |  | yes |  |
-| `tolerance` | `number` | `double` |  | yes |  |
-| `toleranceUnit` | `string` |  |  | yes | minLength: `1` |
-| `order` | `integer` | `int32` |  | yes | minimum: `1` maximum: `2147483647` |
-| `trainingPositionId` | `string` | `uuid` |  | yes |  |
-| `testTypeName` | `string` |  | yes |  |  |
-| `testTypeId` | `string` | `uuid` | yes |  |  |
-| `testPositionId` | `string` | `uuid` | yes |  |  |
-
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -637,7 +615,7 @@ Type `string`.
 | `impulseLeft` | `number` | `double` |  |
 | `impulseRight` | `number` | `double` |  |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse`
 
 | Field | Type | Format | Nullable |
 | --- | --- | --- | --- |
@@ -655,7 +633,7 @@ Type `string`.
 | `stabilityLeft` | `number` | `double` | yes |
 | `stabilityRight` | `number` | `double` | yes |
 
-### `Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse`
+### `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse`
 
 | Field | Type | Format |
 | --- | --- | --- |
@@ -671,4 +649,26 @@ Type `string`.
 | `stabilityRight` | `number` | `double` |
 | `timeInZoneLeft` | `number` | `double` |
 | `timeInZoneRight` | `number` | `double` |
+
+### `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.TrainingExercise`
+
+| Field | Type | Format | Nullable | Required | Description |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  | yes |  |
+| `contractionTime` | `string` | `date-span` |  | yes |  |
+| `forceGoal` | `number` | `double` |  | yes |  |
+| `trainingZone` | `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget` |  |  | yes |  |
+| `laterality` | `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality` |  |  | yes |  |
+| `movement` | `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement` |  |  | yes |  |
+| `joint` | `Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint` |  |  | yes |  |
+| `repetitions` | `integer` | `int32` |  | yes |  |
+| `restTime` | `string` | `date-span` |  | yes |  |
+| `restTimeAfterSet` | `string` | `date-span` |  | yes |  |
+| `tolerance` | `number` | `double` |  | yes |  |
+| `toleranceUnit` | `string` |  |  | yes | minLength: `1` |
+| `order` | `integer` | `int32` |  | yes | minimum: `1` maximum: `2147483647` |
+| `trainingPositionId` | `string` | `uuid` |  | yes |  |
+| `testTypeName` | `string` |  | yes |  |  |
+| `testTypeId` | `string` | `uuid` | yes |  |  |
+| `testPositionId` | `string` | `uuid` | yes |  |  |
 <!-- generated:vald-forceframe-schemas end -->

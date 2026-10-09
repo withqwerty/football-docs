@@ -2,7 +2,7 @@
 source_url: https://reep.football/get-started
 source_type: curated
 upstream_version: null
-crawled_at: 2026-09-29
+crawled_at: 2026-10-09
 ---
 
 # Reep register overview
@@ -31,9 +31,10 @@ download the file and join. Use the API for a single lookup from a running
 application.
 
 **API keys are not self-service.** There is no sign-up form. Email
-getintouch+nutmeg@withqwerty.com with your organisation, what you are matching and
-roughly how many lookups you expect, and a key is issued by hand. The download
-needs nothing from anyone.
+getintouch+nutmeg@withqwerty.com with your organisation, which group you are in
+(data partner, organisation evaluating the register, or production access) and
+what you are matching, and a key is issued by hand. A free evaluation key lasts
+30 days and is extended on request. The download needs nothing from anyone.
 
 Sources: [get-started guide](https://reep.football/get-started),
 [API guide](https://reep.football/api).

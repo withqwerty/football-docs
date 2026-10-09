@@ -348,7 +348,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; provider support may depend on licensed input files.",
       "public_safety_notes": "Use public library docs and general provider-mapping guidance only.",
-      "version": "3.19.0",
+      "version": "3.19.1",
       "package": { "type": "pypi", "name": "kloppy" },
       "sources": [
         { "url": "https://kloppy.pysport.org/", "type": "readthedocs" },

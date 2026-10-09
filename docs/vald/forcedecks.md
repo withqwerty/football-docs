@@ -398,8 +398,8 @@ The 33 component schemas of the ForceDecks spec, in spec order. No field has a d
 | Field | Type | Format | Nullable | Description |
 | --- | --- | --- | --- | --- |
 | `teamId` | `string` | `uuid` |  |  |
-| `id` | `string` | `uuid` |  |  |
-| `hubId` | `string` | `uuid` | yes |  |
+| `id` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
 | `name` | `string` |  | yes | **Personal data.** |
 | `givenName` | `string` |  | yes | **Personal data.** |
 | `familyName` | `string` |  | yes | **Personal data.** |
@@ -431,23 +431,23 @@ Type `string`.
 
 ### `DeletedAthleteDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `teamId` | `string` | `uuid` |  |
-| `id` | `string` | `uuid` |  |
-| `hubId` | `string` | `uuid` | yes |
-| `isHardDeleted` | `boolean` |  |  |
-| `deletedUTC` | `string` | `date-time` |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `teamId` | `string` | `uuid` |  |  |
+| `id` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `isHardDeleted` | `boolean` |  |  | True if the deletion is a hard (permanent), as opposed to soft (un-doable) deletion. |
+| `deletedUTC` | `string` | `date-time` |  |  |
 
 ### `DeletedTestDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |
-| `teamId` | `string` | `uuid` |  |
-| `athleteId` | `string` | `uuid` |  |
-| `hubAthleteId` | `string` | `uuid` | yes |
-| `deletedUTC` | `string` | `date-time` |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  |  |
+| `teamId` | `string` | `uuid` |  |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `deletedUTC` | `string` | `date-time` |  |  |
 
 ### `DetailedTestDTO`
 
@@ -455,8 +455,8 @@ Type `string`.
 | --- | --- | --- | --- | --- |
 | `id` | `string` | `uuid` |  |  |
 | `teamId` | `string` | `uuid` |  |  |
-| `athleteId` | `string` | `uuid` |  |  |
-| `hubAthleteId` | `string` | `uuid` | yes |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
 | `fullName` | `string` |  | yes | **Personal data.** |
 | `recordedUTC` | `string` | `date-time` |  |  |
 | `recordedOffset` | `integer` | `int32` |  |  |
@@ -531,23 +531,23 @@ Type `string`.
 
 ### `RecordingDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |
-| `athleteId` | `string` | `uuid` |  |
-| `hubAthleteId` | `string` | `uuid` | yes |
-| `recordedUTC` | `string` | `date-time` |  |
-| `recordedOffset` | `integer` | `int32` |  |
-| `recordedTimezone` | `string` |  | yes |
-| `recordingInfo` | `string` |  | yes |
-| `dataSource` | `string` |  | yes |
-| `recordingType` | `RecordingType` |  |  |
-| `recordingOutput` | `RecordingOutput` |  |  |
-| `samplingFrequency` | `integer` | `int32` |  |
-| `duration` | `number` | `double` |  |
-| `lastModifiedUTC` | `string` | `date-time` |  |
-| `recordingDataHeader` | array of `string` |  | yes |
-| `recordingData` | array of array of `number` |  | yes |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `recordedUTC` | `string` | `date-time` |  |  |
+| `recordedOffset` | `integer` | `int32` |  |  |
+| `recordedTimezone` | `string` |  | yes |  |
+| `recordingInfo` | `string` |  | yes |  |
+| `dataSource` | `string` |  | yes |  |
+| `recordingType` | `RecordingType` |  |  |  |
+| `recordingOutput` | `RecordingOutput` |  |  |  |
+| `samplingFrequency` | `integer` | `int32` |  | Sample frequency (Hz) of the recording. |
+| `duration` | `number` | `double` |  | Duration/length of the recording in seconds. |
+| `lastModifiedUTC` | `string` | `date-time` |  |  |
+| `recordingDataHeader` | array of `string` |  | yes | Defines the sample point elements mapped to RecordingData array indexes. |
+| `recordingData` | array of array of `number` |  | yes | Recording raw sample data. |
 
 ### `RecordingOutput`
 
@@ -621,30 +621,30 @@ Type `string`.
 
 ### `SummaryTestDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |
-| `teamId` | `string` | `uuid` |  |
-| `athleteId` | `string` | `uuid` |  |
-| `hubAthleteId` | `string` | `uuid` | yes |
-| `testType` | `string` |  | yes |
-| `recordingId` | `string` | `uuid` |  |
-| `recordedUTC` | `string` | `date-time` |  |
-| `recordedOffset` | `integer` | `int32` |  |
-| `samplingFrequency` | `integer` | `int32` |  |
-| `duration` | `number` | `double` |  |
-| `dataSource` | `string` |  | yes |
-| `analysedUTC` | `string` | `date-time` |  |
-| `analysedOffset` | `integer` | `int32` |  |
-| `analysisInfo` | `string` |  | yes |
-| `lastModifiedUTC` | `string` | `date-time` |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  |  |
+| `teamId` | `string` | `uuid` |  |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `testType` | `string` |  | yes |  |
+| `recordingId` | `string` | `uuid` |  |  |
+| `recordedUTC` | `string` | `date-time` |  |  |
+| `recordedOffset` | `integer` | `int32` |  |  |
+| `samplingFrequency` | `integer` | `int32` |  |  |
+| `duration` | `number` | `double` |  |  |
+| `dataSource` | `string` |  | yes |  |
+| `analysedUTC` | `string` | `date-time` |  |  |
+| `analysedOffset` | `integer` | `int32` |  |  |
+| `analysisInfo` | `string` |  | yes |  |
+| `lastModifiedUTC` | `string` | `date-time` |  |  |
 
 ### `TeamDTO`
 
 | Field | Type | Format | Nullable | Description |
 | --- | --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |  |
-| `name` | `string` |  | yes |  |
+| `id` | `string` | `uuid` |  | Team/Tenant Id in ForceDecks and Vald Hub. |
+| `name` | `string` |  | yes | Team name. |
 | `region` | `AzureRegion` |  |  |  |
 | `links` | object (map of `string`) |  | yes | readOnly: `true` |
 
@@ -663,8 +663,8 @@ Type `string`.
 | --- | --- | --- | --- | --- |
 | `id` | `string` | `uuid` |  |  |
 | `teamId` | `string` | `uuid` |  |  |
-| `athleteId` | `string` | `uuid` |  |  |
-| `hubAthleteId` | `string` | `uuid` | yes |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
 | `recordingId` | `string` | `uuid` |  |  |
 | `recordedUTC` | `string` | `date-time` |  |  |
 | `recordedOffset` | `integer` | `int32` |  |  |
@@ -696,8 +696,8 @@ Type `string`.
 
 | Field | Type | Format | Description |
 | --- | --- | --- | --- |
-| `resultId` | `integer` | `int32` | readOnly: `true` |
-| `value` | `number` | `double` | readOnly: `true` |
+| `resultId` | `integer` | `int32` | Gets test parameter type unqiue id. readOnly: `true` |
+| `value` | `number` | `double` | Gets the parameter value for the test. readOnly: `true` |
 | `definition` | `ResultDefinition` |  |  |
 
 ### `TestParameterResponse`
@@ -731,13 +731,13 @@ Type `string`.
 
 ### `TestTypeSummaryDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `teamId` | `string` | `uuid` |  |
-| `athleteId` | `string` | `uuid` |  |
-| `hubAthleteId` | `string` | `uuid` | yes |
-| `testType` | `string` |  | yes |
-| `count` | `integer` | `int32` |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `teamId` | `string` | `uuid` |  |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `testType` | `string` |  | yes |  |
+| `count` | `integer` | `int32` |  |  |
 
 ### `TrendDirection`
 
@@ -751,19 +751,19 @@ Type `string`.
 
 ### `TrialDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `id` | `string` | `uuid` |  |
-| `athleteId` | `string` | `uuid` |  |
-| `hubAthleteId` | `string` | `uuid` | yes |
-| `recordedUTC` | `string` | `date-time` |  |
-| `recordedOffset` | `integer` | `int32` |  |
-| `recordedTimezone` | `string` |  | yes |
-| `startTime` | `number` | `double` |  |
-| `endTime` | `number` | `double` |  |
-| `results` | array of `TrialResultDTO` |  | yes |
-| `lastModifiedUTC` | `string` | `date-time` |  |
-| `limb` | `TrialLimb` |  |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | `uuid` |  |  |
+| `athleteId` | `string` | `uuid` |  | Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id in ForceDecks prior to the merge. |
+| `hubAthleteId` | `string` | `uuid` | yes | Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks- only teams. This is also the Id reported as Athlete ID within ForceDecks client applications for a merged team. |
+| `recordedUTC` | `string` | `date-time` |  |  |
+| `recordedOffset` | `integer` | `int32` |  |  |
+| `recordedTimezone` | `string` |  | yes |  |
+| `startTime` | `number` | `double` |  |  |
+| `endTime` | `number` | `double` |  |  |
+| `results` | array of `TrialResultDTO` |  | yes |  |
+| `lastModifiedUTC` | `string` | `date-time` |  |  |
+| `limb` | `TrialLimb` |  |  |  |
 
 ### `TrialLimb`
 
@@ -777,14 +777,14 @@ Type `string`.
 
 ### `TrialResultDTO`
 
-| Field | Type | Format | Nullable |
-| --- | --- | --- | --- |
-| `resultId` | `integer` | `int32` |  |
-| `value` | `number` | `double` | yes |
-| `time` | `number` | `double` |  |
-| `limb` | `ResultLimb` |  |  |
-| `repeat` | `integer` | `int32` |  |
-| `definition` | `ResultDefinition` |  |  |
+| Field | Type | Format | Nullable | Description |
+| --- | --- | --- | --- | --- |
+| `resultId` | `integer` | `int32` |  | Result type definition unqiue id. |
+| `value` | `number` | `double` | yes |  |
+| `time` | `number` | `double` |  |  |
+| `limb` | `ResultLimb` |  |  |  |
+| `repeat` | `integer` | `int32` |  | Rep index for repeated results (hop, multi-jump tests). |
+| `definition` | `ResultDefinition` |  |  |  |
 
 ### `UnitType`
 

@@ -59,6 +59,8 @@ tags:
     description: Entity detail and expansions by Reep ID.
   - name: Search
     description: Bounded discovery by canonical label and safe aliases.
+  - name: Matches
+    description: Generation-pinned published match discovery.
   - name: Notices
     description: >
       Provider-scoped notice feed. A data provider's own key (Unkey
@@ -89,6 +91,149 @@ paths:
                     additionalProperties: { type: string }
         "503": { $ref: "#/components/responses/IndexMissing" }
 
+  /matches:
+    get:
+      tags: [Matches]
+      summary: Published matches mapped across providers
+      description: |
+        Available only when generation mode is on; off and shadow return 404.
+        Requires at least one team, competition or season anchor. Values within
+        each anchor are ORed; different filters intersect. Every valid register
+        key, including partner keys, costs one lookup per page.
+
+        Dates are inclusive register dates, no time-zone conversion and no UTC
+        promise. With no season and neither date bound, the window is the last
+        30 calendar dates including today (the server uses today's UTC date to
+        choose that default). A season suppresses the default window. A single
+        date bound leaves the other end open. Undated rows are excluded whenever
+        a date bound applies; otherwise they sort last. Date ties use reep_id
+        ascending in either sort direction.
+
+        Provider identifiers use provider:namespace:id and resolve inside the
+        same pinned generation as the matches. Redirects are followed. Any
+        unresolved anchor returns an empty page and its original identifier in
+        unresolved. No private or overlay bridges participate. require and
+        missing test all publishable bridges before providers selects the bridges
+        returned. Unknown provider slugs simply have no matching bridges.
+
+        Responses contain at most 100 rows and 262144 UTF-8 bytes, including the
+        envelope and cursor. A byte-limited page may contain fewer than limit;
+        continue with next_cursor. A single row too large returns 503
+        match_response_too_large. Cursors are signed, expire after 24 hours, and
+        bind the normalised filters (including limit and default dates) and the
+        active generation. A filter change, generation change, expired or altered
+        cursor returns 400 stale_cursor; restart without it.
+
+        Null means the register holds no published value, never zero or unknown.
+        Missing sides and ambiguous structure are null; a known id with no label
+        retains that id and a null label. Scores are after-play goals, excluding
+        shootout kicks. No date, score, state or structure is inferred.
+      parameters:
+        - in: query
+          name: team
+          description: Team identifier; up to five, ORed — repeat the parameter (e.g. `team=a&team=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Reep id or provider:namespace:id.
+          style: form
+          explode: true
+          schema: { type: array, maxItems: 5, items: { type: string } }
+        - in: query
+          name: competition
+          description: Competition identifier; up to five, ORed — repeat the parameter (e.g. `competition=a&competition=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Reep id or provider:namespace:id.
+          style: form
+          explode: true
+          schema: { type: array, maxItems: 5, items: { type: string } }
+        - in: query
+          name: season
+          description: Season identifier; up to five, ORed — repeat the parameter (e.g. `season=a&season=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Suppresses the default date window. Reep id or provider:namespace:id.
+          style: form
+          explode: true
+          schema: { type: array, maxItems: 5, items: { type: string } }
+        - in: query
+          name: opponent
+          description: Reep id or provider:namespace:id; requires exactly one team.
+          schema: { type: string }
+        - in: query
+          name: venue
+          description: Relative to exactly one team; even explicit any requires one team.
+          schema: { type: string, enum: [home, away, any], default: any }
+        - in: query
+          name: from
+          description: Inclusive lower register date, with no time-zone conversion.
+          schema: { type: string, format: date }
+        - in: query
+          name: to
+          description: Inclusive upper register date, with no time-zone conversion.
+          schema: { type: string, format: date }
+        - in: query
+          name: state
+          description: Comma-separated states; default all. none selects null state.
+          schema: { type: string, examples: ["played,scheduled,postponed,cancelled,awarded,abandoned,none"] }
+        - in: query
+          name: providers
+          description: Comma-separated publishable bridge providers to return; default all.
+          schema: { type: string }
+        - in: query
+          name: require
+          description: Comma-separated providers; each must have a publishable bridge.
+          schema: { type: string }
+        - in: query
+          name: missing
+          description: Comma-separated providers; none may have a publishable bridge.
+          schema: { type: string }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [desc, asc], default: desc }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: cursor
+          description: Opaque signed cursor from next_cursor; maximum lifetime 24 hours.
+          schema: { type: string }
+      responses:
+        "200":
+          description: A generation-pinned match page, including empty unresolved results.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [matches, count, generation, unresolved, next_cursor]
+                properties:
+                  matches:
+                    type: array
+                    maxItems: 100
+                    items: { $ref: "#/components/schemas/GenerationMatch" }
+                  count: { type: integer, minimum: 0, maximum: 100 }
+                  generation: { type: string, pattern: "^[a-f0-9]{64}$" }
+                  unresolved: { type: array, items: { type: string } }
+                  next_cursor: { type: [string, "null"] }
+        "400":
+          description: >
+            Invalid query or stale_cursor. Query errors include anchor_required,
+            invalid_anchor (more than five), single_team_required, invalid_id,
+            invalid_date, invalid_date_range, invalid_limit, invalid_state,
+            invalid_sort, invalid_venue, invalid_filter, unknown_parameter and
+            repeated_parameter. Error bodies contain error with the code.
+        "401":
+          description: Missing, invalid, revoked or expired key.
+        "402":
+          description: Key quota exceeded.
+        "403":
+          description: Key lacks API permission.
+        "404":
+          description: Generation mode is off or shadow; endpoint is dark.
+        "409":
+          description: ambiguous_provider_id; the identifier names multiple canonical entities.
+        "422":
+          description: wrong_entity_type; an anchor resolves to the wrong entity type.
+        "429":
+          description: Key rate limit exceeded.
+        "503":
+          description: >
+            generation_unavailable (missing or corrupt objects, unavailable binding,
+            or reader admission queue full), match_response_too_large (one row
+            exceeds the byte cap), or an authentication service error. No fallback
+            to static shards or another generation.
+
   /meta:
     get:
       tags: [Metadata]
@@ -118,6 +263,47 @@ paths:
                   counts:
                     type: object
                     additionalProperties: { type: integer }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /key:
+    get:
+      tags: [Metadata]
+      summary: Your key's status
+      description: |
+        The calling key's own plan, expiry and remaining allowance. No quota
+        cost. An evaluation key expires automatically (30 days by default);
+        `expiring_soon` turns true 7 days before `expires_at`. Email
+        getintouch@withqwerty.com to extend it: the key value stays the same.
+
+        Every authenticated response also carries `X-Reep-Key-Expires` (ISO
+        time) and `X-Reep-Key-Days-Remaining` when the key expires, so a client
+        can warn without polling this endpoint.
+      responses:
+        "200":
+          description: The key's status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: object
+                    properties:
+                      plan: { type: [string, "null"], example: evaluation }
+                      access_model: { type: [string, "null"] }
+                      organisation: { type: [string, "null"] }
+                      provider: { type: [string, "null"] }
+                      expires_at: { type: [string, "null"], format: date-time }
+                      days_remaining: { type: [integer, "null"] }
+                      expiring_soon: { type: boolean }
+                      credits_remaining: { type: [integer, "null"] }
+                      rate_limit_remaining: { type: [integer, "null"] }
+                  extend:
+                    type: [object, "null"]
+                    description: How to extend; null for a key that never expires.
+                    properties:
+                      how: { type: string }
+                      contact: { type: string }
         "401": { $ref: "#/components/responses/Unauthorized" }
 
   /providers:
@@ -831,7 +1017,7 @@ components:
         application/json:
           schema: { $ref: "#/components/schemas/Error" }
     Unauthorized:
-      description: Missing, invalid, or revoked API key.
+      description: Missing, invalid, revoked or expired API key (an expired evaluation key returns `key_expired`).
       content:
         application/json:
           schema: { $ref: "#/components/schemas/Error" }
@@ -862,6 +1048,43 @@ components:
           schema: { $ref: "#/components/schemas/Error" }
 
   schemas:
+    MatchLabelledId:
+      type: [object, "null"]
+      required: [reep_id, label]
+      properties:
+        reep_id: { type: string }
+        label: { type: [string, "null"] }
+    GenerationMatch:
+      type: object
+      description: U2 published match row; empty register cells stay null.
+      required: [reep_id, played_on, state, home, away, competition, season, stage, home_score, away_score, result_form, shootout_home, shootout_away, score_basis, leg, aggregate_of, bridges, generation]
+      properties:
+        reep_id: { type: string }
+        generation: { type: string, pattern: "^[a-f0-9]{64}$" }
+        played_on: { type: [string, "null"], format: date }
+        state: { type: [string, "null"], enum: [played, scheduled, postponed, cancelled, awarded, abandoned, null] }
+        home: { $ref: "#/components/schemas/MatchLabelledId" }
+        away: { $ref: "#/components/schemas/MatchLabelledId" }
+        competition: { $ref: "#/components/schemas/MatchLabelledId" }
+        season: { $ref: "#/components/schemas/MatchLabelledId" }
+        stage: { $ref: "#/components/schemas/MatchLabelledId" }
+        home_score: { type: [integer, "null"], minimum: 0 }
+        away_score: { type: [integer, "null"], minimum: 0 }
+        shootout_home: { type: [integer, "null"], minimum: 0 }
+        shootout_away: { type: [integer, "null"], minimum: 0 }
+        result_form: { type: [string, "null"], enum: [regular, extra_time, penalties, golden_goal, awarded, abandoned, unknown, null] }
+        score_basis: { type: [string, "null"], enum: [corroborated, single_source, operator_ruling, null] }
+        leg: { type: [string, "null"], enum: ["1", "2", null] }
+        aggregate_of: { type: [string, "null"] }
+        bridges:
+          type: array
+          items:
+            type: object
+            required: [provider, namespace, external_id]
+            properties:
+              provider: { type: string }
+              namespace: { type: string }
+              external_id: { type: string }
     ReepIdValue:
       type: string
       pattern: "^r[a-z][0-9a-f]{14}$"

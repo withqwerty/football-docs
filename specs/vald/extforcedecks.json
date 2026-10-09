@@ -15,7 +15,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "858b9f0d-ba3f-4edb-8ac1-9f62055fd3bb",
+        "operationId": "2b212102-f171-44bd-b7da-9e082e1bde7c",
         "responses": {
           "200": {
             "description": "OK",
@@ -45,7 +45,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "0e74c54e-b689-4576-a746-0d40b085e2ec",
+        "operationId": "6ee75e04-53f3-46b9-bb20-f5645b7aab94",
         "responses": {
           "204": {
             "description": "No Content"
@@ -58,7 +58,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "9aa64110-7c8d-41f6-b1aa-b88fba30fd4c",
+        "operationId": "f511d0f1-3b42-44c6-8b82-a69b90286ba5",
         "responses": {
           "204": {
             "description": "No Content"
@@ -74,7 +74,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "f0e6842c-5c59-4d24-b493-a5b259be8b92",
+        "operationId": "6e060b4f-d95d-4e52-8dec-09856fd0f89d",
         "parameters": [
           {
             "name": "Diagnostics-Key",
@@ -134,7 +134,7 @@
           "ResultDefinitions"
         ],
         "summary": "Retrieves a collection of ForceDecks result definitions.",
-        "operationId": "3e0176b3-def6-431a-80a6-95c4d4b95a8b",
+        "operationId": "ef7fde90-0fdb-4a11-8eab-ee619d01209d",
         "responses": {
           "200": {
             "description": "OK",
@@ -158,7 +158,7 @@
           "ResultDefinitions"
         ],
         "summary": "Retrieves a ForceDecks result definition.",
-        "operationId": "c9ce97d5-b60e-4eba-a3f8-58400cadebc0",
+        "operationId": "adf0d84f-09de-4b66-a5ce-0f4273e99f6f",
         "parameters": [
           {
             "name": "resultId",
@@ -200,7 +200,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Tenants API.",
-        "operationId": "7c540aee-2f7b-4b42-ac7e-becd8109c0b0",
+        "operationId": "4df1cebf-6533-449e-9316-ce2e6435dec0",
         "responses": {
           "401": {
             "description": "Unauthorized"
@@ -234,7 +234,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
-        "operationId": "eb842fec-8a7a-4702-b676-692fa330be3c",
+        "operationId": "4ddf7e95-fc33-40a4-a864-772b3d0101cf",
         "parameters": [
           {
             "name": "teamId",
@@ -297,7 +297,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
-        "operationId": "6a46a189-34a2-46b7-b5d6-0a929bbf6064",
+        "operationId": "48428adb-22da-486a-947e-3d55af669055",
         "parameters": [
           {
             "name": "teamId",
@@ -360,7 +360,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use External Profiles API.",
-        "operationId": "e7b41470-931e-4f49-b834-05d9c7e85b6b",
+        "operationId": "2f86aed9-3028-4a0a-b211-ca62c561382b",
         "parameters": [
           {
             "name": "teamId",
@@ -423,7 +423,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "4f38fd47-7362-4851-af15-a501d6efffac",
+        "operationId": "c905149b-b5f0-4892-99e3-60b679c0ec7b",
         "parameters": [
           {
             "name": "teamId",
@@ -503,7 +503,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "42496fe1-c96f-4e1b-a2e7-4cc45145c744",
+        "operationId": "4bcc6973-1ca1-4fef-84e8-8c0783f2ad11",
         "parameters": [
           {
             "name": "teamId",
@@ -575,7 +575,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "cfe9f298-b3d2-4f68-bc4b-aa12e9b5da8c",
+        "operationId": "d03c3029-c8aa-4c4d-96b2-8dfdf6ec76ff",
         "parameters": [
           {
             "name": "teamId",
@@ -646,7 +646,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "97bef3bd-ccb2-40bd-a141-0547c62f2105",
+        "operationId": "e8c4ab9f-3289-4dce-9f0d-f11f22a3dd6a",
         "parameters": [
           {
             "name": "teamId",
@@ -726,7 +726,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "687e5443-5821-426e-8add-576940bb14a4",
+        "operationId": "2eea8aa7-2d0b-4bb7-ac1f-f15aec3c9b9a",
         "parameters": [
           {
             "name": "teamId",
@@ -799,7 +799,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "f9d51299-cc84-45ca-81fc-8053cd5bef0b",
+        "operationId": "509e517a-5109-4a7f-b56d-f4bc3ed096a3",
         "parameters": [
           {
             "name": "teamId",
@@ -872,7 +872,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "82b9566f-2508-4b08-9fe5-b6922160096c",
+        "operationId": "df3e3b78-4e8d-48e0-936f-b6d26fb6d2f2",
         "parameters": [
           {
             "name": "teamId",
@@ -935,7 +935,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /tests.",
-        "operationId": "75129023-3a67-458b-b1ca-4639a2453950",
+        "operationId": "79998c05-6f47-468f-8c90-f67ebb7a4ff4",
         "parameters": [
           {
             "name": "teamId",
@@ -1007,7 +1007,7 @@
         "tags": [
           "Team"
         ],
-        "operationId": "7b9ba992-f784-4e1f-a674-3e226850289d",
+        "operationId": "cf26a797-4a5b-4ba8-a8b1-5480e2bb37d5",
         "parameters": [
           {
             "name": "teamId",
@@ -1069,7 +1069,7 @@
         "tags": [
           "Team"
         ],
-        "operationId": "1fdb76e2-69d8-4d25-b305-4cb9b6377b24",
+        "operationId": "9baf6394-d6c2-4afb-adc7-8a701cf39d34",
         "parameters": [
           {
             "name": "teamId",
@@ -1135,7 +1135,7 @@
         "tags": [
           "Team"
         ],
-        "operationId": "a78cabc2-5929-4eed-8093-687bdb0a8153",
+        "operationId": "9a15a1de-f0fe-42c2-8ca0-cfe8d1f00694",
         "parameters": [
           {
             "name": "teamId",
@@ -1196,7 +1196,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /v2019q3/teams/{teamId}/tests/{testId}/recording.",
-        "operationId": "1542fe90-ea5f-4da6-861a-f3a77021c91d",
+        "operationId": "b677366e-a206-4919-a088-f0bc9e65b113",
         "parameters": [
           {
             "name": "teamId",
@@ -1264,7 +1264,7 @@
           "Team"
         ],
         "description": "Endpoints greyed out with a strikethrough are marked as 'Deprecated' and\n        will be phased out over time, though they remain functional. Please refer to the \n        <a href='https://support.vald.com/hc/en-au/articles/38086939480729-A-guide-to-using-the-External-ForceDecks-API#h_01J8HACNZ2HQ543JVHCMA2NMBR'>\n        External ForceDecks API Guide</a> for details on the correct endpoints to use moving forward. We will provide \n        plenty of notice when we plan to phase out the deprecated endpoints.<br><br>Please use /v2019q3/teams/{teamId}/tests/{testId}/recording/file.",
-        "operationId": "7f8f41b2-22fa-4432-9215-2e2197d92a0e",
+        "operationId": "87d910c8-84a9-45b0-87e6-881bc7bb096b",
         "parameters": [
           {
             "name": "teamId",
@@ -1326,7 +1326,7 @@
           "Tests"
         ],
         "summary": "Retrieves a collection of ForceDecks test summaries.",
-        "operationId": "6dd2e2a6-e710-43c3-bbaa-679f8320df85",
+        "operationId": "4c7243f7-66e7-40ec-82c4-e8c8d5d44248",
         "parameters": [
           {
             "name": "TenantId",
@@ -1404,10 +1404,12 @@
           },
           "id": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -1483,7 +1485,8 @@
           "WestEurope",
           "EastUnitedStates"
         ],
-        "type": "string"
+        "type": "string",
+        "description": "An enumeration of the available data centres in the VALD Performance infrastructure. No region\r\nimplies default region for the application server."
       },
       "DeletedAthleteDTO": {
         "type": "object",
@@ -1494,15 +1497,18 @@
           },
           "id": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
           "isHardDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "True if the deletion is a hard (permanent), as opposed to soft (un-doable) deletion."
           },
           "deletedUTC": {
             "type": "string",
@@ -1524,10 +1530,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -1551,10 +1559,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -1777,10 +1787,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -1812,10 +1824,12 @@
           },
           "samplingFrequency": {
             "type": "integer",
+            "description": "Sample frequency (Hz) of the recording.",
             "format": "int32"
           },
           "duration": {
             "type": "number",
+            "description": "Duration/length of the recording in seconds.",
             "format": "double"
           },
           "lastModifiedUTC": {
@@ -1827,6 +1841,7 @@
             "items": {
               "type": "string"
             },
+            "description": "Defines the sample point elements mapped to RecordingData array indexes.",
             "nullable": true
           },
           "recordingData": {
@@ -1838,6 +1853,7 @@
                 "format": "double"
               }
             },
+            "description": "Recording raw sample data.",
             "nullable": true
           }
         },
@@ -1896,7 +1912,8 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Results master Spreadsheet is available from:\r\nhttps://vald.sharepoint.com/:x:/s/engineering/EUqJ4RDt_AJEhdiKmoRUKwYBINhX4OmUpYErjWFdr6UBDg?e=co0QK2."
       },
       "ResultGroup": {
         "enum": [
@@ -1923,7 +1940,8 @@
           "Right",
           "Asym"
         ],
-        "type": "string"
+        "type": "string",
+        "description": "Result type/limb - individual trial result sub-category within a single result, typically \"limb\"\r\nbut really just a sub-type as also covers asymmetry and combined force and could be expanded"
       },
       "SummaryTestDTO": {
         "type": "object",
@@ -1938,10 +1956,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -1990,17 +2010,20 @@
             "format": "date-time"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "A simplified summary of a single test."
       },
       "TeamDTO": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
+            "description": "Team/Tenant Id in ForceDecks and Vald Hub.",
             "format": "uuid"
           },
           "name": {
             "type": "string",
+            "description": "Team name.",
             "nullable": true
           },
           "region": {
@@ -2053,10 +2076,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -2171,11 +2196,13 @@
         "properties": {
           "resultId": {
             "type": "integer",
+            "description": "Gets test parameter type unqiue id.",
             "format": "int32",
             "readOnly": true
           },
           "value": {
             "type": "number",
+            "description": "Gets the parameter value for the test.",
             "format": "double",
             "readOnly": true
           },
@@ -2287,10 +2314,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -2322,10 +2351,12 @@
           },
           "athleteId": {
             "type": "string",
+            "description": "Unique athlete Id. For teams merged with Vald Hub this is the original ForceDecks Athlete Id\r\nin ForceDecks prior to the merge.",
             "format": "uuid"
           },
           "hubAthleteId": {
             "type": "string",
+            "description": "Unique profile (athlete) Id in Vald Hub for merged teams. The Id is not present for ForceDecks-\r\nonly teams. This is also the Id reported as Athlete ID within ForceDecks client applications\r\nfor a merged team.",
             "format": "uuid",
             "nullable": true
           },
@@ -2372,13 +2403,15 @@
           "Left",
           "Right"
         ],
-        "type": "string"
+        "type": "string",
+        "description": "Trial limb."
       },
       "TrialResultDTO": {
         "type": "object",
         "properties": {
           "resultId": {
             "type": "integer",
+            "description": "Result type definition unqiue id.",
             "format": "int32"
           },
           "value": {
@@ -2395,6 +2428,7 @@
           },
           "repeat": {
             "type": "integer",
+            "description": "Rep index for repeated results (hop, multi-jump tests).",
             "format": "int32"
           },
           "definition": {

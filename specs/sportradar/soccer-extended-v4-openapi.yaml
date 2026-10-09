@@ -4529,6 +4529,8 @@ components:
             attribute: true
         phase:
           $ref: '#/components/schemas/enum_phase'
+        phase_type:
+          $ref: '#/components/schemas/enum_phase_type'
         start_date:
           format: date
           type: string

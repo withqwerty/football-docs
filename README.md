@@ -314,7 +314,7 @@ metrics:sources` re-checks every card quote against its live source.
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
 | Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
 | ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
-| Reep | 29 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
+| Reep | 31 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
 | TheSportsDB | 20 | api-access, api-endpoints, livescore, identity-surfaces, data-provenance |
 | FotMob | 5 | identity-surfaces, data-provenance |
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
@@ -325,7 +325,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,511 searchable chunks** across 31 providers and tools (the metric cards count as one).
+**3,513 searchable chunks** across 31 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

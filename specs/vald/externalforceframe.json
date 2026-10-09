@@ -10,7 +10,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "bf6a1860-bce6-4e13-9148-4791031e9d23",
+        "operationId": "e2bb80e8-dc29-49fb-a69f-32a5a18093b0",
         "responses": {
           "200": {
             "description": "OK",
@@ -40,7 +40,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "0d030184-28f1-49e8-afa9-87d2781c7eb7",
+        "operationId": "3a970b72-55e1-491a-9ce2-8b57fc19991f",
         "responses": {
           "204": {
             "description": "No Content"
@@ -53,7 +53,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "a040e0e4-01e0-42f5-baf9-1113394024df",
+        "operationId": "d5cd7ef5-d549-4c19-8be8-8b24ac9d3be2",
         "responses": {
           "204": {
             "description": "No Content"
@@ -69,7 +69,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "feb4271f-ea65-4cf1-a0a0-d1de8e050e2e",
+        "operationId": "d64bd166-0ae3-486b-800a-82e9f184059f",
         "parameters": [
           {
             "name": "Diagnostics-Key",
@@ -105,17 +105,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse"
                 }
               }
             }
@@ -126,10 +126,10 @@
     "/tests/{testId}/forceframetrace": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
         "summary": "Retrieves a ForceFrame force trace.",
-        "operationId": "f306ece4-7c93-40c2-b5d9-a0bf0471becf",
+        "operationId": "dfd8617a-9a5c-40d3-91a1-a7dca277f09c",
         "parameters": [
           {
             "name": "testId",
@@ -196,17 +196,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse"
                 }
               }
             }
@@ -237,10 +237,10 @@
     "/tests/{testId}": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
         "summary": "Retrieves a ForceFrame test summary.",
-        "operationId": "73aa2545-ca91-4889-aef9-84b4ecf20367",
+        "operationId": "6096003a-f155-4e2a-b27b-ee3b27e5448a",
         "parameters": [
           {
             "name": "testId",
@@ -307,17 +307,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse"
                 }
               }
             }
@@ -348,9 +348,9 @@
     "/tests/{testId}/repetitions": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
-        "operationId": "5f035f29-99e9-4053-a978-b223358c7f73",
+        "operationId": "a972b649-dfc2-44b4-aa4b-68df29fcf9ba",
         "parameters": [
           {
             "name": "testId",
@@ -379,7 +379,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult"
                   }
                 }
               },
@@ -387,7 +387,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult"
                   }
                 }
               },
@@ -395,7 +395,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult"
                   }
                 }
               }
@@ -487,10 +487,10 @@
     "/tests": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
         "summary": "Retrieves a collection of pageable ForceFrame test summaries.",
-        "operationId": "61d4fe00-bb36-4e8c-a0c8-76e487226976",
+        "operationId": "e737fa2e-6341-4014-b5d8-bcf7a4e73130",
         "parameters": [
           {
             "name": "TenantId",
@@ -582,17 +582,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse"
                 }
               }
             }
@@ -624,10 +624,10 @@
     "/tests/v2": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
         "summary": "Retrieves a collection of ForceFrame test summaries.",
-        "operationId": "17361c34-c09e-4cf6-8951-33121d43479d",
+        "operationId": "aab4f4c7-7ded-4636-a4a6-84ef179eab5c",
         "parameters": [
           {
             "name": "TenantId",
@@ -685,17 +685,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse"
                 }
               }
             }
@@ -726,10 +726,10 @@
     "/tests/{testId}/metrics": {
       "get": {
         "tags": [
-          "Test"
+          "Tests"
         ],
         "summary": "Retrieves additional metrics for a ForceFrame test summary.",
-        "operationId": "e16a26ff-ea3d-4d27-af64-cea990d0f9c9",
+        "operationId": "521901a0-27e9-4559-a374-ed515b52d1e3",
         "parameters": [
           {
             "name": "testId",
@@ -796,17 +796,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse"
+                  "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult"
                 }
               }
             }
@@ -840,7 +840,7 @@
           "TrainingPrograms"
         ],
         "summary": "Retrieves a list of ForceFrame training programs or a single program.",
-        "operationId": "04f6c1d2-d224-477e-8b08-551f328f35f8",
+        "operationId": "b6edb47c-1e6f-4fa0-b32d-912e4f9742a2",
         "parameters": [
           {
             "name": "TenantId",
@@ -868,7 +868,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse"
                   }
                 }
               }
@@ -916,7 +916,7 @@
           "TrainingSessions"
         ],
         "summary": "Retrieves a list of ForceFrame training sessions.",
-        "operationId": "328e87e1-532b-4442-8109-176d7a089c93",
+        "operationId": "f797ccd6-1996-4530-a810-e22390dc5308",
         "parameters": [
           {
             "name": "TenantId",
@@ -953,7 +953,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse"
                   }
                 }
               }
@@ -1001,7 +1001,7 @@
           "TrainingSessions"
         ],
         "summary": "Retrieves a list of ForceFrame training session exercises or a single training session exercise.",
-        "operationId": "8657ba8e-8c44-4323-9602-ad59f989cbd1",
+        "operationId": "12d22353-7e30-406d-9fcb-81be87d99e9b",
         "parameters": [
           {
             "name": "TenantId",
@@ -1038,7 +1038,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse"
                   }
                 }
               }
@@ -1086,7 +1086,7 @@
           "TrainingSessions"
         ],
         "summary": "Retrieves a list of ForceFrame training session exercise repetitions or a single training session exercise repetition.",
-        "operationId": "a57d69f1-ded7-451d-aacd-137f1e316a66",
+        "operationId": "78f341f6-49fe-4114-9506-fd3c523f799d",
         "parameters": [
           {
             "name": "TenantId",
@@ -1123,7 +1123,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse"
+                    "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse"
                   }
                 }
               }
@@ -1232,7 +1232,7 @@
         },
         "additionalProperties": { }
       },
-      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget": {
+      "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget": {
         "enum": [
           "Manual",
           "Max",
@@ -1240,7 +1240,7 @@
         ],
         "type": "string"
       },
-      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint": {
+      "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint": {
         "enum": [
           "Hamstring",
           "Hip",
@@ -1254,7 +1254,7 @@
         ],
         "type": "string"
       },
-      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality": {
+      "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality": {
         "enum": [
           "Bilateral",
           "UnilateralAlternating",
@@ -1264,7 +1264,7 @@
         ],
         "type": "string"
       },
-      "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement": {
+      "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement": {
         "enum": [
           "Abduction",
           "Adduction",
@@ -1288,7 +1288,18 @@
         ],
         "type": "string"
       },
-      "Vald.Api.ExternalForceFrame.V1.DiagnosticsResult": {
+      "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType": {
+        "enum": [
+          "InnerLeft",
+          "InnerRight",
+          "OuterLeft",
+          "OuterRight",
+          "FlatLeft",
+          "FlatRight"
+        ],
+        "type": "string"
+      },
+      "Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.DiagnosticsResult": {
         "type": "object",
         "properties": {
           "key": {
@@ -1305,18 +1316,24 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Enums.SensorType": {
-        "enum": [
-          "InnerLeft",
-          "InnerRight",
-          "OuterLeft",
-          "OuterRight",
-          "FlatLeft",
-          "FlatRight"
-        ],
-        "type": "string"
+      "Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse": {
+        "type": "object",
+        "properties": {
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.DiagnosticsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult": {
         "type": "object",
         "properties": {
           "id": {
@@ -1328,7 +1345,7 @@
             "format": "uuid"
           },
           "sensorType": {
-            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Enums.SensorType"
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType"
           },
           "repNumber": {
             "type": "integer",
@@ -1420,7 +1437,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult": {
         "type": "object",
         "properties": {
           "athleteId": {
@@ -1954,7 +1971,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.Force": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.Force": {
         "type": "object",
         "properties": {
           "ticks": {
@@ -1980,24 +1997,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse": {
-        "type": "object",
-        "properties": {
-          "machineName": {
-            "type": "string",
-            "nullable": true
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.DiagnosticsResult"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse": {
         "type": "object",
         "properties": {
           "athleteId": {
@@ -2107,7 +2107,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponseV2": {
         "type": "object",
         "properties": {
           "profileId": {
@@ -2217,13 +2217,13 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse": {
         "type": "object",
         "properties": {
           "tests": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse"
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse"
             },
             "nullable": true
           },
@@ -2238,20 +2238,20 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse": {
         "type": "object",
         "properties": {
           "tests": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2"
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponseV2"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse": {
         "type": "object",
         "properties": {
           "athleteId": {
@@ -2281,7 +2281,7 @@
           "forces": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.Force"
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.Force"
             },
             "nullable": true
           },
@@ -2300,7 +2300,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -2314,7 +2314,7 @@
           "exercises": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise"
+              "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.TrainingExercise"
             },
             "nullable": true
           },
@@ -2337,97 +2337,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise": {
-        "required": [
-          "contractionTime",
-          "forceGoal",
-          "id",
-          "joint",
-          "laterality",
-          "movement",
-          "order",
-          "repetitions",
-          "restTime",
-          "restTimeAfterSet",
-          "tolerance",
-          "toleranceUnit",
-          "trainingPositionId",
-          "trainingZone"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "contractionTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "forceGoal": {
-            "type": "number",
-            "format": "double"
-          },
-          "trainingZone": {
-            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget"
-          },
-          "laterality": {
-            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality"
-          },
-          "movement": {
-            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement"
-          },
-          "joint": {
-            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint"
-          },
-          "repetitions": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "restTime": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "restTimeAfterSet": {
-            "type": "string",
-            "format": "date-span"
-          },
-          "tolerance": {
-            "type": "number",
-            "format": "double"
-          },
-          "toleranceUnit": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "order": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingPositionId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "testTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "testTypeId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "testPositionId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -2499,7 +2409,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -2565,7 +2475,7 @@
         },
         "additionalProperties": false
       },
-      "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse": {
+      "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -2618,6 +2528,96 @@
           }
         },
         "additionalProperties": false
+      },
+      "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.TrainingExercise": {
+        "required": [
+          "contractionTime",
+          "forceGoal",
+          "id",
+          "joint",
+          "laterality",
+          "movement",
+          "order",
+          "repetitions",
+          "restTime",
+          "restTimeAfterSet",
+          "tolerance",
+          "toleranceUnit",
+          "trainingPositionId",
+          "trainingZone"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contractionTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "forceGoal": {
+            "type": "number",
+            "format": "double"
+          },
+          "trainingZone": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget"
+          },
+          "laterality": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement"
+          },
+          "joint": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint"
+          },
+          "repetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "restTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "restTimeAfterSet": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "tolerance": {
+            "type": "number",
+            "format": "double"
+          },
+          "toleranceUnit": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "order": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingPositionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "testTypeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "testPositionId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
@@ -2642,7 +2642,7 @@
       "name": "Diagnostics"
     },
     {
-      "name": "Test"
+      "name": "Tests"
     },
     {
       "name": "TrainingPrograms"
