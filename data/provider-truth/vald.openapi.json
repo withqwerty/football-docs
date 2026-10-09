@@ -44,7 +44,7 @@
         "version": "v2"
       }
     ],
-    "generated_at": "2026-09-30"
+    "generated_at": "2026-10-09"
   },
   "basePaths": [],
   "paths": {
@@ -344,26 +344,26 @@
     "Vald.Api.ExternalDynamo.V1.Models.TestCursorHttpResponse",
     "Vald.Api.ExternalDynamo.V1.Models.TestDTO",
     "Vald.Api.ExternalDynamo.V1.Models.TestDtoWithModifiedDate",
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget",
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint",
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality",
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement",
-    "Vald.Api.ExternalForceFrame.V1.DiagnosticsResult",
-    "Vald.Api.ExternalForceFrame.V1.Enums.SensorType",
-    "Vald.Api.ExternalForceFrame.V1.Messages.GetTestRepetitions.GetTestRepetitionsResponse",
-    "Vald.Api.ExternalForceFrame.V1.Messages.GetTestSummaryAdditionalMetricsResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.Force",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetDiagnosticsHttpResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTestSummaryResponseV2",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByDateRangeResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTestsByModifiedDateResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTraceResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.GetTrainingProgramResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingProgram.TrainingExercise",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExerciseRepetitions.GetTrainingSessionExerciseRepetitionsResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessionExercises.GetTrainingSessionExercisesResponse",
-    "Vald.Api.ExternalForceFrame.V1.Models.GetTrainingSessions.GetTrainingSessionsResponse",
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget",
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint",
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality",
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement",
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType",
+    "Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.DiagnosticsResult",
+    "Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.Force",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponseV2",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse",
+    "Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.TrainingExercise",
     "Vald.Api.ExternalHumanTrak.V2.DiagnosticsResult",
     "Vald.Api.ExternalHumanTrak.V2.Models.GetDiagnosticsResponse",
     "Vald.Api.ExternalHumanTrak.V2.Models.GetTestRepetitionsResponse",
@@ -1407,12 +1407,12 @@
       "RangeofMotion",
       "Strength"
     ],
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.ForceTarget": [
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.ForceTarget": [
       "Average",
       "Manual",
       "Max"
     ],
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Joint": [
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Joint": [
       "Ankle",
       "Custom",
       "Dyno",
@@ -1423,14 +1423,14 @@
       "Neck",
       "Shoulder"
     ],
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Laterality": [
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Laterality": [
       "Bilateral",
       "Left",
       "NA",
       "Right",
       "UnilateralAlternating"
     ],
-    "Vald.Api.ExternalForceFrame.V1.Core.Defaults.Movement": [
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.Movement": [
       "Abduction",
       "AbductionAdduction",
       "Adduction",
@@ -1451,7 +1451,7 @@
       "OuterPaddles",
       "PlantarFlexion"
     ],
-    "Vald.Api.ExternalForceFrame.V1.Enums.SensorType": [
+    "Vald.Api.ExternalForceFrame.V1.Domain.Defaults.SensorType": [
       "FlatLeft",
       "FlatRight",
       "InnerLeft",

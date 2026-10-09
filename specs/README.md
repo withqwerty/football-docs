@@ -13,13 +13,13 @@ anyone can re-fetch and diff.
 |---|---|---|---|
 | `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
-| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-09-29 | 2026-09-29 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-10-09 | 2026-10-09 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-09-24 | 2026-09-24 |
-| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-09-29 | 2026-09-29 |
-| `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-09-29 | 2026-09-29 |
-| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-09-29 | 2026-09-29 |
-| `reep/release.json` | https://data.reep.football/releases/20260926T145536Z/release.json (via `latest.json`) | 2026-09-29 | 2026-09-29 |
-| `reep/schema.json` | https://data.reep.football/releases/20260926T145536Z/schema.json | 2026-09-29 | 2026-09-29 |
+| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-10-09 | 2026-10-09 |
+| `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-10-09 | 2026-10-09 |
+| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-10-09 | 2026-10-09 |
+| `reep/release.json` | https://data.reep.football/releases/20261005T180536Z/release.json (via `latest.json`) | 2026-10-09 | 2026-10-09 |
+| `reep/schema.json` | https://data.reep.football/releases/20261005T180536Z/schema.json | 2026-10-09 | 2026-10-09 |
 | `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
@@ -29,9 +29,9 @@ anyone can re-fetch and diff.
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
-| `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-10-09 | 2026-10-09 |
 | `vald/externalnordbord.json` | https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
-| `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-10-09 | 2026-10-09 |
 | `vald/extsmartspeed.json` | https://prd-euw-api-extsmartspeed.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/extdynamo.json` | https://prd-euw-api-extdynamo.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalhumantrakv2.json` | https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json | 2026-09-30 | 2026-09-30 |

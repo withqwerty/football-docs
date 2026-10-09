@@ -9207,6 +9207,7 @@
             },
             "CompetitionEdition": {
                 "type": "object",
+                "description": "The public provider ids, served by both edition serializers.\n\nSubclasses `Serializer` so DRF's metaclass collects the declared fields below; a plain mixin\nwould leave them out of `_declared_fields` and `Meta.fields` would not resolve.\n\nThe view gates them: `MatchingModelViewSet` removes every one of them unless `matching=`\nnames it, so a provider absent from that allow-list (sics, smrtstats, google, instat) can\nnever be reached from here.",
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -9232,7 +9233,7 @@
             },
             "CompetitionEditionMatchingFromCompetition": {
                 "type": "object",
-                "description": "Source: https://stackoverflow.com/a/23674297/3914041\nA ModelSerializer that takes an additional `only` argument that\ncontrols which fields should be displayed.\n\nUseful to get only a subset of the fields for a related serializer.",
+                "description": "The public provider ids, served by both edition serializers.\n\nSubclasses `Serializer` so DRF's metaclass collects the declared fields below; a plain mixin\nwould leave them out of `_declared_fields` and `Meta.fields` would not resolve.\n\nThe view gates them: `MatchingModelViewSet` removes every one of them unless `matching=`\nnames it, so a provider absent from that allow-list (sics, smrtstats, google, instat) can\nnever be reached from here.",
                 "properties": {
                     "id": {
                         "type": "integer",

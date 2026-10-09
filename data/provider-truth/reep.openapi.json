@@ -9,7 +9,7 @@
         "version": "v1.0.0"
       }
     ],
-    "generated_at": "2026-09-29"
+    "generated_at": "2026-10-09"
   },
   "basePaths": [
     "/api/next",
@@ -43,6 +43,12 @@
     "/entities/{reep_id}/relationships": [
       "GET"
     ],
+    "/key": [
+      "GET"
+    ],
+    "/matches": [
+      "GET"
+    ],
     "/meta": [
       "GET"
     ],
@@ -66,6 +72,7 @@
     ]
   },
   "parameters": [
+    "competition",
     "cursor",
     "external_id",
     "family",
@@ -73,15 +80,23 @@
     "include",
     "lang",
     "limit",
+    "missing",
     "namespace",
     "offset",
+    "opponent",
     "provider",
+    "providers",
     "q",
     "reep_id",
+    "require",
+    "season",
     "since",
     "sort",
+    "state",
+    "team",
     "to",
-    "type"
+    "type",
+    "venue"
   ],
   "schemas": [
     "BatchItem",
@@ -92,6 +107,8 @@
     "Entity",
     "EntityType",
     "Error",
+    "GenerationMatch",
+    "MatchLabelledId",
     "MatchScoreline",
     "Overlay",
     "ProviderNoticeFinding",
@@ -106,14 +123,17 @@
   "fields": [
     "acknowledged",
     "acknowledged_at",
+    "aggregate_of",
     "aliases",
     "attributes",
+    "away",
     "away_id",
     "away_score",
     "body",
     "bridge_count",
     "bridges",
     "canonical_reep_id",
+    "competition",
     "confidence",
     "count",
     "detail",
@@ -128,6 +148,8 @@
     "finding_id",
     "first_seen_at",
     "generated_at",
+    "generation",
+    "home",
     "home_id",
     "home_score",
     "id",
@@ -135,9 +157,11 @@
     "include",
     "index_generated_at",
     "kind",
+    "label",
     "lang",
     "language",
     "last_seen_at",
+    "leg",
     "lifecycle_state",
     "link_confidence",
     "match",
@@ -168,6 +192,7 @@
     "roles",
     "schema_version",
     "score_basis",
+    "season",
     "seen",
     "seen_at",
     "severity",
@@ -176,7 +201,9 @@
     "source",
     "source_providers",
     "source_tier",
+    "stage",
     "stamp",
+    "state",
     "status",
     "suggested_action",
     "tier",
