@@ -1487,13 +1487,13 @@ describe("golden retrieval evals", () => {
   it("distinguishes an unindexed provider filter from an empty search", () => {
     const result = searchDocs(db, {
       query: "shot map expected threat player radar",
-      provider: "API-Football",
+      provider: "FutureProvider",
       max_results: 3,
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBe(true);
-    expect(text).toContain('Provider "API-Football (api-football)" is not indexed');
+    expect(text).toContain('Provider "FutureProvider (futureprovider)" is not indexed');
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
   });
@@ -1717,13 +1717,13 @@ describe("golden retrieval evals", () => {
   it("reports unindexed providers when a comparison has no matches", () => {
     const result = compareProviders(db, {
       topic: "shot maps and xG",
-      providers: ["API-Football"],
+      providers: ["FutureProvider"],
     });
     const text = result.content[0].text;
 
     expect(result.isError).toBeUndefined();
     expect(text).toContain('No matching docs found for "shot maps and xG"');
-    expect(text).toContain("Requested provider(s) not indexed: api-football");
+    expect(text).toContain("Requested provider(s) not indexed: futureprovider");
     expect(text).toContain("Call list_providers");
     expect(text).toContain("request_update");
   });

@@ -355,7 +355,6 @@ New providers are assessed against [INCLUSION.md](INCLUSION.md). Comment on the 
 | Provider | Priority | Status | Best source material |
 |----------|----------|--------|---------------------|
 | FPL (Fantasy Premier League) | High | Open | https://www.oliverlooney.com/blogs/FPL-APIs-Explained |
-| API-Football (RapidAPI) | High | Open for anyone: [#23](https://github.com/withqwerty/football-docs/issues/23) | https://www.api-football.com/documentation-v3 |
 | FootyStats | Medium | In progress: [#24](https://github.com/withqwerty/football-docs/issues/24) | https://footystats.org/api/documentations/ |
 | Football Charts | Medium | In progress: [#22](https://github.com/withqwerty/football-docs/issues/22) | https://www.football-charts.com/developers |
 | Football-data.org | Medium | Open | https://www.football-data.org/documentation/api |

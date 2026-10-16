@@ -15,6 +15,39 @@
     "search_docs names them when a query mentions them, so agents do not read unrelated results as an answer."
   ],
   "providers": {
+    "api-football": {
+      "description": "API-SPORTS football API v3: fixtures, teams, competitions, lineups, player and team statistics, standings, absences and transfers",
+      "display_name": "API-Football",
+      "aliases": [
+        "apifootball",
+        "api_football",
+        "api-sports-football",
+        "api-football-rapidapi"
+      ],
+      "access_level": "public-api-docs",
+      "licence_status": "Public documentation and original structural observations; data access requires an API key and remains subject to provider terms. No raw response payloads are reproduced.",
+      "public_safety_notes": "Index selected football endpoints and original field/type notes only. Exclude betting products and related fields. Do not include keys, account details or customer payloads.",
+      "version": "3.9.3",
+      "package": null,
+      "sources": [
+        {
+          "url": "https://www.api-football.com/documentation-v3",
+          "type": "curated",
+          "note": "Documentation v3.9.3 and direct API field/type observations checked 2026-10-15, without raw payloads. Access notes revised 2026-10-16: RapidAPI is historical only, not a verified current access path. Direct Free checks on 2026-10-16 accepted season 2024 and rejected season 2026; coverage is not generalised beyond the sample."
+        },
+        {
+          "url": "https://www.api-football.com/news/post/how-ratelimit-works",
+          "type": "curated",
+          "note": "Dated direct-access rate limits; plan allocations checked against the pricing page on 2026-10-15."
+        },
+        {
+          "url": "https://www.api-football.com/terms",
+          "type": "curated",
+          "note": "Data-source disclosure is limited to unnamed partners; no named upstream collector inferred."
+        }
+      ],
+      "last_crawled": "2026-10-16"
+    },
     "espn": {
       "description": "Curated observations of ESPN soccer JSON endpoints for fixtures, match summaries, teams, standings, and league discovery",
       "display_name": "ESPN",
