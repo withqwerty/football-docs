@@ -17,7 +17,31 @@ permissions:
   contents: read
 
 jobs:
+  # The package runs wherever an MCP client runs, so a release is tested on
+  # macOS and Windows before anything is published. This lives here, not in CI:
+  # those runners bill at 10x and 2x the Linux rate, and running them on every
+  # pull request and push was a quarter of the account's Actions bill.
+  cross-os:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm run ingest
+      - run: pnpm test
+      - run: pnpm run build
+
   release:
+    needs: cross-os
     runs-on: ubuntu-latest
     permissions:
       contents: write
