@@ -496,7 +496,10 @@ describe("resolve_entity with a register file in the later layout", () => {
     ]) {
       await con.run(sql);
     }
+    // Close the instance too, not only the connection: on Windows an open instance
+    // keeps the file locked, and the read-only open in resolveEntity then fails.
     con.closeSync();
+    instance.closeSync();
   });
 
   it("opens the file without release_metadata and resolves a provider ID", async () => {
@@ -505,7 +508,7 @@ describe("resolve_entity with a register file in the later layout", () => {
       { env: { REEP_DUCKDB_PATH: path }, fetchImpl: latest("2026-10-31.1") },
     );
     const t = text(r);
-    expect(r.isError).toBeUndefined();
+    expect(r.isError, t).toBeUndefined();
     expect(t).toContain("Bukayo Saka");
     expect(t).toContain("sofascore");
     expect(t).toContain("934235");
