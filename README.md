@@ -4,7 +4,7 @@ Searchable football data provider and tooling documentation for AI coding agents
 
 **Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
 
-**What it does:** Gives your AI agent a searchable index of documentation for 30 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more), and the APIs of wearable and sports-science vendors (STATSports, Firstbeat, Hawkin Dynamics, VALD). Your agent looks up the real docs instead of guessing from training data.
+**What it does:** Gives your AI agent a searchable index of documentation for 31 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more), and the APIs of wearable and sports-science vendors (STATSports, Firstbeat, Hawkin Dynamics, VALD). Your agent looks up the real docs instead of guessing from training data.
 
 **Why not just let the AI figure it out?** LLMs get football data specifics wrong constantly — Opta qualifier IDs, StatsBomb coordinate ranges, API endpoint URLs, library method signatures. These are mutable facts that change across versions. football-docs gives the agent verified, sourced documentation with provenance tracking so you know where every answer came from.
 
@@ -313,6 +313,7 @@ metrics:sources` re-checks every card quote against its live source.
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
 | Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
+| API-Football | 29 | api-access, data-model, identity-surfaces |
 | ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
 | Reep | 32 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
 | TheSportsDB | 20 | api-access, api-endpoints, livescore, identity-surfaces, data-provenance |
@@ -325,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,514 searchable chunks** across 31 providers and tools (the metric cards count as one).
+**3,543 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

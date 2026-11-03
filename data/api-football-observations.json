@@ -1,0 +1,5551 @@
+{
+  "source_url": "https://v3.football.api-sports.io",
+  "observed_at": "2026-10-15T13:33:18.585736+00:00",
+  "documentation_version": "3.9.3",
+  "scope": "Paid direct-access structural observations, including completed and scheduled fixtures, empty responses, a missing-required-parameter error, all four selected player pages, extended fixture queries and optional variants. Main contexts: league 140, seasons 2024 and 2026, team 541. Head-to-head, squad and transfer queries are not restricted to that season pair. Types are not exhaustive schemas. Account fields, raw payloads and excluded product fields are omitted.",
+  "observations": [
+    {
+      "endpoint": "/status",
+      "parameters": {},
+      "http_status": 200,
+      "results": 0,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "array"
+        ],
+        "response": [
+          "object"
+        ],
+        "response.requests": [
+          "object"
+        ],
+        "response.requests.current": [
+          "integer"
+        ],
+        "response.requests.limit_day": [
+          "integer"
+        ],
+        "response.subscription": [
+          "object"
+        ],
+        "response.subscription.active": [
+          "boolean"
+        ],
+        "response.subscription.end": [
+          "string"
+        ],
+        "response.subscription.plan": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/leagues",
+      "parameters": {
+        "id": 140,
+        "season": 2024
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.id": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].country": [
+          "object"
+        ],
+        "response[].country.code": [
+          "string"
+        ],
+        "response[].country.flag": [
+          "string"
+        ],
+        "response[].country.name": [
+          "string"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.type": [
+          "string"
+        ],
+        "response[].seasons": [
+          "array"
+        ],
+        "response[].seasons[]": [
+          "object"
+        ],
+        "response[].seasons[].coverage": [
+          "object"
+        ],
+        "response[].seasons[].coverage.fixtures": [
+          "object"
+        ],
+        "response[].seasons[].coverage.fixtures.events": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.fixtures.lineups": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.fixtures.statistics_fixtures": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.fixtures.statistics_players": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.injuries": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.players": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.standings": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.top_assists": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.top_cards": [
+          "boolean"
+        ],
+        "response[].seasons[].coverage.top_scorers": [
+          "boolean"
+        ],
+        "response[].seasons[].current": [
+          "boolean"
+        ],
+        "response[].seasons[].end": [
+          "string"
+        ],
+        "response[].seasons[].start": [
+          "string"
+        ],
+        "response[].seasons[].year": [
+          "integer"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/teams",
+      "parameters": {
+        "id": 541
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.id": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.code": [
+          "string"
+        ],
+        "response[].team.country": [
+          "string"
+        ],
+        "response[].team.founded": [
+          "integer"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "response[].team.national": [
+          "boolean"
+        ],
+        "response[].venue": [
+          "object"
+        ],
+        "response[].venue.address": [
+          "string"
+        ],
+        "response[].venue.capacity": [
+          "integer"
+        ],
+        "response[].venue.city": [
+          "string"
+        ],
+        "response[].venue.id": [
+          "integer"
+        ],
+        "response[].venue.image": [
+          "string"
+        ],
+        "response[].venue.name": [
+          "string"
+        ],
+        "response[].venue.surface": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/fixtures",
+      "parameters": {
+        "league": 140,
+        "season": 2024,
+        "team": 541,
+        "status": "FT"
+      },
+      "http_status": 200,
+      "results": 38,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.status": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.periods": [
+          "object"
+        ],
+        "response[].fixture.periods.first": [
+          "integer"
+        ],
+        "response[].fixture.periods.second": [
+          "integer"
+        ],
+        "response[].fixture.referee": [
+          "string"
+        ],
+        "response[].fixture.status": [
+          "object"
+        ],
+        "response[].fixture.status.elapsed": [
+          "integer"
+        ],
+        "response[].fixture.status.extra": [
+          "integer",
+          "null"
+        ],
+        "response[].fixture.status.long": [
+          "string"
+        ],
+        "response[].fixture.status.short": [
+          "string"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].fixture.venue": [
+          "object"
+        ],
+        "response[].fixture.venue.city": [
+          "string"
+        ],
+        "response[].fixture.venue.id": [
+          "integer"
+        ],
+        "response[].fixture.venue.name": [
+          "string"
+        ],
+        "response[].goals": [
+          "object"
+        ],
+        "response[].goals.away": [
+          "integer"
+        ],
+        "response[].goals.home": [
+          "integer"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.round": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "boolean"
+        ],
+        "response[].score": [
+          "object"
+        ],
+        "response[].score.extratime": [
+          "object"
+        ],
+        "response[].score.extratime.away": [
+          "null"
+        ],
+        "response[].score.extratime.home": [
+          "null"
+        ],
+        "response[].score.fulltime": [
+          "object"
+        ],
+        "response[].score.fulltime.away": [
+          "integer"
+        ],
+        "response[].score.fulltime.home": [
+          "integer"
+        ],
+        "response[].score.halftime": [
+          "object"
+        ],
+        "response[].score.halftime.away": [
+          "integer"
+        ],
+        "response[].score.halftime.home": [
+          "integer"
+        ],
+        "response[].score.penalty": [
+          "object"
+        ],
+        "response[].score.penalty.away": [
+          "null"
+        ],
+        "response[].score.penalty.home": [
+          "null"
+        ],
+        "response[].teams": [
+          "object"
+        ],
+        "response[].teams.away": [
+          "object"
+        ],
+        "response[].teams.away.id": [
+          "integer"
+        ],
+        "response[].teams.away.logo": [
+          "string"
+        ],
+        "response[].teams.away.name": [
+          "string"
+        ],
+        "response[].teams.away.winner": [
+          "boolean",
+          "null"
+        ],
+        "response[].teams.home": [
+          "object"
+        ],
+        "response[].teams.home.id": [
+          "integer"
+        ],
+        "response[].teams.home.logo": [
+          "string"
+        ],
+        "response[].teams.home.name": [
+          "string"
+        ],
+        "response[].teams.home.winner": [
+          "boolean",
+          "null"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/fixtures/events",
+      "parameters": {
+        "fixture": 1208829
+      },
+      "http_status": 200,
+      "results": 13,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].assist": [
+          "object"
+        ],
+        "response[].assist.id": [
+          "integer",
+          "null"
+        ],
+        "response[].assist.name": [
+          "null",
+          "string"
+        ],
+        "response[].comments": [
+          "null"
+        ],
+        "response[].detail": [
+          "string"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "response[].time": [
+          "object"
+        ],
+        "response[].time.elapsed": [
+          "integer"
+        ],
+        "response[].time.extra": [
+          "null"
+        ],
+        "response[].type": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/fixtures/lineups",
+      "parameters": {
+        "fixture": 1208829
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].coach": [
+          "object"
+        ],
+        "response[].coach.id": [
+          "integer"
+        ],
+        "response[].coach.name": [
+          "string"
+        ],
+        "response[].coach.photo": [
+          "string"
+        ],
+        "response[].formation": [
+          "string"
+        ],
+        "response[].startXI": [
+          "array"
+        ],
+        "response[].startXI[]": [
+          "object"
+        ],
+        "response[].startXI[].player": [
+          "object"
+        ],
+        "response[].startXI[].player.grid": [
+          "string"
+        ],
+        "response[].startXI[].player.id": [
+          "integer"
+        ],
+        "response[].startXI[].player.name": [
+          "string"
+        ],
+        "response[].startXI[].player.number": [
+          "integer"
+        ],
+        "response[].startXI[].player.pos": [
+          "string"
+        ],
+        "response[].substitutes": [
+          "array"
+        ],
+        "response[].substitutes[]": [
+          "object"
+        ],
+        "response[].substitutes[].player": [
+          "object"
+        ],
+        "response[].substitutes[].player.grid": [
+          "null"
+        ],
+        "response[].substitutes[].player.id": [
+          "integer"
+        ],
+        "response[].substitutes[].player.name": [
+          "string"
+        ],
+        "response[].substitutes[].player.number": [
+          "integer"
+        ],
+        "response[].substitutes[].player.pos": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.colors": [
+          "object"
+        ],
+        "response[].team.colors.goalkeeper": [
+          "object"
+        ],
+        "response[].team.colors.goalkeeper.border": [
+          "string"
+        ],
+        "response[].team.colors.goalkeeper.number": [
+          "string"
+        ],
+        "response[].team.colors.goalkeeper.primary": [
+          "string"
+        ],
+        "response[].team.colors.player": [
+          "object"
+        ],
+        "response[].team.colors.player.border": [
+          "string"
+        ],
+        "response[].team.colors.player.number": [
+          "string"
+        ],
+        "response[].team.colors.player.primary": [
+          "string"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/fixtures/statistics",
+      "parameters": {
+        "fixture": 1208829
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].type": [
+          "string"
+        ],
+        "response[].statistics[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/fixtures/players",
+      "parameters": {
+        "fixture": 1208829
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].players": [
+          "array"
+        ],
+        "response[].players[]": [
+          "object"
+        ],
+        "response[].players[].player": [
+          "object"
+        ],
+        "response[].players[].player.id": [
+          "integer"
+        ],
+        "response[].players[].player.name": [
+          "string"
+        ],
+        "response[].players[].player.photo": [
+          "string"
+        ],
+        "response[].players[].statistics": [
+          "array"
+        ],
+        "response[].players[].statistics[]": [
+          "object"
+        ],
+        "response[].players[].statistics[].cards": [
+          "object"
+        ],
+        "response[].players[].statistics[].cards.red": [
+          "integer"
+        ],
+        "response[].players[].statistics[].cards.yellow": [
+          "integer"
+        ],
+        "response[].players[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].players[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].dribbles.past": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].duels": [
+          "object"
+        ],
+        "response[].players[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].players[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].games": [
+          "object"
+        ],
+        "response[].players[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].players[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].games.number": [
+          "integer"
+        ],
+        "response[].players[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].players[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].players[].statistics[].games.substitute": [
+          "boolean"
+        ],
+        "response[].players[].statistics[].goals": [
+          "object"
+        ],
+        "response[].players[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].goals.conceded": [
+          "integer"
+        ],
+        "response[].players[].statistics[].goals.saves": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].offsides": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].passes": [
+          "object"
+        ],
+        "response[].players[].statistics[].passes.accuracy": [
+          "null",
+          "string"
+        ],
+        "response[].players[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].players[].statistics[].penalty.commited": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].penalty.missed": [
+          "integer"
+        ],
+        "response[].players[].statistics[].penalty.saved": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].penalty.scored": [
+          "integer"
+        ],
+        "response[].players[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].players[].statistics[].shots": [
+          "object"
+        ],
+        "response[].players[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].players[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].tackles.interceptions": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "response[].team.update": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/standings",
+      "parameters": {
+        "league": 140,
+        "season": 2024
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "array"
+        ],
+        "response[].league.standings[]": [
+          "array"
+        ],
+        "response[].league.standings[][]": [
+          "object"
+        ],
+        "response[].league.standings[][].all": [
+          "object"
+        ],
+        "response[].league.standings[][].all.draw": [
+          "integer"
+        ],
+        "response[].league.standings[][].all.goals": [
+          "object"
+        ],
+        "response[].league.standings[][].all.goals.against": [
+          "integer"
+        ],
+        "response[].league.standings[][].all.goals.for": [
+          "integer"
+        ],
+        "response[].league.standings[][].all.lose": [
+          "integer"
+        ],
+        "response[].league.standings[][].all.played": [
+          "integer"
+        ],
+        "response[].league.standings[][].all.win": [
+          "integer"
+        ],
+        "response[].league.standings[][].away": [
+          "object"
+        ],
+        "response[].league.standings[][].away.draw": [
+          "integer"
+        ],
+        "response[].league.standings[][].away.goals": [
+          "object"
+        ],
+        "response[].league.standings[][].away.goals.against": [
+          "integer"
+        ],
+        "response[].league.standings[][].away.goals.for": [
+          "integer"
+        ],
+        "response[].league.standings[][].away.lose": [
+          "integer"
+        ],
+        "response[].league.standings[][].away.played": [
+          "integer"
+        ],
+        "response[].league.standings[][].away.win": [
+          "integer"
+        ],
+        "response[].league.standings[][].description": [
+          "null",
+          "string"
+        ],
+        "response[].league.standings[][].form": [
+          "string"
+        ],
+        "response[].league.standings[][].goalsDiff": [
+          "integer"
+        ],
+        "response[].league.standings[][].group": [
+          "string"
+        ],
+        "response[].league.standings[][].home": [
+          "object"
+        ],
+        "response[].league.standings[][].home.draw": [
+          "integer"
+        ],
+        "response[].league.standings[][].home.goals": [
+          "object"
+        ],
+        "response[].league.standings[][].home.goals.against": [
+          "integer"
+        ],
+        "response[].league.standings[][].home.goals.for": [
+          "integer"
+        ],
+        "response[].league.standings[][].home.lose": [
+          "integer"
+        ],
+        "response[].league.standings[][].home.played": [
+          "integer"
+        ],
+        "response[].league.standings[][].home.win": [
+          "integer"
+        ],
+        "response[].league.standings[][].points": [
+          "integer"
+        ],
+        "response[].league.standings[][].rank": [
+          "integer"
+        ],
+        "response[].league.standings[][].status": [
+          "string"
+        ],
+        "response[].league.standings[][].team": [
+          "object"
+        ],
+        "response[].league.standings[][].team.id": [
+          "integer"
+        ],
+        "response[].league.standings[][].team.logo": [
+          "string"
+        ],
+        "response[].league.standings[][].team.name": [
+          "string"
+        ],
+        "response[].league.standings[][].update": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024,
+        "page": 1
+      },
+      "http_status": 200,
+      "results": 20,
+      "paging": {
+        "current": 1,
+        "total": 4
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.page": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.injured": [
+          "boolean"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "string"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].cards": [
+          "object"
+        ],
+        "response[].statistics[].cards.red": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellow": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellowred": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles.past": [
+          "null"
+        ],
+        "response[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels": [
+          "object"
+        ],
+        "response[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games": [
+          "object"
+        ],
+        "response[].statistics[].games.appearences": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].statistics[].games.lineups": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.number": [
+          "null"
+        ],
+        "response[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].statistics[].goals": [
+          "object"
+        ],
+        "response[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.conceded": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.saves": [
+          "null"
+        ],
+        "response[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].league": [
+          "object"
+        ],
+        "response[].statistics[].league.country": [
+          "string"
+        ],
+        "response[].statistics[].league.flag": [
+          "string"
+        ],
+        "response[].statistics[].league.id": [
+          "integer"
+        ],
+        "response[].statistics[].league.logo": [
+          "string"
+        ],
+        "response[].statistics[].league.name": [
+          "string"
+        ],
+        "response[].statistics[].league.season": [
+          "integer"
+        ],
+        "response[].statistics[].passes": [
+          "object"
+        ],
+        "response[].statistics[].passes.accuracy": [
+          "null"
+        ],
+        "response[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].statistics[].penalty.commited": [
+          "null"
+        ],
+        "response[].statistics[].penalty.missed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.saved": [
+          "null"
+        ],
+        "response[].statistics[].penalty.scored": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].statistics[].shots": [
+          "object"
+        ],
+        "response[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes": [
+          "object"
+        ],
+        "response[].statistics[].substitutes.bench": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.in": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.out": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.interceptions": [
+          "null"
+        ],
+        "response[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/players/squads",
+      "parameters": {
+        "team": 541
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].players": [
+          "array"
+        ],
+        "response[].players[]": [
+          "object"
+        ],
+        "response[].players[].age": [
+          "integer"
+        ],
+        "response[].players[].id": [
+          "integer"
+        ],
+        "response[].players[].name": [
+          "string"
+        ],
+        "response[].players[].number": [
+          "integer"
+        ],
+        "response[].players[].photo": [
+          "string"
+        ],
+        "response[].players[].position": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/injuries",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024
+      },
+      "http_status": 200,
+      "results": 185,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.reason": [
+          "string"
+        ],
+        "response[].player.type": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "endpoint": "/transfers",
+      "parameters": {
+        "team": 541
+      },
+      "http_status": 200,
+      "results": 344,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].transfers": [
+          "array"
+        ],
+        "response[].transfers[]": [
+          "object"
+        ],
+        "response[].transfers[].date": [
+          "string"
+        ],
+        "response[].transfers[].teams": [
+          "object"
+        ],
+        "response[].transfers[].teams.in": [
+          "object"
+        ],
+        "response[].transfers[].teams.in.id": [
+          "integer",
+          "null"
+        ],
+        "response[].transfers[].teams.in.logo": [
+          "null",
+          "string"
+        ],
+        "response[].transfers[].teams.in.name": [
+          "null",
+          "string"
+        ],
+        "response[].transfers[].teams.out": [
+          "object"
+        ],
+        "response[].transfers[].teams.out.id": [
+          "integer",
+          "null"
+        ],
+        "response[].transfers[].teams.out.logo": [
+          "null",
+          "string"
+        ],
+        "response[].transfers[].teams.out.name": [
+          "null",
+          "string"
+        ],
+        "response[].transfers[].type": [
+          "string"
+        ],
+        "response[].update": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "account-active",
+      "endpoint": "/status",
+      "parameters": {},
+      "http_status": 200,
+      "results": 0,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "array"
+        ],
+        "response": [
+          "object"
+        ],
+        "response.requests": [
+          "object"
+        ],
+        "response.requests.current": [
+          "integer"
+        ],
+        "response.requests.limit_day": [
+          "integer"
+        ],
+        "response.subscription": [
+          "object"
+        ],
+        "response.subscription.active": [
+          "boolean"
+        ],
+        "response.subscription.end": [
+          "string"
+        ],
+        "response.subscription.plan": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "single-fixture-extended",
+      "endpoint": "/fixtures",
+      "parameters": {
+        "id": 1208829
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.id": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].events": [
+          "array"
+        ],
+        "response[].events[]": [
+          "object"
+        ],
+        "response[].events[].assist": [
+          "object"
+        ],
+        "response[].events[].assist.id": [
+          "integer",
+          "null"
+        ],
+        "response[].events[].assist.name": [
+          "null",
+          "string"
+        ],
+        "response[].events[].comments": [
+          "null"
+        ],
+        "response[].events[].detail": [
+          "string"
+        ],
+        "response[].events[].player": [
+          "object"
+        ],
+        "response[].events[].player.id": [
+          "integer"
+        ],
+        "response[].events[].player.name": [
+          "string"
+        ],
+        "response[].events[].team": [
+          "object"
+        ],
+        "response[].events[].team.id": [
+          "integer"
+        ],
+        "response[].events[].team.logo": [
+          "string"
+        ],
+        "response[].events[].team.name": [
+          "string"
+        ],
+        "response[].events[].time": [
+          "object"
+        ],
+        "response[].events[].time.elapsed": [
+          "integer"
+        ],
+        "response[].events[].time.extra": [
+          "null"
+        ],
+        "response[].events[].type": [
+          "string"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.periods": [
+          "object"
+        ],
+        "response[].fixture.periods.first": [
+          "integer"
+        ],
+        "response[].fixture.periods.second": [
+          "integer"
+        ],
+        "response[].fixture.referee": [
+          "string"
+        ],
+        "response[].fixture.status": [
+          "object"
+        ],
+        "response[].fixture.status.elapsed": [
+          "integer"
+        ],
+        "response[].fixture.status.extra": [
+          "integer"
+        ],
+        "response[].fixture.status.long": [
+          "string"
+        ],
+        "response[].fixture.status.short": [
+          "string"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].fixture.venue": [
+          "object"
+        ],
+        "response[].fixture.venue.city": [
+          "string"
+        ],
+        "response[].fixture.venue.id": [
+          "integer"
+        ],
+        "response[].fixture.venue.name": [
+          "string"
+        ],
+        "response[].goals": [
+          "object"
+        ],
+        "response[].goals.away": [
+          "integer"
+        ],
+        "response[].goals.home": [
+          "integer"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.round": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "boolean"
+        ],
+        "response[].lineups": [
+          "array"
+        ],
+        "response[].lineups[]": [
+          "object"
+        ],
+        "response[].lineups[].coach": [
+          "object"
+        ],
+        "response[].lineups[].coach.id": [
+          "integer"
+        ],
+        "response[].lineups[].coach.name": [
+          "string"
+        ],
+        "response[].lineups[].coach.photo": [
+          "string"
+        ],
+        "response[].lineups[].formation": [
+          "string"
+        ],
+        "response[].lineups[].startXI": [
+          "array"
+        ],
+        "response[].lineups[].startXI[]": [
+          "object"
+        ],
+        "response[].lineups[].startXI[].player": [
+          "object"
+        ],
+        "response[].lineups[].startXI[].player.grid": [
+          "string"
+        ],
+        "response[].lineups[].startXI[].player.id": [
+          "integer"
+        ],
+        "response[].lineups[].startXI[].player.name": [
+          "string"
+        ],
+        "response[].lineups[].startXI[].player.number": [
+          "integer"
+        ],
+        "response[].lineups[].startXI[].player.pos": [
+          "string"
+        ],
+        "response[].lineups[].substitutes": [
+          "array"
+        ],
+        "response[].lineups[].substitutes[]": [
+          "object"
+        ],
+        "response[].lineups[].substitutes[].player": [
+          "object"
+        ],
+        "response[].lineups[].substitutes[].player.grid": [
+          "null"
+        ],
+        "response[].lineups[].substitutes[].player.id": [
+          "integer"
+        ],
+        "response[].lineups[].substitutes[].player.name": [
+          "string"
+        ],
+        "response[].lineups[].substitutes[].player.number": [
+          "integer"
+        ],
+        "response[].lineups[].substitutes[].player.pos": [
+          "string"
+        ],
+        "response[].lineups[].team": [
+          "object"
+        ],
+        "response[].lineups[].team.colors": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.goalkeeper": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.border": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.number": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.primary": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.player.border": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player.number": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player.primary": [
+          "string"
+        ],
+        "response[].lineups[].team.id": [
+          "integer"
+        ],
+        "response[].lineups[].team.logo": [
+          "string"
+        ],
+        "response[].lineups[].team.name": [
+          "string"
+        ],
+        "response[].players": [
+          "array"
+        ],
+        "response[].players[]": [
+          "object"
+        ],
+        "response[].players[].players": [
+          "array"
+        ],
+        "response[].players[].players[]": [
+          "object"
+        ],
+        "response[].players[].players[].player": [
+          "object"
+        ],
+        "response[].players[].players[].player.id": [
+          "integer"
+        ],
+        "response[].players[].players[].player.name": [
+          "string"
+        ],
+        "response[].players[].players[].player.photo": [
+          "string"
+        ],
+        "response[].players[].players[].statistics": [
+          "array"
+        ],
+        "response[].players[].players[].statistics[]": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].cards": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].cards.red": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].cards.yellow": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].dribbles.past": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].duels": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].games": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].players[].players[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].games.number": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].players[].players[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].players[].players[].statistics[].games.substitute": [
+          "boolean"
+        ],
+        "response[].players[].players[].statistics[].goals": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].goals.conceded": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].goals.saves": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].offsides": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].passes": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].passes.accuracy": [
+          "null",
+          "string"
+        ],
+        "response[].players[].players[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].penalty.commited": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty.missed": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].penalty.saved": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty.scored": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].players[].players[].statistics[].shots": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles.interceptions": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].team": [
+          "object"
+        ],
+        "response[].players[].team.id": [
+          "integer"
+        ],
+        "response[].players[].team.logo": [
+          "string"
+        ],
+        "response[].players[].team.name": [
+          "string"
+        ],
+        "response[].players[].team.update": [
+          "string"
+        ],
+        "response[].score": [
+          "object"
+        ],
+        "response[].score.extratime": [
+          "object"
+        ],
+        "response[].score.extratime.away": [
+          "null"
+        ],
+        "response[].score.extratime.home": [
+          "null"
+        ],
+        "response[].score.fulltime": [
+          "object"
+        ],
+        "response[].score.fulltime.away": [
+          "integer"
+        ],
+        "response[].score.fulltime.home": [
+          "integer"
+        ],
+        "response[].score.halftime": [
+          "object"
+        ],
+        "response[].score.halftime.away": [
+          "integer"
+        ],
+        "response[].score.halftime.home": [
+          "integer"
+        ],
+        "response[].score.penalty": [
+          "object"
+        ],
+        "response[].score.penalty.away": [
+          "null"
+        ],
+        "response[].score.penalty.home": [
+          "null"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].statistics": [
+          "array"
+        ],
+        "response[].statistics[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].statistics[].type": [
+          "string"
+        ],
+        "response[].statistics[].statistics[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "response[].teams": [
+          "object"
+        ],
+        "response[].teams.away": [
+          "object"
+        ],
+        "response[].teams.away.id": [
+          "integer"
+        ],
+        "response[].teams.away.logo": [
+          "string"
+        ],
+        "response[].teams.away.name": [
+          "string"
+        ],
+        "response[].teams.away.winner": [
+          "boolean"
+        ],
+        "response[].teams.home": [
+          "object"
+        ],
+        "response[].teams.home.id": [
+          "integer"
+        ],
+        "response[].teams.home.logo": [
+          "string"
+        ],
+        "response[].teams.home.name": [
+          "string"
+        ],
+        "response[].teams.home.winner": [
+          "boolean"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "head-to-head",
+      "endpoint": "/fixtures/headtohead",
+      "parameters": {
+        "h2h": "541-548",
+        "last": 2
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.h2h": [
+          "string"
+        ],
+        "parameters.last": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.periods": [
+          "object"
+        ],
+        "response[].fixture.periods.first": [
+          "integer"
+        ],
+        "response[].fixture.periods.second": [
+          "integer"
+        ],
+        "response[].fixture.referee": [
+          "string"
+        ],
+        "response[].fixture.status": [
+          "object"
+        ],
+        "response[].fixture.status.elapsed": [
+          "integer"
+        ],
+        "response[].fixture.status.extra": [
+          "integer"
+        ],
+        "response[].fixture.status.long": [
+          "string"
+        ],
+        "response[].fixture.status.short": [
+          "string"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].fixture.venue": [
+          "object"
+        ],
+        "response[].fixture.venue.city": [
+          "string"
+        ],
+        "response[].fixture.venue.id": [
+          "integer"
+        ],
+        "response[].fixture.venue.name": [
+          "string"
+        ],
+        "response[].goals": [
+          "object"
+        ],
+        "response[].goals.away": [
+          "integer"
+        ],
+        "response[].goals.home": [
+          "integer"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.round": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "boolean"
+        ],
+        "response[].score": [
+          "object"
+        ],
+        "response[].score.extratime": [
+          "object"
+        ],
+        "response[].score.extratime.away": [
+          "null"
+        ],
+        "response[].score.extratime.home": [
+          "null"
+        ],
+        "response[].score.fulltime": [
+          "object"
+        ],
+        "response[].score.fulltime.away": [
+          "integer"
+        ],
+        "response[].score.fulltime.home": [
+          "integer"
+        ],
+        "response[].score.halftime": [
+          "object"
+        ],
+        "response[].score.halftime.away": [
+          "integer"
+        ],
+        "response[].score.halftime.home": [
+          "integer"
+        ],
+        "response[].score.penalty": [
+          "object"
+        ],
+        "response[].score.penalty.away": [
+          "null"
+        ],
+        "response[].score.penalty.home": [
+          "null"
+        ],
+        "response[].teams": [
+          "object"
+        ],
+        "response[].teams.away": [
+          "object"
+        ],
+        "response[].teams.away.id": [
+          "integer"
+        ],
+        "response[].teams.away.logo": [
+          "string"
+        ],
+        "response[].teams.away.name": [
+          "string"
+        ],
+        "response[].teams.away.winner": [
+          "boolean"
+        ],
+        "response[].teams.home": [
+          "object"
+        ],
+        "response[].teams.home.id": [
+          "integer"
+        ],
+        "response[].teams.home.logo": [
+          "string"
+        ],
+        "response[].teams.home.name": [
+          "string"
+        ],
+        "response[].teams.home.winner": [
+          "boolean"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "batch-fixtures-extended",
+      "endpoint": "/fixtures",
+      "parameters": {
+        "ids": "1570340-1391056"
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.ids": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].events": [
+          "array"
+        ],
+        "response[].events[]": [
+          "object"
+        ],
+        "response[].events[].assist": [
+          "object"
+        ],
+        "response[].events[].assist.id": [
+          "integer",
+          "null"
+        ],
+        "response[].events[].assist.name": [
+          "null",
+          "string"
+        ],
+        "response[].events[].comments": [
+          "null",
+          "string"
+        ],
+        "response[].events[].detail": [
+          "string"
+        ],
+        "response[].events[].player": [
+          "object"
+        ],
+        "response[].events[].player.id": [
+          "integer"
+        ],
+        "response[].events[].player.name": [
+          "string"
+        ],
+        "response[].events[].team": [
+          "object"
+        ],
+        "response[].events[].team.id": [
+          "integer"
+        ],
+        "response[].events[].team.logo": [
+          "string"
+        ],
+        "response[].events[].team.name": [
+          "string"
+        ],
+        "response[].events[].time": [
+          "object"
+        ],
+        "response[].events[].time.elapsed": [
+          "integer"
+        ],
+        "response[].events[].time.extra": [
+          "integer",
+          "null"
+        ],
+        "response[].events[].type": [
+          "string"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.periods": [
+          "object"
+        ],
+        "response[].fixture.periods.first": [
+          "integer"
+        ],
+        "response[].fixture.periods.second": [
+          "integer"
+        ],
+        "response[].fixture.referee": [
+          "string"
+        ],
+        "response[].fixture.status": [
+          "object"
+        ],
+        "response[].fixture.status.elapsed": [
+          "integer"
+        ],
+        "response[].fixture.status.extra": [
+          "integer"
+        ],
+        "response[].fixture.status.long": [
+          "string"
+        ],
+        "response[].fixture.status.short": [
+          "string"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].fixture.venue": [
+          "object"
+        ],
+        "response[].fixture.venue.city": [
+          "string"
+        ],
+        "response[].fixture.venue.id": [
+          "integer"
+        ],
+        "response[].fixture.venue.name": [
+          "string"
+        ],
+        "response[].goals": [
+          "object"
+        ],
+        "response[].goals.away": [
+          "integer"
+        ],
+        "response[].goals.home": [
+          "integer"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.round": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "boolean"
+        ],
+        "response[].lineups": [
+          "array"
+        ],
+        "response[].lineups[]": [
+          "object"
+        ],
+        "response[].lineups[].coach": [
+          "object"
+        ],
+        "response[].lineups[].coach.id": [
+          "integer"
+        ],
+        "response[].lineups[].coach.name": [
+          "string"
+        ],
+        "response[].lineups[].coach.photo": [
+          "string"
+        ],
+        "response[].lineups[].formation": [
+          "string"
+        ],
+        "response[].lineups[].startXI": [
+          "array"
+        ],
+        "response[].lineups[].startXI[]": [
+          "object"
+        ],
+        "response[].lineups[].startXI[].player": [
+          "object"
+        ],
+        "response[].lineups[].startXI[].player.grid": [
+          "string"
+        ],
+        "response[].lineups[].startXI[].player.id": [
+          "integer"
+        ],
+        "response[].lineups[].startXI[].player.name": [
+          "string"
+        ],
+        "response[].lineups[].startXI[].player.number": [
+          "integer"
+        ],
+        "response[].lineups[].startXI[].player.pos": [
+          "string"
+        ],
+        "response[].lineups[].substitutes": [
+          "array"
+        ],
+        "response[].lineups[].substitutes[]": [
+          "object"
+        ],
+        "response[].lineups[].substitutes[].player": [
+          "object"
+        ],
+        "response[].lineups[].substitutes[].player.grid": [
+          "null"
+        ],
+        "response[].lineups[].substitutes[].player.id": [
+          "integer"
+        ],
+        "response[].lineups[].substitutes[].player.name": [
+          "string"
+        ],
+        "response[].lineups[].substitutes[].player.number": [
+          "integer"
+        ],
+        "response[].lineups[].substitutes[].player.pos": [
+          "string"
+        ],
+        "response[].lineups[].team": [
+          "object"
+        ],
+        "response[].lineups[].team.colors": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.goalkeeper": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.border": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.number": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.goalkeeper.primary": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player": [
+          "object"
+        ],
+        "response[].lineups[].team.colors.player.border": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player.number": [
+          "string"
+        ],
+        "response[].lineups[].team.colors.player.primary": [
+          "string"
+        ],
+        "response[].lineups[].team.id": [
+          "integer"
+        ],
+        "response[].lineups[].team.logo": [
+          "string"
+        ],
+        "response[].lineups[].team.name": [
+          "string"
+        ],
+        "response[].players": [
+          "array"
+        ],
+        "response[].players[]": [
+          "object"
+        ],
+        "response[].players[].players": [
+          "array"
+        ],
+        "response[].players[].players[]": [
+          "object"
+        ],
+        "response[].players[].players[].player": [
+          "object"
+        ],
+        "response[].players[].players[].player.id": [
+          "integer"
+        ],
+        "response[].players[].players[].player.name": [
+          "string"
+        ],
+        "response[].players[].players[].player.photo": [
+          "string"
+        ],
+        "response[].players[].players[].statistics": [
+          "array"
+        ],
+        "response[].players[].players[].statistics[]": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].cards": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].cards.red": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].cards.yellow": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].dribbles.past": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].duels": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].games": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].players[].players[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].games.number": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].players[].players[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].players[].players[].statistics[].games.substitute": [
+          "boolean"
+        ],
+        "response[].players[].players[].statistics[].goals": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].goals.conceded": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].goals.saves": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].offsides": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].passes": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].passes.accuracy": [
+          "null",
+          "string"
+        ],
+        "response[].players[].players[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].penalty.commited": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty.missed": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].penalty.saved": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].penalty.scored": [
+          "integer"
+        ],
+        "response[].players[].players[].statistics[].penalty.won": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].shots": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].players[].players[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles.interceptions": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].players[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].players[].team": [
+          "object"
+        ],
+        "response[].players[].team.id": [
+          "integer"
+        ],
+        "response[].players[].team.logo": [
+          "string"
+        ],
+        "response[].players[].team.name": [
+          "string"
+        ],
+        "response[].players[].team.update": [
+          "string"
+        ],
+        "response[].score": [
+          "object"
+        ],
+        "response[].score.extratime": [
+          "object"
+        ],
+        "response[].score.extratime.away": [
+          "null"
+        ],
+        "response[].score.extratime.home": [
+          "null"
+        ],
+        "response[].score.fulltime": [
+          "object"
+        ],
+        "response[].score.fulltime.away": [
+          "integer"
+        ],
+        "response[].score.fulltime.home": [
+          "integer"
+        ],
+        "response[].score.halftime": [
+          "object"
+        ],
+        "response[].score.halftime.away": [
+          "integer"
+        ],
+        "response[].score.halftime.home": [
+          "integer"
+        ],
+        "response[].score.penalty": [
+          "object"
+        ],
+        "response[].score.penalty.away": [
+          "null"
+        ],
+        "response[].score.penalty.home": [
+          "null"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].statistics": [
+          "array"
+        ],
+        "response[].statistics[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].statistics[].type": [
+          "string"
+        ],
+        "response[].statistics[].statistics[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "response[].teams": [
+          "object"
+        ],
+        "response[].teams.away": [
+          "object"
+        ],
+        "response[].teams.away.id": [
+          "integer"
+        ],
+        "response[].teams.away.logo": [
+          "string"
+        ],
+        "response[].teams.away.name": [
+          "string"
+        ],
+        "response[].teams.away.winner": [
+          "boolean"
+        ],
+        "response[].teams.home": [
+          "object"
+        ],
+        "response[].teams.home.id": [
+          "integer"
+        ],
+        "response[].teams.home.logo": [
+          "string"
+        ],
+        "response[].teams.home.name": [
+          "string"
+        ],
+        "response[].teams.home.winner": [
+          "boolean"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "scheduled-fixtures",
+      "endpoint": "/fixtures",
+      "parameters": {
+        "league": 140,
+        "season": 2026,
+        "team": 541,
+        "status": "NS"
+      },
+      "http_status": 200,
+      "results": 30,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.status": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.periods": [
+          "object"
+        ],
+        "response[].fixture.periods.first": [
+          "null"
+        ],
+        "response[].fixture.periods.second": [
+          "null"
+        ],
+        "response[].fixture.referee": [
+          "null"
+        ],
+        "response[].fixture.status": [
+          "object"
+        ],
+        "response[].fixture.status.elapsed": [
+          "null"
+        ],
+        "response[].fixture.status.extra": [
+          "null"
+        ],
+        "response[].fixture.status.long": [
+          "string"
+        ],
+        "response[].fixture.status.short": [
+          "string"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].fixture.venue": [
+          "object"
+        ],
+        "response[].fixture.venue.city": [
+          "null",
+          "string"
+        ],
+        "response[].fixture.venue.id": [
+          "integer",
+          "null"
+        ],
+        "response[].fixture.venue.name": [
+          "null",
+          "string"
+        ],
+        "response[].goals": [
+          "object"
+        ],
+        "response[].goals.away": [
+          "null"
+        ],
+        "response[].goals.home": [
+          "null"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.round": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].league.standings": [
+          "boolean"
+        ],
+        "response[].score": [
+          "object"
+        ],
+        "response[].score.extratime": [
+          "object"
+        ],
+        "response[].score.extratime.away": [
+          "null"
+        ],
+        "response[].score.extratime.home": [
+          "null"
+        ],
+        "response[].score.fulltime": [
+          "object"
+        ],
+        "response[].score.fulltime.away": [
+          "null"
+        ],
+        "response[].score.fulltime.home": [
+          "null"
+        ],
+        "response[].score.halftime": [
+          "object"
+        ],
+        "response[].score.halftime.away": [
+          "null"
+        ],
+        "response[].score.halftime.home": [
+          "null"
+        ],
+        "response[].score.penalty": [
+          "object"
+        ],
+        "response[].score.penalty.away": [
+          "null"
+        ],
+        "response[].score.penalty.home": [
+          "null"
+        ],
+        "response[].teams": [
+          "object"
+        ],
+        "response[].teams.away": [
+          "object"
+        ],
+        "response[].teams.away.id": [
+          "integer"
+        ],
+        "response[].teams.away.logo": [
+          "string"
+        ],
+        "response[].teams.away.name": [
+          "string"
+        ],
+        "response[].teams.away.winner": [
+          "null"
+        ],
+        "response[].teams.home": [
+          "object"
+        ],
+        "response[].teams.home.id": [
+          "integer"
+        ],
+        "response[].teams.home.logo": [
+          "string"
+        ],
+        "response[].teams.home.name": [
+          "string"
+        ],
+        "response[].teams.home.winner": [
+          "null"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "scheduled-events-empty",
+      "endpoint": "/fixtures/events",
+      "parameters": {
+        "fixture": 1570711
+      },
+      "http_status": 200,
+      "results": 0,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "results": [
+          "integer"
+        ]
+      },
+      "expected_empty": true
+    },
+    {
+      "case": "scheduled-lineups-empty",
+      "endpoint": "/fixtures/lineups",
+      "parameters": {
+        "fixture": 1570711
+      },
+      "http_status": 200,
+      "results": 0,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "results": [
+          "integer"
+        ]
+      },
+      "expected_empty": true
+    },
+    {
+      "case": "rounds-with-dates",
+      "endpoint": "/fixtures/rounds",
+      "parameters": {
+        "league": 140,
+        "season": 2024,
+        "dates": "true"
+      },
+      "http_status": 200,
+      "results": 38,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.dates": [
+          "string"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].dates": [
+          "array"
+        ],
+        "response[].dates[]": [
+          "string"
+        ],
+        "response[].round": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "half-statistics",
+      "endpoint": "/fixtures/statistics",
+      "parameters": {
+        "fixture": 1208829,
+        "half": "true"
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.fixture": [
+          "string"
+        ],
+        "parameters.half": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].type": [
+          "string"
+        ],
+        "response[].statistics[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].statistics_1h": [
+          "array"
+        ],
+        "response[].statistics_1h[]": [
+          "object"
+        ],
+        "response[].statistics_1h[].type": [
+          "string"
+        ],
+        "response[].statistics_1h[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].statistics_2h": [
+          "array"
+        ],
+        "response[].statistics_2h[]": [
+          "object"
+        ],
+        "response[].statistics_2h[].type": [
+          "string"
+        ],
+        "response[].statistics_2h[].value": [
+          "integer",
+          "null",
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "batch-injuries",
+      "endpoint": "/injuries",
+      "parameters": {
+        "ids": "1208829"
+      },
+      "http_status": 200,
+      "results": 12,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.ids": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.reason": [
+          "string"
+        ],
+        "response[].player.type": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "players-page-1",
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024,
+        "page": 1
+      },
+      "http_status": 200,
+      "results": 20,
+      "paging": {
+        "current": 1,
+        "total": 4
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.page": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.injured": [
+          "boolean"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "string"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].cards": [
+          "object"
+        ],
+        "response[].statistics[].cards.red": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellow": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellowred": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles.past": [
+          "null"
+        ],
+        "response[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels": [
+          "object"
+        ],
+        "response[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games": [
+          "object"
+        ],
+        "response[].statistics[].games.appearences": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].statistics[].games.lineups": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.number": [
+          "null"
+        ],
+        "response[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].statistics[].goals": [
+          "object"
+        ],
+        "response[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.conceded": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.saves": [
+          "null"
+        ],
+        "response[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].league": [
+          "object"
+        ],
+        "response[].statistics[].league.country": [
+          "string"
+        ],
+        "response[].statistics[].league.flag": [
+          "string"
+        ],
+        "response[].statistics[].league.id": [
+          "integer"
+        ],
+        "response[].statistics[].league.logo": [
+          "string"
+        ],
+        "response[].statistics[].league.name": [
+          "string"
+        ],
+        "response[].statistics[].league.season": [
+          "integer"
+        ],
+        "response[].statistics[].passes": [
+          "object"
+        ],
+        "response[].statistics[].passes.accuracy": [
+          "null"
+        ],
+        "response[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].statistics[].penalty.commited": [
+          "null"
+        ],
+        "response[].statistics[].penalty.missed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.saved": [
+          "null"
+        ],
+        "response[].statistics[].penalty.scored": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].statistics[].shots": [
+          "object"
+        ],
+        "response[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes": [
+          "object"
+        ],
+        "response[].statistics[].substitutes.bench": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.in": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.out": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.interceptions": [
+          "null"
+        ],
+        "response[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "players-page-2",
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024,
+        "page": 2
+      },
+      "http_status": 200,
+      "results": 20,
+      "paging": {
+        "current": 2,
+        "total": 4
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.page": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "null",
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.injured": [
+          "boolean"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "null",
+          "string"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].cards": [
+          "object"
+        ],
+        "response[].statistics[].cards.red": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellow": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].cards.yellowred": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles.past": [
+          "null"
+        ],
+        "response[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels": [
+          "object"
+        ],
+        "response[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games": [
+          "object"
+        ],
+        "response[].statistics[].games.appearences": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].statistics[].games.lineups": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.minutes": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games.number": [
+          "null"
+        ],
+        "response[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].statistics[].goals": [
+          "object"
+        ],
+        "response[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.conceded": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.saves": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].league": [
+          "object"
+        ],
+        "response[].statistics[].league.country": [
+          "string"
+        ],
+        "response[].statistics[].league.flag": [
+          "string"
+        ],
+        "response[].statistics[].league.id": [
+          "integer"
+        ],
+        "response[].statistics[].league.logo": [
+          "string"
+        ],
+        "response[].statistics[].league.name": [
+          "string"
+        ],
+        "response[].statistics[].league.season": [
+          "integer"
+        ],
+        "response[].statistics[].passes": [
+          "object"
+        ],
+        "response[].statistics[].passes.accuracy": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].statistics[].penalty.commited": [
+          "null"
+        ],
+        "response[].statistics[].penalty.missed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.saved": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.scored": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].statistics[].shots": [
+          "object"
+        ],
+        "response[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes": [
+          "object"
+        ],
+        "response[].statistics[].substitutes.bench": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.in": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.out": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.interceptions": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "players-page-3",
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024,
+        "page": 3
+      },
+      "http_status": 200,
+      "results": 20,
+      "paging": {
+        "current": 3,
+        "total": 4
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.page": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.injured": [
+          "boolean"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "string"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].cards": [
+          "object"
+        ],
+        "response[].statistics[].cards.red": [
+          "integer"
+        ],
+        "response[].statistics[].cards.yellow": [
+          "integer"
+        ],
+        "response[].statistics[].cards.yellowred": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].statistics[].dribbles.attempts": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].dribbles.past": [
+          "null"
+        ],
+        "response[].statistics[].dribbles.success": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels": [
+          "object"
+        ],
+        "response[].statistics[].duels.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].duels.won": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].statistics[].fouls.committed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].fouls.drawn": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].games": [
+          "object"
+        ],
+        "response[].statistics[].games.appearences": [
+          "integer"
+        ],
+        "response[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].statistics[].games.lineups": [
+          "integer"
+        ],
+        "response[].statistics[].games.minutes": [
+          "integer"
+        ],
+        "response[].statistics[].games.number": [
+          "null"
+        ],
+        "response[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].statistics[].games.rating": [
+          "null",
+          "string"
+        ],
+        "response[].statistics[].goals": [
+          "object"
+        ],
+        "response[].statistics[].goals.assists": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.conceded": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.saves": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].goals.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].league": [
+          "object"
+        ],
+        "response[].statistics[].league.country": [
+          "string"
+        ],
+        "response[].statistics[].league.flag": [
+          "string"
+        ],
+        "response[].statistics[].league.id": [
+          "integer"
+        ],
+        "response[].statistics[].league.logo": [
+          "string"
+        ],
+        "response[].statistics[].league.name": [
+          "string"
+        ],
+        "response[].statistics[].league.season": [
+          "integer"
+        ],
+        "response[].statistics[].passes": [
+          "object"
+        ],
+        "response[].statistics[].passes.accuracy": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.key": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].statistics[].penalty.commited": [
+          "null"
+        ],
+        "response[].statistics[].penalty.missed": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.saved": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.scored": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].statistics[].shots": [
+          "object"
+        ],
+        "response[].statistics[].shots.on": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].shots.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes": [
+          "object"
+        ],
+        "response[].statistics[].substitutes.bench": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].substitutes.in": [
+          "integer"
+        ],
+        "response[].statistics[].substitutes.out": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.interceptions": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.total": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "players-page-4",
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541,
+        "league": 140,
+        "season": 2024,
+        "page": 4
+      },
+      "http_status": 200,
+      "results": 2,
+      "paging": {
+        "current": 4,
+        "total": 4
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.league": [
+          "string"
+        ],
+        "parameters.page": [
+          "string"
+        ],
+        "parameters.season": [
+          "string"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.injured": [
+          "boolean"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "string"
+        ],
+        "response[].statistics": [
+          "array"
+        ],
+        "response[].statistics[]": [
+          "object"
+        ],
+        "response[].statistics[].cards": [
+          "object"
+        ],
+        "response[].statistics[].cards.red": [
+          "integer"
+        ],
+        "response[].statistics[].cards.yellow": [
+          "integer"
+        ],
+        "response[].statistics[].cards.yellowred": [
+          "null"
+        ],
+        "response[].statistics[].dribbles": [
+          "object"
+        ],
+        "response[].statistics[].dribbles.attempts": [
+          "integer"
+        ],
+        "response[].statistics[].dribbles.past": [
+          "null"
+        ],
+        "response[].statistics[].dribbles.success": [
+          "integer"
+        ],
+        "response[].statistics[].duels": [
+          "object"
+        ],
+        "response[].statistics[].duels.total": [
+          "integer"
+        ],
+        "response[].statistics[].duels.won": [
+          "integer"
+        ],
+        "response[].statistics[].fouls": [
+          "object"
+        ],
+        "response[].statistics[].fouls.committed": [
+          "integer"
+        ],
+        "response[].statistics[].fouls.drawn": [
+          "integer"
+        ],
+        "response[].statistics[].games": [
+          "object"
+        ],
+        "response[].statistics[].games.appearences": [
+          "integer"
+        ],
+        "response[].statistics[].games.captain": [
+          "boolean"
+        ],
+        "response[].statistics[].games.lineups": [
+          "integer"
+        ],
+        "response[].statistics[].games.minutes": [
+          "integer"
+        ],
+        "response[].statistics[].games.number": [
+          "null"
+        ],
+        "response[].statistics[].games.position": [
+          "string"
+        ],
+        "response[].statistics[].games.rating": [
+          "string"
+        ],
+        "response[].statistics[].goals": [
+          "object"
+        ],
+        "response[].statistics[].goals.assists": [
+          "integer"
+        ],
+        "response[].statistics[].goals.conceded": [
+          "integer"
+        ],
+        "response[].statistics[].goals.saves": [
+          "null"
+        ],
+        "response[].statistics[].goals.total": [
+          "integer"
+        ],
+        "response[].statistics[].league": [
+          "object"
+        ],
+        "response[].statistics[].league.country": [
+          "string"
+        ],
+        "response[].statistics[].league.flag": [
+          "string"
+        ],
+        "response[].statistics[].league.id": [
+          "integer"
+        ],
+        "response[].statistics[].league.logo": [
+          "string"
+        ],
+        "response[].statistics[].league.name": [
+          "string"
+        ],
+        "response[].statistics[].league.season": [
+          "integer"
+        ],
+        "response[].statistics[].passes": [
+          "object"
+        ],
+        "response[].statistics[].passes.accuracy": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].passes.key": [
+          "integer"
+        ],
+        "response[].statistics[].passes.total": [
+          "integer"
+        ],
+        "response[].statistics[].penalty": [
+          "object"
+        ],
+        "response[].statistics[].penalty.commited": [
+          "null"
+        ],
+        "response[].statistics[].penalty.missed": [
+          "integer"
+        ],
+        "response[].statistics[].penalty.saved": [
+          "null"
+        ],
+        "response[].statistics[].penalty.scored": [
+          "integer"
+        ],
+        "response[].statistics[].penalty.won": [
+          "null"
+        ],
+        "response[].statistics[].shots": [
+          "object"
+        ],
+        "response[].statistics[].shots.on": [
+          "integer"
+        ],
+        "response[].statistics[].shots.total": [
+          "integer"
+        ],
+        "response[].statistics[].substitutes": [
+          "object"
+        ],
+        "response[].statistics[].substitutes.bench": [
+          "null"
+        ],
+        "response[].statistics[].substitutes.in": [
+          "integer"
+        ],
+        "response[].statistics[].substitutes.out": [
+          "null"
+        ],
+        "response[].statistics[].tackles": [
+          "object"
+        ],
+        "response[].statistics[].tackles.blocks": [
+          "integer",
+          "null"
+        ],
+        "response[].statistics[].tackles.interceptions": [
+          "integer"
+        ],
+        "response[].statistics[].tackles.total": [
+          "integer"
+        ],
+        "response[].statistics[].team": [
+          "object"
+        ],
+        "response[].statistics[].team.id": [
+          "integer"
+        ],
+        "response[].statistics[].team.logo": [
+          "string"
+        ],
+        "response[].statistics[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "player-profile",
+      "endpoint": "/players/profiles",
+      "parameters": {
+        "player": 735
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.player": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.age": [
+          "integer"
+        ],
+        "response[].player.birth": [
+          "object"
+        ],
+        "response[].player.birth.country": [
+          "string"
+        ],
+        "response[].player.birth.date": [
+          "string"
+        ],
+        "response[].player.birth.place": [
+          "string"
+        ],
+        "response[].player.firstname": [
+          "string"
+        ],
+        "response[].player.height": [
+          "string"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.lastname": [
+          "string"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.nationality": [
+          "string"
+        ],
+        "response[].player.number": [
+          "integer"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.position": [
+          "string"
+        ],
+        "response[].player.weight": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "player-teams",
+      "endpoint": "/players/teams",
+      "parameters": {
+        "player": 735
+      },
+      "http_status": 200,
+      "results": 5,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.player": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].seasons": [
+          "array"
+        ],
+        "response[].seasons[]": [
+          "integer"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "squads-player-filter",
+      "endpoint": "/players/squads",
+      "parameters": {
+        "player": 735
+      },
+      "http_status": 200,
+      "results": 1,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.player": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].players": [
+          "array"
+        ],
+        "response[].players[]": [
+          "object"
+        ],
+        "response[].players[].age": [
+          "integer"
+        ],
+        "response[].players[].id": [
+          "integer"
+        ],
+        "response[].players[].name": [
+          "string"
+        ],
+        "response[].players[].number": [
+          "integer"
+        ],
+        "response[].players[].photo": [
+          "string"
+        ],
+        "response[].players[].position": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    },
+    {
+      "case": "missing-required-season",
+      "endpoint": "/players",
+      "parameters": {
+        "team": 541
+      },
+      "http_status": 200,
+      "results": 0,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "object"
+        ],
+        "errors.season": [
+          "string"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.team": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "results": [
+          "integer"
+        ]
+      },
+      "expected_error": true
+    },
+    {
+      "case": "injuries-multiple-ids",
+      "endpoint": "/injuries",
+      "parameters": {
+        "ids": "1570340-1391056"
+      },
+      "http_status": 200,
+      "results": 19,
+      "paging": {
+        "current": 1,
+        "total": 1
+      },
+      "fields": {
+        "errors": [
+          "array"
+        ],
+        "get": [
+          "string"
+        ],
+        "paging": [
+          "object"
+        ],
+        "paging.current": [
+          "integer"
+        ],
+        "paging.total": [
+          "integer"
+        ],
+        "parameters": [
+          "object"
+        ],
+        "parameters.ids": [
+          "string"
+        ],
+        "response": [
+          "array"
+        ],
+        "response[]": [
+          "object"
+        ],
+        "response[].fixture": [
+          "object"
+        ],
+        "response[].fixture.date": [
+          "string"
+        ],
+        "response[].fixture.id": [
+          "integer"
+        ],
+        "response[].fixture.timestamp": [
+          "integer"
+        ],
+        "response[].fixture.timezone": [
+          "string"
+        ],
+        "response[].league": [
+          "object"
+        ],
+        "response[].league.country": [
+          "string"
+        ],
+        "response[].league.flag": [
+          "string"
+        ],
+        "response[].league.id": [
+          "integer"
+        ],
+        "response[].league.logo": [
+          "string"
+        ],
+        "response[].league.name": [
+          "string"
+        ],
+        "response[].league.season": [
+          "integer"
+        ],
+        "response[].player": [
+          "object"
+        ],
+        "response[].player.id": [
+          "integer"
+        ],
+        "response[].player.name": [
+          "string"
+        ],
+        "response[].player.photo": [
+          "string"
+        ],
+        "response[].player.reason": [
+          "string"
+        ],
+        "response[].player.type": [
+          "string"
+        ],
+        "response[].team": [
+          "object"
+        ],
+        "response[].team.id": [
+          "integer"
+        ],
+        "response[].team.logo": [
+          "string"
+        ],
+        "response[].team.name": [
+          "string"
+        ],
+        "results": [
+          "integer"
+        ]
+      }
+    }
+  ],
+  "verification_updated_at": "2026-10-15T19:43:32.802348+00:00",
+  "checks": {
+    "pagination": {
+      "pages_checked": 4,
+      "results_per_page": [
+        20,
+        20,
+        20,
+        2
+      ],
+      "unique_players": 62,
+      "overlap": false
+    },
+    "single_and_batch_extended_blocks": [
+      "events",
+      "lineups",
+      "statistics",
+      "players"
+    ],
+    "scheduled_status": "NS",
+    "half_statistics_blocks": [
+      "statistics_1h",
+      "statistics_2h"
+    ]
+  }
+}
