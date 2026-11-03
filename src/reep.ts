@@ -413,7 +413,7 @@ async function freshnessNote(path: string, local: string | null, fetchImpl: type
     return (
       `Local register release: ${local ?? "unknown"}. Could not check for a newer release ` +
       `(${error instanceof Error ? error.message : String(error)}). The current stamp is at ${REEP_LATEST_URL}; ` +
-      `releases are weekly. If it differs from the local release:\n${update}`
+      `download releases are weekly or less often. If it differs from the local release:\n${update}`
     );
   }
   if (local === current) return `Local register release: ${local} (current).`;
@@ -598,7 +598,8 @@ function setupGuidance(q: Query, note?: string): string {
     "",
     `1. Free, no key: download the whole register (${REEP_DOWNLOAD_URL}, one DuckDB file of several hundred MB)`,
     "   and set REEP_DUCKDB_PATH to its path in this server's MCP configuration. Lookups then run locally.",
-    "   Reep releases weekly; this tool reports when the local file is out of date and how to refresh it.",
+    "   Reep publishes a download release weekly or less often; this tool reports when the local file is out of date",
+    "   and how to refresh it. The daily matching updates go to the Reep API only.",
     `2. The Reep API: set REEP_API_KEY. Keys are issued by hand on request, with no self-service sign-up;`,
     `   email ${REEP_CONTACT} with your organisation and what you are matching.`,
     "",
