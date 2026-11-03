@@ -6,34 +6,43 @@
 
 Two jobs:
 
-1. Links. Every stable download link must redirect to the file the current
-   manifest names, and every reep.football / data.reep.football URL cited in
-   docs/reep must answer.
-2. Drift. The live manifest, column schema and OpenAPI spec are compared with
-   the snapshots in specs/reep/. A difference is a list of doc sections to
-   reread, not an error in itself: review it, update docs/reep, then rerun with
-   --update and run the tests.
+1. Links. Every stable download link (DuckDB, and the CSV and Parquet file of
+   every table) must redirect to the file the current release names, and every
+   reep.football / data.reep.football URL cited in docs/reep must answer.
+2. Drift. The live release file list, manifest, table columns and OpenAPI spec
+   are compared with the snapshots in specs/reep/. A difference is a list of doc
+   sections to reread, not an error in itself: review it, update docs/reep, then
+   rerun with --update and run the tests.
+
+The release no longer publishes a schema file, so the columns come from the
+header line of each table's CSV, read with a ranged request (the first 64 KiB
+of the gzip stream), never the whole file. specs/reep/columns.json holds them.
 
 Exit status: 1 if a link is broken, 2 if anything drifted, 0 if all is current.
 Standard library only. No keys are used; nothing here needs API access.
 """
 
 import argparse
+import csv
 import hashlib
+import io
 import json
 import re
 import sys
 import time
 import urllib.error
 import urllib.request
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SPECS = ROOT / "specs" / "reep"
 DOCS = ROOT / "docs" / "reep"
-LATEST = "https://data.reep.football/releases/latest.json"
+DATA = "https://data.reep.football"
+LATEST = f"{DATA}/releases/latest.json"
 SPEC_URL = "https://reep.football/openapi.yaml"
 SITE = "https://reep.football"
+DUCKDB = "reep-register.duckdb"
 # Cloudflare refuses urllib's default User-Agent (error 1010).
 HEADERS = {"User-Agent": "football-docs-reep-check/1.0 (+https://github.com/withqwerty/football-docs)"}
 PAUSE = 0.5
@@ -44,11 +53,11 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def fetch(url, follow=True):
+def fetch(url, follow=True, extra_headers=None):
     """Return (status, headers, body). HTTP errors come back as a status, not an exception."""
     time.sleep(PAUSE)
     opener = urllib.request.build_opener() if follow else urllib.request.build_opener(NoRedirect)
-    request = urllib.request.Request(url, headers=HEADERS)
+    request = urllib.request.Request(url, headers={**HEADERS, **(extra_headers or {})})
     try:
         with opener.open(request, timeout=60) as response:
             return response.status, response.headers, response.read()
@@ -56,25 +65,52 @@ def fetch(url, follow=True):
         return error.code, error.headers, b""
 
 
-def table_of(key):
-    return key.removeprefix("csv/").removesuffix(".csv.gz")
+def fetch_verified(url, sha256):
+    status, _, body = fetch(url)
+    if status != 200:
+        sys.exit(f"cannot read {url}: HTTP {status}")
+    if hashlib.sha256(body).hexdigest() != sha256:
+        sys.exit(f"{url} does not match its published checksum; retry later")
+    return body
 
 
-def check_links(manifest):
+def tables_of(files):
+    """Table name -> {"csv": file, "parquet": file}, for every table that ships as CSV."""
+    tables = {}
+    for name, entry in files.items():
+        match = re.fullmatch(r"([a-z_]+)\.(csv\.gz|parquet)", name)
+        if match:
+            kind = "csv" if match.group(2) == "csv.gz" else "parquet"
+            tables.setdefault(match.group(1), {})[kind] = entry
+    return {table: kinds for table, kinds in tables.items() if "csv" in kinds}
+
+
+def csv_columns(url):
+    """The header line of a gzipped CSV, from the first 64 KiB only."""
+    status, _, head = fetch(url, extra_headers={"Range": "bytes=0-65535"})
+    if status not in (200, 206):
+        sys.exit(f"cannot read the start of {url}: HTTP {status}")
+    first_line = zlib.decompressobj(31).decompress(head).split(b"\n", 1)[0]
+    return next(csv.reader(io.StringIO(first_line.decode("utf-8"))))
+
+
+def check_links(files):
     broken = []
-    files = manifest["files"]
-    csv = {table_of(k): v for k, v in files.items() if re.fullmatch(r"csv/[a-z_]+\.csv\.gz", k)}
-    duckdb = next((v for k, v in files.items() if k.endswith(".duckdb")), None)
-    targets = [(f"{SITE}/downloads/csv/{t}", v.get("url")) for t, v in sorted(csv.items())]
-    if duckdb:
-        targets.append((f"{SITE}/downloads/duckdb", duckdb.get("url")))
+    targets = []
+    for table, kinds in sorted(tables_of(files).items()):
+        for kind, entry in sorted(kinds.items()):
+            targets.append((f"{SITE}/downloads/{kind}/{table}", f"{DATA}/{entry['key']}"))
+    if DUCKDB in files:
+        targets.append((f"{SITE}/downloads/duckdb", f"{DATA}/{files[DUCKDB]['key']}"))
+    else:
+        broken.append(f"the release lists no {DUCKDB}")
     for link, expected in targets:
         status, headers, _ = fetch(link, follow=False)
         location = headers.get("Location") if headers else None
-        ok = status in (301, 302, 307, 308) and (expected is None or location == expected)
+        ok = status in (301, 302, 307, 308) and location == expected
         print(f"  {'ok ' if ok else 'BAD'} {status} {link}")
         if not ok:
-            broken.append(f"{link} -> {status} {location or ''} (manifest: {expected})")
+            broken.append(f"{link} -> {status} {location or ''} (release: {expected})")
 
     cited = set()
     for doc in sorted(DOCS.glob("*.md")):
@@ -86,7 +122,7 @@ def check_links(manifest):
     for url in sorted(cited):
         # A download link must not be followed: it would pull the whole file just
         # to check it. Pages are small, so follow them and require a real 200.
-        download = re.search(r"/downloads/(csv/|duckdb)", url) is not None
+        download = re.search(r"/downloads/(csv/|parquet/|duckdb)", url) is not None
         status, _, _ = fetch(url, follow=not download)
         ok = status in (301, 302, 307, 308) if download else status == 200
         print(f"  {'ok ' if ok else 'BAD'} {status} {url}")
@@ -95,63 +131,70 @@ def check_links(manifest):
     return broken
 
 
-def diff_release(live_manifest, live_schema):
+def snapshot(name, missing):
+    """A snapshot in specs/reep/, or `missing` before the first --update writes it."""
+    path = SPECS / name
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else missing
+
+
+def diff_release(release, manifest, columns):
     drift = []
-    old_manifest = json.loads((SPECS / "release.json").read_text(encoding="utf-8"))
-    old_schema = json.loads((SPECS / "schema.json").read_text(encoding="utf-8"))
+    old_release = snapshot("release.json", {"stamp": None, "files": {}})
+    old_manifest = snapshot("manifest.json", {})
+    old_columns = snapshot("columns.json", {})
 
-    if live_manifest["stamp"] != old_manifest["stamp"]:
-        print(f"  new release: {old_manifest['stamp']} -> {live_manifest['stamp']}")
+    if release["stamp"] != old_release["stamp"]:
+        print(f"  new release: {old_release['stamp']} -> {release['stamp']}")
+    if release.get("schema") != old_release.get("schema"):
+        drift.append(f"release.json schema {old_release.get('schema')} -> {release.get('schema')} "
+                     "(this script, download doc: release layout)")
 
-    old_files = {k: v.get("role") for k, v in old_manifest["files"].items() if k.startswith("csv/")}
-    new_files = {k: v.get("role") for k, v in live_manifest["files"].items() if k.startswith("csv/")}
-    for key in sorted(set(old_files) | set(new_files)):
-        if old_files.get(key) != new_files.get(key):
-            drift.append(f"CSV file {key}: {old_files.get(key)} -> {new_files.get(key)} "
-                         "(download doc: table list, four-table summary)")
+    old_names, new_names = set(old_release["files"]), set(release["files"])
+    for name in sorted(old_names ^ new_names):
+        where = "added" if name in new_names else "removed"
+        drift.append(f"release file {name} {where} (download doc: table list and table summary)")
 
-    old_cols = {table_of(k): v["columns"] for k, v in old_schema["files"].items()}
-    new_cols = {table_of(k): v["columns"] for k, v in live_schema["files"].items()}
-    for table in sorted(set(old_cols) | set(new_cols)):
-        before, after = old_cols.get(table), new_cols.get(table)
+    for table in sorted(set(old_columns) | set(columns)):
+        before, after = old_columns.get(table), columns.get(table)
         if before != after:
             drift.append(f"columns of {table}: {before} -> {after} (SQL examples, table summary)")
 
-    for field in ("licence", "redaction", "schema_version", "tier"):
-        if old_manifest.get(field) != live_manifest.get(field):
+    for field in ("identity_rider_boundaries",):
+        if old_manifest.get(field) != manifest.get(field):
             drift.append(f"manifest {field} changed (overview: licence and scope)")
+    old_types, new_types = set(old_manifest.get("entity_counts_by_type", {})), set(manifest.get("entity_counts_by_type", {}))
+    if old_types != new_types:
+        drift.append(f"entity types {sorted(old_types)} -> {sorted(new_types)} "
+                     "(ENTITY_TYPES in src/reep.ts, overview)")
     return drift
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--update", action="store_true", help="write the live manifest, schema and spec into specs/reep/")
+    parser.add_argument("--update", action="store_true",
+                        help="write the live release, manifest, columns and spec into specs/reep/")
     args = parser.parse_args()
 
     status, _, body = fetch(LATEST)
     if status != 200:
         sys.exit(f"cannot read {LATEST}: HTTP {status}")
-    latest = json.loads(body)
-    status, _, manifest_body = fetch(latest["manifest_url"])
-    if status != 200:
-        sys.exit(f"cannot read the manifest: HTTP {status}")
-    if hashlib.sha256(manifest_body).hexdigest() != latest.get("manifest_sha256"):
-        sys.exit("manifest checksum does not match latest.json; retry later")
+    pointer = json.loads(body)["release"]
+    release_body = fetch_verified(f"{DATA}/{pointer['key']}", pointer["sha256"])
+    release = json.loads(release_body)
+    files = release["files"]
+    manifest_body = fetch_verified(f"{DATA}/{files['manifest.json']['key']}", files["manifest.json"]["sha256"])
     manifest = json.loads(manifest_body)
-    base = latest["manifest_url"].rsplit("/", 1)[0]
-    status, _, schema_body = fetch(f"{base}/schema.json")
-    if status != 200:
-        sys.exit(f"cannot read schema.json: HTTP {status}")
+    columns = {table: csv_columns(f"{DATA}/{kinds['csv']['key']}") for table, kinds in sorted(tables_of(files).items())}
     status, _, spec_body = fetch(SPEC_URL)
     if status != 200:
         sys.exit(f"cannot read {SPEC_URL}: HTTP {status}")
 
-    print(f"Release {manifest['stamp']}")
+    print(f"Release {release['stamp']}")
     print("Links:")
-    broken = check_links(manifest)
+    broken = check_links(files)
 
     print("Drift against specs/reep/:")
-    drift = diff_release(manifest, json.loads(schema_body))
+    drift = diff_release(release, manifest, columns)
     if spec_body != (SPECS / "openapi.yaml").read_bytes():
         drift.append("openapi.yaml changed: diff it, regenerate truth "
                      "(bash scripts/gen_all_openapi_truth.sh), reread docs/reep/api.md")
@@ -161,8 +204,9 @@ def main():
         print("  none")
 
     if args.update:
-        (SPECS / "release.json").write_bytes(manifest_body)
-        (SPECS / "schema.json").write_bytes(schema_body)
+        (SPECS / "release.json").write_bytes(release_body)
+        (SPECS / "manifest.json").write_bytes(manifest_body)
+        (SPECS / "columns.json").write_text(json.dumps(columns, indent=2) + "\n", encoding="utf-8", newline="\n")
         (SPECS / "openapi.yaml").write_bytes(spec_body)
         print("Snapshots updated. Regenerate truth, run the tests, and update dates in specs/README.md.")
 

@@ -3,38 +3,41 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-// Holds docs/reep to a snapshot of one published Reep release: its manifest
-// (specs/reep/release.json) and its column schema (specs/reep/schema.json).
-// Endpoints are checked separately against specs/reep/openapi.yaml by the
-// provider-truth tests. Refresh the snapshots with scripts/check_reep_live.py.
+// Holds docs/reep to a snapshot of one published Reep release: its file list
+// (specs/reep/release.json), its manifest (specs/reep/manifest.json) and the
+// columns of each table (specs/reep/columns.json, read from the CSV headers, as
+// the release publishes no schema file). Endpoints are checked separately against
+// specs/reep/openapi.yaml by the provider-truth tests. Refresh the snapshots with
+// scripts/check_reep_live.py.
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const manifest = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/release.json"), "utf8")) as {
+const release = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/release.json"), "utf8")) as {
   stamp: string;
-  licence: { spdx: string };
-  redaction: Record<string, string>;
-  files: Record<string, { role?: string }>;
+  files: Record<string, { key: string; sha256: string }>;
 };
-const schema = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/schema.json"), "utf8")) as {
-  files: Record<string, { columns: string[] }>;
+const manifest = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/manifest.json"), "utf8")) as {
+  appearance_count: number;
+  identity_rider_boundaries: { private_dobs_stripped: boolean; u18_persons_withheld: number; internal_lineups_withheld: boolean };
 };
+const schema = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/columns.json"), "utf8")) as Record<string, string[]>;
 const docs = Object.fromEntries(
   readdirSync(resolve(ROOT, "docs/reep"))
     .filter((f) => f.endsWith(".md"))
     .map((f) => [f, readFileSync(resolve(ROOT, "docs/reep", f), "utf8")]),
 ) as Record<string, string>;
 
-const tableOf = (key: string) => key.replace(/^csv\//, "").replace(/\.csv\.gz$/, "");
-const csvTables = new Set(Object.keys(manifest.files).filter((k) => /^csv\/.+\.csv\.gz$/.test(k)).map(tableOf));
+const csvTables = new Set(
+  Object.keys(release.files)
+    .filter((name) => /^[a-z_]+\.csv\.gz$/.test(name))
+    .map((name) => name.replace(/\.csv\.gz$/, "")),
+);
 const columns: Record<string, Set<string>> = Object.fromEntries(
-  Object.entries(schema.files).map(([k, v]) => [tableOf(k), new Set(v.columns)]),
+  Object.entries(schema).map(([table, cols]) => [table, new Set(cols)]),
 );
 
-// Tables that exist only in the DuckDB build, and the user's own example tables.
-// Each is named here so an invented table or column elsewhere still fails.
+// The user's own example tables. Each is named here so an invented table or
+// column elsewhere still fails.
 const EXTRA_TABLES: Record<string, string[]> = {
-  entity_search: ["reep_id", "label", "entity_type", "search_text", "bridge_count"],
-  release_metadata: ["key", "value"],
   my_squad: ["wyscout_id", "shirt_name"],
   my_saved_ids: ["reep_id"],
 };
@@ -108,7 +111,8 @@ function sqlViolations(text: string): string[] {
 describe("Reep docs match the release snapshot", () => {
   it("lists exactly the CSV tables the release publishes", () => {
     const listed = documentedCsvTables(docs["download-duckdb-csv.md"]);
-    expect(listed.length).toBeGreaterThan(10);
+    expect(listed.length).toBeGreaterThanOrEqual(9);
+    expect(Object.keys(schema).sort()).toEqual([...csvTables].sort());
     expect(new Set(listed)).toEqual(csvTables);
   });
 
@@ -127,29 +131,34 @@ describe("Reep docs match the release snapshot", () => {
   });
 
   it("states the licence and exclusions the manifest records", () => {
-    expect(manifest.licence.spdx).toBe("CC0-1.0");
+    // The release files no longer state the licence; the downloads page does.
     expect(docs["overview.md"]).toContain("CC0 1.0");
-    for (const field of ["dob", "evidence", "appearances"]) {
-      expect(manifest.redaction[field], field).toBe("excluded");
-    }
+    const boundaries = manifest.identity_rider_boundaries;
+    expect(boundaries.private_dobs_stripped).toBe(true);
+    expect(boundaries.internal_lineups_withheld).toBe(true);
+    expect(manifest.appearance_count).toBe(0);
     const overview = docs["overview.md"].replace(/\s+/g, " ");
+    expect(overview).toContain(`${boundaries.u18_persons_withheld.toLocaleString("en-GB")} under-18 persons withheld`);
+    expect(overview).toContain(`release \`${release.stamp}\``);
     expect(overview).toContain("excludes dates of birth");
     expect(overview).toContain("raw provider evidence");
     expect(overview).toContain("no career history, squad membership or appearance data");
   });
 
   it("catches invented tables and columns", () => {
-    expect(summaryViolations("| `bridges` | `provider, confidence` | x |")).toEqual([
-      "bridges.confidence not in schema",
+    expect(summaryViolations("| `bridges` | `provider, upstream_status` | x |")).toEqual([
+      "bridges.upstream_status not in schema",
     ]);
     expect(summaryViolations("| `transfers` | `reep_id` | x |")).toEqual(["unknown table transfers"]);
     expect(sqlViolations("```sql\nSELECT b.nonesuch FROM bridges b;\n```")).toEqual([
       "bridges.nonesuch not in schema",
     ]);
-    // A real column, on the wrong table: label is an entities column.
-    expect(sqlViolations("```sql\nSELECT b.label FROM bridges b;\n```")).toEqual([
-      "bridges.label not in schema",
+    // A real column, on the wrong table: canonical_name is an entities column.
+    expect(sqlViolations("```sql\nSELECT b.canonical_name FROM bridges b;\n```")).toEqual([
+      "bridges.canonical_name not in schema",
     ]);
+    // A column of an older release layout.
+    expect(sqlViolations("```sql\nSELECT e.label FROM entities e;\n```")).toEqual(["entities.label not in schema"]);
     expect(sqlViolations("```sql\nSELECT z.reep_id FROM bridges b;\n```")).toEqual([
       "alias z names no table",
     ]);

@@ -24,7 +24,7 @@ const USER_AGENT = "football-docs (+https://github.com/withqwerty/football-docs)
 const MAX_RESULTS = 10;
 const FRESHNESS_TTL_MS = 60 * 60 * 1000;
 
-export const ENTITY_TYPES = ["player", "coach", "referee", "team", "competition", "season", "stage", "match"] as const;
+export const ENTITY_TYPES = ["player", "coach", "referee", "team", "competition", "season", "stage", "venue", "match"] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 
 export type ResolveEntityArgs = {
@@ -553,10 +553,9 @@ function sqlFor(q: Query): string {
   if (q.kind === "provider") {
     return [
       "-- A bridge can name a merged Reep ID: follow its redirect to the survivor. An empty",
-      "-- to_id is a tombstone (redirect_reason de_corroborated or withheld), not a merge.",
-      "-- upstream_status: empty for a live ID, retired or removed when the provider no longer uses it.",
-      "SELECT b.reep_id AS bridged_id, r.reason AS redirect_reason, e.reep_id, e.label, e.entity_type,",
-      "       o.provider, o.namespace, o.external_id, coalesce(o.upstream_status, '') AS upstream_status",
+      "-- to_id is a tombstone (the ID was withdrawn or withheld), not a merge.",
+      "SELECT b.reep_id AS bridged_id, r.reason AS redirect_reason, e.reep_id, e.canonical_name, e.entity_type,",
+      "       o.provider, o.namespace, o.external_id",
       "FROM bridges b",
       "LEFT JOIN redirects r ON r.from_id = b.reep_id",
       "JOIN entities e ON e.reep_id = coalesce(nullif(r.to_id, ''), b.reep_id)",
@@ -564,28 +563,27 @@ function sqlFor(q: Query): string {
       "JOIN bridges o ON o.reep_id = e.reep_id OR o.reep_id IN (SELECT from_id FROM redirects WHERE to_id = e.reep_id)",
       `WHERE b.provider = ${quote(q.provider)}${q.namespace ? ` AND b.namespace = ${quote(q.namespace)}` : ""}`,
       `  AND b.external_id = ${quote(q.id)}`,
-      "ORDER BY coalesce(o.upstream_status, '') <> '', o.provider, o.namespace;",
+      "ORDER BY o.provider, o.namespace;",
     ].join("\n");
   }
   if (q.kind === "reep_id") {
     return [
       "-- First check for a tombstone: a redirect with an empty to_id means the ID was withdrawn",
-      "-- (reason de_corroborated) or withheld, not merged.",
+      "-- or withheld, not merged.",
       `SELECT from_id, to_id, reason FROM redirects WHERE from_id = ${quote(q.reepId)};`,
       "",
       "-- Then follow a merge redirect to the survivor, and list every provider ID, including",
       "-- any still attached to an ID merged into it (bridged_on names that ID).",
-      "SELECT e.reep_id, e.label, e.entity_type, b.provider, b.namespace, b.external_id, b.reep_id AS bridged_on,",
-      "       coalesce(b.upstream_status, '') AS upstream_status",
+      "SELECT e.reep_id, e.canonical_name, e.entity_type, b.provider, b.namespace, b.external_id, b.reep_id AS bridged_on",
       "FROM entities e",
       "JOIN bridges b ON b.reep_id = e.reep_id OR b.reep_id IN (SELECT from_id FROM redirects WHERE to_id = e.reep_id)",
       `WHERE e.reep_id = coalesce((SELECT nullif(to_id, '') FROM redirects WHERE from_id = ${quote(q.reepId)}), ${quote(q.reepId)})`,
       `  AND NOT EXISTS (SELECT 1 FROM redirects WHERE from_id = ${quote(q.reepId)} AND coalesce(to_id, '') = '')`,
-      "ORDER BY coalesce(b.upstream_status, '') <> '', b.provider, b.namespace;",
+      "ORDER BY b.provider, b.namespace;",
     ].join("\n");
   }
   return [
-    "SELECT reep_id, label, entity_type, bridge_count",
+    "SELECT reep_id, canonical_name, entity_type, bridge_count",
     "FROM entity_search",
     `WHERE search_text ILIKE ${quote(`%${q.name}%`)}${q.type ? ` AND entity_type = ${quote(q.type)}` : ""}`,
     "ORDER BY bridge_count DESC",
@@ -604,7 +602,7 @@ function setupGuidance(q: Query, note?: string): string {
     `2. The Reep API: set REEP_API_KEY. Keys are issued by hand on request, with no self-service sign-up;`,
     `   email ${REEP_CONTACT} with your organisation and what you are matching.`,
     "",
-    "Meanwhile, this query answers the question against the downloaded file (duckdb reep-register-v1.duckdb):",
+    "Meanwhile, this query answers the question against the downloaded file (duckdb reep-register.duckdb):",
     "",
     "```sql",
     sqlFor(q),

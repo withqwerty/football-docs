@@ -11,7 +11,8 @@ The API serves the current release over HTTP for single, live lookups. It
 exposes nothing the free download does not. Base URL:
 `https://reep.football/api/v1`. The full contract is the OpenAPI specification
 at https://reep.football/openapi.yaml, rendered at https://reep.football/docs.
-Checked on 2026-10-09 against release `20261005T180536Z`.
+Checked on 2026-10-09 against release `20261005T180536Z`; the specification was
+unchanged on 2026-11-03, when release `2026-10-31.1` was current.
 
 ## Getting a key
 
