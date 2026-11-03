@@ -5,7 +5,7 @@
     "page": "https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede",
     "page_id": "65ce257f-83b5-451f-b798-96b01d41aede",
     "title": "Driblab API 1.0 Guide [EN]",
-    "generated_at": "2026-09-09"
+    "generated_at": "2026-11-03"
   },
   "basePaths": [],
   "paths": {
@@ -88,6 +88,15 @@
       "GET"
     ],
     "/game/{id}/video-type/{fileTypeId}/stream-link": [
+      "GET"
+    ],
+    "/general-positions": [
+      "GET"
+    ],
+    "/percentiles": [
+      "GET"
+    ],
+    "/player-percentiles-eventing/{percentileId}/general-position/{positionId}": [
       "GET"
     ],
     "/player-positions": [
@@ -195,12 +204,15 @@
     "matchDay",
     "matchGroupId",
     "matchday",
+    "percentileId",
     "playerId",
+    "positionId",
     "roundTypeId",
     "seasonId",
     "teamId"
   ],
   "fields": [
+    "Passing",
     "String",
     "academy",
     "accelerations",
@@ -297,6 +309,7 @@
     "games_lost",
     "games_played",
     "games_won",
+    "general_position_id",
     "goals",
     "goalsConceded",
     "goals_conceded",
@@ -359,6 +372,10 @@
     "passesBypassingPlayers",
     "passesFinalThirdTotal",
     "passesOppHalf",
+    "passesOppHalfP10",
+    "passesOppHalfP90",
+    "passesP10",
+    "passesP90",
     "passesPerLongBall",
     "passesPerShots",
     "passesSuccessful",
@@ -368,11 +385,15 @@
     "passingPct",
     "penaltiesTaken",
     "penalty_shootout_score",
+    "percentileId",
+    "percentileName",
     "period",
     "player",
     "players",
     "points",
     "position",
+    "positionId",
+    "positionName",
     "possession",
     "ppda",
     "predictive",
@@ -1105,6 +1126,57 @@
         "uses_left"
       ]
     },
+    "GET /general-positions": {
+      "name": "General Positions",
+      "group": "General positions",
+      "description": "List of all general positions",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /percentiles": {
+      "name": "Available Percentiles",
+      "group": "Percentiles",
+      "description": "List of available percentiles",
+      "paginated": false,
+      "parameters": [],
+      "fields": [
+        "id",
+        "name"
+      ]
+    },
+    "GET /player-percentiles-eventing/{percentileId}/general-position/{positionId}": {
+      "name": "Player Percentiles Eventing",
+      "group": "Percentiles",
+      "description": "List of all stats percentiles for certain position",
+      "paginated": false,
+      "parameters": [
+        "percentileId",
+        "positionId"
+      ],
+      "fields": [
+        "Passing",
+        "aerial",
+        "association",
+        "ball_handing",
+        "defending",
+        "passesOppHalfP10",
+        "passesOppHalfP90",
+        "passesP10",
+        "passesP90",
+        "passing",
+        "percentileId",
+        "percentileName",
+        "positionId",
+        "positionName",
+        "saving",
+        "shooting",
+        "stats"
+      ]
+    },
     "GET /player-positions": {
       "name": "Player Positions",
       "group": "Player positions",
@@ -1113,6 +1185,7 @@
       "parameters": [],
       "fields": [
         "description",
+        "general_position_id",
         "id",
         "name"
       ]

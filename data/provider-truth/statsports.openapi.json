@@ -19,7 +19,7 @@
         "version": "7"
       }
     ],
-    "generated_at": "2026-09-30"
+    "generated_at": "2026-11-03"
   },
   "basePaths": [],
   "paths": {
@@ -47,12 +47,17 @@
     "/api/thirdPartyData/getSessionRawData": [
       "POST"
     ],
-    "/api/thirdPartyData/test": [
+    "/api/thirdPartyData/health": [
       "GET"
     ]
   },
   "parameters": [
-    "api-version"
+    "api-version",
+    "canBeCanceled",
+    "isCancellationRequested",
+    "waitHandle.handle",
+    "waitHandle.safeWaitHandle.isClosed",
+    "waitHandle.safeWaitHandle.isInvalid"
   ],
   "schemas": [
     "DrillDataV5",

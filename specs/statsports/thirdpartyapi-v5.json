@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "STATSports 3rd Party API",
     "description": "3rd Party API To Allow Authorized 3rd Parties Access To STATSports Data. This API version has been deprecated.",
@@ -15,11 +15,12 @@
     "version": "5"
   },
   "paths": {
-    "/api/thirdPartyData/test": {
+    "/api/thirdPartyData/health": {
       "get": {
         "tags": [
           "ThirdPartyData"
         ],
+        "summary": "Liveness probe confirming the service is running and reachable.",
         "parameters": [
           {
             "name": "api-version",
@@ -33,7 +34,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "The service is up and responding.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         },
         "deprecated": true
@@ -46,6 +54,41 @@
         ],
         "parameters": [
           {
+            "name": "isCancellationRequested",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "canBeCanceled",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.handle",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/System.IntPtr"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isInvalid",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isClosed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "api-version",
             "in": "header",
             "description": "The requested API version",
@@ -57,7 +100,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -78,7 +121,43 @@
         "tags": [
           "ThirdPartyData"
         ],
+        "summary": "Returns the session and drills recorded for a requested session date",
         "parameters": [
+          {
+            "name": "isCancellationRequested",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "canBeCanceled",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.handle",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/System.IntPtr"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isInvalid",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isClosed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
           {
             "name": "api-version",
             "in": "header",
@@ -90,24 +169,46 @@
           }
         ],
         "requestBody": {
+          "description": "3rd Party ID for a STATSports client and the required session date",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ThirdPartyDto"
+                "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Api.ThirdPartyDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Request was successful",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ThirdPartyDataV5"
+                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
                 }
               }
             }
+          },
+          "204": {
+            "description": "Request was successful, no session found for requested date"
+          },
+          "400": {
+            "description": "Body has missing/invalid values"
+          },
+          "401": {
+            "description": "Unauthorized - invalid ID supplied"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service unavailable"
           }
         },
         "deprecated": true
@@ -118,7 +219,43 @@
         "tags": [
           "ThirdPartyData"
         ],
+        "summary": "Returns the session and drills recorded for a requested session date",
         "parameters": [
+          {
+            "name": "isCancellationRequested",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "canBeCanceled",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.handle",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/System.IntPtr"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isInvalid",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isClosed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
           {
             "name": "api-version",
             "in": "header",
@@ -130,24 +267,46 @@
           }
         ],
         "requestBody": {
+          "description": "3rd Party ID for a STATSports client and the required session date",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ThirdPartyShareDateDto"
+                "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.ThirdPartyShareDateDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Request was successful",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ThirdPartyDataV5"
+                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
                 }
               }
             }
+          },
+          "204": {
+            "description": "Request was successful, no session found for requested date"
+          },
+          "400": {
+            "description": "Body has missing/invalid values"
+          },
+          "401": {
+            "description": "Unauthorized - invalid ID supplied"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service unavailable"
           }
         },
         "deprecated": true
@@ -158,7 +317,43 @@
         "tags": [
           "ThirdPartyData"
         ],
+        "summary": "Returns the player details for each of the uploaded players for a requested session date",
         "parameters": [
+          {
+            "name": "isCancellationRequested",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "canBeCanceled",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.handle",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/System.IntPtr"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isInvalid",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "waitHandle.safeWaitHandle.isClosed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
           {
             "name": "api-version",
             "in": "header",
@@ -170,24 +365,46 @@
           }
         ],
         "requestBody": {
+          "description": "3rd Party ID for a STATSports client and the required session date",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ThirdPartyDto"
+                "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Api.ThirdPartyDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Request was successful",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlayerDataV5"
+                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
                 }
               }
             }
+          },
+          "204": {
+            "description": "Request was successful, no players found for requested date"
+          },
+          "400": {
+            "description": "Body has missing/invalid values"
+          },
+          "401": {
+            "description": "Unauthorized - invalid ID supplied"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service unavailable"
           }
         },
         "deprecated": true
@@ -196,7 +413,70 @@
   },
   "components": {
     "schemas": {
-      "DrillDataV5": {
+      "Core.Common.Models.PlayerService.PlayerThirdParty": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "syncedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedBy": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thirdPartyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.Common.Models.ThirdPartyService.Api.ThirdPartyDto": {
+        "type": "object",
+        "properties": {
+          "thirdPartyApiId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.Common.Models.ThirdPartyService.Base.DrillDataV5": {
         "type": "object",
         "properties": {
           "name": {
@@ -216,12 +496,12 @@
             "nullable": true
           },
           "drillKpi": {
-            "$ref": "#/components/schemas/DrillKpiV5"
+            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.DrillKpiV5"
           }
         },
         "additionalProperties": false
       },
-      "DrillKpiV5": {
+      "Core.Common.Models.ThirdPartyService.Base.DrillKpiV5": {
         "type": "object",
         "properties": {
           "totalTime": {
@@ -1103,11 +1383,92 @@
         },
         "additionalProperties": false
       },
-      "IntPtr": {
+      "Core.Common.Models.ThirdPartyService.Base.SessionDataV5": {
         "type": "object",
+        "properties": {
+          "sessionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sessionType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
         "additionalProperties": false
       },
-      "PlayerDataV5": {
+      "Core.Common.Models.ThirdPartyService.Base.SessionPlayerDataV5": {
+        "type": "object",
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
+          },
+          "drills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.DrillDataV5"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shareDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "session": {
+            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.SessionDataV5"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.SessionPlayerDataV5"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.Common.Models.ThirdPartyService.ThirdPartyShareDateDto": {
+        "required": [
+          "thirdPartyApiId"
+        ],
+        "type": "object",
+        "properties": {
+          "thirdPartyApiId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shareDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.Common.Models.ThirdPartyService.V5.PlayerDataV5": {
         "type": "object",
         "properties": {
           "id": {
@@ -1189,7 +1550,7 @@
           "playerThirdParties": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PlayerThirdParty"
+              "$ref": "#/components/schemas/Core.Common.Models.PlayerService.PlayerThirdParty"
             },
             "nullable": true
           },
@@ -1200,154 +1561,27 @@
         },
         "additionalProperties": false
       },
-      "PlayerThirdParty": {
+      "System.IntPtr": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "syncedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "updatedBy": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "thirdPartyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "customId": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "SessionDataV5": {
-        "type": "object",
-        "properties": {
-          "sessionDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "SessionPlayerDataV5": {
-        "type": "object",
-        "properties": {
-          "player": {
-            "$ref": "#/components/schemas/PlayerDataV5"
-          },
-          "drills": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DrillDataV5"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ThirdPartyDataV5": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "shareDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "session": {
-            "$ref": "#/components/schemas/SessionDataV5"
-          },
-          "players": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SessionPlayerDataV5"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ThirdPartyDto": {
-        "type": "object",
-        "properties": {
-          "thirdPartyApiId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "sessionDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ThirdPartyShareDateDto": {
-        "required": [
-          "thirdPartyApiId"
-        ],
-        "type": "object",
-        "properties": {
-          "thirdPartyApiId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "shareDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "scheme": "Bearer"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "ThirdPartyData"
+    }
+  ]
 }

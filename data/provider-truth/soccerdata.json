@@ -3,8 +3,8 @@
   "kind": "python-package",
   "source": {
     "package": "soccerdata",
-    "version": "1.9.1",
-    "generated_at": "2026-08-31"
+    "version": "2026.43.0",
+    "generated_at": "2026-11-03"
   },
   "modules": {
     "soccerdata": [

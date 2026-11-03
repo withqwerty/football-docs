@@ -316,8 +316,11 @@ holding `end_contract_date`, `contract_option`, `loan_team` and
 `loan_end_contract_date`.
 
 `position` is a short code (`GK`) and `side` is a word (`Centre`); the full
-vocabulary comes from `GET /player-positions`. `market_value` appears on both
-players and teams, so squad value needs no summing.
+vocabulary comes from `GET /player-positions`. Each player position carries a
+`general_position_id`, which points into `GET /general-positions` (`id`, `name`).
+In the guide's sample, `RC` ("RED CARD") and `Sub` ("SUBSTITUTE") have
+`general_position_id` 0. `market_value` appears on both players and teams, so
+squad value needs no summing.
 
 **Season** (`GET /season/{id}`) — `year` (the starting calendar year),
 `alias` (a short label such as `ESP I 2016`), `current_matchday`,
@@ -332,6 +335,18 @@ aggregate as complete rather than assuming they agree.
 **Competition** — `division` (a number, 1 for a top flight), `competition_type`,
 `is_youth`, `is_male`, `country`, `number_of_seasons`. Gender is a boolean
 `is_male` rather than an enumerated field.
+
+## Percentiles
+
+`GET /player-percentiles-eventing/{percentileId}/general-position/{positionId}`
+returns, for one percentile set (`GET /percentiles`, for example "Europe Top 5")
+and one general position, a `stats` object. The guide lists its attributes as
+`defending`, `passing`, `association`, `aerial`, `ball_handing`, `saving` and
+`shooting`, each an object. Its response sample capitalises the group
+(`"Passing"`) and shows keys such as `passesP10`, `passesP90`,
+`passesOppHalfP10` and `passesOppHalfP90`. The guide does not list the keys inside
+each group, and does not define the `P10` and `P90` suffixes. Read the group
+names case-insensitively, and check a live response before relying on a key.
 
 ## What Driblab does not provide
 

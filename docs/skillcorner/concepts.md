@@ -48,7 +48,7 @@ SkillCorner's Game Intelligence (V2) models tactical, positional behaviour from 
 | **On-ball engagements** | out of possession | Pressing/defensive engagements on the opponent ball carrier |
 | **Phases of play** | — | Segmentation of the match into possession phases / game states |
 
-Each is available as a per-match **dynamic-events** stream (CSV, row-level) and as **aggregated GI metrics** (JSON, with `group_by`/`average_per`). The V1 equivalents (`/in_possession/...`, `/beta/out_of_possession/`) are deprecated.
+Each is available as a per-match **dynamic-events** stream (CSV, row-level) and as **aggregated GI metrics** (JSON, with `group_by`/`average_per`). The V1 equivalents (`/in_possession/...`, `/beta/out_of_possession/`) are no longer in the published spec (checked 2026-11-03).
 
 ## Data quality gates
 

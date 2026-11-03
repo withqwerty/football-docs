@@ -20,11 +20,11 @@ upstream. Selenium-based (requires Chrome/Chromium), 7-second rate limit enforce
 | `read_lineup(match_id=None)` | Lineups | `[league, season, game]` | jersey_number, position, minutes_played, is_starter |
 | `read_events(match_id=None)` | In-match events | `[league, season, game]` | Goals, cards, substitutions with timing |
 
-**Team season stat types** (as of soccerdata 1.9.1; `keeper_adv`, `passing`, `passing_types`, `goal_shot_creation`, `defense`, and `possession` were removed after fbref.com restricted access to those pages): `standard`, `keeper`, `shooting`, `playing_time`, `misc`.
+**Team season stat types** (as of soccerdata 2026.43.0; `keeper_adv`, `passing`, `passing_types`, `goal_shot_creation`, `defense`, and `possession` were removed after fbref.com restricted access to those pages): `standard`, `keeper`, `shooting`, `playing_time`, `misc`.
 
-**Team match stat types** (as of soccerdata 1.9.1; same removals as above): `schedule`, `shooting`, `keeper`, `misc`.
+**Team match stat types** (as of soccerdata 2026.43.0; same removals as above): `schedule`, `shooting`, `keeper`, `misc`.
 
-**Player match stat types** (as of soccerdata 1.9.1; same removals as above): `summary`, `keepers`.
+**Player match stat types** (as of soccerdata 2026.43.0; same removals as above): `summary`, `keepers`.
 
 ## Understat (sd.Understat)
 

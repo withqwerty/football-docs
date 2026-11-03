@@ -411,7 +411,7 @@
       "access_level": "open-source",
       "licence_status": "Open-source library documentation; upstream site terms vary.",
       "public_safety_notes": "Describe supported public sources and avoid private scraper state.",
-      "version": "1.9.1",
+      "version": "2026.43.0",
       "package": { "type": "pypi", "name": "soccerdata" },
       "sources": [
         { "url": "https://soccerdata.readthedocs.io/en/latest/", "type": "readthedocs" },

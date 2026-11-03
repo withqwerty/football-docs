@@ -9,15 +9,12 @@
         "version": ""
       }
     ],
-    "generated_at": "2026-10-09"
+    "generated_at": "2026-11-03"
   },
   "basePaths": [
     "/api"
   ],
   "paths": {
-    "/beta/out_of_possession/": [
-      "GET"
-    ],
     "/competition_editions/": [
       "GET"
     ],
@@ -34,15 +31,6 @@
       "GET"
     ],
     "/data_collections/custom/": [
-      "GET"
-    ],
-    "/in_possession/off_ball_runs/": [
-      "GET"
-    ],
-    "/in_possession/on_ball_pressures/": [
-      "GET"
-    ],
-    "/in_possession/passes/": [
       "GET"
     ],
     "/match/{match_id}/": [
@@ -70,18 +58,6 @@
       "GET"
     ],
     "/match/{match_id}/custom/dynamic_events/player_possessions/": [
-      "GET"
-    ],
-    "/match/{match_id}/custom/in_possession/off_ball_runs/": [
-      "GET"
-    ],
-    "/match/{match_id}/custom/in_possession/on_ball_pressures/": [
-      "GET"
-    ],
-    "/match/{match_id}/custom/in_possession/passes/": [
-      "GET"
-    ],
-    "/match/{match_id}/custom/out_of_possession/": [
       "GET"
     ],
     "/match/{match_id}/custom/physical/": [
@@ -177,7 +153,6 @@
     "age__gte",
     "age__lte",
     "average_per",
-    "channel",
     "competition",
     "competition_edition",
     "competition_id",
@@ -191,11 +166,9 @@
     "dynamic_events_last_modified__gte",
     "dynamic_events_v2_last_modified__gte",
     "dynamic_events_v3_last_modified__gte",
-    "extrapolated_tracking_last_modified__gte",
     "extrapolated_tracking_v3_last_modified__gte",
     "feed_type",
     "file_format",
-    "group",
     "group_by",
     "ignore_dynamic_events_check",
     "in_possession_dealing_with_pressure_last_modified__gte",
@@ -228,19 +201,14 @@
     "position",
     "position_group",
     "possession",
-    "pressure_intensity",
     "response_format",
     "result",
     "results",
-    "role",
-    "run_type",
     "search",
     "season",
     "stadium",
     "team",
     "team_id",
-    "third",
-    "tracking_last_modified__gte",
     "user",
     "variants",
     "venue"

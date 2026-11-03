@@ -6,10 +6,10 @@
       {
         "spec": "specs/hawkin-dynamics/openapi.json",
         "title": "Hawkin Force Platform API",
-        "version": "1.16"
+        "version": "1.17"
       }
     ],
-    "generated_at": "2026-10-01"
+    "generated_at": "2026-11-03"
   },
   "basePaths": [],
   "paths": {

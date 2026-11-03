@@ -39,6 +39,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from gen_openapi_truth import with_short_schema_names
+
 REPO = Path(__file__).resolve().parent.parent
 SPECS = REPO / "specs"
 DOCS = REPO / "docs"
@@ -177,7 +179,11 @@ def notes(vendor: str, schema: str, field: str, prop: dict[str, Any]) -> str:
         parts.append(cell(prop["description"]))
     if prop.get("enum"):
         parts.append("Values: " + ", ".join(f"`{v}`" for v in prop["enum"]))
-    bounds = [f"{key}: `{fmt(prop[key])}`" for key in ("minLength", "maxLength", "minimum", "maximum") if key in prop]
+    bounds = [
+        f"{key}: `{fmt(prop[key])}`"
+        for key in ("minLength", "maxLength", "minimum", "exclusiveMinimum", "maximum")
+        if key in prop
+    ]
     if bounds:
         parts.append(" ".join(bounds))
     if "default" in prop:
@@ -299,8 +305,10 @@ def inventory(spec: dict[str, Any], skip: tuple[str, ...] = ()) -> list[list[str
 STATSPORTS_VERSIONS = ("v5", "v6", "v7")
 
 
+@functools.cache
 def statsports_specs() -> dict[str, dict[str, Any]]:
-    return {v: load(f"statsports/thirdpartyapi-{v}.json") for v in STATSPORTS_VERSIONS}
+    # The specs name schemas by .NET full type name; the docs use the short names.
+    return {v: with_short_schema_names(load(f"statsports/thirdpartyapi-{v}.json")) for v in STATSPORTS_VERSIONS}
 
 
 def statsports_component(name: str) -> tuple[list[str], dict[str, Any]]:

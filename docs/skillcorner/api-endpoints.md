@@ -72,8 +72,8 @@ Aggregated with `group_by`, `average_per`, `order_by`, `variants`, plus the stan
 
 ## Custom (per-match, customer-specific)
 
-`GET /match/{match_id}/custom/` and beneath it: `data_collection/`, `tracking/`, `physical/`, `in_possession/{off_ball_runs,on_ball_pressures,passes}/`, `out_of_possession/`, and `dynamic_events/{off_ball_runs,on_ball_engagements,passing_options,phases_of_play,player_possessions}/`.
+`GET /match/{match_id}/custom/` and beneath it: `data_collection/`, `tracking/`, `physical/`, and `dynamic_events/{off_ball_runs,on_ball_engagements,passing_options,phases_of_play,player_possessions}/`.
 
-## Deprecated (Game Intelligence V1)
+## Removed (Game Intelligence V1)
 
-`GET /beta/out_of_possession/`, `GET /in_possession/off_ball_runs/`, `GET /in_possession/on_ball_pressures/`, `GET /in_possession/passes/` — superseded by the V2 `dynamic_events` / `metrics/game_intelligence` endpoints above.
+The spec fetched on 2026-11-03 no longer lists the Game Intelligence V1 endpoints: `/beta/out_of_possession/`, `/in_possession/off_ball_runs/`, `/in_possession/on_ball_pressures/`, `/in_possession/passes/`, and their per-match forms under `/match/{match_id}/custom/` (`out_of_possession/` and `in_possession/{off_ball_runs,on_ball_pressures,passes}/`). The earlier spec described V1 as "no longer generated for new matches". Use the V2 `dynamic_events` and `metrics/game_intelligence` endpoints above.

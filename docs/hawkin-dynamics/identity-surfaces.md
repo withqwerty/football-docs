@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.17 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -43,7 +43,8 @@ player ID kept in `external`.
 
 ## Personal data in identity fields
 
-`Athlete` carries `name`, `image` (URL to a photo), `dob` (date of birth, ISO-8601
-date), `height` (centimetres), `position` and `sport`. These are personal data;
+`Athlete` carries `name`, `image` (URL to a photo), `dob` (date of birth, returned as
+stored: a full `YYYY-MM-DD` date or a year only, `YYYY`), `height` (centimetres),
+`position` and `sport`. These are personal data;
 `height` is health data. Do not use them as join keys, and do not copy them into
 shared datasets.

@@ -14,7 +14,7 @@
         "version": "4.0.0"
       }
     ],
-    "generated_at": "2026-10-09"
+    "generated_at": "2026-11-03"
   },
   "basePaths": [
     "/soccer-extended/production/v4",
@@ -226,6 +226,7 @@
     "base_manager",
     "base_player",
     "base_season_brackets_cup_round_sport_event",
+    "base_season_player",
     "base_season_stage_group",
     "base_sport_event_basic",
     "base_sport_event_conditions",
@@ -374,6 +375,7 @@
     "standing_competitor_comment",
     "standing_group",
     "standing_group_comment",
+    "standing_stage",
     "stream_events",
     "stream_heartbeat",
     "stream_metadata",
@@ -397,6 +399,7 @@
     "assists",
     "attendance",
     "average_ball_possession",
+    "average_grade",
     "away_normaltime_score",
     "away_overtime_score",
     "away_score",
@@ -1202,6 +1205,7 @@
       "2nd_part_of_season_2nd_leg",
       "3rd_round",
       "apertura",
+      "best_third",
       "champions_round",
       "clausura",
       "conference",

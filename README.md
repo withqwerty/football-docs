@@ -312,7 +312,7 @@ metrics:sources` re-checks every card quote against its live source.
 | Sportradar | 481 | integration guide (API basics, coverage tiers, ID handling, match status, update frequencies, push, historical data), Soccer Extended v4 endpoint reference with data-point tables, FAQ, plus curated api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
-| Driblab | 32 | api-access, api-endpoints, data-model, data-provenance |
+| Driblab | 34 | api-access, api-endpoints, data-model, data-provenance |
 | API-Football | 29 | api-access, data-model, identity-surfaces |
 | ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
 | Reep | 32 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,543 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,545 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
