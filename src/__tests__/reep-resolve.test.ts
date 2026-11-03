@@ -2,9 +2,12 @@ import { DuckDBInstance } from "@duckdb/node-api";
 import { beforeAll, describe, expect, it } from "vitest";
 import { type LocalRegister, REEP_CONTACT, resolveEntity } from "../reep.js";
 
-// A register with the published file's shape and a handful of rows. The tool's
-// own SQL runs against it, so a query that breaks on the real schema fails here.
+// A register in the shape of the files the tool still reads (release_metadata,
+// entities.label, bridges.upstream_status), with a handful of rows. `current`
+// holds the same rows in the 2026-10-31.1 shape; the SQL the tool suggests runs
+// against it, so a suggested query that breaks on the current schema fails here.
 let register: LocalRegister;
+let current: LocalRegister;
 const STAMP = "20260915T203651Z";
 
 beforeAll(async () => {
@@ -49,6 +52,21 @@ beforeAll(async () => {
   register = {
     stamp: STAMP,
     query: async (sql, params) => (await con.runAndReadAll(sql, params)).getRowObjectsJson() as Record<string, unknown>[],
+  };
+  for (const sql of [
+    "CREATE SCHEMA current",
+    "CREATE TABLE current.entities AS SELECT reep_id, entity_type, label AS canonical_name FROM main.entities",
+    "CREATE TABLE current.bridges AS SELECT reep_id, provider, namespace, external_id FROM main.bridges",
+    "CREATE TABLE current.redirects AS SELECT *, NULL::VARCHAR AS created_at FROM main.redirects",
+    "CREATE TABLE current.entity_search AS SELECT reep_id, entity_type, label, label AS canonical_name, search_text, bridge_count, 0::BIGINT AS alias_count FROM main.entity_search",
+  ]) {
+    await con.run(sql);
+  }
+  const currentCon = await instance.connect();
+  await currentCon.run("SET search_path = 'current'");
+  current = {
+    stamp: null,
+    query: async (sql, params) => (await currentCon.runAndReadAll(sql, params)).getRowObjectsJson() as Record<string, unknown>[],
   };
 });
 
@@ -225,7 +243,7 @@ describe("resolve_entity against a local register", () => {
   it("suggests provider SQL that follows a bridge's redirect", async () => {
     const t = text(await resolveEntity({ provider: "transfermarkt", namespace: "spieler", id: "1146905" }, { env: {}, fetchImpl: noNetwork }));
     const sql = t.split("```sql\n")[1].split("\n```")[0];
-    const rows = await register.query(sql, {});
+    const rows = await current.query(sql, {});
     expect(rows.length).toBeGreaterThan(0);
     expect(new Set(rows.map((row) => row.reep_id))).toEqual(new Set(["rpsurvivor000001"]));
     expect(rows[0].bridged_id).toBe("rpmergedsrc00001");
@@ -267,14 +285,28 @@ describe("resolve_entity against a local register", () => {
     const sql = t.split("```sql\n")[1].split("\n```")[0];
     const statements = sql.split(";").map((s) => s.replace(/^\s*--.*$/gm, "").trim()).filter(Boolean);
     expect(statements).toHaveLength(2);
-    const tombstone = await register.query(statements[0], {});
+    const tombstone = await current.query(statements[0], {});
     expect(tombstone).toEqual([{ from_id: "rpwithdrawn00000", to_id: "", reason: "de_corroborated" }]);
-    expect(await register.query(statements[1], {})).toEqual([]);
+    expect(await current.query(statements[1], {})).toEqual([]);
     const merged = text(await resolveEntity({ reep_id: "rpdeadbeef000000" }, { env: {}, fetchImpl: noNetwork }));
     const survivorSql = merged.split("```sql\n")[1].split("\n```")[0].split(";")[1];
-    const survivorRows = await register.query(survivorSql, {});
-    expect(survivorRows.length).toBe(5);
-    expect(survivorRows.map((row) => row.upstream_status)).toEqual(["", "", "", "removed", "retired"]);
+    const survivorRows = await current.query(survivorSql, {});
+    expect(survivorRows.map((row) => `${row.provider}/${row.external_id}`)).toEqual([
+      "skillcorner/12174",
+      "skillcorner/55555",
+      "transfermarkt/11",
+      "transfermarkt/999",
+      "wyscout/379209",
+    ]);
+    expect(survivorRows.every((row) => row.canonical_name === "Declan Rice")).toBe(true);
+  });
+
+  it("suggests name-search SQL that runs against the register's schema", async () => {
+    const t = text(await resolveEntity({ name: "Declan Rice", type: "player" }, { env: {}, fetchImpl: noNetwork }));
+    const sql = t.split("```sql\n")[1].split("\n```")[0];
+    expect(await current.query(sql, {})).toEqual([
+      { reep_id: "rp1b829f1d3468c4", canonical_name: "Declan Rice", entity_type: "player", bridge_count: "3" },
+    ]);
   });
 
   it("treats % in a name as a literal character", async () => {

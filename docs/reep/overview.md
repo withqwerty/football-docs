@@ -2,22 +2,23 @@
 source_url: https://reep.football/get-started
 source_type: curated
 upstream_version: null
-crawled_at: 2026-10-09
+crawled_at: 2026-11-03
 ---
 
 # Reep register overview
 
 Reep is an open football identity register. It gives each player, coach,
-referee, team, competition, season, stage and match one stable Reep ID, and maps
+referee, team, competition, season, stage, venue and match one stable Reep ID, and maps
 the IDs that data providers use (Opta, Transfermarkt, Wyscout, SkillCorner,
 StatsBomb, FotMob, API-Football and more) onto it. Any provider ID therefore maps
-to any other through the Reep ID. Written from reep.football on 2026-09-22.
+to any other through the Reep ID. Written from reep.football on 2026-09-22, and
+checked against release `2026-10-31.1` on 2026-11-03.
 
 ## Two ways in: download or API
 
 Both serve the same weekly, stamped release. Pick by the job.
 
-| Question | Download (DuckDB or CSV) | API |
+| Question | Download (DuckDB, Parquet or CSV) | API |
 |---|---|---|
 | Who can use it | Anyone | Named partners and evaluators with a key |
 | Access | No key, no sign-up | Bearer key, issued by hand on request |
@@ -48,7 +49,8 @@ source that is set up in the MCP server's environment:
 1. `REEP_DUCKDB_PATH`: the path to a downloaded copy of the register. No key is
    needed, and lookups run locally. Each answer ends with the file's release stamp
    checked against the latest release, and says how to download the new file
-   when it is out of date.
+   when it is out of date. A file in the 2026-10-31.1 layout does not record its
+   stamp, so the answer names the current release instead.
 2. `REEP_API_KEY`: a Reep API key, issued by hand on request (email
    getintouch+nutmeg@withqwerty.com). There is no self-service sign-up.
 
@@ -65,9 +67,10 @@ What the answers say:
   `to_id`) is reported as withdrawn or withheld, with the reason. It is not
   reported as unknown: it was published, and the ID is never reused.
 - Provider IDs that the provider no longer uses (`upstream_status` retired or
-  removed, in a local register file) are marked, and listed after the live
-  ones. They still resolve, so an old stored ID keeps working, but map to the
-  unmarked ones. The Reep API does not return this field.
+  removed, in a local register file that has that column) are marked, and listed
+  after the live ones. They still resolve, so an old stored ID keeps working, but
+  map to the unmarked ones. Release `2026-10-31.1` has no `upstream_status`
+  column, and the Reep API does not return this field.
 - A provider ID looked up without a namespace gets a note: which namespace it
   matched in, or a warning when it matched in more than one. Pass the
   namespace (or the entity type) to be sure of the entity.
@@ -80,7 +83,7 @@ Example MCP configuration:
     "football-docs": {
       "command": "npx",
       "args": ["-y", "football-docs"],
-      "env": { "REEP_DUCKDB_PATH": "/path/to/reep-register-v1.duckdb" }
+      "env": { "REEP_DUCKDB_PATH": "/path/to/reep-register.duckdb" }
     }
   }
 }
@@ -89,26 +92,32 @@ Example MCP configuration:
 ## Licence and scope
 
 The release, provider-ID bridges included, is dedicated to the public domain
-under CC0 1.0 and ships its own LICENSE.txt. It can be used for anything,
+under CC0 1.0. The downloads page says each release ships its own LICENSE.txt;
+the file list of release `2026-10-31.1` does not include one. It can be used for anything,
 including commercially, with no attribution required. Citing "Reep, the football
 identity register (reep.football)" with the release stamp is requested as a
 courtesy, not a condition. CC0 covers only rights Reep holds; it grants no rights
 in third-party source material.
 
 The public release deliberately excludes dates of birth, known minors and raw
-provider evidence. Players, coaches and referees are identity records: they carry
-provider bridges, names and aliases, but no career history, squad membership or
-appearance data. Published relationships are structural only: competition,
-season, stage and match, and which teams take part in which competition-seasons.
+provider evidence. In release `2026-10-31.1`, `manifest.json` records
+`private_dobs_stripped: true`, 14,510 under-18 persons withheld and
+`internal_lineups_withheld: true`, and the date-of-birth columns of `entities` are
+empty. Players, coaches and referees are identity records: they carry provider
+bridges, names and aliases, but no career history, squad membership or
+appearance data. Published relationships are structural only. In that release the
+`edges` table links matches to their home and away teams, season and venue,
+stages to seasons, and seasons to competitions.
 
 Sources: [downloads and licence](https://reep.football/data/),
 [API reference](https://reep.football/docs).
 
 ## Releases and corrections
 
-A new release is cut weekly. Each carries a stamp such as `20260915T203651Z`, a
-manifest, per-file checksums and a machine-readable schema. The current
-manifest is always at https://data.reep.football/releases/latest.json, and
+A new release is cut weekly. Each carries a stamp such as `2026-10-31.1` (older
+releases used stamps such as `20260915T203651Z`), a `release.json` file list with
+per-file SHA-256 checksums, and a `manifest.json` of counts. The pointer to the
+current release is always at https://data.reep.football/releases/latest.json, and
 every API response carries the stamp in the `X-Reep-Release-Stamp` header.
 
 A wrong mapping found while joining is worth reporting: submit the two provider

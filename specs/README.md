@@ -18,8 +18,9 @@ anyone can re-fetch and diff.
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
 | `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-10-09 | 2026-10-09 |
-| `reep/release.json` | https://data.reep.football/releases/20261005T180536Z/release.json (via `latest.json`) | 2026-10-09 | 2026-10-09 |
-| `reep/schema.json` | https://data.reep.football/releases/20261005T180536Z/schema.json | 2026-10-09 | 2026-10-09 |
+| `reep/release.json` | https://data.reep.football/releases/2026-10-31.1/release.json (via `latest.json`) | 2026-11-03 | 2026-11-03 |
+| `reep/manifest.json` | the `manifest.json` that `reep/release.json` lists | 2026-11-03 | 2026-11-03 |
+| `reep/columns.json` | derived: the header line of each table's `.csv.gz` that `reep/release.json` lists | 2026-11-03 | 2026-11-03 |
 | `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-11-03 | 2026-11-03 |
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-11-03 | 2026-11-03 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-11-03 | 2026-11-03 |
@@ -282,11 +283,14 @@ Impect API specification is kept in this repository.
 
 ## Reep
 
-Reep is checked against three snapshots: the API spec (`reep/openapi.yaml`, used by
-the provider-truth tests) and one release's manifest and column schema
-(`reep/release.json`, `reep/schema.json`, used by `src/__tests__/reep.test.ts`). A new
-release is cut weekly, so the manifest snapshot is expected to age; what matters is
-whether anything the docs state has changed.
+Reep is checked against four snapshots: the API spec (`reep/openapi.yaml`, used by
+the provider-truth tests) and one release's file list, manifest and table columns
+(`reep/release.json`, `reep/manifest.json`, `reep/columns.json`, used by
+`src/__tests__/reep.test.ts`). Releases from `2026-10-31.1` on publish no column
+schema, so `reep/columns.json` is not a copy of a published file: `check_reep_live.py`
+reads the first line of each table's gzipped CSV with a ranged request and writes
+the column names. A new release is cut weekly, so the snapshots are expected to
+age; what matters is whether anything the docs state has changed.
 
 To refresh:
 

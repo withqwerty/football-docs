@@ -1,0 +1,110 @@
+{
+  "bridges": [
+    "reep_id",
+    "provider",
+    "namespace",
+    "external_id",
+    "entity_type",
+    "independence_bucket",
+    "route_scope",
+    "rule_id",
+    "confidence",
+    "attached_at"
+  ],
+  "edges": [
+    "edge_id",
+    "edge_kind",
+    "source_reep_id",
+    "source_type",
+    "target_reep_id",
+    "target_type",
+    "provider_count",
+    "metadata_json"
+  ],
+  "entities": [
+    "reep_id",
+    "entity_type",
+    "canonical_name",
+    "gender",
+    "country",
+    "birth_date",
+    "birth_date_iso",
+    "dob_precision",
+    "grade",
+    "bucket_count",
+    "corroboration_buckets",
+    "metadata_json",
+    "updated_at"
+  ],
+  "entity_search": [
+    "reep_id",
+    "entity_type",
+    "label",
+    "canonical_name",
+    "search_text",
+    "bridge_count",
+    "alias_count"
+  ],
+  "matches": [
+    "reep_id",
+    "fixture_label",
+    "gender",
+    "country",
+    "match_date_iso",
+    "season_id",
+    "home_team_id",
+    "away_team_id",
+    "home_score",
+    "away_score",
+    "match_state",
+    "result_form",
+    "shootout_home",
+    "shootout_away",
+    "score_basis",
+    "leg",
+    "aggregate_of",
+    "grade",
+    "bucket_count",
+    "corroboration_buckets",
+    "metadata_json"
+  ],
+  "overlay_aliases": [
+    "reep_id",
+    "source",
+    "qid",
+    "name",
+    "alias",
+    "language",
+    "lang",
+    "name_source",
+    "confidence",
+    "link_confidence",
+    "dob_check",
+    "evidence",
+    "created_at"
+  ],
+  "overlay_links": [
+    "reep_id",
+    "source",
+    "external_id",
+    "qid",
+    "property",
+    "confidence",
+    "dob_check",
+    "entity_type",
+    "evidence",
+    "created_at"
+  ],
+  "provider_aliases": [
+    "reep_id",
+    "alias",
+    "alias_kind",
+    "provider"
+  ],
+  "redirects": [
+    "from_id",
+    "to_id",
+    "reason",
+    "created_at"
+  ]
+}

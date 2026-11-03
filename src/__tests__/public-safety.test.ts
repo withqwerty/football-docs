@@ -15,8 +15,9 @@ import { describe, expect, it } from "vitest";
  */
 const FORBIDDEN: Array<{ label: string; pattern: RegExp }> = [
   { label: "internal ticket reference", pattern: /\bWIT-\d+/ },
-  // reep-register-v1.duckdb is the name of the public download on reep.football, not a repository.
-  { label: "private sibling repository", pattern: /reep-(custom|register(?!-v\d+\.duckdb)|next|toolkit|scripts)/i },
+  // reep-register.duckdb (reep-register-v1.duckdb before October 2026) is the name of
+  // the public download on reep.football, not a repository.
+  { label: "private sibling repository", pattern: /reep-(custom|register(?!(-v\d+)?\.duckdb)|next|toolkit|scripts)/i },
   { label: "local data mirror", pattern: /[\w-]+-local\.sqlite/i },
   { label: "absolute local path", pattern: /\/Volumes\/[A-Za-z0-9_-]+\//, },
   { label: "private substrate vocabulary", pattern: /\bprovider-mirror\b|\bregister surface\b|\bWIT class\b/i },

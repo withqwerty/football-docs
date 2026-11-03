@@ -1,0 +1,226 @@
+{
+  "release_tag": "2026-10-31.1",
+  "release_date": "2026-10-31",
+  "exported_at": "2026-10-31T12:22:22.211975+00:00",
+  "entity_count": 3116484,
+  "bridge_count": 15879646,
+  "match_count": 2546280,
+  "appearance_count": 0,
+  "edge_count": 7588789,
+  "redirect_count": 12917,
+  "overlay_link_count": 159684,
+  "overlay_alias_count": 868221,
+  "provider_alias_count": 1541812,
+  "entity_search_count": 3116484,
+  "u18_persons_withheld": 14510,
+  "entity_counts_by_type": {
+    "coach": 24120,
+    "competition": 1614,
+    "match": 2546280,
+    "player": 437688,
+    "referee": 17915,
+    "season": 17866,
+    "stage": 25584,
+    "team": 43031,
+    "venue": 2386
+  },
+  "bridge_counts_by_provider": {
+    "api_football": 1206825,
+    "besoccer": 232793,
+    "capology": 55305,
+    "clubelo": 2982,
+    "driblab": 282727,
+    "eafc": 91886,
+    "espn": 461776,
+    "fbref": 19167,
+    "fbref_dsg": 70951,
+    "fifa": 425331,
+    "fotmob": 1115810,
+    "impect": 307659,
+    "jleague": 18889,
+    "kicker": 50706,
+    "kicker_ama": 8979,
+    "national_football_teams": 23967,
+    "opta": 3103132,
+    "rsssf": 881,
+    "scisports": 100415,
+    "second_spectrum": 15235,
+    "skillcorner": 355466,
+    "soccerdonna": 85955,
+    "sofascore": 795873,
+    "sofifa": 818,
+    "sportmonks": 377101,
+    "sportradar": 138707,
+    "statsbomb": 11298,
+    "thefa": 3271,
+    "transfermarkt": 2056526,
+    "uefa": 208808,
+    "understat": 29874,
+    "whoscored": 1168735,
+    "worldfootball": 553951,
+    "wyscout": 2497847
+  },
+  "identity_rider_boundaries": {
+    "private_dobs_stripped": true,
+    "u18_persons_withheld": 14510,
+    "internal_lineups_withheld": true
+  },
+  "gates": {
+    "uncorroborated_mint_leaks": 0,
+    "hold_count": 0,
+    "rights_matrix_passed": true,
+    "redirect_stability_pct": 100.0,
+    "deterministic_quality": {
+      "passed": false,
+      "precision_pct": null,
+      "wilson_lower_bound_95": null,
+      "recall_lineup_slot_pct": 97.24,
+      "recall_crosswalk_holdout_pct": null,
+      "split_twin_total": 5,
+      "steady_state_all_green": false,
+      "checks": {
+        "register_population": {
+          "status": "passed",
+          "required": true
+        },
+        "structural": {
+          "status": "passed",
+          "required": true
+        },
+        "detected_conflicts": {
+          "status": "failed",
+          "required": true
+        },
+        "lineup_coverage": {
+          "status": "failed",
+          "required": true
+        },
+        "appearance_physics": {
+          "status": "passed",
+          "required": true
+        },
+        "independent_precision": {
+          "status": "not_evaluated",
+          "required": true
+        },
+        "resolver_holdout_recall": {
+          "status": "not_evaluated",
+          "required": true
+        },
+        "evidence_eligibility": {
+          "status": "not_evaluated",
+          "required": true
+        },
+        "sealed_input_identity": {
+          "status": "not_evaluated",
+          "required": true
+        },
+        "conservation": {
+          "status": "passed",
+          "required": true
+        },
+        "conservation_drift": {
+          "status": "passed",
+          "required": true
+        },
+        "provider_onboarding": {
+          "status": "not_evaluated",
+          "required": false
+        },
+        "review_queue": {
+          "status": "passed",
+          "required": false
+        }
+      }
+    },
+    "gate_passed": false
+  },
+  "checksums_sha256": {
+    "entities.parquet": "b7a4167d0d550c5358183c28cc9f896952ce9e9b386dd314b97f96494fb5b98b",
+    "bridges.parquet": "1ff0b13801a743714e09afa70edc7d767195776dce50253420e36f042512a63e",
+    "matches.parquet": "fe27bba4e47695296b4bc30fd9987d99ac869ee6924a2a763f612b3d204c6cdf",
+    "edges.parquet": "3c5d9f6cb392ede846f211601e562270e6b8b237e1a180e6f50d7127974a5239",
+    "redirects.parquet": "4f7b0895d5f92a097e29d05f9067e181b4413dce105dca26b8755974ea442315",
+    "overlay_links.parquet": "c7b5f38a9e6f4137d9deb6f063143c624e6e900ed5df03965378c1c8eac5771f",
+    "overlay_aliases.parquet": "e0f5088189359af4d2e8fc6c357e62c5263a8d027d1200707d25c5ceb8025f78",
+    "entities.csv": "09228406436cdf35bf92c4685c41ba830501f5b2c4f4e3d736f3bc87ef457083",
+    "bridges.csv": "261856cc204f0c904aac506dc2b15311df27d00452bb34c8f90d4f6603d91df9",
+    "matches.csv": "51fa0ab67c0605502a5036ea278746ff586e2495d373e6e700f017256e557b55",
+    "edges.csv": "0a92a5ed88dd0e8a6cfcebe42e3db1fafdc3960317cd53f9a4c8205f08097b25",
+    "redirects.csv": "eb53646b8f841ce09b9d5a406dd4001de8194d1afab20d0cce6e2144dbf0db86",
+    "overlay_links.csv": "8ebbe4de5946b44863b226b3edddb05d65d85e9e2f18c861a7b8ae6bf05e6797",
+    "overlay_aliases.csv": "0857c571f3482c43b97736c388b83b4a8695d3e35da250d0ab03c3b90cd3d89d",
+    "entities.csv.gz": "4d7c27a35fd79d58e92176c736e134fad8857daa10d12b2528c3bfabbe256923",
+    "bridges.csv.gz": "0c9912fb18f9e78b118c9b2d15054138a5d2967cf6117b5e6824ade7bbcf894d",
+    "matches.csv.gz": "3a75f93c3fa13d4fbfe88dd66586ecc7d76235d9b7d4f166013eb5e78f359d28",
+    "edges.csv.gz": "968312961b0a924a9db827a596c21c0e40fbf9bd1384c203f4e3c40fa18c338c",
+    "redirects.csv.gz": "e54d6cad14108fe0ef91fa3fc932c10abd527f7bfd1216c949006bb940966c01",
+    "overlay_links.csv.gz": "fa3dd33b24fc7b65c9fde184c7cf78a60aed18843a1ea1128fd3c3716596deed",
+    "overlay_aliases.csv.gz": "4581c71643be981f2014b3bd1c821592c05258b9497f7ee1f09a850c411c6ac4",
+    "entity_search.csv.gz": "b687dffaf31a5fb29d1ff3f3706c7bace145dc6bea8a5f5003bbe1e2fd0357b7",
+    "provider_aliases.csv.gz": "304058c745787bb4337b0826816d0b1c32c5781afc6caecc68ea2b1d662a475d",
+    "reep-register.duckdb": "24e0cdbd2e8c83e0f0eaa1d70fae0c123734a0bafb3f610b0d1194f4ebeb5cf3",
+    "provider_aliases.parquet": "5b34a9508a15f2943b9cd99a350b79bf2c940f615f159a2a2e885aa8cc59a605",
+    "provider_aliases.csv": "d4574717626b9c124d31284755f582c9b81e6edc1ff887ba14eda6953043547f",
+    "entity_search.parquet": "4ecd9a5ae938aaca41686bb9efebe6c41f63bd7c846ed54b7964f6d2fd7d6b98",
+    "entity_search.csv": "2936077bdd18058b51cd52d5e0f3ae9b2479f40bca859ffe1cc36c5c9f0e21df",
+    "upkeep_ledger.json": "6570dff98326a466fea34199f8f5286681d9941a75037cf140ae02d760345a5e",
+    "site-summary.json": "892eb0673556d14fa17cd4e4c75ef043c6cf9e16bef5a8bb2c4c7b610c4e4b09"
+  },
+  "upkeep_ledger_file": "upkeep_ledger.json",
+  "site_summary_file": "site-summary.json",
+  "diff": {
+    "previous_label": "2026-10-25.1",
+    "current_label": "2026-10-31.1",
+    "previous_entity_count": 3119021,
+    "current_entity_count": 3116484,
+    "net_entity_delta": -2537,
+    "entity_delta_by_type": {
+      "coach": 0,
+      "competition": 83,
+      "match": 286,
+      "player": 163,
+      "referee": 0,
+      "season": 238,
+      "stage": -3307,
+      "team": 0,
+      "venue": 0
+    },
+    "id_retention_pct": 99.99987161480333,
+    "redirect_stability_pct": 100.0,
+    "retained_ids_count": 3115620,
+    "redirected_ids_count": 12916,
+    "dropped_ids": [],
+    "new_bridges_by_provider": {
+      "api_football": 4075,
+      "besoccer": 124,
+      "capology": 4,
+      "driblab": 299,
+      "eafc": 6,
+      "espn": 283,
+      "fifa": 887,
+      "fotmob": 2612,
+      "impect": 109,
+      "jleague": 30,
+      "kicker": 3,
+      "kicker_ama": 1,
+      "opta": 9422,
+      "scisports": 18,
+      "skillcorner": 986,
+      "soccerdonna": 1998,
+      "sofascore": 200,
+      "sportmonks": 1027,
+      "sportradar": 684,
+      "statsbomb": 4,
+      "transfermarkt": 16618,
+      "uefa": 63,
+      "understat": 1,
+      "whoscored": 747,
+      "worldfootball": 6985,
+      "wyscout": 16777
+    },
+    "uncorroborated_mint_leaks": [],
+    "rights_matrix_passed": true,
+    "gate_passed": true
+  }
+}
