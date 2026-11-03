@@ -377,7 +377,7 @@ Refresh manually with `python3 scripts/observe_espn.py --scheduled-date YYYYMMDD
 choosing a future fixture date and using permitted access. The script stores no
 raw responses. Review the diff, update the docs and dates, then rebuild the index.
 
-Reep's snapshots age weekly, as a new release is cut each week. Run
+Reep's snapshots age with each download release, which is cut weekly or less often. Run
 `python3 scripts/check_reep_live.py` to check every download link and list what
 has changed since the snapshots; the refresh steps are in [specs/README.md](specs/README.md#reep).
 

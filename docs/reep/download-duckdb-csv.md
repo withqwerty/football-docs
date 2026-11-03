@@ -55,9 +55,10 @@ these. Code written for the old layout fails on the new file.
 
 ## Keeping a local copy current
 
-A new release is cut every week. The DuckDB file of release `2026-10-31.1` does
-not record its own stamp, so keep the stamp of the release you downloaded
-next to the file, or compare the file's SHA-256 with the `sha256` of
+A new download release is cut weekly or less often. The daily matching goes to
+the API only, so the file has no matches made after its release. The DuckDB file
+of release `2026-10-31.1` does not record its own stamp, so keep the stamp of the
+release you downloaded next to the file, or compare the file's SHA-256 with the `sha256` of
 `reep-register.duckdb` in the current `release.json`. When they differ, download
 the file again from https://reep.football/downloads/duckdb over the old copy,
 then resolve stored Reep IDs through the `redirects` table. Check before any bulk

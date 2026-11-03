@@ -16,7 +16,8 @@ checked against release `2026-10-31.1` on 2026-11-03.
 
 ## Two ways in: download or API
 
-Both serve the same weekly, stamped release. Pick by the job.
+They do not update at the same rate. The API gets new matching daily. The
+download is a stamped release, published weekly or less often. Pick by the job.
 
 | Question | Download (DuckDB, Parquet or CSV) | API |
 |---|---|---|
@@ -25,11 +26,12 @@ Both serve the same weekly, stamped release. Pick by the job.
 | Matching a whole dataset | Yes, SQL joins over every table | No, one lookup at a time, rate-limited |
 | One live lookup from an app | Only if you host the file | Yes, nothing to host |
 | Redirects after a merge | Join the redirects table yourself | Automatic: the survivor is returned |
-| What data it exposes | The whole release | The same release, nothing extra |
+| How current it is | The last download release, weekly or less often | Updated daily with new matching |
+| What data it exposes | The whole release | The same kinds of record, nothing extra |
 
 Rule of thumb: for more than a few hundred records, or any recurring pipeline,
 download the file and join. Use the API for a single lookup from a running
-application.
+application, or when an ID matched since the last download release matters.
 
 **API keys are not self-service.** There is no sign-up form. Email
 getintouch+nutmeg@withqwerty.com with your organisation, which group you are in
@@ -114,11 +116,13 @@ Sources: [downloads and licence](https://reep.football/data/),
 
 ## Releases and corrections
 
-A new release is cut weekly. Each carries a stamp such as `2026-10-31.1` (older
-releases used stamps such as `20260915T203651Z`), a `release.json` file list with
-per-file SHA-256 checksums, and a `manifest.json` of counts. The pointer to the
+A new download release is cut weekly or less often. Each carries a stamp such as
+`2026-10-31.1` (older releases used stamps such as `20260915T203651Z`), a
+`release.json` file list with per-file SHA-256 checksums, and a `manifest.json` of counts. The pointer to the
 current release is always at https://data.reep.football/releases/latest.json, and
-every API response carries the stamp in the `X-Reep-Release-Stamp` header.
+every API response carries the stamp of the data it served in the
+`X-Reep-Release-Stamp` header. The API updates daily, so that stamp can be newer
+than the stamp of the current download.
 
 A wrong mapping found while joining is worth reporting: submit the two provider
 IDs and what is believed to be right through

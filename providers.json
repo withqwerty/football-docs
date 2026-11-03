@@ -289,7 +289,7 @@
       "aliases": ["reep-football", "reep.football"],
       "access_level": "open-data",
       "licence_status": "Releases are CC0 1.0, provider-ID bridges included. The download needs no key. API keys are issued by hand on request (getintouch+nutmeg@withqwerty.com); there is no self-service sign-up.",
-      "public_safety_notes": "Document the current register only (reep.football, /api/v1). Spec snapshot in specs/reep/ comes from the public, unauthenticated https://reep.football/openapi.yaml - see specs/README.md. Endpoint claims are validated against it in CI. Do not hard-code release counts; they change weekly.",
+      "public_safety_notes": "Document the current register only (reep.football, /api/v1). Spec snapshot in specs/reep/ comes from the public, unauthenticated https://reep.football/openapi.yaml - see specs/README.md. Endpoint claims are validated against it in CI. Do not hard-code release counts; they change with each release.",
       "version": "v1",
       "package": null,
       "sources": [
