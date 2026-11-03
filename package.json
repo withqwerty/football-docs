@@ -57,20 +57,20 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.1.0",
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@mozilla/readability": "^0.6.0",
-    "linkedom": "^0.18.13",
+    "linkedom": "^0.18.15",
     "turndown": "^7.2.4",
     "unpdf": "1.8.1",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.7",
-    "@types/node": "^22.20.1",
+    "@biomejs/biome": "^2.6.4",
+    "@types/node": "^22.20.5",
     "@types/turndown": "^5.0.6",
-    "tsx": "^4.23.12",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "files": [
     "dist/",
