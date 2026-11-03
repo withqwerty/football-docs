@@ -32,6 +32,13 @@ type, format and nullability from the spec. Fields marked **Personal data** hold
 data about an identifiable athlete; health data (heart rate, body measures) is
 special category data under UK and EU GDPR.
 
+These docs use the short schema names. Since 2026-11-03 the specs name each schema
+by its .NET full type name: `DrillKpiV7` is
+`Core.Common.Models.ThirdPartyService.V7.DrillKpiV7`, `ThirdPartyDto` is
+`Core.Common.Models.ThirdPartyService.Api.ThirdPartyDto`, and `GpsDataV6RawDataResponse`
+is ``ThirdPartyCloudService.Models.RawDataResponse`1[[Core.Common.Models.ThirdPartyService.V6.GpsDataV6, ...]]``.
+Only the names changed; the fields are the same as in the 2026-09-30 specs.
+
 ## `ThirdPartyDataV7` (session response)
 
 <!-- generated:statsports-schema-thirdpartydatav7 start -->
@@ -430,7 +437,7 @@ Defined in the v6, v7 specs.
 
 Defined in the v5, v6, v7 specs.
 
-`IntPtr` is an object with no properties. No operation or schema in any version refers to it.
+`IntPtr` is an object with no properties. No schema refers to it. Since the specs fetched on 2026-11-03, the `waitHandle.handle` query parameter refers to it; that parameter is part of a .NET `CancellationToken`, not a real request parameter (see STATSports API endpoints).
 
 ## Differences between versions
 

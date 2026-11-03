@@ -16,10 +16,11 @@ python3 scripts/gen_openapi_truth.py \
   --provider sportradar
 python3 scripts/gen_openapi_truth.py specs/reep/openapi.yaml --provider reep
 # STATSports publishes v5, v6 and v7 of its third-party API; clients still call all three.
+# Its schema ids are .NET full type names; the docs use the short names.
 python3 scripts/gen_openapi_truth.py \
   specs/statsports/thirdpartyapi-v5.json specs/statsports/thirdpartyapi-v6.json \
   specs/statsports/thirdpartyapi-v7.json \
-  --provider statsports
+  --provider statsports --short-schema-names
 python3 scripts/gen_openapi_truth.py specs/firstbeat/openapi.json --provider firstbeat
 python3 scripts/gen_openapi_truth.py specs/hawkin-dynamics/openapi.json --provider hawkin-dynamics
 # VALD publishes one specification per product API, each on its own host.

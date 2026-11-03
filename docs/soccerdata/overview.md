@@ -6,6 +6,7 @@ soccerdata is a Python library that scrapes football data from popular websites 
 
 - **Install**: `pip install soccerdata` (optional: `pip install soccerdata[socceraction]` for SPADL conversion)
 - **Python**: >=3.10, <3.15
+- **Versions**: after 1.9.1, releases moved to automated weekly CalVer versions; the first is 2026.43.0 (2026-10-19). These docs were checked against 2026.43.0, whose fixes include Understat assist player IDs and default seasons
 - **Key dependencies**: pandas, lxml, seleniumbase (Selenium scrapers), tls_requests, html5lib, unidecode
 
 ## Supported Sources

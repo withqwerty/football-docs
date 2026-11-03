@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.17 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -11,7 +11,7 @@ crawled_at: 2026-09-30
 
 Hawkin Dynamics makes force plates. The Hawkin Force Platform API returns an
 organisation's own test results (jumps, isometric tests and others), force-time
-data and athlete records. The reference page labels it "Beta API · v1.16".
+data and athlete records. The reference page labels it "Beta API · v1.17".
 
 - Reference page: https://connect.hawkindynamics.com/api
 - OpenAPI 3.0.3 document: inline on the reference page (its "Download OpenAPI Spec"
@@ -91,10 +91,11 @@ From the spec's description and the `GET /api/v1` parameters:
 
 ## Version history
 
-The reference page's changelog, checked 2026-10-01:
+The reference page's changelog, checked 2026-11-03:
 
 | Date | Version | Change, as the page states it |
 |---|---|---|
+| Oct 2026 | v1.17 | Athlete profile fields on create and update: `position`, `sport`, `dob` and `height` documented as writable on all four athlete write endpoints (create and update, single and bulk). A correction: the API has accepted them since mid-2026, and earlier versions of the reference said they were read-only. `dob` takes `YYYY` or `YYYY-MM-DD` (1900 to the current year; a full date must not be in the future) and is returned exactly as sent. `height` is in centimetres (greater than 0, at most 300). Empty values leave a field unset on create and unchanged on update; the API cannot clear them. `lastTestedOn` stays read-only |
 | Sep 2026 | v1.16 | Response-shape query params on Get Tests: `useNulls` (default `true`; `false` returns the string `"N/A"` instead of `null` for non-calculable metrics), `rounding` (default `false`) and `nestMetrics` (default `false`; metrics as a `metrics` array, see `TestNested`). For customers migrating from a legacy named endpoint; new integrations should leave the defaults |
 | Jul 2026 | v1.15 | New `GET /api/v1/cop/{test_id}`; force-time shear forces, moments and `eid`; `rsi` is an array; `timestamp` is an integer; non-calculable metrics are `null`, not `"N/A"`; tests include `active`; metrics use `testTypeName`; test types return a bare array; teams, groups and tags include `count`; team-scoped token behaviour documented |
 | May 2026 | v1.14 | Athlete profile fields `image`, `position`, `dob`, `sport`, `height`, `lastTestedOn`; `includeInactive` on athletes documented |

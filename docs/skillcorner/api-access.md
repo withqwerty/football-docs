@@ -66,6 +66,6 @@ against v2 keeps working; point new work at the v3 filters.
 
 Endpoints under `/match/{id}/custom/...`, `/matches/custom/` and `/data_collections/custom/` serve **customer-specific** computed feeds (the standard, non-custom endpoints serve SkillCorner's catalogue products). `/data_collections/` tells you which data products are available for which matches.
 
-## Deprecated
+## Removed
 
-`/beta/out_of_possession/` and `/in_possession/{off_ball_runs,on_ball_pressures,passes}/` are **Game Intelligence V1 (deprecated)**. Use the `dynamic_events` and `metrics/game_intelligence` endpoints (V2) instead.
+`/beta/out_of_possession/` and `/in_possession/{off_ball_runs,on_ball_pressures,passes}/` were **Game Intelligence V1**. The spec fetched on 2026-11-03 no longer lists them, or their per-match forms under `/match/{id}/custom/`. Use the `dynamic_events` and `metrics/game_intelligence` endpoints (V2) instead.

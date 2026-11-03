@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.17 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -10,7 +10,7 @@ crawled_at: 2026-09-30
 ## Endpoint inventory
 
 All 14 operations in the Hawkin Force Platform API spec
-(`info.version` "1.16"), from the OpenAPI document published inline on
+(`info.version` "1.17"), from the OpenAPI document published inline on
 https://connect.hawkindynamics.com/api. Paths are relative to the regional base URL
 (see Hawkin Dynamics API access), for example
 `https://cloud.hawkindynamics.com/api/v1/athletes`.

@@ -7,7 +7,7 @@ crawled_at: 2026-09-09
 
 # Driblab API Endpoints
 
-59 documented operations across 58 paths, all relative to `https://apidriblab.com`.
+62 documented operations across 61 paths, all relative to `https://apidriblab.com`.
 "Paged" means the endpoint accepts `page`, `size` and `sort`; see
 [api-access.md](api-access.md).
 
@@ -25,7 +25,8 @@ ID fields on other resources point into.
 | `GET /country/{id}` | One country | no |
 | `GET /competition-types` | Competition types, e.g. regular league vs cup | no |
 | `GET /game-status` | Game processing statuses | no |
-| `GET /player-positions` | Position vocabulary | no |
+| `GET /player-positions` | Position vocabulary, each with a `general_position_id` | no |
+| `GET /general-positions` | General positions (`id`, `name`), e.g. goalkeeper, defender | no |
 | `GET /player-transfers` | Transfer type vocabulary | no |
 | `GET /game/tracking/status` | Tracking pipeline statuses | no |
 | `GET /file-types/video` | Video and match-sheet file types, for uploads | no |
@@ -109,6 +110,21 @@ moved has two rows for one season.
 Note the guide writes five of these player endpoints without a space after the
 verb (`GET/player/{id}/injuries`). That is a typographical slip in the guide, not
 a different route.
+
+## Percentiles
+
+Added to the guide after 2026-09-09 (seen on 2026-11-03).
+
+| Endpoint | Returns | Paged |
+|---|---|---|
+| `GET /percentiles` | Available percentile sets (`id`, `name`), e.g. "Europe Top 5" | no |
+| `GET /player-percentiles-eventing/{percentileId}/general-position/{positionId}` | Stat percentiles for one percentile set and one general position | no |
+
+`positionId` is a general position ID from `GET /general-positions`, not a
+`GET /player-positions` ID; a player position links to its general position
+through `general_position_id`. The response has `percentileId`, `percentileName`,
+`positionId`, `positionName` and a `stats` object; see
+[data-model.md](data-model.md#percentiles).
 
 ## Coach
 

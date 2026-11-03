@@ -13,19 +13,19 @@ anyone can re-fetch and diff.
 |---|---|---|---|
 | `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
-| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-10-09 | 2026-10-09 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-11-03 | 2026-11-03 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-09-24 | 2026-09-24 |
-| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-10-09 | 2026-10-09 |
-| `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-10-09 | 2026-10-09 |
+| `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
+| `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
 | `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-10-09 | 2026-10-09 |
 | `reep/release.json` | https://data.reep.football/releases/20261005T180536Z/release.json (via `latest.json`) | 2026-10-09 | 2026-10-09 |
 | `reep/schema.json` | https://data.reep.football/releases/20261005T180536Z/schema.json | 2026-10-09 | 2026-10-09 |
-| `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-09-30 | 2026-09-30 |
-| `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-09-30 | 2026-09-30 |
-| `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-09-30 | 2026-09-30 |
+| `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-11-03 | 2026-11-03 |
+| `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-11-03 | 2026-11-03 |
+| `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-11-03 | 2026-11-03 |
 | `firstbeat/openapi.json` | https://apidocs.firstbeat.com/assets/api-specification/openapi.json | 2026-09-30 | 2026-09-30 |
 | `football-data/notes.txt` | https://www.football-data.co.uk/notes.txt | 2026-10-04 | 2026-10-04 |
-| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-10-01 | 2026-10-01 |
+| `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-11-03 | 2026-11-03 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
@@ -107,7 +107,10 @@ three versions, v5, v6 and v7. All three are mirrored, because the docs cover ea
 one. The spec declares no `servers`; the callable base is
 `https://statsportsproseries.com/thirdpartyapi`. Its `test` endpoint answered HTTP
 200 at `https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/test` on
-2026-09-30.
+2026-09-30. The specs fetched on 2026-11-03 replace it with `health`, which answered
+HTTP 200 at `.../api/thirdPartyData/health` that day, and name schemas by .NET full
+type name. `scripts/gen_openapi_truth.py --short-schema-names` and
+`scripts/gen_vendor_tables.py` use the short names, which the docs use.
 
 The server is not stable in one respect. Repeated fetches of the same file return
 path keys with a varying number of leading `/thirdpartyapi` segments
@@ -115,7 +118,10 @@ path keys with a varying number of leading `/thirdpartyapi` segments
 `/thirdpartyapi/thirdpartyapi/api/thirdPartyData/test`, and so on); the rest of the
 document does not change. The snapshots here keep the form with no prefix, and
 `scripts/check_upstream.py` removes the prefix from both sides before it compares.
-If a refresh brings back a prefixed copy, fetch again.
+If a refresh brings back a prefixed copy, fetch again. On 2026-11-03 the v7 file
+never came back without a prefix in more than 50 fetches, so the leading
+`/thirdpartyapi` segments were removed from its path keys with a text replacement; nothing else in
+the file was changed.
 
 The spec's `info.license` is named "Privacy Policy" and links to
 `https://statsports.com/apex-pro-series-privacy-policy/`, which returned 404 on

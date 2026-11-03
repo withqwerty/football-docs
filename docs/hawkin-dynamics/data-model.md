@@ -1,7 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
-upstream_version: Hawkin Force Platform API 1.16 (OpenAPI 3.0.3)
+upstream_version: Hawkin Force Platform API 1.17 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---
 
@@ -128,10 +128,10 @@ In this shape each metric carries its `metricId` (for example `jumpHeight`), its
 | `groups` | array of `string` |  |  | yes | Array of group IDs |
 | `image` | `string` | `uri` | yes |  | **Personal data.** URL to the athlete's photo. Three-state: omitted when never set, null when explicitly cleared, string when set. |
 | `position` | `string` |  |  |  | **Personal data.** Free-text playing position (e.g. "Forward"). Omitted when blank. |
-| `dob` | `string` | `date` |  |  | **Personal data.** Date of birth as ISO-8601 (YYYY-MM-DD). Omitted when blank. |
+| `dob` | `string` |  |  |  | **Personal data.** Date of birth, returned exactly as stored: a full date (YYYY-MM-DD) or a year only (YYYY). Not parsed as a date, so there is no timezone shift. Omitted when blank. |
 | `sport` | `string` |  |  |  | **Personal data.** Free-text sport name (e.g. "Basketball"). Omitted when blank. |
-| `height` | `number` |  |  |  | **Personal data.** Athlete height in centimeters. Guaranteed numeric and in-range when present. Omitted entirely when no valid height is on file. minimum: `1` maximum: `300` |
-| `lastTestedOn` | `integer` | `int64` |  |  | Unix epoch seconds of the athlete's most recent test session. Omitted when the athlete has no tests on file. |
+| `height` | `number` |  |  |  | **Personal data.** Athlete height in centimeters, rounded to 1 decimal. Guaranteed numeric and in-range when present. Omitted entirely when no valid height is on file. Legacy records were stored in inches or decimal feet, so the unit is inferred from the stored magnitude on read: below 10 = decimal feet, 10 to below 100 = inches, 100 to 300 = centimeters. minimum: `1` maximum: `300` |
+| `lastTestedOn` | `integer` | `int64` |  |  | Unix epoch seconds of the athlete's most recent test session. Omitted when the athlete has no tests on file. Read-only: derived from test history and ignored on write. readOnly: `true` |
 | `external` | `object` |  |  |  | Custom external properties as key-value pairs |
 <!-- generated:hawkin-schema-athlete end -->
 
@@ -145,6 +145,10 @@ In this shape each metric carries its `metricId` (for example `jumpHeight`), its
 | `active` | `boolean` |  |  |  | default: `true` |
 | `teams` | array of `string` |  |  |  | Team IDs. Defaults to [defaultTeamId] |
 | `groups` | array of `string` |  |  |  | Group IDs default: `[]` |
+| `position` | `string` |  | yes |  | Playing position. Leading/trailing whitespace is trimmed. Omitted, null, empty or whitespace-only leaves it unset. Non-string values are ignored. |
+| `sport` | `string` |  | yes |  | Sport name. Leading/trailing whitespace is trimmed. Omitted, null, empty or whitespace-only leaves it unset. Non-string values are ignored. |
+| `dob` | `string` |  | yes |  | Date of birth as "YYYY" or "YYYY-MM-DD" (send a string; the API also tolerates a 4-digit number such as 1995, which this schema does not model). The year must be between 1900 and the current year; a full date must be a real calendar date and must not be in the future. Whitespace is trimmed. Stored and returned exactly as sent. Omitted, null or "" leaves it unset. Invalid values return 400 (single) or a failures entry (bulk). |
+| `height` | `number` |  | yes |  | Height in centimeters, greater than 0 and at most 300; decimals allowed (the server checks > 0, although its error message says 1-300). Send a number; the API also tolerates a numeric string, which this schema does not model. Omitted, null, "" or 0 leaves it unset. Values below 100 are reinterpreted on read (legacy unit inference: 95 reads back as 241.3), so send centimeters rounded to 1 decimal. Invalid values return 400 (single) or a failures entry (bulk). minimum: `0` exclusiveMinimum: `true` maximum: `300` |
 | `external` | `object` |  |  |  | Custom properties |
 <!-- generated:hawkin-schema-athleteinput end -->
 
@@ -159,7 +163,11 @@ In this shape each metric carries its `metricId` (for example `jumpHeight`), its
 | `active` | `boolean` |  |  |  |  |
 | `teams` | array of `string` |  |  |  |  |
 | `groups` | array of `string` |  |  |  |  |
-| `external` | `object` |  |  |  | Custom properties. Note: custom properties NOT present in the request will be REMOVED. |
+| `position` | `string` |  | yes |  | New playing position. Leading/trailing whitespace is trimmed. Omitted, null or "" leaves it unchanged; the API cannot clear it (clear it in the Hawkin app). Non-string values are ignored. |
+| `sport` | `string` |  | yes |  | New sport name. Leading/trailing whitespace is trimmed. Omitted, null or "" leaves it unchanged; the API cannot clear it (clear it in the Hawkin app). Non-string values are ignored. |
+| `dob` | `string` |  | yes |  | New date of birth as "YYYY" or "YYYY-MM-DD" (send a string; the API also tolerates a 4-digit number such as 1995, which this schema does not model). The year must be between 1900 and the current year; a full date must be a real calendar date and must not be in the future. Whitespace is trimmed. Stored and returned exactly as sent. Omitted, null or "" leaves it unchanged; the API cannot clear it. Invalid values return 400 (single) or a failures entry (bulk). |
+| `height` | `number` |  | yes |  | New height in centimeters, greater than 0 and at most 300; decimals allowed (the server checks > 0, although its error message says 1-300). Send a number; the API also tolerates a numeric string, which this schema does not model. Omitted, null or "" leaves it unchanged; the API cannot clear it. Omit height rather than sending 0. Values below 100 are reinterpreted on read (legacy unit inference: 95 reads back as 241.3), so send centimeters rounded to 1 decimal. Invalid values return 400 (single) or a failures entry (bulk). minimum: `0` exclusiveMinimum: `true` maximum: `300` |
+| `external` | `object` |  |  |  | Custom properties. Note: custom properties NOT present in the request will be REMOVED. Omitting external entirely leaves it unchanged. |
 <!-- generated:hawkin-schema-athleteupdateinput end -->
 
 ## `BulkResult`

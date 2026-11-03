@@ -22,7 +22,7 @@ command -v "$PY" >/dev/null || { echo "need $PY on PATH (set PYTHON=...)"; exit 
 PINS=(
   "kloppy==3.19.1"
   "socceraction==1.5.3"
-  "soccerdata==1.9.1"
+  "soccerdata==2026.43.0"
   "mplsoccer==1.8.1"
   "floodlight==1.2.0"
   "databallpy==0.8.1"

@@ -40,6 +40,35 @@ def load_spec(path: Path) -> dict[str, Any]:
     return json.loads(text)
 
 
+def short_schema_name(name: str) -> str:
+    """A .NET schema id without its namespace.
+
+    Swashbuckle can name schemas by full type name: Core.Common.Models.ThirdPartyService.V7.DrillKpiV7,
+    and for a generic type ThirdPartyCloudService.Models.RawDataResponse`1[[Core.Common.Models.
+    ThirdPartyService.V6.GpsDataV6, Core.Common, Version=0.0.0.0, ...]]. The short forms are
+    DrillKpiV7 and GpsDataV6RawDataResponse, the ids STATSports used before November 2026.
+    """
+    generic = re.fullmatch(r"(?:[\w.]+\.)?(\w+)`\d+\[\[([\w.]+),.*\]\]", name)
+    if generic:
+        return generic.group(2).rsplit(".", 1)[-1] + generic.group(1)
+    return name.rsplit(".", 1)[-1]
+
+
+def with_short_schema_names(spec: dict[str, Any]) -> dict[str, Any]:
+    """A copy of the spec with every schema id, and every $ref to one, in its short form."""
+    schemas = spec.get("components", {}).get("schemas") or {}
+    renames = {name: short_schema_name(name) for name in schemas}
+    if len(set(renames.values())) != len(renames):
+        raise SystemExit("two schemas share a short name; compare them by full name")
+    prefix = "#/components/schemas/"
+    text = json.dumps(spec)
+    for old, new in renames.items():
+        text = text.replace(json.dumps(prefix + old), json.dumps(prefix + new))
+    copy = json.loads(text)
+    copy["components"]["schemas"] = {renames[k]: v for k, v in copy["components"]["schemas"].items()}
+    return copy
+
+
 def walk_schemas(node: Any, fields: set[str], enums: dict[str, list[str]], name: str = "") -> None:
     """Collect property names and enum members from anywhere in the schema tree."""
     if isinstance(node, dict):
@@ -67,6 +96,11 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("spec", type=Path, nargs="+", help="one or more spec files to merge")
     ap.add_argument("--provider", required=True)
+    ap.add_argument(
+        "--short-schema-names",
+        action="store_true",
+        help="record .NET full-name schema ids without their namespace (see short_schema_name)",
+    )
     args = ap.parse_args()
 
     paths: dict[str, list[str]] = {}
@@ -82,6 +116,8 @@ def main() -> None:
     # one version's absence as a documentation error.
     for spec_path in args.spec:
         spec = load_spec(spec_path)
+        if args.short_schema_names:
+            spec = with_short_schema_names(spec)
         info = spec.get("info") or {}
         infos.append({
             "spec": str(spec_path),

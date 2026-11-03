@@ -16,6 +16,19 @@ const readDoc = (provider: string, file: string) =>
   readFileSync(resolve(ROOT, "docs", provider, file), "utf8");
 const readSpec = (path: string) => JSON.parse(readFileSync(resolve(ROOT, "specs", path), "utf8"));
 
+/**
+ * A STATSports spec's schemas by short name. The spec ids are .NET full type names
+ * (Core.Common.Models.ThirdPartyService.V7.DrillKpiV7); the docs use the short ones,
+ * as scripts/gen_openapi_truth.py short_schema_name does.
+ */
+function statsportsSchemas(path: string): Record<string, { properties: Record<string, unknown> }> {
+  const schemas = readSpec(path).components.schemas;
+  return Object.fromEntries(Object.entries(schemas).map(([name, schema]) => [name.split(".").pop(), schema])) as Record<
+    string,
+    { properties: Record<string, unknown> }
+  >;
+}
+
 /** Backticked names in the first column of every markdown table body row. */
 function firstColumnNames(text: string): string[] {
   const names: string[] = [];
@@ -71,8 +84,7 @@ describe("wearable vendor docs are grounded in the vendor's spec", () => {
   });
 
   it("lists every DrillKpiV7 field exactly once", () => {
-    const spec = readSpec("statsports/thirdpartyapi-v7.json");
-    const fields = Object.keys(spec.components.schemas.DrillKpiV7.properties);
+    const fields = Object.keys(statsportsSchemas("statsports/thirdpartyapi-v7.json").DrillKpiV7.properties);
     const text = readDoc("statsports", "drill-kpi-metrics.md");
     const documented = text
       .split("\n## ")
@@ -83,7 +95,7 @@ describe("wearable vendor docs are grounded in the vendor's spec", () => {
   });
 
   it("lists the DrillKpiV6 fields that v7 dropped and the fields v6 added over v5", () => {
-    const schemas = readSpec("statsports/thirdpartyapi-v7.json").components.schemas;
+    const schemas = statsportsSchemas("statsports/thirdpartyapi-v7.json");
     const v7 = Object.keys(schemas.DrillKpiV7.properties);
     const v6 = Object.keys(schemas.DrillKpiV6.properties);
     const v5 = Object.keys(schemas.DrillKpiV5.properties);

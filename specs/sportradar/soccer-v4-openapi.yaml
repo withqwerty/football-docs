@@ -1426,6 +1426,80 @@ components:
       xml:
         name: sport_event
         x-sr-object-name: SeasonBracketsCupRoundSportEventsSportEvent
+    base_season_player:
+      additionalProperties: false
+      properties:
+        country_code:
+          type: string
+          xml:
+            attribute: true
+        date_of_birth:
+          description: YYYY-MM-DD
+          format: date
+          type: string
+          xml:
+            attribute: true
+        display_first_name:
+          type: string
+          xml:
+            attribute: true
+        display_last_name:
+          type: string
+          xml:
+            attribute: true
+        first_name:
+          type: string
+          xml:
+            attribute: true
+        gender:
+          $ref: '#/components/schemas/enum_gender'
+        height:
+          description: Height in cm
+          type: integer
+          xml:
+            attribute: true
+        id:
+          type: string
+          xml:
+            attribute: true
+        jersey_number:
+          type: integer
+          xml:
+            attribute: true
+        last_name:
+          type: string
+          xml:
+            attribute: true
+        loaned_to_competitor_id:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+          xml:
+            attribute: true
+        nationality:
+          type: string
+          xml:
+            attribute: true
+        nickname:
+          type: string
+          xml:
+            attribute: true
+        type:
+          $ref: '#/components/schemas/enum_player_type'
+        weight:
+          description: Weight in kg
+          type: integer
+          xml:
+            attribute: true
+      required:
+      - id
+      - name
+      type: object
+      xml:
+        name: player
+        x-sr-object-name: SeasonPlayer
     base_season_stage_group:
       additionalProperties: false
       properties:
@@ -2678,6 +2752,7 @@ components:
       - 2nd_part_of_season_2nd_leg
       - 3rd_round
       - apertura
+      - best_third
       - champions_round
       - clausura
       - conference
@@ -4803,6 +4878,12 @@ components:
           xml:
             attribute: true
         display_last_name:
+          type: string
+          xml:
+            attribute: true
+        estimated_return_date:
+          description: Estimated return date for the player
+          format: date-time
           type: string
           xml:
             attribute: true
@@ -9998,7 +10079,7 @@ components:
           xml:
             attribute: true
         stage:
-          $ref: '#/components/schemas/sport_event_context_stage'
+          $ref: '#/components/schemas/standing_stage'
         standings:
           items:
             $ref: '#/components/schemas/standing_competitor'
@@ -10026,6 +10107,41 @@ components:
       type: object
       xml:
         name: comment
+    standing_stage:
+      additionalProperties: false
+      properties:
+        end_date:
+          format: date
+          type: string
+          xml:
+            attribute: true
+        order:
+          type: integer
+          xml:
+            attribute: true
+        phase:
+          $ref: '#/components/schemas/enum_phase'
+        phase_type:
+          $ref: '#/components/schemas/enum_phase_type'
+        start_date:
+          format: date
+          type: string
+          xml:
+            attribute: true
+        type:
+          $ref: '#/components/schemas/enum_stage_type'
+        year:
+          type: string
+          xml:
+            attribute: true
+      required:
+      - order
+      - type
+      - phase
+      type: object
+      xml:
+        name: stage
+        x-sr-object-name: StandingStage
     stream_events:
       properties:
         metadata:

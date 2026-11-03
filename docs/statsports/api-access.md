@@ -30,7 +30,9 @@ The spec declares no `servers`. The Swagger UI loads its specs from
 `/thirdpartyapi/swagger/...`, and the API paths start `/api/thirdPartyData/`. On
 2026-09-30 a request to
 `https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/test` with header
-`api-version: 7` answered HTTP 200 with the body `"Success"`. So a full URL is:
+`api-version: 7` answered HTTP 200 with the body `"Success"`. On 2026-11-03 `/test`
+answered 404; its replacement, `/api/thirdPartyData/health`, answered HTTP 200 with
+an empty body. So a full URL is:
 
 ```
 https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/getFullSession
@@ -53,14 +55,24 @@ the v5 spec does not. The spec's default is `"7"`, `"6"` or `"5"`, matching the
 spec file. The paths are the same in every version, so
 the header alone selects the version.
 
+Since the specs fetched on 2026-11-03, every operation except `health` also lists
+five query parameters (`isCancellationRequested`, `canBeCanceled`, `waitHandle.handle`
+and two `waitHandle.safeWaitHandle` flags). They are the properties of a .NET
+`CancellationToken` that the spec generator lists by mistake. Do not send them.
+
 ## Authentication
 
-- The spec defines no `securitySchemes` and no `security` requirement.
+- Since the specs fetched on 2026-11-03, each version defines one security scheme,
+  `Bearer` (`type: http`, `scheme: Bearer`, "JWT Authorization header using the
+  Bearer scheme."), and requires it for every operation. The spec does not say how
+  to get a token. On 2026-11-03, `getAvailableMetrics` answered HTTP 200 without an
+  `Authorization` header, and `getFullSession` with an all-zero `thirdPartyApiId` and
+  no `Authorization` header answered HTTP 400 with an RFC 9110 problem-details body,
+  not 401. The earlier specs (2026-09-30) defined no security scheme.
 - Every `POST` body carries `thirdPartyApiId` (`string`, format `uuid`). The spec
   gives it no description. `ThirdPartyShareDateDto` is the only request schema that
   marks it required.
-- The two `GET` operations, `test` and `getAvailableMetrics`, take no body, and
-  the spec shows no key for them.
+- The two `GET` operations, `health` and `getAvailableMetrics`, take no body.
 - The spec does not say how a `thirdPartyApiId` is issued. STATSports' help centre
   (`elitesupport.statsports.com`) blocks non-browser clients, so it was not read and
   is not a source for these docs.
@@ -86,8 +98,21 @@ The spec does not describe what `sessionDate` selects, or which time zone it use
 ## Rate limits and errors
 
 The spec states no rate limit, quota or page size, other than the `nextPage` field
-on raw-data requests and responses. Every response in the spec is `200` "Success";
-no error codes are documented.
+on raw-data requests and responses. Since the specs fetched on 2026-11-03, every
+`POST` operation lists these responses, with no body except for `200`:
+
+| Code | Description in the spec |
+|---|---|
+| `200` | "Request was successful" |
+| `204` | "Request was successful, no session found for requested date" (session operations) or "no players found for requested date" (`getPlayerDetails` and the raw-data operations) |
+| `400` | "Body has missing/invalid values" |
+| `401` | "Unauthorized - invalid ID supplied" |
+| `415` | "Unsupported media type" |
+| `422` | "Unprocessable entity" |
+| `500` | "Internal server error" |
+| `503` | "Service unavailable" |
+
+The two `GET` operations list `200` only.
 
 ## Terms
 

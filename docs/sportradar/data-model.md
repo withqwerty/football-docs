@@ -51,6 +51,12 @@ plus `phase_type` as the key for a stage within a season, and fall back to
 `phase` when `phase_type` is absent. The prose endpoint pages do not list
 `phase_type` yet.
 
+In the specs fetched on 2026-11-03, standings carry `phase_type` too: the `stage`
+of a `standing_group` is now a `standing_stage` (`order`, `type` and `phase`
+required; also `phase_type`, `start_date`, `end_date` and `year`), not the
+`sport_event_context_stage` it used before. The same specs add `best_third` to the
+`phase_type` values.
+
 ## Coordinates
 
 Timeline event coordinates use a 0-100 pitch frame.
@@ -99,6 +105,7 @@ These fields come from the Soccer v4 specification snapshot in
 | `captain` | `player`, `lineup_player`, `base_lineup_player` | Boolean. Marks the captain in a lineup, so there is no need to infer it from armband events or squad metadata. |
 | `estimated_return_date` | `player`, `lineup_player`, `base_lineup_player` | Date-time. The spec describes it as the estimated return date for the active player status, sourced from SDS `PlayerStatus.endTime`. |
 | `estimated_return_date` | `missing_player` | Date-time. Estimated return date for a player listed as missing from the squad. |
+| `estimated_return_date` | `season_player` (the Season Players response) | Date-time, "Estimated return date for the player". Added in the specs fetched on 2026-11-03. |
 | `is_friendly` | `coverage_competition_properties` | Boolean. Flags a competition as friendly, alongside the other coverage properties. |
 
 Treat `estimated_return_date` as an estimate that moves, not a fixed fact. Store
