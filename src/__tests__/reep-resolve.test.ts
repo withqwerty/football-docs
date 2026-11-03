@@ -436,3 +436,49 @@ describe("resolve_entity against the API", () => {
     expect(text(r)).toContain("Call again with reep_id");
   });
 });
+
+describe("resolve_entity with a register file in the later layout", () => {
+  // Later releases ship the DuckDB file without release_metadata, name entities in
+  // canonical_name instead of label, and have no bridges.upstream_status.
+  let path: string;
+
+  beforeAll(async () => {
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    path = join(mkdtempSync(join(tmpdir(), "reep-later-")), "register.duckdb");
+    const instance = await DuckDBInstance.create(path);
+    const con = await instance.connect();
+    for (const sql of [
+      "CREATE TABLE entities (reep_id VARCHAR, entity_type VARCHAR, canonical_name VARCHAR, birth_date_iso VARCHAR)",
+      "INSERT INTO entities VALUES ('rp56bd0fc61d9da5', 'player', 'Bukayo Saka', NULL)",
+      "CREATE TABLE bridges (reep_id VARCHAR, provider VARCHAR, namespace VARCHAR, external_id VARCHAR, entity_type VARCHAR, rule_id VARCHAR, confidence DOUBLE)",
+      `INSERT INTO bridges VALUES
+        ('rp56bd0fc61d9da5', 'transfermarkt', 'spieler', '433177', 'player', 'r', 1.0),
+        ('rp56bd0fc61d9da5', 'sofascore', 'player', '934235', 'player', 'r', 1.0),
+        ('rpmergedsaka0001', 'understat', 'player', '7322', 'player', 'r', 1.0)`,
+      "CREATE TABLE redirects (from_id VARCHAR, to_id VARCHAR, reason VARCHAR, created_at VARCHAR)",
+      "INSERT INTO redirects VALUES ('rpmergedsaka0001', 'rp56bd0fc61d9da5', 'merged', NULL)",
+      "CREATE TABLE entity_search (reep_id VARCHAR, entity_type VARCHAR, label VARCHAR, canonical_name VARCHAR, search_text VARCHAR, bridge_count BIGINT, alias_count BIGINT)",
+      "INSERT INTO entity_search VALUES ('rp56bd0fc61d9da5', 'player', 'Bukayo Saka', 'Bukayo Saka', 'bukayo saka', 3, 0)",
+    ]) {
+      await con.run(sql);
+    }
+    con.closeSync();
+  });
+
+  it("opens the file without release_metadata and resolves a provider ID", async () => {
+    const r = await resolveEntity(
+      { provider: "transfermarkt", namespace: "spieler", id: "433177" },
+      { env: { REEP_DUCKDB_PATH: path }, fetchImpl: latest("2026-10-31.1") },
+    );
+    const t = text(r);
+    expect(r.isError).toBeUndefined();
+    expect(t).toContain("Bukayo Saka");
+    expect(t).toContain("sofascore");
+    expect(t).toContain("934235");
+    // A bridge still on a merged ID is listed under the survivor.
+    expect(t).toContain("7322");
+    expect(t).toContain("does not record its release");
+  });
+});

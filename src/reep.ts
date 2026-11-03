@@ -75,21 +75,32 @@ function upstreamLabel(status: string | undefined): string {
   return `upstream status: ${status}`;
 }
 
-// bridges.upstream_status arrived in the 2026-09-26 release; older files lack it.
-const upstreamColumn = new WeakMap<LocalRegister, Promise<boolean>>();
-function hasUpstreamStatus(register: LocalRegister): Promise<boolean> {
-  let known = upstreamColumn.get(register);
+// Register files differ by release: bridges.upstream_status arrived in the
+// 2026-09-26 release and is gone again from later ones, and later releases name
+// an entity in entities.canonical_name instead of entities.label.
+const knownColumns = new WeakMap<LocalRegister, Map<string, Promise<boolean>>>();
+function hasColumn(register: LocalRegister, table: string, column: string): Promise<boolean> {
+  let columns = knownColumns.get(register);
+  if (!columns) {
+    columns = new Map();
+    knownColumns.set(register, columns);
+  }
+  const key = `${table}.${column}`;
+  let known = columns.get(key);
   if (!known) {
     known = register
       .query(
-        "SELECT count(*) AS n FROM information_schema.columns WHERE table_name = 'bridges' AND column_name = 'upstream_status'",
-        {},
+        "SELECT count(*) AS n FROM information_schema.columns WHERE table_name = $table AND column_name = $column",
+        { table, column },
       )
       .then((rows) => Number(rows[0]?.n ?? 0) > 0)
       .catch(() => false);
-    upstreamColumn.set(register, known);
+    columns.set(key, known);
   }
   return known;
+}
+function hasUpstreamStatus(register: LocalRegister): Promise<boolean> {
+  return hasColumn(register, "bridges", "upstream_status");
 }
 type Found = {
   reep_id: string;
@@ -141,7 +152,15 @@ async function openDuckdb(path: string): Promise<{ register: LocalRegister; clos
   const connection = await instance.connect();
   const query = async (sql: string, params: Record<string, string>) =>
     (await connection.runAndReadAll(sql, params)).getRowObjectsJson() as Row[];
-  const meta = await query("SELECT value FROM release_metadata WHERE key = 'source_stamp'", {});
+  // Later releases ship the file without release_metadata, so its stamp is unknown.
+  const hasMetadata = await query(
+    "SELECT count(*) AS n FROM information_schema.tables WHERE table_name = 'release_metadata'",
+    {},
+  );
+  const meta =
+    Number(hasMetadata[0]?.n ?? 0) > 0
+      ? await query("SELECT value FROM release_metadata WHERE key = 'source_stamp'", {})
+      : [];
   return {
     register: { stamp: meta.length ? String(meta[0].value) : null, query },
     close: () => connection.closeSync(),
@@ -207,6 +226,7 @@ async function localLookup(
 
   const upstream = await hasUpstreamStatus(register);
   const upstreamCol = upstream ? "upstream_status" : "NULL AS upstream_status";
+  const labelCol = (await hasColumn(register, "entities", "label")) ? "label" : "canonical_name AS label";
 
   if (q.kind === "provider") {
     const params: Record<string, string> = { provider: q.provider, id: q.id };
@@ -258,7 +278,7 @@ async function localLookup(
     // Two bridges (or search hits) can lead to the same survivor.
     if (seen.has(target.id)) continue;
     seen.add(target.id);
-    const entity = await register.query("SELECT reep_id, label, entity_type FROM entities WHERE reep_id = $id", {
+    const entity = await register.query(`SELECT reep_id, ${labelCol}, entity_type FROM entities WHERE reep_id = $id`, {
       id: target.id,
     });
     if (!entity.length) {
@@ -397,8 +417,14 @@ async function freshnessNote(path: string, local: string | null, fetchImpl: type
     );
   }
   if (local === current) return `Local register release: ${local} (current).`;
+  if (local === null) {
+    return (
+      `The local register file does not record its release (it has no release_metadata table); the current ` +
+      `release is ${current}. If the file was downloaded before that release, update it:\n${update}`
+    );
+  }
   return (
-    `**The local register is out of date.** Local release: ${local ?? "unknown"}; current release: ${current}. ` +
+    `**The local register is out of date.** Local release: ${local}; current release: ${current}. ` +
     `Tell the user, and offer to update it before relying on these results.\n${update}`
   );
 }
