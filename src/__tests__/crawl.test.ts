@@ -396,6 +396,15 @@ describe("llms.txt indexes", () => {
     );
   });
 
+  it("names a directory-URL page by its last two directories", () => {
+    expect(llmsPageCategory("https://docs.example.com/versions/v1/endpoints/videos/index.md")).toBe(
+      "endpoints-videos",
+    );
+    expect(llmsPageCategory("https://docs.example.com/versions/v1/events/index.md")).toBe("v1-events");
+    expect(llmsPageCategory("https://docs.example.com/guide/index.md")).toBe("guide");
+    expect(llmsPageCategory("https://docs.example.com/index.md")).toBe("index");
+  });
+
   it("follows nested indexes and never fetches an excluded page", async () => {
     const pages: Record<string, string> = {
       "https://docs.example.com/llms.txt": "- [Section](https://docs.example.com/section/llms.txt)",
@@ -415,6 +424,24 @@ describe("llms.txt indexes", () => {
     expect(docs[0].source_url).toBe("https://docs.example.com/section/kept");
     expect(docs[0].source_type).toBe("llms_txt");
     expect(fetched).not.toContain("https://docs.example.com/section/odds-feed.md");
+  });
+
+  it("keeps every page of a directory-URL site and links each to its page URL", async () => {
+    const body = `## Fields\n\n${"A real paragraph. ".repeat(10)}`;
+    const pages: Record<string, string> = {
+      "https://docs.example.com/llms.txt": [
+        "- [Videos](https://docs.example.com/v1/endpoints/videos/index.md)",
+        "- [Pass](https://docs.example.com/v1/events/pass/index.md)",
+      ].join("\n"),
+      "https://docs.example.com/v1/endpoints/videos/index.md": `# Videos\n\n${body}`,
+      "https://docs.example.com/v1/events/pass/index.md": `# Pass\n\n${body}`,
+    };
+    const docs = await crawlLlmsIndexes(["https://docs.example.com/llms.txt"], [], async (url) => pages[url] ?? null, 0);
+    expect(docs.map((d) => d.category)).toEqual(["endpoints-videos", "events-pass"]);
+    expect(docs.map((d) => d.source_url)).toEqual([
+      "https://docs.example.com/v1/endpoints/videos/",
+      "https://docs.example.com/v1/events/pass/",
+    ]);
   });
 });
 
