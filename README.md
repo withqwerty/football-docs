@@ -304,6 +304,7 @@ metrics:sources` re-checks every card quote against its live source.
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
 | SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| AI on the Ball | 289 | API v1 endpoints (videos, analyses, events, summary, player and team reports, interval queries, tracking, schema), 12 event types, 7 filters, concepts (pitch coordinates, player IDs, possession, speed and distance, teams and sides, webhooks), recording guidelines, data-provenance |
 | Free sources | 69 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
@@ -326,7 +327,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,546 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,835 searchable chunks** across 33 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

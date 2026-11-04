@@ -460,10 +460,18 @@ export function parseLlmsIndex(content: string, indexUrl: string): { pages: stri
   return { pages: [...new Set(pages)], indexes: [...new Set(indexes)] };
 }
 
-/** The category a page is stored under: the last path segment, without `.md`. */
+/**
+ * The category a page is stored under: the last path segment, without `.md`.
+ * Sites built with directory URLs (mkdocs and others) link every page as
+ * `<page>/index.md`; there the page is named by its last two directories
+ * (`endpoints/videos/index.md` -> `endpoints-videos`), so pages do not all
+ * become `index` and overwrite each other.
+ */
 export function llmsPageCategory(pageUrl: string): string {
-  const segment = new URL(pageUrl).pathname.split("/").pop() ?? "";
-  return slugify(segment.replace(/\.md$/, ""));
+  const segments = new URL(pageUrl).pathname.split("/").filter(Boolean);
+  const last = segments.pop() ?? "";
+  if (last === "index.md" && segments.length > 0) return slugify(segments.slice(-2).join("-"));
+  return slugify(last.replace(/\.md$/, ""));
 }
 
 /**
@@ -627,7 +635,7 @@ export async function crawlLlmsIndexes(
     docs.push({
       category,
       content,
-      source_url: pageUrl.replace(/\.md$/, ""),
+      source_url: pageUrl.replace(/\/index\.md$/, "/").replace(/\.md$/, ""),
       source_type: "llms_txt",
     });
   }

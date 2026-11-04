@@ -15,6 +15,24 @@
     "search_docs names them when a query mentions them, so agents do not read unrelated results as an answer."
   ],
   "providers": {
+    "ai-on-the-ball": {
+      "description": "Video-to-data REST API: upload a football match video and get timed events (passes, carries, shots, goals, possession phases), player and ball tracking, a match summary, per-player and per-team reports, and filter-based interval queries. Works on broadcast and single-camera amateur footage",
+      "display_name": "AI on the Ball",
+      "aliases": ["aiontheball", "aib", "aib-api", "smart11"],
+      "access_level": "public-api-docs",
+      "licence_status": "Public API documentation; API access requires an account with prepaid credits or a contract. Output licence and limits are in the provider's Terms of Service.",
+      "public_safety_notes": "Index the public API docs only: endpoints, parameters, fields, event types, filters and concepts. Accuracy sections are dropped (INCLUSION.md), and the home page (prices, terms) and changelog are left out. No credentials, customer videos or analysis payloads.",
+      "version": "API v1",
+      "package": null,
+      "sources": [
+        { "url": "https://docs.aiontheball.nl/llms.txt", "type": "llms_txt", "note": "Public llms.txt index of per-page markdown copies of the API v1 docs" },
+        { "type": "curated", "note": "Data provenance note, written by the provider" }
+      ],
+      "llms_indexes": ["https://docs.aiontheball.nl/llms.txt"],
+      "exclude_categories": ["index", "v1-changelog", "guides-confirm-sides-widget"],
+      "exclude_sections": ["Accuracy"],
+      "last_crawled": "2026-11-04"
+    },
     "api-football": {
       "description": "API-SPORTS football API v3: fixtures, teams, competitions, lineups, player and team statistics, standings, absences and transfers",
       "display_name": "API-Football",
