@@ -52,7 +52,7 @@ Endpoints return `429 Too Many Requests` when exceeded; back off and retry. (No 
 ## Response formats
 
 - **List/metric endpoints** return JSON. `/physical/` additionally accepts `response_format` ∈ `json`, `small_json`, `csv` (this toggle is `/physical/`-only; the GI-metric endpoints always return JSON).
-- **Tracking** (`/match/{id}/tracking/`) returns a **downloadable file**: `file_format` ∈ `jsonl` (one JSON object per line), `fifa-xml`, or `fifa-data` (FIFA EPTS standard — a metadata `.xml` + data `.txt`). Current `data_version` is `3`.
+- **Tracking** (`/match/{id}/tracking/`) returns a **downloadable file**: `file_format` ∈ `jsonl` (one JSON object per line), `fifa-xml`, or `fifa-data` (FIFA EPTS standard — a metadata `.xml` + data `.txt`). Current `data_version` is `3`. The spec fetched on 2026-11-16 adds `frame_rate` (`10` or `25` fps) and names a parquet format, both "only available for data_version >= 4.0", which its `data_version` enum does not list yet.
 - **Dynamic events** (`/match/{id}/dynamic_events/...`) return **CSV files** (`file_format`, `data_version`, `period_starts`).
 
 ## Data versions

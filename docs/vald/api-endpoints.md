@@ -74,7 +74,7 @@ service has. Each product's page has the parameters, responses and schemas.
 | NordBord | `externalnordbord` | `GET` | `/training/sessions/isometric/exercises/repetitions` | Retrieves a list of Nordbord isometric training exercise sessions |  |
 | ForceFrame | `externalforceframe` | `GET` | `/tests/{testId}/forceframetrace` | Retrieves a ForceFrame force trace. |  |
 | ForceFrame | `externalforceframe` | `GET` | `/tests/{testId}` | Retrieves a ForceFrame test summary. |  |
-| ForceFrame | `externalforceframe` | `GET` | `/tests/{testId}/repetitions` |  |  |
+| ForceFrame | `externalforceframe` | `GET` | `/tests/{testId}/repetitions` | Retrieves the repetitions of a ForceFrame test. |  |
 | ForceFrame | `externalforceframe` | `GET` | `/tests` | Retrieves a collection of pageable ForceFrame test summaries. | yes |
 | ForceFrame | `externalforceframe` | `GET` | `/tests/v2` | Retrieves a collection of ForceFrame test summaries. |  |
 | ForceFrame | `externalforceframe` | `GET` | `/tests/{testId}/metrics` | Retrieves additional metrics for a ForceFrame test summary. |  |

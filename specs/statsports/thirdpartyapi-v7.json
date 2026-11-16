@@ -14,6 +14,11 @@
     },
     "version": "7"
   },
+  "servers": [
+    {
+      "url": "/thirdpartyapi"
+    }
+  ],
   "paths": {
     "/api/thirdPartyData/health": {
       "get": {
@@ -71,7 +76,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -141,7 +146,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -185,7 +190,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  }
                 }
               }
             }
@@ -239,7 +247,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -283,7 +291,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  }
                 }
               }
             }
@@ -337,7 +348,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -381,7 +392,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7"
+                  }
                 }
               }
             }
@@ -435,7 +449,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -479,7 +493,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.PlayerDataV6"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.PlayerDataV6"
+                  }
                 }
               }
             }
@@ -533,7 +550,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -631,7 +648,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -729,7 +746,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -808,6 +825,18 @@
       "Core.Common.Models.PlayerService.PlayerThirdParty": {
         "type": "object",
         "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thirdPartyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customId": {
+            "type": "string",
+            "nullable": true
+          },
           "id": {
             "type": "string",
             "format": "uuid"
@@ -837,18 +866,6 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
-          },
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "thirdPartyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "customId": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -860,12 +877,12 @@
             "type": "string",
             "format": "uuid"
           },
-          "sessionStartDate": {
+          "SessionStartDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "sessionEndDate": {
+          "SessionEndDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
@@ -906,951 +923,6 @@
         },
         "additionalProperties": false
       },
-      "Core.Common.Models.ThirdPartyService.Base.DrillDataV5": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          },
-          "drillKpi": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.DrillKpiV5"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.Base.DrillKpiV5": {
-        "type": "object",
-        "properties": {
-          "totalTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceTotal": {
-            "type": "number",
-            "format": "double"
-          },
-          "distancePerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "highSpeedRunningRel": {
-            "type": "number",
-            "format": "double"
-          },
-          "hsrRelPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "highSpeedRunningAbs": {
-            "type": "number",
-            "format": "double"
-          },
-          "hsrAbsPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "emd": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmld": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmltime": {
-            "type": "number",
-            "format": "double"
-          },
-          "dsl": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ1Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ2Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ6Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensity": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalMetabolicPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageMetabolicPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "impacts": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerations": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxAcceleration": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerations": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxDeceleration": {
-            "type": "number",
-            "format": "double"
-          },
-          "sprints": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "sprintDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "entriesZ3Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ4Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ5Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ6Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ3Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ4Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ5Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ6Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxHeartrate": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrexertion": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeInRedZone": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "explosiveDistanceRel": {
-            "type": "number",
-            "format": "double"
-          },
-          "explosiveDistanceAbs": {
-            "type": "number",
-            "format": "double"
-          },
-          "fatigueIndex": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelImpulseTotal": {
-            "type": "number",
-            "format": "double"
-          },
-          "externalWork": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrv": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrrPercent": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrrBeats": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "stepBalance": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadVert": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadLat": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadAnt": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadMag": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadSlow": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalRightSteps": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rightVerticalImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightLateralImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightAntPostImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightMagImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightAverageVertImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalLeftSteps": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leftVerticalImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftLateralImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftAntPostImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftMagImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftAverageVertImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hibsDuration": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsMaxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "energyExpenditure": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalDecelLoading": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalAccelLoading": {
-            "type": "number",
-            "format": "double"
-          },
-          "acute": {
-            "type": "number",
-            "format": "double"
-          },
-          "chronic": {
-            "type": "number",
-            "format": "double"
-          },
-          "acuteChronicRatio": {
-            "type": "number",
-            "format": "double"
-          },
-          "percentTimeInRedZone": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ2Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastAccel": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastDecel": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageGoalkeeperPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "dives": {
-            "type": "number",
-            "format": "double"
-          },
-          "divesLeft": {
-            "type": "number",
-            "format": "double"
-          },
-          "divesRight": {
-            "type": "number",
-            "format": "double"
-          },
-          "goalkeeperLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastDive": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmldPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "numberOfHmlEfforts": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmlEffortsMaxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmlEffortsTotalDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastHmlEffort": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceHib": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceSprint": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageHeartRate": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.Base.SessionDataV5": {
-        "type": "object",
-        "properties": {
-          "sessionDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.Base.SessionPlayerDataV5": {
-        "type": "object",
-        "properties": {
-          "player": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
-          },
-          "drills": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.DrillDataV5"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Core.Common.Models.ThirdPartyService.ThirdPartyShareDateDto": {
         "required": [
           "thirdPartyApiId"
@@ -1864,1082 +936,6 @@
           "shareDate": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.V5.PlayerDataV5": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "gender": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "shortName": {
-            "type": "string",
-            "nullable": true
-          },
-          "height": {
-            "type": "number",
-            "format": "double"
-          },
-          "weight": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxHeartRate": {
-            "type": "number",
-            "format": "double"
-          },
-          "restingHeartRate": {
-            "type": "number",
-            "format": "double"
-          },
-          "activeSquadName": {
-            "type": "string",
-            "nullable": true
-          },
-          "thirdPartyId1": {
-            "type": "string",
-            "nullable": true
-          },
-          "maxAccel": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxDecel": {
-            "type": "number",
-            "format": "double"
-          },
-          "runningSymmetry": {
-            "type": "number",
-            "format": "double"
-          },
-          "thirdPartyId2": {
-            "type": "string",
-            "nullable": true
-          },
-          "thirdPartyId3": {
-            "type": "string",
-            "nullable": true
-          },
-          "playerThirdParties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.PlayerService.PlayerThirdParty"
-            },
-            "nullable": true
-          },
-          "position": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.V6.DrillDataV6": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          },
-          "drillKpi": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.DrillKpiV6"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "sessionId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "sessionPlayerDataId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "primaryLabel": {
-            "type": "string",
-            "nullable": true
-          },
-          "secondaryLabel": {
-            "type": "string",
-            "nullable": true
-          },
-          "tertiaryLabel": {
-            "type": "string",
-            "nullable": true
-          },
-          "freeText": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.V6.DrillKpiV6": {
-        "type": "object",
-        "properties": {
-          "totalTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceTotal": {
-            "type": "number",
-            "format": "double"
-          },
-          "distancePerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "highSpeedRunningRel": {
-            "type": "number",
-            "format": "double"
-          },
-          "hsrRelPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "highSpeedRunningAbs": {
-            "type": "number",
-            "format": "double"
-          },
-          "hsrAbsPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "emd": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmld": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmltime": {
-            "type": "number",
-            "format": "double"
-          },
-          "dsl": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ1Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ2Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ6Time": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensity": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ1Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ2Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ3Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ4Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ5Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ1Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ2Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ3Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ4Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ5Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "speedIntensityZ6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalMetabolicPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageMetabolicPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "impacts": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "impactsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerations": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "accelerationDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxAcceleration": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerations": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ1": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ2": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ3": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ4": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ5": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationsZ6": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "decelerationDistanceZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationDistanceZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationTimeZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "maxDeceleration": {
-            "type": "number",
-            "format": "double"
-          },
-          "sprints": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "sprintDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "entriesZ3Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ4Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ5Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ6Rel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ3Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ4Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ5Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "entriesZ6Abs": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxHeartrate": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrexertion": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ1": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ2": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ3": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ4": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ5": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartrateZ6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeInRedZone": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "explosiveDistanceRel": {
-            "type": "number",
-            "format": "double"
-          },
-          "explosiveDistanceAbs": {
-            "type": "number",
-            "format": "double"
-          },
-          "fatigueIndex": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelImpulseTotal": {
-            "type": "number",
-            "format": "double"
-          },
-          "externalWork": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrv": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrrPercent": {
-            "type": "number",
-            "format": "double"
-          },
-          "hrrBeats": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "stepBalance": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadVert": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadLat": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadAnt": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadMag": {
-            "type": "number",
-            "format": "double"
-          },
-          "dynamicLoadSlow": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalRightSteps": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rightVerticalImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightLateralImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightAntPostImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightMagImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "rightAverageVertImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalLeftSteps": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leftVerticalImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftLateralImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftAntPostImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftMagImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "leftAverageVertImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hibsDuration": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "hibsMaxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "energyExpenditure": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalDecelLoading": {
-            "type": "number",
-            "format": "double"
-          },
-          "totalAccelLoading": {
-            "type": "number",
-            "format": "double"
-          },
-          "acute": {
-            "type": "number",
-            "format": "double"
-          },
-          "chronic": {
-            "type": "number",
-            "format": "double"
-          },
-          "acuteChronicRatio": {
-            "type": "number",
-            "format": "double"
-          },
-          "percentTimeInRedZone": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ2Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeHeartRateZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ2Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ3Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Z6Abs": {
-            "type": "number",
-            "format": "double"
-          },
-          "distanceZ4Z6Rel": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastAccel": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "decelerationsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastDecel": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "dslZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageGoalkeeperPower": {
-            "type": "number",
-            "format": "double"
-          },
-          "dives": {
-            "type": "number",
-            "format": "double"
-          },
-          "divesLeft": {
-            "type": "number",
-            "format": "double"
-          },
-          "divesRight": {
-            "type": "number",
-            "format": "double"
-          },
-          "goalkeeperLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastDive": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ3Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ4Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "impactsZ5Z6": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "metabolicTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmldPerMin": {
-            "type": "number",
-            "format": "double"
-          },
-          "numberOfHmlEfforts": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmlEffortsMaxSpeed": {
-            "type": "number",
-            "format": "double"
-          },
-          "hmlEffortsTotalDistance": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceLastHmlEffort": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceHib": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageTimeSinceSprint": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageHeartRate": {
-            "type": "number",
-            "format": "double"
-          },
-          "accelerationSymmetry": {
-            "type": "number",
-            "format": "double"
-          },
-          "averageDiveImpact": {
-            "type": "number",
-            "format": "double"
-          },
-          "ballInPlayTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "collisionLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "collisions": {
-            "type": "number",
-            "format": "double"
-          },
-          "mechanicalWork": {
-            "type": "number",
-            "format": "double"
-          },
-          "runningSymmetry": {
-            "type": "number",
-            "format": "double"
-          },
-          "scrumLoad": {
-            "type": "number",
-            "format": "double"
-          },
-          "scrums": {
-            "type": "number",
-            "format": "double"
-          },
-          "ballInPlayTimePercent": {
-            "type": "number",
-            "format": "double"
-          },
-          "customMetrics": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "number",
-              "format": "double"
-            },
             "nullable": true
           }
         },
@@ -2974,6 +970,13 @@
       "Core.Common.Models.ThirdPartyService.V6.GpsImuDataV6": {
         "type": "object",
         "properties": {
+          "imuData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.ImuDataV6"
+            },
+            "nullable": true
+          },
           "t": {
             "type": "integer",
             "format": "int64"
@@ -2993,13 +996,6 @@
           "hr": {
             "type": "number",
             "format": "double"
-          },
-          "imuData": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.ImuDataV6"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3011,27 +1007,27 @@
             "type": "integer",
             "format": "int64"
           },
-          "ax": {
+          "aX": {
             "type": "number",
             "format": "double"
           },
-          "ay": {
+          "aY": {
             "type": "number",
             "format": "double"
           },
-          "az": {
+          "aZ": {
             "type": "number",
             "format": "double"
           },
-          "gx": {
+          "gX": {
             "type": "number",
             "format": "double"
           },
-          "gy": {
+          "gY": {
             "type": "number",
             "format": "double"
           },
-          "gz": {
+          "gZ": {
             "type": "number",
             "format": "double"
           }
@@ -3041,9 +1037,13 @@
       "Core.Common.Models.ThirdPartyService.V6.PlayerDataV6": {
         "type": "object",
         "properties": {
-          "id": {
+          "primaryPosition": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
+          },
+          "secondaryPosition": {
+            "type": "string",
+            "nullable": true
           },
           "displayName": {
             "type": "string",
@@ -3093,7 +1093,7 @@
             "type": "string",
             "nullable": true
           },
-          "thirdPartyId1": {
+          "customPlayerId": {
             "type": "string",
             "nullable": true
           },
@@ -3108,83 +1108,6 @@
           "runningSymmetry": {
             "type": "number",
             "format": "double"
-          },
-          "thirdPartyId2": {
-            "type": "string",
-            "nullable": true
-          },
-          "thirdPartyId3": {
-            "type": "string",
-            "nullable": true
-          },
-          "playerThirdParties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.PlayerService.PlayerThirdParty"
-            },
-            "nullable": true
-          },
-          "sessionId": {
-            "type": "string",
-            "nullable": true
-          },
-          "primaryPosition": {
-            "type": "string",
-            "nullable": true
-          },
-          "secondaryPosition": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.V6.SessionDataV6": {
-        "type": "object",
-        "properties": {
-          "sessionDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Core.Common.Models.ThirdPartyService.V6.SessionPlayerDataV6": {
-        "type": "object",
-        "properties": {
-          "player": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.PlayerDataV6"
-          },
-          "drills": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.DrillDataV6"
-            },
-            "nullable": true
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "sessionId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "dataId": {
-            "type": "string",
-            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -3192,30 +1115,10 @@
       "Core.Common.Models.ThirdPartyService.V7.DrillDataV7": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "sessionType": {
-            "type": "string",
-            "nullable": true
-          },
           "drillKpi": {
             "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.DrillKpiV7"
           },
           "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "sessionId": {
             "type": "string",
             "format": "uuid"
           },
@@ -3236,6 +1139,22 @@
             "nullable": true
           },
           "freeText": {
+            "type": "string",
+            "nullable": true
+          },
+          "drillName": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sessionType": {
             "type": "string",
             "nullable": true
           }
@@ -3481,7 +1400,7 @@
             "type": "number",
             "format": "double"
           },
-          "hmltime": {
+          "hmlTime": {
             "type": "number",
             "format": "double"
           },
@@ -3857,7 +1776,7 @@
             "type": "number",
             "format": "double"
           },
-          "hrexertion": {
+          "hrExertion": {
             "type": "number",
             "format": "double"
           },
@@ -4531,6 +2450,10 @@
       "Core.Common.Models.ThirdPartyService.V7.SessionDataV7": {
         "type": "object",
         "properties": {
+          "squadId": {
+            "type": "string",
+            "nullable": true
+          },
           "sessionDate": {
             "type": "string",
             "format": "date-time"
@@ -4546,10 +2469,6 @@
           "sessionType": {
             "type": "string",
             "nullable": true
-          },
-          "squadId": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4557,9 +2476,6 @@
       "Core.Common.Models.ThirdPartyService.V7.SessionPlayerDataV7": {
         "type": "object",
         "properties": {
-          "player": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.PlayerDataV6"
-          },
           "drills": {
             "type": "array",
             "items": {
@@ -4571,11 +2487,10 @@
             "type": "string",
             "format": "uuid"
           },
-          "sessionId": {
-            "type": "string",
-            "format": "uuid"
+          "playerDetails": {
+            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V6.PlayerDataV6"
           },
-          "dataId": {
+          "rawDataId": {
             "type": "string",
             "format": "uuid"
           }
@@ -4585,11 +2500,21 @@
       "Core.Common.Models.ThirdPartyService.V7.ThirdPartyDataV7": {
         "type": "object",
         "properties": {
+          "sessionDetails": {
+            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.SessionDataV7"
+          },
+          "sessionPlayers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.SessionPlayerDataV7"
+            },
+            "nullable": true
+          },
           "id": {
             "type": "string",
             "format": "uuid"
           },
-          "name": {
+          "sessionName": {
             "type": "string",
             "nullable": true
           },
@@ -4597,26 +2522,8 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "session": {
-            "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.SessionDataV7"
-          },
-          "players": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V7.SessionPlayerDataV7"
-            },
-            "nullable": true
-          },
-          "clubId": {
-            "type": "string",
-            "nullable": true
           }
         },
-        "additionalProperties": false
-      },
-      "System.IntPtr": {
-        "type": "object",
         "additionalProperties": false
       },
       "ThirdPartyCloudService.Models.RawDataResponse`1[[Core.Common.Models.ThirdPartyService.V6.GpsDataV6, Core.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]": {

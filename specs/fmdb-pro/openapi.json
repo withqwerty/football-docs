@@ -3757,7 +3757,13 @@
             "$ref": "#/components/parameters/QueryGbeDetailCurrentClubLeagueBand"
           },
           {
+            "$ref": "#/components/parameters/QueryEscStatus"
+          },
+          {
             "$ref": "#/components/parameters/QueryTagsGbeEligible"
+          },
+          {
+            "$ref": "#/components/parameters/QueryTagsEscEligible"
           },
           {
             "$ref": "#/components/parameters/QueryTagsLessthan6MonthsContract"
@@ -16654,6 +16660,14 @@
               "type": "boolean",
               "nullable": true
             },
+            "isLoan": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "isLoanReturn": {
+              "type": "boolean",
+              "nullable": true
+            },
             "isPre": {
               "type": "boolean",
               "nullable": true
@@ -20338,7 +20352,113 @@
           }
         }
       },
+      "ResponseEligible": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "ResponseYouthPlayer": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "ResponseYouthCutOffDate": {
+        "type": "string",
+        "nullable": true
+      },
+      "ResponseNationTop50": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "ResponseHasMatchData": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "ResponseCriteriaPlayersEsc": {
+        "description": "The eight ESC criteria, with the matches the player played and whether each criterion is met.",
+        "type": "array",
+        "nullable": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "number",
+              "nullable": true
+            },
+            "key": {
+              "type": "string",
+              "nullable": true
+            },
+            "label": {
+              "type": "string",
+              "nullable": true
+            },
+            "requiredMatches": {
+              "type": "number",
+              "nullable": true
+            },
+            "matches": {
+              "type": "number",
+              "nullable": true
+            },
+            "periodMonths": {
+              "type": "number",
+              "nullable": true
+            },
+            "applies": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "met": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "ResponseEsc": {
+        "description": "The player's Elite Significant Contribution (ESC) assessment. ESC only applies to Youth Players (23 or under). A Youth Player qualifies when, within the ESC Player Reference Period (previous 24 months), they satisfied one or more of eight criteria based on youth and senior international matches, continental competition matches and domestic competition matches.",
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/ResponseStatus"
+          },
+          "eligible": {
+            "$ref": "#/components/schemas/ResponseEligible"
+          },
+          "youthPlayer": {
+            "$ref": "#/components/schemas/ResponseYouthPlayer"
+          },
+          "youthCutOffDate": {
+            "$ref": "#/components/schemas/ResponseYouthCutOffDate"
+          },
+          "fifaRanking": {
+            "$ref": "#/components/schemas/ResponseFifaRanking"
+          },
+          "nationTop50": {
+            "$ref": "#/components/schemas/ResponseNationTop50"
+          },
+          "hasMatchData": {
+            "$ref": "#/components/schemas/ResponseHasMatchData"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/ResponseReason"
+          },
+          "exemptionReason": {
+            "$ref": "#/components/schemas/ResponseExemptionReason"
+          },
+          "exemptNation": {
+            "$ref": "#/components/schemas/ResponseExemptNation"
+          },
+          "criteria": {
+            "$ref": "#/components/schemas/ResponseCriteriaPlayersEsc"
+          }
+        }
+      },
       "ResponseGbeEligible": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "ResponseEscEligible": {
         "type": "boolean",
         "nullable": true
       },
@@ -20361,6 +20481,9 @@
         "properties": {
           "gbeEligible": {
             "$ref": "#/components/schemas/ResponseGbeEligible"
+          },
+          "escEligible": {
+            "$ref": "#/components/schemas/ResponseEscEligible"
           },
           "lessthan6MonthsContract": {
             "$ref": "#/components/schemas/ResponseLessthan6MonthsContract"
@@ -21122,6 +21245,8 @@
                     "moves.toNation.name",
                     "moves.date",
                     "moves.dateIsEstimate",
+                    "moves.isLoan",
+                    "moves.isLoanReturn",
                     "moves.isPre",
                     "moves.fee.amount",
                     "moves.fee.currency",
@@ -21564,7 +21689,26 @@
                     "gbe.detail.currentClub.maxPoints",
                     "gbe.detail.currentClub.league.name",
                     "gbe.detail.currentClub.league.band",
+                    "esc.status",
+                    "esc.eligible",
+                    "esc.youthPlayer",
+                    "esc.youthCutOffDate",
+                    "esc.fifaRanking",
+                    "esc.nationTop50",
+                    "esc.hasMatchData",
+                    "esc.reason",
+                    "esc.exemptionReason",
+                    "esc.exemptNation",
+                    "esc.criteria.number",
+                    "esc.criteria.key",
+                    "esc.criteria.label",
+                    "esc.criteria.requiredMatches",
+                    "esc.criteria.matches",
+                    "esc.criteria.periodMonths",
+                    "esc.criteria.applies",
+                    "esc.criteria.met",
                     "tags.gbeEligible",
+                    "tags.escEligible",
                     "tags.lessthan6MonthsContract",
                     "tags.onLoan",
                     "tags.hotProspect",
@@ -23976,6 +24120,9 @@
                       },
                       "gbe": {
                         "$ref": "#/components/schemas/ResponseGbePlayers"
+                      },
+                      "esc": {
+                        "$ref": "#/components/schemas/ResponseEsc"
                       },
                       "tags": {
                         "$ref": "#/components/schemas/ResponseTags"
@@ -29645,7 +29792,9 @@
             "gbe.detail.currentClub.maxPoints",
             "gbe.detail.currentClub.league.name",
             "gbe.detail.currentClub.league.band",
+            "esc.status",
             "tags.gbeEligible",
+            "tags.escEligible",
             "tags.lessthan6MonthsContract",
             "tags.onLoan",
             "tags.hotProspect"
@@ -29730,6 +29879,7 @@
               "goalkeeperAttributesPercentiles",
               "mentalTraitsPercentiles",
               "gbe",
+              "esc",
               "tags",
               "clubCompetitionExperience"
             ]
@@ -29813,6 +29963,7 @@
               "goalkeeperAttributesPercentiles",
               "mentalTraitsPercentiles",
               "gbe",
+              "esc",
               "tags",
               "clubCompetitionExperience"
             ]
@@ -34009,6 +34160,14 @@
         },
         "description": "Filters the list based on whether the `gbe.detail.currentClub.league.band` field value matches the specified value."
       },
+      "QueryEscStatus": {
+        "name": "esc.status",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Filters the list based on whether the `esc.status` field value matches the specified value."
+      },
       "QueryTagsGbeEligible": {
         "name": "tags.gbeEligible",
         "in": "query",
@@ -34016,6 +34175,14 @@
           "type": "boolean"
         },
         "description": "Filters the list based on whether the `tags.gbeEligible` field value matches the specified value."
+      },
+      "QueryTagsEscEligible": {
+        "name": "tags.escEligible",
+        "in": "query",
+        "schema": {
+          "type": "boolean"
+        },
+        "description": "Filters the list based on whether the `tags.escEligible` field value matches the specified value."
       },
       "QueryTagsLessthan6MonthsContract": {
         "name": "tags.lessthan6MonthsContract",

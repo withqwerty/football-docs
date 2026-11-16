@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json
 upstream_version: STATSports 3rd Party API v5, v6 and v7 (OpenAPI 3.0.1)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # STATSports Data Model
@@ -10,21 +10,50 @@ crawled_at: 2026-09-30
 ## Response structure (v7)
 
 `getFullSession`, `getFullSessionsByDateRange` and `getFullSessionByShareDate`
-return `ThirdPartyDataV7` in v7. The nesting, from the spec's `$ref` links:
+return an array of `ThirdPartyDataV7` in v7. The nesting, from the spec's `$ref`
+links:
 
 ```
-ThirdPartyDataV7
-├── session: SessionDataV7
-└── players[]: SessionPlayerDataV7
-    ├── player: PlayerDataV6
+ThirdPartyDataV7[]
+├── sessionDetails: SessionDataV7
+└── sessionPlayers[]: SessionPlayerDataV7
+    ├── playerDetails: PlayerDataV6
     └── drills[]: DrillDataV7
         └── drillKpi: DrillKpiV7   (319 metric fields, see STATSports drill KPI metrics)
 ```
 
 In v6 the same shape uses `ThirdPartyDataV6`, `SessionDataV6`,
 `SessionPlayerDataV6`, `PlayerDataV6`, `DrillDataV6` and `DrillKpiV6`. In v5 it uses
-the `V5` schemas. `getPlayerDetails` returns `PlayerDataV6` in v6 and v7, and
-`PlayerDataV5` in v5.
+the `V5` schemas. `getPlayerDetails` returns an array of `PlayerDataV6` in v6 and
+v7, and an array of `PlayerDataV5` in v5.
+
+## STATSports spec changes on 2026-11-16
+
+The specs fetched on 2026-11-16 rename and remove fields in all three versions.
+The docs follow the new specs. Responses were not checked against the live API,
+because it needs a customer token. Compared with the specs fetched on 2026-11-03:
+
+- The full-session endpoints and `getPlayerDetails` return an array; the earlier
+  specs gave a single object.
+- Top-level session response: `name` is now `sessionName`, `session` is
+  `sessionDetails` and `players` is `sessionPlayers`. `clubId` (v6, v7) is gone.
+- Player in a session: `player` is now `playerDetails`. In v6 and v7, `dataId` is
+  gone and `rawDataId` is new, and `sessionId` is gone.
+- Player: `id`, `thirdPartyId1`, `thirdPartyId2`, `thirdPartyId3`,
+  `playerThirdParties` and (v6) `sessionId` are gone, and `customPlayerId` is new.
+  No player field holds a STATSports player ID any more.
+- Drill: `name` is now `drillName`. In v6 and v7, `sessionId` is gone.
+- Drill KPIs: `hmltime` is now `hmlTime` and `hrexertion` is now `hrExertion`.
+- IMU sample: `ax`, `ay`, `az`, `gx`, `gy`, `gz` are now `aX`, `aY`, `aZ`, `gX`,
+  `gY`, `gZ`.
+- `ThirdPartyDateRangeDto` (request body): `sessionStartDate` and `sessionEndDate`
+  are now `SessionStartDate` and `SessionEndDate`.
+- `PlayerThirdParty` is still defined, but no schema or operation refers to it.
+- The `IntPtr` schema is gone, and each spec declares the server URL
+  `/thirdpartyapi`.
+- Each version's spec now defines only its own schemas. The v6 and v7 specs no
+  longer carry the `V5` schemas, and the v7 spec no longer carries `DrillDataV6`,
+  `DrillKpiV6`, `SessionDataV6` or `SessionPlayerDataV6`.
 
 No schema field in any version has a description, and the spec gives no units.
 Every schema sets `additionalProperties: false`. The field tables below copy name,
@@ -37,7 +66,8 @@ by its .NET full type name: `DrillKpiV7` is
 `Core.Common.Models.ThirdPartyService.V7.DrillKpiV7`, `ThirdPartyDto` is
 `Core.Common.Models.ThirdPartyService.Api.ThirdPartyDto`, and `GpsDataV6RawDataResponse`
 is ``ThirdPartyCloudService.Models.RawDataResponse`1[[Core.Common.Models.ThirdPartyService.V6.GpsDataV6, ...]]``.
-Only the names changed; the fields are the same as in the 2026-09-30 specs.
+That renaming changed no field; the field changes came with the specs fetched on
+2026-11-16 (see above).
 
 ## `ThirdPartyDataV7` (session response)
 
@@ -46,12 +76,11 @@ Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
+| `sessionDetails` | `SessionDataV7` |  |  |  |  |
+| `sessionPlayers` | array of `SessionPlayerDataV7` |  | yes |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `name` | `string` |  | yes |  |  |
+| `sessionName` | `string` |  | yes |  |  |
 | `shareDate` | `string` | `date-time` | yes |  |  |
-| `session` | `SessionDataV7` |  |  |  |  |
-| `players` | array of `SessionPlayerDataV7` |  | yes |  |  |
-| `clubId` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-thirdpartydatav7 end -->
 
 ## `ThirdPartyDataV6` (session response)
@@ -61,12 +90,11 @@ Defined in the v6 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
+| `sessionDetails` | `SessionDataV6` |  |  |  |  |
+| `sessionPlayers` | array of `SessionPlayerDataV6` |  | yes |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `name` | `string` |  | yes |  |  |
+| `sessionName` | `string` |  | yes |  |  |
 | `shareDate` | `string` | `date-time` | yes |  |  |
-| `session` | `SessionDataV6` |  |  |  |  |
-| `players` | array of `SessionPlayerDataV6` |  | yes |  |  |
-| `clubId` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-thirdpartydatav6 end -->
 
 ## `ThirdPartyDataV5` (session response)
@@ -77,10 +105,10 @@ Defined in the v5 spec.
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `id` | `string` | `uuid` |  |  |  |
-| `name` | `string` |  | yes |  |  |
+| `sessionName` | `string` |  | yes |  |  |
 | `shareDate` | `string` | `date-time` | yes |  |  |
-| `session` | `SessionDataV5` |  |  |  |  |
-| `players` | array of `SessionPlayerDataV5` |  | yes |  |  |
+| `sessionDetails` | `SessionDataV5` |  |  |  |  |
+| `sessionPlayers` | array of `SessionPlayerDataV5` |  | yes |  |  |
 <!-- generated:statsports-schema-thirdpartydatav5 end -->
 
 ## `SessionDataV7` (session)
@@ -90,17 +118,17 @@ Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
+| `squadId` | `string` |  | yes |  |  |
 | `sessionDate` | `string` | `date-time` |  |  |  |
 | `startTime` | `string` | `date-time` |  |  |  |
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
-| `squadId` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-sessiondatav7 end -->
 
 ## `SessionDataV6` (session)
 
 <!-- generated:statsports-schema-sessiondatav6 start -->
-Defined in the v6, v7 specs.
+Defined in the v6 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
@@ -113,7 +141,7 @@ Defined in the v6, v7 specs.
 ## `SessionDataV5` (session)
 
 <!-- generated:statsports-schema-sessiondatav5 start -->
-Defined in the v5, v6, v7 specs.
+Defined in the v5 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
@@ -130,35 +158,33 @@ Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `player` | `PlayerDataV6` |  |  |  |  |
 | `drills` | array of `DrillDataV7` |  | yes |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `sessionId` | `string` | `uuid` |  |  |  |
-| `dataId` | `string` | `uuid` |  |  |  |
+| `playerDetails` | `PlayerDataV6` |  |  |  |  |
+| `rawDataId` | `string` | `uuid` |  |  |  |
 <!-- generated:statsports-schema-sessionplayerdatav7 end -->
 
 ## `SessionPlayerDataV6` (player in a session)
 
 <!-- generated:statsports-schema-sessionplayerdatav6 start -->
-Defined in the v6, v7 specs.
+Defined in the v6 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `player` | `PlayerDataV6` |  |  |  |  |
-| `drills` | array of `DrillDataV6` |  | yes |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `sessionId` | `string` | `uuid` |  |  |  |
-| `dataId` | `string` | `uuid` |  |  |  |
+| `playerDetails` | `PlayerDataV6` |  |  |  |  |
+| `rawDataId` | `string` | `uuid` |  |  |  |
+| `drills` | array of `DrillDataV6` |  | yes |  |  |
 <!-- generated:statsports-schema-sessionplayerdatav6 end -->
 
 ## `SessionPlayerDataV5` (player in a session)
 
 <!-- generated:statsports-schema-sessionplayerdatav5 start -->
-Defined in the v5, v6, v7 specs.
+Defined in the v5 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `player` | `PlayerDataV5` |  |  |  |  |
+| `playerDetails` | `PlayerDataV5` |  |  |  |  |
 | `drills` | array of `DrillDataV5` |  | yes |  |  |
 <!-- generated:statsports-schema-sessionplayerdatav5 end -->
 
@@ -169,7 +195,8 @@ Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `id` | `string` | `uuid` |  |  |  |
+| `primaryPosition` | `string` |  | yes |  |  |
+| `secondaryPosition` | `string` |  | yes |  |  |
 | `displayName` | `string` |  | yes |  | **Personal data.** |
 | `firstName` | `string` |  | yes |  | **Personal data.** |
 | `lastName` | `string` |  | yes |  | **Personal data.** |
@@ -182,28 +209,22 @@ Defined in the v6, v7 specs.
 | `maxHeartRate` | `number` | `double` |  |  | **Personal data.** |
 | `restingHeartRate` | `number` | `double` |  |  | **Personal data.** |
 | `activeSquadName` | `string` |  | yes |  |  |
-| `thirdPartyId1` | `string` |  | yes |  |  |
+| `customPlayerId` | `string` |  | yes |  |  |
 | `maxAccel` | `number` | `double` |  |  |  |
 | `maxDecel` | `number` | `double` |  |  |  |
 | `runningSymmetry` | `number` | `double` |  |  |  |
-| `thirdPartyId2` | `string` |  | yes |  |  |
-| `thirdPartyId3` | `string` |  | yes |  |  |
-| `playerThirdParties` | array of `PlayerThirdParty` |  | yes |  |  |
-| `sessionId` | `string` |  | yes |  |  |
-| `primaryPosition` | `string` |  | yes |  |  |
-| `secondaryPosition` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-playerdatav6 end -->
 
-`gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `thirdPartyId1`, `thirdPartyId2` and `thirdPartyId3` have no description in the spec.
+`gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `customPlayerId` has no description in the spec. The player has no STATSports ID field (see STATSports spec changes on 2026-11-16).
 
 ## `PlayerDataV5` (player)
 
 <!-- generated:statsports-schema-playerdatav5 start -->
-Defined in the v5, v6, v7 specs.
+Defined in the v5 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `id` | `string` | `uuid` |  |  |  |
+| `position` | `string` |  | yes |  |  |
 | `displayName` | `string` |  | yes |  | **Personal data.** |
 | `firstName` | `string` |  | yes |  | **Personal data.** |
 | `lastName` | `string` |  | yes |  | **Personal data.** |
@@ -216,17 +237,13 @@ Defined in the v5, v6, v7 specs.
 | `maxHeartRate` | `number` | `double` |  |  | **Personal data.** |
 | `restingHeartRate` | `number` | `double` |  |  | **Personal data.** |
 | `activeSquadName` | `string` |  | yes |  |  |
-| `thirdPartyId1` | `string` |  | yes |  |  |
+| `customPlayerId` | `string` |  | yes |  |  |
 | `maxAccel` | `number` | `double` |  |  |  |
 | `maxDecel` | `number` | `double` |  |  |  |
 | `runningSymmetry` | `number` | `double` |  |  |  |
-| `thirdPartyId2` | `string` |  | yes |  |  |
-| `thirdPartyId3` | `string` |  | yes |  |  |
-| `playerThirdParties` | array of `PlayerThirdParty` |  | yes |  |  |
-| `position` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-playerdatav5 end -->
 
-`gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `thirdPartyId1`, `thirdPartyId2` and `thirdPartyId3` have no description in the spec.
+`gender` is an `integer` (`int32`). The spec gives no mapping from values to meanings. `customPlayerId` has no description in the spec. The player has no STATSports ID field (see STATSports spec changes on 2026-11-16).
 
 ## `PlayerThirdParty` (player third-party ID)
 
@@ -235,6 +252,9 @@ Defined in the v5, v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
+| `playerId` | `string` | `uuid` |  |  |  |
+| `thirdPartyId` | `integer` | `int32` |  |  |  |
+| `customId` | `string` |  | yes |  |  |
 | `id` | `string` | `uuid` |  |  |  |
 | `syncedAt` | `string` | `date-time` | yes |  |  |
 | `isDeleted` | `boolean` |  |  |  |  |
@@ -242,12 +262,9 @@ Defined in the v5, v6, v7 specs.
 | `createdBy` | `string` | `uuid` |  |  |  |
 | `updatedAt` | `string` | `date-time` | yes |  |  |
 | `updatedBy` | `string` | `uuid` | yes |  |  |
-| `playerId` | `string` | `uuid` |  |  |  |
-| `thirdPartyId` | `integer` | `int32` |  |  |  |
-| `customId` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-playerthirdparty end -->
 
-`thirdPartyId` is an `integer`; the spec does not list its values or say which third party each value names.
+`thirdPartyId` is an `integer`; the spec does not list its values or say which third party each value names. Since the specs fetched on 2026-11-16, no schema or operation refers to `PlayerThirdParty`: the player objects no longer carry `playerThirdParties`.
 
 ## `DrillDataV7` (drill)
 
@@ -256,49 +273,47 @@ Defined in the v7 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `name` | `string` |  | yes |  |  |
-| `startTime` | `string` | `date-time` |  |  |  |
-| `endTime` | `string` | `date-time` |  |  |  |
-| `sessionType` | `string` |  | yes |  |  |
 | `drillKpi` | `DrillKpiV7` |  |  |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `sessionId` | `string` | `uuid` |  |  |  |
 | `sessionPlayerDataId` | `string` | `uuid` |  |  |  |
 | `primaryLabel` | `string` |  | yes |  |  |
 | `secondaryLabel` | `string` |  | yes |  |  |
 | `tertiaryLabel` | `string` |  | yes |  |  |
 | `freeText` | `string` |  | yes |  |  |
+| `drillName` | `string` |  | yes |  |  |
+| `startTime` | `string` | `date-time` |  |  |  |
+| `endTime` | `string` | `date-time` |  |  |  |
+| `sessionType` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-drilldatav7 end -->
 
 ## `DrillDataV6` (drill)
 
 <!-- generated:statsports-schema-drilldatav6 start -->
-Defined in the v6, v7 specs.
+Defined in the v6 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `name` | `string` |  | yes |  |  |
-| `startTime` | `string` | `date-time` |  |  |  |
-| `endTime` | `string` | `date-time` |  |  |  |
-| `sessionType` | `string` |  | yes |  |  |
-| `drillKpi` | `DrillKpiV6` |  |  |  |  |
 | `id` | `string` | `uuid` |  |  |  |
-| `sessionId` | `string` | `uuid` |  |  |  |
 | `sessionPlayerDataId` | `string` | `uuid` |  |  |  |
 | `primaryLabel` | `string` |  | yes |  |  |
 | `secondaryLabel` | `string` |  | yes |  |  |
 | `tertiaryLabel` | `string` |  | yes |  |  |
 | `freeText` | `string` |  | yes |  |  |
+| `drillKpi` | `DrillKpiV6` |  |  |  |  |
+| `drillName` | `string` |  | yes |  |  |
+| `startTime` | `string` | `date-time` |  |  |  |
+| `endTime` | `string` | `date-time` |  |  |  |
+| `sessionType` | `string` |  | yes |  |  |
 <!-- generated:statsports-schema-drilldatav6 end -->
 
 ## `DrillDataV5` (drill)
 
 <!-- generated:statsports-schema-drilldatav5 start -->
-Defined in the v5, v6, v7 specs.
+Defined in the v5 spec.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
-| `name` | `string` |  | yes |  |  |
+| `drillName` | `string` |  | yes |  |  |
 | `startTime` | `string` | `date-time` |  |  |  |
 | `endTime` | `string` | `date-time` |  |  |  |
 | `sessionType` | `string` |  | yes |  |  |
@@ -335,8 +350,8 @@ Defined in the v6, v7 specs.
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `thirdPartyApiId` | `string` | `uuid` |  |  |  |
-| `sessionStartDate` | `string` | `date-time` | yes |  |  |
-| `sessionEndDate` | `string` | `date-time` | yes |  |  |
+| `SessionStartDate` | `string` | `date-time` | yes |  |  |
+| `SessionEndDate` | `string` | `date-time` | yes |  |  |
 <!-- generated:statsports-schema-thirdpartydaterangedto end -->
 
 ## `ThirdPartyRawDataDto` (request body)
@@ -397,15 +412,15 @@ Defined in the v6, v7 specs.
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
 | `t` | `integer` | `int64` |  |  |  |
-| `ax` | `number` | `double` |  |  |  |
-| `ay` | `number` | `double` |  |  |  |
-| `az` | `number` | `double` |  |  |  |
-| `gx` | `number` | `double` |  |  |  |
-| `gy` | `number` | `double` |  |  |  |
-| `gz` | `number` | `double` |  |  |  |
+| `aX` | `number` | `double` |  |  |  |
+| `aY` | `number` | `double` |  |  |  |
+| `aZ` | `number` | `double` |  |  |  |
+| `gX` | `number` | `double` |  |  |  |
+| `gY` | `number` | `double` |  |  |  |
+| `gZ` | `number` | `double` |  |  |  |
 <!-- generated:statsports-schema-imudatav6 end -->
 
-The spec gives no units or descriptions for `t`, `ax`, `ay`, `az`, `gx`, `gy` or `gz`.
+The spec gives no units or descriptions for `t`, `aX`, `aY`, `aZ`, `gX`, `gY` or `gZ`. Specs before 2026-11-16 spelt them `ax`, `ay`, `az`, `gx`, `gy` and `gz`.
 
 ## `GpsImuDataV6RawDataResponse` (raw GPS and IMU page)
 
@@ -425,31 +440,24 @@ Defined in the v6, v7 specs.
 
 | Field | Type | Format | Nullable | Required | Description |
 |---|---|---|---|---|---|
+| `imuData` | array of `ImuDataV6` |  | yes |  |  |
 | `t` | `integer` | `int64` |  |  |  |
 | `lat` | `number` | `double` |  |  |  |
 | `lon` | `number` | `double` |  |  |  |
 | `v` | `number` | `double` |  |  |  |
 | `hr` | `number` | `double` |  |  | **Personal data.** |
-| `imuData` | array of `ImuDataV6` |  | yes |  |  |
 <!-- generated:statsports-schema-gpsimudatav6 end -->
-
-## `IntPtr` (empty schema)
-
-Defined in the v5, v6, v7 specs.
-
-`IntPtr` is an object with no properties. No schema refers to it. Since the specs fetched on 2026-11-03, the `waitHandle.handle` query parameter refers to it; that parameter is part of a .NET `CancellationToken`, not a real request parameter (see STATSports API endpoints).
 
 ## Differences between versions
 
-From the spec files, compared on 2026-09-30:
+From the spec files, compared on 2026-11-16:
 
 - v6 adds, over v5: the `getFullSessionsByDateRange`, `getSessionGpsData`,
-  `getSessionImuData` and `getSessionRawData` operations; `id`, `sessionId`,
+  `getSessionImuData` and `getSessionRawData` operations; `id`,
   `sessionPlayerDataId`, `primaryLabel`, `secondaryLabel`, `tertiaryLabel` and
-  `freeText` on the drill; `id`, `sessionId` and `dataId` on the session player;
-  `sessionId`, `primaryPosition` and `secondaryPosition` on the player (v5 has
-  `position` instead); `clubId` on the top-level object; and 11 drill KPI
-  fields.
+  `freeText` on the drill; `id` and `rawDataId` on the session player;
+  `primaryPosition` and `secondaryPosition` on the player (v5 has `position`
+  instead); and 11 drill KPI fields.
 - v7 adds, over v6: `squadId` on the session, and a new drill KPI schema
   (`DrillKpiV7`) with 319 fields. `DrillKpiV7` drops 79 `DrillKpiV6` field names
   and adds 168. The full lists are in STATSports drill KPI metrics.

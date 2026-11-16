@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://www.football-data.co.uk/notes.txt
 upstream_version: null
-crawled_at: 2026-10-04
+crawled_at: 2026-11-16
 ---
 
 # football-data.co.uk CSV columns
@@ -51,6 +51,8 @@ points to https://www.football-data.co.uk/matches.php.
 |---|---|
 | `Attendance` | Crowd Attendance |
 | `Referee` | Match Referee |
+| `HxG` | Home Team expected goals |
+| `AxG` | Away Team expected goals |
 | `HS` | Home Team Shots |
 | `AS` | Away Team Shots |
 | `HST` | Home Team Shots on Target |
@@ -82,6 +84,17 @@ Two notes from notes.txt on these columns:
 - English and Scottish yellow cards do not include the first yellow card when a
   second yellow turns into a red; in European games that card is counted as a
   yellow (plus red).
+
+## football-data.co.uk expected goals columns (HxG, AxG)
+
+notes.txt added `HxG` ("Home Team expected goals") and `AxG` ("Away Team
+expected goals") between 2026-10-04 and 2026-11-16. It does not say whose xG
+model produces them, or which leagues and seasons carry them. On 2026-11-16 none
+of these files had either column in its header row: the 2025/26 `E0`, `E1`,
+`D1`, `SP1`, `I1`, `F1` and `SC0` files, the 2024/25 `E0`, `D1` and `SC0` files,
+and the `new/BRA.csv` and `new/USA.csv` files. Check the header row before you
+use them, and do not mix them with xG from another model (see
+[xG timelines](xg-timelines.md)).
 
 ## Betting odds
 

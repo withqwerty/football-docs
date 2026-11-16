@@ -303,12 +303,12 @@ metrics:sources` re-checks every card quote against its live source.
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
-| SkillCorner | 51 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
-| Free sources | 69 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
+| SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| Free sources | 70 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
 | Opta | 73 | event-types, qualifiers, coordinate-system, api-access, charting-game-state, charting-lineups, charting-passmaps, charting-set-pieces, charting-shot-placement, identity-surfaces, data-provenance |
-| FMDB Pro | 37 | api-access, api-endpoints, data-model, identity-surfaces, data-provenance |
+| FMDB Pro | 39 | api-access, api-endpoints, data-model, identity-surfaces, data-provenance |
 | Sportradar | 481 | integration guide (API basics, coverage tiers, ID handling, match status, update frequencies, push, historical data), Soccer Extended v4 endpoint reference with data-point tables, FAQ, plus curated api-access, api-endpoints, data-model, charting-and-stories, integration-notes, data-provenance |
 | socceraction | 34 | SPADL format, VAEP, Expected Threat |
 | BeSoccer | 16 | api-access, api-endpoints, data-provenance |
@@ -320,13 +320,13 @@ metrics:sources` re-checks every card quote against its live source.
 | FotMob | 5 | identity-surfaces, data-provenance |
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
 | Transfermarkt | 10 | identity-surfaces, data-provenance, transfermarkt-datasets |
-| STATSports | 70 | api-access, api-endpoints, data-model, drill-kpi-metrics (all 319 DrillKpiV7 fields), identity-surfaces, data-provenance |
+| STATSports | 71 | api-access, api-endpoints, data-model, drill-kpi-metrics (all 319 DrillKpiV7 fields), identity-surfaces, data-provenance |
 | Firstbeat | 79 | api-access, api-endpoints, data-model, variables (100 scalars, 17 time series), identity-surfaces, data-provenance |
 | Hawkin Dynamics | 69 | api-access, api-endpoints, data-model, test-metrics (535 metrics across 13 test types), identity-surfaces, data-provenance |
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,546 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,551 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

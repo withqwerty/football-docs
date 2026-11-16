@@ -1212,12 +1212,12 @@ describe("golden retrieval evals", () => {
     expect(text).toContain("aliases: hudl, hudl-wyscout");
     expect(text).toContain("**sportmonks** (568 chunks)");
     expect(text).toContain("charting-season-stories (7)");
-    expect(text).toContain("**fmdb-pro** (37 chunks)");
+    expect(text).toContain("**fmdb-pro** (39 chunks)");
     expect(text).toContain("aliases: fmdb");
     expect(text).toContain("**transferroom** (45 chunks)");
     expect(text).toContain("charting-availability (5)");
     expect(text).toContain("aliases: transfer-room");
-    expect(text).toContain("**free-sources** (69 chunks)");
+    expect(text).toContain("**free-sources** (70 chunks)");
     expect(text).toContain("contextual-story-joins (8)");
     expect(text).toContain("xg-timelines (8)");
     expect(text).toContain(

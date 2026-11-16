@@ -50,6 +50,9 @@ or name its source of results.
 
 Source: [ClubElo](https://clubelo.com/). Checked 2026-09-24.
 
+The ClubElo section of the free-sources overview is frozen as of 2026-11-16: the
+site has no unattended access route.
+
 ## football-data.co.uk data sources
 
 **Category:** aggregated.

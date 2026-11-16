@@ -95,10 +95,10 @@ describe("wearable vendor docs are grounded in the vendor's spec", () => {
   });
 
   it("lists the DrillKpiV6 fields that v7 dropped and the fields v6 added over v5", () => {
-    const schemas = statsportsSchemas("statsports/thirdpartyapi-v7.json");
-    const v7 = Object.keys(schemas.DrillKpiV7.properties);
-    const v6 = Object.keys(schemas.DrillKpiV6.properties);
-    const v5 = Object.keys(schemas.DrillKpiV5.properties);
+    // Each version's spec defines only its own drill KPI schema (since the specs fetched on 2026-11-16).
+    const v7 = Object.keys(statsportsSchemas("statsports/thirdpartyapi-v7.json").DrillKpiV7.properties);
+    const v6 = Object.keys(statsportsSchemas("statsports/thirdpartyapi-v6.json").DrillKpiV6.properties);
+    const v5 = Object.keys(statsportsSchemas("statsports/thirdpartyapi-v5.json").DrillKpiV5.properties);
     const text = readDoc("statsports", "drill-kpi-metrics.md");
     expect(tableUnder(text, "DrillKpiV6 fields not in DrillKpiV7").sort()).toEqual(
       v6.filter((f) => !v7.includes(f)).sort(),
