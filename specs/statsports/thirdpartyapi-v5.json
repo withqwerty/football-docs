@@ -14,6 +14,11 @@
     },
     "version": "5"
   },
+  "servers": [
+    {
+      "url": "/thirdpartyapi"
+    }
+  ],
   "paths": {
     "/api/thirdPartyData/health": {
       "get": {
@@ -71,7 +76,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -141,7 +146,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -184,7 +189,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
+                  }
                 }
               }
             }
@@ -239,7 +247,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -282,7 +290,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.ThirdPartyDataV5"
+                  }
                 }
               }
             }
@@ -337,7 +348,7 @@
             "name": "waitHandle.handle",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/System.IntPtr"
+              "deprecated": true
             }
           },
           {
@@ -380,7 +391,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
+                  }
                 }
               }
             }
@@ -416,6 +430,18 @@
       "Core.Common.Models.PlayerService.PlayerThirdParty": {
         "type": "object",
         "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thirdPartyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customId": {
+            "type": "string",
+            "nullable": true
+          },
           "id": {
             "type": "string",
             "format": "uuid"
@@ -445,18 +471,6 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
-          },
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "thirdPartyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "customId": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -479,7 +493,7 @@
       "Core.Common.Models.ThirdPartyService.Base.DrillDataV5": {
         "type": "object",
         "properties": {
-          "name": {
+          "drillName": {
             "type": "string",
             "nullable": true
           },
@@ -692,7 +706,7 @@
             "type": "number",
             "format": "double"
           },
-          "hmltime": {
+          "hmlTime": {
             "type": "number",
             "format": "double"
           },
@@ -1040,7 +1054,7 @@
             "type": "number",
             "format": "double"
           },
-          "hrexertion": {
+          "hrExertion": {
             "type": "number",
             "format": "double"
           },
@@ -1408,7 +1422,7 @@
       "Core.Common.Models.ThirdPartyService.Base.SessionPlayerDataV5": {
         "type": "object",
         "properties": {
-          "player": {
+          "playerDetails": {
             "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.V5.PlayerDataV5"
           },
           "drills": {
@@ -1428,7 +1442,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "name": {
+          "sessionName": {
             "type": "string",
             "nullable": true
           },
@@ -1437,10 +1451,10 @@
             "format": "date-time",
             "nullable": true
           },
-          "session": {
+          "sessionDetails": {
             "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.SessionDataV5"
           },
-          "players": {
+          "sessionPlayers": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Core.Common.Models.ThirdPartyService.Base.SessionPlayerDataV5"
@@ -1471,9 +1485,9 @@
       "Core.Common.Models.ThirdPartyService.V5.PlayerDataV5": {
         "type": "object",
         "properties": {
-          "id": {
+          "position": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
           "displayName": {
             "type": "string",
@@ -1523,7 +1537,7 @@
             "type": "string",
             "nullable": true
           },
-          "thirdPartyId1": {
+          "customPlayerId": {
             "type": "string",
             "nullable": true
           },
@@ -1538,31 +1552,8 @@
           "runningSymmetry": {
             "type": "number",
             "format": "double"
-          },
-          "thirdPartyId2": {
-            "type": "string",
-            "nullable": true
-          },
-          "thirdPartyId3": {
-            "type": "string",
-            "nullable": true
-          },
-          "playerThirdParties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Core.Common.Models.PlayerService.PlayerThirdParty"
-            },
-            "nullable": true
-          },
-          "position": {
-            "type": "string",
-            "nullable": true
           }
         },
-        "additionalProperties": false
-      },
-      "System.IntPtr": {
-        "type": "object",
         "additionalProperties": false
       }
     },

@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json
 upstream_version: STATSports 3rd Party API v5, v6 and v7 (OpenAPI 3.0.1)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # STATSports API Endpoints
@@ -38,16 +38,16 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json`, `
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/health` | none | `string` |
 | `GET` | `/api/thirdPartyData/getAvailableMetrics` | none | array of `string` |
-| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | `ThirdPartyDataV7` |
-| `POST` | `/api/thirdPartyData/getFullSessionsByDateRange` | `ThirdPartyDateRangeDto` (application/Json) | `ThirdPartyDataV7` |
-| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | `ThirdPartyDataV7` |
-| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | `PlayerDataV6` |
+| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | array of `ThirdPartyDataV7` |
+| `POST` | `/api/thirdPartyData/getFullSessionsByDateRange` | `ThirdPartyDateRangeDto` (application/Json) | array of `ThirdPartyDataV7` |
+| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | array of `ThirdPartyDataV7` |
+| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | array of `PlayerDataV6` |
 | `POST` | `/api/thirdPartyData/getSessionGpsData` | `ThirdPartyRawDataDto` (application/json) | `GpsDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionImuData` | `ThirdPartyRawDataDto` (application/json) | `ImuDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionRawData` | `ThirdPartyRawDataDto` (application/json) | `GpsImuDataV6RawDataResponse` |
 <!-- generated:statsports-endpoints-v7 end -->
 
-Every operation in v7 takes the header `api-version` (`string`, required, default `"7"`), described as "The requested API version". The spec also gives every operation except `health` five query parameters: `isCancellationRequested`, `canBeCanceled`, `waitHandle.handle` (`IntPtr`), `waitHandle.safeWaitHandle.isInvalid` and `waitHandle.safeWaitHandle.isClosed`, none required and none described. They are the properties of a .NET `CancellationToken`, which the spec generator lists as if they were request parameters; do not send them. Each operation has a one-line summary. Every `POST` operation lists `200` "Request was successful", `204` (no session or no players found for the requested date), `400` "Body has missing/invalid values", `401` "Unauthorized - invalid ID supplied", `415`, `422`, `500` and `503`. The two `GET` operations list `200` only.
+Every operation in v7 takes the header `api-version` (`string`, required, default `"7"`), described as "The requested API version". The spec also gives every operation except `health` five query parameters: `isCancellationRequested`, `canBeCanceled`, `waitHandle.handle` (no type; since the specs fetched on 2026-11-16 its schema is only `deprecated: true`), `waitHandle.safeWaitHandle.isInvalid` and `waitHandle.safeWaitHandle.isClosed`, none required and none described. They are the properties of a .NET `CancellationToken`, which the spec generator lists as if they were request parameters; do not send them. Each operation has a one-line summary. Every `POST` operation lists `200` "Request was successful", `204` (no session or no players found for the requested date), `400` "Body has missing/invalid values", `401` "Unauthorized - invalid ID supplied", `415`, `422`, `500` and `503`. The two `GET` operations list `200` only.
 
 ## Version 6 endpoints
 
@@ -58,10 +58,10 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json`, `
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/health` | none | `string` |
 | `GET` | `/api/thirdPartyData/getAvailableMetrics` | none | array of `string` |
-| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | `ThirdPartyDataV6` |
-| `POST` | `/api/thirdPartyData/getFullSessionsByDateRange` | `ThirdPartyDateRangeDto` (application/Json) | `ThirdPartyDataV6` |
-| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | `ThirdPartyDataV6` |
-| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | `PlayerDataV6` |
+| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | array of `ThirdPartyDataV6` |
+| `POST` | `/api/thirdPartyData/getFullSessionsByDateRange` | `ThirdPartyDateRangeDto` (application/Json) | array of `ThirdPartyDataV6` |
+| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | array of `ThirdPartyDataV6` |
+| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | array of `PlayerDataV6` |
 | `POST` | `/api/thirdPartyData/getSessionGpsData` | `ThirdPartyRawDataDto` (application/json) | `GpsDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionImuData` | `ThirdPartyRawDataDto` (application/json) | `ImuDataV6RawDataResponse` |
 | `POST` | `/api/thirdPartyData/getSessionRawData` | `ThirdPartyRawDataDto` (application/json) | `GpsImuDataV6RawDataResponse` |
@@ -78,9 +78,9 @@ Spec: `https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json`, `
 |---|---|---|---|
 | `GET` | `/api/thirdPartyData/health` | none | `string` |
 | `GET` | `/api/thirdPartyData/getAvailableMetrics` | none | array of `string` |
-| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | `ThirdPartyDataV5` |
-| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | `ThirdPartyDataV5` |
-| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | `PlayerDataV5` |
+| `POST` | `/api/thirdPartyData/getFullSession` | `ThirdPartyDto` (application/json) | array of `ThirdPartyDataV5` |
+| `POST` | `/api/thirdPartyData/getFullSessionByShareDate` | `ThirdPartyShareDateDto` (application/json) | array of `ThirdPartyDataV5` |
+| `POST` | `/api/thirdPartyData/getPlayerDetails` | `ThirdPartyDto` (application/json) | array of `PlayerDataV5` |
 <!-- generated:statsports-endpoints-v5 end -->
 
 Every operation in v5 takes the header `api-version` (`string`, default `"5"`), described as "The requested API version", and the same five query parameters as v7. Unlike v6 and v7, the v5 spec does not mark `api-version` as required. Summaries and response codes are as in v7.
@@ -98,11 +98,18 @@ Every operation in v5 takes the header `api-version` (`string`, default `"5"`), 
 - `POST /api/thirdPartyData/getFullSessionsByDateRange` declares its request body
   as `application/Json` (capital J) in v6 and v7. Every other request body is
   `application/json`.
-- `getFullSessionsByDateRange` returns one `ThirdPartyDataV6` or `ThirdPartyDataV7`
-  object in the spec, not an array, although its name is plural.
+- `getFullSession`, `getFullSessionsByDateRange`, `getFullSessionByShareDate` and
+  `getPlayerDetails` return an array in the specs fetched on 2026-11-16. The
+  earlier specs gave a single object, even for the plural
+  `getFullSessionsByDateRange`.
 - The three raw-data operations (`getSessionGpsData`, `getSessionImuData`,
   `getSessionRawData`) take `ThirdPartyRawDataDto` (`thirdPartyApiId`,
   `rawDataId`, `nextPage`) and return an object with `nextPage` (`integer`,
-  `int32`) and `data` (array). The spec does not say where a `rawDataId` comes from
-  or how `nextPage` ends; no field in the session, player or drill schemas is
-  named `rawDataId`.
+  `int32`) and `data` (array). Since the specs fetched on 2026-11-16, the player
+  in a session (`SessionPlayerDataV6`, `SessionPlayerDataV7`) has a `rawDataId`
+  field (`string`, `uuid`); the earlier specs had a `dataId` field there. The spec does not say that
+  this is the value the raw-data operations take, or how `nextPage` ends.
+- In v6 and v7, the `getFullSessionsByDateRange` request body
+  (`ThirdPartyDateRangeDto`) names its dates `SessionStartDate` and
+  `SessionEndDate` (capital S) since the specs fetched on 2026-11-16. The earlier
+  specs used `sessionStartDate` and `sessionEndDate`.

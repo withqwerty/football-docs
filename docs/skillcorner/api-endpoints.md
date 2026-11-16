@@ -31,7 +31,11 @@ crawled_at: 2026-08-31
 |---|---|
 | `GET /match/{match_id}/` | Match metadata (teams, score, lineups, `pitch_length`/`pitch_width`, `home_team_side`, periods, referees) |
 | `GET /match/{match_id}/data_collection/` | Data products available for the match |
-| `GET /match/{match_id}/tracking/` | **Tracking file** (`file_format` ∈ jsonl/fifa-xml/fifa-data; `data_version=3`) |
+| `GET /match/{match_id}/tracking/` | **Tracking file** (`file_format` ∈ jsonl/fifa-xml/fifa-data; `data_version=3`; `frame_rate` ∈ 10/25, see below) |
+
+### `frame_rate` and tracking data version 4.0
+
+The spec fetched on 2026-11-16 adds a `frame_rate` query parameter (string, `10` or `25`, default `10`) to `GET /match/{match_id}/tracking/` and `GET /match/{match_id}/custom/tracking/`. Its description: "Resolution of the tracking data in frame per second (fps), only availabe if data_version >= 4.0". The `file_format` description now also names "a flat parquet (one row per frame per entity, only available for data_version >= 4.0)". The same spec still lists only `3.0` in the `data_version` enum and only `jsonl`, `fifa-xml` and `fifa-data` in the `file_format` enum, so version 4.0, 25 fps and parquet are described but not yet selectable by the spec's own values.
 
 ## Dynamic events (per match, CSV downloads)
 
@@ -68,7 +72,7 @@ Aggregated with `group_by`, `average_per`, `order_by`, `variants`, plus the stan
 | Endpoint | Returns |
 |---|---|
 | `GET /physical/` | Aggregated physical metrics (see [physical-data.md](physical-data.md)) |
-| `GET /match/{match_id}/custom/physical/` | Customer physical feed for a match |
+| `GET /match/{match_id}/custom/physical/` | Customer physical feed for a match (`data_version`, `response_format`; the `feed_type` parameter was removed in the spec fetched on 2026-11-16) |
 
 ## Custom (per-match, customer-specific)
 

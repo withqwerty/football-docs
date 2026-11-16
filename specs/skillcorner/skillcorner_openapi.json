@@ -1515,19 +1515,6 @@
                     },
                     {
                         "in": "query",
-                        "name": "feed_type",
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "broadcast",
-                                "clean_feed",
-                                "tactical"
-                            ]
-                        },
-                        "description": "Video feed type for custom provider data. If not specified, will try in priority order: tactical > clean_feed > broadcast."
-                    },
-                    {
-                        "in": "query",
                         "name": "data_version",
                         "schema": {
                             "type": "string",
@@ -1629,7 +1616,7 @@
                             ],
                             "default": "jsonl"
                         },
-                        "description": "Format of the downloaded file.\n It can be a jsonlines, where each line is a full parsable json, or Fifa format which is composed by two files : a .xml for metadata, and a .txt for data (for details : https://www.fifa.com/technical/football-technology/standards/epts/research-development-epts-standard-data-format)"
+                        "description": "Format of the downloaded file.\n It can be a jsonlines, where each line is a full parsable json, a flat parquet (one row per frame per entity, only available for data_version >= 4.0), or Fifa format which is composed by two files : a .xml for metadata, and a .txt for data (for details : https://www.fifa.com/technical/football-technology/standards/epts/research-development-epts-standard-data-format)"
                     },
                     {
                         "in": "query",
@@ -1642,6 +1629,19 @@
                             "default": "3.0"
                         },
                         "description": "SkillCorner tracking data version. Defaults to the current version (3.0)."
+                    },
+                    {
+                        "in": "query",
+                        "name": "frame_rate",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "10",
+                                "25"
+                            ],
+                            "default": "10"
+                        },
+                        "description": "Resolution of the tracking data in frame per second (fps), only availabe if data_version >= 4.0"
                     }
                 ],
                 "tags": [
@@ -2683,7 +2683,7 @@
                             ],
                             "default": "jsonl"
                         },
-                        "description": "Format of the downloaded file.\n It can be a jsonlines, where each line is a full parsable json, or Fifa format which is composed by two files : a .xml for metadata, and a .txt for data (for details : https://www.fifa.com/technical/football-technology/standards/epts/research-development-epts-standard-data-format)"
+                        "description": "Format of the downloaded file.\n It can be a jsonlines, where each line is a full parsable json, a flat parquet (one row per frame per entity, only available for data_version >= 4.0), or Fifa format which is composed by two files : a .xml for metadata, and a .txt for data (for details : https://www.fifa.com/technical/football-technology/standards/epts/research-development-epts-standard-data-format)"
                     },
                     {
                         "in": "query",
@@ -2696,6 +2696,19 @@
                             "default": "3.0"
                         },
                         "description": "SkillCorner tracking data version. Defaults to the current version (3.0)."
+                    },
+                    {
+                        "in": "query",
+                        "name": "frame_rate",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "10",
+                                "25"
+                            ],
+                            "default": "10"
+                        },
+                        "description": "Resolution of the tracking data in frame per second (fps), only availabe if data_version >= 4.0"
                     }
                 ],
                 "tags": [

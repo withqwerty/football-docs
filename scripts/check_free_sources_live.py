@@ -10,9 +10,11 @@ the data the doc describes, not just a status code.
 
 When a doc's access recipe changes, change its check here in the same commit.
 
-Not checked: FBref, Transfermarkt and WhoScored. The docs send readers through
-soccerdata, a headed browser or a scraper with its own User-Agent handling, and
-a bare request here would only measure bot protection, not the docs.
+Not checked: FBref, Transfermarkt, WhoScored and ClubElo. The docs send readers
+through soccerdata, a headed browser or a scraper with its own User-Agent
+handling, and a bare request here would only measure bot protection, not the
+docs. ClubElo joined this list on 2026-11-16, when clubelo.com began to serve a
+Cloudflare challenge to every script.
 
 Exit status: 1 if any check fails, 0 if all pass.
 Standard library only. No keys are used.
@@ -20,7 +22,6 @@ Standard library only. No keys are used.
 
 import gzip
 import json
-import re
 import sys
 import time
 import urllib.error
@@ -57,16 +58,6 @@ def understat_match_shots(body):
     return {"h", "a"} <= set(shots) and bool(shots["h"] or shots["a"])
 
 
-def clubelo_chart(fields):
-    def check(body):
-        match = re.search(rb"var vegaJson = (\{.*?\});\s*\n", body, re.S)
-        # The spec can carry empty datasets next to the one with the rows.
-        rows = next(rows for rows in json.loads(match.group(1))["datasets"].values() if rows)
-        return bool(rows) and fields <= set(rows[0])
-
-    return check
-
-
 def football_data_csv(body):
     header = body.decode("utf-8-sig", "replace").splitlines()[0].split(",")
     return {"Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR"} <= set(header)
@@ -95,20 +86,6 @@ CHECKS = [
         "https://understat.com/getMatchData/28000",
         {"X-Requested-With": "XMLHttpRequest"},
         understat_match_shots,
-    ),
-    (
-        "overview.md#clubelo",
-        "ranking page embeds the top-50 chart dataset",
-        "https://clubelo.com/",
-        None,
-        clubelo_chart({"Name", "Elo", "Golo", "Level", "Federation"}),
-    ),
-    (
-        "overview.md#clubelo",
-        "club page embeds the rating history chart dataset",
-        "https://clubelo.com/Bayern",
-        None,
-        clubelo_chart({"Date", "Elo", "Golo"}),
     ),
     (
         "overview.md#football-datacouk",

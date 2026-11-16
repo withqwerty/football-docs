@@ -35,7 +35,7 @@ The `Players` response is the richest entity surface. Important first-level fiel
 | Ability and roles | `currentAbility`, `recommendedCurrentAbility`, `potentialAbility`, `expectedPotentialAbility`, `position`, `positions`, `bestPosition`, `bestPositions`, `bestRole`. |
 | Attributes | `mentalTraits`, `mentalAttributes`, `physicalAttributes`, `technicalAttributes`, `goalkeeperAttributes`, plus percentile groups for each. |
 | Value and availability | `estimatedPlayerValues`, `availabilityIntelligence`, `injuries`, `unavailabilities`, `history`, `moves`, `retirements`. |
-| Regulatory/scouting | `gbe`, `tags`, `homegrownStatus`, `clubCompetitionExperience`, `reputation`. |
+| Regulatory/scouting | `gbe`, `esc`, `tags`, `homegrownStatus`, `clubCompetitionExperience`, `reputation`. |
 
 Use `includeFields` aggressively when fetching players, because a full player object can be wide and deeply nested.
 
@@ -121,6 +121,25 @@ Player and person surfaces can include a `gbe` object. The player full spec expo
 - `gbe.detail.currentClub.*`
 
 These fields are useful for UK Governing Body Endorsement checks and scouting workflows. Treat them as derived policy/scouting fields rather than raw match-event data.
+
+## ESC fields
+
+The spec fetched on 2026-11-16 adds a nullable `esc` object to the `Players` response. The spec describes it as "The player's Elite Significant Contribution (ESC) assessment. ESC only applies to Youth Players (23 or under). A Youth Player qualifies when, within the ESC Player Reference Period (previous 24 months), they satisfied one or more of eight criteria based on youth and senior international matches, continental competition matches and domestic competition matches."
+
+All fields are nullable:
+
+- `esc.status` (string; the spec lists no values)
+- `esc.eligible`, `esc.youthPlayer`, `esc.nationTop50`, `esc.hasMatchData` (boolean)
+- `esc.youthCutOffDate` (string)
+- `esc.fifaRanking` (number)
+- `esc.reason`, `esc.exemptionReason`, `esc.exemptNation`
+- `esc.criteria`, an array described as "The eight ESC criteria, with the matches the player played and whether each criterion is met". Each item holds `number`, `requiredMatches`, `matches`, `periodMonths` (numbers), `key`, `label` (strings) and `applies`, `met` (booleans).
+
+The same spec adds `tags.escEligible` (boolean) next to `tags.gbeEligible`. `/api/players` accepts `esc.status` and `tags.escEligible` as query filters, `esc` in `includeFields` and `excludeFields`, `esc.status` and `tags.escEligible` in `sortBy`, and the `esc.*` keys above as filter-condition keys in the request body.
+
+## Player moves: loan flags
+
+The spec fetched on 2026-11-16 adds two nullable booleans to each item of the player `moves` array: `isLoan` and `isLoanReturn`. Both are also filter-condition keys (`moves.isLoan`, `moves.isLoanReturn`). The spec gives them no description.
 
 ## Update timestamps
 

@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json
 upstream_version: STATSports 3rd Party API v5, v6 and v7 (OpenAPI 3.0.1)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # STATSports Drill KPI Metrics
@@ -137,7 +137,7 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | `metabolicTimeZ5Abs` | `number` | `double` |  |  |
 | `metabolicTimeZ6Abs` | `number` | `double` |  |  |
 | `hmld` | `number` | `double` | yes | yes |
-| `hmltime` | `number` | `double` | yes | yes |
+| `hmlTime` | `number` | `double` | yes | yes |
 | `totalMetabolicPower` | `number` | `double` | yes | yes |
 | `averageMetabolicPower` | `number` | `double` | yes | yes |
 | `metabolicDistanceRel` | `number` | `double` |  |  |
@@ -363,7 +363,7 @@ High-speed running (HSR) appears as `highSpeedRunningAbs`, `highSpeedRunningRel`
 | Field | Type | Format | In `DrillKpiV6` | In `DrillKpiV5` |
 |---|---|---|---|---|
 | `maxHeartrate` | `number` | `double` | yes | yes |
-| `hrexertion` | `number` | `double` | yes | yes |
+| `hrExertion` | `number` | `double` | yes | yes |
 | `timeHeartRateZ1Rel` | `number` | `double` |  |  |
 | `timeHeartRateZ2Rel` | `number` | `double` |  |  |
 | `timeHeartRateZ3Rel` | `number` | `double` |  |  |

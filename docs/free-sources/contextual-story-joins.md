@@ -33,7 +33,11 @@ elo_diff = home_elo - away_elo
 
 The ClubElo CSV API moved behind authentication in September 2026, so a
 lookup by date now needs API access, or ratings taken from the club pages (about
-four years of history). See the ClubElo section of `overview.md`.
+four years of history). Since 16 November 2026 the club pages sit behind a
+Cloudflare challenge that a person must complete in a browser, so no unattended
+pipeline can read them, and the ClubElo docs are frozen. For a pipeline, compute
+your own Elo ratings from results instead. See the ClubElo section of
+`overview.md`.
 
 ClubElo names are not guaranteed to match provider team labels. Keep the alias
 map in project code, and treat promoted, renamed, and abbreviated clubs as normal

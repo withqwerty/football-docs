@@ -57,6 +57,7 @@ Returned as a **file download**, not inline JSON:
 - `file_format=jsonl` — newline-delimited JSON; each line is one frame of player + ball positions in pitch coordinates. Players are keyed by their `trackable_object` id (join to `Player.trackable_object`).
 - `file_format=fifa-xml` / `fifa-data` — the **FIFA EPTS** standard format (a `.xml` metadata file + a `.txt` data file). See the [FIFA EPTS standard](https://www.fifa.com/technical/football-technology/standards/epts/research-development-epts-standard-data-format).
 - `data_version=3` is current.
+- `frame_rate` (`10` or `25` fps, default `10`) is in the spec fetched on 2026-11-16, described as "only availabe if data_version >= 4.0". That spec also describes a flat parquet `file_format` (one row per frame per entity) for version 4.0 and later, but its enums still list only `data_version` `3.0` and the three formats above.
 
 Frame geometry (pitch dimensions, attacking side) comes from the match metadata above; the exact per-frame field layout is defined in the SkillCorner glossary / EPTS spec.
 
