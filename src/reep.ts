@@ -24,7 +24,19 @@ const USER_AGENT = "football-docs (+https://github.com/withqwerty/football-docs)
 const MAX_RESULTS = 10;
 const FRESHNESS_TTL_MS = 60 * 60 * 1000;
 
-export const ENTITY_TYPES = ["player", "coach", "referee", "team", "competition", "season", "stage", "venue", "match"] as const;
+export const ENTITY_TYPES = [
+  "player",
+  "coach",
+  "referee",
+  "team",
+  "competition",
+  "season",
+  "stage",
+  "venue",
+  "match",
+  "transfer",
+  "award",
+] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 
 export type ResolveEntityArgs = {

@@ -2,7 +2,7 @@
 source_url: https://reep.football/id-policy
 source_type: curated
 upstream_version: null
-crawled_at: 2026-11-03
+crawled_at: 2026-11-16
 ---
 
 # Reep IDs, bridges and redirects
@@ -16,11 +16,13 @@ The API specification says a Reep ID matches `^r[a-z][0-9a-f]{14}$`, for example
 `rp1b829f1d3468c4`. The second letter varies with the entity type, but read the
 `entity_type` field rather than parsing the ID. Store Reep IDs as text.
 
-The download has a second form too. In release `2026-10-31.1`, 192,942 of the
-3,116,484 entities have an ID of one letter, an underscore and 16 hex digits:
-192,906 matches (for example `m_00004237ae76edf9`), 29 venues (`v_…`), 3 coaches
-(`c_…`), 3 players (`p_…`) and 1 stage (`r_…`). Do not validate Reep IDs against
-the pattern above; treat them as opaque text.
+The download has a second form too. In release `2026-10-19.1`, 1,127 of the
+1,990,061 entities have an ID of one letter, an underscore and 16 hex digits:
+1,088 transfers (for example `x_0025dde5e1e2fe1f`), 29 venues (`v_…`), 3 coaches
+(`c_…`), 3 players (`p_…`), 2 awards (`a_…`) and 2 stages (`r_…`). Matches there
+use the `r…` form (`rm…`). Release `2026-10-31.1` instead gave 192,906 matches the
+underscore form (for example `m_00004237ae76edf9`). Do not validate Reep IDs
+against the pattern above; treat them as opaque text.
 
 What an ID promises:
 
@@ -63,17 +65,19 @@ numeric columns before joining. Opta carries both its 25-character IDs
 (`person`, `team`) and numeric forms (`person_numeric`, `team_numeric`,
 `competition_numeric`, and also `match_numeric` and `season_numeric`). The
 namespaces above follow the get-started guide and were checked against release
-`2026-10-31.1`.
+`2026-10-19.1`.
 
-That release has 279 provider and namespace pairs across 34 providers. Next to
-the namespaces above, most providers also carry generic ones: `fixture_participants`
-(29 providers), `team`, `coach`, `match`, `player`, `competition`, `stage`,
-`manager`, `season` and `venue`. Transfermarkt has both `verein` and `team`, and
-both `spieler` and `player`, with different IDs in each: Arsenal has `verein`
-`11` and `team` `97974`. Join on the namespace your IDs came from; a wrong
-namespace matches nothing, or matches a different ID.
+That release has 218 provider and namespace pairs across 33 providers. Next to
+the namespaces above, many providers also carry generic ones: `team` (24
+providers), `player` (23), `competition` (22), `match` (20), `award` and `season`
+(16 each), `stage` (15), `coach` (9), `venue` and `person` (7 each) and `manager`
+(6). Transfermarkt has both `spieler` (395,449 bridges) and `player` (907), and no
+entity carries both; its clubs are under `verein` only in that release. (Release
+`2026-10-31.1` also had a Transfermarkt `team` namespace with different IDs:
+Arsenal was `verein` `11` and `team` `97974`.) Join on the namespace your IDs came
+from; a wrong namespace matches nothing, or matches a different ID.
 
-In that release, 2,464 of the 4,920 venue bridges carry a prefix in
+In that release, 114 of the 187 venue bridges carry a prefix in
 `external_id`: the Emirates Stadium is `transfermarkt / venue / tm_venue:11` and
 `besoccer / venue / bs_venue:263`, but `api_football / venue / 494`. Check the
 form before joining a provider's bare venue number.
@@ -81,8 +85,8 @@ form before joining a provider's bare venue number.
 A few entities hold two IDs from one provider, for example after the provider
 reissued an ID. Aggregate with `string_agg` rather than `max` so that neither is
 dropped. Releases from 2026-09-26 to at least 2026-10-05 marked the retired one
-of such a pair in `bridges.upstream_status`; release `2026-10-31.1` has no such
-column. Source: [get-started guide](https://reep.football/get-started).
+of such a pair in `bridges.upstream_status`; releases `2026-10-19.1` and
+`2026-10-31.1` have no such column. Source: [get-started guide](https://reep.football/get-started).
 
 ## Provider roles
 
