@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://prd-euw-api-extforcedecks.valdperformance.com/swagger/index.html
 upstream_version: VALD external APIs, eight specifications (OpenAPI 3.0.4)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # VALD API Access
@@ -105,6 +105,12 @@ The specifications state no rate limit. Error responses in the specs use
 `ProblemDetails` and `ValidationProblemDetails` schemas (`type`, `title`, `status`,
 `detail`, `instance`, and `errors` for validation); some specs give them longer
 names, such as `Microsoft.AspNetCore.Mvc.ProblemDetails`.
+
+The ForceDecks and ForceFrame specs fetched on 2026-11-16 list `429` Too Many
+Requests (body `string`) on every endpoint, and `401`, `500`, `502` and `504` with a
+`ProblemDetails` body on every data endpoint. They serve error bodies as
+`application/problem+json`. They still give no limit value. The other six specs
+list no `429`.
 
 ## Deprecated ForceDecks endpoints
 

@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json
 upstream_version: Vald.Api.ExternalForceFrame.V1 v1 (OpenAPI 3.0.4)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # VALD ForceFrame API
@@ -28,7 +28,7 @@ crawled_at: 2026-09-30
 | `GET` | `/diagnostics` |  |  |
 | `GET` | `/tests/{testId}/forceframetrace` | Retrieves a ForceFrame force trace. |  |
 | `GET` | `/tests/{testId}` | Retrieves a ForceFrame test summary. |  |
-| `GET` | `/tests/{testId}/repetitions` |  |  |
+| `GET` | `/tests/{testId}/repetitions` | Retrieves the repetitions of a ForceFrame test. |  |
 | `GET` | `/tests` | Retrieves a collection of pageable ForceFrame test summaries. | yes |
 | `GET` | `/tests/v2` | Retrieves a collection of ForceFrame test summaries. |  |
 | `GET` | `/tests/{testId}/metrics` | Retrieves additional metrics for a ForceFrame test summary. |  |
@@ -45,10 +45,10 @@ crawled_at: 2026-09-30
 <!-- generated:vald-forceframe-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
-| `GET /version` |  | `200` OK: `string` |
-| `GET /liveness` |  | `204` No Content |
-| `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
-| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse` |
+| `GET /version` |  | `200` OK: `string`<br>`429` Too Many Requests: `string` |
+| `GET /liveness` |  | `204` No Content<br>`429` Too Many Requests: `string` |
+| `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`429` Too Many Requests: `string` |
+| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`<br>`200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Diagnostics.Responses.GetDiagnosticsResponse`<br>`429` Too Many Requests: `string` |
 <!-- generated:vald-forceframe-health end -->
 
 ## VALD ForceFrame: `GET /tests/{testId}/forceframetrace`
@@ -62,10 +62,15 @@ Parameters:
 
 Responses:
 
-- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTraceResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}`
 
@@ -78,10 +83,15 @@ Parameters:
 
 Responses:
 
-- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestSummaryResponse`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}/repetitions`
 
@@ -93,10 +103,14 @@ Parameters:
 Responses:
 
 - `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestRepetitions.GetTestRepetitionsResult`
-- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
 - `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /tests`
 
@@ -114,10 +128,15 @@ Parameters:
 
 Responses:
 
-- `204` No Content
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByDateRangeResponse`
+- `204` No Content
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/v2`
 
@@ -131,10 +150,15 @@ Parameters:
 
 Responses:
 
-- `204` No Content
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Responses.GetTestsByModifiedDateResponse`
+- `204` No Content
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /tests/{testId}/metrics`
 
@@ -147,10 +171,15 @@ Parameters:
 
 Responses:
 
-- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `200` OK: `Vald.Api.ExternalForceFrame.V1.Features.Tests.Messages.GetTestSummaryAdditionalMetrics.GetTestSummaryAdditionalMetricsResult`
 - `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
+- `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /training/programs/current`
 
@@ -164,10 +193,15 @@ Parameters:
 Responses:
 
 - `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingProgramResponse`
-- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
+- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /training/sessions`
 
@@ -182,10 +216,15 @@ Parameters:
 Responses:
 
 - `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionsResponse`
-- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
+- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /training/sessions/exercises`
 
@@ -200,10 +239,15 @@ Parameters:
 Responses:
 
 - `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExercisesResponse`
-- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
+- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame: `GET /training/sessions/exercises/repetitions`
 
@@ -218,10 +262,15 @@ Parameters:
 Responses:
 
 - `200` OK: array of `Vald.Api.ExternalForceFrame.V1.Features.Training.Responses.GetTrainingSessionExerciseRepetitionsResponse`
-- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
-- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 - `204` No Content
+- `400` Bad Request: `Microsoft.AspNetCore.Mvc.ValidationProblemDetails`
 - `404` Not Found: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `403` Forbidden: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `500` Internal Server Error: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `502` Bad Gateway: `Microsoft.AspNetCore.Mvc.ProblemDetails`
+- `504` Gateway Timeout: `Microsoft.AspNetCore.Mvc.ProblemDetails`
 
 ## VALD ForceFrame schemas
 

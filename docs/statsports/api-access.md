@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://statsportsproseries.com/thirdpartyapi/index.html
 upstream_version: STATSports 3rd Party API v5, v6 and v7 (OpenAPI 3.0.1)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # STATSports API Access
@@ -26,13 +26,14 @@ To Allow Authorized 3rd Parties Access To STATSports Data."
 
 ## Base URL
 
-The spec declares no `servers`. The Swagger UI loads its specs from
+The specs before 2026-11-16 declared no `servers`; the specs fetched on 2026-11-16
+declare one relative server URL, `/thirdpartyapi`. The Swagger UI loads its specs from
 `/thirdpartyapi/swagger/...`, and the API paths start `/api/thirdPartyData/`. On
 2026-09-30 a request to
 `https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/test` with header
 `api-version: 7` answered HTTP 200 with the body `"Success"`. On 2026-11-03 `/test`
 answered 404; its replacement, `/api/thirdPartyData/health`, answered HTTP 200 with
-an empty body. So a full URL is:
+an empty body, and it did so again on 2026-11-16. So a full URL is:
 
 ```
 https://statsportsproseries.com/thirdpartyapi/api/thirdPartyData/getFullSession

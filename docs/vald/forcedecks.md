@@ -2,7 +2,7 @@
 source_type: curated
 source_url: https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json
 upstream_version: VALD External ForceDecks API v2019q3 (OpenAPI 3.0.4)
-crawled_at: 2026-09-30
+crawled_at: 2026-11-16
 ---
 
 # VALD ForceDecks API
@@ -55,10 +55,10 @@ crawled_at: 2026-09-30
 <!-- generated:vald-forcedecks-health start -->
 | Endpoint | Parameters | Responses |
 |---|---|---|
-| `GET /version` |  | `200` OK: `string` |
-| `GET /liveness` |  | `204` No Content |
-| `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable |
-| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `ProblemDetails`<br>`200` OK: `GetDiagnosticsResponse` |
+| `GET /version` |  | `200` OK: `string`<br>`429` Too Many Requests: `string` |
+| `GET /liveness` |  | `204` No Content<br>`429` Too Many Requests: `string` |
+| `GET /readiness` |  | `204` No Content<br>`503` Service Unavailable<br>`429` Too Many Requests: `string` |
+| `GET /diagnostics` | `Diagnostics-Key` (header, string) | `401` Unauthorized: `ProblemDetails`<br>`200` OK: `GetDiagnosticsResponse`<br>`429` Too Many Requests: `string` |
 <!-- generated:vald-forcedecks-health end -->
 
 ## VALD ForceDecks: `GET /resultdefinitions`
@@ -69,6 +69,13 @@ Responses:
 
 - `200` OK: `GetResultDefinitionsResponse`
 - `204` No Content
+- `429` Too Many Requests: `string`
+- `400` Bad Request: `ValidationProblemDetails`
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /resultdefinitions/{resultId}`
 
@@ -82,6 +89,13 @@ Responses:
 
 - `200` OK: `GetResultDefinitionResponse`
 - `404` Not Found: `ProblemDetails`
+- `429` Too Many Requests: `string`
+- `400` Bad Request: `ValidationProblemDetails`
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams`
 
@@ -89,10 +103,15 @@ Marked `deprecated` in the spec. Description: "Endpoints greyed out with a strik
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `TeamDTO`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `400` Bad Request: `ValidationProblemDetails`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/athletes`
 
@@ -105,11 +124,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `AthleteItemDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/athletes/softdeleted`
 
@@ -122,11 +145,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `AthleteItemDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/athletes/deleted`
 
@@ -139,11 +166,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `DeletedAthleteDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/athlete/{athleteId}/tests/{page}`
 
@@ -158,11 +189,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `TestDTOPagedDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/athlete/{athleteId}/tests/deleted`
 
@@ -176,11 +211,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `DeletedTestDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/{page}`
 
@@ -194,11 +233,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `TestDTOPagedDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/{dateFrom}/{dateTo}/{page}`
 
@@ -213,11 +256,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `TestDTOPagedDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/summary/{dateFrom}/{dateTo}`
 
@@ -231,11 +278,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `SummaryTestDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/typesummarybyathlete/{dateFrom}/{dateTo}`
 
@@ -249,11 +300,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `TestTypeSummaryDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/deleted`
 
@@ -266,11 +321,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `DeletedTestDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/detailed/{dateFrom}/{dateTo}`
 
@@ -284,11 +343,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `DetailedTestDTO`
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/{testId}/trials`
 
@@ -299,11 +362,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: array of `TrialDTO`
 - `400` Bad Request: `ValidationProblemDetails`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/{testId}/recording`
 
@@ -315,11 +382,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `RecordingDTO`
 - `400` Bad Request: `ValidationProblemDetails`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/tests/{testId}/recording/file`
 
@@ -330,11 +401,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `string`
 - `400` Bad Request: `ValidationProblemDetails`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/recordings/{recordingId}`
 
@@ -348,11 +423,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `RecordingDTO`
 - `400` Bad Request: `ValidationProblemDetails`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /v2019q3/teams/{teamId}/recordings/{recordingId}/file`
 
@@ -365,11 +444,15 @@ Parameters:
 
 Responses:
 
-- `401` Unauthorized
-- `403` Forbidden
+- `401` Unauthorized: `ProblemDetails`
+- `403` Forbidden: `ProblemDetails`
 - `200` OK: `string`
 - `400` Bad Request: `ValidationProblemDetails`
 - `404` Not Found
+- `429` Too Many Requests: `string`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks: `GET /tests`
 
@@ -387,6 +470,11 @@ Responses:
 - `204` No Content
 - `400` Bad Request: `ValidationProblemDetails`
 - `403` Forbidden: `ProblemDetails`
+- `429` Too Many Requests: `string`
+- `401` Unauthorized: `ProblemDetails`
+- `500` Internal Server Error: `ProblemDetails`
+- `502` Bad Gateway: `ProblemDetails`
+- `504` Gateway Timeout: `ProblemDetails`
 
 ## VALD ForceDecks schemas
 
@@ -777,14 +865,14 @@ Type `string`.
 
 ### `TrialResultDTO`
 
-| Field | Type | Format | Nullable | Description |
-| --- | --- | --- | --- | --- |
-| `resultId` | `integer` | `int32` |  | Result type definition unqiue id. |
-| `value` | `number` | `double` | yes |  |
-| `time` | `number` | `double` |  |  |
-| `limb` | `ResultLimb` |  |  |  |
-| `repeat` | `integer` | `int32` |  | Rep index for repeated results (hop, multi-jump tests). |
-| `definition` | `ResultDefinition` |  |  |  |
+| Field | Type | Format | Description |
+| --- | --- | --- | --- |
+| `resultId` | `integer` | `int32` | Result type definition unqiue id. |
+| `value` | `number` | `double` |  |
+| `time` | `number` | `double` |  |
+| `limb` | `ResultLimb` |  |  |
+| `repeat` | `integer` | `int32` | Rep index for repeated results (hop, multi-jump tests). |
+| `definition` | `ResultDefinition` |  |  |
 
 ### `UnitType`
 

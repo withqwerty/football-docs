@@ -7,7 +7,7 @@
 | StatsBomb Open Data | Event-level (full) | GitHub download / API | Select matches (World Cups, specific leagues/seasons) | None |
 | FBref | Results, basic stats (no advanced metrics since Jan 2026) | Web scrape / soccerdata | 100+ competitions | Strict (3s between requests) |
 | Understat | xG, shot-level | Web scrape / soccerdata | Top 5 European leagues | Moderate |
-| ClubElo | Elo ratings | Web pages (API now behind auth) | All top European leagues, public pages from ~2022 | Unknown |
+| ClubElo (frozen) | Elo ratings | None automated: web pages behind a Cloudflare challenge a person must complete, API behind auth | All top European leagues, public pages from ~2022 | Unknown |
 | football-data.co.uk | Match results + odds | CSV download | 25+ leagues, 20+ seasons | None |
 | engsoccerdata | Historical league results | R package / GitHub data | England 1888+, Spain 1928+, other leagues | None |
 | Transfermarkt | Market values, transfers, injuries | Web scrape | All professional leagues | Strict |
@@ -81,47 +81,21 @@ many leagues. Advanced metrics covered 2017/18 to January 2026 only.
 
 ## ClubElo
 
-**What it provides**: Elo ratings for European football clubs, updated after each match. The Elo model adjusts for home advantage, goal difference, and competition level.
+**Status: frozen on 16 November 2026.** This section is no longer kept up to date,
+and no script checks ClubElo any more. It records why ClubElo is not a usable
+source for an automated pipeline.
 
-> **The public CSV API is gone (checked 23 September 2026).** `api.clubelo.com`,
-> which served `http://api.clubelo.com/{club_name}` and
-> `http://api.clubelo.com/{YYYY-MM-DD}` as CSV, now returns 502. The API has moved
-> behind authentication, and registration is not open yet. Anything that uses the
-> old endpoints, including the `soccerdata` ClubElo reader, no longer works.
->
-> On 29 September 2026 the site showed a Login link (`/login/`). The login page,
-> the club pages and the country pages all returned 503/504 hosting errors that
-> day. Registration for the authenticated API was still closed on that date.
-> The ranking page still answered.
+**What it provides**: Elo ratings for European football clubs, updated after each match. The Elo model adjusts for home advantage, goal difference, and competition level. Ratings run from 1946 to the present.
 
-**Access**: The website only. The pages are rendered on the server, with the data in the HTML. Each chart is a Vega-Lite spec assigned to a `vegaJson` variable in the page, with its rows under `datasets`. The spec can hold more than one dataset, and some are empty (on 29 September 2026 the ranking page's first dataset had no rows), so take the dataset that has rows rather than the first one.
+**Why there is no automated access** (dated checks):
 
-| Page | Chart dataset fields | Range |
-|---|---|---|
-| `https://clubelo.com/` | `Name`, `Elo`, `Golo`, `Level`, `Federation`, `FedURL`, `TLC`, plus chart styling fields (top 50 clubs) | Current |
-| `https://clubelo.com/{club}` (e.g. `/Bayern`, `/Liverpool`) | `Date`, `Elo`, `Golo`, `segment_id` (one row per match) | About four years (from late 2022) |
+- **23 September 2026.** The public CSV API at `api.clubelo.com` (`http://api.clubelo.com/{club_name}`, `http://api.clubelo.com/{YYYY-MM-DD}`) returned 502. The API moved behind authentication, and registration was not open. Anything that uses those endpoints, including the `soccerdata` ClubElo reader, no longer works.
+- **29 September 2026.** The site showed a Login link (`/login/`). The login, club and country pages returned 503/504 hosting errors; the ranking page still answered. Registration was still closed.
+- **16 November 2026.** `https://clubelo.com/` and the club pages answered every script with HTTP 403 and a Cloudflare challenge page (`cf-mitigated: challenge`), with a plain or a browser User-Agent. A headed browser (Playwright with Chromium) did not pass the challenge on its own: the page loaded only after a person clicked the challenge's verify box. `api.clubelo.com` still answered 502.
 
-The pages also carry HTML tables of recent and upcoming matches, with Elo win probabilities and rating changes per game. Club slugs are the site's own (`AstonVilla`, `AustriaWien`); take them from the links on the ranking page.
+**What a person can still see**: in a browser, after the challenge, the pages show the same server-rendered charts as before. The club pages (`https://clubelo.com/{club}`, for example `/Bayern`) chart about four years of ratings (`Date`, `Elo`, `Golo` per match), and the ranking page charts the top 50 clubs. That is a manual lookup, not a data source for a pipeline.
 
-```python
-import json, re, requests
-
-def clubelo_history(club):
-    """Rows from the rating chart on a ClubElo club page."""
-    html = requests.get(f"https://clubelo.com/{club}", timeout=30).text
-    spec = json.loads(re.search(r"var vegaJson = (\{.*?\});\s*\n", html, re.S).group(1))
-    return next(rows for rows in spec["datasets"].values() if rows)
-
-rows = clubelo_history("Bayern")   # [{"Date": "2022-09-30T00:00:00", "Elo": ..., "Golo": ..., "segment_id": 0}, ...]
-```
-
-**Coverage**: Ratings run from 1946 to the present, but the public pages expose only the recent chart window. The full history was available through the old API.
-
-**Project use**: For run-in, fixture-difficulty, and season-story surfaces,
-ClubElo is useful as a lightweight strength prior. Join by a maintained club
-name map rather than assuming site labels match your canonical team labels.
-ClubElo is a rating source, not a fixture/result source, so combine it with
-fixtures from Opta, SportMonks, football-data.co.uk, or another schedule feed.
+**Alternatives**: for a team-strength prior in an automated pipeline, compute your own Elo ratings from results (for example from football-data.co.uk, below), and join by a maintained club name map.
 
 ## football-data.co.uk
 
@@ -242,9 +216,9 @@ it in public analysis.
 |---|---|---|---|---|---|---|---|---|
 | Event-level data | Full | No | Shot-level | No | No | No | No | Full |
 | Aggregated stats | Via events | Yes | Yes | No | Basic | No | No | Yes |
-| xG | Yes | Yes (Opta) | Yes (own model) | No | No | No | No | No |
+| xG | Yes | Yes (Opta) | Yes (own model) | No | Not yet (`HxG`/`AxG` listed in notes.txt, in no file checked on 2026-11-16) | No | No | No |
 | Coordinates | Yes | No | Shot coords | No | No | No | No | Yes |
 | Historical depth | Limited | 2017+ detailed | 2014+ | ~2022+ public (1946+ via API) | 1993+ | 1888+ England | 2004+ | ~2010+ |
 | League coverage | Select | Top 5+ | Top 5 | Europe | 25+ | England + selected global leagues | Global | Top 5+ |
 | Commercial use | No | No | Unclear | Yes | Yes | Non-commercial attribution expected | No | No |
-| API available | GitHub | No | No | Behind auth | CSV download | R/GitHub data | No | No |
+| API available | GitHub | No | No | Behind auth (section frozen) | CSV download | R/GitHub data | No | No |

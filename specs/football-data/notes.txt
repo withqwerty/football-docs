@@ -19,6 +19,8 @@ HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)
 Match Statistics (where available)
 Attendance = Crowd Attendance
 Referee = Match Referee
+HxG = Home Team expected goals
+AxG = Away Team expected goals
 HS = Home Team Shots
 AS = Away Team Shots
 HST = Home Team Shots on Target

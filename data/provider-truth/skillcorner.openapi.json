@@ -9,7 +9,7 @@
         "version": ""
       }
     ],
-    "generated_at": "2026-11-03"
+    "generated_at": "2026-11-16"
   },
   "basePaths": [
     "/api"
@@ -169,6 +169,7 @@
     "extrapolated_tracking_v3_last_modified__gte",
     "feed_type",
     "file_format",
+    "frame_rate",
     "group_by",
     "ignore_dynamic_events_check",
     "in_possession_dealing_with_pressure_last_modified__gte",
