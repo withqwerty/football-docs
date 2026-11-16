@@ -1,8 +1,8 @@
 ---
 source_url: https://reep.football/data/
 source_type: curated
-upstream_version: 2026-10-31.1
-crawled_at: 2026-11-03
+upstream_version: 2026-10-19.1
+crawled_at: 2026-11-16
 ---
 
 # Reep download: DuckDB, Parquet and CSV
@@ -11,7 +11,7 @@ The whole register is a free download with no key and no sign-up. Each table
 comes as a Parquet file and as a gzipped CSV, and one DuckDB file holds every
 table. The site calls the Parquet and CSV files the source contract and the
 DuckDB file a convenience build of the same rows. Written from reep.football and
-release `2026-10-31.1` on 2026-11-03.
+release `2026-10-19.1`, the current download, on 2026-11-16.
 
 ## Stable download links
 
@@ -27,16 +27,23 @@ Each link redirects to the file under
 
 Tables available as CSV: `bridges`, `entities`, `redirects`, `entity_search`,
 `matches`, `edges`, `provider_aliases`, and the Wikidata overlay tables
-`overlay_links` and `overlay_aliases`.
+`overlay_links` and `overlay_aliases`. In release `2026-10-19.1` the `edges` CSV
+and Parquet files hold only a header row, and the DuckDB file has no `edges`
+table.
 
 Source: [downloads](https://reep.football/data/). The old page address,
 https://reep.football/downloads, redirects there.
 
 ## Release files and checksums
 
-https://data.reep.football/releases/latest.json names the current release: its
-`stamp` (for example `2026-10-31.1`), and under `release` the `key` and `sha256`
-of that release's `release.json`. `release.json` lists every file of the release
+https://data.reep.football/releases/latest.json names the release the downloads
+channel serves: its `stamp` (for example `2026-10-19.1`), and under `release` the
+`key` and `sha256` of that release's `release.json`. On 2026-11-16 the file had
+`schema` `reep-public-selection/v1`, and also `generated_at`,
+`activation_requested_at` and the checksums of the candidate, the policy and the
+predecessor. It is a selection, not a counter: on that date it named
+`2026-10-19.1`, older than the `2026-10-31.1` it named on 2026-11-03 (see the
+overview). `release.json` lists every file of the release
 by name, each with its `key` (its path on the `data.reep.football` host), its
 `sha256` and its size in `bytes`. Besides the tables (`<table>.parquet`,
 `<table>.csv.gz` and an uncompressed `<table>.csv`) and `reep-register.duckdb`, a
@@ -50,14 +57,15 @@ in DuckDB, or the first line of a CSV).
 Older releases, such as `20261005T180536Z`, used a different layout: stamps of
 that form, a `release_metadata` table in the DuckDB file
 (`reep-register-v1.duckdb`), a `schema.json`, an `entities.label` column and
-`bridges.rung` and `bridges.upstream_status`. Release `2026-10-31.1` has none of
-these. Code written for the old layout fails on the new file.
+`bridges.rung` and `bridges.upstream_status`. Releases `2026-10-19.1` and
+`2026-10-31.1` have none of these. Code written for the old layout fails on the
+new file.
 
 ## Keeping a local copy current
 
 A new download release is cut weekly or less often. The daily matching goes to
-the API only, so the file has no matches made after its release. The DuckDB file
-of release `2026-10-31.1` does not record its own stamp, so keep the stamp of the
+the API only, so the file has no matches made after its release. The DuckDB files
+of releases `2026-10-19.1` and `2026-10-31.1` do not record their own stamp, so keep the stamp of the
 release you downloaded next to the file, or compare the file's SHA-256 with the `sha256` of
 `reep-register.duckdb` in the current `release.json`. When they differ, download
 the file again from https://reep.football/downloads/duckdb over the old copy,
@@ -74,24 +82,33 @@ matching job.
 | `entity_search` | `reep_id, entity_type, label, canonical_name, search_text, bridge_count, alias_count` | Each identity's names and aliases in one text column, for name search. |
 
 `entities` also has `birth_date`, `birth_date_iso` and `dob_precision`. In
-release `2026-10-31.1` both date columns are empty in every row and
-`dob_precision` is `redacted_private` in every row. `matches` holds fixtures
-(`fixture_label`, `match_date_iso`, `season_id`, `home_team_id`, `away_team_id`,
-`home_score`, `away_score` and more), `edges` holds typed links between entities
-(`edge_kind` values in that release: `home_team`, `away_team`, `match_in_season`,
-`stage_of`, `season_of`, `hosted_at`), and `provider_aliases` holds provider name
-variants (`alias_kind`: `label`, `initial_name`, `alias`, `short_name`,
-`full_name`, `official_name`).
+release `2026-10-19.1` both date columns are empty in every row and
+`dob_precision` is `redacted_private` in every row.
+
+`matches` holds fixtures. In release `2026-10-19.1` its columns are `reep_id`,
+`fixture_label`, `gender`, `country`, `match_date_iso`, `grade`, `bucket_count`,
+`corroboration_buckets` and `metadata_json`. Every row has a `match_date_iso`,
+and `metadata_json` is empty in every row. It has no team, season, score or
+result columns, and `edges` has no rows, so the download cannot say which teams
+played a match except through the `fixture_label` text. Release `2026-10-31.1`
+also had `season_id`, `home_team_id`, `away_team_id`, `home_score`, `away_score`,
+`match_state`, `result_form`, `shootout_home`, `shootout_away`, `score_basis`,
+`leg` and `aggregate_of`, and `edges` rows (`edge_kind`: `home_team`,
+`away_team`, `match_in_season`, `stage_of`, `season_of`, `hosted_at`). For teams,
+scores and states, use the API's `GET /api/v1/matches`.
+
+`provider_aliases` holds provider name variants (`alias_kind` in release
+`2026-10-19.1`: `label`, `initial_name`, `alias`, `short_name`, `official_name`).
 
 The DuckDB file is self-describing: `SHOW TABLES;` and `DESCRIBE bridges;`.
 Source: [get-started guide](https://reep.football/get-started).
 
 ### Redirect reasons
 
-In release `2026-10-31.1`, `redirects` has 12,917 rows and every row has a
+In release `2026-10-19.1`, `redirects` has 7,918 rows and every row has a
 `to_id`: there are no tombstones (rows with an empty `to_id`) in that release.
-`reason` is free text, with 5,983 distinct values, for example
-`v4.dormant_recorroborate.match_reconciled_to_active`. Do not branch on it. The
+`reason` is free text, with 6,027 distinct values, for example
+`v4.dormant_recorroborate.person_merged_into_active`. Do not branch on it. The
 ledger is flat: no `to_id` is also a `from_id`.
 
 ### Bridges can name a merged Reep ID
@@ -100,7 +117,7 @@ When two Reep IDs merge, the losing ID can keep its bridge rows, and `redirects`
 points it at the survivor. A bridge's `reep_id` can then be a merged ID, and a
 join from `bridges` straight to `entities` lands on the merged ID and misses the
 survivor's other provider IDs. Release `20261005T180536Z` had 4,211 such
-bridges; release `2026-10-31.1` has none. Resolve every bridge to its survivor
+bridges; releases `2026-10-19.1` and `2026-10-31.1` have none. Resolve every bridge to its survivor
 first anyway, so the same query works on every release. One join is enough,
 because the ledger is flat:
 
@@ -140,7 +157,7 @@ WHERE a.provider = 'wyscout' AND a.namespace = 'player'
 -- → rp1b829f1d3468c4 · Declan Rice · skillcorner 12174
 ```
 
-Checked on release `2026-10-31.1`.
+Checked on release `2026-10-19.1`.
 
 ## Bridge a whole file in one pass
 
@@ -210,7 +227,7 @@ FROM entity_search
 WHERE search_text ILIKE '%ødegaard%'
 ORDER BY bridge_count DESC
 LIMIT 5;
--- → Martin Ødegaard (26 bridges), Magnar Ødegaard (18), Emil Gundelach Ødegaard (17), …
+-- → Martin Ødegaard (29 bridges), Magnar Ødegaard (21), Emil Gundelach Ødegaard (19), …
 ```
 
 Confirm a name match by team, season or nationality before trusting it.
