@@ -1,8 +1,8 @@
 ---
 source_url: https://github.com/ImpectAPI/open-data
 source_type: curated
-upstream_version: open-data snapshot (Bundesliga 2023/24, dataVersion V3)
-crawled_at: 2026-07-30
+upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
+crawled_at: 2026-11-24
 ---
 
 # Impect Open Data: Overview
@@ -15,7 +15,10 @@ a possession-value model). This documentation set describes Impect's
 - **Repository**: [github.com/ImpectAPI/open-data](https://github.com/ImpectAPI/open-data)
 - **Format**: JSON files, one per match or per iteration
 - **Coverage**: Bundesliga 2023/24 (`iterationId` 743) — 306 matches
-- **In-repo reference**: `Documentation.pdf` (field-by-field descriptions and appendices)
+- **Current release**: v2.0 (2026-11-24), on the `v2` branch and tag `v2.0`.
+  v1.0 is on `main` and tag `v1.0` — see [Versions](#versions-v20-and-v10)
+- **In-repo reference**: `Documentation.pdf` (field-by-field descriptions and
+  appendices; identical in v1.0 and v2.0) and `CHANGELOG.md` (from v2.0)
 
 > **Scope note.** These docs cover the open-data repository only. Impect's
 > commercial products and customer-facing API are not documented here. If you
@@ -25,7 +28,8 @@ a possession-value model). This documentation set describes Impect's
 ## What the snapshot is (and is not)
 
 The open-data repository is a **static snapshot**, published to show what Impect
-provides and how it is structured. Treat it as a *representative* picture of
+provides and how it is structured. Impect versions it with git tags, so an
+analysis can pin a release. Treat it as a *representative* picture of
 Impect's data structure and metric definitions, **not** a complete or current
 mirror of the live product.
 
@@ -34,13 +38,45 @@ In particular:
 - It is a single competition-season (Bundesliga 2023/24), not Impect's full coverage.
 - Impect regularly enriches and adjusts data points in the live product. Fields,
   enum members and KPI sets can differ from what appears in this snapshot.
-- The snapshot carries `dataVersion: "V3"`. Impect's own documentation marks
+- Both releases carry `dataVersion: "V3"`. Impect's own documentation marks
   several attributes as available only from **dataV4+** / seasons starting summer
   2024. Those are described in [data-model.md](data-model.md) and flagged as
   *not populated in the snapshot* where that is the case.
 
 Anything an agent asserts about Impect beyond what is in this repository is a
 guess. Prefer "the open data does not show this" over inference.
+
+## Versions: v2.0 and v1.0
+
+These docs describe **v2.0**, released 2026-11-24 on the `v2` branch (tag
+`v2.0`). Impect recalculated all 306 matches with its current pipeline, so
+results computed on v1.0 do not reproduce exactly on v2.0.
+
+Breaking changes from v1.0:
+
+- **New event IDs.** Every event `id` was regenerated; no v1.0 event ID occurs in
+  v2.0. Stored v1.0 IDs, and joins on `eventId` against v1.0 data, do not carry
+  over.
+- **`pass` is `null` without an end location.** On pass-like events, `pass` is
+  now `null` whenever `end` is null. In v1.0 those events carried a `pass`
+  object, often `{"distance": 0.0, "angle": null, "receiver": null}`. See
+  [data-model.md](data-model.md).
+
+Other changes: recalculated event attributes (`sequenceIndex`, set-piece links,
+`action`/`actionType`, some end locations) and KPI values; seven KPIs added at
+event level; rewritten KPI descriptions and a new `inverted` flag in
+`kpi_definitions.json`; new fields `goals`, `result`, `resultType` and
+`stadiumId` on matches, `height` on players, `stadiumId` on lineups and
+`competition.ageGroup` on iterations; `coachId` set in lineups; country
+corrections. `Documentation.pdf` and `LICENSE.pdf` are unchanged.
+
+**v1.0 and kloppy (as of 2026-11-24).** v1.0 stays on `main` and tag `v1.0`.
+The repository README says `main` and kloppy's `impect.load_open_data()` serve
+v1.0 until a kloppy release supports v2.0; kloppy 3.19.1 is the latest release
+and still loads v1.0. Support for v2.0 is tracked in
+[PySport/kloppy#666](https://github.com/PySport/kloppy/pull/666), which is not
+merged. Where these docs give a v2.0 count or field, the v1.0 difference is
+noted beside it.
 
 ## What is in the repository
 
@@ -65,7 +101,8 @@ See [data-model.md](data-model.md) for the payload schema of each file.
 
 ## Loading the data
 
-Directly with pandas:
+Directly with pandas, from a clone of the `v2` branch
+(`git clone --branch v2 https://github.com/ImpectAPI/open-data.git`):
 
 ```python
 import pandas as pd
@@ -75,12 +112,13 @@ print(df.head())
 ```
 
 Via [kloppy](https://kloppy.pysport.org/), which has a first-class Impect
-deserialiser and will normalise coordinates and event types into its own model:
+deserialiser and will normalise coordinates and event types into its own model.
+`load_open_data()` reads `main`, so it returns **v1.0** data:
 
 ```python
 from kloppy import impect
 
-events = impect.load_open_data(match_id=122840)   # open data
+events = impect.load_open_data(match_id=122840)   # v1.0 open data
 # impect.load(...) is the entry point for non-open data
 ```
 
@@ -109,17 +147,17 @@ The join keys are plain integer IDs:
 
 ## Scale of the snapshot
 
-Measured across all 306 matches in the repository:
+Measured across all 306 matches in each release:
 
-| Quantity | Count |
-|---|---|
-| Matches | 306 |
-| Events | 939,200 |
-| Events carrying a `pass` object | 337,387 |
-| Events carrying a `shot` object | 8,069 |
-| Events carrying a `duel` object | 26,729 |
-| Events linked to a set-piece phase | 32,377 |
-| KPI definitions | 103 |
+| Quantity | v2.0 | v1.0 |
+|---|---|---|
+| Matches | 306 | 306 |
+| Events | 939,341 | 939,200 |
+| Events carrying a `pass` object | 335,439 | 337,387 |
+| Events carrying a `shot` object | 8,073 | 8,069 |
+| Events carrying a `duel` object | 26,698 | 26,729 |
+| Events linked to a set-piece phase | 96,613 | 32,377 |
+| KPI definitions | 103 | 103 |
 
 ## Licensing and attribution
 

@@ -1,8 +1,8 @@
 ---
 source_url: https://github.com/ImpectAPI/open-data
 source_type: curated
-upstream_version: open-data snapshot (Bundesliga 2023/24, dataVersion V3)
-crawled_at: 2026-07-30
+upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
+crawled_at: 2026-11-24
 ---
 
 # Impect Concepts: Packing, pxT and KPIs
@@ -153,8 +153,11 @@ Resolve any `kpiId` through `data/kpi_definitions.json`, which carries `name`,
 `details.label`, `details.definition` and `details.meaning`. See
 [kpi-definitions.md](kpi-definitions.md) for the full ID index.
 
-`parentKpi` and `context` exist for aggregated data but are null for the
-event-level KPIs in this snapshot.
+Only two KPI definitions set `parentKpi` and `context`: the second-ball
+variants 6 and 74. v2.0 added seven KPIs to the event level, among them
+`SHOT_ASSISTS`, `EXPECTED_GOAL_ASSISTS` and `EXPECTED_PASSES`; v2.0 also flags
+each KPI as `inverted` when a lower value is better. See
+[kpi-definitions.md](kpi-definitions.md).
 
 ## Phases of play
 
