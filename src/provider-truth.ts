@@ -80,8 +80,10 @@ const TOKEN_ALLOWLIST: Record<string, string[]> = {
   // Match-official position codes emitted when include_officials=True. They come
   // from the Rust core rather than a Python enum, so introspection cannot see them.
   // FOURTH is the fourth official: the Rust core emits "4TH" and 0.3.0 relabels it
-  // via _OFFICIAL_POSITION_RELABEL in fastforward._dataset.
-  "fast-forward": ["REF", "AREF", "VAR", "AVAR", "FOURTH"],
+  // via _OFFICIAL_POSITION_RELABEL in fastforward._dataset. UNK is the position the
+  // 0.4.0 Second Spectrum mapping-file loader gives every player; it sits in the same
+  // Rust position-code table.
+  "fast-forward": ["REF", "AREF", "VAR", "AVAR", "FOURTH", "UNK"],
   // A torchmetrics metric the training loop tracks, not an unravel symbol.
   unravelsports: ["AUROC"],
 };

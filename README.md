@@ -293,7 +293,7 @@ metrics:sources` re-checks every card quote against its live source.
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| fast-forward | 250 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
+| fast-forward | 255 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
 | StatsBomb | 244 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
@@ -303,7 +303,7 @@ metrics:sources` re-checks every card quote against its live source.
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
-| SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| SkillCorner | 56 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
 | Free sources | 70 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,551 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,560 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

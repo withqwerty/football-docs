@@ -105,7 +105,7 @@ PERSONAL_FIELDS: dict[str, set[str]] = {
         ),
         *(
             f"Vald.Api.ExternalProfile.V1.Models.GetProfileSearchResponse_ProfileDetail.{field}"
-            for field in ("givenName", "familyName", "dateOfBirth")
+            for field in ("givenName", "familyName", "dateOfBirth", "sex", "email")
         ),
         *(
             f"Vald.Api.ExternalProfile.V1.Models.ImportProfileRequest.{field}"

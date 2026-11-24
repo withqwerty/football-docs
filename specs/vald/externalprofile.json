@@ -11,7 +11,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "c09e6594-406a-4238-8b58-999d1d6f2c83",
+        "operationId": "3d7d0550-2312-4b55-bfaa-881ffa2274c0",
         "responses": {
           "200": {
             "description": "OK",
@@ -41,7 +41,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "2a28e01d-6a70-4dac-9a79-1cf8690c2e09",
+        "operationId": "b4067eac-175d-4a61-b538-aa75398a6851",
         "responses": {
           "204": {
             "description": "No Content"
@@ -54,7 +54,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "c607f5d8-afb1-443f-9863-6225c246e23b",
+        "operationId": "05a3a542-95cd-4569-a84d-7118ed3c4cd9",
         "responses": {
           "204": {
             "description": "No Content"
@@ -70,7 +70,7 @@
         "tags": [
           "Diagnostics"
         ],
-        "operationId": "e56469a7-a812-4a5b-ae3e-a47fc83c6f90",
+        "operationId": "cd70f8be-b095-4777-b54e-549e90084e12",
         "parameters": [
           {
             "name": "Diagnostics-Key",
@@ -129,7 +129,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "f5933fca-c63b-4254-bfb9-19919e8efe63",
+        "operationId": "2f8b69c7-187c-42a5-af2f-7c10c4c7d6da",
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -206,7 +206,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "35cad259-ebd1-4ef2-8e81-0541073a269a",
+        "operationId": "49b36d02-21d9-4922-b4ce-58fded06dc04",
         "parameters": [
           {
             "name": "SyncId",
@@ -295,7 +295,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "3a05ed69-5a8f-445e-9a81-df7707df5704",
+        "operationId": "03e1f474-6276-4000-adbe-0ea07ddefaac",
         "parameters": [
           {
             "name": "tenantId",
@@ -405,7 +405,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "1e0bc510-f862-45c1-952a-fca4ec5fa85b",
+        "operationId": "df6b95f8-bb9c-4c71-915b-8df8485fe23f",
         "parameters": [
           {
             "name": "TenantId",
@@ -530,7 +530,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "23f861b5-719a-403f-9adc-afb1d64be3b3",
+        "operationId": "e4a9037a-1385-415d-9357-7fd94516a515",
         "parameters": [
           {
             "name": "tenantId",
@@ -594,7 +594,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "639043bc-8a5c-4ca5-a6a9-b0b48ad183fa",
+        "operationId": "3973d11b-3bb7-4e1c-b05d-c29498a4a79f",
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -649,7 +649,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "a05fb464-569d-4f65-b0a5-88499248165c",
+        "operationId": "458eaf3e-ba07-4d98-bcf6-a480ea35291f",
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -704,7 +704,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "7425455f-06b2-4497-adb0-229fc88adf1f",
+        "operationId": "9392925c-0952-4884-8394-f13c3a109aee",
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -761,7 +761,7 @@
         "tags": [
           "Profiles"
         ],
-        "operationId": "973c6fe3-b86f-4beb-9484-26306bd1acfb",
+        "operationId": "ac95f2cf-45d7-4be8-9c8c-26d3bcd6969c",
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -1098,6 +1098,13 @@
           "dateOfBirth": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Vald.Api.ExternalProfile.V1.Sex"
+          },
+          "email": {
+            "type": "string",
             "nullable": true
           },
           "modifiedDateUtc": {

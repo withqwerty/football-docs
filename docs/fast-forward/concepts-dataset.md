@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/dataset/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.550Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.006Z
 ---
 The `TrackingDataset` is the central object returned by every provider's `load_tracking()` function. It contains all tracking data and metadata. The underlying type of each table (Polars, PySpark, or pyarrow) is determined by the `engine` kwarg passed to `load_tracking`.
 
@@ -45,6 +45,8 @@ The main DataFrame containing positional data. Schema depends on the [layout](ht
 | `y` | Float32 | Y coordinate |
 | `z` | Float32 | Z coordinate (height) |
 
+On a frame the provider delivered without a ball, the ball's coordinates are null: `x`, `y`, `z` on the ball row in `long`, `ball_x`, `ball_y`, `ball_z` in `long_ball` and `wide`.
+
 ### metadata
 
 Single-row DataFrame with match-level information.
@@ -61,6 +63,7 @@ Single-row DataFrame with match-level information.
 | `pitch_length` | Float32 | Pitch length in meters |
 | `pitch_width` | Float32 | Pitch width in meters |
 | `fps` | Float32 | Frames per second |
+| `version` | String | The provider's tracking format version when it has more than one. SkillCorner: `"3"` or `"4"`. Null for the other providers |
 | `coordinate_system` | String | Current coordinate system |
 | `orientation` | String | Current orientation |
 
@@ -120,7 +123,7 @@ One row per period found in the data.
 
 ## Per-engine schema
 
-The tracking schema dtypes for SkillCorner (long layout, all include flags on), shown across the four engine values:
+The tracking schema dtypes for SkillCorner (long layout, all include flags on, so with the Tracking v4 velocity, acceleration and predicted-error columns), shown across the four engine values:
 
 | Column | `engine="polars"` (default) | `engine="arrow"` (Polars-style Arrow) | `engine="arrow[spark]"` (Spark-compat) | `engine="pyspark"` |
 | --- | --- | --- | --- | --- |
@@ -135,6 +138,9 @@ The tracking schema dtypes for SkillCorner (long layout, all include flags on), 
 | `x`, `y`, `z` | `Float32` | `float` (float32) | `float` (float32) | `FloatType` |
 | `ball_owning_player_id` | `String` | `string_view` | `string` | `StringType` |
 | `is_detected` | `Boolean` | `bool` | `bool` | `BooleanType` |
+| `vx`, `vy`, `vz` | `Float32` | `float` (float32) | `float` (float32) | `FloatType` |
+| `ax`, `ay`, `az` | `Float32` | `float` (float32) | `float` (float32) | `FloatType` |
+| `dist_pred_error`, `speed_pred_error` | `Float32` | `float` (float32) | `float` (float32) | `FloatType` |
 
 Two columns differ between the two arrow dialects: `string_view` vs `string`, and `duration[ms]` vs `int64`. The other arrow columns are identical between `engine="arrow"` and `engine="arrow[spark]"`. The choice between them is dictated by what your downstream framework accepts, not by which one is more correct. See the [Distributed Compute](https://fast-forward.readthedocs.io/en/latest/concepts/distributed-compute/) page for guidance.
 

@@ -9,7 +9,7 @@
         "version": ""
       }
     ],
-    "generated_at": "2026-11-16"
+    "generated_at": "2026-11-24"
   },
   "basePaths": [
     "/api"
@@ -63,6 +63,12 @@
     "/match/{match_id}/custom/physical/": [
       "GET"
     ],
+    "/match/{match_id}/custom/physical/referee/": [
+      "GET"
+    ],
+    "/match/{match_id}/custom/physical_events/": [
+      "GET"
+    ],
     "/match/{match_id}/custom/tracking/": [
       "GET"
     ],
@@ -102,6 +108,9 @@
     "/match/{match_id}/metrics/game_intelligence/out_of_possession/on_ball_engagements/": [
       "GET"
     ],
+    "/match/{match_id}/physical_events/": [
+      "GET"
+    ],
     "/match/{match_id}/tracking/": [
       "GET"
     ],
@@ -127,6 +136,9 @@
       "GET"
     ],
     "/physical/": [
+      "GET"
+    ],
+    "/physical/referee/": [
       "GET"
     ],
     "/players/": [
@@ -167,6 +179,7 @@
     "dynamic_events_v2_last_modified__gte",
     "dynamic_events_v3_last_modified__gte",
     "extrapolated_tracking_v3_last_modified__gte",
+    "extrapolated_tracking_v4_last_modified__gte",
     "feed_type",
     "file_format",
     "frame_rate",
@@ -192,9 +205,12 @@
     "performance_included_count__gte",
     "period",
     "period_starts",
+    "phase",
     "physical_check_passed",
+    "physical_events_v4_0_last_modified__gte",
     "physical_v3_0_3_last_modified__gte",
     "physical_v3_last_modified__gte",
+    "physical_v4_0_last_modified__gte",
     "player",
     "player_id",
     "playing_time__gte",
@@ -208,6 +224,7 @@
     "search",
     "season",
     "stadium",
+    "subperiod",
     "team",
     "team_id",
     "user",
@@ -284,6 +301,7 @@
     "gender",
     "gi_goal_event_provider_used",
     "gi_shot_event_provider_used",
+    "goal_event_provider_used_v4",
     "home_team",
     "home_team_coach",
     "home_team_kit",
@@ -313,8 +331,11 @@
     "name",
     "next",
     "number_color",
+    "physical_events_v4_0_last_modified",
     "physical_v3_0_3_last_modified",
     "physical_v3_last_modified",
+    "physical_v4_0_last_modified",
+    "physical_v4_0_quality_index",
     "pitch_length",
     "pitch_width",
     "players",
@@ -328,6 +349,7 @@
     "season",
     "season_id",
     "short_name",
+    "shot_event_provider_used_v4",
     "stadium",
     "stadium_id",
     "start_year",
@@ -337,6 +359,9 @@
     "tracking_extra_v3_ball_quality_index",
     "tracking_extra_v3_last_modified",
     "tracking_extra_v3_players_quality_index",
+    "tracking_extra_v4_ball_quality_index",
+    "tracking_extra_v4_last_modified",
+    "tracking_extra_v4_players_quality_index",
     "video_feed_type"
   ],
   "enums": {
