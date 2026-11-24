@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/distributed-compute/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.552Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.008Z
 ---
 Engine choice depends on the consumer:
 

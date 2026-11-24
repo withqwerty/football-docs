@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/api/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.551Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.007Z
 ---
 ## TrackingDataset
 
@@ -199,13 +199,14 @@ Parameters:
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
 | `raw_data` | `FileLike` | Path to JSONL tracking file, or bytes, or file-like object. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
-| `meta_data` | `FileLike` | Path to JSON metadata file, or bytes, or file-like object. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
+| `meta_data` | `FileLike` | Path to the metadata file, or bytes, or file-like object. The format is detected from the content: - SecondSpectrum JSON metadata - SecondSpectrum XML metadata. It has no team or player info, so team ids are "home"/"away" and players come from the tracking. - A mapping file (top-level `MatchId`, `HomeTeam`/`AwayTeam` with `Players`, `Stadium`). Fps and periods are taken from the tracking. Each roster player is linked to the tracking by `playerExternalIds.fspId`; a player on the other side or wearing a different number in the tracking raises an error. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
 | `layout` | `('long', 'long_ball', 'wide')` | DataFrame layout: - "long": Ball as row with team_id="ball", player_id="ball" - "long_ball": Ball in separate columns, only player rows - "wide": One row per frame, player_id in column names | `"long"` |
 | `coordinates` | `'cdf'` | Coordinate system: - "cdf": Common Data Format (origin at center) | `"cdf"` |
 | `orientation` | `str` | Coordinate orientation: - "static_home_away": Home attacks right (+x) entire match - "static_away_home": Away attacks right (+x) entire match - "home_away": Home attacks right 1st half, left 2nd half - "away_home": Away attacks right 1st half, left 2nd half - "attack_right": Attacking team always attacks right - "attack_left": Attacking team always attacks left | `"static_home_away"` |
 | `only_alive` | `bool` | If True, only include frames where ball is in play (ball_state == "alive") | `True` |
 | `exclude_missing_ball_frames` | `bool` | If True, exclude frames where ball coordinates are missing (ball_z == -10). SecondSpectrum uses ball_z = -10 as a sentinel value for failed ball tracking. | `True` |
 | `include_game_id` | `bool or str` | If True, add game_id column to tracking_df, team_df, and player_df from metadata. If False, no game_id column is added. If str, use the provided string as the game_id value. | `True` |
+| `object_id` | `('ss', 'fsp', 'auto')` | Which id `player_id` carries, in the tracking and the players table: - "ss": SecondSpectrum's player UUID. Players who never appear in the tracking have none and are left out of the players table. - "fsp": The FSP id (`playerExternalIds.fspId`); error if a tracking player has none. - "auto": The FSP id where present, otherwise the UUID. Team ids always come from the metadata. | `"ss"` |
 | `engine` | `('polars', 'pyspark', 'arrow', 'arrow[spark]')` | DataFrame engine to use: - "polars": Return Polars DataFrames (default) - "pyspark": Return PySpark DataFrames - "arrow": Return pyarrow.Tables with Polars-style Arrow types (string_view, duration[ms]). For Dask/Ray workers. - "arrow[spark]": Return pyarrow.Tables pre-normalized for Spark consumption (string, int64 ms). For Spark mapInArrow UDFs. | `"polars"` |
 | `spark_session` | `SparkSession` | PySpark SparkSession to use. If None and engine="pyspark", will get or create a session automatically. | `None` |
 
@@ -219,11 +220,13 @@ Returns:
 
 Load SkillCorner tracking data.
 
+Reads every SkillCorner tracking delivery: v3 JSON Lines (`tracking_extrapolated.jsonl`) and Tracking v4 as JSON Lines or parquet, at 10 or 25 frames per second. The format, the version and the frame rate are read from the file, not passed in. `dataset.metadata["version"]` is `"3"` or `"4"`; `dataset.metadata["fps"]` and the period frame bounds are on the file's own clock.
+
 Parameters:
 
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
-| `raw_data` | `FileLike` | Path to JSONL tracking file (e.g., tracking_extrapolated.jsonl), or bytes, or file-like object. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
+| `raw_data` | `FileLike` | Path to the tracking file (JSON Lines, gzipped or not, or parquet), or bytes, or file-like object. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
 | `meta_data` | `FileLike` | Path to JSON match file (e.g., match.json), or bytes, or file-like object. Supports: file paths (str/Path), bytes, file objects, URLs, S3 paths, zip files. | required |
 | `layout` | `('long', 'long_ball', 'wide')` | DataFrame layout: - "long": Ball as row with team_id="ball", player_id="ball" - "long_ball": Ball in separate columns, only player rows - "wide": One row per frame, player_id in column names | `"long"` |
 | `coordinates` | `'cdf'` | Coordinate system: - "cdf": Common Data Format (origin at center) | `"cdf"` |
@@ -232,7 +235,11 @@ Parameters:
 | `include_empty_frames` | `bool` | If True, include frames with no detected players | `False` |
 | `include_game_id` | `bool or str` | If True, add game_id column to tracking_df, team_df, and player_df from metadata. If False, no game_id column is added. If str, use the provided string as the game_id value. | `True` |
 | `include_ball_owning_player` | `bool` | If True, attach a `ball_owning_player_id` column to the tracking DataFrame carrying the player UUID currently in possession on each frame (null when SkillCorner did not record one). Pass False to omit the column. | `True` |
-| `include_is_detected` | `bool` | If True, attach an `is_detected` column to the tracking DataFrame (long / long_ball layouts) indicating whether each player position was camera-detected (True) or imputed/extrapolated (False). Ball rows in long layout receive null since the concept doesn't apply. Wide layout doesn't surface the flag yet; long or long_ball is recommended for detection-aware analyses. Pass False to omit the column. | `True` |
+| `include_is_detected` | `bool` | If True, attach an `is_detected` column to the tracking DataFrame (long / long_ball layouts): whether each position was camera-detected (True) or extrapolated (False). In long layout the ball row carries the ball's own flag. Wide layout doesn't surface the flag; long or long_ball is recommended for detection-aware analyses. Pass False to omit the column. | `True` |
+| `include_velocity` | `bool` | If True, add `vx`, `vy`, `vz` next to `x`, `y`, `z` for every entity (`ball_vx` and so on where the ball has its own columns, and `<player_id>_vx` in wide layout). Tracking v4 only; null on a v3 file. Players have `vz` 0, as they have `z` 0. Values follow the chosen orientation and coordinate system: metres per second for `"cdf"`. | `False` |
+| `include_acceleration` | `bool` | If True, add `ax`, `ay`, `az` the same way. Tracking v4 only. | `False` |
+| `include_prediction_error` | `bool` | If True, add `dist_pred_error` (expected position error, metres) and `speed_pred_error` (expected speed error, m/s) for every ball and player row in long layout; in long_ball the ball's come as `ball_dist_pred_error` and `ball_speed_pred_error`. Tracking v4 only; null on a v3 file. | `False` |
+| `include_officials` | `bool` | If True, the referees Tracking v4 tracks (the main referee, for now) are rows with `team_id="officials"` and a `player_id` of SkillCorner's referee id, or `"main_referee"` when the file gives none, and appear in `dataset.players` with position `REF`. They carry the same velocity, acceleration and predicted-error columns as players. v3 files have no referees. | `False` |
 | `engine` | `('polars', 'pyspark', 'arrow', 'arrow[spark]')` | DataFrame engine to use: - "polars": Return Polars DataFrames (default) - "pyspark": Return PySpark DataFrames - "arrow": Return pyarrow.Tables with Polars-style Arrow types (string_view, duration[ms]). For Dask/Ray workers. - "arrow[spark]": Return pyarrow.Tables pre-normalized for Spark consumption (string, int64 ms). For Spark mapInArrow UDFs. | `"polars"` |
 | `spark_session` | `SparkSession` | PySpark SparkSession to use. If None and engine="pyspark", will get or create a session automatically. | `None` |
 

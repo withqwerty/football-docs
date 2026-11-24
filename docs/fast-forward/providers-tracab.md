@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/tracab/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.554Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.010Z
 ---
 Load tracking data from **Tracab** format. Supports multiple file format variants.
 

@@ -74,6 +74,38 @@ describe("impect docs are grounded in the open-data repository", () => {
     expect(violations.some((v) => v.includes("BYPASSED_OPPONENTS"))).toBe(true);
   });
 
+  it("lists every KPI in the index with its inverted flag", () => {
+    const index = docs.find((d) => d.file === "kpi-definitions.md");
+    const flagged = [
+      ...(index?.text ?? "").matchAll(/^\|\s*`(\d+)`\s*\|\s*`[A-Z0-9_]+`\s*\|[^|\n]*\|\s*(yes|no)\s*\|/gm),
+    ].map((row) => row[1]);
+    expect(flagged.sort()).toEqual(Object.keys(truth.kpis).sort());
+    expect(truth.invertedKpis.length).toBeGreaterThan(0);
+  });
+
+  it("flags a wrong inverted flag", () => {
+    const id = truth.invertedKpis[0];
+    const violations = validateImpectDocs(
+      [{ file: "fake.md", text: `| \`${id}\` | \`${truth.kpis[id]}\` | Label | no |` }],
+      truth,
+    );
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toContain("inverted=no");
+  });
+
+  it("flags a field that the file family does not have", () => {
+    const text = [
+      "## Matches — `data/matches/matches_{iterationId}.json`",
+      "",
+      "| Field | Type | Notes |",
+      "|---|---|---|",
+      "| `stadiumId` | integer | |",
+      "| `refereeId` | integer | |",
+    ].join("\n");
+    const violations = validateImpectDocs([{ file: "fake.md", text }], truth);
+    expect(violations).toEqual(['fake.md: field "refereeId" is not present in data/matches']);
+  });
+
   it("flags reintroduced commercial-API references", () => {
     // Assembled at runtime so this test file does not itself carry the strings
     // it exists to keep out of the corpus.

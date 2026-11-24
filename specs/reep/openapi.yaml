@@ -2,8 +2,7 @@ openapi: 3.1.0
 info:
   title: Reep Next API
   version: v1.0.0
-  x-api-schema: public-bridge-register-v2
-  x-changes-index-schema: 2
+  x-api-schema: public-scope-mapping-v1
   description: |
     The Reep Next API resolves football identity across providers. It reads from
     generated, versioned release artefacts — never the private register database —
@@ -12,8 +11,15 @@ info:
     ## What it does
     - **Resolve** a provider's own ID (Transfermarkt, Opta, Wyscout, …) to a stable
       Reep ID, and vice versa.
-    - **Expand** an entity with typed aliases, sourced attributes, provider bridges,
-      a lower-confidence Wikidata overlay, and a grouped relationship summary.
+    - **Expand** an entity with its aliases, provider bridges and the linked
+      Wikidata QID (`include=aliases,attributes,bridges,overlay`).
+    - **Look up a match** by its Reep ID or by any provider's match ID and get
+      every provider's match ID back (`/matches/{reep_id}`,
+      `/matches/{provider}/{external_id}`).
+
+    A release publishes a mapping and nothing else: Reep IDs, names, provider IDs,
+    redirects, Wikidata links and aliases. `/search` and `/changes` answer 410
+    `not_published` on this release.
 
     ## Authentication
     Pass a manually issued partner key as `Authorization: Bearer <key>`.
@@ -21,7 +27,7 @@ info:
     <https://reep.football/data/>; preview API access is described at
     <https://reep.football/partners>.
     Metadata endpoints (`/meta`, `/providers`, `/provider-notices/summary`) do not
-    consume quota; entity and resolve calls cost one lookup each.
+    consume quota; entity, bridge, overlay, match and resolve calls cost one lookup each.
 
     ## Identifiers
     A Reep ID matches `^r[a-z][0-9a-f]{14}$` (e.g. `rl0173c34b3874f2`). IDs are
@@ -58,9 +64,9 @@ tags:
   - name: Entities
     description: Entity detail and expansions by Reep ID.
   - name: Search
-    description: Bounded discovery by canonical label and safe aliases.
+    description: Not published on this release (410). Find a name by joining the alias tables of the download.
   - name: Matches
-    description: Generation-pinned published match discovery.
+    description: One match and every provider's match ID.
   - name: Notices
     description: >
       Provider-scoped notice feed. A data provider's own key (Unkey
@@ -91,148 +97,70 @@ paths:
                     additionalProperties: { type: string }
         "503": { $ref: "#/components/responses/IndexMissing" }
 
-  /matches:
+  /matches/{reep_id}:
     get:
       tags: [Matches]
-      summary: Published matches mapped across providers
+      summary: One match and every provider's match id
       description: |
-        Available only when generation mode is on; off and shadow return 404.
-        Requires at least one team, competition or season anchor. Values within
-        each anchor are ORed; different filters intersect. Every valid register
-        key, including partner keys, costs one lookup per page.
-
-        Dates are inclusive register dates, no time-zone conversion and no UTC
-        promise. With no season and neither date bound, the window is the last
-        30 calendar dates including today (the server uses today's UTC date to
-        choose that default). A season suppresses the default window. A single
-        date bound leaves the other end open. Undated rows are excluded whenever
-        a date bound applies; otherwise they sort last. Date ties use reep_id
-        ascending in either sort direction.
-
-        Provider identifiers use provider:namespace:id and resolve inside the
-        same pinned generation as the matches. Redirects are followed. Any
-        unresolved anchor returns an empty page and its original identifier in
-        unresolved. No private or overlay bridges participate. require and
-        missing test all publishable bridges before providers selects the bridges
-        returned. Unknown provider slugs simply have no matching bridges.
-
-        Responses contain at most 100 rows and 262144 UTF-8 bytes, including the
-        envelope and cursor. A byte-limited page may contain fewer than limit;
-        continue with next_cursor. A single row too large returns 503
-        match_response_too_large. Cursors are signed, expire after 24 hours, and
-        bind the normalised filters (including limit and default dates) and the
-        active generation. A filter change, generation change, expired or altered
-        cursor returns 400 stale_cursor; restart without it.
-
-        Null means the register holds no published value, never zero or unknown.
-        Missing sides and ambiguous structure are null; a known id with no label
-        retains that id and a null label. Scores are after-play goals, excluding
-        shootout kicks. No date, score, state or structure is inferred.
+        The match entity (Reep ID, label "Home v Away, YYYY-MM-DD") with every provider id that maps to it. No score and
+        no team columns. A redirected Reep ID answers with its survivor (requested_id, redirected_to). An id of another
+        entity type answers 404. The filter list `GET /matches?team=…` answers 410 `match_details_unavailable` on this release.
+        Costs one lookup.
       parameters:
-        - in: query
-          name: team
-          description: Team identifier; up to five, ORed — repeat the parameter (e.g. `team=a&team=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Reep id or provider:namespace:id.
-          style: form
-          explode: true
-          schema: { type: array, maxItems: 5, items: { type: string } }
-        - in: query
-          name: competition
-          description: Competition identifier; up to five, ORed — repeat the parameter (e.g. `competition=a&competition=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Reep id or provider:namespace:id.
-          style: form
-          explode: true
-          schema: { type: array, maxItems: 5, items: { type: string } }
-        - in: query
-          name: season
-          description: Season identifier; up to five, ORed — repeat the parameter (e.g. `season=a&season=b`); do not comma-separate values (a comma-joined Reep id is rejected as `invalid_id`; a comma-joined provider reference is read as one reference and returned in `unresolved`). Suppresses the default date window. Reep id or provider:namespace:id.
-          style: form
-          explode: true
-          schema: { type: array, maxItems: 5, items: { type: string } }
-        - in: query
-          name: opponent
-          description: Reep id or provider:namespace:id; requires exactly one team.
-          schema: { type: string }
-        - in: query
-          name: venue
-          description: Relative to exactly one team; even explicit any requires one team.
-          schema: { type: string, enum: [home, away, any], default: any }
-        - in: query
-          name: from
-          description: Inclusive lower register date, with no time-zone conversion.
-          schema: { type: string, format: date }
-        - in: query
-          name: to
-          description: Inclusive upper register date, with no time-zone conversion.
-          schema: { type: string, format: date }
-        - in: query
-          name: state
-          description: Comma-separated states; default all. none selects null state.
-          schema: { type: string, examples: ["played,scheduled,postponed,cancelled,awarded,abandoned,none"] }
-        - in: query
-          name: providers
-          description: Comma-separated publishable bridge providers to return; default all.
-          schema: { type: string }
-        - in: query
-          name: require
-          description: Comma-separated providers; each must have a publishable bridge.
-          schema: { type: string }
-        - in: query
-          name: missing
-          description: Comma-separated providers; none may have a publishable bridge.
-          schema: { type: string }
-        - in: query
-          name: sort
-          schema: { type: string, enum: [desc, asc], default: desc }
-        - in: query
-          name: limit
-          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
-        - in: query
-          name: cursor
-          description: Opaque signed cursor from next_cursor; maximum lifetime 24 hours.
-          schema: { type: string }
+        - $ref: "#/components/parameters/ReepId"
       responses:
         "200":
-          description: A generation-pinned match page, including empty unresolved results.
+          description: The match and its provider ids.
           content:
             application/json:
               schema:
                 type: object
-                required: [matches, count, generation, unresolved, next_cursor]
                 properties:
-                  matches:
+                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  entity_type: { type: string, enum: [match] }
+                  canonical_name: { type: string }
+                  bridges:
                     type: array
-                    maxItems: 100
-                    items: { $ref: "#/components/schemas/GenerationMatch" }
-                  count: { type: integer, minimum: 0, maximum: 100 }
-                  generation: { type: string, pattern: "^[a-f0-9]{64}$" }
-                  unresolved: { type: array, items: { type: string } }
-                  next_cursor: { type: [string, "null"] }
-        "400":
-          description: >
-            Invalid query or stale_cursor. Query errors include anchor_required,
-            invalid_anchor (more than five), single_team_required, invalid_id,
-            invalid_date, invalid_date_range, invalid_limit, invalid_state,
-            invalid_sort, invalid_venue, invalid_filter, unknown_parameter and
-            repeated_parameter. Error bodies contain error with the code.
-        "401":
-          description: Missing, invalid, revoked or expired key.
-        "402":
-          description: Key quota exceeded.
-        "403":
-          description: Key lacks API permission.
-        "404":
-          description: Generation mode is off or shadow; endpoint is dark.
-        "409":
-          description: ambiguous_provider_id; the identifier names multiple canonical entities.
-        "422":
-          description: wrong_entity_type; an anchor resolves to the wrong entity type.
-        "429":
-          description: Key rate limit exceeded.
-        "503":
-          description: >
-            generation_unavailable (missing or corrupt objects, unavailable binding,
-            or reader admission queue full), match_response_too_large (one row
-            exceeds the byte cap), or an authentication service error. No fallback
-            to static shards or another generation.
+                    items: { $ref: "#/components/schemas/Bridge" }
+                  requested_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /matches/{provider}/{external_id}:
+    get:
+      tags: [Matches]
+      summary: One provider's match id to the Reep ID and every other provider's match id
+      description: Costs one lookup. Transfermarkt and Soccerdonna match ids use the namespace `spiel`.
+      parameters:
+        - { name: provider, in: path, required: true, schema: { type: string } }
+        - { name: external_id, in: path, required: true, schema: { type: string } }
+        - { name: namespace, in: query, required: false, schema: { type: string } }
+      responses:
+        "200":
+          description: The match and its provider ids, with resolved_via naming the id that matched.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
+                  entity_type: { type: string, enum: [match] }
+                  canonical_name: { type: string }
+                  bridges:
+                    type: array
+                    items: { $ref: "#/components/schemas/Bridge" }
+                  resolved_via:
+                    type: object
+                    properties:
+                      provider: { type: string }
+                      namespace: { type: string }
+                      external_id: { type: string }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: The provider id maps to more than one match. }
 
   /meta:
     get:
@@ -241,12 +169,8 @@ paths:
       description: |
         The serving release's stamp, tier, schema, and row counts. No quota cost.
 
-        `counts` reports the served release's own population — the bridge register
-        the API resolves against. This is a different projection from the public
-        entity headline shown on <https://reep.football> (and in the downloadable
-        open census), which is filtered for public redistribution and so can carry
-        a slightly different total. Use `counts` for what the API can resolve; use
-        the site headline for the public census figure.
+        `counts` reports the served release's own population: the register the API
+        resolves against.
       responses:
         "200":
           description: Release metadata and register counts.
@@ -332,284 +256,43 @@ paths:
                   count: { type: integer }
         "401": { $ref: "#/components/responses/Unauthorized" }
 
+  /search:
+    get:
+      tags: [Search]
+      summary: Not published on this release
+      description: |
+        A mapping release has no search index: this path answers 410 `not_published`.
+        To find a name, join `provider_aliases` or `overlay_aliases` (and
+        `entities.canonical_name`) in the download.
+      responses:
+        "410": { $ref: "#/components/responses/NotPublished" }
+
   /changes:
     get:
       tags: [Changes]
-      summary: What changed in a release window
+      summary: Not published on this release
       description: |
-        Walk the published release chain for entity-added, entity-status-change,
-        provider-bridge, and any later-added event type. Backed by static shards
-        built from each release's own changelog — never the live register — so
-        results are anchored to specific release stamps.
-
-        The window is named with `from`/`to` (release stamps; `to` defaults to
-        the latest release). `since=X` is sugar for `from=X`. With no `from`
-        (bare `/changes`, or `to` alone), the window is just the ONE named `to`
-        release — so bare `/changes` returns just the latest release's own
-        events. `from` equal to `to` (e.g. `since=<latest>`) is a valid request
-        that returns an empty page. See `GET /changes/releases` for the list of
-        stamps a request may name.
-
-        Results are paginated with `limit`/`cursor`; `cursor` is opaque and MUST
-        be passed back verbatim alongside the same `from`/`to`/`type`/`provider`
-        — it encodes a position in that specific walk. `?provider=<p>` narrows to
-        `provider_updated` events that added or removed an id for that provider,
-        dropping every other type (and overriding a conflicting `type=`) — this
-        is a pre-sharded page read, not a scan. No quota cost. Responses carry an
-        `ETag`; a matching `If-None-Match` answers 304 without touching a single
-        event shard. The server reads changes-index schema 2, whose static
-        shards declare a page size for each event type; callers should follow
-        the opaque cursor instead of deriving shard offsets themselves.
-      parameters:
-        - name: from
-          in: query
-          required: false
-          description: A prior release stamp from `/changes/releases`. Omit for just the `to` release's own events.
-          schema: { type: string, example: "20260826T221009Z" }
-        - name: since
-          in: query
-          required: false
-          description: Sugar for `from` (kept for readability at the call site — `since=X` behaves exactly like `from=X`).
-          schema: { type: string, example: "20260826T221009Z" }
-        - name: to
-          in: query
-          required: false
-          description: The newer end of the window. Defaults to the latest release.
-          schema: { type: string, example: "20260902T081253Z" }
-        - name: type
-          in: query
-          required: false
-          description: Restrict to one event type. Default walks entity_added, entity_status_changed, provider_updated first, then any other type the register has since added. Ignored when `provider` is set.
-          schema: { type: string, example: entity_added }
-        - name: provider
-          in: query
-          required: false
-          description: Restrict to provider_updated events touching this provider (added or removed an id for it). Forces type=provider_updated.
-          schema: { type: string, example: opta }
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer, minimum: 1, maximum: 1000, default: 500 }
-        - name: cursor
-          in: query
-          required: false
-          description: Opaque continuation token from a previous response's `next_cursor`.
-          schema: { type: string }
+        A mapping release has no change feed: this path answers 410 `not_published` and is not in the API index.
       responses:
-        "200":
-          description: Changes across the walked release window.
-          headers:
-            ETag:
-              schema: { type: string }
-              description: Derived from the active changes-index schema/generation and request window/pagination state, never fetched shard content — poll with `If-None-Match` for a free 304.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  since: { type: [string, "null"], description: "Echoes `from` (or the `since` alias, if that's what was passed)." }
-                  from: { type: [string, "null"] }
-                  to: { type: string }
-                  until: { type: string, description: "The latest release this response was walked up to (always the current latest)." }
-                  chain:
-                    type: array
-                    items: { type: string }
-                    description: Release stamps actually walked, oldest to newest.
-                  releases:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        stamp: { type: string }
-                        counts: { type: object, additionalProperties: { type: integer } }
-                    description: Per-release event-type counts for the releases actually walked.
-                  counts:
-                    type: object
-                    additionalProperties: { type: integer }
-                    description: Per-type event totals summed across the whole walked chain (not filtered by `type`/`provider`).
-                  type: { type: [string, "null"] }
-                  provider: { type: [string, "null"] }
-                  events:
-                    type: array
-                    items:
-                      type: object
-                      required: [type, reep_id]
-                      properties:
-                        type: { type: string, enum: [entity_added, entity_status_changed, provider_updated, entity_removed, label_updated, redirect_changed, fixture_updated, score_updated] }
-                        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
-                      additionalProperties: true
-                  matched:
-                    type: integer
-                    description: How many events the caller's filters can page through over the walked window (per-provider via the pre-sharded provider counts, per-type, or the total). `counts` stays the window's full per-type breakdown.
-                  next_cursor: { type: [string, "null"] }
-        "304":
-          description: Unchanged since the `If-None-Match` ETag — no body.
-        "400":
-          description: Unknown `type`/`provider`, an unknown `from`/`to`/`since` stamp, an inverted range, or a stale/malformed `cursor`. A cursor from an older changes-index schema or generation is stale; restart the walk without it.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500":
-          description: The sharded release chain has a gap (a walked release's recorded `prior` does not match the previous release) — never served silently.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
+        "410": { $ref: "#/components/responses/NotPublished" }
 
   /changes/releases:
     get:
       tags: [Changes]
-      summary: The sharded release chain
+      summary: Not published on this release
       description: |
-        The full list of release stamps `/changes` and `/changes/summary` can
-        name in `from`/`to`/`since` — how a consumer learns valid values (also
-        referenced from those endpoints' 400 responses). Newest first. No quota
-        cost.
+        A mapping release has no change feed: this path answers 410 `not_published` and is not in the API index.
       responses:
-        "200":
-          description: The sharded chain, newest first.
-          headers:
-            ETag: { schema: { type: string } }
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  latest: { type: string }
-                  releases:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        stamp: { type: string }
-                        prior: { type: [string, "null"] }
-                        generated_at: { type: string }
-                        counts: { type: object, additionalProperties: { type: integer } }
-        "304": { description: "Unchanged since the If-None-Match ETag — no body." }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
+        "410": { $ref: "#/components/responses/NotPublished" }
 
   /changes/summary:
     get:
       tags: [Changes]
-      summary: Change counts for a release window
+      summary: Not published on this release
       description: |
-        The same `from`/`to`/`since` window as `GET /changes`, but counts only
-        — no events. The cheap "is there anything new for me" poll; pair with
-        `If-None-Match` for a free 304 when nothing changed. No quota cost.
-      parameters:
-        - name: from
-          in: query
-          required: false
-          schema: { type: string }
-        - name: since
-          in: query
-          required: false
-          description: Sugar for `from`.
-          schema: { type: string }
-        - name: to
-          in: query
-          required: false
-          schema: { type: string }
+        A mapping release has no change feed: this path answers 410 `not_published` and is not in the API index.
       responses:
-        "200":
-          description: Summed and per-release change counts across the window.
-          headers:
-            ETag: { schema: { type: string } }
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  since: { type: [string, "null"] }
-                  from: { type: [string, "null"] }
-                  to: { type: string }
-                  until: { type: string }
-                  chain: { type: array, items: { type: string } }
-                  releases:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        stamp: { type: string }
-                        counts: { type: object, additionalProperties: { type: integer } }
-                  counts: { type: object, additionalProperties: { type: integer } }
-        "304": { description: "Unchanged since the If-None-Match ETag — no body." }
-        "400":
-          description: An unknown from/to/since stamp, or an inverted range.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500":
-          description: The sharded release chain has a gap.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "503": { $ref: "#/components/responses/ChangesIndexUnavailable" }
-
-  /search:
-    get:
-      tags: [Search]
-      summary: Search entities by name or alias
-      description: |
-        Search canonical labels, canonical aliases and labelled public overlay
-        aliases. The static index keeps at most 500 candidates per normalised
-        token, so this is bounded discovery rather than an exhaustive database
-        scan. Costs one lookup. Relevance is the default ordering; bridge count
-        is a coverage-based ordering, not a claim of real-world popularity.
-      parameters:
-        - name: q
-          in: query
-          required: true
-          description: Name query containing 3 or more normalised characters and at most 5 tokens.
-          schema: { type: string, minLength: 3, example: salah }
-        - name: type
-          in: query
-          required: false
-          description: Restrict results to one entity type.
-          schema: { $ref: "#/components/schemas/EntityType" }
-        - name: sort
-          in: query
-          required: false
-          schema: { type: string, enum: [relevance, bridges], default: relevance }
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer, minimum: 1, maximum: 20, default: 20 }
-      responses:
-        "200":
-          description: Bounded search results.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  query: { type: string }
-                  normalised_query: { type: string }
-                  sort: { type: string, enum: [relevance, bridges] }
-                  type: { type: [string, "null"] }
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      required: [reep_id, entity_type, label, bridge_count, relevance]
-                      properties:
-                        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
-                        entity_type: { $ref: "#/components/schemas/EntityType" }
-                        label: { type: string }
-                        bridge_count: { type: integer }
-                        relevance: { type: integer }
-                  count: { type: integer }
-                  limit: { type: integer }
-                  bounded: { type: boolean, const: true }
-                  max_candidates_per_token: { type: integer }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "402": { $ref: "#/components/responses/QuotaExceeded" }
-        "429": { $ref: "#/components/responses/RateLimited" }
-        "503": { $ref: "#/components/responses/IndexMissing" }
+        "410": { $ref: "#/components/responses/NotPublished" }
 
   /provider-notices/summary:
     get:
@@ -899,7 +582,8 @@ paths:
     get:
       tags: [Entities]
       summary: Wikidata overlay for one entity
-      description: The lower-confidence Wikidata overlay (QID, inherited IDs, aliases). Never a canonical bridge.
+      description: |
+        The linked Wikidata QID (`{wikidata: {source, qid, qids?}}`; `qids` when the entity holds two). Never a canonical bridge.
       parameters:
         - $ref: "#/components/parameters/ReepId"
       responses:
@@ -913,47 +597,6 @@ paths:
                   reep_id: { $ref: "#/components/schemas/ReepIdValue" }
                   overlay: { $ref: "#/components/schemas/Overlay" }
                   count: { type: integer }
-                  requested_id: { $ref: "#/components/schemas/ReepIdValue" }
-                  redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "404": { $ref: "#/components/responses/NotFound" }
-
-  /entities/{reep_id}/relationships:
-    get:
-      tags: [Entities]
-      summary: Relationship summary for one entity
-      description: >-
-        A grouped, cardinality-summarised view of the entity's STRUCTURAL relationships:
-        competition, season, stage and match, plus which teams participate in which
-        competition-seasons. Player, coach and referee entities are identity records —
-        they carry bridges, names and aliases, and return an empty list here by design.
-        Squad membership, career history and appearance data are private matching
-        evidence and are not published in the open bridge register.
-      parameters:
-        - $ref: "#/components/parameters/ReepId"
-        - name: family
-          in: query
-          required: false
-          description: Restrict to a single relationship family.
-          schema: { type: string }
-        - name: limit
-          in: query
-          required: false
-          description: Maximum relationship families to return (1–100).
-          schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
-      responses:
-        "200":
-          description: The entity's grouped relationships.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reep_id: { $ref: "#/components/schemas/ReepIdValue" }
-                  relationships:
-                    type: array
-                    items: { $ref: "#/components/schemas/RelationshipSummary" }
                   requested_id: { $ref: "#/components/schemas/ReepIdValue" }
                   redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
         "400": { $ref: "#/components/responses/BadRequest" }
@@ -997,7 +640,7 @@ components:
       schema:
         type: string
         example: aliases,bridges,overlay
-      x-allowed-values: [aliases, attributes, bridges, relationships, overlay]
+      x-allowed-values: [aliases, attributes, bridges, overlay]
     Lang:
       name: lang
       in: query
@@ -1006,8 +649,8 @@ components:
       schema: { type: string }
 
   responses:
-    ChangesIndexUnavailable:
-      description: The changes shards are missing, or changes-index schema 2 is unsupported by this deployment.
+    NotPublished:
+      description: This release publishes the mapping tables only; the endpoint has nothing to serve (`not_published`).
       content:
         application/json:
           schema: { $ref: "#/components/schemas/Error" }
@@ -1048,43 +691,6 @@ components:
           schema: { $ref: "#/components/schemas/Error" }
 
   schemas:
-    MatchLabelledId:
-      type: [object, "null"]
-      required: [reep_id, label]
-      properties:
-        reep_id: { type: string }
-        label: { type: [string, "null"] }
-    GenerationMatch:
-      type: object
-      description: U2 published match row; empty register cells stay null.
-      required: [reep_id, played_on, state, home, away, competition, season, stage, home_score, away_score, result_form, shootout_home, shootout_away, score_basis, leg, aggregate_of, bridges, generation]
-      properties:
-        reep_id: { type: string }
-        generation: { type: string, pattern: "^[a-f0-9]{64}$" }
-        played_on: { type: [string, "null"], format: date }
-        state: { type: [string, "null"], enum: [played, scheduled, postponed, cancelled, awarded, abandoned, null] }
-        home: { $ref: "#/components/schemas/MatchLabelledId" }
-        away: { $ref: "#/components/schemas/MatchLabelledId" }
-        competition: { $ref: "#/components/schemas/MatchLabelledId" }
-        season: { $ref: "#/components/schemas/MatchLabelledId" }
-        stage: { $ref: "#/components/schemas/MatchLabelledId" }
-        home_score: { type: [integer, "null"], minimum: 0 }
-        away_score: { type: [integer, "null"], minimum: 0 }
-        shootout_home: { type: [integer, "null"], minimum: 0 }
-        shootout_away: { type: [integer, "null"], minimum: 0 }
-        result_form: { type: [string, "null"], enum: [regular, extra_time, penalties, golden_goal, awarded, abandoned, unknown, null] }
-        score_basis: { type: [string, "null"], enum: [corroborated, single_source, operator_ruling, null] }
-        leg: { type: [string, "null"], enum: ["1", "2", null] }
-        aggregate_of: { type: [string, "null"] }
-        bridges:
-          type: array
-          items:
-            type: object
-            required: [provider, namespace, external_id]
-            properties:
-              provider: { type: string }
-              namespace: { type: string }
-              external_id: { type: string }
     ReepIdValue:
       type: string
       pattern: "^r[a-z][0-9a-f]{14}$"
@@ -1120,27 +726,25 @@ components:
         schema_version: { type: string }
         generated_at: { type: string, format: date-time }
         stamp: { type: string, example: "20260704T095840Z" }
-        tier: { type: string, enum: [public_bridge_v1, open_census] }
+        tier: { type: string, example: public_bridge_v1 }
         publishable: { type: boolean }
         index_generated_at: { type: string, format: date-time }
     Entity:
       type: object
       description: |
-        The entity envelope. Base identity is always present; `aliases`, `names`,
-        `attributes`, `bridges`, `relationships` and `overlay` appear only when
-        requested via `include`. `requested_id`/`redirected_to` appear only when a
-        redirected ID was requested. `match` appears on match entities, carrying
-        the published scoreline.
-      required: [reep_id, entity_type, name_en, lifecycle_state]
+        The entity envelope: the mapping row (reep-v4 `entities`), nothing more. `aliases`, `names`,
+        `bridges` and `overlay` appear only when requested via `include`. `requested_id`/`redirected_to`
+        appear only when a redirected ID was requested. A match is an entity with `entity_type: match`,
+        its fixture label as `canonical_name` and no country.
+      required: [reep_id, entity_type, canonical_name]
       properties:
         reep_id: { $ref: "#/components/schemas/ReepIdValue" }
         entity_type: { $ref: "#/components/schemas/EntityType" }
-        name_en: { type: string }
-        lifecycle_state: { type: string, example: active }
-        canonical_reep_id:
-          oneOf:
-            - { $ref: "#/components/schemas/ReepIdValue" }
-            - { type: "null" }
+        canonical_name: { type: string }
+        gender:
+          oneOf: [{ type: string }, { type: "null" }]
+        country:
+          oneOf: [{ type: string }, { type: "null" }]
         aliases:
           type: array
           items: { $ref: "#/components/schemas/CanonicalAlias" }
@@ -1150,65 +754,16 @@ components:
           items: { type: string }
         attributes:
           type: object
-          description: Sourced identity facts; each value is an array of provider-sourced strings.
+          description: Provider-sourced identity facts, when the release holds them; never a date of birth.
           additionalProperties:
             type: array
             items: { type: string }
         bridges:
           type: array
           items: { $ref: "#/components/schemas/Bridge" }
-        relationships:
-          type: array
-          items: { $ref: "#/components/schemas/RelationshipSummary" }
         overlay: { $ref: "#/components/schemas/Overlay" }
-        match: { $ref: "#/components/schemas/MatchScoreline" }
         requested_id: { $ref: "#/components/schemas/ReepIdValue" }
         redirected_to: { $ref: "#/components/schemas/ReepIdValue" }
-    MatchScoreline:
-      type: object
-      description: |
-        The published scoreline of a match entity, as `matches.csv.gz` carries
-        it (Reep Register Format v1 §5.1.1). Every key is always present. A null
-        means the register holds no value for that cell: it never means zero,
-        and never means `unknown`. `home_score`/`away_score` are the score after
-        play (90 or 120 minutes) and never include shootout kicks, which live in
-        `shootout_home`/`shootout_away`. A side id is populated only when that
-        team is itself published by the release serving this response.
-      required:
-        - home_score
-        - away_score
-        - result_form
-        - shootout_home
-        - shootout_away
-        - score_basis
-        - home_id
-        - away_id
-        - played_on
-      properties:
-        home_score:
-          oneOf: [{ type: integer }, { type: "null" }]
-        away_score:
-          oneOf: [{ type: integer }, { type: "null" }]
-        result_form:
-          oneOf:
-            - { type: string, enum: [regular, extra_time, penalties, golden_goal, awarded, abandoned, unknown] }
-            - { type: "null" }
-          description: How the result was reached.
-        shootout_home:
-          oneOf: [{ type: integer }, { type: "null" }]
-        shootout_away:
-          oneOf: [{ type: integer }, { type: "null" }]
-        score_basis:
-          oneOf:
-            - { type: string, enum: [corroborated, single_source, operator_ruling] }
-            - { type: "null" }
-          description: How the published score was established. Describes the score, never the entity identity.
-        home_id:
-          oneOf: [{ $ref: "#/components/schemas/ReepIdValue" }, { type: "null" }]
-        away_id:
-          oneOf: [{ $ref: "#/components/schemas/ReepIdValue" }, { type: "null" }]
-        played_on:
-          oneOf: [{ type: string, format: date }, { type: "null" }]
     CanonicalAlias:
       type: object
       required: [name]
@@ -1217,80 +772,37 @@ components:
         language:
           oneOf: [{ type: string }, { type: "null" }]
           description: >
-            BCP-47/ISO language tag for this alias name. Currently always null:
-            the served export carries the column but not yet the per-alias
-            language corpus, so `?lang=` matches nothing today. Populated when the
-            register export emits per-alias language.
+            Language tag of this alias name (the `language` column of `overlay_aliases`);
+            null for a provider alias. `?lang=` filters on it.
         type:
           oneOf: [{ type: string }, { type: "null" }]
           description: Alias kind from the register (e.g. full, short, secondary).
         rank:
           oneOf: [{ type: number }, { type: "null" }]
-          description: Register-assigned display rank (1 = primary); aliases are returned rank-ordered, unranked last.
+          description: Always null; the register publishes no alias rank. Provider aliases come before Wikidata aliases.
     Bridge:
       type: object
       required: [provider, external_id, entity_type]
       properties:
+        reep_id: { $ref: "#/components/schemas/ReepIdValue" }
         provider: { type: string, example: transfermarkt }
         namespace: { type: string, example: spieler }
         external_id: { type: string }
         entity_type: { $ref: "#/components/schemas/EntityType" }
-        role:
-          type: string
-          enum: [canonical_bridge, bridge_only, overlay_only]
     Overlay:
       type: object
-      description: Optional lower-confidence overlay layer. Present only when overlay data exists.
+      description: The linked Wikidata QID. Present only when the entity has a link.
       properties:
         wikidata: { $ref: "#/components/schemas/WikidataOverlay" }
     WikidataOverlay:
       type: object
       properties:
         source: { type: string, enum: [wikidata] }
-        source_tier: { type: string, enum: [wikidata-originated] }
         qid: { type: string, pattern: "^Q[1-9][0-9]*$", example: Q615 }
-        link_confidence:
-          oneOf: [{ type: number }, { type: "null" }]
-        dob_check:
-          oneOf: [{ type: string }, { type: "null" }]
-        ids:
+        qids:
           type: array
-          items: { $ref: "#/components/schemas/WikidataId" }
-        aliases:
-          type: array
-          items: { $ref: "#/components/schemas/WikidataAlias" }
-    WikidataId:
-      type: object
-      required: [provider, property, external_id, confidence]
-      properties:
-        provider: { type: string }
-        property: { type: string, example: P1825 }
-        external_id: { type: string }
-        confidence: { type: number, minimum: 0, maximum: 1 }
-    WikidataAlias:
-      type: object
-      required: [name, source]
-      properties:
-        name: { type: string }
-        language:
-          oneOf: [{ type: string }, { type: "null" }]
-        source: { type: string, enum: [wikidata] }
-        confidence:
-          oneOf: [{ type: number }, { type: "null" }]
-    RelationshipSummary:
-      type: object
-      properties:
-        family: { type: string, example: participates_in }
-        count: { type: integer }
-        roles:
-          type: object
-          additionalProperties: { type: integer }
-        source_providers:
-          type: array
-          items: { type: string }
-        expansion:
-          type: string
-          enum: [summary_only, summary_only_high_cardinality]
+          description: Present when the entity holds two QIDs.
+          items: { type: string, pattern: "^Q[1-9][0-9]*$" }
     ProviderRollup:
       type: object
       properties:

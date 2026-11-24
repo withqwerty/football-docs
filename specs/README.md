@@ -13,14 +13,14 @@ anyone can re-fetch and diff.
 |---|---|---|---|
 | `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
-| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-11-16 | 2026-11-16 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-11-24 | 2026-11-24 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-11-16 | 2026-11-16 |
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
 | `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
-| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-10-09 | 2026-11-16 |
-| `reep/release.json` | https://data.reep.football/releases/2026-10-19.1/release.json (via `latest.json`) | 2026-11-16 | 2026-11-16 |
-| `reep/manifest.json` | the `manifest.json` that `reep/release.json` lists | 2026-11-16 | 2026-11-16 |
-| `reep/columns.json` | derived: the header line of each table's `.csv.gz` that `reep/release.json` lists | 2026-11-16 | 2026-11-16 |
+| `reep/openapi.yaml` | https://reep.football/openapi.yaml | 2026-11-24 | 2026-11-24 |
+| `reep/release.json` | https://data.reep.football/releases/2026-11-23.1/release.json (via `latest.json`) | 2026-11-24 | 2026-11-24 |
+| `reep/manifest.json` | the `manifest.json` that `reep/release.json` lists | 2026-11-24 | 2026-11-24 |
+| `reep/columns.json` | derived: the header line of each table's `.csv.gz` that `reep/release.json` lists | 2026-11-24 | 2026-11-24 |
 | `statsports/thirdpartyapi-v5.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v5/swagger.json | 2026-11-16 | 2026-11-16 |
 | `statsports/thirdpartyapi-v6.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v6/swagger.json | 2026-11-16 | 2026-11-16 |
 | `statsports/thirdpartyapi-v7.json` | https://statsportsproseries.com/thirdpartyapi/swagger/v7/swagger.json | 2026-11-16 | 2026-11-16 |
@@ -29,7 +29,7 @@ anyone can re-fetch and diff.
 | `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-11-03 | 2026-11-03 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
-| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-11-24 | 2026-11-24 |
 | `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-11-16 | 2026-11-16 |
 | `vald/externalnordbord.json` | https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-11-16 | 2026-11-16 |
@@ -288,14 +288,16 @@ Impect API specification is kept in this repository.
 Reep is checked against four snapshots: the API spec (`reep/openapi.yaml`, used by
 the provider-truth tests) and one release's file list, manifest and table columns
 (`reep/release.json`, `reep/manifest.json`, `reep/columns.json`, used by
-`src/__tests__/reep.test.ts`). Releases `2026-10-19.1` and `2026-10-31.1` publish no column
-schema, so `reep/columns.json` is not a copy of a published file: `check_reep_live.py`
-reads the first line of each table's gzipped CSV with a ranged request and writes
-the column names. A new release is cut weekly, so the snapshots are expected to
-age; what matters is whether anything the docs state has changed. `latest.json` is
-a selection and can move to an older release: on 2026-11-16 it named
-`2026-10-19.1` after naming `2026-10-31.1` on 2026-11-03, so the snapshots here
-went back to `2026-10-19.1`.
+`src/__tests__/reep.test.ts`). `reep/columns.json` is not a copy of a published
+file: `check_reep_live.py` reads the first line of each table's gzipped CSV with
+a ranged request and writes the column names. Releases `2026-10-19.1` and
+`2026-10-31.1` published no column schema; release `2026-11-23.1` publishes
+`schema.json` again, and its columns match the CSV headers. A new release is cut
+weekly or less often, so the snapshots are expected to age; what matters is
+whether anything the docs state has changed. `latest.json` is a selection and can
+move to an older release: on 2026-11-16 it named `2026-10-19.1` after naming
+`2026-10-31.1` on 2026-11-03, so the snapshots went back to `2026-10-19.1`. On
+2026-11-24 it named `2026-11-23.1`.
 
 To refresh:
 

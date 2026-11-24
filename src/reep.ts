@@ -34,8 +34,6 @@ export const ENTITY_TYPES = [
   "stage",
   "venue",
   "match",
-  "transfer",
-  "award",
 ] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 
@@ -110,6 +108,18 @@ function hasColumn(register: LocalRegister, table: string, column: string): Prom
     columns.set(key, known);
   }
   return known;
+}
+/**
+ * Releases up to 2026-10-19.1 ship an entity_search table and record why a Reep ID
+ * left the register (redirects.reason). From 2026-11-23.1 a release publishes the
+ * mapping only: names are in entities and the two alias tables, redirects hold
+ * merges only, and a withdrawn ID leaves no trace.
+ */
+function hasSearchTable(register: LocalRegister): Promise<boolean> {
+  return hasColumn(register, "entity_search", "search_text");
+}
+function hasRedirectReason(register: LocalRegister): Promise<boolean> {
+  return hasColumn(register, "redirects", "reason");
 }
 function hasUpstreamStatus(register: LocalRegister): Promise<boolean> {
   return hasColumn(register, "bridges", "upstream_status");
@@ -207,7 +217,8 @@ async function followRedirects(register: LocalRegister, start: string): Promise<
   let current = start;
   const seen = new Set([start]);
   for (let hop = 0; hop < 5; hop++) {
-    const next = await register.query("SELECT to_id, reason FROM redirects WHERE from_id = $id", { id: current });
+    const reason = (await hasRedirectReason(register)) ? "reason" : "NULL AS reason";
+    const next = await register.query(`SELECT to_id, ${reason} FROM redirects WHERE from_id = $id`, { id: current });
     if (!next.length) return { id: current };
     const to = next[0].to_id == null ? "" : String(next[0].to_id).trim();
     if (!to) {
@@ -267,12 +278,31 @@ async function localLookup(
   } else {
     const pattern = `%${q.name.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
     const params: Record<string, string> = { pattern };
-    let sql = "SELECT reep_id, bridge_count FROM entity_search WHERE search_text ILIKE $pattern ESCAPE '\\'";
-    if (q.type) {
-      sql += " AND entity_type = $type";
-      params.type = q.type;
+    if (q.type) params.type = q.type;
+    let sql: string;
+    if (await hasSearchTable(register)) {
+      sql = "SELECT reep_id, bridge_count FROM entity_search WHERE search_text ILIKE $pattern ESCAPE '\\'";
+      if (q.type) sql += " AND entity_type = $type";
+      sql += " ORDER BY bridge_count DESC, reep_id";
+    } else {
+      // An entity named exactly as asked (in any of its names) ranks first, then by provider IDs.
+      params.exact = q.name.toLowerCase();
+      const sources = ["SELECT reep_id, lower(canonical_name) = $exact AS exact FROM entities WHERE canonical_name ILIKE $pattern ESCAPE '\\'"];
+      for (const table of ["provider_aliases", "overlay_aliases"]) {
+        if (await hasColumn(register, table, "alias")) {
+          sources.push(`SELECT reep_id, lower(alias) = $exact AS exact FROM ${table} WHERE alias ILIKE $pattern ESCAPE '\\'`);
+        }
+      }
+      sql = [
+        `WITH hits AS (${sources.join(" UNION ALL ")}),`,
+        "named AS (SELECT reep_id, bool_or(exact) AS exact FROM hits GROUP BY reep_id)",
+        "SELECT n.reep_id, n.exact, count(b.reep_id) AS bridge_count",
+        "FROM named n JOIN entities e USING (reep_id) LEFT JOIN bridges b USING (reep_id)",
+        q.type ? "WHERE e.entity_type = $type" : "",
+        "GROUP BY n.reep_id, n.exact ORDER BY n.exact DESC, bridge_count DESC, n.reep_id",
+      ].join(" ");
     }
-    ids = (await register.query(`${sql} ORDER BY bridge_count DESC LIMIT ${MAX_RESULTS}`, params)).map((r) => ({
+    ids = (await register.query(`${sql} LIMIT ${MAX_RESULTS}`, params)).map((r) => ({
       reep_id: String(r.reep_id),
       bridge_count: Number(r.bridge_count),
     }));
@@ -519,6 +549,22 @@ async function apiLookup(q: Query, key: string, base: string, fetchImpl: typeof 
       true,
     );
   }
+  if (response.status === 410) {
+    // A mapping-only release answers 410 not_published on /search and the change feed.
+    const error = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+    const why = [error?.error, error?.message].filter(Boolean).join(": ");
+    const name =
+      q.kind === "name"
+        ? " The API publishes no name search on this release. The free download answers it: set REEP_DUCKDB_PATH " +
+          `to a copy of ${REEP_DOWNLOAD_URL}, or run this query against the file:\n\n\`\`\`sql\n${sqlFor(q)}\n\`\`\`\n\n` +
+          "Or look the entity up by a provider ID (provider + id) instead."
+        : "";
+    return textResult(
+      `The Reep API does not publish this on the current release (HTTP 410${why ? `, ${why}` : ""}).${name}` +
+        `${footer ? `\n\n${footer}` : ""}`,
+      q.kind !== "name",
+    );
+  }
   if (response.status === 404) {
     // Keep the API's own error code and message: a removed entity leaves a
     // tombstone, and "not found" alone would hide that it was ever published.
@@ -564,9 +610,8 @@ function sqlFor(q: Query): string {
   const quote = (s: string) => `'${s.replace(/'/g, "''")}'`;
   if (q.kind === "provider") {
     return [
-      "-- A bridge can name a merged Reep ID: follow its redirect to the survivor. An empty",
-      "-- to_id is a tombstone (the ID was withdrawn or withheld), not a merge.",
-      "SELECT b.reep_id AS bridged_id, r.reason AS redirect_reason, e.reep_id, e.canonical_name, e.entity_type,",
+      "-- A bridge can name a merged Reep ID: follow its redirect to the survivor.",
+      "SELECT b.reep_id AS bridged_id, e.reep_id, e.canonical_name, e.entity_type,",
       "       o.provider, o.namespace, o.external_id",
       "FROM bridges b",
       "LEFT JOIN redirects r ON r.from_id = b.reep_id",
@@ -580,12 +625,12 @@ function sqlFor(q: Query): string {
   }
   if (q.kind === "reep_id") {
     return [
-      "-- First check for a tombstone: a redirect with an empty to_id means the ID was withdrawn",
-      "-- or withheld, not merged.",
-      `SELECT from_id, to_id, reason FROM redirects WHERE from_id = ${quote(q.reepId)};`,
+      "-- First check for a merge: a row here names the survivor in to_id. Releases up to",
+      "-- 2026-10-19.1 also list withdrawn IDs here, with an empty to_id. Later ones do not.",
+      `SELECT from_id, to_id FROM redirects WHERE from_id = ${quote(q.reepId)};`,
       "",
-      "-- Then follow a merge redirect to the survivor, and list every provider ID, including",
-      "-- any still attached to an ID merged into it (bridged_on names that ID).",
+      "-- Then list every provider ID of the ID or its survivor, including any still attached",
+      "-- to an ID merged into it (bridged_on names that ID).",
       "SELECT e.reep_id, e.canonical_name, e.entity_type, b.provider, b.namespace, b.external_id, b.reep_id AS bridged_on",
       "FROM entities e",
       "JOIN bridges b ON b.reep_id = e.reep_id OR b.reep_id IN (SELECT from_id FROM redirects WHERE to_id = e.reep_id)",
@@ -594,11 +639,21 @@ function sqlFor(q: Query): string {
       "ORDER BY b.provider, b.namespace;",
     ].join("\n");
   }
+  const like = quote(`%${q.name}%`);
+  const exact = quote(q.name.toLowerCase());
   return [
-    "SELECT reep_id, canonical_name, entity_type, bridge_count",
-    "FROM entity_search",
-    `WHERE search_text ILIKE ${quote(`%${q.name}%`)}${q.type ? ` AND entity_type = ${quote(q.type)}` : ""}`,
-    "ORDER BY bridge_count DESC",
+    "-- Names are in entities and in the two alias tables. An exact name ranks first, then the",
+    "-- entities with the most provider IDs.",
+    "WITH hits AS (",
+    `  SELECT reep_id, lower(canonical_name) = ${exact} AS exact FROM entities WHERE canonical_name ILIKE ${like}`,
+    `  UNION ALL SELECT reep_id, lower(alias) = ${exact} FROM provider_aliases WHERE alias ILIKE ${like}`,
+    `  UNION ALL SELECT reep_id, lower(alias) = ${exact} FROM overlay_aliases WHERE alias ILIKE ${like}`,
+    "), named AS (SELECT reep_id, bool_or(exact) AS exact FROM hits GROUP BY reep_id)",
+    "SELECT e.reep_id, e.canonical_name, e.entity_type, count(b.reep_id) AS bridge_count",
+    "FROM named n JOIN entities e USING (reep_id) LEFT JOIN bridges b USING (reep_id)",
+    ...(q.type ? [`WHERE e.entity_type = ${quote(q.type)}`] : []),
+    "GROUP BY e.reep_id, e.canonical_name, e.entity_type, n.exact",
+    "ORDER BY n.exact DESC, bridge_count DESC, e.reep_id",
     "LIMIT 10;",
   ].join("\n");
 }
@@ -676,7 +731,12 @@ export async function resolveEntity(args: ResolveEntityArgs, options: ResolveEnt
       if (tombstone) return textResult(`${tombstoneText(tombstone)}\n\n${note}`);
       const gone = tombstones.map((t) => tombstoneText(t)).join("\n\n");
       if (!found.length) {
-        return textResult(`${gone || "No Reep entity matches that query in the local register."}\n\n${note}`);
+        const untraced =
+          q.kind === "reep_id" && !gone && !(await hasRedirectReason(register))
+            ? " This release records merges but not withdrawals: a Reep ID from an earlier release that is not here " +
+              "(and is not mistyped) was withdrawn or withheld, and has no survivor to map to."
+            : "";
+        return textResult(`${gone || `No Reep entity matches that query in the local register.${untraced}`}\n\n${note}`);
       }
       return textResult(
         `Found ${found.length} result(s) in the local Reep register:\n\n${formatFound(found)}${namespaceNote(q, found)}` +

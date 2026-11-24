@@ -51,9 +51,10 @@ Endpoints return `429 Too Many Requests` when exceeded; back off and retry. (No 
 
 ## Response formats
 
-- **List/metric endpoints** return JSON. `/physical/` additionally accepts `response_format` ∈ `json`, `small_json`, `csv` (this toggle is `/physical/`-only; the GI-metric endpoints always return JSON).
-- **Tracking** (`/match/{id}/tracking/`) returns a **downloadable file**: `file_format` ∈ `jsonl` (one JSON object per line), `fifa-xml`, or `fifa-data` (FIFA EPTS standard — a metadata `.xml` + data `.txt`). Current `data_version` is `3`. The spec fetched on 2026-11-16 adds `frame_rate` (`10` or `25` fps) and names a parquet format, both "only available for data_version >= 4.0", which its `data_version` enum does not list yet.
+- **List/metric endpoints** return JSON. `/physical/` additionally accepts `response_format` ∈ `json`, `small_json`, `csv`, `nested_json` ("small_json: data_version 3.x only; nested_json: data_version=4.0 only"). The GI-metric endpoints always return JSON.
+- **Tracking** (`/match/{id}/tracking/`) returns a **downloadable file**: `file_format` ∈ `jsonl` (one JSON object per line), `fifa-xml`, or `fifa-data` (FIFA EPTS standard — a metadata `.xml` + data `.txt`). `data_version` ∈ `3.0`, `4.0` (default `3.0`). `frame_rate` (`10` or `25` fps) and `file_format=parquet` are "only available for data_version >= 4.0"; the spec fetched on 2026-11-24 is the first to list `4.0` and `parquet` in its enums.
 - **Dynamic events** (`/match/{id}/dynamic_events/...`) return **CSV files** (`file_format`, `data_version`, `period_starts`).
+- **Physical events** (`/match/{id}/physical_events/`, physical v4.0 only) return a file: `file_format` ∈ `csv` (default), `json`, `sportscode-xml`, `matchtracker-xml`, `focus-json`.
 
 ## Data versions
 
@@ -61,6 +62,15 @@ SkillCorner versions its data products independently. Versions in the 2026-08-31
 
 Dynamic events v2 filters remain in the spec alongside v3, so a sync job written
 against v2 keeps working; point new work at the v3 filters.
+
+### Version 4 (spec fetched on 2026-11-24)
+
+The spec fetched on 2026-11-24 adds a version 4 for tracking and physical data:
+
+- **Tracking `4.0`** is selectable on the tracking endpoints, with `frame_rate` and `file_format=parquet`. The default stays `3.0`.
+- **Physical `4.0`** is selectable on `/physical/` and `custom/physical/` (the default stays `3.0.3`). It adds the main-referee endpoints (`/physical/referee/`, `/match/{id}/custom/physical/referee/`) and the physical-events endpoints (`/match/{id}/physical_events/`, `/match/{id}/custom/physical_events/`). See [physical-data.md](physical-data.md#physical-v40).
+- New sync filters on `/matches/` and `/matches/custom/`: `extrapolated_tracking_v4_last_modified__gte`, `physical_v4_0_last_modified__gte`, `physical_events_v4_0_last_modified__gte`.
+- New data-collection fields: `physical_v4_0_last_modified`, `physical_v4_0_quality_index`, `physical_events_v4_0_last_modified`, `tracking_extra_v4_last_modified`, `tracking_extra_v4_ball_quality_index`, `tracking_extra_v4_players_quality_index`, `goal_event_provider_used_v4`, `shot_event_provider_used_v4`.
 
 ## Custom feeds
 
