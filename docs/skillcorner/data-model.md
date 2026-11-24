@@ -7,7 +7,7 @@ crawled_at: 2026-08-31
 
 # SkillCorner Data Model
 
-Payload shapes from the API. Field lists below are from the OpenAPI spec's inline response schemas; where a product is delivered as a downloadable file (tracking, dynamic events) the per-row schema is documented in SkillCorner's glossary (<https://skillcorner.crunch.help/en>) rather than the OpenAPI spec. See [physical-data.md](physical-data.md) for physical metrics and [coordinate-system.md](coordinate-system.md) for tracking geometry.
+Payload shapes from the API. Field lists below are from the OpenAPI spec's inline response schemas; where a product is delivered as a downloadable file (tracking, dynamic events) the per-row schema is not in the OpenAPI spec. For the dynamic-events columns see [dynamic-events.md](dynamic-events.md); for tracking see SkillCorner's glossary (<https://skillcorner.crunch.help/en>). See [physical-data.md](physical-data.md) for physical metrics and [coordinate-system.md](coordinate-system.md) for tracking geometry.
 
 ## Master data
 
@@ -73,7 +73,7 @@ Returned as **CSV files** (`file_format`, `data_version`, `period_starts`). One 
 | `player_possessions` | Individual player ball-possession spells |
 | `phases_of_play` | Possession phases / game state segmentation |
 
-These are SkillCorner's **Game Intelligence** event streams; column definitions are in the glossary. The `dynamic_events_check` (skippable via `ignore_dynamic_events_check`) is a data-quality gate that can return `403 Bad data quality`.
+These are SkillCorner's **Game Intelligence** event streams; the dynamic-events column definitions are in [dynamic-events.md](dynamic-events.md). The `dynamic_events_check` (skippable via `ignore_dynamic_events_check`) is a data-quality gate that can return `403 Bad data quality`.
 
 ## Game Intelligence metrics (`GET /metrics/game_intelligence/...`)
 

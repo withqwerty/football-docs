@@ -39,6 +39,12 @@ describe("golden retrieval evals", () => {
       expected: ["`furthest_line_break`", "None / first_line / second_last_line / last_line"],
     },
     {
+      // The spec says first_line / second_last_line / last_line; the delivered CSV holds first / second_last / last.
+      id: "skillcorner-dynamic-events-delivered-values",
+      args: { query: "SkillCorner furthest_line_break values delivered CSV", provider: "skillcorner", max_results: 3 },
+      expected: ["## Values in the delivered CSV", "`first` / `second_last` / `last`"],
+    },
+    {
       id: "fmdb-pro-players-endpoint",
       args: { query: "FMDB Pro players endpoint", provider: "fmdb-pro", max_results: 5 },
       expected: ["/api/players", "x-api-key"],

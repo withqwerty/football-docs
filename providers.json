@@ -370,7 +370,7 @@
       "sources": [
         { "url": "https://www.skillcorner.com/apidocs.json", "type": "openapi", "note": "Public unauthenticated OpenAPI 3.1 document, mirrored at specs/skillcorner/skillcorner_openapi.json; the HTML docs UI at skillcorner.com/api/docs/ now needs a customer login" },
         { "url": "https://skillcorner.crunch.help/en", "type": "api_docs", "note": "Glossary & metric definitions" },
-        { "url": "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf", "type": "api_docs", "note": "Dynamic Events CSV Specifications (2025/02/16), linked from the SkillCorner/opendata README; its attribute tables are docs/skillcorner/dynamic-events.md" },
+        { "url": "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf", "type": "api_docs", "note": "Dynamic Events CSV Specifications (2025/02/16), linked from the SkillCorner/opendata README and from https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs; its attribute tables are docs/skillcorner/dynamic-events.md" },
         { "url": "https://github.com/SkillCorner/opendata", "type": "github", "note": "MIT open data; the field names in dynamic-events.md are checked against its dynamic-events CSV headers at a pinned commit" },
         { "type": "curated", "note": "Identity-resolution guidance" }
       ],

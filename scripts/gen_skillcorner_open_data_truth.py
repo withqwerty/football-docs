@@ -2,7 +2,9 @@
 """Build data/skillcorner-open-data-truth.json from SkillCorner's open data.
 
 Reads every `*_dynamic_events.csv` in https://github.com/SkillCorner/opendata
-at one pinned commit and records their column names, in file order.
+at one pinned commit. It records their column names, in file order, the
+distinct values of each text column with at most MAX_VALUES values, and the
+columns whose values are all numbers.
 
 The test src/__tests__/skillcorner-open-data-validation.test.ts checks
 docs/skillcorner/dynamic-events.md against this file.
@@ -24,6 +26,7 @@ from pathlib import Path
 
 REPO = "SkillCorner/opendata"
 DEFAULT_COMMIT = "4340d274572876239c154c90bc507a9b3250a656"
+MAX_VALUES = 30
 OUT = Path(__file__).resolve().parent.parent / "data" / "skillcorner-open-data-truth.json"
 
 
@@ -38,9 +41,19 @@ def dynamic_event_paths(commit: str) -> list[str]:
     return sorted(e["path"] for e in tree["tree"] if e["path"].endswith("_dynamic_events.csv"))
 
 
+def is_number(value: str) -> bool:
+    try:
+        float(value)
+    except ValueError:
+        return False
+    return True
+
+
 def build(commit: str) -> dict:
     columns: list[str] | None = None
     rows = 0
+    seen: dict[str, set[str]] = {}
+    text_columns: set[str] = set()
     paths = dynamic_event_paths(commit)
     for path in paths:
         text = fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/{path}").decode("utf-8")
@@ -49,7 +62,16 @@ def build(commit: str) -> dict:
             columns = list(reader.fieldnames or [])
         elif list(reader.fieldnames or []) != columns:
             sys.exit(f"{path}: columns differ from the first file")
-        rows += sum(1 for _ in reader)
+        for row in reader:
+            rows += 1
+            for name, value in row.items():
+                if value == "":
+                    continue
+                if not is_number(value):
+                    text_columns.add(name)
+                values = seen.setdefault(name, set())
+                if len(values) <= MAX_VALUES:
+                    values.add(value)
     assert columns is not None
     return {
         "source": {
@@ -60,6 +82,12 @@ def build(commit: str) -> dict:
             "rows": rows,
         },
         "columns": columns,
+        "values": {
+            name: sorted(seen[name])
+            for name in columns
+            if name in text_columns and len(seen[name]) <= MAX_VALUES
+        },
+        "numeric": [name for name in columns if name in seen and name not in text_columns],
     }
 
 

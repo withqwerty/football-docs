@@ -7,11 +7,57 @@ crawled_at: 2026-11-24
 
 # SkillCorner Dynamic Events
 
-Column definitions for the Game Intelligence dynamic-events CSV (`GET /match/{match_id}/dynamic_events/`), from SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16), linked from the [SkillCorner open-data README](https://github.com/SkillCorner/opendata). Descriptions and values are as the specification gives them. For the endpoints see [api-endpoints.md](api-endpoints.md); for the event types see [concepts.md](concepts.md).
+Column definitions for the Game Intelligence dynamic-events CSV (`GET /match/{match_id}/dynamic_events/`), from SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16), linked from the [SkillCorner open-data README](https://github.com/SkillCorner/opendata) and from SkillCorner's article [SkillCorner Open Data #4: Visualising Off-Ball Runs](https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs). Descriptions and values are as the specification gives them. For the endpoints see [api-endpoints.md](api-endpoints.md); for the event types see [concepts.md](concepts.md).
+
+The specification predates the files in the open data. At open-data commit `4340d27` ("Refresh four matches to dynamic events v3") the CSVs also carry columns that the specification does not define: the EPV columns (`possession_epv_*`, `pass_epv_*`, `pass_reception_epv_*`), `overall_pressure_*`, `passing_option_ease_*`, `reception_difficulty_*`, `space_constraint_*` and `time_to_impact_*`. The specification does not define the columns of the `phases_of_play` CSV either. Some delivered values are spelled differently from the specification; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 The goal here is to deliver an exhaustive list of the attributes grouped under key themes. The order of the attributes does not necessarily reflect the order in which the columns are in the csv files.
 
 The **Events** column lists the event types each attribute applies to: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP) and On-Ball Engagement (OBE).
+
+## Changelog
+
+The specification's changes since its earlier versions.
+
+**Changelog Since 2024/07/12**
+
+1/ Addition of one New Out of Possession Dynamic Event: On-Ball Engagement<br>
+2/ Addition of Phase of Play information.<br>
+3/ Reordering of the columns and bug correction.
+
+- To include phases of play properly we reorder the columns in the csv file that is delivered.
+- We noticed that previously the values for the game_interruption_before, game_interruption_before_id were inverted with game_interruption_after, game_interruption_after_id. We have corrected this issue in the new version.
+
+**Changelog Since 2024/02/15**
+
+1/ Addition of two New Dynamic Events: Passing Options and Player Possessions<br>
+2/ Changes to Off-Ball runs Dynamic Event
+
+New data points including
+
+- Positions (LWB, LB, CD, ...) of the player in possession and the player performing the off-ball runs.
+- Game states (winning, losing, drawing) and team scores at the moment of the event.
+- last_defensive_line_height (distance of the last defender from their own goal).
+
+Renaming of attributes
+
+| Former name | New name |
+|---|---|
+| player_possession_frame_start | associated_player_possession_frame_start |
+| passing_option | predicted_passing_option |
+| passing_option_start | passing_option_at_start |
+| simultaneous_runs | n_simultaneous_runs |
+| opponents_ahead_start | n_opponents_ahead_start |
+| opponents_ahead_end | n_opponents_ahead_end |
+| opponents_overtaken | n_opponents_overtaken |
+
+Give and Go
+
+Previously, we classified as give_and_go any off-ball runs that started within 2 seconds after a pass from the same player.<br>Based on feedback we have received we have decided to restrict it to off-ball runs of subtype behind, cross_receiver, overlap, pulling_half_space, pulling_wide, run_ahead_of_the_ball, underlap, support (for support run we also impose that it starts in the attacking third and in a half_space/the central channel).<br>As a consequence, coming_short, dropping_off and some support off-ball runs are not taken into account to determine whether there is a give and go or not.
+
+Event filtering
+
+Previously, we only considered off-ball runs where we were able to match the tracking data with the end of the associated player possession.<br>Now, we include cases where tracking data could not be matched. We provide the field is_player_possession_end_matched to indicate whether the end of the possession was successfully matched.
 
 ## Basics
 
