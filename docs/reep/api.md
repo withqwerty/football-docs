@@ -2,7 +2,7 @@
 source_url: https://reep.football/api
 source_type: curated
 upstream_version: null
-crawled_at: 2026-11-16
+crawled_at: 2026-11-24
 ---
 
 # Reep API
@@ -11,9 +11,16 @@ The API serves the current release over HTTP for single, live lookups. It
 exposes nothing the free download does not. Base URL:
 `https://reep.football/api/v1`. The full contract is the OpenAPI specification
 at https://reep.football/openapi.yaml, rendered at https://reep.football/docs.
-Checked on 2026-10-09 against release `20261005T180536Z`; the specification was
-unchanged on 2026-11-03 and on 2026-11-16 (when the download served release
-`2026-10-19.1`).
+Checked against the specification fetched on 2026-11-24 (`x-api-schema`
+`public-scope-mapping-v1`), when the download served release `2026-11-23.1`.
+
+The specification says: "A release publishes a mapping and nothing else: Reep
+IDs, names, provider IDs, redirects, Wikidata links and aliases. `/search` and
+`/changes` answer 410 `not_published` on this release." The match filter list
+(matches filtered by team, competition or season) answers 410
+`match_details_unavailable`, and the
+relationships endpoint is gone. The specification fetched on 2026-11-16
+(`public-bridge-register-v2`) still had all three.
 
 ## Getting a key
 
@@ -33,10 +40,10 @@ Email getintouch+nutmeg@withqwerty.com with your organisation, which group you
 are in and what you are matching. Keys and limits never unlock extra fields or
 providers. For bulk work, use the download instead.
 
-Send the key as `Authorization: Bearer <key>`. Search, entity, bridge, overlay,
-relationship and resolve calls each count as one lookup, as does each page of
-matches. The remaining count comes back in `X-Reep-Credits-Remaining`. Metadata
-and changes endpoints do not count. Every endpoint is subject to the key's
+Send the key as `Authorization: Bearer <key>`. Entity, bridge, overlay, match and
+resolve calls each count as one lookup. The remaining count comes back in
+`X-Reep-Credits-Remaining`. Metadata endpoints (`/meta`, `/providers`,
+`/provider-notices/summary`) do not count. Every endpoint is subject to the key's
 per-second rate limit. A key that expires also gets `X-Reep-Key-Expires` (ISO
 time) and `X-Reep-Key-Days-Remaining` on every authenticated response, and
 `GET /api/v1/key` shows the key's status.
@@ -47,20 +54,18 @@ Source: [API guide](https://reep.football/api).
 
 | Request | Purpose | Lookup cost |
 |---|---|---|
-| `GET /api/v1/meta` | Current release stamp and its predecessor | none |
+| `GET /api/v1/meta` | The serving release's stamp, tier, schema and row counts | none |
 | `GET /api/v1/providers` | Providers with bridge counts, entity types and role | none |
 | `GET /api/v1/key` | The calling key's plan, expiry and remaining allowance | none |
 | `GET /api/v1/resolve/{provider}/{external_id}` | Provider ID to Reep entity; takes `namespace` and `type` | one |
 | `POST /api/v1/batch` | Up to 100 entity items or 20 resolve items per request | one per item |
 | `GET /api/v1/entities/{reep_id}` | Entity detail | one |
 | `GET /api/v1/entities/{reep_id}/bridges` | Every provider ID for one entity | one |
-| `GET /api/v1/entities/{reep_id}/overlay` | Wikidata overlay for one entity | one |
-| `GET /api/v1/entities/{reep_id}/relationships` | Relationship summary | one |
-| `GET /api/v1/search` | Name and alias search; takes `q`, `type`, `sort`, `limit` | one |
-| `GET /api/v1/matches` | Published matches mapped across providers, filtered by team, competition or season | one per page |
-| `GET /api/v1/changes/summary` | Change counts since a stamp | none |
-| `GET /api/v1/changes` | Paged change events, filtered by `type` or `provider` | none |
-| `GET /api/v1/changes/releases` | The list of published releases | none |
+| `GET /api/v1/entities/{reep_id}/overlay` | The linked Wikidata QID for one entity | one |
+| `GET /api/v1/matches/{reep_id}` | One match and every provider's match ID | one |
+| `GET /api/v1/matches/{provider}/{external_id}` | One provider's match ID to the Reep ID and every other provider's match ID; takes `namespace` | one |
+| `GET /api/v1/search` | 410 `not_published` on release `2026-11-23.1` | none |
+| `GET /api/v1/changes`, `/changes/summary`, `/changes/releases` | 410 `not_published` on release `2026-11-23.1` | none |
 
 Source: [OpenAPI specification](https://reep.football/openapi.yaml).
 
@@ -73,8 +78,7 @@ curl -H "Authorization: Bearer $REEP_API_KEY" \
 
 Always pass the namespace: bridges are keyed by provider, namespace and ID.
 Entity and resolve responses carry the core record only, unless you add
-`include=` with any of `aliases`, `attributes`, `bridges`, `relationships` and
-`overlay`. With `include=bridges`, one call returns every provider ID Reep holds
+`include=` with any of `aliases`, `attributes`, `bridges` and `overlay`. With `include=bridges`, one call returns every provider ID Reep holds
 for the entity. A merged ID returns its survivor with HTTP 200, naming both
 `requested_id` and `redirected_to`.
 
@@ -95,18 +99,20 @@ limit.
 
 ## Search by name
 
-`GET /api/v1/search?q=salah&type=player&sort=bridges&limit=10` searches canonical
-labels and safe aliases. Relevance is the default order; `sort=bridges` orders by
-how many providers are bridged. Search is bounded to 500 candidates per token, so
-use the download's full-text search for exhaustive discovery.
+`GET /api/v1/search` answers 410 `not_published` on release `2026-11-23.1`: the
+release has no search index. The specification says: "To find a name, join
+`provider_aliases` or `overlay_aliases` (and `entities.canonical_name`) in the
+download." See "No provider ID: search by name" on the download page. Up to the
+specification fetched on 2026-11-16, `search` took `q`, `type`, `sort` and
+`limit`.
 
 ## Keeping in sync
 
-Poll `GET /api/v1/changes/summary?since=<stamp>` for the counts since your last
-sync, then page `GET /api/v1/changes` for the events: entities added, IDs
-redirected with their survivor, and bridges added or removed. Use `from` and `to`
-for any two published releases. Both endpoints return an `ETag`, and a matching
-`If-None-Match` returns 304 with no body.
+The change feed (`/changes`, `/changes/summary`, `/changes/releases`) answers
+410 `not_published` on release `2026-11-23.1`. The downloads page says to compare
+the change counts and dropped IDs in the release metadata files instead (the
+`diff` in `manifest.json`, and `upkeep_ledger.json`), and to read the current
+stamp from `GET /api/v1/meta`.
 
 ## Key status
 
@@ -121,50 +127,27 @@ for any two published releases. Both endpoints return an `ETag`, and a matching
 
 ## Matches mapped across providers
 
-`GET /api/v1/matches` returns published matches with their IDs at every
-provider. It is available only when the register's generation mode is on; when
-it is off or in shadow, the endpoint returns 404.
+A match is published as a mapping: one entity with its fixture label and the
+provider IDs attached to it.
 
 ```bash
 curl -H "Authorization: Bearer $REEP_API_KEY" \
-  "https://reep.football/api/v1/matches?team=<reep_id or provider:namespace:id>&from=2026-08-01&to=2026-08-31&require=opta,wyscout"
+  "https://reep.football/api/v1/matches/transfermarkt/<match-id>?namespace=spiel"
 ```
 
-- **Anchors:** at least one `team`, `competition` or `season` is required. Each
-  takes a Reep ID or `provider:namespace:id`, up to five values. Repeat the
-  parameter for more than one value (`team=a&team=b`); do not comma-separate.
-  Values within one anchor are ORed, and different filters intersect.
-- **Other filters:** `opponent` and `venue` (`home`, `away` or `any`, default
-  `any`) need exactly one `team`. `from` and `to` are inclusive register dates,
-  with no time-zone conversion. `state` takes comma-separated states (`played`,
-  `scheduled`, `postponed`, `cancelled`, `awarded`, `abandoned`, or `none` for a
-  null state). `providers` limits the bridges returned; `require` and `missing`
-  keep matches that have, or do not have, a publishable bridge at each named
-  provider. `sort` is `desc` (default) or `asc` by date, and `limit` is 1 to 100
-  (default 20).
-- **Default window:** with no `season` and no date bound, the window is the last
-  30 calendar dates including today (UTC). A `season` removes the default
-  window, and a single date bound leaves the other end open. Undated matches
-  are left out whenever a date bound applies.
-- **Paging:** a page holds at most 100 rows and 262,144 bytes, so it can hold
-  fewer than `limit`. Continue with `cursor=<next_cursor>`. Cursors are signed,
-  expire after 24 hours and are bound to the filters and the generation; a
-  changed filter or generation, or an expired cursor, returns 400
-  `stale_cursor`, and you restart without it.
-- **Response:** `matches`, `count`, `generation`, `unresolved` (anchors that
-  did not resolve, which give an empty page) and `next_cursor`. Each match has
-  `reep_id`, `played_on`, `state`, `home`, `away`, `competition`, `season` and
-  `stage` (each a `reep_id` with a `label`), `home_score`, `away_score`,
-  `shootout_home`, `shootout_away`, `result_form`, `score_basis`, `leg`,
-  `aggregate_of`, `bridges` (`provider`, `namespace`, `external_id`) and
-  `generation`.
-- **Nulls:** null means the register holds no published value, never zero or
-  unknown. Scores are after-play goals and exclude shoot-out kicks. No date,
-  score, state or structure is inferred.
-- **Errors** carry the code in `error`: 400 for an invalid query (for example
-  `anchor_required`, `single_team_required`, `invalid_id`) or `stale_cursor`,
-  409 `ambiguous_provider_id`, 422 `wrong_entity_type`, and 503
-  `generation_unavailable` or `match_response_too_large`.
+- `GET /api/v1/matches/{provider}/{external_id}` takes a provider's match ID,
+  with `namespace`. Transfermarkt and Soccerdonna match IDs use the namespace
+  `spiel`. A provider ID that maps to more than one match answers 409.
+- `GET /api/v1/matches/{reep_id}` starts from the Reep side. A redirected Reep ID
+  answers with its survivor (`requested_id`, `redirected_to`); the Reep ID of
+  another entity type answers 404.
+- **Response:** `reep_id`, `entity_type` (`match`), `canonical_name` (the label,
+  "Home v Away, YYYY-MM-DD") and `bridges`. There is no score and no team
+  column.
+- The filter list (matches filtered by team, competition or season) answers 410
+  `match_details_unavailable` on release `2026-11-23.1`. Up to the specification
+  fetched on 2026-11-16 it returned teams, competition, season, scores and states,
+  filtered by team, competition or season.
 
-Source: [OpenAPI specification](https://reep.football/openapi.yaml), release
-`20261005T180536Z`.
+Source: [OpenAPI specification](https://reep.football/openapi.yaml), fetched on
+2026-11-24.
