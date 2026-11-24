@@ -34,6 +34,18 @@ describe("golden retrieval evals", () => {
       expected: ["| 214 | bigChance |"],
     },
     {
+      id: "skillcorner-dynamic-events-furthest-line-break",
+      args: { query: "SkillCorner furthest line break through around", provider: "skillcorner", max_results: 3 },
+      // Only the furthest_line_break row pairs these values with PO, PP; affected_line_break is OBE.
+      expected: ["| `furthest_line_break` | str |", "None / first_line / second_last_line / last_line | PO, PP |"],
+    },
+    {
+      // The spec says first_line / second_last_line / last_line; the delivered CSV holds first / second_last / last.
+      id: "skillcorner-dynamic-events-delivered-values",
+      args: { query: "SkillCorner furthest_line_break values delivered CSV", provider: "skillcorner", max_results: 3 },
+      expected: ["## Values in the delivered CSV", "`first` / `second_last` / `last`"],
+    },
+    {
       id: "fmdb-pro-players-endpoint",
       args: { query: "FMDB Pro players endpoint", provider: "fmdb-pro", max_results: 5 },
       expected: ["/api/players", "x-api-key"],

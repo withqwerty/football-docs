@@ -363,13 +363,15 @@
       "display_name": "SkillCorner",
       "aliases": ["skill-corner"],
       "access_level": "public-api-docs",
-      "licence_status": "Public API documentation with commercial access requirements.",
-      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads. Spec snapshot in specs/skillcorner/ comes from the public, unauthenticated https://www.skillcorner.com/apidocs.json - see specs/README.md. Endpoint claims are validated against it in CI.",
+      "licence_status": "Public API documentation with commercial access requirements. The Dynamic Events CSV Specifications PDF is public and needs no login; it states no licence. The football-docs maintainer accepted reproducing its tables with attribution in the review of PR #111. The open data is MIT.",
+      "public_safety_notes": "Document public API concepts and avoid restricted tracking payloads. Spec snapshot in specs/skillcorner/ comes from the public, unauthenticated https://www.skillcorner.com/apidocs.json - see specs/README.md. Endpoint claims are validated against it in CI. docs/skillcorner/dynamic-events.md reproduces the public Dynamic Events CSV Specifications tables with attribution; its field names, and the values in dynamic-events-delivered-values.md, are validated against the MIT open data at a pinned commit.",
       "version": "tracking v3 / physical v3 / dynamic events v3",
       "package": { "type": "pypi", "name": "skillcorner", "repo": "SkillCorner/skillcorner-toolkit" },
       "sources": [
         { "url": "https://www.skillcorner.com/apidocs.json", "type": "openapi", "note": "Public unauthenticated OpenAPI 3.1 document, mirrored at specs/skillcorner/skillcorner_openapi.json; the HTML docs UI at skillcorner.com/api/docs/ now needs a customer login" },
         { "url": "https://skillcorner.crunch.help/en", "type": "api_docs", "note": "Glossary & metric definitions" },
+        { "url": "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf", "type": "api_docs", "note": "Dynamic Events CSV Specifications (2025/02/16), linked from the SkillCorner/opendata README and from https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs; its attribute tables are docs/skillcorner/dynamic-events.md, built from it by pnpm skillcorner:spec" },
+        { "url": "https://github.com/SkillCorner/opendata", "type": "github", "note": "MIT open data; at a pinned commit, the field names in dynamic-events.md are checked against its dynamic-events CSV headers and dynamic-events-delivered-values.md against their distinct values" },
         { "type": "curated", "note": "Identity-resolution guidance" }
       ],
       "last_crawled": "2026-06-03"

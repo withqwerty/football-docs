@@ -18,6 +18,9 @@ One report from the checks that otherwise live in separate places:
    publish no spec to mirror, so their truth files are regenerated from the
    public source and compared with the committed ones, ignoring the `source`
    block. The committed files are restored afterwards, byte for byte.
+   SkillCorner's dynamic-events truth is pinned to an open-data commit, so the
+   check reports a newer commit on SkillCorner/opendata and a spec PDF link that
+   no longer answers.
 4. Live checks. scripts/check_free_sources_live.py and scripts/check_reep_live.py.
 
 A finding is a list of things to review, not an error in itself: bump the pin,
@@ -27,6 +30,7 @@ Exit status: 1 if anything needs review, 0 if everything is current.
 Standard library only. No keys are used.
 """
 
+import hashlib
 import json
 import re
 import subprocess
@@ -227,6 +231,51 @@ def check_derived_truth():
         "driblab.notion.json",
         [sys.executable, "scripts/gen_notion_truth.py", DRIBLAB_PAGE, "--provider", "driblab"],
     )
+    findings += check_skillcorner_open_data()
+    return findings
+
+
+SKILLCORNER_TRUTH = ROOT / "data" / "skillcorner-open-data-truth.json"
+# The spec PDF's URL and hash are pinned in the script that builds docs/skillcorner/dynamic-events.md.
+SKILLCORNER_SPEC_SCRIPT = ROOT / "src" / "skillcorner-spec.ts"
+
+
+def check_skillcorner_open_data():
+    pinned = json.loads(SKILLCORNER_TRUTH.read_text(encoding="utf-8"))["source"]["commit"]
+    findings = []
+    try:
+        commits = fetch("https://api.github.com/repos/SkillCorner/opendata/commits?path=data/matches&per_page=1")
+        latest = json.loads(commits)[0]["sha"]
+    except Exception as error:  # noqa: BLE001
+        print(f"  ??? skillcorner open data: could not check ({error})")
+        findings.append(f"skillcorner open data: commit check failed ({error})")
+    else:
+        same = latest == pinned
+        note = "" if same else f": {latest[:7]} after pin {pinned[:7]}"
+        print(f"  {'ok ' if same else 'NEW'} skillcorner open data{note}")
+        if not same:
+            findings.append(
+                f"skillcorner open data: new commit {latest[:7]} (set DEFAULT_COMMIT in"
+                " scripts/gen_skillcorner_open_data_truth.py, run pnpm skillcorner:truth, then fix the docs)"
+            )
+    script = SKILLCORNER_SPEC_SCRIPT.read_text(encoding="utf-8")
+    spec_url = re.search(r'SPEC_URL =\s*"([^"]+)"', script)[1]
+    pinned_pdf = re.search(r'SPEC_SHA256 = "([0-9a-f]{64})"', script)[1]
+    try:
+        pdf = fetch(spec_url)
+    except Exception as error:  # noqa: BLE001
+        print(f"  ??? skillcorner dynamic-events spec: could not fetch ({error})")
+        findings.append(f"skillcorner dynamic-events spec: fetch failed ({error}; find its new URL)")
+    else:
+        same = hashlib.sha256(pdf).hexdigest() == pinned_pdf
+        print(f"  {'ok ' if same else 'NEW'} skillcorner dynamic-events spec")
+        if not pdf.startswith(b"%PDF-"):
+            findings.append("skillcorner dynamic-events spec: the PDF link no longer serves a PDF (find its new URL)")
+        elif not same:
+            findings.append(
+                "skillcorner dynamic-events spec: the PDF changed (read it, update src/skillcorner-spec.ts,"
+                " then run pnpm skillcorner:spec)"
+            )
     return findings
 
 

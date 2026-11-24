@@ -75,8 +75,9 @@ const TOKEN_ALLOWLIST: Record<string, string[]> = {
   mplsoccer: [],
   floodlight: ["PATH"],
   databallpy: [],
-  // HTTP verbs in the endpoint tables.
-  skillcorner: ["GET", "POST"],
+  // HTTP verbs in the endpoint tables, and the boolean spelling of the Dynamic
+  // Events CSV Specifications, quoted in dynamic-events-delivered-values.md.
+  skillcorner: ["GET", "POST", "TRUE", "FALSE"],
   // Match-official position codes emitted when include_officials=True. They come
   // from the Rust core rather than a Python enum, so introspection cannot see them.
   // FOURTH is the fourth official: the Rust core emits "4TH" and 0.3.0 relabels it
