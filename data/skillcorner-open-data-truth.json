@@ -331,15 +331,68 @@
     "pass_epv_delta_against"
   ],
   "values": {
+    "match_id": [
+      "1874553",
+      "1886347",
+      "1899585",
+      "1925299",
+      "1927964",
+      "1953632",
+      "1959846",
+      "1986691",
+      "1996435",
+      "1996436",
+      "2006229",
+      "2006363",
+      "2007448",
+      "2007721",
+      "2010085",
+      "2011166",
+      "2013725",
+      "2015213",
+      "2016236",
+      "2017461"
+    ],
+    "period": [
+      "1",
+      "2"
+    ],
+    "attacking_side_id": [
+      "1",
+      "2"
+    ],
     "attacking_side": [
       "left_to_right",
       "right_to_left"
+    ],
+    "event_type_id": [
+      "1",
+      "7",
+      "8",
+      "9"
     ],
     "event_type": [
       "off_ball_run",
       "on_ball_engagement",
       "passing_option",
       "player_possession"
+    ],
+    "event_subtype_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "event_subtype": [
       "behind",
@@ -357,6 +410,27 @@
       "run_ahead_of_the_ball",
       "support",
       "underlap"
+    ],
+    "player_position_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "2",
+      "20",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "player_position": [
       "AM",
@@ -379,6 +453,27 @@
       "RW",
       "RWB"
     ],
+    "player_in_possession_position_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "2",
+      "20",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "player_in_possession_position": [
       "AM",
       "CB",
@@ -400,6 +495,21 @@
       "RW",
       "RWB"
     ],
+    "team_id": [
+      "1802",
+      "1803",
+      "1804",
+      "1805",
+      "2380",
+      "2902",
+      "4177",
+      "866",
+      "867",
+      "868",
+      "869",
+      "870",
+      "871"
+    ],
     "team_shortname": [
       "Adelaide United",
       "Auckland FC",
@@ -415,12 +525,24 @@
       "Western Sydney",
       "Western United"
     ],
+    "channel_id_start": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "channel_start": [
       "center",
       "half_space_left",
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "third_id_start": [
+      "1",
+      "2",
+      "3"
     ],
     "third_start": [
       "attacking_third",
@@ -431,12 +553,24 @@
       "False",
       "True"
     ],
+    "channel_id_end": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "channel_end": [
       "center",
       "half_space_left",
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "third_id_end": [
+      "1",
+      "2",
+      "3"
     ],
     "third_end": [
       "attacking_third",
@@ -447,6 +581,14 @@
       "False",
       "True"
     ],
+    "associated_player_possession_end_type_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
     "associated_player_possession_end_type": [
       "clearance",
       "foul_suffered",
@@ -454,6 +596,18 @@
       "possession_loss",
       "shot",
       "unknown"
+    ],
+    "associated_off_ball_run_subtype_id": [
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "associated_off_ball_run_subtype": [
       "behind",
@@ -467,10 +621,29 @@
       "support",
       "underlap"
     ],
+    "game_state_id": [
+      "1",
+      "2",
+      "3"
+    ],
     "game_state": [
       "drawing",
       "losing",
       "winning"
+    ],
+    "team_score": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "opponent_team_score": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
     ],
     "first_player_possession_in_team_possession": [
       "False",
@@ -488,9 +661,43 @@
       "False",
       "True"
     ],
+    "n_player_possessions_in_phase": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "2",
+      "20",
+      "22",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "team_possession_loss_in_phase": [
       "False",
       "True"
+    ],
+    "team_in_possession_phase_type_id": [
+      "0",
+      "1",
+      "14",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
     ],
     "team_in_possession_phase_type": [
       "build_up",
@@ -503,6 +710,17 @@
       "set_play",
       "transition"
     ],
+    "team_out_of_possession_phase_type_id": [
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "5",
+      "8",
+      "9"
+    ],
     "team_out_of_possession_phase_type": [
       "chaotic",
       "defending_direct",
@@ -513,6 +731,22 @@
       "high_block",
       "low_block",
       "medium_block"
+    ],
+    "current_team_in_possession_next_phase_type_id": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "15",
+      "2",
+      "3",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "current_team_in_possession_next_phase_type": [
       "build_up",
@@ -530,6 +764,22 @@
       "quick_break",
       "set_play"
     ],
+    "current_team_out_of_possession_next_phase_type_id": [
+      "0",
+      "1",
+      "10",
+      "12",
+      "13",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "current_team_out_of_possession_next_phase_type": [
       "build_up",
       "chaotic",
@@ -545,6 +795,23 @@
       "quick_break",
       "set_play",
       "transition"
+    ],
+    "current_team_in_possession_previous_phase_type_id": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "current_team_in_possession_previous_phase_type": [
       "build_up",
@@ -563,6 +830,23 @@
       "set_play",
       "transition"
     ],
+    "current_team_out_of_possession_previous_phase_type_id": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "current_team_out_of_possession_previous_phase_type": [
       "build_up",
       "chaotic",
@@ -580,6 +864,19 @@
       "set_play",
       "transition"
     ],
+    "game_interruption_before_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
     "game_interruption_before": [
       "corner_against",
       "corner_for",
@@ -592,6 +889,20 @@
       "penalty_against",
       "throw_in_against",
       "throw_in_for"
+    ],
+    "game_interruption_after_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "game_interruption_after": [
       "corner_against",
@@ -606,6 +917,21 @@
       "penalty_for",
       "throw_in_against",
       "throw_in_for"
+    ],
+    "start_type_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "start_type": [
       "corner_interception",
@@ -622,6 +948,19 @@
       "throw_in_reception",
       "unknown"
     ],
+    "end_type_id": [
+      "1",
+      "10",
+      "11",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "end_type": [
       "clearance",
       "direct_disruption",
@@ -635,16 +974,32 @@
       "shot",
       "unknown"
     ],
+    "pass_direction_received_id": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
     "pass_direction_received": [
       "backward",
       "forward",
       "sideway_left",
       "sideway_right"
     ],
+    "pass_range_received_id": [
+      "1",
+      "2",
+      "3"
+    ],
     "pass_range_received": [
       "long",
       "medium",
       "short"
+    ],
+    "pass_outcome_id": [
+      "1",
+      "2",
+      "3"
     ],
     "pass_outcome": [
       "offside",
@@ -699,6 +1054,12 @@
       "False",
       "True"
     ],
+    "trajectory_direction_id": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
     "trajectory_direction": [
       "backward",
       "forward",
@@ -713,21 +1074,44 @@
       "False",
       "True"
     ],
+    "speed_avg_band_id": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
     "speed_avg_band": [
       "hsr",
       "jogging",
       "running",
       "sprinting"
     ],
+    "location_to_player_in_possession_id_start": [
+      "1",
+      "2",
+      "3"
+    ],
     "location_to_player_in_possession_start": [
       "ahead",
       "behind",
       "same_line"
     ],
+    "location_to_player_in_possession_id_end": [
+      "1",
+      "2",
+      "3"
+    ],
     "location_to_player_in_possession_end": [
       "ahead",
       "behind",
       "same_line"
+    ],
+    "player_in_possession_channel_id_start": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     ],
     "player_in_possession_channel_start": [
       "center",
@@ -735,6 +1119,11 @@
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "player_in_possession_third_id_start": [
+      "1",
+      "2",
+      "3"
     ],
     "player_in_possession_third_start": [
       "attacking_third",
@@ -745,12 +1134,24 @@
       "False",
       "True"
     ],
+    "player_in_possession_channel_id_end": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "player_in_possession_channel_end": [
       "center",
       "half_space_left",
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "player_in_possession_third_id_end": [
+      "1",
+      "2",
+      "3"
     ],
     "player_in_possession_third_end": [
       "attacking_third",
@@ -772,12 +1173,26 @@
       "very_easy",
       "very_hard"
     ],
+    "reception_difficulty_start_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "time_to_impact_start": [
       "easy",
       "hard",
       "medium",
       "very_easy",
       "very_hard"
+    ],
+    "time_to_impact_start_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     ],
     "space_constraint_start": [
       "easy",
@@ -786,12 +1201,26 @@
       "very_easy",
       "very_hard"
     ],
+    "space_constraint_start_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "passing_option_ease_start": [
       "easy",
       "hard",
       "medium",
       "very_easy",
       "very_hard"
+    ],
+    "passing_option_ease_start_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     ],
     "overall_pressure_start": [
       "high_pressure",
@@ -800,12 +1229,26 @@
       "no_pressure",
       "very_high_pressure"
     ],
+    "overall_pressure_start_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "time_to_impact_end": [
       "easy",
       "hard",
       "medium",
       "very_easy",
       "very_hard"
+    ],
+    "time_to_impact_end_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     ],
     "passing_option_ease_end": [
       "easy",
@@ -814,12 +1257,47 @@
       "very_easy",
       "very_hard"
     ],
+    "passing_option_ease_end_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "overall_pressure_end": [
       "high_pressure",
       "low_pressure",
       "medium_pressure",
       "no_pressure",
       "very_high_pressure"
+    ],
+    "overall_pressure_end_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "player_targeted_position_id": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "2",
+      "20",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "player_targeted_position": [
       "AM",
@@ -842,12 +1320,24 @@
       "RW",
       "RWB"
     ],
+    "player_targeted_channel_pass_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "player_targeted_channel_pass": [
       "center",
       "half_space_left",
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "player_targeted_third_pass_id": [
+      "1",
+      "2",
+      "3"
     ],
     "player_targeted_third_pass": [
       "attacking_third",
@@ -858,12 +1348,24 @@
       "False",
       "True"
     ],
+    "player_targeted_channel_reception_id": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "player_targeted_channel_reception": [
       "center",
       "half_space_left",
       "half_space_right",
       "wide_left",
       "wide_right"
+    ],
+    "player_targeted_third_reception_id": [
+      "1",
+      "2",
+      "3"
     ],
     "player_targeted_third_reception": [
       "attacking_third",
@@ -873,6 +1375,12 @@
     "player_targeted_penalty_area_reception": [
       "False",
       "True"
+    ],
+    "player_targeted_speed_avg_band_id": [
+      "1",
+      "2",
+      "3",
+      "4"
     ],
     "player_targeted_speed_avg_band": [
       "hsr",
@@ -888,6 +1396,11 @@
       "False",
       "True"
     ],
+    "interplayer_distance_range_id": [
+      "1",
+      "2",
+      "3"
+    ],
     "interplayer_distance_range": [
       "long",
       "medium",
@@ -896,6 +1409,12 @@
     "close_at_player_possession_start": [
       "False",
       "True"
+    ],
+    "interplayer_direction_id": [
+      "1",
+      "2",
+      "3",
+      "4"
     ],
     "interplayer_direction": [
       "backward",
@@ -919,10 +1438,134 @@
       "False",
       "True"
     ],
+    "n_teammates_ahead_end": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_teammates_ahead_start": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_player_targeted_opponents_ahead_start": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_player_targeted_opponents_ahead_end": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_player_targeted_teammates_ahead_start": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_player_targeted_teammates_ahead_end": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_player_targeted_teammates_within_5m_start": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "n_player_targeted_teammates_within_5m_end": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "n_player_targeted_opponents_within_5m_start": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "n_player_targeted_opponents_within_5m_end": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "pass_range_id": [
+      "1",
+      "2",
+      "3"
+    ],
     "pass_range": [
       "long",
       "medium",
       "short"
+    ],
+    "pass_direction_id": [
+      "1",
+      "2",
+      "3",
+      "4"
     ],
     "pass_direction": [
       "backward",
@@ -950,13 +1593,54 @@
       "False",
       "True"
     ],
+    "n_simultaneous_passing_options": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "organised_defense": [
       "False",
       "True"
     ],
+    "defensive_structure": [
+      "343",
+      "352",
+      "4123",
+      "4132",
+      "4141",
+      "4231",
+      "424",
+      "4312",
+      "4321",
+      "433",
+      "4411",
+      "442",
+      "451",
+      "5131",
+      "523",
+      "532",
+      "541"
+    ],
+    "n_defensive_lines": [
+      "2",
+      "3"
+    ],
     "first_line_break": [
       "False",
       "True"
+    ],
+    "first_line_break_type_id": [
+      "1",
+      "2"
     ],
     "first_line_break_type": [
       "around",
@@ -966,6 +1650,10 @@
       "False",
       "True"
     ],
+    "second_last_line_break_type_id": [
+      "1",
+      "2"
+    ],
     "second_last_line_break_type": [
       "around",
       "through"
@@ -974,18 +1662,80 @@
       "False",
       "True"
     ],
+    "last_line_break_type_id": [
+      "1",
+      "2"
+    ],
     "last_line_break_type": [
       "around",
       "through"
+    ],
+    "furthest_line_break_id": [
+      "1",
+      "2",
+      "3"
     ],
     "furthest_line_break": [
       "first",
       "last",
       "second_last"
     ],
+    "furthest_line_break_type_id": [
+      "1",
+      "2"
+    ],
     "furthest_line_break_type": [
       "around",
       "through"
+    ],
+    "n_opponents_ahead_player_in_possession_pass_moment": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_opponents_ahead_pass_reception": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_opponents_bypassed": [
+      "-1",
+      "-10",
+      "-2",
+      "-3",
+      "-4",
+      "-5",
+      "-6",
+      "-7",
+      "-8",
+      "-9",
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "one_touch": [
       "False",
@@ -1015,6 +1765,178 @@
       "False",
       "True"
     ],
+    "n_passing_options": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_off_ball_runs": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "n_passing_options_line_break": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "n_passing_options_first_line_break": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "n_passing_options_second_last_line_break": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "n_passing_options_last_line_break": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "n_passing_options_ahead": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_passing_options_dangerous_difficult": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "n_passing_options_dangerous_not_difficult": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "n_passing_options_not_dangerous_not_difficult": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_passing_options_not_dangerous_difficult": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "n_passing_options_at_start": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "n_passing_options_at_end": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "n_passing_options_ahead_at_start": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "n_passing_options_ahead_at_end": [
+      "0",
+      "1",
+      "10",
+      "11",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_simultaneous_runs": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
     "give_and_go": [
       "False",
       "True"
@@ -1035,6 +1957,60 @@
       "False",
       "True"
     ],
+    "n_opponents_ahead_end": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_opponents_ahead_start": [
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "n_opponents_overtaken": [
+      "-1",
+      "-10",
+      "-2",
+      "-3",
+      "-4",
+      "-5",
+      "-6",
+      "-7",
+      "-8",
+      "-9",
+      "0",
+      "1",
+      "10",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "affected_line_break_id": [
+      "1",
+      "2",
+      "3"
+    ],
     "affected_line_break": [
       "first",
       "last",
@@ -1047,6 +2023,17 @@
     "affected_line_breaking_passing_option_dangerous": [
       "False",
       "True"
+    ],
+    "affected_line_breaking_passing_option_run_subtype_id": [
+      "1",
+      "10",
+      "2",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ],
     "affected_line_breaking_passing_option_run_subtype": [
       "behind",
@@ -1063,13 +2050,55 @@
       "False",
       "True"
     ],
+    "pressing_chain_length": [
+      "10",
+      "11",
+      "12",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "pressing_chain_end_type_id": [
+      "1",
+      "2"
+    ],
     "pressing_chain_end_type": [
       "disruption",
       "regain"
     ],
+    "index_in_pressing_chain": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
     "simultaneous_defensive_engagement_same_target": [
       "False",
       "True"
+    ],
+    "simultaneous_defensive_engagement_same_target_rank": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
     ],
     "consecutive_on_ball_engagements": [
       "False",
@@ -1097,7 +2126,6 @@
     ]
   },
   "numeric": [
-    "event_id",
     "index",
     "match_id",
     "frame_start",
@@ -1123,11 +2151,9 @@
     "y_end",
     "channel_id_end",
     "third_id_end",
-    "associated_player_possession_event_id",
     "associated_player_possession_frame_start",
     "associated_player_possession_frame_end",
     "associated_player_possession_end_type_id",
-    "associated_off_ball_run_event_id",
     "associated_off_ball_run_subtype_id",
     "game_state_id",
     "team_score",
@@ -1150,7 +2176,6 @@
     "pass_distance_received",
     "pass_range_received_id",
     "pass_outcome_id",
-    "targeted_passing_option_event_id",
     "distance_covered",
     "trajectory_angle",
     "trajectory_direction_id",
@@ -1269,7 +2294,6 @@
     "n_opponents_ahead_end",
     "n_opponents_ahead_start",
     "n_opponents_overtaken",
-    "affected_line_breaking_passing_option_id",
     "affected_line_break_id",
     "affected_line_breaking_passing_option_xthreat",
     "affected_line_breaking_passing_option_run_subtype_id",

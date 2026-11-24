@@ -30,11 +30,19 @@ function ticked(cell: string): string[] {
   return [...cell.matchAll(/`([^`]+)`/g)].map((m) => m[1]);
 }
 
-/** The spec's Values cell for each field, split into its values. */
-function specValues(text: string): Map<string, string[]> {
-  const out = new Map<string, string[]>();
-  for (const m of text.matchAll(/^\| `([^`]+)` \|.*\| ([^|]*) \| [A-Z, ]+ \|$/gm)) {
-    out.set(m[1], m[2].split(/ \/ |<br>|,/).map((v) => v.trim()));
+interface SpecField {
+  type: string;
+  /** The Values cell split into its values. An ID entry such as "15 (defending_direct)", "1(GK)" or "1: first half" also adds its number. */
+  values: string[];
+}
+
+/** The spec's Type and Values cells for each field. */
+function specFields(text: string): Map<string, SpecField> {
+  const out = new Map<string, SpecField>();
+  for (const m of text.matchAll(/^\| `([^`]+)` \| ([^|]*) \|.*\| ([^|]*) \| [A-Z, ]+ \|$/gm)) {
+    const values = m[3].split(/ \/ |<br>|,/).map((v) => v.trim());
+    const ids = values.flatMap((v) => /^(-?\d+) ?[(:]/.exec(v)?.[1] ?? []);
+    out.set(m[1], { type: m[2].trim(), values: [...values, ...ids] });
   }
   return out;
 }
@@ -42,6 +50,7 @@ function specValues(text: string): Map<string, string[]> {
 interface CuratedRow {
   /** Named columns, or every column the spec lists as TRUE / FALSE minus the named exceptions. */
   columns: string[] | { trueFalseExcept: string[] };
+  specCell: string;
   spec: string[];
   delivered: string[];
 }
@@ -54,12 +63,14 @@ function curatedRows(text: string): CuratedRow[] {
       columns: m[1].startsWith("Every column listed as")
         ? { trueFalseExcept: ticked(m[1]).filter((v) => v !== "TRUE" && v !== "FALSE") }
         : ticked(m[1]),
+      specCell: m[2],
       spec: ticked(m[2]),
       delivered: ticked(m[3]),
     }));
 }
 
-const spec = specValues(doc);
+const specField = specFields(doc);
+const spec = new Map([...specField].map(([name, f]) => [name, f.values]));
 const rows = curatedRows(curated);
 const isTrueFalse = (values: string[]) => values.includes("TRUE") && values.includes("FALSE");
 
@@ -84,6 +95,10 @@ describe("skillcorner dynamic-events doc is grounded in the open data", () => {
     expect(names.filter((n, i) => names.indexOf(n) !== i)).toEqual([]);
   });
 
+  it("reads the Type and Values of every field", () => {
+    expect([...specField.keys()]).toEqual(fields(doc));
+  });
+
   it("names only fields that are columns in the open-data CSVs", () => {
     const columns = new Set(truth.columns);
     expect(fields(doc).filter((n) => !columns.has(n))).toEqual([]);
@@ -100,6 +115,15 @@ describe("skillcorner delivered values match the open data", () => {
   it("has a curated table", () => {
     expect(curated).toMatch(/^source_type: curated$/m);
     expect(rows.length).toBeGreaterThan(5);
+  });
+
+  it("names only spec fields, and quotes a spec value or says not listed", () => {
+    const unknown = rows.flatMap((row) =>
+      (Array.isArray(row.columns) ? row.columns : row.columns.trueFalseExcept).filter((n) => !spec.has(n)),
+    );
+    expect(unknown).toEqual([]);
+    expect(rows.filter((row) => row.spec.length === 0 && row.specCell !== "not listed")).toEqual([]);
+    expect(rows.filter((row) => row.delivered.length === 0)).toEqual([]);
   });
 
   it("quotes the spec's own values in the Specification column", () => {
@@ -136,11 +160,29 @@ describe("skillcorner delivered values match the open data", () => {
     expect(missing).toEqual([]);
   });
 
-  it("states the two type mismatches", () => {
-    expect(isTrueFalse(spec.get("xloss_player_possession_start") ?? [])).toBe(true);
-    expect(truth.numeric).toContain("xloss_player_possession_start");
-    expect(truth.values.player_targeted_difficult_pass_target).toEqual(["False", "True"]);
-    expect(curated).toContain("`xloss_player_possession_start` is listed with the values `TRUE` / `FALSE`");
-    expect(curated).toContain("`player_targeted_difficult_pass_target` is typed `float`");
+  it("counts and names the columns the spec does not define", () => {
+    const documented = new Set(fields(doc));
+    const undefinedColumns = truth.columns.filter((c) => !documented.has(c));
+    const section = curated.split("\n## Columns the specification does not define\n")[1] ?? "";
+    const families = [...section.matchAll(/`([a-z_]+)_\*`/g)].map((m) => m[1]);
+    expect(section).toContain(`carry ${undefinedColumns.length} columns`);
+    expect(undefinedColumns.filter((c) => !families.some((f) => c.startsWith(`${f}_`)))).toEqual([]);
+    expect(families.filter((f) => !undefinedColumns.some((c) => c.startsWith(`${f}_`)))).toEqual([]);
+  });
+
+  it("names every column whose delivered type differs from the spec", () => {
+    const numeric = new Set(truth.numeric);
+    const isText = (name: string) => Boolean(truth.values[name]) && !numeric.has(name);
+    const differs = [...specField]
+      .filter(([name, f]) => {
+        const exampleNumber = /^e\.g\. -?\d/.test(f.values[0] ?? "");
+        const saysNumber = f.type === "int" || f.type === "float" || exampleNumber;
+        const saysBool = f.type === "bool" || isTrueFalse(f.values);
+        return (saysNumber && isText(name)) || (saysBool && numeric.has(name));
+      })
+      .map(([name]) => name);
+    const section = curated.split("\n## Types in the delivered CSV\n")[1] ?? "";
+    const named = [...section.matchAll(/^- `([^`]+)`/gm)].map((m) => m[1]);
+    expect(named.sort()).toEqual(differs.sort());
   });
 });

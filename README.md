@@ -303,7 +303,7 @@ metrics:sources` re-checks every card quote against its live source.
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
-| SkillCorner | 75 | api-access, api-endpoints, data-model, dynamic-events, dynamic-events-delivered-values, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| SkillCorner | 76 | api-access, api-endpoints, data-model, dynamic-events, dynamic-events-delivered-values, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
 | Free sources | 70 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,574 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,575 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
@@ -363,7 +363,7 @@ trusting them.
 | BeSoccer | The vendor's published Postman collection — request vocabulary and parameters | `src/__tests__/provider-truth.test.ts` |
 | Driblab | The vendor's published API guide — endpoint paths and methods. Field and group names are not in CI: the guide disagrees with the live API on them, so the docs follow the live API, checked by hand on 2026-09-22 | `src/__tests__/provider-truth.test.ts` |
 | Impect | The public [open-data](https://github.com/ImpectAPI/open-data) repository | `src/__tests__/impect-open-data-validation.test.ts` |
-| SkillCorner (dynamic events) | Field names checked against the column headers of every `*_dynamic_events.csv` in the public [open data](https://github.com/SkillCorner/opendata) at a pinned commit (`data/skillcorner-open-data-truth.json`). The values in `dynamic-events-delivered-values.md` are checked against the distinct values of those files, and each delivered value that the specification does not list must appear there. Regenerate with `python3 scripts/gen_skillcorner_open_data_truth.py` | `src/__tests__/skillcorner-open-data-validation.test.ts` |
+| SkillCorner (dynamic events) | Field names checked against the column headers of every `*_dynamic_events.csv` in the public [open data](https://github.com/SkillCorner/opendata) at a pinned commit (`data/skillcorner-open-data-truth.json`). The values in `dynamic-events-delivered-values.md` are checked against the distinct values of those files, and each delivered value that the specification does not list must appear there. Regenerate with `pnpm skillcorner:truth` | `src/__tests__/skillcorner-open-data-validation.test.ts` |
 | StatsBomb | ID and name pairs observed in a sample of the public [open data](https://github.com/statsbomb/open-data) (three matches per competition-season, at a pinned commit). IDs the sample lacks must be listed in both the Open Data Events specification and kloppy's parser. Regenerate with `pnpm statsbomb:truth` | `src/__tests__/statsbomb-truth.test.ts` |
 | Opta | Stats Perform's F24 appendices, which have no machine-readable form. `data/opta-truth.json` holds each ID the docs use, with its label, checked by hand. The test also rejects the wrong meanings earlier docs gave some IDs (`WRONG_MEANINGS` in `src/opta-truth.ts`) | `src/__tests__/opta-truth.test.ts` |
 | SportMonks | Type and state IDs as SportMonks publishes them on its definitions pages and in the types spreadsheet linked from its Types page (`data/sportmonks-types-truth.json`, fetched 2026-09-30). Not the full list: the complete one needs an API key | `src/__tests__/sportmonks-truth.test.ts` |

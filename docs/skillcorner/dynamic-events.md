@@ -7,17 +7,19 @@ crawled_at: 2026-11-24
 
 # SkillCorner Dynamic Events
 
-Column definitions for the Game Intelligence dynamic-events CSV (`GET /match/{match_id}/dynamic_events/`), from SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16), linked from the [SkillCorner open-data README](https://github.com/SkillCorner/opendata) and from SkillCorner's article [SkillCorner Open Data #4: Visualising Off-Ball Runs](https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs). Descriptions and values are as the specification gives them. For the endpoints see [api-endpoints.md](api-endpoints.md); for the event types see [concepts.md](concepts.md).
+Column definitions for SkillCorner's dynamic-events CSV, as SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16) gives them. The specification is linked from the [SkillCorner open-data README](https://github.com/SkillCorner/opendata) and from SkillCorner's article [SkillCorner Open Data #4: Visualising Off-Ball Runs](https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs). The API serves this file at `GET /match/{match_id}/dynamic_events/`; see [api-endpoints.md](api-endpoints.md). For the event types see [concepts.md](concepts.md).
 
-The specification predates the files in the open data. At open-data commit `4340d27` ("Refresh four matches to dynamic events v3") the CSVs also carry columns that the specification does not define: the EPV columns (`possession_epv_*`, `pass_epv_*`, `pass_reception_epv_*`), `overall_pressure_*`, `passing_option_ease_*`, `reception_difficulty_*`, `space_constraint_*` and `time_to_impact_*`. The specification does not define the columns of the `phases_of_play` CSV either. Some delivered values are spelled differently from the specification; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+The specification is older than the files in the open data. The columns it does not define, and the values the files spell differently, are in [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
-The goal here is to deliver an exhaustive list of the attributes grouped under key themes. The order of the attributes does not necessarily reflect the order in which the columns are in the csv files.
+The specification introduces its attribute tables as follows:
+
+> The goal here is to deliver an exhaustive list of the attributes grouped under key themes. The order of the attributes does not necessarily reflect the order in which the columns are in the csv files.
 
 The **Events** column lists the event types each attribute applies to: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP) and On-Ball Engagement (OBE).
 
 ## Changelog
 
-The specification's changes since its earlier versions.
+The changes in SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16) since its earlier versions.
 
 **Changelog Since 2024/07/12**
 
@@ -62,6 +64,8 @@ Previously, we only considered off-ball runs where we were able to match the tra
 ## Basics
 
 These attributes define fundamental event details: when and where it occurs, who performs it (active player), who is in possession, the event type, and its subtype. These attributes provide the foundation for further analysis.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -112,6 +116,8 @@ These attributes define fundamental event details: when and where it occurs, who
 
 These attributes link the current event to related events, helping to understand event relationships—especially for those analyzing event sequences and interactions.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `associated_player_possession_event_id` | str | ID of the associated player possession event. | e.g. | OBR, PO, OBE |
@@ -126,6 +132,8 @@ These attributes link the current event to related events, helping to understand
 ## Game Context
 
 These attributes capture the overall match state, including the scoreline and phase of play.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -158,6 +166,8 @@ These attributes capture the overall match state, including the scoreline and ph
 
 These attributes define how an event begins and concludes, such as whether a player’s possession ends with a pass or a shot.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `game_interruption_before_id` | int |  | 1 (corner_for) / 2 (corner_against) / 3 (free_kick_for) / 4 (free_kick_against) / 5 (goal_for) / 6 (goal_against) / 7 (goal_kick_for) / 8 (goal_kick_against) / 9 (penalty_for) / 10 (penalty_against) / 11 (throw_in_for) / 12 (throw_in_against) | PP, OBE |
@@ -183,6 +193,8 @@ These attributes define how an event begins and concludes, such as whether a pla
 
 These attributes describe the consequences of an event, including its impact on possession, team advantage, and defensive effectiveness.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `lead_to_shot` | bool | TRUE if there is a shot within the 10 seconds after the end of the event.<br>Else FALSE. | TRUE / FALSE | OBR, PO, PP, OBE |
@@ -201,6 +213,8 @@ These attributes describe the consequences of an event, including its impact on 
 
 These attributes capture movement and effort during an event, providing insights into player dynamics and positioning.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `distance_covered` | float | On-ball Engagements<br>Distance covered (in metres) by the player between when the player starts his physical effort (frame_physical_start) and when the event ends (frame_end).<br>Other Event Types<br>Distance covered (in metres) by the player during the event (between frame_start and frame_end).<br>It is based on the actual player's trajectory. | e.g. 10 | OBR, PO, PP, OBE |
@@ -216,6 +230,8 @@ These attributes capture movement and effort during an event, providing insights
 ## Player In Possession Details
 
 These attributes describe the player in possession and their positioning throughout the event.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -250,6 +266,8 @@ These attributes describe the player in possession and their positioning through
 ## Player Targeted
 
 These attributes define the player targeted by a pass or engagement, capturing positioning, movement, danger and pass difficulty.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -302,6 +320,8 @@ These attributes define the player targeted by a pass or engagement, capturing p
 
 These attributes describe a player's positioning relative to the defensive line, team shape, and surrounding players.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `last_defensive_line_x_start` | float | x coordinate of the last defender at the start of the event. | e.g. 10.1 | OBR, PO, PP, OBE |
@@ -332,6 +352,8 @@ These attributes describe a player's positioning relative to the defensive line,
 
 These attributes define key characteristics of passes, including distance, direction, difficulty, and threat level.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `pass_distance` | float | If a pass occurs and is completed, distance between the pass location to the reception location.<br>Else None. | e.g. None, 30.1 | PO, PP |
@@ -354,6 +376,8 @@ These attributes define key characteristics of passes, including distance, direc
 ## Line Breaks
 
 These attributes describe whether a line breaking pass occurred or could have occurred.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -378,6 +402,8 @@ These attributes describe whether a line breaking pass occurred or could have oc
 
 These attributes help assess passing effectiveness in bypassing players.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `n_opponents_ahead_player_in_possession_pass_moment` | int | Opponents ahead of the player in possession when he passed the ball to the player.<br>None, if we know that a pass occurred but we are not able to have an accurate reception location. | e.g. 4, , None | PO, PP |
@@ -387,6 +413,8 @@ These attributes help assess passing effectiveness in bypassing players.
 ## Player Possession Specifics
 
 These attributes provide further details on how a player possession is executed.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -401,6 +429,8 @@ These attributes provide further details on how a player possession is executed.
 ## Passing Option Availability
 
 These attributes describe the number and characteristics of passing options available to the player in possession.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -424,6 +454,8 @@ These attributes describe the number and characteristics of passing options avai
 
 These attributes describe off-ball runs, their impact on defensive lines, and their connection to passing options.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `n_simultaneous_runs` | int | The number of off-ball runs that overlap with the current event or that happen less than 5 frames before or after it. | e.g. 2 | OBR |
@@ -437,6 +469,8 @@ These attributes describe off-ball runs, their impact on defensive lines, and th
 
 These attributes help evaluate a player's ability to overtake opponents through his off-ball runs.
 
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
 | `n_opponents_ahead_end` | int | The number of opponents (goalkeeper excluded) between the opposing team goal at the end of the event. | e.g. 3 | OBR, PP |
@@ -446,6 +480,8 @@ These attributes help evaluate a player's ability to overtake opponents through 
 ## On-Ball Engagement Specifics
 
 These attributes help evaluate defensive coordination and ability to affect an opponent's line breaking passing options.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|
@@ -470,6 +506,8 @@ These attributes help evaluate defensive coordination and ability to affect an o
 ## Data Matching
 
 These attributes indicate to what extent key moments align with tracking data. The better the alignment, the more confident one can be in the accuracy of the event data.
+
+From SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16). Events: Off-Ball Run (OBR), Passing Option (PO), Player Possession (PP), On-Ball Engagement (OBE). The delivered CSV spells some values differently; see [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
 
 | Field | Type | Description | Values | Events |
 |---|---|---|---|---|

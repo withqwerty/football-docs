@@ -73,9 +73,9 @@ pnpm provider:truth                   # regenerate package ground truth (python3
 pnpm openapi:truth                    # regenerate spec-derived ground truth
 pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
+pnpm skillcorner:truth                # regenerate SkillCorner dynamic-events ground truth from its open data (--check to diff only)
 python3 scripts/gen_vendor_tables.py  # rebuild the generated tables in the wearable vendor docs from specs/ (--check to diff only)
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
-python3 scripts/gen_skillcorner_open_data_truth.py  # regenerate SkillCorner dynamic-events ground truth from its open data (--check to diff only)
 python3 scripts/gen_metric_cards.py   # rebuild metrics/cards.json and docs/metric-cards/ from metrics/cards/*.toml (--check to diff only)
 python3 -m pytest metrics/tests       # metric card reference code against its test values (downloads pinned StatsBomb open data)
 pnpm metrics:sources                  # re-check every metric card quote against its live source (run before a release)

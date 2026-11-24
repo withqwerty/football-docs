@@ -3,7 +3,7 @@
 
 Reads every `*_dynamic_events.csv` in https://github.com/SkillCorner/opendata
 at one pinned commit. It records their column names, in file order, the
-distinct values of each text column with at most MAX_VALUES values, and the
+distinct values of each column with at most MAX_VALUES values, and the
 columns whose values are all numbers.
 
 The test src/__tests__/skillcorner-open-data-validation.test.ts checks
@@ -19,6 +19,7 @@ import argparse
 import csv
 import io
 import json
+import re
 import sys
 import urllib.request
 from datetime import date
@@ -41,12 +42,13 @@ def dynamic_event_paths(commit: str) -> list[str]:
     return sorted(e["path"] for e in tree["tree"] if e["path"].endswith("_dynamic_events.csv"))
 
 
+# Plain decimal numbers only. float() also takes "1_0", "nan" and "inf", and
+# event IDs such as "1_0" are text.
+NUMBER = re.compile(r"[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?")
+
+
 def is_number(value: str) -> bool:
-    try:
-        float(value)
-    except ValueError:
-        return False
-    return True
+    return NUMBER.fullmatch(value) is not None
 
 
 def build(commit: str) -> dict:
@@ -85,7 +87,7 @@ def build(commit: str) -> dict:
         "values": {
             name: sorted(seen[name])
             for name in columns
-            if name in text_columns and len(seen[name]) <= MAX_VALUES
+            if name in seen and len(seen[name]) <= MAX_VALUES
         },
         "numeric": [name for name in columns if name in seen and name not in text_columns],
     }
