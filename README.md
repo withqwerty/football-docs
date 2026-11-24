@@ -302,7 +302,7 @@ metrics:sources` re-checks every card quote against its live source.
 | SportMonks | 568 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
-| Impect | 79 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
+| Impect | 82 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
 | SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
 | Free sources | 70 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,551 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,554 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
@@ -341,11 +341,12 @@ for source status and [coverage notes](docs/espn/identity-and-coverage.md) for t
 tested requests and limitations.
 
 > **Impect** documentation is built solely from the public
-> [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository — a
-> static Bundesliga 2023/24 snapshot, representative of Impect's structure and
-> metric definitions rather than a complete or current mirror. Impect's
-> commercial API is deliberately not documented here. Every enum value, KPI name
-> and field name in `docs/impect/` is validated against that repository in CI
+> [ImpectAPI/open-data](https://github.com/ImpectAPI/open-data) repository
+> (release v2.0, with notes for v1.0) — a static Bundesliga 2023/24 snapshot,
+> representative of Impect's structure and metric definitions rather than a
+> complete or current mirror. Impect's commercial API is deliberately not
+> documented here. Every enum value, KPI name, `inverted` flag and field name in
+> `docs/impect/` is validated against that repository in CI
 > (`pnpm impect:truth`, `src/__tests__/impect-open-data-validation.test.ts`).
 > Data source: **Impect**; use is subject to the repository's own Terms of Use.
 

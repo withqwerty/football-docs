@@ -1,8 +1,8 @@
 ---
 source_url: https://github.com/ImpectAPI/open-data
 source_type: curated
-upstream_version: open-data snapshot (Bundesliga 2023/24, dataVersion V3)
-crawled_at: 2026-07-30
+upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
+crawled_at: 2026-11-24
 ---
 
 # Impect Identity Surfaces
@@ -24,7 +24,7 @@ or string keys, and no separate "external reference" primary key.
 | Squad | `squads[].id` | `squadId`, `homeSquadId`, `awaySquadId`, `currentSquadId` |
 | Player | `players[].id` | `playerId`, `player.id`, `pressingPlayerId`, `fouledPlayerId`, `exchangedPlayerId` |
 | Country | `countries[].id` | `countryId`, `countryIds[]` |
-| Event | `events[].id` | `eventId` in `events_kpis` |
+| Event | `events[].id` | `eventId` in `events_kpis`. Regenerated in v2.0: v1.0 event IDs do not occur in v2.0 |
 | KPI | `kpi_definitions[].id` | `kpiId` |
 
 An **iteration** is the central organising unit: one season of one competition.
@@ -79,9 +79,10 @@ hard-coding `heim_spiel` and `skill_corner`.
   bridge to another provider's event feed.
 - **Countries** have no `idMappings`, but they do carry ISO and FIFA codes, which
   serve the same purpose — see below.
-- **Coaches and stadiums** are not entities in the open data at all. `coachId`
-  appears in the lineups payload but is null throughout the snapshot, and there is
-  no coach or stadium master-data file.
+- **Coaches and stadiums** have no master-data file. In v2.0, lineups carry a
+  `coachId` per squad and matches and lineups carry a `stadiumId`, but these are
+  bare integers with no names and no `idMappings`. In v1.0, `coachId` is null
+  throughout and there is no `stadiumId`.
 
 ## Country identification
 
@@ -117,12 +118,11 @@ master data, and are per match.
 
 ## Deriving match context
 
-The open data has no scoreline field. To establish a result, count `GOAL` and
-`OWN_GOAL` events, attributing own goals to the opposing squad. Match metadata
-gives `homeSquadId`, `awaySquadId`, `scheduledDate` and `matchDay`, but not the
-score, venue or referee.
-
-There is also no stadium or venue reference anywhere in the open data.
+In v2.0, match metadata gives `homeSquadId`, `awaySquadId`, `scheduledDate`,
+`matchDay`, the score (`goals`, `result`, `resultType`) and a `stadiumId`, but
+no referee. v1.0 match metadata has no score or venue: count `GOAL` and
+`OWN_GOAL` events, attributing own goals to the opposing squad. In v2.0 that
+count agrees with `goals` in all 306 matches.
 
 ## Relationship to SkillCorner
 

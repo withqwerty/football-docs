@@ -1,8 +1,8 @@
 ---
 source_url: https://github.com/ImpectAPI/open-data
 source_type: curated
-upstream_version: open-data snapshot (Bundesliga 2023/24, dataVersion V3)
-crawled_at: 2026-07-30
+upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
+crawled_at: 2026-11-24
 ---
 
 # Impect Event Types and Enums
@@ -11,8 +11,8 @@ Impect classifies every event with two controlled enums: **`actionType`** (the
 broad category) and **`action`** (the specific action, a finer form of the same
 thing). Neither is a free-text field.
 
-Values below are those **observed across all 939,200 events** in the
-[open-data snapshot](https://github.com/ImpectAPI/open-data), cross-checked
+Values below are those **observed across all 939,341 events** of release v2.0
+of the [open-data snapshot](https://github.com/ImpectAPI/open-data), cross-checked
 against appendices 3–5 and 7 of the repository's `Documentation.pdf`. Where the
 documentation and the data disagree, both are shown — that discrepancy is itself
 something to code defensively against.
@@ -54,7 +54,7 @@ values that do not appear here.
 **Documented but absent from the snapshot:** `YELLOW_CARD`, which Impect marks as
 dataV4+.
 
-## `action` — 44 observed values
+## `action` — 43 observed values
 
 ### Passing and distribution
 
@@ -130,9 +130,11 @@ dataV4+.
 | `FINAL_WHISTLE` | Final whistle of a half |
 | `BALL_OUT_OF_GOAL_LINE` | Ball out of play at the goal line |
 | `BALL_OUT_OF_SIDE_LINE` | Ball out of play at the side line |
-| `BALL_OUT_OF_UNKNOWN` | Ball out at the goal or side line, side unresolved |
 | `REFERY_INTERCEPTION` | Referee interrupts play, e.g. for an injured player |
 | `VIDEO_NOT_AVAILABLE` | No video footage available |
+
+v1.0 also emits `BALL_OUT_OF_UNKNOWN` (ball out, goal or side line unresolved).
+v2.0 recalculated `action` and no longer emits it.
 
 ### Documentation-versus-data discrepancies
 

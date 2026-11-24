@@ -1,8 +1,8 @@
 ---
 source_url: https://github.com/ImpectAPI/open-data
 source_type: curated
-upstream_version: open-data snapshot (Bundesliga 2023/24, dataVersion V3)
-crawled_at: 2026-07-30
+upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
+crawled_at: 2026-11-24
 ---
 
 # Impect Coordinate System and Spatial Zones
@@ -22,7 +22,7 @@ spot**.
 | `coordinates` | Raw coordinates, from the viewpoint of the TV footage |
 | `adjCoordinates` | Adjusted coordinates, where **both teams play left to right** |
 
-Ranges observed across all 939,200 snapshot events:
+Ranges observed across all 939,341 v2.0 events (the same in v1.0):
 
 | Axis | Range |
 |---|---|
@@ -33,8 +33,9 @@ Use `adjCoordinates` for anything direction-sensitive — comparing or aggregati
 across halves and teams — since it removes the need to flip by period or side.
 Use raw `coordinates` only when you need to align with the broadcast view.
 
-Both `start` and `end` carry both coordinate pairs. `end` is null on roughly 42%
-of events (those with no distinct end location), so guard for it.
+Both `start` and `end` carry both coordinate pairs. `end` is null on roughly 40%
+of v2.0 events (42% in v1.0) — those with no distinct end location — so guard
+for it.
 
 ## Packing zones
 
@@ -119,7 +120,7 @@ For dataV3 the **y-axis is inverted** — the **right post is at y = −3.66** a
 **left post is at y = +3.66**. `z` is height above the ground, with the crossbar
 at 2.44 m.
 
-Values run outside the frame for off-target shots. Observed in the snapshot:
+Values run outside the frame for off-target shots. Observed in v2.0 (and v1.0):
 `y` from −5.08 to +5.07, `z` from 0.04 to 3.62.
 
 ## Putting it together

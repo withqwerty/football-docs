@@ -349,14 +349,14 @@
       "aliases": [],
       "access_level": "open-data",
       "licence_status": "Open-data repository governed by Impect's Terms of Use (LICENSE.pdf): analytical and research use only, no redistribution or commercial use, attribution to Impect required. Impect reserves all rights in its data, documentation and APIs.",
-      "public_safety_notes": "Document the open-data repository ONLY. Do not document, crawl or infer Impect's commercial API surface (endpoints, authentication, update/delete feeds). All enum values, KPI names and field names must be validated against the open-data repository before publishing - see scripts/validate-impect.ts.",
-      "version": "open-data snapshot (Bundesliga 2023/24, dataVersion V3)",
+      "public_safety_notes": "Document the open-data repository ONLY. Do not document, crawl or infer Impect's commercial API surface (endpoints, authentication, update/delete feeds). All enum values, KPI names and field names must be validated against the open-data repository before publishing - see src/impect-truth.ts.",
+      "version": "open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3); v1.0 on main and tag v1.0",
       "package": null,
       "sources": [
-        { "url": "https://github.com/ImpectAPI/open-data", "type": "github", "note": "Sole permitted source: sample datasets, Documentation.pdf, kpi_definitions.json" },
+        { "url": "https://github.com/ImpectAPI/open-data", "type": "github", "note": "Sole permitted source: sample datasets, Documentation.pdf, kpi_definitions.json, CHANGELOG.md. Docs follow v2.0 (v2 branch, tag v2.0, 2026-11-24); v1.0 stays on main and tag v1.0, which kloppy load_open_data() reads" },
         { "type": "curated", "note": "Schema, enum and KPI documentation derived from the open-data repository and validated against it" }
       ],
-      "last_crawled": "2026-07-30"
+      "last_crawled": "2026-11-24"
     },
     "skillcorner": {
       "description": "Commercial broadcast-tracking, physical and Game Intelligence (off-ball runs, on-ball engagements) data provider",
