@@ -30,6 +30,7 @@ Exit status: 1 if anything needs review, 0 if everything is current.
 Standard library only. No keys are used.
 """
 
+import hashlib
 import json
 import re
 import subprocess
@@ -235,10 +236,8 @@ def check_derived_truth():
 
 
 SKILLCORNER_TRUTH = ROOT / "data" / "skillcorner-open-data-truth.json"
-SKILLCORNER_SPEC = (
-    "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/"
-    "20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf"
-)
+# The spec PDF's URL and hash are pinned in the script that builds docs/skillcorner/dynamic-events.md.
+SKILLCORNER_SPEC_SCRIPT = ROOT / "src" / "skillcorner-spec.ts"
 
 
 def check_skillcorner_open_data():
@@ -259,15 +258,24 @@ def check_skillcorner_open_data():
                 f"skillcorner open data: new commit {latest[:7]} (set DEFAULT_COMMIT in"
                 " scripts/gen_skillcorner_open_data_truth.py, run pnpm skillcorner:truth, then fix the docs)"
             )
+    script = SKILLCORNER_SPEC_SCRIPT.read_text(encoding="utf-8")
+    spec_url = re.search(r'SPEC_URL =\s*"([^"]+)"', script)[1]
+    pinned_pdf = re.search(r'SPEC_SHA256 = "([0-9a-f]{64})"', script)[1]
     try:
-        is_pdf = fetch(SKILLCORNER_SPEC)[:5] == b"%PDF-"
+        pdf = fetch(spec_url)
     except Exception as error:  # noqa: BLE001
-        is_pdf = False
         print(f"  ??? skillcorner dynamic-events spec: could not fetch ({error})")
+        findings.append(f"skillcorner dynamic-events spec: fetch failed ({error}; find its new URL)")
     else:
-        print(f"  {'ok ' if is_pdf else 'NEW'} skillcorner dynamic-events spec")
-    if not is_pdf:
-        findings.append("skillcorner dynamic-events spec: the PDF link no longer serves a PDF (find its new URL)")
+        same = hashlib.sha256(pdf).hexdigest() == pinned_pdf
+        print(f"  {'ok ' if same else 'NEW'} skillcorner dynamic-events spec")
+        if not pdf.startswith(b"%PDF-"):
+            findings.append("skillcorner dynamic-events spec: the PDF link no longer serves a PDF (find its new URL)")
+        elif not same:
+            findings.append(
+                "skillcorner dynamic-events spec: the PDF changed (read it, update src/skillcorner-spec.ts,"
+                " then run pnpm skillcorner:spec)"
+            )
     return findings
 
 

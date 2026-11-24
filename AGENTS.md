@@ -37,6 +37,7 @@ regenerated on each release and this file is not kept in lockstep with it.
 | `src/discover.ts` | Source probing without crawling |
 | `src/provider-truth.ts` | Validates docs against package/spec ground truth |
 | `src/impect-truth.ts` | Validates Impect docs against the open-data repository |
+| `src/skillcorner-spec.ts` | Builds the SkillCorner dynamic-events page from its spec PDF |
 | `src/papers/` | Paper and web-source tools: OpenAlex, arXiv, SportRxiv, Crossref, Wayback and Zotero (local and web API) clients, PDF text and sections (unpdf), quote matching, the user's paper library, the identifier parser and the off switch |
 | `src/metrics.ts` | Metric card format, get_metric and list_metrics |
 | `metrics/` | Metric cards (`cards/*.toml`), the generated `cards.json`, Python reference code and its tests |
@@ -74,6 +75,7 @@ pnpm openapi:truth                    # regenerate spec-derived ground truth
 pnpm impect:truth                     # regenerate Impect open-data ground truth
 pnpm statsbomb:truth                  # regenerate StatsBomb ID ground truth from a sample of open data
 pnpm skillcorner:truth                # regenerate SkillCorner dynamic-events ground truth from its open data (--check to diff only)
+pnpm skillcorner:spec                 # rebuild docs/skillcorner/dynamic-events.md from SkillCorner's spec PDF (--check to diff only)
 python3 scripts/gen_vendor_tables.py  # rebuild the generated tables in the wearable vendor docs from specs/ (--check to diff only)
 pnpm check:upstream                   # check packages, specs and live sources against upstream (run before a release)
 python3 scripts/gen_metric_cards.py   # rebuild metrics/cards.json and docs/metric-cards/ from metrics/cards/*.toml (--check to diff only)

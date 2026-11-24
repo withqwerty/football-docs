@@ -22,6 +22,7 @@
     "impect:truth": "tsx src/impect-truth.ts",
     "statsbomb:truth": "tsx src/statsbomb-truth.ts",
     "skillcorner:truth": "python3 scripts/gen_skillcorner_open_data_truth.py",
+    "skillcorner:spec": "tsx src/skillcorner-spec.ts",
     "site:stats": "tsx scripts/site-stats.ts",
     "metrics:sources": "tsx scripts/check-metric-sources.ts",
     "lint": "biome check src/",
