@@ -3,8 +3,8 @@
   "kind": "python-package",
   "source": {
     "package": "fastforward",
-    "version": "0.3.0",
-    "generated_at": "2026-08-31"
+    "version": "0.4.0",
+    "generated_at": "2026-11-24"
   },
   "modules": {
     "fastforward": [
@@ -224,7 +224,9 @@
     "object_id": [
       "auto",
       "fifa",
+      "fsp",
       "he",
+      "ss",
       "uefa"
     ],
     "orientation": [
@@ -580,6 +582,11 @@
         "long_ball",
         "wide"
       ],
+      "object_id": [
+        "auto",
+        "fsp",
+        "ss"
+      ],
       "orientation": [
         "attack_left",
         "attack_right",
@@ -899,7 +906,7 @@
     "fastforward.respovision.with_error_handler": "with_error_handler(func)",
     "fastforward.scisports.load_tracking": "load_tracking(raw_data: \"'FileLike'\", meta_data: \"'FileLike'\", layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_game_id: 'Union[bool, str]' = True, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
     "fastforward.scisports.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, engine: 'Engine' = 'polars') -> 'Schemas'",
-    "fastforward.secondspectrum.load_tracking": "load_tracking(raw_data: 'FileLike', meta_data: 'FileLike', layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, exclude_missing_ball_frames: 'bool' = True, include_game_id: 'Union[bool, str]' = True, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
+    "fastforward.secondspectrum.load_tracking": "load_tracking(raw_data: 'FileLike', meta_data: 'FileLike', layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, exclude_missing_ball_frames: 'bool' = True, include_game_id: 'Union[bool, str]' = True, object_id: \"Literal['ss', 'fsp', 'auto']\" = 'ss', *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
     "fastforward.secondspectrum.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, engine: 'Engine' = 'polars') -> 'Schemas'",
     "fastforward.signality.discover_files_in_directory": "discover_files_in_directory(directory: 'Union[str, Path]', pattern: 'str') -> 'List[Path]'",
     "fastforward.signality.get_filename_from_filelike": "get_filename_from_filelike(filelike: \"'FileLike'\") -> 'str'",
@@ -907,8 +914,8 @@
     "fastforward.signality.load_tracking": "load_tracking(meta_data: \"Union['FileLike', bytes, bytearray, memoryview]\", raw_data_feeds: \"Union['FileLike', List['FileLike'], bytes, bytearray, memoryview, List[Tuple[int, bytes]]]\", venue_information: \"Union['FileLike', bytes, bytearray, memoryview]\", layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'signality', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_game_id: 'Union[bool, str]' = True, include_officials: 'bool' = False, period: 'Optional[int]' = None, *, lazy: 'bool' = False, from_cache: 'bool' = False, parallel: 'bool' = True, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
     "fastforward.signality.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, engine: 'Engine' = 'polars') -> 'Schemas'",
     "fastforward.signality.with_error_handler": "with_error_handler(func)",
-    "fastforward.skillcorner.load_tracking": "load_tracking(raw_data: 'FileLike', meta_data: 'FileLike', layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_empty_frames: 'bool' = False, include_game_id: 'Union[bool, str]' = True, include_ball_owning_player: 'bool' = True, include_is_detected: 'bool' = True, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
-    "fastforward.skillcorner.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, include_ball_owning_player: 'bool' = True, include_is_detected: 'bool' = True, engine: 'Engine' = 'polars') -> 'Schemas'",
+    "fastforward.skillcorner.load_tracking": "load_tracking(raw_data: 'FileLike', meta_data: 'FileLike', layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_empty_frames: 'bool' = False, include_game_id: 'Union[bool, str]' = True, include_ball_owning_player: 'bool' = True, include_is_detected: 'bool' = True, include_velocity: 'bool' = False, include_acceleration: 'bool' = False, include_prediction_error: 'bool' = False, include_officials: 'bool' = False, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
+    "fastforward.skillcorner.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, include_ball_owning_player: 'bool' = True, include_is_detected: 'bool' = True, include_velocity: 'bool' = False, include_acceleration: 'bool' = False, include_prediction_error: 'bool' = False, include_officials: 'bool' = False, engine: 'Engine' = 'polars') -> 'Schemas'",
     "fastforward.sportec.load_tracking": "load_tracking(raw_data: 'FileLike', meta_data: 'FileLike', layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'hawkeye', 'kloppy', 'opta', 'pff', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'sportvu', 'tracab']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_game_id: 'Union[bool, str]' = True, include_officials: 'bool' = False, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",
     "fastforward.sportec.schemas": "schemas(*, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', include_game_id: 'bool' = True, engine: 'Engine' = 'polars') -> 'Schemas'",
     "fastforward.statsperform.load_tracking": "load_tracking(ma25_data: 'FileLike', ma1_data: 'FileLike', pitch_length: 'Optional[float]' = None, pitch_width: 'Optional[float]' = None, layout: \"Literal['long', 'long_ball', 'wide']\" = 'long', coordinates: \"Literal['cdf', 'statsperform', 'sportvu', 'kloppy', 'opta', 'secondspectrum', 'skillcorner', 'sportec:event', 'sportec:tracking', 'tracab', 'pff', 'gradientsports', 'hawkeye']\" = 'cdf', orientation: \"Literal['static_home_away', 'attack_left', 'attack_right', 'away_home', 'home_away', 'static_away_home']\" = 'static_home_away', only_alive: 'bool' = True, include_game_id: 'Union[bool, str]' = True, include_officials: 'bool' = False, *, lazy: 'bool' = False, from_cache: 'bool' = False, engine: 'Engine' = 'polars', spark_session: \"Optional['SparkSession']\" = None) -> 'TrackingDataset'",

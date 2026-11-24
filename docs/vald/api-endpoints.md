@@ -100,7 +100,7 @@ service has. Each product's page has the parameters, responses and schemas.
 | API | Host service | Spec version | Operations (with health endpoints) | Schemas | Schema fields |
 |---|---|---|---|---|---|
 | Tenants | `externaltenants` | `v1` | 16 | 18 | 53 |
-| Profiles | `externalprofile` | `v1` | 13 | 14 | 65 |
+| Profiles | `externalprofile` | `v1` | 13 | 14 | 67 |
 | ForceDecks | `extforcedecks` | `v2019q3` | 24 | 33 | 188 |
 | NordBord | `externalnordbord` | `v1` | 16 | 27 | 270 |
 | ForceFrame | `externalforceframe` | `v1` | 14 | 22 | 278 |

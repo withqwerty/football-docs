@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/getting-started/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.549Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.006Z
 ---
 ## Installation
 

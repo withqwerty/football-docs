@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.546Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.003Z
 ---
 ![fast-forward](https://fast-forward.readthedocs.io/en/assets/logos/fastforward-gradient-logo.png)
 
@@ -62,7 +62,7 @@ transformed = dataset.transform(
 | SciSports | EPTS XML + Text | 2 |
 | SecondSpectrum | JSONL + JSON | 2 |
 | Signality | JSON (per-period) | 3+ |
-| SkillCorner | JSONL + JSON | 2 |
+| SkillCorner | JSONL or parquet + JSON | 2 |
 | Sportec | XML | 2 |
 | StatsPerform | MA25 text + MA1 JSON/XML | 2 |
 | Tracab | DAT/JSON + XML/JSON | 2 |
@@ -114,7 +114,7 @@ Per-period JSON tracking files plus JSON metadata and venue files.
 
 ### [SkillCorner](https://fast-forward.readthedocs.io/en/providers/skillcorner/)
 
-JSONL tracking plus JSON metadata.
+JSONL (v3, Tracking v4) or parquet (Tracking v4) tracking plus JSON metadata; the frame rate is read from the file.
 
 ### [Sportec](https://fast-forward.readthedocs.io/en/providers/sportec/)
 

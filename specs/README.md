@@ -13,7 +13,7 @@ anyone can re-fetch and diff.
 |---|---|---|---|
 | `wyscout/v3-current.yml` | https://apidocs.wyscout.com/assets/specs/prod/current.yml | 2026-08-31 | 2026-08-31 |
 | `wyscout/v4-next.yml` | https://apidocs.wyscout.com/assets/specs/prod/next.yml | 2026-08-31 | 2026-08-31 |
-| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-11-16 | 2026-11-16 |
+| `skillcorner/skillcorner_openapi.json` | https://www.skillcorner.com/apidocs.json | 2026-11-24 | 2026-11-24 |
 | `fmdb-pro/openapi.json` | https://api.fmdb.pro/api/openapi | 2026-11-16 | 2026-11-16 |
 | `sportradar/soccer-v4-openapi.yaml` | https://api.sportradar.com/soccer/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
 | `sportradar/soccer-extended-v4-openapi.yaml` | https://api.sportradar.com/soccer-extended/trial/v4/openapi/openapi.yaml | 2026-11-03 | 2026-11-03 |
@@ -29,7 +29,7 @@ anyone can re-fetch and diff.
 | `hawkin-dynamics/openapi.json` | https://connect.hawkindynamics.com/api (extracted from the page, see below) | 2026-11-03 | 2026-11-03 |
 | `hawkin-dynamics/metrics.json` | https://connect.hawkindynamics.com/assets/metrics.json | 2026-09-30 | 2026-09-30 |
 | `vald/externaltenants.json` | https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
-| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
+| `vald/externalprofile.json` | https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json | 2026-11-24 | 2026-11-24 |
 | `vald/extforcedecks.json` | https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json | 2026-11-16 | 2026-11-16 |
 | `vald/externalnordbord.json` | https://prd-euw-api-externalnordbord.valdperformance.com/swagger/v1/swagger.json | 2026-09-30 | 2026-09-30 |
 | `vald/externalforceframe.json` | https://prd-euw-api-externalforceframe.valdperformance.com/swagger/v1/swagger.json | 2026-11-16 | 2026-11-16 |
