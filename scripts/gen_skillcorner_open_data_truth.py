@@ -2,9 +2,11 @@
 """Build data/skillcorner-open-data-truth.json from SkillCorner's open data.
 
 Reads every `*_dynamic_events.csv` in https://github.com/SkillCorner/opendata
-at one pinned commit. It records their column names, in file order, the
-distinct values of each column with at most MAX_VALUES values, and the
-columns whose values are all numbers.
+at one pinned commit. It records, per column: its name (in file order), its
+distinct values when there are at most MAX_VALUES, its type (number, bool or
+text), the shapes of its text values when there are at most MAX_SHAPES, and
+the event types whose rows fill it. It also records each `<name>_id` to
+`<name>` pair seen in the data.
 
 The test src/__tests__/skillcorner-open-data-validation.test.ts checks
 docs/skillcorner/dynamic-events.md against this file.
@@ -28,6 +30,7 @@ from pathlib import Path
 REPO = "SkillCorner/opendata"
 DEFAULT_COMMIT = "4340d274572876239c154c90bc507a9b3250a656"
 MAX_VALUES = 30
+MAX_SHAPES = 5
 OUT = Path(__file__).resolve().parent.parent / "data" / "skillcorner-open-data-truth.json"
 
 
@@ -51,11 +54,31 @@ def is_number(value: str) -> bool:
     return NUMBER.fullmatch(value) is not None
 
 
+def shape(value: str) -> str:
+    """The value with each digit replaced by "d", for example "45:03.2" -> "dd:dd.d"."""
+    return re.sub(r"\d", "d", value)
+
+
+def column_type(values: set[str], text: bool) -> str:
+    if not text:
+        return "number"
+    return "bool" if values <= {"True", "False"} else "text"
+
+
+def one_name(id_column: str, id_: str, names: set[str]) -> str:
+    if len(names) != 1:
+        sys.exit(f"{id_column} = {id_} has more than one name: {sorted(names)}")
+    return next(iter(names))
+
+
 def build(commit: str) -> dict:
     columns: list[str] | None = None
     rows = 0
     seen: dict[str, set[str]] = {}
     text_columns: set[str] = set()
+    shapes: dict[str, set[str]] = {}
+    events: dict[str, set[str]] = {}
+    pairs: dict[str, dict[str, set[str]]] = {}
     paths = dynamic_event_paths(commit)
     for path in paths:
         text = fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/{path}").decode("utf-8")
@@ -64,13 +87,22 @@ def build(commit: str) -> dict:
             columns = list(reader.fieldnames or [])
         elif list(reader.fieldnames or []) != columns:
             sys.exit(f"{path}: columns differ from the first file")
+        id_columns = [c for c in columns if c.endswith("_id") and c[:-3] in columns]
         for row in reader:
             rows += 1
+            for id_column in id_columns:
+                if row[id_column] != "" and row[id_column[:-3]] != "":
+                    names = pairs.setdefault(id_column, {}).setdefault(row[id_column], set())
+                    names.add(row[id_column[:-3]])
             for name, value in row.items():
                 if value == "":
                     continue
+                events.setdefault(name, set()).add(row["event_type"])
                 if not is_number(value):
                     text_columns.add(name)
+                    column_shapes = shapes.setdefault(name, set())
+                    if len(column_shapes) <= MAX_SHAPES:
+                        column_shapes.add(shape(value))
                 values = seen.setdefault(name, set())
                 if len(values) <= MAX_VALUES:
                     values.add(value)
@@ -89,7 +121,15 @@ def build(commit: str) -> dict:
             for name in columns
             if name in seen and len(seen[name]) <= MAX_VALUES
         },
-        "numeric": [name for name in columns if name in seen and name not in text_columns],
+        "types": {name: column_type(seen[name], name in text_columns) for name in columns if name in seen},
+        "shapes": {
+            name: sorted(shapes[name]) for name in columns if name in shapes and len(shapes[name]) <= MAX_SHAPES
+        },
+        "events": {name: sorted(events[name]) for name in columns if name in events},
+        "id_pairs": {
+            id_column: {id_: one_name(id_column, id_, names) for id_, names in sorted(by_id.items(), key=lambda kv: float(kv[0]))}
+            for id_column, by_id in pairs.items()
+        },
     }
 
 

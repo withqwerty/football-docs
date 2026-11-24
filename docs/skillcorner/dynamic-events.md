@@ -9,7 +9,7 @@ crawled_at: 2026-11-24
 
 Column definitions for SkillCorner's dynamic-events CSV, as SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16) gives them. The specification is linked from the [SkillCorner open-data README](https://github.com/SkillCorner/opendata) and from SkillCorner's article [SkillCorner Open Data #4: Visualising Off-Ball Runs](https://skillcorner.com/articles/skillcorner-open-data-4-visualising-off-ball-runs). The API serves this file at `GET /match/{match_id}/dynamic_events/`; see [api-endpoints.md](api-endpoints.md). For the event types see [concepts.md](concepts.md).
 
-The specification is older than the files in the open data. The columns it does not define, and the values the files spell differently, are in [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md).
+The specification is older than the files in the open data. The columns it does not define, and the values the files spell differently, are in [dynamic-events-delivered-values.md](dynamic-events-delivered-values.md). This specification does not define the columns of the `phases_of_play` CSV; SkillCorner publishes those in a separate *Phases of Play CSV Specifications* document.
 
 The specification introduces its attribute tables as follows:
 

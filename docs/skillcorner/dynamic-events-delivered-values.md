@@ -23,13 +23,18 @@ Observed across the 20 `*_dynamic_events.csv` files of the [SkillCorner open dat
 | `team_out_of_possession_phase_type` | not listed | `defending_direct` |
 | Every column listed as `TRUE` / `FALSE`, except `xloss_player_possession_start` | `TRUE` / `FALSE` | `True` / `False` |
 
+The specification's own ID list for `event_type_id` already uses the delivered spelling: `9 (on_ball_engagement)`.
+
 ## Types in the delivered CSV
 
-In the SkillCorner open data at commit `4340d27`, three dynamic-events columns disagree with the type or the values that the *Dynamic Events CSV Specifications* (2025/02/16) give:
+In the SkillCorner open data at commit `4340d27`, these dynamic-events columns disagree with the type, the example or the values that the *Dynamic Events CSV Specifications* (2025/02/16) give. The Delivered CSV column starts with the type the files hold: number, bool (`True` / `False`) or text.
 
-- `xloss_player_possession_start` is typed `float` but listed with the values `TRUE` / `FALSE`. The CSV holds numbers (a probability).
-- `player_targeted_difficult_pass_target` is typed `float`, but the CSV holds `True` / `False`.
-- `simultaneous_defensive_engagement_same_target` is typed `bool` with the example value `2`, and the CSV holds `True` / `False`.
+| Columns | Specification | Delivered CSV |
+|---|---|---|
+| `xloss_player_possession_start` | `float`, listed with the values `TRUE` / `FALSE` | number, a probability |
+| `player_targeted_difficult_pass_target` | `float` | bool |
+| `simultaneous_defensive_engagement_same_target` | `bool`, with the example value `2` | bool |
+| `time_start`, `time_end` | `timestamp`, with the example `00:00:06.293` | text in the form `MM:SS.s`, for example `45:03.2`; minutes count on from 45 in the second period |
 
 ## Columns the specification does not define
 
