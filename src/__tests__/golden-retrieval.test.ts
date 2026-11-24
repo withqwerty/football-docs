@@ -34,6 +34,11 @@ describe("golden retrieval evals", () => {
       expected: ["| 214 | bigChance |"],
     },
     {
+      id: "skillcorner-dynamic-events-furthest-line-break",
+      args: { query: "SkillCorner furthest line break through around", provider: "skillcorner", max_results: 3 },
+      expected: ["`furthest_line_break`", "None / first_line / second_last_line / last_line"],
+    },
+    {
       id: "fmdb-pro-players-endpoint",
       args: { query: "FMDB Pro players endpoint", provider: "fmdb-pro", max_results: 5 },
       expected: ["/api/players", "x-api-key"],

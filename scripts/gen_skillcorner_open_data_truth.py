@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""Build data/skillcorner-open-data-truth.json from SkillCorner's open data.
+
+Reads every `*_dynamic_events.csv` in https://github.com/SkillCorner/opendata
+at one pinned commit and records their column names, in file order.
+
+The test src/__tests__/skillcorner-open-data-validation.test.ts checks
+docs/skillcorner/dynamic-events.md against this file.
+
+Usage:
+    python3 scripts/gen_skillcorner_open_data_truth.py [--commit SHA] [--check]
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import io
+import json
+import sys
+import urllib.request
+from datetime import date
+from pathlib import Path
+
+REPO = "SkillCorner/opendata"
+DEFAULT_COMMIT = "4340d274572876239c154c90bc507a9b3250a656"
+OUT = Path(__file__).resolve().parent.parent / "data" / "skillcorner-open-data-truth.json"
+
+
+def fetch(url: str) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": "football-docs-truth"})
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        return resp.read()
+
+
+def dynamic_event_paths(commit: str) -> list[str]:
+    tree = json.loads(fetch(f"https://api.github.com/repos/{REPO}/git/trees/{commit}?recursive=1"))
+    return sorted(e["path"] for e in tree["tree"] if e["path"].endswith("_dynamic_events.csv"))
+
+
+def build(commit: str) -> dict:
+    columns: list[str] | None = None
+    rows = 0
+    paths = dynamic_event_paths(commit)
+    for path in paths:
+        text = fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/{path}").decode("utf-8")
+        reader = csv.DictReader(io.StringIO(text))
+        if columns is None:
+            columns = list(reader.fieldnames or [])
+        elif list(reader.fieldnames or []) != columns:
+            sys.exit(f"{path}: columns differ from the first file")
+        rows += sum(1 for _ in reader)
+    assert columns is not None
+    return {
+        "source": {
+            "repo": f"https://github.com/{REPO}",
+            "commit": commit,
+            "generated_at": date.today().isoformat(),
+            "matches": len(paths),
+            "rows": rows,
+        },
+        "columns": columns,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--commit", default=DEFAULT_COMMIT)
+    parser.add_argument("--check", action="store_true", help="diff against the committed file only")
+    args = parser.parse_args()
+    truth = build(args.commit)
+    if args.check:
+        current = json.loads(OUT.read_text())
+        current["source"].pop("generated_at", None)
+        fresh = dict(truth, source={k: v for k, v in truth["source"].items() if k != "generated_at"})
+        if current != fresh:
+            sys.exit(f"{OUT.name} is out of date; rerun without --check")
+        print(f"{OUT.name} is up to date")
+        return
+    OUT.write_text(json.dumps(truth, indent=2) + "\n")
+    print(f"wrote {OUT} ({truth['source']['matches']} matches, {truth['source']['rows']} rows)")
+
+
+if __name__ == "__main__":
+    main()
