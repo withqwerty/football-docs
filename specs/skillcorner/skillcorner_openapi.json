@@ -450,6 +450,15 @@
                                             "physical_v3_last_modified": {
                                                 "type": "string"
                                             },
+                                            "physical_v4_0_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "physical_events_v4_0_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "physical_v4_0_quality_index": {
+                                                "type": "number"
+                                            },
                                             "tracking_extra_players_quality_index": {
                                                 "type": "number"
                                             },
@@ -463,6 +472,15 @@
                                                 "type": "number"
                                             },
                                             "tracking_extra_v3_ball_quality_index": {
+                                                "type": "number"
+                                            },
+                                            "tracking_extra_v4_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "tracking_extra_v4_players_quality_index": {
+                                                "type": "number"
+                                            },
+                                            "tracking_extra_v4_ball_quality_index": {
                                                 "type": "number"
                                             },
                                             "in_possession_off_ball_runs_last_modified": {
@@ -488,6 +506,14 @@
                                             },
                                             "video_feed_type": {
                                                 "type": "string"
+                                            },
+                                            "shot_event_provider_used_v4": {
+                                                "type": "boolean",
+                                                "nullable": true
+                                            },
+                                            "goal_event_provider_used_v4": {
+                                                "type": "boolean",
+                                                "nullable": true
                                             }
                                         }
                                     }
@@ -583,6 +609,15 @@
                                             "physical_v3_last_modified": {
                                                 "type": "string"
                                             },
+                                            "physical_v4_0_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "physical_events_v4_0_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "physical_v4_0_quality_index": {
+                                                "type": "number"
+                                            },
                                             "tracking_extra_players_quality_index": {
                                                 "type": "number"
                                             },
@@ -596,6 +631,15 @@
                                                 "type": "number"
                                             },
                                             "tracking_extra_v3_ball_quality_index": {
+                                                "type": "number"
+                                            },
+                                            "tracking_extra_v4_last_modified": {
+                                                "type": "string"
+                                            },
+                                            "tracking_extra_v4_players_quality_index": {
+                                                "type": "number"
+                                            },
+                                            "tracking_extra_v4_ball_quality_index": {
                                                 "type": "number"
                                             },
                                             "in_possession_off_ball_runs_last_modified": {
@@ -621,6 +665,14 @@
                                             },
                                             "video_feed_type": {
                                                 "type": "string"
+                                            },
+                                            "shot_event_provider_used_v4": {
+                                                "type": "boolean",
+                                                "nullable": true
+                                            },
+                                            "goal_event_provider_used_v4": {
+                                                "type": "boolean",
+                                                "nullable": true
                                             }
                                         }
                                     }
@@ -1502,7 +1554,7 @@
         "/match/{match_id}/custom/physical/": {
             "get": {
                 "operationId": "match_custom_physical_retrieve",
-                "description": "Returns physical data with human-readable column names. Use response_format=csv (default for this endpoint) for CSV, or response_format=json for a JSON records array, whose field names are the snake_case ones /api/physical/ serves.",
+                "description": "Returns physical data with human-readable column names. Use response_format=csv (default for this endpoint) for CSV, or response_format=json for a JSON records array, whose field names are the snake_case ones /api/physical/ serves. With data_version=4.0: Physical v4, every player performance of the match with every breakdown at once (response_format csv, json or nested_json; feed_type broadcast, clean_feed or tactical).",
                 "parameters": [
                     {
                         "in": "path",
@@ -1515,16 +1567,16 @@
                     },
                     {
                         "in": "query",
-                        "name": "data_version",
+                        "name": "feed_type",
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "3.0.2",
-                                "3.0.3"
-                            ],
-                            "default": "3.0.3"
+                                "broadcast",
+                                "clean_feed",
+                                "tactical"
+                            ]
                         },
-                        "description": "Physical data version."
+                        "description": "The custom provider feed. If omitted: tactical, then clean_feed, then broadcast."
                     },
                     {
                         "in": "query",
@@ -1534,11 +1586,825 @@
                             "enum": [
                                 "csv",
                                 "json",
-                                "small_json"
+                                "nested_json"
                             ],
-                            "default": "json"
+                            "default": "csv"
+                        },
+                        "description": "Format of the response. nested_json: data_version=4.0 only."
+                    },
+                    {
+                        "in": "query",
+                        "name": "data_version",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "3.0.2",
+                                "3.0.3",
+                                "4.0"
+                            ],
+                            "default": "3.0.3"
+                        },
+                        "description": "Physical data version."
+                    }
+                ],
+                "tags": [
+                    "custom"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "Basic": []
+                    },
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/match/{match_id}/custom/physical/referee/": {
+            "get": {
+                "operationId": "match_custom_physical_referee_retrieve",
+                "description": "Physical v4: the main referee of one match, with every breakdown at once and no normalisation (data_version 4.0 only). CSV by default.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "match_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "feed_type",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "broadcast",
+                                "clean_feed",
+                                "tactical"
+                            ]
+                        },
+                        "description": "The custom provider feed. If omitted: tactical, then clean_feed, then broadcast."
+                    },
+                    {
+                        "in": "query",
+                        "name": "response_format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "csv",
+                                "json",
+                                "nested_json"
+                            ],
+                            "default": "csv"
                         },
                         "description": "Format of the response."
+                    },
+                    {
+                        "in": "query",
+                        "name": "data_version",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "4.0"
+                            ],
+                            "default": "4.0"
+                        },
+                        "description": "Physical data version: only 4.0."
+                    }
+                ],
+                "tags": [
+                    "custom"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "Basic": []
+                    },
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "match_name": {
+                                                "type": "string"
+                                            },
+                                            "match_id": {
+                                                "type": "integer"
+                                            },
+                                            "match_date": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "competition_name": {
+                                                "type": "string"
+                                            },
+                                            "competition_id": {
+                                                "type": "integer"
+                                            },
+                                            "season_name": {
+                                                "type": "string"
+                                            },
+                                            "season_id": {
+                                                "type": "integer"
+                                            },
+                                            "competition_edition_id": {
+                                                "type": "integer"
+                                            },
+                                            "minutes_full_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "minutes_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "physical_quality_index": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_full_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_full_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_full_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_full_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_full_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_full_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "psv99": {
+                                                "type": "number"
+                                            },
+                                            "peak_velocity": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_full_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_et1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_et2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h1s2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h1s3_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h2s2_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_h2s3_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_et1s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_distance_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "total_metersperminute_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "running_distance_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_distance_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hsr_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_distance_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "sprint_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_distance_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "hi_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "medaccel_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highaccel_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "meddecel_count_et2s1_all": {
+                                                "type": "number"
+                                            },
+                                            "highdecel_count_et2s1_all": {
+                                                "type": "number"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "The main referee of the match (response_format=csv, the default): every breakdown at once, one CSV line, with human-readable column names."
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/match/{match_id}/custom/physical_events/": {
+            "get": {
+                "operationId": "match_custom_physical_events_retrieve",
+                "description": "Physical v4: the physical events of one match from the custom provider's feed (data_version 4.0 only), in the formats of the physical events endpoint.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "match_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "feed_type",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "broadcast",
+                                "clean_feed",
+                                "tactical"
+                            ]
+                        },
+                        "description": "The custom provider feed. If omitted: tactical, then clean_feed, then broadcast."
+                    },
+                    {
+                        "in": "query",
+                        "name": "frame_rate",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "10",
+                                "25"
+                            ],
+                            "default": "10"
+                        },
+                        "description": "The frame rate of the frame fields (frame_start, frame_end, frame_peak): csv and json only."
+                    },
+                    {
+                        "in": "query",
+                        "name": "file_format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "csv",
+                                "focus-json",
+                                "json",
+                                "matchtracker-xml",
+                                "sportscode-xml"
+                            ],
+                            "default": "csv"
+                        },
+                        "description": "Format of the events file."
+                    },
+                    {
+                        "in": "query",
+                        "name": "period_starts",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The video start second of each period (two, or four with extra time), separated by commas: syncs the video formats (sportscode-xml, matchtracker-xml, focus-json) with the video."
+                    },
+                    {
+                        "in": "query",
+                        "name": "data_version",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "4.0"
+                            ],
+                            "default": "4.0"
+                        },
+                        "description": "Physical data version: physical events only exist in 4.0."
                     }
                 ],
                 "tags": [
@@ -1612,7 +2478,8 @@
                             "enum": [
                                 "fifa-data",
                                 "fifa-xml",
-                                "jsonl"
+                                "jsonl",
+                                "parquet"
                             ],
                             "default": "jsonl"
                         },
@@ -1624,7 +2491,8 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "3.0"
+                                "3.0",
+                                "4.0"
                             ],
                             "default": "3.0"
                         },
@@ -2657,6 +3525,106 @@
                 }
             }
         },
+        "/match/{match_id}/physical_events/": {
+            "get": {
+                "operationId": "match_physical_events_retrieve",
+                "description": "Physical v4: the physical events of one match (data_version 4.0 only), as a CSV or JSON file (frames at 10 or 25 fps), or for video analysis tools (Sportscode XML, MatchTracker XML, Focus JSON).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "match_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "frame_rate",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "10",
+                                "25"
+                            ],
+                            "default": "10"
+                        },
+                        "description": "The frame rate of the frame fields (frame_start, frame_end, frame_peak): csv and json only."
+                    },
+                    {
+                        "in": "query",
+                        "name": "file_format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "csv",
+                                "focus-json",
+                                "json",
+                                "matchtracker-xml",
+                                "sportscode-xml"
+                            ],
+                            "default": "csv"
+                        },
+                        "description": "Format of the events file."
+                    },
+                    {
+                        "in": "query",
+                        "name": "period_starts",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The video start second of each period (two, or four with extra time), separated by commas: syncs the video formats (sportscode-xml, matchtracker-xml, focus-json) with the video."
+                    },
+                    {
+                        "in": "query",
+                        "name": "data_version",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "4.0"
+                            ],
+                            "default": "4.0"
+                        },
+                        "description": "Physical data version: physical events only exist in 4.0."
+                    }
+                ],
+                "tags": [
+                    "match"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "Basic": []
+                    },
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/match/{match_id}/tracking/": {
             "get": {
                 "operationId": "match_tracking_retrieve",
@@ -2679,7 +3647,8 @@
                             "enum": [
                                 "fifa-data",
                                 "fifa-xml",
-                                "jsonl"
+                                "jsonl",
+                                "parquet"
                             ],
                             "default": "jsonl"
                         },
@@ -2691,7 +3660,8 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "3.0"
+                                "3.0",
+                                "4.0"
                             ],
                             "default": "3.0"
                         },
@@ -2875,12 +3845,39 @@
                     },
                     {
                         "in": "query",
+                        "name": "physical_v4_0_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where physical v4.0 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "physical_events_v4_0_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where physical events v4.0 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
                         "name": "extrapolated_tracking_v3_last_modified__gte",
                         "schema": {
                             "type": "string",
                             "format": "date-time"
                         },
                         "description": "Filter matches where extrapolated tracking v3 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "extrapolated_tracking_v4_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where extrapolated tracking v4 data was last modified on or after this date."
                     },
                     {
                         "in": "query",
@@ -3196,12 +4193,39 @@
                     },
                     {
                         "in": "query",
+                        "name": "physical_v4_0_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where physical v4.0 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "physical_events_v4_0_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where physical events v4.0 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
                         "name": "extrapolated_tracking_v3_last_modified__gte",
                         "schema": {
                             "type": "string",
                             "format": "date-time"
                         },
                         "description": "Filter matches where extrapolated tracking v3 data was last modified on or after this date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "extrapolated_tracking_v4_last_modified__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "description": "Filter matches where extrapolated tracking v4 data was last modified on or after this date."
                     },
                     {
                         "in": "query",
@@ -5570,15 +6594,18 @@
                                 "enum": [
                                     "full",
                                     "h1",
-                                    "h2"
+                                    "h2",
+                                    "et1",
+                                    "et2"
                                 ]
                             },
                             "default": [
                                 "full"
                             ]
                         },
-                        "description": "full or/and h1 or/and h2 separated by comma.",
-                        "explode": false
+                        "description": "The periods to return metrics for. et1, et2: data_version=4.0 only, only returned for a match that went to extra time.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
                     },
                     {
                         "in": "query",
@@ -5597,27 +6624,17 @@
                                 "all"
                             ]
                         },
-                        "description": "all or/and tip or/and otip separated by comma.",
-                        "explode": false
+                        "description": "The possession scopes to return metrics for.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
                     },
                     {
                         "in": "query",
                         "name": "physical_check_passed",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "enum": [
-                                    "true",
-                                    "false"
-                                ]
-                            },
-                            "default": [
-                                "true"
-                            ]
+                            "type": "string"
                         },
-                        "description": "If *physical_check_passed=true* API returns only the performances that have passed the SkillCorner physical check.\n\nIf *physical_check_passed=false* API returns only the performances that did not pass the SkillCorner physical check.\n\nIf *physical_check_passed=true,false* returns all the performances.\n\nFormerly called quality_check in v2",
-                        "explode": false
+                        "description": "true, false or true,false: the performances that passed the SkillCorner physical check, those that did not, or both. Not available in data_version 4.0, where the Physical Quality Index replaces it."
                     },
                     {
                         "in": "query",
@@ -5637,8 +6654,9 @@
                                 ]
                             }
                         },
-                        "description": "Specify the aggregation level you want.\nThis parameter accepts multiple values separated by commas. ",
-                        "explode": false
+                        "description": "The aggregation level. Without group_by, or with both player and match, every record is one performance.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
                     },
                     {
                         "in": "query",
@@ -5656,11 +6674,12 @@
                             "enum": [
                                 "csv",
                                 "json",
+                                "nested_json",
                                 "small_json"
                             ],
                             "default": "json"
                         },
-                        "description": "Format of the response."
+                        "description": "Format of the response. small_json: data_version 3.x only; nested_json: data_version=4.0 only."
                     },
                     {
                         "in": "query",
@@ -5674,12 +6693,17 @@
                                     "p90",
                                     "p60bip",
                                     "p30tip",
-                                    "p30otip"
+                                    "p30otip",
+                                    "p5phase"
                                 ]
-                            }
+                            },
+                            "default": [
+                                "match"
+                            ]
                         },
-                        "description": "Specify the normalization we want to use to compute physical metrics.",
-                        "explode": false
+                        "description": "The normalisations to return. p5phase: data_version=4.0 only, with a phase breakdown.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
                     },
                     {
                         "in": "query",
@@ -5696,11 +6720,64 @@
                             "type": "string",
                             "enum": [
                                 "3.0.2",
-                                "3.0.3"
+                                "3.0.3",
+                                "4.0"
                             ],
                             "default": "3.0.3"
                         },
                         "description": "Physical data version."
+                    },
+                    {
+                        "in": "query",
+                        "name": "subperiod",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "full",
+                                    "h1s1",
+                                    "h1s2",
+                                    "h1s3",
+                                    "h2s1",
+                                    "h2s2",
+                                    "h2s3",
+                                    "et1s1",
+                                    "et2s1"
+                                ]
+                            }
+                        },
+                        "description": "data_version=4.0 only. The 15-minute subperiods to return metrics for (subperiod mode), counted from the start of each half: h1s1 is the first 15 minutes of the first half, h2s3 the last window of the second half. h1s3 and h2s3 are only returned for a match whose halves last more than 30 minutes, et1s1 and et2s1 for a match that went to extra time. Cannot be combined with a period or phase breakdown. A request with subperiods reads at most 1 competition edition(s), unless narrowed to teams, players or matches. Default with data_version 4.0: full.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "phase",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "all",
+                                    "buildup",
+                                    "create",
+                                    "finish",
+                                    "direct",
+                                    "transition",
+                                    "attackingother",
+                                    "lowblock",
+                                    "mediumblock",
+                                    "highblock",
+                                    "defendingdirectplay",
+                                    "defendingtransition",
+                                    "defendingother"
+                                ]
+                            }
+                        },
+                        "description": "data_version=4.0 only. The phases of play to return metrics for at full time (phase mode). Cannot be combined with a period, subperiod or possession breakdown. Default with data_version 4.0: all.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
                     }
                 ],
                 "tags": [
@@ -6428,6 +7505,329 @@
                             }
                         },
                         "description": "Physical data."
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/physical/referee/": {
+            "get": {
+                "operationId": "physical_referee_retrieve",
+                "description": "Physical v4 main-referee metrics: one record per main referee and match (data_version 4.0 only). A request reads at most 10 competition editions, unless narrowed to matches.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "season",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "description": "SkillCorner Season ID(s).\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "competition",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "description": "SkillCorner Competition ID(s).\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "competition_edition",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "description": "SkillCorner Competition Edition ID(s).\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "match",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "description": "SkillCorner Match ID(s).\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "date__lte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "description": "Match date before the date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "date__gte",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "description": "Match date after the date."
+                    },
+                    {
+                        "in": "query",
+                        "name": "period",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "full",
+                                    "h1",
+                                    "h2",
+                                    "et1",
+                                    "et2"
+                                ]
+                            },
+                            "default": [
+                                "full"
+                            ]
+                        },
+                        "description": "The periods to return metrics for. et1, et2: data_version=4.0 only, only returned for a match that went to extra time.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "subperiod",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "full",
+                                    "h1s1",
+                                    "h1s2",
+                                    "h1s3",
+                                    "h2s1",
+                                    "h2s2",
+                                    "h2s3",
+                                    "et1s1",
+                                    "et2s1"
+                                ]
+                            }
+                        },
+                        "description": "data_version=4.0 only. The 15-minute subperiods to return metrics for (subperiod mode), counted from the start of each half: h1s1 is the first 15 minutes of the first half, h2s3 the last window of the second half. h1s3 and h2s3 are only returned for a match whose halves last more than 30 minutes, et1s1 and et2s1 for a match that went to extra time. Cannot be combined with a period or phase breakdown. A request with subperiods reads at most 1 competition edition(s), unless narrowed to teams, players or matches. Default with data_version 4.0: full.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "average_per",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "match",
+                                    "p90",
+                                    "p60bip"
+                                ]
+                            },
+                            "default": [
+                                "match"
+                            ]
+                        },
+                        "description": "The normalisations to return.\nThis parameter accepts multiple values separated by commas.",
+                        "explode": false,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "response_format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "csv",
+                                "json",
+                                "nested_json"
+                            ],
+                            "default": "json"
+                        },
+                        "description": "Format of the response."
+                    },
+                    {
+                        "in": "query",
+                        "name": "order_by",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Flat keys of the results, comma-separated, the first sorting first; prefix a key with `-` for a descending order. Nulls, and keys a record does not have, come last."
+                    },
+                    {
+                        "in": "query",
+                        "name": "after",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The cursor of the next page, as the previous page returned it (`cursor_after`)."
+                    },
+                    {
+                        "in": "query",
+                        "name": "data_version",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "4.0"
+                            ],
+                            "default": "4.0"
+                        },
+                        "description": "Physical data version: only 4.0."
+                    }
+                ],
+                "tags": [
+                    "physical"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "Basic": []
+                    },
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "match_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "match_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "match_date": {
+                                                        "type": "string",
+                                                        "format": "date"
+                                                    },
+                                                    "competition_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "competition_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "season_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "season_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "competition_edition_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "minutes_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "physical_quality_index": {
+                                                        "type": "number"
+                                                    },
+                                                    "total_distance_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "total_metersperminute_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "running_distance_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "hsr_distance_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "hsr_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "sprint_distance_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "sprint_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "hi_distance_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "hi_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "psv99": {
+                                                        "type": "number"
+                                                    },
+                                                    "peak_velocity": {
+                                                        "type": "number"
+                                                    },
+                                                    "medaccel_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "highaccel_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "meddecel_count_full_all": {
+                                                        "type": "number"
+                                                    },
+                                                    "highdecel_count_full_all": {
+                                                        "type": "number"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "next": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "nullable": true
+                                        },
+                                        "cursor_after": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "count": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "One page of main-referee performances, here for the default breakdown (full, all, match)."
                     },
                     "400": {
                         "description": "Bad Request"
@@ -7441,6 +8841,7 @@
             },
             "NonStaffDataCollection": {
                 "type": "object",
+                "description": "Base of the (video) data-collection serializers, for the fields they need to declare.\n\nA field declared here appears only in the subclasses that list it in their Meta.fields.",
                 "properties": {
                     "match_id": {
                         "type": "integer",
@@ -7470,6 +8871,27 @@
                         ],
                         "format": "date-time"
                     },
+                    "physical_v4_0_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "physical_events_v4_0_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "physical_v4_0_quality_index": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "format": "double"
+                    },
                     "tracking_extra_v3_last_modified": {
                         "type": [
                             "string",
@@ -7486,6 +8908,29 @@
                         "minimum": -2147483648
                     },
                     "tracking_extra_v3_ball_quality_index": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "tracking_extra_v4_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "tracking_extra_v4_players_quality_index": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "tracking_extra_v4_ball_quality_index": {
                         "type": [
                             "integer",
                             "null"
@@ -7561,6 +9006,18 @@
                     },
                     "gi_goal_event_provider_used": {
                         "type": "boolean"
+                    },
+                    "shot_event_provider_used_v4": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
+                    "goal_event_provider_used_v4": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
                     },
                     "metrics_gi_v2_check": {
                         "type": "string",
@@ -7623,6 +9080,7 @@
             },
             "NonStaffVideoDataCollection": {
                 "type": "object",
+                "description": "Base of the (video) data-collection serializers, for the fields they need to declare.\n\nA field declared here appears only in the subclasses that list it in their Meta.fields.",
                 "properties": {
                     "match_id": {
                         "type": "integer",
@@ -7652,6 +9110,27 @@
                         ],
                         "format": "date-time"
                     },
+                    "physical_v4_0_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "physical_events_v4_0_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "physical_v4_0_quality_index": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "format": "double"
+                    },
                     "tracking_extra_v3_last_modified": {
                         "type": [
                             "string",
@@ -7668,6 +9147,29 @@
                         "minimum": -2147483648
                     },
                     "tracking_extra_v3_ball_quality_index": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "tracking_extra_v4_last_modified": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "tracking_extra_v4_players_quality_index": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "tracking_extra_v4_ball_quality_index": {
                         "type": [
                             "integer",
                             "null"
@@ -7743,6 +9245,18 @@
                     },
                     "gi_goal_event_provider_used": {
                         "type": "boolean"
+                    },
+                    "shot_event_provider_used_v4": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
+                    "goal_event_provider_used_v4": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
                     }
                 },
                 "required": [

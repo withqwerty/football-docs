@@ -7,7 +7,7 @@ crawled_at: 2026-08-31
 
 # SkillCorner API Endpoints
 
-52 `GET` endpoints under base `https://skillcorner.com/api`. All require auth (Basic or `?token=`; see [api-access.md](api-access.md)). Paths below are relative to `/api`.
+48 `GET` endpoints (spec fetched on 2026-11-24) under base `https://skillcorner.com/api`. All require auth (Basic or `?token=`; see [api-access.md](api-access.md)). Paths below are relative to `/api`.
 
 ## Master data
 
@@ -31,11 +31,13 @@ crawled_at: 2026-08-31
 |---|---|
 | `GET /match/{match_id}/` | Match metadata (teams, score, lineups, `pitch_length`/`pitch_width`, `home_team_side`, periods, referees) |
 | `GET /match/{match_id}/data_collection/` | Data products available for the match |
-| `GET /match/{match_id}/tracking/` | **Tracking file** (`file_format` ∈ jsonl/fifa-xml/fifa-data; `data_version=3`; `frame_rate` ∈ 10/25, see below) |
+| `GET /match/{match_id}/tracking/` | **Tracking file** (`file_format` ∈ jsonl/fifa-xml/fifa-data/parquet; `data_version` ∈ 3.0/4.0, default 3.0; `frame_rate` ∈ 10/25, see below) |
 
 ### `frame_rate` and tracking data version 4.0
 
-The spec fetched on 2026-11-16 adds a `frame_rate` query parameter (string, `10` or `25`, default `10`) to `GET /match/{match_id}/tracking/` and `GET /match/{match_id}/custom/tracking/`. Its description: "Resolution of the tracking data in frame per second (fps), only availabe if data_version >= 4.0". The `file_format` description now also names "a flat parquet (one row per frame per entity, only available for data_version >= 4.0)". The same spec still lists only `3.0` in the `data_version` enum and only `jsonl`, `fifa-xml` and `fifa-data` in the `file_format` enum, so version 4.0, 25 fps and parquet are described but not yet selectable by the spec's own values.
+`GET /match/{match_id}/tracking/` and `GET /match/{match_id}/custom/tracking/` take a `frame_rate` query parameter (string, `10` or `25`, default `10`), described as "Resolution of the tracking data in frame per second (fps), only availabe if data_version >= 4.0". The `file_format` description names "a flat parquet (one row per frame per entity, only available for data_version >= 4.0)".
+
+The spec fetched on 2026-11-24 makes these selectable: the `data_version` enum is `3.0` and `4.0` (default still `3.0`, "the current version"), and the `file_format` enum adds `parquet` to `jsonl`, `fifa-xml` and `fifa-data`. The spec fetched on 2026-11-16 described 4.0, 25 fps and parquet but listed only `3.0` and the three older formats.
 
 ## Dynamic events (per match, CSV downloads)
 
@@ -72,11 +74,17 @@ Aggregated with `group_by`, `average_per`, `order_by`, `variants`, plus the stan
 | Endpoint | Returns |
 |---|---|
 | `GET /physical/` | Aggregated physical metrics (see [physical-data.md](physical-data.md)) |
-| `GET /match/{match_id}/custom/physical/` | Customer physical feed for a match (`data_version`, `response_format`; the `feed_type` parameter was removed in the spec fetched on 2026-11-16) |
+| `GET /physical/referee/` | Physical v4 main-referee metrics: "one record per main referee and match (data_version 4.0 only)". Cursor-paginated (`after`, `cursor_after`) |
+| `GET /match/{match_id}/physical_events/` | Physical v4 physical events of one match (`data_version` `4.0` only): `file_format` ∈ csv (default)/json/sportscode-xml/matchtracker-xml/focus-json; `frame_rate` ∈ 10/25 ("csv and json only"); `period_starts` syncs the video formats |
+| `GET /match/{match_id}/custom/physical/` | Customer physical feed for a match (`data_version` ∈ 3.0.2/3.0.3/4.0, default 3.0.3; `response_format` ∈ csv/json/nested_json, default `csv`, `nested_json` 4.0 only; `feed_type` ∈ broadcast/clean_feed/tactical) |
+| `GET /match/{match_id}/custom/physical/referee/` | Physical v4 main referee of one match, "with every breakdown at once and no normalisation" (`data_version` `4.0` only; CSV by default) |
+| `GET /match/{match_id}/custom/physical_events/` | Physical v4 physical events from the custom provider's feed, in the formats of `physical_events/` |
+
+The spec fetched on 2026-11-16 had dropped `feed_type` from `custom/physical/`; the spec fetched on 2026-11-24 lists it again: "If omitted: tactical, then clean_feed, then broadcast". The same spec drops `small_json` from `custom/physical/` (it remains on `/physical/` for data_version 3.x).
 
 ## Custom (per-match, customer-specific)
 
-`GET /match/{match_id}/custom/` and beneath it: `data_collection/`, `tracking/`, `physical/`, and `dynamic_events/{off_ball_runs,on_ball_engagements,passing_options,phases_of_play,player_possessions}/`.
+`GET /match/{match_id}/custom/` and beneath it: `data_collection/`, `tracking/`, `physical/`, `physical/referee/`, `physical_events/`, and `dynamic_events/{off_ball_runs,on_ball_engagements,passing_options,phases_of_play,player_possessions}/`.
 
 ## Removed (Game Intelligence V1)
 

@@ -87,14 +87,15 @@ The split metrics repeat across every period × possession × normalisation comb
 | Param | Values |
 |---|---|
 | `group_by` | `player`, `match`, `team`, `position_group`, `position`, `season`, `competition` (comma-combinable) |
-| `average_per` | `match`, `p90`, `p60bip`, `p30tip`, `p30otip` |
-| `period` | `full`, `h1`, `h2` |
+| `average_per` | `match` (default), `p90`, `p60bip`, `p30tip`, `p30otip`, `p5phase` (data_version 4.0 only, with a phase breakdown) |
+| `period` | `full` (default), `h1`, `h2`, `et1`, `et2` (data_version 4.0 only, "only returned for a match that went to extra time") |
 | `possession` | `all`, `tip`, `otip` |
 | `venue` | `home`, `away` |
 | `results` | `win`, `lose`, `draw` |
 | `position_group` | `CentralDefender`, `FullBack`, `Midfield`, `WideAttacker`, `CenterForward` |
-| `physical_check_passed` | `true` → only performances passing SkillCorner's physical QC; `false` → only failed |
-| `response_format` | `json`, `small_json`, `csv` |
+| `physical_check_passed` | `true` → only performances passing SkillCorner's physical QC; `false` → only failed; `true,false` → both. "Not available in data_version 4.0, where the Physical Quality Index replaces it." |
+| `response_format` | `json` (default), `small_json` (data_version 3.x only), `csv`, `nested_json` (data_version 4.0 only) |
+| `data_version` | `3.0.2`, `3.0.3` (default), `4.0` |
 | `order_by` | a metric name; prefix `-` for descending |
 
 ## Filtering
@@ -103,4 +104,25 @@ Entity filters (comma-combinable lists): `season`, `competition`, `competition_e
 
 ## Quality flag
 
-`physical_check_passed` (boolean, per row) indicates whether the performance passed SkillCorner's automated physical-data quality check. `count_match` / `count_match_failed` report how many matches fed an aggregate and how many were excluded. Filter on `physical_check_passed=true` for analysis-grade data.
+`physical_check_passed` (boolean, per row) indicates whether the performance passed SkillCorner's automated physical-data quality check. `count_match` / `count_match_failed` report how many matches fed an aggregate and how many were excluded. Filter on `physical_check_passed=true` for analysis-grade data. This applies to data_version 3.x: in 4.0 the spec replaces it with the Physical Quality Index (see below).
+
+## Physical v4.0
+
+The spec fetched on 2026-11-24 adds `data_version=4.0` to `/physical/` (the default stays `3.0.3`). The spec's own descriptions:
+
+- **`phase`** — "data_version=4.0 only. The phases of play to return metrics for at full time (phase mode). Cannot be combined with a period, subperiod or possession breakdown." Values: `all` (default), `buildup`, `create`, `finish`, `direct`, `transition`, `attackingother`, `lowblock`, `mediumblock`, `highblock`, `defendingdirectplay`, `defendingtransition`, `defendingother`. `average_per=p5phase` goes with a phase breakdown.
+- **`subperiod`** — "data_version=4.0 only. The 15-minute subperiods to return metrics for (subperiod mode), counted from the start of each half". Values: `full` (default), `h1s1`, `h1s2`, `h1s3`, `h2s1`, `h2s2`, `h2s3`, `et1s1`, `et2s1`. `h1s3` and `h2s3` appear only when a half lasts more than 30 minutes; `et1s1` and `et2s1` only after extra time. "Cannot be combined with a period or phase breakdown. A request with subperiods reads at most 1 competition edition(s), unless narrowed to teams, players or matches."
+- **`period`** adds `et1` and `et2`.
+- **Quality:** `physical_check_passed` is "Not available in data_version 4.0, where the Physical Quality Index replaces it". Data-collection records carry `physical_v4_0_quality_index` (a number).
+
+The spec does not list the v4.0 field names for `/physical/`: its response schema is the same as for 3.x. Do not assume that the v3 `{metric}_{period}_{possession}` names cover the new phase and subperiod breakdowns.
+
+### Main referee (`GET /physical/referee/`)
+
+"Physical v4 main-referee metrics: one record per main referee and match (data_version 4.0 only). A request reads at most 10 competition editions, unless narrowed to matches." It takes `competition`, `competition_edition`, `season`, `match`, `date__gte`, `date__lte`, `period`, `subperiod`, `average_per` (`match`, `p90`, `p60bip`), `order_by`, `response_format` (`json` default, `csv`, `nested_json`) and the `after` cursor. The response is a page (`count`, `next`, `cursor_after`, `results`). Each result, for the default breakdown (full, all, match), has `match_id`, `match_name`, `match_date`, `competition_id`, `competition_name`, `competition_edition_id`, `season_id`, `season_name`, `minutes_full_all`, `total_distance_full_all`, `total_metersperminute_full_all`, `running_distance_full_all`, `hsr_distance_full_all`, `hsr_count_full_all`, `sprint_distance_full_all`, `sprint_count_full_all`, `hi_distance_full_all`, `hi_count_full_all`, `medaccel_count_full_all`, `highaccel_count_full_all`, `meddecel_count_full_all`, `highdecel_count_full_all`, `psv99`, `peak_velocity` and `physical_quality_index`.
+
+`GET /match/{match_id}/custom/physical/referee/` returns the main referee of one match from the custom feed, "with every breakdown at once and no normalisation", as one CSV line by default.
+
+### Physical events (`GET /match/{match_id}/physical_events/`)
+
+"Physical v4: the physical events of one match (data_version 4.0 only), as a CSV or JSON file (frames at 10 or 25 fps), or for video analysis tools (Sportscode XML, MatchTracker XML, Focus JSON)." `file_format` ∈ `csv` (default), `json`, `sportscode-xml`, `matchtracker-xml`, `focus-json`. `frame_rate` ∈ `10` (default), `25`: "The frame rate of the frame fields (frame_start, frame_end, frame_peak): csv and json only." `period_starts` gives "The video start second of each period (two, or four with extra time), separated by commas" for the video formats. The spec gives no schema for the file's rows. `GET /match/{match_id}/custom/physical_events/` serves the same from the custom provider's feed.

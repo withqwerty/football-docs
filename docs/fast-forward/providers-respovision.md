@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/respovision/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.553Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.009Z
 ---
 Load tracking data from **Respovision** JSONL format. Unique among providers: metadata is embedded in the tracking file.
 

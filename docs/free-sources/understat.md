@@ -91,6 +91,12 @@ season total; sum the entries to get season figures.
 
 ## Access methods
 
+**Status (checked 2026-11-16 and 2026-11-24):** every Understat URL, including the
+site pages and the AJAX endpoints below, returns HTTP 200 with the same maintenance
+page ("We will come back soon"). The page's `Last-Modified` header is 2026-11-03. The
+access paths below are the ones that worked before; check that the site answers with
+data before relying on them.
+
 **Python (soccerdata):**
 
 ```python

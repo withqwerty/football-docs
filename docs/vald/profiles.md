@@ -258,6 +258,8 @@ The 14 component schemas of the Profiles spec, in spec order. No field has a des
 | `givenName` | `string` |  | yes | **Personal data.** |
 | `familyName` | `string` |  | yes | **Personal data.** |
 | `dateOfBirth` | `string` | `date-time` | yes | **Personal data.** |
+| `sex` | `Vald.Api.ExternalProfile.V1.Sex` |  |  | **Personal data.** |
+| `email` | `string` |  | yes | **Personal data.** |
 | `modifiedDateUtc` | `string` | `date-time` |  |  |
 | `externalId` | `string` |  | yes |  |
 | `beingMergedWithProfileId` | `string` | `uuid` | yes |  |

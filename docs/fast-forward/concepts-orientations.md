@@ -1,8 +1,8 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/concepts/orientations/
 source_type: crawled
-upstream_version: 0.3.0
-crawled_at: 2026-08-31T00:11:18.552Z
+upstream_version: 0.4.0
+crawled_at: 2026-11-24T20:04:36.008Z
 ---
 Orientation controls the attacking direction of teams in the coordinate space. In real matches, teams switch sides at halftime. Orientation settings let you normalize this so your analysis doesn't need to handle side-switching manually.
 
@@ -67,12 +67,12 @@ The attacking (ball-owning) team always attacks towards negative x (-x, left).
 
 ## How Detection Works
 
-fast-forward automatically detects the attacking direction from the data. It calculates the average x-position of home team players in the first frame of each period:
+fast-forward detects the attacking direction from the data. For each period it takes the home goalkeeper's median x-position over the whole period:
 
--   If the average is **negative** (left side of pitch), the home team is attacking **right** (left-to-right)
--   If the average is **positive** (right side of pitch), the home team is attacking **left** (right-to-left)
+-   On the **left** half of the pitch, the home team is attacking **right** (left-to-right)
+-   On the **right** half, the home team is attacking **left** (right-to-left)
 
-This detection happens during parsing and is used to determine whether coordinates need to be flipped to match the requested orientation.
+When the home goalkeeper is not in the frames, the away goalkeeper decides. When neither is found, or the goalkeeper's median sits within a metre of the halfway line, the average x-position of the home players in the period's first frame is used instead. The detected direction fills `home_attacking_direction` in `dataset.periods` and decides whether coordinates are flipped to match the requested orientation.
 
 ## Transforming Orientation
 

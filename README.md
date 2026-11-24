@@ -293,7 +293,7 @@ metrics:sources` re-checks every card quote against its live source.
 
 | Provider | Chunks | Categories |
 |----------|--------|------------|
-| fast-forward | 250 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
+| fast-forward | 255 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
 | StatsBomb | 244 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
@@ -303,7 +303,7 @@ metrics:sources` re-checks every card quote against its live source.
 | databallpy | 63 | data-model, overview, usage |
 | mplsoccer | 65 | overview, pitch-types, visualizations |
 | Impect | 82 | overview, data-model, event-types, coordinate-system, concepts, kpi-definitions, identity-surfaces, data-provenance |
-| SkillCorner | 52 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
+| SkillCorner | 56 | api-access, api-endpoints, data-model, physical-data, coordinate-system, concepts, identity-surfaces, data-provenance |
 | Free sources | 70 | overview, fbref, understat, football-data-columns, contextual-story-joins, xg-timelines, data-provenance |
 | soccerdata | 40 | overview, data-sources, usage |
 | TransferRoom | 45 | api-access, api-endpoints, charting-availability, data-model, identity-surfaces, data-provenance |
@@ -315,7 +315,7 @@ metrics:sources` re-checks every card quote against its live source.
 | Driblab | 34 | api-access, api-endpoints, data-model, data-provenance |
 | API-Football | 29 | api-access, data-model, identity-surfaces |
 | ESPN | 21 | api-access, scoreboard, match-summary, teams-and-standings, identity-and-coverage |
-| Reep | 33 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
+| Reep | 35 | overview, identity-and-ids, download-duckdb-csv, api, data-provenance |
 | TheSportsDB | 20 | api-access, api-endpoints, livescore, identity-surfaces, data-provenance |
 | FotMob | 5 | identity-surfaces, data-provenance |
 | Soccerdonna | 5 | identity-surfaces, data-provenance |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,554 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,565 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health
@@ -367,7 +367,7 @@ trusting them.
 | StatsBomb | ID and name pairs observed in a sample of the public [open data](https://github.com/statsbomb/open-data) (three matches per competition-season, at a pinned commit). IDs the sample lacks must be listed in both the Open Data Events specification and kloppy's parser. Regenerate with `pnpm statsbomb:truth` | `src/__tests__/statsbomb-truth.test.ts` |
 | Opta | Stats Perform's F24 appendices, which have no machine-readable form. `data/opta-truth.json` holds each ID the docs use, with its label, checked by hand. The test also rejects the wrong meanings earlier docs gave some IDs (`WRONG_MEANINGS` in `src/opta-truth.ts`) | `src/__tests__/opta-truth.test.ts` |
 | SportMonks | Type and state IDs as SportMonks publishes them on its definitions pages and in the types spreadsheet linked from its Types page (`data/sportmonks-types-truth.json`, fetched 2026-09-30). Not the full list: the complete one needs an API key | `src/__tests__/sportmonks-truth.test.ts` |
-| Reep | The public OpenAPI spec (endpoint paths and methods), and one release's file list, manifest and table columns read from its CSV headers (CSV table list, columns used in the SQL examples, exclusions) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
+| Reep | The public OpenAPI spec (endpoint paths and methods), and one release's file list, manifest and table columns read from its CSV headers (CSV table list, columns used in the SQL examples, licence, entity types and dropped IDs; `resolve_entity` offers exactly the release's entity types) | `src/__tests__/provider-truth.test.ts`, `src/__tests__/reep.test.ts` |
 | STATSports, Firstbeat, Hawkin Dynamics, VALD | Each vendor's public OpenAPI spec (STATSports v5 to v7, Firstbeat's `openapi.json`, the document inline on Hawkin's API reference page, VALD's eight product specs) — endpoint paths and methods, and every field name in the docs' schema tables. The STATSports `DrillKpiV7` table and the Hawkin metric tables must list the spec's and `metrics.json`'s entries in full. Firstbeat's variable list has no machine-readable source and is copied by hand from its public variables page | `src/__tests__/provider-truth.test.ts`, `src/__tests__/wearable-vendors.test.ts` |
 
 ESPN has a separate observation check in `src/__tests__/espn.test.ts`. It validates
