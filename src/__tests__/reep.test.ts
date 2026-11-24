@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { ENTITY_TYPES } from "../reep.js";
 
 // Holds docs/reep to a snapshot of one published Reep release: its file list
 // (specs/reep/release.json), its manifest (specs/reep/manifest.json) and the
@@ -16,8 +17,10 @@ const release = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/release.json")
   files: Record<string, { key: string; sha256: string }>;
 };
 const manifest = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/manifest.json"), "utf8")) as {
-  appearance_count: number;
-  identity_rider_boundaries: { private_dobs_stripped: boolean; u18_persons_withheld: number; internal_lineups_withheld: boolean };
+  licence: string;
+  licence_file: string;
+  entity_counts_by_type: Record<string, number>;
+  diff: { previous_label: string; dropped_ids: string[] };
 };
 const schema = JSON.parse(readFileSync(resolve(ROOT, "specs/reep/columns.json"), "utf8")) as Record<string, string[]>;
 const docs = Object.fromEntries(
@@ -82,7 +85,7 @@ function sqlViolations(text: string): string[] {
     const sql = block[1].replace(/--.*$/gm, "");
     const ctes: Record<string, Set<string>> = {};
     for (const m of sql.matchAll(
-      /\b(?:WITH|,)\s*([a-z_]+)\s+AS\s*\(\s*SELECT\s+([\s\S]*?)\bFROM\s+([a-z_]+)(?:\s+(?:AS\s+)?([a-z]{1,2})\b)?/g,
+      /(?:\bWITH|,)\s*([a-z_]+)\s+AS\s*\(\s*SELECT\s+([\s\S]*?)\bFROM\s+([a-z_]+)(?:\s+(?:AS\s+)?([a-z]{1,2})\b)?/g,
     )) {
       const [, name, select, table, alias] = m;
       const cols = new Set<string>();
@@ -111,7 +114,7 @@ function sqlViolations(text: string): string[] {
 describe("Reep docs match the release snapshot", () => {
   it("lists exactly the CSV tables the release publishes", () => {
     const listed = documentedCsvTables(docs["download-duckdb-csv.md"]);
-    expect(listed.length).toBeGreaterThanOrEqual(9);
+    expect(listed.length).toBeGreaterThanOrEqual(6);
     expect(Object.keys(schema).sort()).toEqual([...csvTables].sort());
     expect(new Set(listed)).toEqual(csvTables);
   });
@@ -130,19 +133,24 @@ describe("Reep docs match the release snapshot", () => {
     }
   });
 
-  it("states the licence and exclusions the manifest records", () => {
-    // The release files no longer state the licence; the downloads page does.
-    expect(docs["overview.md"]).toContain("CC0 1.0");
-    const boundaries = manifest.identity_rider_boundaries;
-    expect(boundaries.private_dobs_stripped).toBe(true);
-    expect(boundaries.internal_lineups_withheld).toBe(true);
-    expect(manifest.appearance_count).toBe(0);
+  it("states the licence, entity types and dropped IDs the manifest records", () => {
+    expect(manifest.licence).toBe("CC0-1.0");
+    expect(release.files[manifest.licence_file]).toBeDefined();
     const overview = docs["overview.md"].replace(/\s+/g, " ");
-    expect(overview).toContain(`${boundaries.u18_persons_withheld.toLocaleString("en-GB")} under-18 persons withheld`);
+    expect(overview).toContain("CC0 1.0");
     expect(overview).toContain(`release \`${release.stamp}\``);
-    expect(overview).toContain("excludes dates of birth");
-    expect(overview).toContain("raw provider evidence");
     expect(overview).toContain("no career history, squad membership or appearance data");
+    // The entity types the overview names are the ones the release has.
+    const types = Object.keys(manifest.entity_counts_by_type).sort();
+    const named = overview.split("one stable Reep ID")[0];
+    for (const type of types) expect(named, type).toContain(type);
+    const ids = docs["identity-and-ids.md"].replace(/\s+/g, " ");
+    expect(ids).toContain(`${manifest.diff.dropped_ids.length.toLocaleString("en-GB")} IDs`);
+    expect(ids).toContain(`\`${manifest.diff.previous_label}\``);
+  });
+
+  it("offers exactly the release's entity types in resolve_entity", () => {
+    expect([...ENTITY_TYPES].sort()).toEqual(Object.keys(manifest.entity_counts_by_type).sort());
   });
 
   it("catches invented tables and columns", () => {

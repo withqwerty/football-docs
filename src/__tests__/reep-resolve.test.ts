@@ -4,8 +4,10 @@ import { type LocalRegister, REEP_CONTACT, resolveEntity } from "../reep.js";
 
 // A register in the shape of the files the tool still reads (release_metadata,
 // entities.label, bridges.upstream_status), with a handful of rows. `current`
-// holds the same rows in the 2026-10-31.1 shape; the SQL the tool suggests runs
-// against it, so a suggested query that breaks on the current schema fails here.
+// holds the same rows in the 2026-11-23.1 shape (no entity_search, no
+// redirects.reason, no tombstone rows, two alias tables); the SQL the tool
+// suggests runs against it, so a suggested query that breaks on the current
+// schema fails here.
 let register: LocalRegister;
 let current: LocalRegister;
 const STAMP = "20260915T203651Z";
@@ -55,10 +57,13 @@ beforeAll(async () => {
   };
   for (const sql of [
     "CREATE SCHEMA current",
-    "CREATE TABLE current.entities AS SELECT reep_id, entity_type, label AS canonical_name FROM main.entities",
-    "CREATE TABLE current.bridges AS SELECT reep_id, provider, namespace, external_id FROM main.bridges",
-    "CREATE TABLE current.redirects AS SELECT *, NULL::VARCHAR AS created_at FROM main.redirects",
-    "CREATE TABLE current.entity_search AS SELECT reep_id, entity_type, label, label AS canonical_name, search_text, bridge_count, 0::BIGINT AS alias_count FROM main.entity_search",
+    "CREATE TABLE current.entities AS SELECT reep_id, entity_type, label AS canonical_name, NULL::VARCHAR AS gender, NULL::VARCHAR AS country FROM main.entities WHERE status <> 'withdrawn'",
+    "CREATE TABLE current.bridges AS SELECT b.reep_id, provider, namespace, external_id, e.entity_type FROM main.bridges b JOIN main.entities e USING (reep_id) WHERE e.status <> 'withdrawn'",
+    "CREATE TABLE current.redirects AS SELECT from_id, to_id FROM main.redirects WHERE coalesce(to_id, '') <> '' AND reason = 'merged'",
+    "CREATE TABLE current.provider_aliases (reep_id VARCHAR, alias VARCHAR, alias_kind VARCHAR)",
+    "INSERT INTO current.provider_aliases VALUES ('rp1b829f1d3468c4', 'Rice', 'short_name'), ('rp1b829f1d3468c4', 'D. Rice', 'initial_name')",
+    "CREATE TABLE current.overlay_aliases (reep_id VARCHAR, qid VARCHAR, alias VARCHAR, language VARCHAR)",
+    "INSERT INTO current.overlay_aliases VALUES ('rp1b829f1d3468c4', 'Q1', 'Declan Rice', 'en')",
   ]) {
     await con.run(sql);
   }
@@ -280,14 +285,17 @@ describe("resolve_entity against a local register", () => {
     expect(text(r)).toContain("rpmergedgone0000 was merged into rpwithdrawn00000, and Reep ID rpwithdrawn00000 is withdrawn");
   });
 
-  it("suggests SQL that reports tombstones and runs against the register's schema", async () => {
+  it("suggests SQL that follows a merge and runs against the register's schema", async () => {
     const t = text(await resolveEntity({ reep_id: "rpwithdrawn00000" }, { env: {}, fetchImpl: noNetwork }));
     const sql = t.split("```sql\n")[1].split("\n```")[0];
     const statements = sql.split(";").map((s) => s.replace(/^\s*--.*$/gm, "").trim()).filter(Boolean);
     expect(statements).toHaveLength(2);
-    const tombstone = await current.query(statements[0], {});
-    expect(tombstone).toEqual([{ from_id: "rpwithdrawn00000", to_id: "", reason: "de_corroborated" }]);
+    // The current layout drops a withdrawn ID without a trace: no redirect, no entity.
+    expect(await current.query(statements[0], {})).toEqual([]);
     expect(await current.query(statements[1], {})).toEqual([]);
+    const mergedCheck = text(await resolveEntity({ reep_id: "rpdeadbeef000000" }, { env: {}, fetchImpl: noNetwork }));
+    const first = mergedCheck.split("```sql\n")[1].split(";")[0].replace(/^\s*--.*$/gm, "");
+    expect(await current.query(first, {})).toEqual([{ from_id: "rpdeadbeef000000", to_id: "rp1b829f1d3468c4" }]);
     const merged = text(await resolveEntity({ reep_id: "rpdeadbeef000000" }, { env: {}, fetchImpl: noNetwork }));
     const survivorSql = merged.split("```sql\n")[1].split("\n```")[0].split(";")[1];
     const survivorRows = await current.query(survivorSql, {});
@@ -305,8 +313,14 @@ describe("resolve_entity against a local register", () => {
     const t = text(await resolveEntity({ name: "Declan Rice", type: "player" }, { env: {}, fetchImpl: noNetwork }));
     const sql = t.split("```sql\n")[1].split("\n```")[0];
     expect(await current.query(sql, {})).toEqual([
-      { reep_id: "rp1b829f1d3468c4", canonical_name: "Declan Rice", entity_type: "player", bridge_count: "3" },
+      { reep_id: "rp1b829f1d3468c4", canonical_name: "Declan Rice", entity_type: "player", bridge_count: "5" },
     ]);
+  });
+
+  it("suggests name-search SQL that finds a name only in the alias tables", async () => {
+    const t = text(await resolveEntity({ name: "D. Rice" }, { env: {}, fetchImpl: noNetwork }));
+    const sql = t.split("```sql\n")[1].split("\n```")[0];
+    expect((await current.query(sql, {})).map((r) => r.reep_id)).toEqual(["rp1b829f1d3468c4"]);
   });
 
   it("treats % in a name as a literal character", async () => {
@@ -515,5 +529,111 @@ describe("resolve_entity with a register file in the later layout", () => {
     // A bridge still on a merged ID is listed under the survivor.
     expect(t).toContain("7322");
     expect(t).toContain("does not record its release");
+  });
+});
+
+describe("resolve_entity with a register file in the mapping-only layout (2026-11-23.1)", () => {
+  // From 2026-11-23.1 the file has no entity_search table, redirects carry no
+  // reason and hold merges only, and names are in entities and two alias tables.
+  let path: string;
+  const env = () => ({ REEP_DUCKDB_PATH: path });
+
+  beforeAll(async () => {
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    path = join(mkdtempSync(join(tmpdir(), "reep-mapping-")), "register.duckdb");
+    const instance = await DuckDBInstance.create(path);
+    const con = await instance.connect();
+    for (const sql of [
+      "CREATE TABLE release_metadata (key VARCHAR, value VARCHAR)",
+      "INSERT INTO release_metadata VALUES ('source_stamp', '2026-11-23.1'), ('licence', 'CC0-1.0')",
+      "CREATE TABLE entities (reep_id VARCHAR, entity_type VARCHAR, canonical_name VARCHAR, gender VARCHAR, country VARCHAR)",
+      `INSERT INTO entities VALUES
+        ('rp8a503e860b7abe', 'player', 'Lionel Andrés Messi Cuccittini', 'male', 'ARG'),
+        ('rp7f681e65504cf5', 'player', 'Junior Walter Messias', 'male', 'BRA'),
+        ('rt00000000messi1', 'team', 'Messina', NULL, 'ITA')`,
+      "CREATE TABLE bridges (reep_id VARCHAR, provider VARCHAR, namespace VARCHAR, external_id VARCHAR, entity_type VARCHAR)",
+      `INSERT INTO bridges VALUES
+        ('rp8a503e860b7abe', 'transfermarkt', 'spieler', '28003', 'player'),
+        ('rp8a503e860b7abe', 'wyscout', 'player', '3359', 'player'),
+        ('rp7f681e65504cf5', 'transfermarkt', 'spieler', '1', 'player'),
+        ('rp7f681e65504cf5', 'wyscout', 'player', '2', 'player'),
+        ('rp7f681e65504cf5', 'opta', 'person', '3', 'player'),
+        ('rt00000000messi1', 'transfermarkt', 'verein', '9', 'team')`,
+      "CREATE TABLE redirects (from_id VARCHAR, to_id VARCHAR)",
+      "INSERT INTO redirects VALUES ('rpmergedmessi001', 'rp8a503e860b7abe')",
+      "CREATE TABLE provider_aliases (reep_id VARCHAR, alias VARCHAR, alias_kind VARCHAR)",
+      "INSERT INTO provider_aliases VALUES ('rp8a503e860b7abe', 'Messi', 'short_name'), ('rp8a503e860b7abe', 'L. Messi', 'initial_name')",
+      "CREATE TABLE overlay_aliases (reep_id VARCHAR, qid VARCHAR, alias VARCHAR, language VARCHAR)",
+      "INSERT INTO overlay_aliases VALUES ('rp8a503e860b7abe', 'Q615', 'Лионель Месси', 'ru')",
+    ]) {
+      await con.run(sql);
+    }
+    con.closeSync();
+    instance.closeSync();
+  });
+
+  it("resolves a provider ID", async () => {
+    const r = await resolveEntity(
+      { provider: "transfermarkt", namespace: "spieler", id: "28003" },
+      { env: env(), fetchImpl: latest("2026-11-23.1") },
+    );
+    const t = text(r);
+    expect(r.isError, t).toBeUndefined();
+    expect(t).toContain("### Lionel Andrés Messi Cuccittini (player)");
+    expect(t).toContain("wyscout / player: 3359");
+    expect(t).toContain("Local register release: 2026-11-23.1 (current).");
+  });
+
+  it("follows a merge redirect that has no reason column", async () => {
+    const t = text(await resolveEntity({ reep_id: "rpmergedmessi001" }, { env: env(), fetchImpl: latest("2026-11-23.1") }));
+    expect(t).toContain("Redirected: rpmergedmessi001 was merged into rp8a503e860b7abe");
+  });
+
+  it("ranks an exact name first, even with fewer provider IDs", async () => {
+    const t = text(await resolveEntity({ name: "Messi" }, { env: env(), fetchImpl: latest("2026-11-23.1") }));
+    const order = [...t.matchAll(/^### (.+)$/gm)].map((m) => m[1]);
+    expect(order[0]).toBe("Lionel Andrés Messi Cuccittini (player)");
+    expect(order).toContain("Junior Walter Messias (player)");
+    expect(order).toContain("Messina (team)");
+  });
+
+  it("finds a name only in an alias table, and narrows by type", async () => {
+    const t = text(await resolveEntity({ name: "Месси", type: "player" }, { env: env(), fetchImpl: latest("2026-11-23.1") }));
+    expect(t).toContain("Lionel Andrés Messi Cuccittini");
+    const teams = text(await resolveEntity({ name: "Messi", type: "team" }, { env: env(), fetchImpl: latest("2026-11-23.1") }));
+    expect([...teams.matchAll(/^### (.+)$/gm)].map((m) => m[1])).toEqual(["Messina (team)"]);
+  });
+
+  it("says an unknown Reep ID may have been withdrawn, since this layout keeps no tombstones", async () => {
+    const t = text(await resolveEntity({ reep_id: "x_0025dde5e1e2fe1f" }, { env: env(), fetchImpl: latest("2026-11-23.1") }));
+    expect(t).toContain("No Reep entity matches that query in the local register.");
+    expect(t).toContain("records merges but not withdrawals");
+  });
+});
+
+describe("resolve_entity against an API release that does not publish search", () => {
+  const KEYED_410 = { REEP_API_KEY: "test-key" };
+  const gone = async () =>
+    new Response(JSON.stringify({ error: "not_published", message: "A mapping release has no search index." }), {
+      status: 410,
+      headers: { "Content-Type": "application/json", "X-Reep-Release-Stamp": "2026-11-23.1" },
+    });
+
+  it("points a name search to the download, with a query that runs on it", async () => {
+    const r = await resolveEntity({ name: "Declan Rice" }, { env: KEYED_410, fetchImpl: gone });
+    const t = text(r);
+    expect(r.isError).toBeUndefined();
+    expect(t).toContain("HTTP 410, not_published");
+    expect(t).toContain("REEP_DUCKDB_PATH");
+    expect(t).toContain("provider_aliases");
+    expect(t).toContain("Release: 2026-11-23.1");
+  });
+
+  it("reports a 410 on another lookup as an error", async () => {
+    const r = await resolveEntity({ reep_id: "rp1b829f1d3468c4" }, { env: KEYED_410, fetchImpl: gone });
+    expect(r.isError).toBe(true);
+    expect(text(r)).toContain("HTTP 410");
   });
 });
