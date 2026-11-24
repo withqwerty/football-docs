@@ -292,6 +292,7 @@ export function createFootballDocsServer(): McpServer {
       "Look up by provider + id (pass namespace too, e.g. transfermarkt 'spieler', opta 'person'), by reep_id, or by name.",
       "Sources, in order: a local copy of the free register (REEP_DUCKDB_PATH), then the Reep API (REEP_API_KEY; keys are",
       "issued by hand on request, never self-service). With neither set, it returns setup steps and a DuckDB query.",
+      "Name search needs the local file: on the current release the Reep API publishes no search (HTTP 410).",
       "Keeping the local file current: Reep publishes a download release weekly or less often; new matching reaches the",
       "Reep API daily. Every local answer ends with the file's release stamp checked",
       "against https://data.reep.football/releases/latest.json. If it says the file is out of date, tell the user and offer",

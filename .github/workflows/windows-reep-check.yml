@@ -1,0 +1,22 @@
+# Temporary: proves the new Reep DuckDB tests release their file on Windows
+# before this branch merges (release.yml is the only other Windows run, and it
+# runs on a tag). Remove before merge.
+name: windows-reep-check
+on:
+  pull_request:
+    paths:
+      - "src/reep.ts"
+      - "src/__tests__/reep*.ts"
+      - ".github/workflows/windows-reep-check.yml"
+jobs:
+  reep-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec vitest run src/__tests__/reep-resolve.test.ts src/__tests__/reep.test.ts

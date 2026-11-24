@@ -9,7 +9,7 @@
         "version": "v1.0.0"
       }
     ],
-    "generated_at": "2026-10-09"
+    "generated_at": "2026-11-24"
   },
   "basePaths": [
     "/api/next",
@@ -40,13 +40,13 @@
     "/entities/{reep_id}/overlay": [
       "GET"
     ],
-    "/entities/{reep_id}/relationships": [
-      "GET"
-    ],
     "/key": [
       "GET"
     ],
-    "/matches": [
+    "/matches/{provider}/{external_id}": [
+      "GET"
+    ],
+    "/matches/{reep_id}": [
       "GET"
     ],
     "/meta": [
@@ -72,31 +72,15 @@
     ]
   },
   "parameters": [
-    "competition",
-    "cursor",
     "external_id",
-    "family",
-    "from",
     "include",
     "lang",
     "limit",
-    "missing",
     "namespace",
     "offset",
-    "opponent",
     "provider",
-    "providers",
-    "q",
     "reep_id",
-    "require",
-    "season",
-    "since",
-    "sort",
-    "state",
-    "team",
-    "to",
-    "type",
-    "venue"
+    "type"
   ],
   "schemas": [
     "BatchItem",
@@ -107,67 +91,42 @@
     "Entity",
     "EntityType",
     "Error",
-    "GenerationMatch",
-    "MatchLabelledId",
-    "MatchScoreline",
     "Overlay",
     "ProviderNoticeFinding",
     "ProviderRollup",
     "ReepIdValue",
-    "RelationshipSummary",
     "ReleaseSummary",
-    "WikidataAlias",
-    "WikidataId",
     "WikidataOverlay"
   ],
   "fields": [
     "acknowledged",
     "acknowledged_at",
-    "aggregate_of",
     "aliases",
     "attributes",
-    "away",
-    "away_id",
-    "away_score",
     "body",
     "bridge_count",
     "bridges",
-    "canonical_reep_id",
-    "competition",
-    "confidence",
-    "count",
+    "canonical_name",
+    "country",
     "detail",
-    "dob_check",
     "entity_type",
     "entity_types",
     "error",
-    "expansion",
     "expected",
     "external_id",
-    "family",
     "finding_id",
     "first_seen_at",
+    "gender",
     "generated_at",
-    "generation",
-    "home",
-    "home_id",
-    "home_score",
     "id",
-    "ids",
     "include",
     "index_generated_at",
     "kind",
-    "label",
     "lang",
     "language",
     "last_seen_at",
-    "leg",
-    "lifecycle_state",
-    "link_confidence",
-    "match",
     "message",
     "name",
-    "name_en",
     "names",
     "namespace",
     "observed",
@@ -175,35 +134,23 @@
     "overlay_count",
     "payload",
     "payload_hash",
-    "played_on",
-    "property",
     "provider",
     "provider_ref",
     "publishable",
     "qid",
+    "qids",
     "rank",
     "redirected_to",
     "reep_id",
-    "relationships",
     "requested_id",
     "requests",
-    "result_form",
     "role",
-    "roles",
     "schema_version",
-    "score_basis",
-    "season",
     "seen",
     "seen_at",
     "severity",
-    "shootout_away",
-    "shootout_home",
     "source",
-    "source_providers",
-    "source_tier",
-    "stage",
     "stamp",
-    "state",
     "status",
     "suggested_action",
     "tier",
@@ -222,19 +169,6 @@
       "stage",
       "team"
     ],
-    "expansion": [
-      "summary_only",
-      "summary_only_high_cardinality"
-    ],
-    "oneOf": [
-      "abandoned",
-      "awarded",
-      "extra_time",
-      "golden_goal",
-      "penalties",
-      "regular",
-      "unknown"
-    ],
     "role": [
       "bridge_only",
       "canonical_bridge",
@@ -242,13 +176,6 @@
     ],
     "source": [
       "wikidata"
-    ],
-    "source_tier": [
-      "wikidata-originated"
-    ],
-    "tier": [
-      "open_census",
-      "public_bridge_v1"
     ],
     "type": [
       "entity",
