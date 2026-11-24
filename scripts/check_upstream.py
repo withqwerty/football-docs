@@ -18,6 +18,9 @@ One report from the checks that otherwise live in separate places:
    publish no spec to mirror, so their truth files are regenerated from the
    public source and compared with the committed ones, ignoring the `source`
    block. The committed files are restored afterwards, byte for byte.
+   SkillCorner's dynamic-events truth is pinned to an open-data commit, so the
+   check reports a newer commit on SkillCorner/opendata and a spec PDF link that
+   no longer answers.
 4. Live checks. scripts/check_free_sources_live.py and scripts/check_reep_live.py.
 
 A finding is a list of things to review, not an error in itself: bump the pin,
@@ -227,6 +230,44 @@ def check_derived_truth():
         "driblab.notion.json",
         [sys.executable, "scripts/gen_notion_truth.py", DRIBLAB_PAGE, "--provider", "driblab"],
     )
+    findings += check_skillcorner_open_data()
+    return findings
+
+
+SKILLCORNER_TRUTH = ROOT / "data" / "skillcorner-open-data-truth.json"
+SKILLCORNER_SPEC = (
+    "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/"
+    "20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf"
+)
+
+
+def check_skillcorner_open_data():
+    pinned = json.loads(SKILLCORNER_TRUTH.read_text(encoding="utf-8"))["source"]["commit"]
+    findings = []
+    try:
+        commits = fetch("https://api.github.com/repos/SkillCorner/opendata/commits?path=data/matches&per_page=1")
+        latest = json.loads(commits)[0]["sha"]
+    except Exception as error:  # noqa: BLE001
+        print(f"  ??? skillcorner open data: could not check ({error})")
+        findings.append(f"skillcorner open data: commit check failed ({error})")
+    else:
+        same = latest == pinned
+        note = "" if same else f": {latest[:7]} after pin {pinned[:7]}"
+        print(f"  {'ok ' if same else 'NEW'} skillcorner open data{note}")
+        if not same:
+            findings.append(
+                f"skillcorner open data: new commit {latest[:7]} (set DEFAULT_COMMIT in"
+                " scripts/gen_skillcorner_open_data_truth.py, run pnpm skillcorner:truth, then fix the docs)"
+            )
+    try:
+        is_pdf = fetch(SKILLCORNER_SPEC)[:5] == b"%PDF-"
+    except Exception as error:  # noqa: BLE001
+        is_pdf = False
+        print(f"  ??? skillcorner dynamic-events spec: could not fetch ({error})")
+    else:
+        print(f"  {'ok ' if is_pdf else 'NEW'} skillcorner dynamic-events spec")
+    if not is_pdf:
+        findings.append("skillcorner dynamic-events spec: the PDF link no longer serves a PDF (find its new URL)")
     return findings
 
 

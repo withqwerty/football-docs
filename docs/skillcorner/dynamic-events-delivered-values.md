@@ -9,7 +9,7 @@ crawled_at: 2026-11-24
 
 ## Values in the delivered CSV
 
-Observed across the 20 `*_dynamic_events.csv` files of the [SkillCorner open data](https://github.com/SkillCorner/opendata) at commit `4340d27`. These are not part of SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16), whose column definitions are in [dynamic-events.md](dynamic-events.md). Where the delivered files spell a value differently from the specification, the files use the spelling below. A `None` in the specification is an empty cell in the CSV.
+Observed across the 20 `*_dynamic_events.csv` files of the [SkillCorner open data](https://github.com/SkillCorner/opendata) at commit `4340d27`. These are not part of SkillCorner's *Dynamic Events CSV Specifications* (2025/02/16), whose column definitions are in [dynamic-events.md](dynamic-events.md). Where the delivered files spell a value differently from the specification, the files use the spelling below. A `None` in the specification is an empty cell in the CSV. Empty cells also occur where the Values cell lists no `None`: 95 of the 294 specified fields are empty in some rows of the event types they apply to. For many of these the description says when the value is None, for example `in_to_out` and `n_defensive_lines`.
 
 | Columns | Specification | Delivered CSV |
 |---|---|---|

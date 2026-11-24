@@ -4244,6 +4244,1451 @@
       "player_possession"
     ]
   },
+  "empty": {
+    "frame_physical_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "event_subtype_id": [
+      "passing_option",
+      "player_possession"
+    ],
+    "event_subtype": [
+      "passing_option",
+      "player_possession"
+    ],
+    "player_in_possession_id": [
+      "player_possession"
+    ],
+    "player_in_possession_name": [
+      "player_possession"
+    ],
+    "player_in_possession_position_id": [
+      "player_possession"
+    ],
+    "player_in_possession_position": [
+      "player_possession"
+    ],
+    "x_start": [
+      "passing_option",
+      "player_possession"
+    ],
+    "y_start": [
+      "passing_option",
+      "player_possession"
+    ],
+    "x_end": [
+      "player_possession"
+    ],
+    "y_end": [
+      "player_possession"
+    ],
+    "associated_player_possession_event_id": [
+      "player_possession"
+    ],
+    "associated_player_possession_frame_start": [
+      "player_possession"
+    ],
+    "associated_player_possession_frame_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "associated_player_possession_end_type_id": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "associated_player_possession_end_type": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "associated_off_ball_run_event_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "associated_off_ball_run_subtype_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "associated_off_ball_run_subtype": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_possession_phase_index": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "first_player_possession_in_team_possession": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "last_player_possession_in_team_possession": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "lead_to_different_phase": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "issued_from_different_phase": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_player_possessions_in_phase": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "team_possession_loss_in_phase": [
+      "off_ball_run",
+      "passing_option"
+    ],
+    "current_team_in_possession_next_phase_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_in_possession_next_phase_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_out_of_possession_next_phase_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_out_of_possession_next_phase_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_in_possession_previous_phase_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_in_possession_previous_phase_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_out_of_possession_previous_phase_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "current_team_out_of_possession_previous_phase_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "game_interruption_before_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "game_interruption_before": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "game_interruption_after_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "game_interruption_after": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "start_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "start_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "end_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "end_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "pass_angle_received": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_direction_received_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_direction_received": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_distance_received": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_range_received_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_range_received": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_outcome_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_outcome": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "targeted_passing_option_event_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "high_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "targeted": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "received": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "received_in_space": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_danger": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "beaten_by_possession": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "beaten_by_movement": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "stop_possession_danger": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "reduce_possession_danger": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "force_backward": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "trajectory_angle": [
+      "passing_option",
+      "player_possession"
+    ],
+    "trajectory_direction_id": [
+      "passing_option",
+      "player_possession"
+    ],
+    "trajectory_direction": [
+      "passing_option",
+      "player_possession"
+    ],
+    "in_to_out": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "out_to_in": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "speed_avg": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "speed_avg_band_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "speed_avg_band": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "location_to_player_in_possession_id_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "location_to_player_in_possession_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "location_to_player_in_possession_id_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "location_to_player_in_possession_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "distance_to_player_in_possession_start": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "distance_to_player_in_possession_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_x_start": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_in_possession_y_start": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_in_possession_channel_id_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_channel_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_third_id_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_third_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_penalty_area_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_x_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_y_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_channel_id_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_channel_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_third_id_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_third_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "player_in_possession_penalty_area_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "passing_option_at_player_possession_start": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "xloss_player_possession_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xloss_player_possession_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xloss_player_possession_max": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xshot_player_possession_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xshot_player_possession_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xshot_player_possession_max": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "reception_difficulty_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "reception_difficulty_start_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "time_to_impact_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "time_to_impact_start_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "space_constraint_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "space_constraint_start_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_ease_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_ease_start_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "overall_pressure_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "overall_pressure_start_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "time_to_impact_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "time_to_impact_end_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_ease_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_ease_end_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "overall_pressure_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "overall_pressure_end_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_id": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_name": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_position_id": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_position": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_x_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_y_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_channel_pass_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_channel_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_third_pass_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_third_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_penalty_area_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_x_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_y_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_channel_reception_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_channel_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_third_reception_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_third_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_penalty_area_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_distance_to_goal_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_distance_to_goal_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_angle_to_goal_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_angle_to_goal_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_average_speed": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_speed_avg_band_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_speed_avg_band": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "speed_difference": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_xpass_completion": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_difficult_pass_target": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_xthreat": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "player_targeted_dangerous": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "interplayer_distance": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "interplayer_distance_range_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "interplayer_distance_range": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "interplayer_distance_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "interplayer_distance_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "interplayer_distance_min": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "interplayer_distance_start_physical": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "close_at_player_possession_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "interplayer_angle": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "interplayer_direction_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "interplayer_direction": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "angle_of_engagement": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "goal_side_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "goal_side_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "last_defensive_line_x_start": [
+      "passing_option",
+      "player_possession"
+    ],
+    "last_defensive_line_x_end": [
+      "player_possession"
+    ],
+    "delta_to_last_defensive_line_start": [
+      "passing_option",
+      "player_possession"
+    ],
+    "delta_to_last_defensive_line_end": [
+      "player_possession"
+    ],
+    "delta_to_last_defensive_line_gain": [
+      "passing_option",
+      "player_possession"
+    ],
+    "last_defensive_line_height_start": [
+      "passing_option",
+      "player_possession"
+    ],
+    "last_defensive_line_height_end": [
+      "player_possession"
+    ],
+    "last_defensive_line_height_gain": [
+      "passing_option",
+      "player_possession"
+    ],
+    "inside_defensive_shape_start": [
+      "on_ball_engagement"
+    ],
+    "inside_defensive_shape_end": [
+      "on_ball_engagement"
+    ],
+    "n_teammates_ahead_end": [
+      "off_ball_run",
+      "passing_option"
+    ],
+    "n_teammates_ahead_start": [
+      "off_ball_run",
+      "passing_option"
+    ],
+    "n_player_targeted_opponents_ahead_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_opponents_ahead_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_teammates_ahead_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_teammates_ahead_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_teammates_within_5m_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_teammates_within_5m_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_opponents_within_5m_start": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_player_targeted_opponents_within_5m_end": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "separation_start": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "separation_end": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "separation_gain": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_distance": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_range_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_range": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_angle": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_direction_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_direction": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_ahead": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "passing_option_at_pass_moment": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "dangerous": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "difficult_pass_target": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "xthreat": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "xpass_completion": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_score": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "predicted_passing_option": [
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "peak_passing_option_frame": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "n_simultaneous_passing_options": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "organised_defense": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "defensive_structure": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_defensive_lines": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "first_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "first_line_break_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "first_line_break_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "second_last_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "second_last_line_break_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "second_last_line_break_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "last_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "last_line_break_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "last_line_break_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "furthest_line_break_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "furthest_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "furthest_line_break_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "furthest_line_break_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_opponents_ahead_player_in_possession_pass_moment": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "n_opponents_ahead_pass_reception": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "n_opponents_bypassed": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "player_possession"
+    ],
+    "one_touch": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "quick_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "carry": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "forward_momentum": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "is_header": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "hand_pass": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "initiate_give_and_go": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_off_ball_runs": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_first_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_second_last_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_last_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_ahead": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_dangerous_difficult": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_dangerous_not_difficult": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_not_dangerous_not_difficult": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_not_dangerous_difficult": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_passing_options_at_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_passing_options_at_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_passing_options_ahead_at_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_passing_options_ahead_at_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_simultaneous_runs": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "give_and_go": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "intended_run_behind": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "push_defensive_line": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "break_defensive_line": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "passing_option_at_start": [
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "n_opponents_ahead_end": [
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_opponents_ahead_start": [
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "n_opponents_overtaken": [
+      "on_ball_engagement",
+      "passing_option"
+    ],
+    "affected_line_breaking_passing_option_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_break_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_break": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_breaking_passing_option_attempted": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_breaking_passing_option_xthreat": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_breaking_passing_option_dangerous": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_breaking_passing_option_run_subtype_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "affected_line_breaking_passing_option_run_subtype": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pressing_chain": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "pressing_chain_length": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pressing_chain_end_type_id": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pressing_chain_end_type": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pressing_chain_index": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "index_in_pressing_chain": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "simultaneous_defensive_engagement_same_target": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "simultaneous_defensive_engagement_same_target_rank": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "consecutive_on_ball_engagements": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "is_previous_pass_matched": [
+      "off_ball_run",
+      "passing_option",
+      "player_possession"
+    ],
+    "is_pass_reception_matched": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "fully_extrapolated": [
+      "off_ball_run",
+      "on_ball_engagement"
+    ],
+    "possession_epv_for_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_for_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_against_start": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_against_end": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_reception_epv_for": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_reception_epv_against": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_total": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_epv_total": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_delta_for": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "possession_epv_delta_against": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_epv_delta_for": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ],
+    "pass_epv_delta_against": [
+      "off_ball_run",
+      "on_ball_engagement",
+      "passing_option",
+      "player_possession"
+    ]
+  },
   "id_pairs": {
     "attacking_side_id": {
       "1": "left_to_right",

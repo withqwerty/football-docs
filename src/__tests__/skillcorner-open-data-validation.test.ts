@@ -20,6 +20,8 @@ interface Truth {
   shapes: Record<string, string[]>;
   /** The event types whose rows fill each column. */
   events: Record<string, string[]>;
+  /** The event types whose rows leave each column empty. */
+  empty: Record<string, string[]>;
   /** `<name>_id` column -> ID -> the `<name>` value seen with it. */
   id_pairs: Record<string, Record<string, string>>;
 }
@@ -304,6 +306,17 @@ describe("skillcorner delivered values match the open data", () => {
         .map((v) => `${name}: ${v}`);
     });
     expect(missing).toEqual([]);
+  });
+
+  it("counts the fields that are empty although their Values cell lists no None", () => {
+    const quiet = [...specField].filter(
+      ([name, f]) =>
+        !f.values.some((v) => v === "None" || v === "e.g. None") && (truth.empty[name] ?? []).some((e) => f.events.includes(EVENT_CODES[e])),
+    );
+    const text = section(curated, "Values in the delivered CSV");
+    expect(text).toContain(`${quiet.length} of the ${specField.size} specified fields are empty`);
+    const examples = [...text.matchAll(/for example `([^`]+)` and `([^`]+)`\./g)].flatMap((m) => [m[1], m[2]]);
+    expect(examples.filter((n) => !quiet.some(([q]) => q === n))).toEqual([]);
   });
 
   it("counts and names the columns the spec does not define", () => {

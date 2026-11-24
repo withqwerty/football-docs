@@ -4,8 +4,8 @@
 Reads every `*_dynamic_events.csv` in https://github.com/SkillCorner/opendata
 at one pinned commit. It records, per column: its name (in file order), its
 distinct values when there are at most MAX_VALUES, its type (number, bool or
-text), the shapes of its text values when there are at most MAX_SHAPES, and
-the event types whose rows fill it. It also records each `<name>_id` to
+text), the shapes of its text values when there are at most MAX_SHAPES, the
+event types whose rows fill it, and the event types whose rows leave it empty. It also records each `<name>_id` to
 `<name>` pair seen in the data.
 
 The test src/__tests__/skillcorner-open-data-validation.test.ts checks
@@ -78,6 +78,7 @@ def build(commit: str) -> dict:
     text_columns: set[str] = set()
     shapes: dict[str, set[str]] = {}
     events: dict[str, set[str]] = {}
+    empty: dict[str, set[str]] = {}
     pairs: dict[str, dict[str, set[str]]] = {}
     paths = dynamic_event_paths(commit)
     for path in paths:
@@ -96,6 +97,7 @@ def build(commit: str) -> dict:
                     names.add(row[id_column[:-3]])
             for name, value in row.items():
                 if value == "":
+                    empty.setdefault(name, set()).add(row["event_type"])
                     continue
                 events.setdefault(name, set()).add(row["event_type"])
                 if not is_number(value):
@@ -126,6 +128,7 @@ def build(commit: str) -> dict:
             name: sorted(shapes[name]) for name in columns if name in shapes and len(shapes[name]) <= MAX_SHAPES
         },
         "events": {name: sorted(events[name]) for name in columns if name in events},
+        "empty": {name: sorted(empty[name]) for name in columns if name in empty},
         "id_pairs": {
             id_column: {id_: one_name(id_column, id_, names) for id_, names in sorted(by_id.items(), key=lambda kv: float(kv[0]))}
             for id_column, by_id in pairs.items()
