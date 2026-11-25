@@ -41,7 +41,16 @@ const SAVE_PAUSE_MS = 8_000;
  */
 const GENERATED = [/^metric-cards\//, /^skillcorner\/dynamic-events\.md$/];
 
-type Doc = { path: string; rel: string; text: string; sourceUrl: string; archivedUrl: string | null; crawledAt: string | null };
+type Doc = {
+  path: string;
+  rel: string;
+  text: string;
+  sourceUrl: string;
+  archivedUrl: string | null;
+  crawledAt: string | null;
+  /** crawled_at is missing, so crawledAt is the doc's last commit date. */
+  datedByGit?: boolean;
+};
 
 function frontmatterValue(block: string, key: string): string | null {
   const match = block.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
@@ -65,6 +74,7 @@ export function readDoc(path: string): Doc | null {
     sourceUrl,
     archivedUrl: frontmatterValue(block, "archived_url"),
     crawledAt: crawled ? crawled.slice(0, 10) : lastCommitDate(path),
+    datedByGit: !crawled,
   };
 }
 
@@ -101,8 +111,11 @@ function daysBetween(a: string, b: string): number {
 }
 
 /** Whether an archived_url already on a doc still stands for it. */
-export function permalinkHolds(doc: Pick<Doc, "archivedUrl" | "crawledAt">): boolean {
+export function permalinkHolds(doc: Pick<Doc, "archivedUrl" | "crawledAt" | "datedByGit">): boolean {
   if (!doc.archivedUrl) return false;
+  // Without crawled_at, the last commit may only have touched the frontmatter
+  // (adding source_url, say), so it is no sign that the doc was checked again.
+  if (doc.datedByGit) return true;
   if (/^https:\/\/(github\.com|raw\.githubusercontent\.com)\//.test(doc.archivedUrl)) return true;
   const date = waybackDate(doc.archivedUrl);
   if (!date) return true; // set by hand
