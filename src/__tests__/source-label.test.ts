@@ -1,5 +1,10 @@
+import { createHash } from "node:crypto";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { parseFrontmatter, SCHEMA_SQL } from "../ingest.js";
+import { DATA_SCHEMA_VERSION, readArchivedUrls, writeMeta } from "../data-format.js";
+import { archivedUrlMap, parseFrontmatter, SCHEMA_SQL } from "../ingest.js";
 import { type Database, openDatabase } from "../sqlite.js";
 import { getProviderDocs, searchDocs, sourceLabel } from "../tools.js";
 
@@ -55,9 +60,20 @@ describe("archived_url in the index", () => {
     beforeAll(() => {
       db = openDatabase(":memory:");
       db.exec(SCHEMA_SQL);
-      db.prepare(
-        "INSERT INTO docs (provider, category, title, content, source_url, archived_url, crawled_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      ).run("reep", "overview", "Reep overview", "Reep maps provider IDs onto one Reep ID.", LIVE, ARCHIVED, "2026-11-24");
+      db.prepare("INSERT INTO docs (provider, category, title, content, source_url, crawled_at) VALUES (?, ?, ?, ?, ?, ?)").run(
+        "reep",
+        "overview",
+        "Reep overview",
+        "Reep maps provider IDs onto one Reep ID.",
+        LIVE,
+        "2026-11-24",
+      );
+      writeMeta(db, {
+        dataStamp: "2026-11-25T00:00:00Z",
+        commit: null,
+        providersJson: readFileSync(new URL("../../providers.json", import.meta.url), "utf8"),
+        archivedUrlsJson: JSON.stringify({ "reep/overview": ARCHIVED }),
+      });
     });
     afterAll(() => db.close());
 
@@ -67,11 +83,11 @@ describe("archived_url in the index", () => {
     });
   });
 
-  describe("an index built before archived_url existed", () => {
+  describe("an index without a permalink map", () => {
     let db: Database;
     beforeAll(() => {
       db = openDatabase(":memory:");
-      db.exec(SCHEMA_SQL.replace("    archived_url TEXT,\n", ""));
+      db.exec(SCHEMA_SQL);
       db.prepare("INSERT INTO docs (provider, category, title, content, source_url) VALUES (?, ?, ?, ?, ?)").run(
         "reep",
         "overview",
@@ -83,11 +99,31 @@ describe("archived_url in the index", () => {
     afterAll(() => db.close());
 
     it("still answers, without a permalink", () => {
-      const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
-      expect(columns.map((c) => c.name)).not.toContain("archived_url");
+      expect(readArchivedUrls(db).size).toBe(0);
       const text = searchDocs(db, { query: "Reep provider IDs" }).content[0].text;
       expect(text).toContain(`curated by football-docs contributors from ${LIVE}`);
       expect(text).not.toContain("archived");
     });
+  });
+
+  it("keys each permalink by the doc, so two docs can share a source page", () => {
+    const dir = mkdtempSync(join(tmpdir(), "archived-"));
+    mkdirSync(join(dir, "reep"));
+    const doc = (archived: string) => `---\nsource_url: ${LIVE}\narchived_url: ${archived}\n---\n\n# T\n`;
+    writeFileSync(join(dir, "reep", "a.md"), doc(ARCHIVED));
+    writeFileSync(join(dir, "reep", "b.md"), doc(`${ARCHIVED}x`));
+    writeFileSync(join(dir, "reep", "c.md"), "# No frontmatter\n");
+    expect(archivedUrlMap(dir)).toEqual({ "reep/a": ARCHIVED, "reep/b": `${ARCHIVED}x` });
+  });
+});
+
+describe("the index schema", () => {
+  // Servers compare the schema exactly and reject any other. Servers up to
+  // 0.17.9 rejected an index with an extra archived_url column, so data
+  // publishing stopped. A change here needs a DATA_SCHEMA_VERSION bump and a
+  // server release, or a meta key instead (as archived_urls is).
+  it("is the one schema version 1 servers accept", () => {
+    expect(DATA_SCHEMA_VERSION).toBe(1);
+    expect(createHash("sha256").update(SCHEMA_SQL).digest("hex")).toBe("3b8a572c76f9a58fdbdbdc6d46bc53348c66025da307dee939181d644a92ed1b");
   });
 });

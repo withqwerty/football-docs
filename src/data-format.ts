@@ -28,7 +28,6 @@ export const SCHEMA_SQL = `
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     source_url TEXT,
-    archived_url TEXT,
     source_type TEXT NOT NULL DEFAULT 'curated',
     upstream_version TEXT,
     crawled_at TEXT
@@ -162,6 +161,29 @@ export interface MetaInput {
   providersJson: string;
   /** metrics/cards.json, when the build has metric cards. Servers before 0.17 ignore the key. */
   metricCardsJson?: string;
+  /**
+   * JSON object mapping each doc ("provider/category") to its archived_url.
+   * Permalinks live here, not in a docs column, so the schema servers up to
+   * 0.17.9 check exactly stays the same. Older servers ignore the key.
+   */
+  archivedUrlsJson?: string;
+}
+
+/**
+ * The "provider/category" to archived_url map from the meta table. Empty when the index
+ * has no meta table, no map, or a map that is not a JSON object of strings.
+ */
+export function readArchivedUrls(db: Database): Map<string, string> {
+  if (!hasMetaTable(db)) return new Map();
+  const row = db.prepare("SELECT value FROM meta WHERE key = 'archived_urls'").get() as { value: string } | undefined;
+  if (!row) return new Map();
+  try {
+    const parsed: unknown = JSON.parse(row.value);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return new Map();
+    return new Map(Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
+  } catch {
+    return new Map();
+  }
 }
 
 /** Replace the meta table's contents. Used by ingest. */
@@ -175,6 +197,7 @@ export function writeMeta(db: Database, input: MetaInput): void {
     if (input.commit) insert.run("commit", input.commit);
     insert.run("providers_json", input.providersJson);
     if (input.metricCardsJson) insert.run("metric_cards", input.metricCardsJson);
+    if (input.archivedUrlsJson) insert.run("archived_urls", input.archivedUrlsJson);
   });
 }
 
