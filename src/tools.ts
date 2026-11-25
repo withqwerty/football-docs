@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type ProviderRegistryEntry, type ProvidersFile, providersFileSchema, readMeta } from "./data-format.js";
+import { type ProviderRegistryEntry, type ProvidersFile, providersFileSchema, readArchivedUrls, readMeta } from "./data-format.js";
 import type { Database } from "./sqlite.js";
 
 export { type ResolveEntityArgs, resolveEntity } from "./reep.js";
@@ -380,7 +380,7 @@ function searchRows(
 ): SearchRow[] {
   let sql = `
     SELECT d.provider, d.category, d.title, d.content,
-           d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
+           d.source_type, d.source_url, NULL AS archived_url, d.upstream_version,
            d.crawled_at,
            rank * -1 as relevance
     FROM docs_fts
@@ -397,7 +397,7 @@ function searchRows(
   sql += " ORDER BY rank LIMIT ?";
   params.push(limit);
 
-  return db.prepare(sql).all(...params) as SearchRow[];
+  return withArchivedUrls(db, db.prepare(sql).all(...params) as SearchRow[]);
 }
 
 /**
@@ -520,20 +520,17 @@ export function versionLabel(version: string | null): string {
   return /^\d/.test(trimmed) ? `v${trimmed}` : trimmed;
 }
 
-const archivedUrlColumns = new WeakMap<Database, string>();
+const archivedUrlMaps = new WeakMap<Database, Map<string, string>>();
 
-/**
- * The archived_url column, or NULL for an index built before it existed (a
- * downloaded data file can be older than the server reading it).
- */
-function archivedUrlColumn(db: Database): string {
-  let column = archivedUrlColumns.get(db);
-  if (column === undefined) {
-    const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
-    column = columns.some((c) => c.name === "archived_url") ? "d.archived_url" : "NULL AS archived_url";
-    archivedUrlColumns.set(db, column);
+/** Fill each row's archived_url from the index's meta map (none on older indexes). */
+function withArchivedUrls(db: Database, rows: SearchRow[]): SearchRow[] {
+  let map = archivedUrlMaps.get(db);
+  if (!map) {
+    map = readArchivedUrls(db);
+    archivedUrlMaps.set(db, map);
   }
-  return column;
+  const archived = map;
+  return rows.map((row) => ({ ...row, archived_url: archived.get(`${row.provider}/${row.category}`) ?? null }));
 }
 
 /**
@@ -622,7 +619,7 @@ function providerDocsRows(
   if (matchQuery) {
     sql = `
       SELECT d.provider, d.category, d.title, d.content,
-             d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
+             d.source_type, d.source_url, NULL AS archived_url, d.upstream_version,
              d.crawled_at,
              rank * -1 as relevance
       FROM docs_fts
@@ -633,7 +630,7 @@ function providerDocsRows(
   } else {
     sql = `
       SELECT d.provider, d.category, d.title, d.content,
-             d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
+             d.source_type, d.source_url, NULL AS archived_url, d.upstream_version,
              d.crawled_at,
              0 as relevance
       FROM docs d
@@ -649,7 +646,7 @@ function providerDocsRows(
 
   sql += matchQuery ? " ORDER BY rank LIMIT ?" : " ORDER BY d.category, d.id LIMIT ?";
   params.push(limit);
-  return db.prepare(sql).all(...params) as SearchRow[];
+  return withArchivedUrls(db, db.prepare(sql).all(...params) as SearchRow[]);
 }
 
 export function resolveProviderId(

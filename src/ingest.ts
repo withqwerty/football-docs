@@ -49,7 +49,6 @@ interface DocChunk {
   title: string;
   content: string;
   source_url: string | null;
-  archived_url: string | null;
   source_type: string;
   upstream_version: string | null;
   crawled_at: string | null;
@@ -147,8 +146,8 @@ function ingestProvider(db: Database, provider: string): number {
   let totalChunks = 0;
 
   const insert = db.prepare(
-    `INSERT INTO docs (provider, category, title, content, source_url, archived_url, source_type, upstream_version, crawled_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO docs (provider, category, title, content, source_url, source_type, upstream_version, crawled_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   for (const file of files) {
@@ -163,7 +162,6 @@ function ingestProvider(db: Database, provider: string): number {
         chunk.title,
         chunk.content,
         chunk.source_url,
-        chunk.archived_url,
         chunk.source_type,
         chunk.upstream_version,
         chunk.crawled_at,
@@ -183,12 +181,24 @@ export { SCHEMA_SQL };
 /** Ensure tables exist without dropping existing data. */
 function ensureSchema(db: Database): void {
   db.exec(SCHEMA_SQL);
-  // An index built before archived_url existed gains the column, so a
-  // single-provider ingest can still write to it.
-  const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
-  if (!columns.some((column) => column.name === "archived_url")) {
-    db.exec("ALTER TABLE docs ADD COLUMN archived_url TEXT");
+}
+
+/**
+ * Each doc's archived_url, keyed by "provider/category" (the doc's file), read
+ * from all docs so a single-provider ingest keeps the full map. Two docs can
+ * share a source_url but were read on different dates, so the key is the doc.
+ */
+export function archivedUrlMap(docsDir: string = DOCS_DIR): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const provider of readdirSync(docsDir).sort()) {
+    const dir = resolve(docsDir, provider);
+    if (!existsSync(dir) || !statSync(dir).isDirectory()) continue;
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) {
+      const { frontmatter } = parseFrontmatter(readFileSync(resolve(dir, file), "utf-8"));
+      if (frontmatter.archived_url) map[`${provider}/${basename(file, ".md")}`] = frontmatter.archived_url;
+    }
   }
+  return map;
 }
 
 function git(args: string[]): string | null {
@@ -215,6 +225,7 @@ function recordMeta(db: Database): void {
     commit: process.env.GITHUB_SHA || git(["rev-parse", "HEAD"]),
     providersJson: readFileSync(PROVIDERS_PATH, "utf-8"),
     metricCardsJson: existsSync(METRIC_CARDS_PATH) ? readFileSync(METRIC_CARDS_PATH, "utf-8") : undefined,
+    archivedUrlsJson: JSON.stringify(archivedUrlMap()),
   });
 }
 
