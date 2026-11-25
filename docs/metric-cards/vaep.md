@@ -1,6 +1,6 @@
 ---
 source_type: curated
-source_url: 1802.07127
+source_url: https://arxiv.org/abs/1802.07127
 upstream_version: metric card v1
 crawled_at: 2026-10-05
 ---
@@ -21,7 +21,7 @@ VAEP values every on-the-ball action by how it changes two probabilities: that t
 
 Tom Decroos, Lotte Bransen, Jan Van Haaren and Jesse Davis (KU Leuven and SciSports), 'Actions Speak Louder than Goals: Valuing Player Actions in Soccer', KDD 2019 (DOI 10.1145/3292500.3330758); first posted on arXiv in February 2018 (1802.07127).
 
-Source: 1802.07127
+Source: https://arxiv.org/abs/1802.07127
 
 ## Variants
 

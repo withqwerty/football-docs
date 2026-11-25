@@ -42,6 +42,7 @@ Outcome rules are from F24 Appendix 8 unless the note says otherwise.
 | 30 | End | always 1 | End of a period. kloppy reads the period end time from it |
 | 32 | Start | always 1 | Start of a period. kloppy reads the period start time from it |
 | 34 | Team set up | always 1 | Formation/lineup event |
+| 35 | Player changed position | — | Named in socceraction 1.5.3. Stats Perform's MA36 event type table (August 2025) does not list it |
 | 37 | Collection end | always 1 | |
 | 40 | Formation change | always 1 | In-game formation change |
 | 41 | Punch | always 1 | GK punches the ball |

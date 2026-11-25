@@ -294,10 +294,10 @@ metrics:sources` re-checks every card quote against its live source.
 | Provider | Chunks | Categories |
 |----------|--------|------------|
 | fast-forward | 255 | overview, getting-started, data-model, coordinate-system, orientations, layouts, transformations, distributed-compute, api-reference, 12 provider format pages |
-| StatsBomb | 244 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
+| StatsBomb | 243 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-lineups, xg-model, iq-metrics, player/team stats, player-mapping, identity-surfaces, data-provenance |
 | unravelsports | 202 | overview, installation, quickstart, concepts, graph converters, pressing intensity, formation detection, models, utils, american-football |
 | Wyscout | 165 | event-types, data-model, coordinate-system, api-access, api-endpoints, charting-analysis-metrics, glossary, identity-surfaces, data-provenance |
-| kloppy | 126 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
+| kloppy | 125 | data-model, usage, provider-mapping, tracking-rendering, event-derived-metrics |
 | floodlight | 144 | core data objects, io parsers (Tracab, DFL, Kinexon, Opta, SkillCorner, StatsBomb, StatsPerform, Second Spectrum), transforms, metrics, models, visualisation, guides |
 | SportMonks | 568 | full v3 endpoint reference (fixtures, livescores, leagues, seasons, states, types, statistics, brackets), syntax and includes, filtering, rate limits, error codes, changelog, plus curated event-types, data-model, api-access, charting-season-stories, identity-surfaces, data-provenance |
 | databallpy | 63 | data-model, overview, usage |
@@ -326,7 +326,7 @@ metrics:sources` re-checks every card quote against its live source.
 | VALD | 318 | api-access, api-endpoints, per-product endpoints and schemas (tenants, profiles, forcedecks, nordbord, forceframe, smartspeed, dynamo, humantrak), identity-surfaces, data-provenance |
 | Metric cards | 101 | xg, npxg, xg_assisted, xa, ppda, progressive_passes, progressive_carries, xt, vaep, field_tilt, pass_completion; see [Metric cards](#metric-cards) |
 
-**3,589 searchable chunks** across 32 providers and tools (the metric cards count as one).
+**3,587 searchable chunks** across 32 providers and tools (the metric cards count as one).
 
 STATSports, Firstbeat, Hawkin Dynamics and VALD sell wearables and testing devices.
 Their APIs return a customer's own athlete data, which includes personal and health

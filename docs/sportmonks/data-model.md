@@ -300,7 +300,7 @@ All list endpoints are paginated:
 }
 ```
 
-Default page size is 25. Use `per_page` parameter to adjust (max depends on plan).
+Default page size is 25. Use `per_page` parameter to adjust (max 50). Add `filters=populate` to raise the page size to 1,000; includes are disabled when this filter is used.
 
 ## Relationships Diagram
 

@@ -40,9 +40,10 @@ A practical team-sheet flow:
    not just the kickoff team sheet.
 
 The lineups payload is not just the starting XI. A player can appear in
-`lineup[]` with no interval starting at `00:00`, then enter later through a
-`Substitution` interval. Conversely, a starter can have a later interval ending
-with `Substitution` or `Tactical Shift`.
+`lineup[]` with no interval starting at `00:00`, then enter later through an
+interval whose `start_reason` is, for example, `Substitution - On (Tactical)`.
+Conversely, a starter can have a later interval ending with, for example,
+`Substitution - Off (Tactical)` or `Tactical Shift`.
 
 ## Position intervals
 
@@ -53,8 +54,20 @@ Each lineups player can carry multiple `positions[]` entries:
 | `position_id` / `position` | Display role for the interval. |
 | `from` / `from_period` | Entry time for that role. |
 | `to` / `to_period` | Exit time for that role; `null` means through the final whistle or current interval end. |
-| `start_reason` | Why the interval started: `Starting XI`, `Substitution`, or `Tactical Shift`. |
-| `end_reason` | Why the interval ended: `Substitution`, `Tactical Shift`, `Final Whistle`, etc. |
+| `start_reason` | Why the interval started. |
+| `end_reason` | Why the interval ended. |
+
+The Lineups Specification v2.0.0 PDF does not document `positions[]` (or
+`cards`), so it gives no list of reason values. A sample of 60 open-data lineup
+files contains these values (examples, not a closed list):
+
+- `start_reason`: `Starting XI`, `Tactical Shift`, `Substitution - On (Tactical)`,
+  `Substitution - On (Injury)`, `Substitution - On (Off Camera)`, `Player On`,
+  `Player On (Off Camera)`.
+- `end_reason`: `Final Whistle`, `Tactical Shift`, `Substitution - Off (Tactical)`,
+  `Substitution - Off (Injury)`, `Substitution - Off (Off Camera)`,
+  `Substitution - On (Tactical)`, `Substitution - On (Injury)`, `Player Off`,
+  `Player Off (Permanent)`, `Player Off (Off Camera)`, `Foul Committed (Red Card)`.
 
 For a static lineup card, use the interval that starts with `Starting XI`. For a
 timeline, formation animation, or minute-specific pitch view, resolve the active

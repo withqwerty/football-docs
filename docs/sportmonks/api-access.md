@@ -7,7 +7,7 @@ source_type: curated
 
 ## Overview
 
-SportMonks provides a REST API (v3) for football data. It offers a **free tier** with limited data, making it accessible for side projects and prototyping. Paid plans unlock more leagues, historical data, and advanced stats.
+SportMonks provides a REST API (v3) for football data. It offers a **free tier** (Danish Superliga and Scottish Premiership only), making it accessible for side projects and prototyping. Paid plans differ by the number of leagues you can select and by API call capacity; xG, odds and older historical data are sold as add-ons.
 
 ## Base URL
 
@@ -55,20 +55,22 @@ fixture = get_fixture(19145782, includes=["events", "lineups", "statistics"])
 
 ## Rate Limits
 
-| Plan | Requests/Minute | Requests/Hour |
-|---|---|---|
-| Free | 180 | 3,000 |
-| Básico | 1,000 | 10,000 |
-| Standard | 1,500 | 20,000 |
-| Advanced | 3,000 | 50,000 |
-| Enterprise | Custom | Custom |
+| Plan | API calls per entity per hour |
+|---|---|
+| Free | 3,000 |
+| Starter | 2,000 |
+| Growth | 2,500 |
+| Pro | 3,000 |
+| Enterprise | 5,000 |
+
+API call add-ons increase the hourly limit accordingly.
 
 **Limits are per entity, not per account.** Each entity type (Fixture, Team, Player
 and so on) has its own quota, shared across every endpoint that returns that entity.
 On a plan allowing 3,000 requests per hour you could therefore make 3,000 Fixture
 requests *and* 3,000 Team requests in the same hour, rather than 3,000 in total.
 
-Rate limit state is returned in the JSON response body, not in HTTP headers:
+Rate limit state is returned in a `rate_limit` object in the JSON response body:
 
 ```json
 {
@@ -81,31 +83,34 @@ Rate limit state is returned in the JSON response body, not in HTTP headers:
 ```
 
 `requested_entity` tells you which quota the call was counted against.
+`x-ratelimit-limit` and `x-ratelimit-remaining` can also be available in response
+headers. Not every error includes a `rate_limit` object, and cached responses need not
+expose matching header values.
 
 ## Plans & Coverage
 
-### Free Plan ("Básico Gratis")
+### Free Plan
 
-- 1 league (usually the league you select during signup)
-- Current season only
-- Basic fixture data, events, lineups
-- No historical data
-- No advanced statistics (xG, etc.)
-- 180 requests/minute
+- Danish Superliga and Scottish Premiership only
+- No credit card required, no expiry
+- 3,000 API calls per entity per hour
 
 ### Paid Plans
 
-| Feature | Básico | Standard | Advanced |
+| Plan | Leagues | API calls per entity per hour | Price |
 |---|---|---|---|
-| Leagues | 5 | 20+ | All (1,400+) |
-| Historical seasons | 2 | 5 | All |
-| Events & lineups | Yes | Yes | Yes |
-| Player stats | Basic | Full | Full |
-| xG / advanced stats | No | Yes | Yes |
-| Odds data | No | Yes | Yes |
-| Sidelined/injuries | Yes | Yes | Yes |
-| Live scores | No | Yes | Yes |
-| Transfers | Yes | Yes | Yes |
+| Starter | Pick any 5 leagues | 2,000 | €29/month |
+| Growth | Pick any 30 leagues | 2,500 | €99/month |
+| Pro | Pick any 120 leagues | 3,000 | €249/month |
+| Enterprise | All leagues | 5,000 | Custom |
+
+- All plans include the same core data features; the only difference is the number
+  of leagues and the API call capacity.
+- xG (the "xG & Pressure Index" bundle) and odds (the "Odds & Predictions" bundle) are
+  add-ons, as are extra API calls and extra leagues.
+- Historical data older than three seasons is a one-time add-on on Starter, Growth and
+  Pro. Enterprise includes full historical access.
+- Paid plans come with a 14-day free trial; yearly billing is discounted 20%.
 
 ## Key Endpoints
 
@@ -215,8 +220,12 @@ GET /fixtures?select=id,name,starting_at&include=scores:select(id,score)
 GET /fixtures?per_page=50&page=2
 ```
 
-Default: 50 per page. The maximum is a fixed API-wide ceiling rather than a
-plan-scaled figure — add `filters=populate` to raise it, up to 1,000.
+Default: 25 per page. The maximum `per_page` is 50. Add `filters=populate` to raise
+the page size to 1,000; includes are disabled when this filter is used.
+
+Offset pagination is rejected with a `4xx` error when `(page - 1) × per_page` exceeds
+20,000 rows. Every paginated response includes a `next_cursor` field; pass it as
+`cursor` to page beyond that cap.
 
 Response includes pagination metadata:
 
@@ -259,13 +268,8 @@ GET /fixtures?timezone=Europe/London
 
 ## Webhooks
 
-SportMonks supports webhooks for real-time updates (paid plans):
-
-- Match state changes (kick-off, goals, cards, FT)
-- Odds changes
-- Lineup confirmations
-
-Configure via the SportMonks dashboard.
+The SportMonks Football API does not support webhooks. Poll for changes and refresh
+caches on a schedule or when a polled response changes.
 
 ## Tips for Efficient Usage
 

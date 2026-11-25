@@ -1215,7 +1215,7 @@ describe("golden retrieval evals", () => {
     const result = listProviders(db);
     const text = result.content[0].text;
 
-    expect(text).toContain("**statsbomb** (244 chunks)");
+    expect(text).toContain("**statsbomb** (243 chunks)");
     expect(text).toContain("charting-lineups (6)");
     expect(text).toContain("aliases: stats-bomb, statsbomb-open-data, statsbomb-open");
     expect(text).toContain("**wyscout** (165 chunks)");
@@ -1253,7 +1253,7 @@ describe("golden retrieval evals", () => {
     );
     expect(text).toContain("**mplsoccer** (65 chunks)");
     expect(text).toContain("visualizations (49)");
-    expect(text).toContain("**kloppy** (126 chunks)");
+    expect(text).toContain("**kloppy** (125 chunks)");
     expect(text).toContain("event-derived-metrics (13)");
     expect(text).toContain("tracking-rendering (13)");
     expect(text).toContain("aliases: secondspectrum, second-spectrum");

@@ -21,10 +21,10 @@ arrays. Keep their ordering intact when building team sheets.
 | Qualifier | Meaning | Team-sheet use |
 |---|---|---|
 | `30` | player IDs | Match-day player list. |
-| `44` | player positions | Provider position values, parallel to the player list. |
+| `44` | player positions | Provider position values for the players in the set-up. |
 | `59` | shirt numbers | Shirt number list, parallel to the player list. |
 | `130` | team formation | Formation ID or label for the team setup. |
-| `131` | team-player formation | Starting XI formation slots, usually `1` through `11`. |
+| `131` | team-player formation | One formation slot per player, in the same order as the `30` player list. kloppy 3.19.1 pairs the two lists and maps each slot to a position for the `130` formation: slots `1` to `11` are positions, and slot `0` has none. |
 | `145` | formation slot | Slot for a player coming on as a substitute. |
 | `194` | captain | Opta player ID of the team captain when supplied. |
 

@@ -25,6 +25,10 @@ consumer-facing endpoints.
 IDs are provider-scoped numeric IDs. URL slugs and display labels are handles,
 not IDs, and can change independently of the underlying ID.
 
+In a match link such as `/matches/arsenal-vs-newcastle-united/3c42by#5795523`, the
+match ID is the number after `#`. The short code before it (`3c42by`) is not the
+match ID: the match page for that link carries `"matchId":5795523`.
+
 ## Other fields
 
 - Match: FotMob match ID, date/time, home and away teams, score, league,

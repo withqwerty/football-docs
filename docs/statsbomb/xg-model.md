@@ -5,7 +5,7 @@ source_type: curated
 
 # StatsBomb xG Model
 
-StatsBomb's expected goals (xG) model is one of the most sophisticated publicly discussed xG implementations. The value is provided as `statsbomb_xg` on every shot event.
+StatsBomb provides its expected goals (xG) value as `statsbomb_xg` on the shot object. The Open Data Events v4.0.0 spec describes it as "The StatsBomb expected goals value calculated for the shot."
 
 ---
 
@@ -32,77 +32,54 @@ The `statsbomb_xg` field is a float between 0.0 and 1.0 representing the probabi
 
 ## Model Inputs
 
-StatsBomb's xG model incorporates significantly more features than basic distance-and-angle models. Based on their published methodology and research:
+Hudl's public posts name these inputs. They do not publish a full feature list.
 
-### 1. Shot Location
-- Distance to goal centre
-- Angle to goal (visible goal width from the shooter's position)
-- Position on the pitch (x, y coordinates)
+### Traditional inputs
+Hudl's xG explainer (<https://www.hudl.com/blog/expected-goals-xg-explained>) says the main factors that have traditionally been fed into the large majority of xG models are distance to goal, angle to goal, body part, and type of assist or previous action (throughball, cross, set-piece, dribble, etc.).
 
-### 2. Shot Type and Technique
-- Body part: right foot, left foot, head, other
-- Technique: normal, volley, half-volley, lob, overhead kick, diving header, backheel
-- First-time shot vs controlled shot
+### What Hudl Statsbomb adds
+The same explainer says Hudl Statsbomb xG adds goalkeeper position and status, the position of all attackers and defenders in frame, and shot impact height.
 
-### 3. Shot Context
-- Open play, free kick, corner, penalty, kick-off
-- Following a dribble
-- One-on-one situation
-- Open goal (goalkeeper out of position)
+### Freeze frame features
+Hudl's "Upgrading Expected Goals" post (May 2022) says the existing xG uses the location of off-ball players in freeze frames at the time of the shot:
 
-### 4. Freeze Frame Data (Unique to StatsBomb)
-This is the most significant differentiator. StatsBomb's model uses the positions of all visible players at the moment of the shot:
+- the number of blockers in the triangle between the shot-taker and goalposts
+- the proportion of the goalface blocked by the defenders
+- whether there is any player between the goal and the shot-taker (the open-goal feature)
 
-- **Goalkeeper position**: Where the keeper is relative to the goal line and the shot trajectory. A keeper off their line or out of position significantly affects xG.
-- **Defender positions**: Number of defenders between the shooter and the goal, and their ability to block the shot.
-- **Defender pressure**: Whether defenders are close enough to affect the shot quality.
-- **Shot angle obstruction**: Whether defenders narrow the effective shooting angle.
-- **Body orientation**: Inferred from player positions and movement direction.
+The 2022 upgrade replaced these discrete features with continuous ones, by representing defenders as 2D Gaussian surfaces instead of fixed-radius circles.
 
-### 5. Preceding Events
-- Whether the shot followed a cross, through ball, or cut-back
-- Quality and type of the assist pass (key pass)
-- Whether the possession involved a counter-attack or set piece build-up
+### Shot and pass height
+StatsBomb's Shot Impact Height post (July 2020, <https://blogarchive.statsbomb.com/news/statsbomb-release-expected-goals-with-shot-impact-height/>) says pass height (whether a pass was on the ground or not) was already an xG input, and adds Shot Impact Height: the height (z coordinate) of the ball when a shot is struck.
 
 ---
 
 ## What Makes StatsBomb xG Different
 
 ### Freeze Frame Integration
-Most xG models (including early public models from sources like Understat or FBref/Opta) use only shot location, angle, body part, and game state. StatsBomb's model is fundamentally different because it incorporates the defensive setup via freeze frame data.
-
-This means two shots from the same location can have very different xG values depending on:
-- How many defenders are blocking the path to goal
-- Whether the goalkeeper is well-positioned
-- Whether the shooter is under pressure
-- Whether there is an open passing option (making defenders hesitate)
+StatsBomb says it has added the location of goalkeeper and defenders around a shot, on every shot, since its data debuted in 2018. This means two shots from the same location can have different xG values depending on where the goalkeeper and defenders are.
 
 ### Example Impact
 
-A shot from 20 yards with:
-- Clear path to goal, keeper off line: ~0.08 xG
-- Two defenders blocking, keeper set: ~0.02 xG
-
-Same location, 4x difference based on defensive context.
+The Shot Impact Height post gives a goalkeeper-position example: a shot valued at 0.48 xG without goalkeeper position is 0.82 with Hudl Statsbomb xG. The post says goalkeeper position has nominal value for most shots, but a large effect when the goalkeeper is far out of position.
 
 ### Penalty xG
 
-StatsBomb assigns a fixed xG value to penalties. Based on their data, penalties convert at approximately 76-77%, so penalty xG is typically around **0.76**.
+Hudl's xG explainer says the large majority of models assign penalties a static value of 0.76 xG, reflecting the historical conversion rate, and that the 2022 update of the Hudl Statsbomb xG model changes this static value to **0.78** xG.
 
 ### Header xG
 
-Headers generally receive lower xG than foot shots from the same location, reflecting the lower conversion rate of headed shots. The model accounts for header difficulty separately from foot shots.
+Hudl's xG explainer says that, from the same distance, foot shots are more likely to result in goals than headed shots.
 
 ---
 
 ## Model Updates
 
-StatsBomb periodically updates their xG model as they collect more data and refine their methodology. The model version is not explicitly stated in the data, but improvements are reflected in updated `statsbomb_xg` values for historical matches when data is reprocessed.
+StatsBomb has published these changes to its xG model:
 
-Key known iterations:
-- **Original model**: Location-based with basic features
-- **Freeze frame model**: Incorporated goalkeeper and defender positions from shot freeze frames
-- **360 enhanced**: Further refined using 360 data for more comprehensive spatial context
+- **2018**: goalkeeper and defender locations around every shot were part of the model from the start.
+- **2020 (Shot Impact Height)**: freeze frames around shots collected by computer vision, and Shot Impact Height added as a feature.
+- **2022 ("Upgrading Expected Goals")**: continuous blocker and goalkeeper features, monotonic constraints (the models are Gradient Boosted Trees), shot velocity in the post-shot xG model, and a split between chance quality and shot execution. Hudl said these upgrades would cover all historic data and everything collected going forwards.
 
 ---
 
@@ -147,18 +124,7 @@ npxg = sum(
 
 ## Comparison with Other xG Models
 
-| Feature | StatsBomb | Opta | Understat | FBref (basic) |
-|---------|-----------|------|-----------|---------------|
-| Shot location | Yes | Yes | Yes | Yes |
-| Body part | Yes | Yes | Yes | Yes |
-| Shot type/technique | Yes | Yes | Partial | Partial |
-| Game state | Yes | Yes | Yes | No |
-| Freeze frame (GK position) | Yes | No | No | No |
-| Freeze frame (defenders) | Yes | No | No | No |
-| Preceding event context | Yes | Partial | No | No |
-| Publicly available values | Open data only | Licensed | Free (web) | Free (web, Opta-sourced) |
-
-StatsBomb's use of freeze frame data is the primary methodological advantage. Academic research has consistently shown that goalkeeper position and defender locations are among the most predictive features for shot conversion probability.
+Hudl's xG explainer says not all xG models take into account the same factors. Its example: a standard model with only distance, angle, body part, and type of assist might value a shot at 0.30 xG, while a model that knows the goalkeeper was out of position might give the same chance 0.65 xG. Hudl does not publish a feature-by-feature comparison with other providers.
 
 ---
 
@@ -176,34 +142,21 @@ Even StatsBomb's model has inherent limitations:
 
 ## xG decomposition
 
-On the Events API v8 feed, the shot object carries a set of xG fields that
-split the chance into situation quality, execution, and goalkeeping
-components:
+Hudl's "Upgrading Expected Goals" post says every shot includes several xG-related outputs:
 
-| Field | Meaning |
+| Output | Meaning (from the post) |
 |---|---|
-| `statsbomb_xg` | **Chance quality** — likelihood of scoring from the *situation* (location, GK and blocker positions from the freeze frame), before the ball is struck. The headline xG. |
-| `shot_execution_xg` | Likelihood of scoring *after* execution — adds shot placement & velocity on top of the `statsbomb_xg` features. |
-| `shot_execution_xg_uplift` | `shot_execution_xg − statsbomb_xg`. Positive when execution improved the chance; negative for a misplaced/weak shot or one fired straight at the keeper. |
-| `gk_save_difficulty_xg` | Likelihood of the keeper conceding given placement, velocity and keeper position. On-target, unblocked shots only. Some feeds label this field `statsbomb_xg2`. |
-| `gk_positioning_xg_suppression` | Threat suppressed by the keeper's positioning vs an average keeper. |
-| `gk_shot_stopping_xg_suppression` | Goals prevented above expectation by the keeper's shot-stopping (rewards/penalises the keeper given outcome and difficulty). |
+| Chance quality (xG) | How dangerous a shooting opportunity is, considering the location of the goalkeeper and defenders. |
+| Shot execution | Post-shot xG from the shot-taker's perspective: chance quality features plus shot placement and velocity. |
+| Save difficulty | Post-shot xG from the keeper's perspective. |
+| Shot execution xG suppression | Listed as an output; the post does not define it further. |
+| GK positioning xG suppression | The difference between models with and without goalkeeper position: how much higher or lower the xG is because of the goalkeeper's position, compared with the average position for that situation. |
+| GK shot-stopping xG suppression | Listed as an output; the post says decoupling positioning lets StatsBomb value it separately from shot-stopping ability. |
+| Shot placement xG maps | Goal probability if the shot was placed anywhere along the goal face. |
+| GK positioning xG maps | Positioning value if the goalkeeper had stood in different areas of the penalty box. |
 
-This separates "how good was the chance" (`statsbomb_xg`) from "how well was it
-taken" (`shot_execution_xg` / `_uplift`) and "how much did the keeper do"
-(`gk_*_suppression`). These connect directly to the aggregated goalkeeping
-metrics in the stats endpoints — `np_psxg`, `npot_psxg_faced`, `gsaa`,
-`save_ratio`, `xs_ratio` — defined in `iq-metrics-glossary.md` and the
-`player-*-stats.md` catalogues.
+The post gives the output names, not JSON field names. The public Open Data Events v4.0.0 spec lists only `statsbomb_xg` on the shot object. Aggregated goalkeeping metrics are covered in `iq-metrics-glossary.md` and the `player-*-stats.md` catalogues.
 
 ## Post-Shot xG (PSxG / xGOT)
 
-Post-shot xG models goal probability *after* the shot is struck, using
-placement and velocity; it is only defined for on-target, unblocked shots and is
-the basis for valuing goalkeeping. In the event feed this corresponds to the
-`gk_save_difficulty_xg` / execution fields above; in the stats endpoints it
-surfaces as `np_psxg` (earned), `np_psxg_faced` / `npot_psxg_faced` (faced by a
-keeper), and is turned into Goals Saved Above Average (`gsaa`, `gsaa_ratio`,
-`xs_ratio`). PSxG is a commercial-API concept — it is not a standard field in
-the open-data event JSON, where only `statsbomb_xg` (and, on v8+ feeds, the
-decomposition) appears.
+Hudl's xG explainer says post-shot xG is calculated after a shot has been taken, generally considers shot placement (and goalkeeper positioning if the model includes it), and assigns a value between 0 (off-target) and 1 to every shot. Its primary use has been assessing goalkeeper shot-stopping. Hudl Statsbomb's post-shot xG model includes shot velocity. Post-shot xG is not a field in the public Open Data Events v4.0.0 spec, which lists only `statsbomb_xg` on the shot object.

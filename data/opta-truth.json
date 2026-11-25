@@ -3,7 +3,7 @@
     "reference": "Stats Perform F24 appendices, Appendix 1 (event types) and Appendix 2 (qualifiers)",
     "url": "https://documentation.statsperform.com/docs/data/opta-push/assets/Appendix/FootballFeedSpec/f24-appendices.htm",
     "checked": "2026-09-30",
-    "note": "Checked by hand: F24 has no machine-readable form. Qualifier labels are this repo's camelCase labels, not the vendor's names. Each was checked against its F24 meaning. Add an ID here only after checking it the same way."
+    "note": "Checked by hand: F24 has no machine-readable form. Qualifier labels are this repo's camelCase labels, not the vendor's names. Each was checked against its F24 meaning. Add an ID here only after checking it the same way. Exception: typeId 35 comes from the Opta type list in socceraction 1.5.3 (socceraction/data/opta/loader.py). It was not checked against F24, because on 2026-11-25 the F24 page opened only behind the Stats Perform customer login."
   },
   "eventTypes": {
     "1": "Pass",
@@ -31,6 +31,7 @@
     "30": "End",
     "32": "Start",
     "34": "Team set up",
+    "35": "Player changed position",
     "37": "Collection end",
     "40": "Formation change",
     "41": "Punch",

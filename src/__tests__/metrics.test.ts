@@ -46,6 +46,11 @@ describe("metric cards", () => {
     }
   });
 
+  it("give each origin a link an agent can open", () => {
+    const { cards } = metricCardsFileSchema.parse(JSON.parse(cardsJson));
+    for (const card of cards) expect(card.origin.source, card.id).toMatch(/^https?:\/\//);
+  });
+
   it("have a docs page for each card, for search_docs", () => {
     const { cards } = metricCardsFileSchema.parse(JSON.parse(cardsJson));
     for (const card of cards) {
