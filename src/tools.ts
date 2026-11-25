@@ -72,6 +72,7 @@ type SearchRow = {
   content: string;
   source_type: string;
   source_url: string | null;
+  archived_url: string | null;
   upstream_version: string | null;
   crawled_at: string | null;
   relevance: number;
@@ -379,7 +380,7 @@ function searchRows(
 ): SearchRow[] {
   let sql = `
     SELECT d.provider, d.category, d.title, d.content,
-           d.source_type, d.source_url, d.upstream_version,
+           d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
            d.crawled_at,
            rank * -1 as relevance
     FROM docs_fts
@@ -519,15 +520,40 @@ export function versionLabel(version: string | null): string {
   return /^\d/.test(trimmed) ? `v${trimmed}` : trimmed;
 }
 
-function sourceLabel(row: SearchRow): string {
-  const crawledAt = row.crawled_at ? ` | crawled ${row.crawled_at}` : "";
-  if (row.source_type === "curated") {
-    return `**Source:** curated by football-docs contributors${crawledAt}`;
+const archivedUrlColumns = new WeakMap<Database, string>();
+
+/**
+ * The archived_url column, or NULL for an index built before it existed (a
+ * downloaded data file can be older than the server reading it).
+ */
+function archivedUrlColumn(db: Database): string {
+  let column = archivedUrlColumns.get(db);
+  if (column === undefined) {
+    const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
+    column = columns.some((c) => c.name === "archived_url") ? "d.archived_url" : "NULL AS archived_url";
+    archivedUrlColumns.set(db, column);
   }
+  return column;
+}
+
+/**
+ * The provenance line above each result. It names the page the text came from
+ * and, when one is recorded, a permalink to that page as it was read, so an
+ * agent can check the original.
+ */
+export function sourceLabel(
+  row: Pick<SearchRow, "source_type" | "source_url" | "archived_url" | "upstream_version" | "crawled_at">,
+): string {
+  const archived = row.archived_url ? `, archived ${row.archived_url}` : "";
+  if (row.source_type === "curated") {
+    const from = row.source_url ? ` from ${row.source_url}${archived}` : "";
+    const checked = row.crawled_at ? ` | checked ${row.crawled_at}` : "";
+    return `**Source:** curated by football-docs contributors${from}${checked}`;
+  }
+  const links = row.source_url ? ` (${row.source_url}${archived})` : "";
   const version = versionLabel(row.upstream_version);
-  return `**Source:** ${row.source_type}${row.source_url ? ` (${row.source_url})` : ""}${
-    version ? ` | ${version}` : ""
-  }${crawledAt}`;
+  const crawledAt = row.crawled_at ? ` | crawled ${row.crawled_at}` : "";
+  return `**Source:** ${row.source_type}${links}${version ? ` | ${version}` : ""}${crawledAt}`;
 }
 
 function providerMetadata(registry: Registry, provider: string): ProviderRegistryEntry | undefined {
@@ -596,7 +622,7 @@ function providerDocsRows(
   if (matchQuery) {
     sql = `
       SELECT d.provider, d.category, d.title, d.content,
-             d.source_type, d.source_url, d.upstream_version,
+             d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
              d.crawled_at,
              rank * -1 as relevance
       FROM docs_fts
@@ -607,7 +633,7 @@ function providerDocsRows(
   } else {
     sql = `
       SELECT d.provider, d.category, d.title, d.content,
-             d.source_type, d.source_url, d.upstream_version,
+             d.source_type, d.source_url, ${archivedUrlColumn(db)}, d.upstream_version,
              d.crawled_at,
              0 as relevance
       FROM docs d

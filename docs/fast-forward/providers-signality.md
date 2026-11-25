@@ -1,5 +1,6 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/signality/
+archived_url: https://web.archive.org/web/20261125115457/https://fast-forward.readthedocs.io/en/latest/providers/signality/
 source_type: crawled
 upstream_version: 0.4.0
 crawled_at: 2026-11-24T20:04:36.009Z

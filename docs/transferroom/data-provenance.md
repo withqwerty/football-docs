@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://blog.transferroom.com/transferroom-api-smarter-team-building-powered-by-data
+archived_url: https://web.archive.org/web/20261015203348/https://blog.transferroom.com/transferroom-api-smarter-team-building-powered-by-data
 upstream_version: null
 crawled_at: 2026-09-24
 ---

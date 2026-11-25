@@ -1,3 +1,9 @@
+---
+source_url: https://databallpy.readthedocs.io/en/latest/getting_started/loading_in_a_game_page.html
+archived_url: https://web.archive.org/web/20260413152901/https://databallpy.readthedocs.io/en/latest/getting_started/loading_in_a_game_page.html
+source_type: curated
+---
+
 # DataBallPy Usage Guide
 
 ## Installation

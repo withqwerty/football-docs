@@ -1,3 +1,9 @@
+---
+source_url: https://soccerdata.readthedocs.io/en/latest/intro.html
+archived_url: https://web.archive.org/web/20260806040749/https://soccerdata.readthedocs.io/en/latest/intro.html
+source_type: curated
+---
+
 # soccerdata Usage Guide
 
 ## Installation

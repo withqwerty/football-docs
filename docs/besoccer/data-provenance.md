@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://api.besoccer.com/en/aboutus
+archived_url: https://web.archive.org/web/20261125114037/https://api.besoccer.com/en/aboutus
 upstream_version: null
 crawled_at: 2026-09-24
 ---

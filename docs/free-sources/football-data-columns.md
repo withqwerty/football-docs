@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.football-data.co.uk/notes.txt
+archived_url: https://web.archive.org/web/20261115033924/https://football-data.co.uk/notes.txt
 upstream_version: null
 crawled_at: 2026-11-16
 ---

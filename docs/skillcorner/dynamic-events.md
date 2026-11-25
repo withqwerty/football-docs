@@ -1,5 +1,6 @@
 ---
 source_url: https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf
+archived_url: https://web.archive.org/web/20260515223103/https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf
 source_type: crawled
 upstream_version: Dynamic Events CSV Specifications 2025/02/16
 crawled_at: 2026-11-24

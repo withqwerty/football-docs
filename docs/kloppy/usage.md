@@ -1,3 +1,9 @@
+---
+source_url: https://kloppy.pysport.org/user-guide/getting-started/
+archived_url: https://web.archive.org/web/20260806032657/https://kloppy.pysport.org/user-guide/getting-started/
+source_type: curated
+---
+
 # kloppy Usage Guide
 
 ## Installation

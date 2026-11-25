@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://github.com/dcaribou/transfermarkt-datasets
+archived_url: https://github.com/dcaribou/transfermarkt-datasets/tree/e44f186d6f06dd8452aaf54c7921ba66c961f637
 upstream_version: release of 2026-09-05 (commit e44f186)
 crawled_at: 2026-10-08
 ---

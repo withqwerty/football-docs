@@ -1,5 +1,6 @@
 ---
 source_url: https://unravelsports.readthedocs.io/en/latest/tutorials/american_football.html
+archived_url: https://web.archive.org/web/20260718024014/https://unravelsports.readthedocs.io/en/latest/tutorials/american_football.html
 source_type: crawled
 upstream_version: 1.2.1
 crawled_at: 2026-08-11T09:09:59.096Z

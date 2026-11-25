@@ -1,3 +1,9 @@
+---
+source_url: https://proud-island-049eed003.2.azurestaticapps.net/
+archived_url: https://web.archive.org/web/20261125135640/https://proud-island-049eed003.2.azurestaticapps.net/
+source_type: curated
+---
+
 # TransferRoom Availability and Injury Story Charts
 
 ## Build an availability story

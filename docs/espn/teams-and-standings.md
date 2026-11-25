@@ -1,5 +1,6 @@
 ---
 source_url: https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings?season=2025
+archived_url: https://web.archive.org/web/20261125114308/https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings?season=2025
 source_type: curated
 upstream_version: null
 crawled_at: 2026-09-06

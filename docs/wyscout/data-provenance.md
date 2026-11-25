@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.hudl.com/blog/wyscout-video-data-sourcing-standard
+archived_url: https://web.archive.org/web/20261125140502/https://www.hudl.com/blog/wyscout-video-data-sourcing-standard
 upstream_version: null
 crawled_at: 2026-09-24
 ---

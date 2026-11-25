@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/PySport/kloppy/blob/v3.19.1/kloppy/domain/models/tracking.py
+archived_url: https://github.com/PySport/kloppy/blob/bd68afcca659989da7ab41c5f5d6304bd5a6ac9d/kloppy/domain/models/tracking.py
+source_type: curated
+---
+
 # kloppy Tracking Rendering Notes
 
 ## Rendering centre-origin tracking data

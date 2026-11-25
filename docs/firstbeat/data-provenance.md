@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://apidocs.firstbeat.com/basic-concepts/
+archived_url: https://web.archive.org/web/20261125120030/https://apidocs.firstbeat.com/basic-concepts/#variables
 upstream_version: null
 crawled_at: 2026-09-30
 ---

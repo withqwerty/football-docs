@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/probberechts/soccerdata/blob/v2026.43.0/soccerdata/understat.py
+archived_url: https://github.com/probberechts/soccerdata/blob/b507432742119ba3897533895c92ac3a4f2b9259/soccerdata/understat.py
+source_type: curated
+---
+
 # Understat
 
 understat.com. Free xG data for the top 5 European leagues and Russian Premier League.

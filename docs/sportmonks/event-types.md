@@ -1,3 +1,8 @@
+---
+source_url: https://docs.sportmonks.com/v3/definitions/types
+source_type: curated
+---
+
 # SportMonks Event & Stat Type IDs
 
 Every ID below is from SportMonks' public type definitions for Football API v3

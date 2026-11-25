@@ -1,5 +1,6 @@
 ---
 source_url: https://fast-forward.readthedocs.io/en/latest/providers/
+archived_url: https://web.archive.org/web/20261125115742/https://fast-forward.readthedocs.io/en/latest/providers/
 source_type: crawled
 upstream_version: 0.4.0
 crawled_at: 2026-11-24T20:04:36.006Z

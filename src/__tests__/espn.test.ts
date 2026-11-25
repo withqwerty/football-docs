@@ -86,7 +86,12 @@ describe("ESPN docs match dated public-endpoint observations", () => {
       expect(urls.has(frontmatter.source_url!), doc.file).toBe(true);
       const source = observations.find((o) => o.url === frontmatter.source_url)!;
       expect(source.observed_at.startsWith(frontmatter.crawled_at!), doc.file).toBe(true);
-      for (const link of doc.text.matchAll(/https:\/\/[^\s)]+\.espn\.com\/[^\s)]+/g)) {
+      if (frontmatter.archived_url) {
+        expect(frontmatter.archived_url).toMatch(/^https:\/\/web\.archive\.org\/web\/\d{14}\//);
+        expect(frontmatter.archived_url.endsWith(`/${frontmatter.source_url}`), doc.file).toBe(true);
+      }
+      const text = doc.text.replace(/^archived_url: .*$/m, "");
+      for (const link of text.matchAll(/https:\/\/[^\s)]+\.espn\.com\/[^\s)]+/g)) {
         expect(urls.has(link[0]), link[0]).toBe(true);
       }
     }

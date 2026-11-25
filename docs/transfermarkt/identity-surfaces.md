@@ -1,6 +1,7 @@
 ---
 source_type: curated
-source_url: null
+source_url: https://www.transfermarkt.co.uk/erling-haaland/profil/spieler/418560
+archived_url: https://web.archive.org/web/20260708122749/https://www.transfermarkt.co.uk/erling-haaland/profil/spieler/418560
 upstream_version: null
 crawled_at: null
 ---

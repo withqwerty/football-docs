@@ -1,5 +1,6 @@
 ---
 source_url: https://floodlight.readthedocs.io/en/latest/modules/io/utils.html
+archived_url: https://web.archive.org/web/20261125122621/https://floodlight.readthedocs.io/en/latest/modules/io/utils.html
 source_type: crawled
 upstream_version:
 crawled_at: 2026-08-11T09:08:54.626Z

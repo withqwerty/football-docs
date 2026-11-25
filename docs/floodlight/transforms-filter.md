@@ -1,5 +1,6 @@
 ---
 source_url: https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html
+archived_url: https://web.archive.org/web/20261125123526/https://floodlight.readthedocs.io/en/latest/modules/transforms/filter.html
 source_type: crawled
 upstream_version:
 crawled_at: 2026-08-11T09:08:54.627Z

@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json
+archived_url: https://web.archive.org/web/20261125140145/https://prd-euw-api-externalhumantrakv2.valdperformance.com/swagger/v2/swagger.json
 upstream_version: Vald.Api.ExternalHumanTrak.V2 v2 (OpenAPI 3.0.4)
 crawled_at: 2026-09-30
 ---

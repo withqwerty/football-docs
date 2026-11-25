@@ -445,6 +445,7 @@ Two registry fields narrow a crawl. `llms_indexes` lists llms.txt files that lin
 npm run discover                        # probe sources without crawling
 npm run crawl                           # crawl all providers with sources
 npm run crawl -- --provider kloppy      # crawl one provider
+npm run permalinks                      # add archived_url permalinks for each source_url
 npm run ingest                          # rebuild search index from docs/
 npm run ingest -- --provider kloppy     # re-ingest one provider (incremental)
 ```

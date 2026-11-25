@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/PySport/kloppy/blob/v3.19.1/kloppy/infra/serializers/event/statsperform/deserializer.py
+archived_url: https://github.com/PySport/kloppy/blob/bd68afcca659989da7ab41c5f5d6304bd5a6ac9d/kloppy/infra/serializers/event/statsperform/deserializer.py
+source_type: curated
+---
+
 # Opta Qualifier IDs
 
 Qualifiers add context to events. Each event has a `qualifier[]` array where each entry has a `qualifierId` (numeric) and optional `value` (string).
@@ -5,6 +11,8 @@ Qualifiers add context to events. Each event has a `qualifier[]` array where eac
 The IDs and names below are checked against Stats Perform's qualifier table for the
 MA36 feed (August 2025). The camelCase names in the Name column are labels for this
 doc, not field names: the feed carries only the numeric `qualifierId`.
+Each qualifier in this table that kloppy 3.19.1 (`statsperform` deserializer) or
+socceraction 1.5.3 (`spadl/opta.py`) also reads has the same meaning in that code.
 
 ## Pass Qualifiers
 

@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/docs/soccer-ig-api-basics
+archived_url: https://web.archive.org/web/20260612050032/https://developer.sportradar.com/soccer/docs/soccer-ig-api-basics
 source_type: api_docs
 upstream_version: Soccer v4 / Soccer Extended v4
 crawled_at: 2026-07-09

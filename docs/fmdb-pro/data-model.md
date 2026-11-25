@@ -1,5 +1,6 @@
 ---
 source_url: https://api.fmdb.pro/api/openapi
+archived_url: https://web.archive.org/web/20261125124306/https://api.fmdb.pro/api/openapi
 source_type: crawled
 upstream_version: latest (full OpenAPI)
 crawled_at: 2026-08-31

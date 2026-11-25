@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://developer.sportradar.com/soccer/reference/soccer-overview
+archived_url: https://web.archive.org/web/20261125124809/https://developer.sportradar.com/soccer/reference/soccer-overview
 upstream_version: null
 crawled_at: 2026-09-24
 ---

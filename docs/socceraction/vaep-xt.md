@@ -1,3 +1,9 @@
+---
+source_url: https://socceraction.readthedocs.io/en/stable/documentation/valuing_actions/vaep.html
+archived_url: https://web.archive.org/web/20261125140822/https://socceraction.readthedocs.io/en/stable/documentation/valuing_actions/vaep.html
+source_type: curated
+---
+
 # VAEP and Expected Threat (xT)
 
 Action valuation models from the DTAI Sports Analytics Lab, implemented in the socceraction library.

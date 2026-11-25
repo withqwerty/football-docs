@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/assets/metrics.json
+archived_url: https://web.archive.org/web/20261125124609/https://connect.hawkindynamics.com/assets/metrics.json
 upstream_version: metrics.json as published 2026-09-30
 crawled_at: 2026-09-30
 ---

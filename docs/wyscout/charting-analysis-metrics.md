@@ -1,3 +1,9 @@
+---
+source_url: https://apidocs.wyscout.com/
+archived_url: https://web.archive.org/web/20260715102130/https://apidocs.wyscout.com/
+source_type: curated
+---
+
 # Wyscout Analysis Metrics and Story Charts
 
 ## Metric data surfaces

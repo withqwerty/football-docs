@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline
+archived_url: https://web.archive.org/web/20260810161553/https://developer.sportradar.com/soccer/reference/soccer-extended-sport-event-extended-timeline
 source_type: api_docs
 upstream_version: Soccer Extended v4
 crawled_at: 2026-08-31

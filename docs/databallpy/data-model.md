@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/Alek050/databallpy/blob/v0.8.1/databallpy/game.py
+archived_url: https://github.com/Alek050/databallpy/blob/3a8ebc17c6c752fb6e087069eeb707f60d2b9841/databallpy/game.py
+source_type: curated
+---
+
 # DataBallPy Data Model
 
 ## Game Object

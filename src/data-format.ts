@@ -28,6 +28,7 @@ export const SCHEMA_SQL = `
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     source_url TEXT,
+    archived_url TEXT,
     source_type TEXT NOT NULL DEFAULT 'curated',
     upstream_version TEXT,
     crawled_at TEXT

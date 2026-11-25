@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://prd-euw-api-extforcedecks.valdperformance.com/swagger/index.html
+archived_url: https://web.archive.org/web/20261125140021/https://prd-euw-api-extforcedecks.valdperformance.com/swagger/index.html
 upstream_version: VALD external APIs, eight specifications (OpenAPI 3.0.4)
 crawled_at: 2026-11-16
 ---

@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json
+archived_url: https://web.archive.org/web/20261125140306/https://prd-euw-api-externaltenants.valdperformance.com/swagger/v1/swagger.json
 upstream_version: Vald.Api.ExternalTenants.V1 v1 (OpenAPI 3.0.4)
 crawled_at: 2026-09-30
 ---

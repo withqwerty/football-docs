@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/reference/soccer-extended-overview
+archived_url: https://web.archive.org/web/20260612051516/https://developer.sportradar.com/soccer/reference/soccer-extended-overview
 source_type: api_docs
 upstream_version: Soccer Extended v4
 crawled_at: 2026-07-09

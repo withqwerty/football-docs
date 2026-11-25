@@ -1,3 +1,9 @@
+---
+source_url: https://mplsoccer.readthedocs.io/en/latest/mplsoccer.soccer.pitch.html
+archived_url: https://web.archive.org/web/20261125140722/https://mplsoccer.readthedocs.io/en/latest/mplsoccer.soccer.pitch.html
+source_type: curated
+---
+
 # mplsoccer Visualizations
 
 ## Drawing a Pitch

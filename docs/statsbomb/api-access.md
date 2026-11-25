@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/hudl/open-data
+archived_url: https://github.com/hudl/open-data/tree/b0bc9f22dd77c206ddedc1d742893b3bbe64baec
+source_type: curated
+---
+
 # StatsBomb API Access
 
 StatsBomb data can be accessed through three channels: the free open data repository, the statsbombpy Python library, and the commercial REST API.

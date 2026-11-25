@@ -1,3 +1,9 @@
+---
+source_url: https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_setup/plot_pitch_types.html
+archived_url: https://web.archive.org/web/20261125140643/https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_setup/plot_pitch_types.html
+source_type: curated
+---
+
 # mplsoccer Pitch Types and Coordinate Systems
 
 ## Supported Pitch Types

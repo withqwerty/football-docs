@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/hudl/open-data/blob/master/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+archived_url: https://github.com/hudl/open-data/blob/bc10e73b03383def9e7567849b037bf5652a2d98/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+source_type: curated
+---
+
 # StatsBomb Data Model
 
 StatsBomb structures football data into four primary entities: **competitions**, **matches**, **lineups**, and **events**. A fifth entity, **360 freeze frames**, is available for select matches and provides positional data for all visible players on every event.

@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/ML-KULeuven/socceraction/blob/v1.5.3/socceraction/data/opta/loader.py
+archived_url: https://github.com/ML-KULeuven/socceraction/blob/3ca3ce0b0163352b84a0f7665c647fb4f3f9c3ad/socceraction/data/opta/loader.py
+source_type: curated
+---
+
 # Opta Event Types (F24 Specification)
 
 Opta's event stream uses numeric `typeId` values on each event. Source: F24 Appendix 1.

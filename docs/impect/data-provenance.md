@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.catapult.com/blog/impect-data-from-football-for-football
+archived_url: https://web.archive.org/web/20261125113746/https://www.catapult.com/blog/impect-data-from-football-for-football
 upstream_version: null
 crawled_at: 2026-09-24
 ---

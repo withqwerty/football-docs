@@ -1,6 +1,7 @@
 ---
 source_type: crawled
 source_url: https://www.skillcorner.com/apidocs.json
+archived_url: https://web.archive.org/web/20261125124623/https://www.skillcorner.com/apidocs.json
 upstream_version: SkillCorner API (OpenAPI 3.1)
 crawled_at: 2026-08-31
 ---

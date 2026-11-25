@@ -1,3 +1,9 @@
+---
+source_url: https://databallpy.readthedocs.io/en/latest/introduction/intro_page.html
+archived_url: https://web.archive.org/web/20260929120741/https://databallpy.readthedocs.io/en/latest/introduction/intro_page.html
+source_type: curated
+---
+
 # DataBallPy
 
 ## Overview

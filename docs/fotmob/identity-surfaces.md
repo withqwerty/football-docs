@@ -1,6 +1,7 @@
 ---
 source_type: curated
-source_url: null
+source_url: https://www.fotmob.com/teams/8456/overview/manchester-city
+archived_url: https://web.archive.org/web/20260731092613/https://www.fotmob.com/teams/8456/overview/manchester-city
 upstream_version: null
 crawled_at: null
 ---

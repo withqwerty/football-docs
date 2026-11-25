@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json
+archived_url: https://web.archive.org/web/20261125140202/https://prd-euw-api-externalprofile.valdperformance.com/swagger/v1/swagger.json
 upstream_version: Vald.Api.ExternalProfile.V1 v1 (OpenAPI 3.0.4)
 crawled_at: 2026-09-30
 ---

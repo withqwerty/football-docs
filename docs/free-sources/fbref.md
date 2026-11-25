@@ -1,3 +1,9 @@
+---
+source_url: https://www.sports-reference.com/blog/2026/01/fbref-stathead-data-update/
+archived_url: https://web.archive.org/web/20260709014630/https://www.sports-reference.com/blog/2026/01/fbref-stathead-data-update/
+source_type: curated
+---
+
 # FBref
 
 Football Reference (fbref.com). A comprehensive free source for historical results,
