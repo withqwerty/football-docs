@@ -41,6 +41,18 @@ const SAVE_PAUSE_MS = 8_000;
  */
 const GENERATED = [/^metric-cards\//, /^skillcorner\/dynamic-events\.md$/];
 
+/**
+ * Pages Save Page Now cannot capture: it answered HTTP 520 on every try in
+ * November 2026. Their docs keep the live source_url as the only link, and
+ * the script does not try them again.
+ */
+const LIVE_ONLY = new Set([
+  "https://www.soccerdonna.de/en/bayern-muenchen/startseite/verein_57.html",
+  "https://docs.sportmonks.com/football/llms-full.txt",
+  "https://docs.sportmonks.com/v3/definitions/types",
+  "https://www.hudl.com/blog/upgrading-expected-goals",
+]);
+
 type Doc = {
   path: string;
   rel: string;
@@ -267,11 +279,13 @@ async function main(): Promise<void> {
   const docs = docFiles(provider)
     .map(readDoc)
     .filter((doc): doc is Doc => doc !== null && !GENERATED.some((pattern) => pattern.test(doc.rel)));
-  const todo = docs.filter((doc) => !permalinkHolds(doc));
+  const liveOnly = docs.filter((doc) => !doc.archivedUrl && LIVE_ONLY.has(doc.sourceUrl));
+  const todo = docs.filter((doc) => !permalinkHolds(doc) && !liveOnly.includes(doc));
+  const liveNote = liveOnly.length ? ` ${liveOnly.length} link only to the live page (${liveOnly.map((doc) => doc.rel).join(", ")}).` : "";
 
   if (check) {
     for (const doc of todo) console.log(`${doc.rel}: ${doc.archivedUrl ? "permalink older than crawled_at" : "no permalink"} (${doc.sourceUrl})`);
-    console.log(`${docs.length - todo.length} of ${docs.length} docs with a source have a permalink.`);
+    console.log(`${docs.length - todo.length - liveOnly.length} of ${docs.length} docs with a source have a permalink.${liveNote}`);
     return;
   }
 
@@ -287,7 +301,7 @@ async function main(): Promise<void> {
       console.log(`${doc.rel}: FAILED ${(error as Error).message}`);
     }
   }
-  console.log(`\n${todo.length - failed.length} permalinks written, ${docs.length - todo.length} already set.`);
+  console.log(`\n${todo.length - failed.length} permalinks written, ${docs.length - todo.length - liveOnly.length} already set.${liveNote}`);
   if (failed.length) console.log(`No permalink for ${failed.length}:\n${failed.map((line) => `  ${line}`).join("\n")}`);
 }
 

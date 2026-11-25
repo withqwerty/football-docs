@@ -1,7 +1,5 @@
 ---
 source_type: curated
-source_url: https://github.com/hudl/open-data
-archived_url: https://github.com/hudl/open-data/tree/4b73468fc5b0f1950f9f66fada70ad3a4f9327cb
 upstream_version: "5.0.0"
 crawled_at: null
 ---
