@@ -1,5 +1,6 @@
 ---
 source_url: https://reep.football/get-started
+archived_url: https://web.archive.org/web/20261125113718/https://reep.football/get-started/
 source_type: curated
 upstream_version: null
 crawled_at: 2026-11-24

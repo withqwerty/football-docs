@@ -380,7 +380,7 @@ New providers are assessed against [INCLUSION.md](INCLUSION.md). Comment on the 
 We do not make up information or overly interpret upstream documentation. Every chunk in the search index should be directly traceable to a source.
 
 - **Crawled docs** are fetched verbatim from upstream (llms.txt, ReadTheDocs, GitHub). They carry provenance metadata (source URL, upstream version, crawl date) in frontmatter. Pages crawled through an llms.txt index have markup and bulk removed (appended OpenAPI definitions, diagrams, long example payloads, repeated tables), with each removal marked; see the README's crawl pipeline section.
-- **Curated docs** are written by contributors for cross-provider comparisons, coordinate conversion formulas, and content that doesn't exist upstream. These are labelled as `source_type: curated`.
+- **Curated docs** are written by contributors for cross-provider comparisons, coordinate conversion formulas, and content that doesn't exist upstream. These are labelled as `source_type: curated`. When the facts come from a public page, name it in `source_url`, at the version you read (a GitHub tag or a versioned docs URL, not the default branch). A maintainer adds `archived_url`, a permalink to the page as you read it, with `pnpm permalinks`.
 
 If you're unsure whether something is accurate, mark it as unverified in your PR rather than guessing.
 

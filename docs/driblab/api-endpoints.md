@@ -1,5 +1,6 @@
 ---
 source_url: https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede
+archived_url: https://web.archive.org/web/20261125114111/https://driblab.notion.site/Driblab-API-1-0-Guide-EN-65ce257f83b5451fb79896b01d41aede
 source_type: curated
 upstream_version: Driblab API 1.0 Guide [EN]
 crawled_at: 2026-09-09

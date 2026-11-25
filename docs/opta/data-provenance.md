@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.statsperform.com/products/opta-data/
+archived_url: https://web.archive.org/web/20260922023750/https://www.statsperform.com/products/opta-data/
 upstream_version: null
 crawled_at: 2026-09-24
 ---

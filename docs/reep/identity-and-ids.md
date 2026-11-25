@@ -1,5 +1,6 @@
 ---
 source_url: https://reep.football/id-policy
+archived_url: https://web.archive.org/web/20261125113647/https://reep.football/id-policy/
 source_type: curated
 upstream_version: null
 crawled_at: 2026-11-24

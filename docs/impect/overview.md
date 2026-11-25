@@ -1,5 +1,6 @@
 ---
-source_url: https://github.com/ImpectAPI/open-data
+source_url: https://github.com/ImpectAPI/open-data/tree/v2.0
+archived_url: https://github.com/ImpectAPI/open-data/tree/dfc80331b1e75629541992dc25650f50f6d8f5ea
 source_type: curated
 upstream_version: open-data v2.0 (tag v2.0, Bundesliga 2023/24, dataVersion V3)
 crawled_at: 2026-11-24

@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.soccerdonna.de/en/
+archived_url: https://web.archive.org/web/20261125124722/https://www.soccerdonna.de/en//how-the-market-values-are-calculated-on-soccerdonna/news/anzeigen_12886.html
 upstream_version: null
 crawled_at: 2026-09-24
 ---

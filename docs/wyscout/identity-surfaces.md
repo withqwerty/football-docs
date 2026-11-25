@@ -1,6 +1,7 @@
 ---
 source_type: curated
-source_url: null
+source_url: https://apidocs.wyscout.com/
+archived_url: https://web.archive.org/web/20260715102130/https://apidocs.wyscout.com/
 upstream_version: null
 crawled_at: null
 ---

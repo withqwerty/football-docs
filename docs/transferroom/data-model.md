@@ -1,5 +1,6 @@
 ---
 source_url: https://proud-island-049eed003.2.azurestaticapps.net/
+archived_url: https://web.archive.org/web/20261125135808/https://proud-island-049eed003.2.azurestaticapps.net/
 source_type: crawled
 upstream_version: null
 crawled_at: 2026-08-31

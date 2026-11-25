@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://docs.sportmonks.com/v3
+archived_url: https://web.archive.org/web/20261106181600/https://docs.sportmonks.com/v3
 upstream_version: null
 crawled_at: null
 ---

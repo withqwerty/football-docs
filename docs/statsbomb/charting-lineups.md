@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/hudl/open-data/blob/master/doc/Open%20Data%20Lineups%20v2.0.0.pdf
+archived_url: https://github.com/hudl/open-data/blob/958d6c736888e79cb1b48f04d55730f7b16b6c4c/doc/Open%20Data%20Lineups%20v2.0.0.pdf
+source_type: curated
+---
+
 # StatsBomb Lineups and Team Sheets
 
 ## Lineup data surfaces

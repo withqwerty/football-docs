@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/hudl/open-data/blob/master/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+archived_url: https://github.com/hudl/open-data/blob/bc10e73b03383def9e7567849b037bf5652a2d98/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+source_type: curated
+---
+
 # StatsBomb Coordinate System
 
 ## Pitch Dimensions

@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://statsportsproseries.com/thirdpartyapi/index.html
+archived_url: https://web.archive.org/web/20261125135423/https://statsportsproseries.com/thirdpartyapi/index.html
 upstream_version: STATSports 3rd Party API v5, v6 and v7 (OpenAPI 3.0.1)
 crawled_at: 2026-11-16
 ---

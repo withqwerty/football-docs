@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/hudl/open-data/blob/master/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+archived_url: https://github.com/hudl/open-data/blob/bc10e73b03383def9e7567849b037bf5652a2d98/doc/StatsBomb%20Open%20Data%20Specification%20v1.1.pdf
+source_type: curated
+---
+
 # StatsBomb Event Types
 
 StatsBomb uses named event types with numeric IDs. Every event in a match has a `type` object with `id` and `name` fields. Events also carry type-specific nested objects (e.g. a Shot event has a `shot` object with outcome, xG, freeze frame, etc.).

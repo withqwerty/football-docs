@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.hudl.com/en_gb/products/statsbomb
+archived_url: https://web.archive.org/web/20260918001751/https://www.hudl.com/en_gb/products/statsbomb
 upstream_version: null
 crawled_at: 2026-09-24
 ---

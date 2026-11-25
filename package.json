@@ -17,6 +17,7 @@
     "check": "tsc --noEmit",
     "dev": "tsx src/index.ts",
     "ingest": "tsx src/ingest.ts",
+    "permalinks": "tsx scripts/permalinks.mts",
     "crawl": "tsx src/crawl.ts",
     "discover": "tsx src/crawl.ts --discover",
     "impect:truth": "tsx src/impect-truth.ts",

@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/docs/soccer-api-vs-soccer-extended-api
+archived_url: https://web.archive.org/web/20260612044828/https://developer.sportradar.com/soccer/docs/soccer-api-vs-soccer-extended-api
 source_type: api_docs
 upstream_version: Soccer v4 / Soccer Extended v4
 crawled_at: 2026-07-09

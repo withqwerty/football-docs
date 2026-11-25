@@ -1,5 +1,6 @@
 ---
 source_url: https://www.api-football.com/documentation-v3
+archived_url: https://web.archive.org/web/20261012113830/https://www.api-football.com/documentation-v3
 source_type: curated
 upstream_version: 3.9.3
 crawled_at: 2026-10-16

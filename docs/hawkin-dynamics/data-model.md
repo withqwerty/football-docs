@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
+archived_url: https://web.archive.org/web/20261125124540/https://connect.hawkindynamics.com/api
 upstream_version: Hawkin Force Platform API 1.17 (OpenAPI 3.0.3)
 crawled_at: 2026-09-30
 ---

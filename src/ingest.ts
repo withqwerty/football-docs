@@ -7,6 +7,7 @@
  * Each markdown file can include a YAML frontmatter block with provenance:
  *   ---
  *   source_url: https://example.com/docs
+ *   archived_url: https://web.archive.org/web/20260326000000/https://example.com/docs
  *   source_type: readthedocs
  *   upstream_version: 1.8.8
  *   crawled_at: 2026-03-26T00:00:00Z
@@ -35,6 +36,8 @@ const METRIC_CARDS_PATH = resolve(__dirname, "..", "metrics", "cards.json");
 
 interface Frontmatter {
   source_url: string | null;
+  /** A link that keeps showing the page as it was read (scripts/permalinks.mts). */
+  archived_url: string | null;
   source_type: string; // "crawled" | "curated" | "llms_txt"
   upstream_version: string | null;
   crawled_at: string | null;
@@ -46,6 +49,7 @@ interface DocChunk {
   title: string;
   content: string;
   source_url: string | null;
+  archived_url: string | null;
   source_type: string;
   upstream_version: string | null;
   crawled_at: string | null;
@@ -58,6 +62,7 @@ export function parseFrontmatter(raw: string): { frontmatter: Frontmatter; body:
   const text = raw.replace(/\r\n?/g, "\n");
   const defaults: Frontmatter = {
     source_url: null,
+    archived_url: null,
     source_type: "curated",
     upstream_version: null,
     crawled_at: null,
@@ -142,8 +147,8 @@ function ingestProvider(db: Database, provider: string): number {
   let totalChunks = 0;
 
   const insert = db.prepare(
-    `INSERT INTO docs (provider, category, title, content, source_url, source_type, upstream_version, crawled_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO docs (provider, category, title, content, source_url, archived_url, source_type, upstream_version, crawled_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   for (const file of files) {
@@ -158,6 +163,7 @@ function ingestProvider(db: Database, provider: string): number {
         chunk.title,
         chunk.content,
         chunk.source_url,
+        chunk.archived_url,
         chunk.source_type,
         chunk.upstream_version,
         chunk.crawled_at,
@@ -177,6 +183,12 @@ export { SCHEMA_SQL };
 /** Ensure tables exist without dropping existing data. */
 function ensureSchema(db: Database): void {
   db.exec(SCHEMA_SQL);
+  // An index built before archived_url existed gains the column, so a
+  // single-provider ingest can still write to it.
+  const columns = db.prepare("PRAGMA table_info(docs)").all() as Array<{ name: string }>;
+  if (!columns.some((column) => column.name === "archived_url")) {
+    db.exec("ALTER TABLE docs ADD COLUMN archived_url TEXT");
+  }
 }
 
 function git(args: string[]): string | null {

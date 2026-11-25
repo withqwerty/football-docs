@@ -1,5 +1,6 @@
 ---
 source_url: https://dataglossary.wyscout.com/
+archived_url: https://web.archive.org/web/20261125140531/https://dataglossary.wyscout.com/
 source_type: crawled
 upstream_version: null
 crawled_at: 2026-06-03

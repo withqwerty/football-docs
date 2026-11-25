@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://landing.skillcorner.com/us/products/football/xy-tracking-data
+archived_url: https://web.archive.org/web/20261125124640/https://landing.skillcorner.com/us/products/football/xy-tracking-data
 upstream_version: null
 crawled_at: 2026-09-24
 ---

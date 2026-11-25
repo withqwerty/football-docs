@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.thesportsdb.com/
+archived_url: https://web.archive.org/web/20260924221918/https://www.thesportsdb.com/
 upstream_version: null
 crawled_at: 2026-09-24
 ---

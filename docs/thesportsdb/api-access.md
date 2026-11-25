@@ -1,5 +1,6 @@
 ---
 source_url: https://www.thesportsdb.com/docs_api_guide
+archived_url: https://web.archive.org/web/20261125135540/https://www.thesportsdb.com/docs_api_guide
 source_type: api_docs
 upstream_version: "1 / 2"
 crawled_at: 2026-07-09

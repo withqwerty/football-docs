@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json
+archived_url: https://web.archive.org/web/20261125140052/https://prd-euw-api-extforcedecks.valdperformance.com/swagger/v2019q3/swagger.json
 upstream_version: null
 crawled_at: 2026-09-30
 ---

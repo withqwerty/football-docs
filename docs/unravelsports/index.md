@@ -1,5 +1,6 @@
 ---
 source_url: https://unravelsports.readthedocs.io/en/latest
+archived_url: https://web.archive.org/web/20261125135846/https://unravelsports.readthedocs.io/en/latest/
 source_type: crawled
 upstream_version: 1.2.1
 crawled_at: 2026-08-11T09:09:59.093Z

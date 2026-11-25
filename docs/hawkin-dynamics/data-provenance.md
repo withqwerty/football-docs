@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://connect.hawkindynamics.com/api
+archived_url: https://web.archive.org/web/20261125124540/https://connect.hawkindynamics.com/api
 upstream_version: null
 crawled_at: 2026-09-30
 ---

@@ -1,3 +1,9 @@
+---
+source_url: https://mplsoccer.readthedocs.io/en/latest/
+archived_url: https://web.archive.org/web/20260811021939/https://mplsoccer.readthedocs.io/en/latest/
+source_type: curated
+---
+
 # mplsoccer
 
 ## Overview

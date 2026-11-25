@@ -1,5 +1,6 @@
 ---
 source_url: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817
+archived_url: https://web.archive.org/web/20261125114225/https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20250817
 source_type: curated
 upstream_version: null
 crawled_at: 2026-09-06

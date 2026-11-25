@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://reep.football/coverage
+archived_url: https://web.archive.org/web/20261125113618/https://reep.football/coverage/
 upstream_version: null
 crawled_at: 2026-11-24
 ---

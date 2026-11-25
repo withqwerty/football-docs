@@ -1,5 +1,6 @@
 ---
 source_url: https://unravelsports.readthedocs.io/en/latest/api/generated/unravel.utils.add_graph_id_column.html
+archived_url: https://web.archive.org/web/20260718032531/https://unravelsports.readthedocs.io/en/latest/api/generated/unravel.utils.add_graph_id_column.html
 source_type: crawled
 upstream_version: 1.2.1
 crawled_at: 2026-08-11T09:09:59.099Z

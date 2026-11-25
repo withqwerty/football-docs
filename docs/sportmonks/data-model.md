@@ -1,3 +1,8 @@
+---
+source_url: https://docs.sportmonks.com/football/llms-full.txt
+source_type: curated
+---
+
 # SportMonks Data Model
 
 ## Core Entities

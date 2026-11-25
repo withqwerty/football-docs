@@ -1,5 +1,6 @@
 ---
 source_url: https://apidocs.wyscout.com/
+archived_url: https://web.archive.org/web/20261125140332/https://apidocs.wyscout.com/#tag/Seasons/paths/~1seasons~1%7BwyId%7D~1teams/get
 source_type: crawled
 upstream_version: v3 2026-07-03 / v4 2026-08-27
 crawled_at: 2026-08-31

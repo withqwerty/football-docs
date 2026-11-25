@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/probberechts/soccerdata/blob/v2026.43.0/README.rst
+archived_url: https://github.com/probberechts/soccerdata/blob/b507432742119ba3897533895c92ac3a4f2b9259/README.rst
+source_type: curated
+---
+
 # soccerdata
 
 ## Overview

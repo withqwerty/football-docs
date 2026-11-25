@@ -101,6 +101,13 @@ github), upstream version, crawl timestamp. This is surfaced in `search_docs`
 results so agents can tell curated content from upstream docs. Don't strip this
 frontmatter when editing `docs/<provider>/*.md` by hand.
 
+Curated docs give `source_url` too: the public page their facts come from, at the
+version they describe (for example a GitHub tag, not the default branch). `pnpm
+permalinks` then adds `archived_url`, a permalink to that page as it was read: a
+commit-pinned GitHub URL, or the closest Wayback Machine snapshot (it saves one if
+there is none). Search results show both. Run it after a crawl or after setting a
+new `source_url`; a crawl rewrites frontmatter and drops `archived_url`.
+
 ## Accuracy rules
 
 Documentation that is confidently wrong is worse than no documentation, because the

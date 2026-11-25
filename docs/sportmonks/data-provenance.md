@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.sportmonks.com/football-api/
+archived_url: https://web.archive.org/web/20261005193258/https://www.sportmonks.com/football-api/
 upstream_version: null
 crawled_at: 2026-09-24
 ---

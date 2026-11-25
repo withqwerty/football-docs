@@ -1,3 +1,9 @@
+---
+source_url: https://github.com/PySport/kloppy/blob/v3.19.1/kloppy/domain/models/event.py
+archived_url: https://github.com/PySport/kloppy/blob/bd68afcca659989da7ab41c5f5d6304bd5a6ac9d/kloppy/domain/models/event.py
+source_type: curated
+---
+
 # kloppy Data Model
 
 ## Overview

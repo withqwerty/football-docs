@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://apidocs.firstbeat.com/variables/
+archived_url: https://web.archive.org/web/20261125120120/https://apidocs.firstbeat.com/variables/#time-series
 upstream_version: Firstbeat Cloud API 1.1.0 (OpenAPI 3.0.1)
 crawled_at: 2026-09-30
 ---

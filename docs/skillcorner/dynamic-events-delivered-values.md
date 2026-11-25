@@ -1,5 +1,6 @@
 ---
 source_url: https://github.com/SkillCorner/opendata/tree/4340d274572876239c154c90bc507a9b3250a656
+archived_url: https://github.com/SkillCorner/opendata/tree/4340d274572876239c154c90bc507a9b3250a656
 source_type: curated
 upstream_version: SkillCorner/opendata 4340d27
 crawled_at: 2026-11-24

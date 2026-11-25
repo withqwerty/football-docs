@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/docs/soccer-ig-overview
+archived_url: https://web.archive.org/web/20261125134752/https://developer.sportradar.com/soccer/docs/soccer-ig-overview
 source_type: llms_txt
 upstream_version: Soccer v4 / Soccer Extended v4
 crawled_at: 2026-09-24T09:30:51.190Z

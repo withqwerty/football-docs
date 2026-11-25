@@ -29,6 +29,8 @@ export const SPEC_URL =
   "https://26560301.fs1.hubspotusercontent-eu1.net/hubfs/26560301/Guides/Dynamic%20Events/20250216%20-%20Dynamic%20Events%20CSV%20Specifications.pdf";
 /** SHA-256 of the PDF the page was built from. check_upstream.py reads this line. */
 export const SPEC_SHA256 = "1b737ffc6882eca1501b6fefab69893fddb8703a8411034256d682453739699a";
+/** A Wayback copy of the same PDF (same SHA-256), so the source outlives the live link. */
+export const SPEC_ARCHIVED_URL = `https://web.archive.org/web/20260515223103/${SPEC_URL}`;
 const SPEC_NAME = "Dynamic Events CSV Specifications 2025/02/16";
 const CRAWLED_AT = "2026-11-24";
 
@@ -293,7 +295,7 @@ function joinVals(ls: string[]): string {
   }, "");
 }
 
-const cell = (text: string) => text.replace(/\|/g, "\\|").trim();
+const cell = (text: string) => text.replace(/\\/g, "\\\\").replace(/\|/g, "\\|").trim();
 
 export function renderPage(sections: Section[]): string {
   const [first, ...rest] = sections;
@@ -308,6 +310,7 @@ export function renderPage(sections: Section[]): string {
   const out = [
     "---",
     `source_url: ${SPEC_URL}`,
+    `archived_url: ${SPEC_ARCHIVED_URL}`,
     "source_type: crawled",
     `upstream_version: ${SPEC_NAME}`,
     `crawled_at: ${CRAWLED_AT}`,
@@ -379,7 +382,7 @@ async function main(): Promise<void> {
   const sha = createHash("sha256").update(data).digest("hex");
   if (sha !== SPEC_SHA256) {
     console.error(`The PDF changed: sha256 ${sha}, pinned ${SPEC_SHA256}.`);
-    console.error("Read the new PDF, update SPEC_NAME, CHANGELOG and SPEC_SHA256 here, then run again.");
+    console.error("Read the new PDF, update SPEC_NAME, CHANGELOG, SPEC_SHA256 and SPEC_ARCHIVED_URL (a Wayback snapshot of the new PDF) here, then run again.");
     process.exit(1);
   }
   const { sections, pages } = await extractSections(data);

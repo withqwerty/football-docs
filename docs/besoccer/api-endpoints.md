@@ -1,5 +1,6 @@
 ---
 source_url: https://documenter.getpostman.com/view/6414020/2s93JwM1t4
+archived_url: https://web.archive.org/web/20261125114010/https://documenter.getpostman.com/view/6414020/2s93JwM1t4
 source_type: curated
 upstream_version: Postman collection "Apiclient"
 crawled_at: 2026-07-31

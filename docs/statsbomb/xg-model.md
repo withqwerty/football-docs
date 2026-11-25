@@ -1,3 +1,8 @@
+---
+source_url: https://www.hudl.com/blog/upgrading-expected-goals
+source_type: curated
+---
+
 # StatsBomb xG Model
 
 StatsBomb's expected goals (xG) model is one of the most sophisticated publicly discussed xG implementations. The value is provided as `statsbomb_xg` on every shot event.

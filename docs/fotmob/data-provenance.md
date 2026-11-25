@@ -1,6 +1,7 @@
 ---
 source_type: curated
 source_url: https://www.fotmob.com/en/topnews/22634-statement-physical-metrics-feature-outage
+archived_url: https://web.archive.org/web/20261125124408/https://www.fotmob.com/en/topnews/22634-statement-physical-metrics-feature-outage
 upstream_version: null
 crawled_at: 2026-09-24
 ---

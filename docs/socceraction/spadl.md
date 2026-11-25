@@ -1,3 +1,9 @@
+---
+source_url: https://socceraction.readthedocs.io/en/stable/documentation/spadl/spadl.html
+archived_url: https://web.archive.org/web/20261125140755/https://socceraction.readthedocs.io/en/stable/documentation/spadl/spadl.html
+source_type: curated
+---
+
 # SPADL (Soccer Player Action Description Language)
 
 A standardised action format from the DTAI Sports Analytics Lab. Converts provider-specific event streams into a unified representation for cross-provider analysis.

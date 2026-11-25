@@ -1,5 +1,6 @@
 ---
 source_url: https://developer.sportradar.com/soccer/reference/soccer-extended-live-schedules
+archived_url: https://web.archive.org/web/20261125130500/https://developer.sportradar.com/soccer/reference/soccer-extended-live-schedules
 source_type: llms_txt
 upstream_version: Soccer v4 / Soccer Extended v4
 crawled_at: 2026-09-24T09:30:51.195Z

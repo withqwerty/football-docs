@@ -1,5 +1,6 @@
 ---
 source_url: https://floodlight.readthedocs.io/en/latest/modules/core/property.html
+archived_url: https://web.archive.org/web/20261125121441/https://floodlight.readthedocs.io/en/latest/modules/core/property.html
 source_type: crawled
 upstream_version:
 crawled_at: 2026-08-11T09:08:54.623Z

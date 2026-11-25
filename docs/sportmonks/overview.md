@@ -1,5 +1,6 @@
 ---
 source_url: https://docs.sportmonks.com/football/llms-full.txt
+archived_url: https://web.archive.org/web/20261125124744/https://docs.sportmonks.com/v3/llms-full.txt
 source_type: llms_txt
 upstream_version: v3
 crawled_at: 2026-08-31T00:17:40.843Z
