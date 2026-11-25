@@ -295,7 +295,7 @@ function joinVals(ls: string[]): string {
   }, "");
 }
 
-const cell = (text: string) => text.replace(/\|/g, "\\|").trim();
+const cell = (text: string) => text.replace(/\\/g, "\\\\").replace(/\|/g, "\\|").trim();
 
 export function renderPage(sections: Section[]): string {
   const [first, ...rest] = sections;
