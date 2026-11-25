@@ -28,7 +28,7 @@ related = ["xt", "xg"]
 
 [origin]
 text = "Tom Decroos, Lotte Bransen, Jan Van Haaren and Jesse Davis (KU Leuven and SciSports), 'Actions Speak Louder than Goals: Valuing Player Actions in Soccer', KDD 2019 (DOI 10.1145/3292500.3330758); first posted on arXiv in February 2018 (1802.07127)."
-source = "1802.07127"
+source = "https://arxiv.org/abs/1802.07127"
 
 [[variants]]
 id = "vaep.decroos-2019"

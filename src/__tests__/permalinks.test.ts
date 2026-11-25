@@ -25,6 +25,9 @@ describe("permalinks script", () => {
     expect(permalinkHolds({ archivedUrl, crawledAt: "2027-02-01" })).toBe(false); // checked again later
     expect(permalinkHolds({ archivedUrl: null, crawledAt: "2026-11-24" })).toBe(false);
     expect(permalinkHolds({ archivedUrl: "https://github.com/a/b/tree/0123", crawledAt: "2030-01-01" })).toBe(true);
+    // No crawled_at: a later commit (one that only added frontmatter, say) is no new check.
+    expect(permalinkHolds({ archivedUrl, crawledAt: "2027-02-01", datedByGit: true })).toBe(true);
+    expect(permalinkHolds({ archivedUrl: null, crawledAt: "2027-02-01", datedByGit: true })).toBe(false);
   });
 
   it("parses GitHub page and raw URLs", () => {

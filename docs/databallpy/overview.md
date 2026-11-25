@@ -38,7 +38,7 @@ Its key distinguishing feature is **smart synchronization of tracking and event 
 | SciSports | `"scisports"` | No | No separate metadata file needed |
 | Sportec/DFL | `"dfl"` or `"sportec"` | Yes | |
 | StatsBomb | `"statsbomb"` | No | Requires event_match_loc + event_lineup_loc |
-| FIFA | `"fifa"` | | Listed as a supported `event_data_provider` by `get_game()`. |
+| FIFA | `"fifa"` | Yes | Listed as a supported `event_data_provider` by `get_game()`. |
 
 ### Kloppy Integration (v0.7.0+)
 

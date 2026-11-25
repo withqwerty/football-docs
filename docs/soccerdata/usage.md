@@ -33,7 +33,7 @@ fbref = sd.FBref(
 
 # Fetch data -- returns pandas DataFrames
 schedule = fbref.read_schedule()
-team_stats = fbref.read_team_season_stats(stat_type="passing")
+team_stats = fbref.read_team_season_stats(stat_type="shooting")
 player_stats = fbref.read_player_season_stats(stat_type="standard")
 ```
 
@@ -136,7 +136,7 @@ WhoScored requires a browser for Selenium-based scraping:
 ```python
 ws = sd.WhoScored(
     'ENG-Premier League', '2023-2024',
-    path_to_browser='/usr/bin/chromium',  # optional, auto-detects
+    path_to_browser='/usr/bin/chromium',  # optional, path to the Chrome executable
     headless=False  # headless may trigger anti-bot detection
 )
 

@@ -8,9 +8,9 @@ source_type: curated
 
 ## Overview
 
-kloppy is a Python library that provides a **unified data model** for football event and tracking data. It abstracts away provider-specific formats (Opta, StatsBomb, Wyscout, WhoScored, etc.) into a canonical set of event types, coordinate systems, and data structures.
+kloppy is a Python library that provides a **unified data model** for football event and tracking data. It abstracts away provider-specific formats (Opta, StatsBomb, Wyscout, etc.) into a canonical set of event types, coordinate systems, and data structures.
 
-Repository: https://github.com/kloppy-project/kloppy
+Repository: https://github.com/PySport/kloppy
 
 ## Canonical Event Types
 
@@ -21,7 +21,7 @@ kloppy defines **19 canonical event types** that all provider events map to:
 | `PASS` | `PassEvent` | Any pass attempt (short, long, cross, through ball) |
 | `SHOT` | `ShotEvent` | Any shot attempt |
 | `TAKE_ON` | `TakeOnEvent` | Dribble / take-on attempt |
-| `CARRY` | `CarryEvent` | Ball carry between events (synthetic, inferred from consecutive events) |
+| `CARRY` | `CarryEvent` | A player controls the ball at their feet while moving or standing still |
 | `DUEL` | `DuelEvent` | 1v1 contest (ground or aerial) |
 | `INTERCEPTION` | `InterceptionEvent` | Interception of opponent pass |
 | `CLEARANCE` | `ClearanceEvent` | Defensive clearance |
@@ -179,24 +179,24 @@ class Event:
     coordinates: Optional[Point]    # Location on the pitch
     end_coordinates: Optional[Point] # End location (passes, carries)
     receiver_player: Optional[Player] # Pass recipient
-    raw_event: dict                  # Original provider data preserved
-    related_events: List[Event]      # Linked events
+    raw_event: object                # Original provider data preserved
+    related_event_ids: List[str]     # IDs of linked events (see get_related_events())
 ```
 
 ### Accessing Qualifiers
 
 ```python
-from kloppy.domain import SetPieceQualifier, BodyPartQualifier
+from kloppy.domain import SetPieceQualifier, SetPieceType, BodyPartQualifier, BodyPart
 
 for event in dataset.events:
-    # Check if event is from a set piece
+    # Check if event is from a set piece (returns a SetPieceType value)
     set_piece = event.get_qualifier_value(SetPieceQualifier)
-    if set_piece == SetPieceQualifier.CORNER_KICK:
+    if set_piece == SetPieceType.CORNER_KICK:
         print(f"Corner kick by {event.player.name}")
 
     # Check body part
     body_part = event.get_qualifier_value(BodyPartQualifier)
-    if body_part == BodyPartQualifier.HEAD:
+    if body_part == BodyPart.HEAD:
         print(f"Header by {event.player.name}")
 ```
 
@@ -268,7 +268,6 @@ The top-level `EventDataset` holds everything:
 class EventDataset:
     metadata: Metadata            # Match info, teams, players, periods
     events: List[Event]           # All events in chronological order
-    coordinate_system: CoordinateSystem
 ```
 
 ### Metadata
@@ -277,11 +276,12 @@ class EventDataset:
 class Metadata:
     teams: List[Team]             # Home team first
     periods: List[Period]         # Match periods
+    coordinate_system: CoordinateSystem
     pitch_dimensions: PitchDimensions
     orientation: Orientation
     frame_rate: Optional[float]   # For tracking data
     provider: Provider            # OPTA, STATSBOMB, WYSCOUT, etc.
-    flags: DatasetFlags           # What's included (e.g., BALL_OWNING_TEAM)
+    flags: DatasetFlag            # What's included (e.g., BALL_OWNING_TEAM)
 ```
 
 ### Team & Player
@@ -299,7 +299,7 @@ class Player:
     name: str
     team: Team
     jersey_no: Optional[int]
-    position: Optional[Position]  # PositionType has 33 members, e.g. Goalkeeper,
+    starting_position: Optional[PositionType]  # PositionType has 33 members, e.g. Goalkeeper,
                                   # LeftBack, CenterDefensiveMidfield, Striker
     starting: bool                # In starting XI
 ```

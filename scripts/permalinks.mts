@@ -41,7 +41,28 @@ const SAVE_PAUSE_MS = 8_000;
  */
 const GENERATED = [/^metric-cards\//, /^skillcorner\/dynamic-events\.md$/];
 
-type Doc = { path: string; rel: string; text: string; sourceUrl: string; archivedUrl: string | null; crawledAt: string | null };
+/**
+ * Pages Save Page Now cannot capture: it answered HTTP 520 on every try in
+ * November 2026. Their docs keep the live source_url as the only link, and
+ * the script does not try them again.
+ */
+const LIVE_ONLY = new Set([
+  "https://www.soccerdonna.de/en/bayern-muenchen/startseite/verein_57.html",
+  "https://docs.sportmonks.com/football/llms-full.txt",
+  "https://docs.sportmonks.com/v3/definitions/types",
+  "https://www.hudl.com/blog/upgrading-expected-goals",
+]);
+
+type Doc = {
+  path: string;
+  rel: string;
+  text: string;
+  sourceUrl: string;
+  archivedUrl: string | null;
+  crawledAt: string | null;
+  /** crawled_at is missing, so crawledAt is the doc's last commit date. */
+  datedByGit?: boolean;
+};
 
 function frontmatterValue(block: string, key: string): string | null {
   const match = block.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
@@ -65,6 +86,7 @@ export function readDoc(path: string): Doc | null {
     sourceUrl,
     archivedUrl: frontmatterValue(block, "archived_url"),
     crawledAt: crawled ? crawled.slice(0, 10) : lastCommitDate(path),
+    datedByGit: !crawled,
   };
 }
 
@@ -101,8 +123,11 @@ function daysBetween(a: string, b: string): number {
 }
 
 /** Whether an archived_url already on a doc still stands for it. */
-export function permalinkHolds(doc: Pick<Doc, "archivedUrl" | "crawledAt">): boolean {
+export function permalinkHolds(doc: Pick<Doc, "archivedUrl" | "crawledAt" | "datedByGit">): boolean {
   if (!doc.archivedUrl) return false;
+  // Without crawled_at, the last commit may only have touched the frontmatter
+  // (adding source_url, say), so it is no sign that the doc was checked again.
+  if (doc.datedByGit) return true;
   if (/^https:\/\/(github\.com|raw\.githubusercontent\.com)\//.test(doc.archivedUrl)) return true;
   const date = waybackDate(doc.archivedUrl);
   if (!date) return true; // set by hand
@@ -254,11 +279,13 @@ async function main(): Promise<void> {
   const docs = docFiles(provider)
     .map(readDoc)
     .filter((doc): doc is Doc => doc !== null && !GENERATED.some((pattern) => pattern.test(doc.rel)));
-  const todo = docs.filter((doc) => !permalinkHolds(doc));
+  const liveOnly = docs.filter((doc) => !doc.archivedUrl && LIVE_ONLY.has(doc.sourceUrl));
+  const todo = docs.filter((doc) => !permalinkHolds(doc) && !liveOnly.includes(doc));
+  const liveNote = liveOnly.length ? ` ${liveOnly.length} link only to the live page (${liveOnly.map((doc) => doc.rel).join(", ")}).` : "";
 
   if (check) {
     for (const doc of todo) console.log(`${doc.rel}: ${doc.archivedUrl ? "permalink older than crawled_at" : "no permalink"} (${doc.sourceUrl})`);
-    console.log(`${docs.length - todo.length} of ${docs.length} docs with a source have a permalink.`);
+    console.log(`${docs.length - todo.length - liveOnly.length} of ${docs.length} docs with a source have a permalink.${liveNote}`);
     return;
   }
 
@@ -274,7 +301,7 @@ async function main(): Promise<void> {
       console.log(`${doc.rel}: FAILED ${(error as Error).message}`);
     }
   }
-  console.log(`\n${todo.length - failed.length} permalinks written, ${docs.length - todo.length} already set.`);
+  console.log(`\n${todo.length - failed.length} permalinks written, ${docs.length - todo.length - liveOnly.length} already set.${liveNote}`);
   if (failed.length) console.log(`No permalink for ${failed.length}:\n${failed.map((line) => `  ${line}`).join("\n")}`);
 }
 

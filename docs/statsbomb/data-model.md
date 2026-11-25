@@ -111,24 +111,18 @@ is empty for matches not yet `available`):
 - `shot_fidelity_version` -- `"1"` (basic) or `"2"` (high-fidelity x/y on shots, freeze frames and shot-paired events)
 - `xy_fidelity_version` -- `"1"` (standard location granularity) or `"2"` (high-precision x/y coordinates)
 
-### Match & collection status (Matches API v6)
+### Match status
 
-The Matches response carries several status fields. Events/360 are only
-fetchable once the relevant status reaches `available`:
+The public specs (Open Data Specification v1.1 and Matches v3.0.0) document one
+status field:
 
 | Field | Values |
 |---|---|
-| `match_status` | `available` (event data obtainable), `scheduled`, `deleted` |
-| `match_status_360` | `available`, `scheduled` (awaiting 360), `unscheduled` (comp gets no 360) |
-| `play_status` | `Normal`, `Postponed`, `Cancelled`, `Abandoned`, `Forfeited` |
-| `collection_status` | collection pipeline state (16 values, below) |
+| `match_status` | `available`, `deleted`, `scheduled`. The final status is `available`, at which point event data can be obtained; only `available` matches are present in the Open Data repository. |
 
-`collection_status` values: `Unassigned` (not started), `InProgress`,
-`WithoutLocation` (events not yet located on pitch), `WithoutFreezeFrame` (shot
-freeze-frame phase), `PendingValidation`, `Validating`, `Invalid`,
-`WithoutDirection`, `Complete`, `Postponed`, `NoVidError` (footage not sourced),
-`IncVidError` (incomplete footage), `PoorVidError`, `ErrorAbandoned`,
-`ErrorCancelled`, `ErrorForfeit`.
+Open-data match files also carry `match_status_360` and `last_updated_360`,
+which the public specs do not document. Values seen in the open-data match
+files include `available`, `scheduled`, and `processing`.
 
 Use `last_updated` / `last_updated_360` per match (and the Competitions
 `match_updated*` / `match_available*` timestamps) to drive incremental sync —

@@ -16,7 +16,7 @@
 
 ## StatsBomb Open Data
 
-**What it provides**: Full event-level data identical to their commercial product -- every pass, shot, duel, carry, pressure event with coordinates, xG, and freeze frames for shots.
+**What it provides**: Full event-level data for selected competitions and seasons, provided as JSON files exported from the StatsBomb Data API -- every pass, shot, duel, carry, pressure event with coordinates, xG, and freeze frames for shots.
 
 **Coverage** (as of 2025):
 - FIFA World Cups (2018, 2022)
@@ -42,21 +42,25 @@ dataset = statsbomb.load_open_data(match_id=3788741)
 
 **Data format**: JSON files organised by competition and season. See `docs/providers/statsbomb/` for full event type documentation.
 
-**License**: Free for non-commercial use with attribution. Must credit StatsBomb.
+**License**: StatsBomb Public Data User Agreement (`LICENSE.pdf` in the repository). The data is free for research and analysis. Users may not commercially exploit the data or any analysis derived from it, and may not distribute or reproduce the data to third parties. Any published analysis must credit StatsBomb as the data source and use the StatsBomb logo.
 
 ## FBref
 
 **What it provides**: Historical results, basic player and team statistics, and squad
 information across 100+ competitions.
 
-**Advanced statistics ended on 20 January 2026**, when Stats Perform terminated
-FBref's access to the Opta feeds that supplied them. No replacement has been
-announced. Treat any guidance that presents FBref as a free source of xG or
+**Advanced statistics ended on 20 January 2026**, when Sports Reference announced that
+the provider of its advanced soccer data (not named in the announcement) had terminated
+its access to the provider's data feeds and required deletion of that data from the site.
+Sports Reference said it would assess possible paths forward, and that any advanced data
+it presents in future will be on a dramatically smaller scale. Treat any guidance that presents FBref as a free source of xG or
 possession-adjusted metrics as out of date.
 
-**Stat categories still available**: goals, assists, appearances, minutes, cards and
-match results. The advanced tables (passing detail, pass types, GCA/SCA, defensive
-actions, possession, advanced goalkeeping) are no longer served.
+**Stat categories still available**: the Standard, Goalkeeping, Shooting, Playing Time
+and Miscellaneous tables (goals, assists, minutes, cards, possession %, shots, saves,
+fouls, crosses, interceptions, tackles won) and match results. The advanced tables
+(passing, pass types, goal and shot creation, defensive actions, possession, advanced
+goalkeeping) and expected-goals columns are no longer served.
 
 **Coverage**: 100+ competitions. Basic stats and results run back to the 1990s for
 many leagues. Advanced metrics covered 2017/18 to January 2026 only.

@@ -15,9 +15,9 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 2 | Ball Recovery | Player regains possession from a loose ball |
 | 3 | Dispossessed | Player loses the ball through opponent action (not a failed dribble) |
 | 4 | Duel | Contested situation between two players (aerial or ground) |
-| 5 | Camera On* | Camera coverage resumes after a break, for example a replay (deprecated; superseded by `off_camera`) |
+| 5 | Camera On | Signals the stop of the camera to capture gameplay for a replay or video cut (deprecated in data version 1.0.3, when `off_camera` was added) |
 | 6 | Block | Player blocks a shot, pass, or cross |
-| 8 | Offside | Player caught in an offside position |
+| 8 | Offside | Offside infringement resulting from a shot or clearance (non-pass); offsides from passes are recorded as pass outcomes |
 | 9 | Clearance | Defensive action to remove the ball from a dangerous area |
 | 10 | Interception | Player intercepts an opponent's pass |
 | 14 | Dribble | Attempt to beat an opponent with the ball (success or failure) |
@@ -31,14 +31,14 @@ StatsBomb uses named event types with numeric IDs. Every event in a match has a 
 | 23 | Goal Keeper | Goalkeeper-specific actions (saves, punches, claims, etc.) |
 | 24 | Bad Behaviour | Disciplinary action not linked to a foul (e.g. dissent) |
 | 25 | Own Goal For | An own goal scored for the team |
-| 26 | Player On | Player enters the pitch (substitution on) |
-| 27 | Player Off | Player leaves the pitch (substitution off) |
+| 26 | Player On | Player returns to the pitch after a Player Off event (not a substitution) |
+| 27 | Player Off | Player goes or is carried off the pitch without a substitution, usually for injury |
 | 28 | Shield | Player shields the ball from an opponent |
-| 29 | Camera off | Camera coverage stops, for example for a replay (deprecated with Camera On; superseded by `off_camera`) |
+| 29 | Camera off | Video broadcast leaves gameplay to show a replay, or the video is cut (deprecated in data version 1.0.3, when `off_camera` was added) |
 | 30 | Pass | Any pass between players, including crosses, through balls, etc. |
 | 33 | 50/50 | Contested loose ball between two players |
 | 34 | Half End | Marks the end of each half/period |
-| 35 | Starting XI | Starting lineup announcement (one per team per match) |
+| 35 | Starting XI | The players in the starting 11, their positions and the team's formation |
 | 36 | Tactical Shift | Formation or positional change during play |
 | 37 | Error | Player makes an on-the-ball mistake that leads to a shot on goal |
 | 38 | Miscontrol | Player fails to control the ball cleanly |

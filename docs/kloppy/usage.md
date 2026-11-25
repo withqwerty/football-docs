@@ -11,9 +11,12 @@ source_type: curated
 ```bash
 pip install kloppy
 
-# With optional dependencies for specific providers
-pip install kloppy[statsbomb]
-pip install kloppy[wyscout]
+# Optional extras (there are no per-provider extras)
+pip install "kloppy[pandas]"    # pandas engine for to_df()
+pip install "kloppy[polars]"    # polars engine for to_df()
+pip install "kloppy[pyarrow]"   # pyarrow
+pip install "kloppy[s3]"        # read files from S3 via fsspec
+pip install "kloppy[query]"     # networkx, for kloppy's query tooling
 ```
 
 ## Loading Data from Providers
@@ -63,20 +66,6 @@ dataset = wyscout.load(
 dataset = wyscout.load(
     event_data="events_v2.json",
     data_version="V2"
-)
-```
-
-### WhoScored (via Opta-style JSON)
-
-WhoScored uses Opta-derived data. Load using the `opta` loader with JSON format:
-
-```python
-from kloppy import opta
-
-dataset = opta.load(
-    f24_data="whoscored_events.json",
-    f7_data="whoscored_meta.json",
-    coordinates="opta"
 )
 ```
 
@@ -148,16 +137,18 @@ df = dataset.to_df(engine="pandas")
 # With additional derived columns (passed as keyword arguments)
 df = dataset.to_df(
     engine="pandas",
-    end_x=lambda event: event.end_coordinates.x if event.end_coordinates else None,
-    end_y=lambda event: event.end_coordinates.y if event.end_coordinates else None,
-    receiver=lambda event: event.receiver_player.name if event.receiver_player else None,
+    # Only passes have receiver_* attributes, so read them with getattr
+    end_x=lambda event: event.receiver_coordinates.x if getattr(event, "receiver_coordinates", None) else None,
+    end_y=lambda event: event.receiver_coordinates.y if getattr(event, "receiver_coordinates", None) else None,
+    receiver=lambda event: event.receiver_player.name if getattr(event, "receiver_player", None) else None,
     is_goal=lambda event: event.result.value == "GOAL" if hasattr(event.result, 'value') else False,
 )
 
 # The DataFrame includes these columns by default:
-# event_id, event_type, result, timestamp, period_id,
-# team_id, player_id, coordinates_x, coordinates_y,
-# ball_state, ball_owning_team_id
+# event_id, event_type, period_id, timestamp, end_timestamp,
+# ball_state, ball_owning_team, team_id, player_id,
+# coordinates_x, coordinates_y, result, success
+# (plus type-specific and qualifier columns)
 ```
 
 ## Exporting to Polars
@@ -223,16 +214,16 @@ player_events = dataset.filter(
 ### By Qualifier
 
 ```python
-from kloppy.domain import SetPieceQualifier, BodyPartQualifier
+from kloppy.domain import SetPieceQualifier, SetPieceType, BodyPartQualifier, BodyPart
 
-# Corner kicks
+# Corner kicks (get_qualifier_value returns the enum value, e.g. SetPieceType)
 corners = dataset.filter(
-    lambda event: event.get_qualifier_value(SetPieceQualifier) == SetPieceQualifier.CORNER_KICK
+    lambda event: event.get_qualifier_value(SetPieceQualifier) == SetPieceType.CORNER_KICK
 )
 
 # Headers
 headers = dataset.filter(
-    lambda event: event.get_qualifier_value(BodyPartQualifier) == BodyPartQualifier.HEAD
+    lambda event: event.get_qualifier_value(BodyPartQualifier) == BodyPart.HEAD
 )
 ```
 
@@ -264,8 +255,8 @@ progressive = dataset.filter(
         and event.result == PassResult.COMPLETE
         and event.period.id == 1
         and event.coordinates
-        and event.end_coordinates
-        and (event.end_coordinates.x - event.coordinates.x) > 25  # 25m+ forward
+        and event.receiver_coordinates
+        and (event.receiver_coordinates.x - event.coordinates.x) > 25  # 25m+ forward
     )
 )
 ```
@@ -277,7 +268,7 @@ progressive = dataset.filter(
 ```python
 from collections import defaultdict
 from kloppy import statsbomb
-from kloppy.domain import EventType, PassResult
+from kloppy.domain import Dimension, EventType, MetricPitchDimensions, PassResult
 
 dataset = statsbomb.load_open_data(match_id=3788741)
 dataset = dataset.transform(
@@ -327,7 +318,7 @@ avg_positions = {
 
 ```python
 from kloppy import statsbomb
-from kloppy.domain import EventType
+from kloppy.domain import BodyPartQualifier, EventType
 
 dataset = statsbomb.load_open_data(match_id=3788741)
 df = dataset.filter(lambda e: e.event_type == EventType.SHOT).to_df(
