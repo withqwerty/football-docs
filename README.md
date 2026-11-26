@@ -2,7 +2,7 @@
 
 Searchable football data provider and tooling documentation for AI coding agents. Like [Context7](https://context7.com) for football data.
 
-**Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Cursor, VS Code Copilot) to work with football data. Works with any tool that supports MCP.
+**Who it's for:** Developers and analysts who use AI coding tools (Claude Code, Codex, Cursor, VS Code Copilot, OpenCode and others) to work with football data. Works with any tool that supports MCP.
 
 **What it does:** Gives your AI agent a searchable index of documentation for 31 football data providers and tools — event types, qualifier IDs, coordinate systems, API endpoints, data models, identity surfaces, and cross-provider comparisons for the data providers (StatsBomb, Opta, Wyscout, Impect, SkillCorner, Sportradar, TheSportsDB, FMDB Pro, TransferRoom, and more), the open-source libraries people build with (kloppy, mplsoccer, socceraction, soccerdata, floodlight, fast-forward, unravelsports, and more), and the APIs of wearable and sports-science vendors (STATSports, Firstbeat, Hawkin Dynamics, VALD). Your agent looks up the real docs instead of guessing from training data.
 
@@ -32,15 +32,49 @@ MCP ([Model Context Protocol](https://modelcontextprotocol.io)) is a standard fo
 The server needs Node.js 22.13 or newer. It uses Node's built-in SQLite, so no
 native module is compiled at install time.
 
+No API key is needed. More install options, with copy buttons: [nutmeg.withqwerty.com/football-docs](https://nutmeg.withqwerty.com/football-docs/#install).
+
+### Any agent
+
+```bash
+npx add-mcp football-docs -g
+```
+
+[add-mcp](https://github.com/neon-solutions/add-mcp) finds the coding agents on
+your computer and adds football-docs to the ones you pick (Claude Code, Codex,
+Cursor, VS Code, OpenCode, Gemini CLI, pi, Hermes and 17 more). It writes each
+agent's own config file. Name one agent with `-a`, for example
+`npx add-mcp football-docs -g -a opencode`.
+
+### Ask your agent
+
+Paste this into your coding agent. It follows the
+[setup steps](https://nutmeg.withqwerty.com/football-docs/setup.md), shows you
+each change first, and checks that the tools answer:
+
+```text
+Set up the football-docs MCP server for this agent only. Read https://nutmeg.withqwerty.com/football-docs/setup.md and follow it. Show me each command or config change before you make it.
+```
+
 ### Claude Code
 
 ```bash
-claude mcp add football-docs -- npx -y football-docs
+claude mcp add --scope user football-docs -- npx -y football-docs
 ```
+
+Leave out `--scope user` to add it to the current project only.
+
+### Codex
+
+```bash
+codex mcp add football-docs -- npx -y football-docs
+```
+
+The Codex CLI and the IDE extension share this config (`~/.codex/config.toml`).
 
 ### Cursor
 
-Settings → MCP → Add server. Use this config:
+Add to `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (one project):
 
 ```json
 {
@@ -55,7 +89,13 @@ Settings → MCP → Add server. Use this config:
 
 ### VS Code / Copilot
 
-Add to `.vscode/mcp.json`:
+[Install in VS Code](https://vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522football-docs%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522football-docs%2522%255D%257D), or run:
+
+```bash
+code --add-mcp '{"name":"football-docs","command":"npx","args":["-y","football-docs"]}'
+```
+
+Or add to `.vscode/mcp.json` (VS Code calls the key `servers`):
 
 ```json
 {
@@ -70,7 +110,7 @@ Add to `.vscode/mcp.json`:
 
 ### Claude Desktop
 
-Add to `claude_desktop_config.json`:
+Add to `claude_desktop_config.json` (Settings → Developer → Edit Config), then restart the app:
 
 ```json
 {
@@ -82,6 +122,19 @@ Add to `claude_desktop_config.json`:
   }
 }
 ```
+
+### Other agents
+
+```bash
+pi mcp add football-docs -- npx -y football-docs
+gemini mcp add -s user football-docs npx -y football-docs
+copilot mcp add football-docs -- npx -y football-docs
+```
+
+For OpenCode, Hermes, Zed, Windsurf, Goose, Kiro and others, use add-mcp with
+`-a <agent>` (see `npx add-mcp list-agents`), or add the standard entry above to
+the agent's MCP config. Some agents use another key: Zed uses
+`context_servers`, OpenCode uses `mcp`.
 
 ### After an update
 
