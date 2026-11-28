@@ -346,34 +346,14 @@ npm run ingest
 
 ---
 
-## What we especially need
+## What to work on
 
-### New providers (not yet documented)
+Open work lives in the issue tracker, not in this file:
 
-New providers are assessed against [INCLUSION.md](INCLUSION.md). Comment on the linked issue before you start, so two people don't write the same docs.
+- [New providers](https://github.com/withqwerty/football-docs/issues?q=is%3Aissue+is%3Aopen+label%3Anew-provider)
+- [Everything marked help wanted](https://github.com/withqwerty/football-docs/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
-| Provider | Priority | Status | Best source material |
-|----------|----------|--------|---------------------|
-| FPL (Fantasy Premier League) | High | Open | https://www.oliverlooney.com/blogs/FPL-APIs-Explained |
-| FootyStats | Medium | In progress: [#24](https://github.com/withqwerty/football-docs/issues/24) | https://footystats.org/api/documentations/ |
-| Football Charts | Medium | In progress: [#22](https://github.com/withqwerty/football-docs/issues/22) | https://www.football-charts.com/developers |
-| Football-data.org | Medium | Open | https://www.football-data.org/documentation/api |
-| WhoScored | Medium | Open | Based on Opta F24, but has its own wrapper format |
-| Sofascore | Medium | Open | Unofficial API, community-documented |
-
-### Improvements to existing docs
-
-- More code examples in R (using `worldfootballR`, `StatsBombR`) and JavaScript
-- Cross-provider comparison tables (e.g., "how do each handle penalty kicks?")
-- Common gotchas from real-world usage
-- Missing fields or type IDs that we haven't documented yet
-- Flagging when upstream libraries have released new versions with API changes
-
-### Conceptual docs (in `docs/concepts/`)
-
-- Football analytics glossary with standardised definitions
-- "Which provider should I use for X?" decision guide
-- Common data quality issues and how to handle them
+New providers are assessed against [INCLUSION.md](INCLUSION.md). Comment on the issue before you start, so two people do not write the same docs. If nothing fits, open an issue first.
 
 ## Accuracy policy
 
